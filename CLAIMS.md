@@ -20,4 +20,6 @@ P10 r9-local 2026-10-11T21:43:08Z job/P10-word-guess-race
 
 P11 r11-local 2026-10-11T21:44:02Z job/P11-tetris-clash
 
+P12 r13-local 2026-10-11T21:44:28Z job/P12-flappy-lanes
+
 <!-- prettier-ignore-end -->
