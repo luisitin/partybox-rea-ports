@@ -51,10 +51,10 @@ export function DrawingPad({
   const gold = useThemeColor('--pb-accent-2', '');
   const mint = useThemeColor('--pb-accent-3', '');
   const sky = useThemeColor('--pb-info', '');
-  const violet = useThemeColor('--pb-player-5', '');
+  const gray = useThemeColor('--pb-text-muted', '');
   const colors = useMemo(
-    () => [ink, rose, gold, mint, sky, violet],
-    [ink, rose, gold, mint, sky, violet],
+    () => [ink, rose, gold, mint, sky, gray],
+    [ink, rose, gold, mint, sky, gray],
   );
   const previousRevision = useRef(inkRevision);
   const sentRevision = useRef(inkRevision);

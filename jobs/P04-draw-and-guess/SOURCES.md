@@ -26,3 +26,5 @@ Interactive attempt: the computer-use browser inventory was empty and
 `cua.createBrowserTab('iab', 'https://skribbl.io/', { visible: true })` failed
 `Browser is not available: iab`. No original private match could be launched
 through the available UI capability; this is an explicit research limitation.
+
+Accessibility reference: [W3C WCAG 2.2 non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast) defines the 3:1 target for essential graphics. Local token calculations verify the drawing palette against it.

@@ -84,3 +84,8 @@ R6: `pnpm.cmd vitest run games/draw-and-guess/__tests__/handoff.test.ts games/dr
 passes26checks in2.47seconds. The reveal-only next-artist label matches the
 actual next turn and skips unavailable seats. New fit artifacts cover the
 longest19-character word at390×500 and long-name eight-way tied standings.
+
+R7: `pnpm.cmd vitest run games/draw-and-guess/client/palettecontrast.test.ts --maxWorkers=1`
+passes31checks. Thirty computed ink/background pairs across all5themes exceed
+3:1; minimum5.243:1. Daylight sixth ink improves2.464:1→7.617:1. Values come
+from shipped palette/tokens rather than expected token assignments. Typecheck passes.

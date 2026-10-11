@@ -5,7 +5,7 @@ export const COLORS = [
   { name: 'Gold', token: '--pb-accent-2' },
   { name: 'Mint', token: '--pb-accent-3' },
   { name: 'Sky', token: '--pb-info' },
-  { name: 'Violet', token: '--pb-player-5' },
+  { name: 'Gray', token: '--pb-text-muted' },
 ] as const;
 
 export const WIDTHS = [
