@@ -11,3 +11,6 @@
 - Upcoming notes are controller-private; TV, spectators and other players see only public counts, speed and run status. Phone-only views include that stage without exposing another player's upcoming notes.
 - Correctness is judged on authoritative event time. Delayed packets at or after the deadline cannot score, and row-index replay protection prevents stale taps from acting on the next note.
 - Research consumes no browser process; only the root runner may launch the one authorized capture browser, with cleanup in a finally block. No whole-suite browser run is authorized.
+
+- Local Windows Vitest fork workers were slow to terminate under desktop load. Final targeted verification uses one thread and a120s test allowance; CI remains bounded by30minutes.
+- The public clone has no gen-registry script or host shell; entries follow the lazy-loading contract and are checked by the SDK loader.

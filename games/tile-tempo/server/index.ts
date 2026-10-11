@@ -56,7 +56,12 @@ const reduce = composeReduce<State, Input>({
   skip: (s, now) => (s.phase.id === 'play' ? enterScore(settle(s, now), now) : advance(s, now)),
   end: (s, now) => enterDone(s.phase.id === 'play' ? settle(s, s.phase.paused?.at ?? now) : s, now),
   prepare: (s, event) => {
-    if (event.type === 'vip' && event.action === 'pause' && s.phase.id === 'play' && !s.phase.paused)
+    if (
+      event.type === 'vip' &&
+      event.action === 'pause' &&
+      s.phase.id === 'play' &&
+      !s.phase.paused
+    )
       return settle(s, event.now);
     if (event.type !== 'vip' || event.action !== 'resume' || s.phase.id !== 'play') return s;
     const ms = pausedFor(s, event.now);

@@ -38,6 +38,8 @@ A spectator sees the same public race information with no tapping board or butto
 
 A valid correct column earns exactly one tile. A valid wrong column ends only that player's run. Duplicate, stale and future-row inputs are ignored, as are inputs outside play, from spectators, from disconnected players or after a run ends. Inputs at or after the shared deadline cannot score. A tap from an older per-player event time is ignored. Invalid inputs are rejected by the schema or ignored safely by the reducer.
 
+The phone immediately predicts taps through at most four already disclosed notes. Only server-confirmed counts decide ranks. A missing acknowledgement clears the pending window after 750 ms; absolute row numbers make retried stale rows harmless.
+
 ## Scoring
 
 One point per correctly tapped tile; no combos, multipliers or survival bonuses. `results()` ranks by this count alone. Equal counts share the same rank, including zero-tile results.

@@ -31,7 +31,7 @@ The important feel is clear from the common loop: read the next target, move a t
 
 ## PartyBox design
 
-- 2-8 players race simultaneously on the same seeded 1,024-row sequence. Each row has one dark note in one of four columns; the sequence is generated once using the SDK's seeded PRNG.
+- 2-8 players race simultaneously on the same initial seeded 1,024-row sequence, extended in shared chunks as needed. Each row has one dark note in one of four columns; the sequence is generated once using the SDK's seeded PRNG.
 - Ready lasts 3 seconds and names the rule before controls activate. Play lasts at most 30 seconds and ends immediately when every run is out. Score holds the final count for 6 seconds, then done exposes terminal results.
 - A phone shows its own next four rows, current count, the shared clock and an unmistakable current-row marker. Only the current row is actionable. No automatic missed-tile loss is imposed.
 - The TV makes count the focal point: every player's progress, count, tiles per second and a text status. It never shows upcoming targets. The same public race stage is available on phones in phone-only rooms.

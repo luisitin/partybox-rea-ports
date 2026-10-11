@@ -49,7 +49,7 @@ export function reducePlay(state: State, event: GameEvent<Input>, next: Transiti
       ...state.runs,
       [event.playerId]: {
         tiles: run.tiles + (correct ? 1 : 0),
-        out: false,
+        out: !correct,
         wrongColumn: correct ? null : event.input.column,
         lastAt: event.now,
       },
