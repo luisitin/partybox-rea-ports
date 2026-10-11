@@ -53,6 +53,73 @@ function normalized(world: World): World {
 }
 
 describe('grid, inputs and seed homes', () => {
+  it('reproduces the old east-side idle swaps at tick eight', () => {
+    const initial = createWorld(testPlayers(8));
+    const legacy = {
+      ...initial,
+      runners: initial.runners.map((r) => {
+        const dir: Direction = r.home % WIDTH < WIDTH / 2 ? 1 : 3;
+        return { ...r, cell: r.home, dir, queued: dir };
+      }),
+    };
+    expect(
+      tickWorld(
+        legacy,
+        7,
+        initial.runners.map((r) => r.id),
+      ).runners.every((r) => r.alive),
+    ).toBe(true);
+    const swapped = tickWorld(
+      legacy,
+      8,
+      initial.runners.map((r) => r.id),
+    );
+    expect(swapped.runners.filter((r) => !r.alive).map((r) => [r.slot, r.cause])).toEqual([
+      [1, 'head'],
+      [2, 'head'],
+      [4, 'head'],
+      [5, 'head'],
+    ]);
+  });
+
+  it.each([2, 4, 8])(
+    'gives every one of %i idle players two seconds to steer without an opening casualty',
+    (count) => {
+      const initial = createWorld(testPlayers(count));
+      expect(initial.runners.map((r) => r.dir)).toEqual([1, 3, 2, 0, 1, 3, 0, 2].slice(0, count));
+      for (const r of initial.runners) expect(initial.homes[r.cell]).toBe(r.slot);
+      const open = tickWorld(
+        initial,
+        10,
+        initial.runners.map((r) => r.id),
+      );
+      expect(open.runners.every((r) => r.alive && r.deaths === 0)).toBe(true);
+    },
+  );
+
+  it('a later unattended north-wall crash is expected, rather than an opening head collision', () => {
+    const initial = createWorld(testPlayers(8));
+    const later = tickWorld(
+      initial,
+      14,
+      initial.runners.map((r) => r.id),
+    );
+    expect(later.runners.filter((r) => r.deaths).map((r) => [r.slot, r.cause])).toEqual([
+      [6, 'wall'],
+    ]);
+  });
+
+  it('respawns each seat with its same safe opening heading', () => {
+    const initial = createWorld(testPlayers(8));
+    for (const r of initial.runners) {
+      const dead = removeRunner(initial, r.slot, 'cut');
+      const back = tickWorld(dead, RESPAWN_TICKS, [r.id]).runners[r.slot]!;
+      expect(back.alive).toBe(true);
+      expect(back.cell).toBe(r.home);
+      expect([back.dir, back.queued]).toEqual([r.dir, r.dir]);
+    }
+  });
+
   it('uses a40×28 board and a200ms simulation step with a3second respawn', () => {
     expect([WIDTH, HEIGHT, TICK_MS, RESPAWN_TICKS]).toEqual([40, 28, 200, 15]);
     const world = createWorld(testPlayers(8));

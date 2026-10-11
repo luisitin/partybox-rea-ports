@@ -8,24 +8,33 @@ const directions = [0, 1, 2, 3] as const;
 const distance = (world: World, a: number, b: number): number =>
   Math.abs((a % world.width) - (b % world.width)) +
   Math.abs(Math.floor(a / world.width) - Math.floor(b / world.width));
-function safe(world: World, me: Runner, dir: Direction, watch: number, look = 3): boolean {
+function safe(world: World, me: Runner, dir: Direction, watch: number, look = 6): boolean {
   if (dir === (me.dir + 2) % 4) return false;
   let cell = me.cell;
+  let exposed = me.trail.length > 0;
   for (let step = 0; step < look; step++) {
     cell = neighbour(cell, dir, world.width, world.height);
-    if (cell < 0 || me.trail.includes(cell)) return false;
+    if (cell < 0 || (exposed && me.trail.includes(cell))) return false;
     // Closing removes the exposed trail before the next automatic move.
-    if (me.trail.length && world.owners[cell] === me.slot) break;
+    if (exposed && world.owners[cell] === me.slot) exposed = false;
   }
   const at = neighbour(me.cell, dir, world.width, world.height);
-  return !world.runners.some(
-    (r) =>
-      r.slot !== me.slot &&
-      r.alive &&
-      (r.cell === at ||
-        neighbour(r.cell, r.queued, world.width, world.height) === at ||
-        (watch > 1 && distance(world, r.cell, at) < watch && r.trail.length > 0)),
-  );
+  for (const rival of world.runners) {
+    if (rival.slot === me.slot || !rival.alive) continue;
+    if (watch > 1 && distance(world, rival.cell, at) < watch && rival.trail.length) return false;
+    let mine = me.cell,
+      other = rival.cell;
+    // A visible queued heading predicts collisions during the next normal decision beat.
+    for (let step = 0; step < 3; step++) {
+      const nextMine = neighbour(mine, dir, world.width, world.height);
+      const nextOther = neighbour(other, rival.queued, world.width, world.height);
+      if (nextOther < 0) break;
+      if (nextMine === nextOther || (nextMine === other && nextOther === mine)) return false;
+      mine = nextMine;
+      other = nextOther;
+    }
+  }
+  return true;
 }
 function segments(world: World, trail: number[]): number[] {
   const lengths = [1];
@@ -79,7 +88,7 @@ export function botInput(
   const me = state.world.runners.find((r) => r.id === playerId);
   if (!me?.alive) return null;
   const world = state.world;
-  const span = skill === 'easy' ? 2 : skill === 'sharp' ? 5 : 3;
+  const span = skill === 'easy' ? 2 : 3;
   const watch = skill === 'sharp' ? 2 : 1;
   let options = directions.filter((dir) => safe(world, me, dir, watch));
   if (!options.length) options = directions.filter((dir) => safe(world, me, dir, 1));
@@ -128,7 +137,7 @@ export function botInput(
           skill === 'sharp' &&
           world.runners.some((r) => r.slot !== me.slot && r.trail.includes(cell))
         )
-          value += 3;
+          value += 0.35;
       }
       return value;
     };

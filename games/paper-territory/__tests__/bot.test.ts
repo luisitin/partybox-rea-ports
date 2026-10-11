@@ -3,8 +3,59 @@ import { createRng } from '@partybox/game-sdk';
 import { testKit, testPlayers } from '@partybox/game-sdk/testing';
 import { game } from '../server/index';
 import type { Runner, World } from '../server/types';
+import { applyDirection, tickWorld } from '../server/world';
 
 describe('public trail threat strategy', () => {
+  it('turns before a wall beyond the three-tile horizon at the longest 1200 ms decision beat', () => {
+    const kit = testKit(game, { players: testPlayers(2) });
+    const play = kit.timer(kit.start());
+    const me = {
+      ...play.world.runners[0]!,
+      cell: 10 * 40 + 35,
+      dir: 1 as const,
+      queued: 1 as const,
+      trail: [10 * 40 + 35],
+    };
+    const state = { ...play, world: { ...play.world, runners: [me, play.world.runners[1]!] } };
+    const input = game.bot.sampleInput(state, 'p1', createRng(1), 'normal');
+    expect(input).not.toBeNull();
+    expect(input!.dir).not.toBe(1);
+    const directed = applyDirection(state.world, 'p1', input!);
+    expect(tickWorld(directed, 6, ['p1']).runners[0]!.alive).toBe(true);
+  });
+
+  it('predicts a rival head collision three ticks ahead while the rival is still inside its home', () => {
+    const kit = testKit(game, { players: testPlayers(2) });
+    const play = kit.timer(kit.start());
+    const at = (x: number, y: number): number => y * 40 + x;
+    const me = {
+      ...play.world.runners[0]!,
+      cell: at(5, 5),
+      dir: 1 as const,
+      queued: 1 as const,
+      trail: [at(5, 5)],
+    };
+    const rival = {
+      ...play.world.runners[1]!,
+      home: at(8, 3),
+      cell: at(8, 2),
+      dir: 2 as const,
+      queued: 2 as const,
+      trail: [],
+    };
+    const owners = Array<number>(40 * 28).fill(-1);
+    for (let y = 2; y <= 4; y++) for (let x = 7; x <= 9; x++) owners[at(x, y)] = 1;
+    const world = { ...play.world, owners, homes: [...owners], runners: [me, rival] };
+    const crash = tickWorld(world, 3, ['p1', 'p2']);
+    expect(crash.runners.map((r) => r.cause)).toEqual(['head', 'head']);
+    const state = { ...play, world };
+    const input = game.bot.sampleInput(state, 'p1', createRng(1), 'sharp');
+    expect(input).not.toBeNull();
+    expect(tickWorld(applyDirection(world, 'p1', input!), 3, ['p1', 'p2']).runners[0]!.alive).toBe(
+      true,
+    );
+  });
+
   it('does not repeat an already queued heading before the next physics tick', () => {
     const kit = testKit(game, { players: testPlayers(2) });
     const play = kit.timer(kit.start());
@@ -42,7 +93,7 @@ describe('public trail threat strategy', () => {
     const state = kit.timer(kit.start());
     const width = 12;
     const cell = (x: number, y: number): number => y * width + x;
-    const owners = Array<number>(width * 7).fill(-1);
+    const owners = Array<number>(width * 12).fill(-1);
     owners[cell(2, 2)] = 0;
     owners[cell(0, 2)] = 1;
     const me: Runner = {
@@ -64,9 +115,9 @@ describe('public trail threat strategy', () => {
     };
     const world: World = {
       width,
-      height: 7,
+      height: 12,
       owners,
-      homes: Array<number>(width * 7).fill(-1),
+      homes: Array<number>(width * 12).fill(-1),
       runners: [me, rival],
       stepped: 0,
     };

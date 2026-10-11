@@ -2,7 +2,7 @@
 // Captures use four-neighbour flood fill; same-tick contested cells become neutral.
 import { z } from '@partybox/game-sdk';
 import type { PlayerInfo } from '@partybox/game-sdk';
-import { ANCHORS } from './content';
+import { ANCHORS, OPENING_OFFSETS, START_DIRECTIONS } from './content';
 import { HEIGHT, RESPAWN_TICKS, WIDTH } from './types';
 import type { Direction, Input, Runner, World } from './types';
 
@@ -40,12 +40,12 @@ export function createWorld(players: readonly PlayerInfo[]): World {
     for (let dy = -1; dy <= 1; dy++)
       for (let dx = -1; dx <= 1; dx++)
         owners[home + dy * WIDTH + dx] = homes[home + dy * WIDTH + dx] = slot;
-    const dir: Direction = x < WIDTH / 2 ? 1 : 3;
+    const dir: Direction = START_DIRECTIONS[slot % START_DIRECTIONS.length]!;
     return {
       id: p.id,
       slot,
       home,
-      cell: home,
+      cell: home + OPENING_OFFSETS[slot % OPENING_OFFSETS.length]!,
       dir,
       queued: dir,
       trail: [],
@@ -238,8 +238,8 @@ export function stepWorld(world: World, activeIds: readonly string[]): World {
           trail: [],
           respawnTick: null,
           cause: null,
-          dir: (r.home % world.width < world.width / 2 ? 1 : 3) as Direction,
-          queued: (r.home % world.width < world.width / 2 ? 1 : 3) as Direction,
+          dir: START_DIRECTIONS[r.slot % START_DIRECTIONS.length]!,
+          queued: START_DIRECTIONS[r.slot % START_DIRECTIONS.length]!,
         };
       if (!positions.has(r.slot) || !r.alive || next.owners[r.cell] === r.slot) return r;
       return { ...r, trail: [...r.trail, r.cell] };
