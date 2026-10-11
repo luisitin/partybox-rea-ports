@@ -10,7 +10,7 @@ const willing = () => ({ ...createRng(16), float: () => 0.5 });
 const hesitant = () => ({ ...createRng(16), float: () => 0.1 });
 
 describe('bots watch alignment', () => {
-  it('sharp waits for a perfect, normal accepts a six-unit error, and easy accepts thirteen', () => {
+  it('sharp aims at the nearest alignment, normal accepts nine units, and easy thirteen', () => {
     const initial = kit.start();
     const at = (offset: number) => ({
       ...initial,
@@ -22,11 +22,11 @@ describe('bots watch alignment', () => {
       expect(botInput(perfect, 'a', willing(), skill)).toEqual(input);
     expect(botInput(at(4), 'a', willing(), 'sharp')).toBeNull();
     expect(botInput(at(4), 'a', willing(), 'normal')).toEqual(input);
-    expect(botInput(at(9), 'a', willing(), 'normal')).toBeNull();
+    expect(botInput(at(9), 'a', willing(), 'normal')).toEqual(input);
     expect(botInput(at(9), 'a', willing(), 'easy')).toEqual(input);
     expect(botInput(at(13), 'a', willing(), 'easy')).toEqual(input);
     expect(botInput(at(13.001), 'a', willing(), 'easy')).toBeNull();
-    expect(botInput(at(6.001), 'a', willing(), 'normal')).toBeNull();
+    expect(botInput(at(9.001), 'a', willing(), 'normal')).toBeNull();
     expect(botInput(at(0), 'a', hesitant(), 'easy')).toBeNull();
   });
 

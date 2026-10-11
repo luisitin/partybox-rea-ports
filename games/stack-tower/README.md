@@ -8,6 +8,8 @@ A one-tap, simultaneous tower race. Each player builds a separate skyline for ex
 
 2–8, local or remote, with or without a TV. Three bot strengths watch the same public slider: easy accepts a wider timing window and sometimes hesitates; normal aims close to center; sharp aims for the perfect window. Spectators see the stage without controls.
 
+Bots account for the engine's 50 ms observations: sharp chooses the nearest visible crossing within half a tick, and any remaining error still trims width at the actual event time. Seeded measurements after tuning average 16.874 / 22 / 65 best floors for easy / normal / sharp, respectively.
+
 ## Phases
 
 | Phase   | TV                                                                          | Phone with a TV                                                                       | Exit                          |
