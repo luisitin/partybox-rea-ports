@@ -2,7 +2,7 @@
 .stage {
   flex: 1;
   min-height: 0;
-  padding: var(--pb-stage-top, 24px) 48px 32px;
+  padding: 0 32px 16px;
 }
 
 .board {
@@ -12,16 +12,17 @@
   grid-template-columns: minmax(0, 1fr) 280px;
   align-items: center;
   gap: 24px;
+  container-type: size;
 }
 
 /* Size from the actual stage's two dimensions, preserving 16:10 under the TV shell. */
 .arena {
   position: relative;
-  width: 100%;
-  max-height: 100%;
+  width: min(100%, 160cqh);
+  justify-self: center;
   aspect-ratio: 160 / 100;
   overflow: hidden;
-  border: 0.2rem solid var(--pb-accent);
+  border: 3px solid var(--pb-accent);
   border-radius: var(--pb-radius-md, 1rem);
   background: radial-gradient(ellipse at 50% 40%, hsl(250 35% 16%), hsl(250 40% 8%));
 }
@@ -83,7 +84,8 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: var(--pb-font-h2);
+  font-size: var(--pb-font-body);
+  line-height: 1.25;
 }
 
 .rows li {
@@ -100,8 +102,8 @@
 
 .dot {
   flex: none;
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: hsl(var(--hue) 85% 58%);
 }
@@ -116,7 +118,8 @@
 .points {
   min-width: 2ch;
   margin-left: auto;
-  font-size: 2.5rem;
+  font-size: 48px;
+  line-height: 1;
   font-weight: 900;
   font-variant-numeric: tabular-nums;
 }

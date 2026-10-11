@@ -1,7 +1,8 @@
 // How many pixels of the page the on-screen keyboard covers (I-795 I). iOS Safari and Chrome on
 // Android leave the layout viewport alone when the keyboard opens and shrink only the visual one,
-// so a sticky footer and a field near the bottom end up under the keys; a screen that pads its
-// bottom by this much lays itself out in the part that is still visible. 0 with no keyboard, with
+// so a sticky footer and a field near the bottom end up under the keys. The phone shell (T-1045,
+// client/controller/keyboardSafe.ts) now shortens itself to the visible part; this hook only tells a
+// screen that the keyboard is up, so TextAnswer can squeeze its lead. 0 with no keyboard, with
 // no visualViewport, and while the page is pinch-zoomed (the visual viewport is small then too).
 import { useEffect, useState } from 'react';
 
