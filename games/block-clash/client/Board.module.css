@@ -1,0 +1,64 @@
+.board {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+  border-radius: var(--pb-radius);
+}
+.background {
+  fill: var(--pb-bg);
+}
+.grid {
+  stroke: var(--pb-surface-2);
+  stroke-width: 0.025;
+}
+.block {
+  fill: var(--pb-info);
+}
+.block[data-kind='2'] {
+  fill: var(--pb-accent-2-fill);
+}
+.block[data-kind='3'] {
+  fill: var(--pb-player-5);
+}
+.block[data-kind='4'] {
+  fill: var(--pb-player-3);
+}
+.block[data-kind='5'] {
+  fill: var(--pb-player-1);
+}
+.block[data-kind='6'] {
+  fill: var(--pb-player-7);
+}
+.block[data-kind='7'] {
+  fill: var(--pb-player-6);
+}
+.block[data-kind='8'] {
+  fill: var(--pb-text-muted);
+}
+.mark {
+  stroke: var(--pb-bg);
+  stroke-width: 0.09;
+  opacity: 0.5;
+}
+.falling {
+  fill: var(--pb-text);
+}
+.ghost {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: 0.07;
+  stroke-dasharray: 0.15 0.1;
+}
+.out rect {
+  fill: var(--pb-surface);
+  stroke: var(--pb-danger);
+  stroke-width: 0.08;
+}
+.out text {
+  fill: var(--pb-text);
+  font-size: 1.6px;
+  font-weight: 900;
+}

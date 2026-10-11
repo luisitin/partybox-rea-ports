@@ -1,0 +1,201 @@
+.screen,
+.stage {
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: var(--pb-space-3);
+  gap: var(--pb-space-2);
+  display: grid;
+  color: var(--pb-text);
+  font-family: var(--pb-font-family);
+}
+.screen {
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+  touch-action: none;
+  user-select: none;
+}
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--pb-space-1);
+  align-items: center;
+}
+.header h2 {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+}
+.header h2 span {
+  font-size: var(--pb-font-caption);
+  font-weight: 600;
+}
+.header > b {
+  font-size: var(--pb-font-h2);
+  font-variant-numeric: tabular-nums;
+}
+.header p {
+  grid-column: 1 / -1;
+  margin: 0;
+  min-height: calc(var(--pb-font-caption) * 2.8);
+  line-height: 1.4;
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+}
+.boardZone {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) + var(--pb-space-3));
+  gap: var(--pb-space-3);
+}
+.picture {
+  min-height: 0;
+  overflow: hidden;
+  touch-action: none;
+}
+.next {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 0;
+  font-size: var(--pb-font-caption);
+  gap: var(--pb-space-1);
+}
+.next p {
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+}
+.preview {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-height: var(--pb-space-8);
+  fill: var(--pb-accent-2-fill);
+  background: var(--pb-surface);
+  border-radius: var(--pb-radius);
+}
+.preview text {
+  fill: var(--pb-text-muted);
+  font-size: 2px;
+}
+.target {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--pb-space-2);
+  font-size: var(--pb-font-caption);
+}
+.target select {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--pb-touch);
+  padding: var(--pb-space-2);
+  border-radius: var(--pb-radius);
+  border: calc(var(--pb-space-1) / 4) solid var(--pb-text-muted);
+  color: var(--pb-text);
+  background: var(--pb-surface);
+  font: inherit;
+}
+.controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--pb-space-2);
+}
+.controls button {
+  min-height: calc(var(--pb-touch) + var(--pb-space-2));
+  padding: var(--pb-space-2);
+  border: 0;
+  border-radius: var(--pb-radius);
+  font-size: var(--pb-font-button);
+  font-weight: 800;
+  font-family: inherit;
+  background: var(--pb-surface-2);
+  color: var(--pb-text);
+  touch-action: manipulation;
+}
+.controls button:active {
+  transform: scale(0.96);
+}
+.controls button:disabled {
+  opacity: 0.55;
+}
+.controls .drop {
+  background: var(--pb-accent-2-fill);
+  color: var(--pb-on-accent-2-fill);
+}
+.controls button:focus-visible,
+.target select:focus-visible {
+  outline: var(--pb-space-1) solid var(--pb-focus);
+  outline-offset: calc(var(--pb-space-1) / 2);
+}
+.hint {
+  margin: 0;
+  text-align: center;
+  font-size: var(--pb-font-caption);
+  line-height: 1.4;
+  color: var(--pb-text-muted);
+}
+.stage {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.stage header h2 {
+  margin: 0;
+  font-size: var(--pb-font-h1);
+}
+.stage header p {
+  margin: var(--pb-space-1) 0 0;
+  font-size: var(--pb-font-body);
+}
+.match {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--pb-space-2);
+}
+.match figure {
+  min-height: 0;
+  min-width: 0;
+  margin: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+.match figcaption {
+  font-size: var(--pb-font-caption);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.standings {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--pb-space-1);
+  font-size: var(--pb-font-body);
+}
+.standings li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--pb-space-2);
+  min-height: var(--pb-space-6);
+  padding: var(--pb-space-1) var(--pb-space-2);
+  background: var(--pb-surface);
+  border-radius: var(--pb-radius);
+}
+.standings li[data-me='true'] {
+  outline: calc(var(--pb-space-1) / 2) solid var(--pb-accent-2);
+}
+.standings b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.standings small {
+  color: var(--pb-text-muted);
+  font-size: var(--pb-font-caption);
+}
+@media (prefers-reduced-motion: reduce) {
+  .controls button:active {
+    transform: none;
+  }
+}

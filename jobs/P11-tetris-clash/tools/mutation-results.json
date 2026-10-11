@@ -1,0 +1,196 @@
+{
+  "total": 20,
+  "caught": 20,
+  "sourceRestored": true,
+  "outcomes": [
+    {
+      "id": "M01",
+      "bug": "single-line points",
+      "file": "content.ts",
+      "caught": true,
+      "failingTests": [
+        "locking and points clears 1 rows for 100 points and 0 attack",
+        "locking and points adds the consecutive-clear combo without rewarding the first clear",
+        "locking and points recognizes a three-corner T-spin only when the last successful action was rotation"
+      ]
+    },
+    {
+      "id": "M02",
+      "bug": "double-line points",
+      "file": "content.ts",
+      "caught": true,
+      "failingTests": [
+        "locking and points clears 2 rows for 300 points and 1 attack"
+      ]
+    },
+    {
+      "id": "M03",
+      "bug": "triple-line points",
+      "file": "content.ts",
+      "caught": true,
+      "failingTests": [
+        "locking and points clears 3 rows for 500 points and 2 attack"
+      ]
+    },
+    {
+      "id": "M04",
+      "bug": "four-line points",
+      "file": "content.ts",
+      "caught": true,
+      "failingTests": [
+        "locking and points clears 4 rows for 800 points and 4 attack",
+        "locking and points back-to-back four-line clears earn the 1.5 multiplier and one extra attack"
+      ]
+    },
+    {
+      "id": "M05",
+      "bug": "hard-drop distance multiplier",
+      "file": "engine.ts",
+      "caught": true,
+      "failingTests": [
+        "locking and points awards two points per hard-drop cell and one per soft-drop cell"
+      ]
+    },
+    {
+      "id": "M06",
+      "bug": "combo bonus removed",
+      "file": "board.ts",
+      "caught": true,
+      "failingTests": [
+        "locking and points adds the consecutive-clear combo without rewarding the first clear"
+      ]
+    },
+    {
+      "id": "M07",
+      "bug": "back-to-back multiplier removed",
+      "file": "board.ts",
+      "caught": true,
+      "failingTests": [
+        "locking and points back-to-back four-line clears earn the 1.5 multiplier and one extra attack"
+      ]
+    },
+    {
+      "id": "M08",
+      "bug": "four-line attack reduced",
+      "file": "content.ts",
+      "caught": true,
+      "failingTests": [
+        "locking and points clears 4 rows for 800 points and 4 attack",
+        "locking and points back-to-back four-line clears earn the 1.5 multiplier and one extra attack",
+        "hold and opponents sends garbage to the chosen living rival and rejects self/unknown targets",
+        "hold and opponents cancels incoming rows before forwarding the remaining attack"
+      ]
+    },
+    {
+      "id": "M09",
+      "bug": "garbage cancellation removed",
+      "file": "board.ts",
+      "caught": true,
+      "failingTests": [
+        "hold and opponents cancels incoming rows before forwarding the remaining attack"
+      ]
+    },
+    {
+      "id": "M10",
+      "bug": "allow repeated hold before locking",
+      "file": "engine.ts",
+      "caught": true,
+      "failingTests": [
+        "hold and opponents permits hold once per falling piece, and restores it after a lock"
+      ]
+    },
+    {
+      "id": "M11",
+      "bug": "hold never re-enabled on lock",
+      "file": "board.ts",
+      "caught": true,
+      "failingTests": [
+        "hold and opponents permits hold once per falling piece, and restores it after a lock"
+      ]
+    },
+    {
+      "id": "M12",
+      "bug": "receiving garbage cap increased",
+      "file": "content.ts",
+      "caught": true,
+      "failingTests": [
+        "hold and opponents caps the receiving queue at twenty rows"
+      ]
+    },
+    {
+      "id": "M13",
+      "bug": "garbage lock batch reduced",
+      "file": "content.ts",
+      "caught": true,
+      "failingTests": [
+        "hold and opponents inserts one-hole garbage rows at lock and caps one insertion at eight rows"
+      ]
+    },
+    {
+      "id": "M14",
+      "bug": "disable lock-above-ceiling top-out",
+      "file": "board.ts",
+      "caught": true,
+      "failingTests": [
+        "gravity and top-out top-outs when a piece locks above the visible ceiling",
+        "match lifecycle reveals scores at the round cap and finishes after the results beat",
+        "match lifecycle a temporary disconnect preserves the board and reconnect restores the same stack"
+      ]
+    },
+    {
+      "id": "M15",
+      "bug": "disable blocked spawn top-out",
+      "file": "board.ts",
+      "caught": true,
+      "failingTests": [
+        "gravity and top-out top-outs when the spawn region is obstructed"
+      ]
+    },
+    {
+      "id": "M16",
+      "bug": "JLSTZ left-wall kick lost",
+      "file": "pieces.ts",
+      "caught": true,
+      "failingTests": [
+        "tetromino cells and SRS uses the JLSTZ right kick at the left wall"
+      ]
+    },
+    {
+      "id": "M17",
+      "bug": "I two-column wall kick reduced",
+      "file": "pieces.ts",
+      "caught": true,
+      "failingTests": [
+        "tetromino cells and SRS uses the I-specific two-column kick at the left wall"
+      ]
+    },
+    {
+      "id": "M18",
+      "bug": "round exceeds two-minute cap",
+      "file": "types.ts",
+      "caught": true,
+      "failingTests": [
+        "match lifecycle starts every player with the identical piece and a two-minute clock"
+      ]
+    },
+    {
+      "id": "M19",
+      "bug": "results timer never exits",
+      "file": "phases/score.ts",
+      "caught": true,
+      "failingTests": [
+        "match lifecycle reveals scores at the round cap and finishes after the results beat",
+        "match lifecycle a temporary disconnect preserves the board and reconnect restores the same stack"
+      ]
+    },
+    {
+      "id": "M20",
+      "bug": "board projection leaks hold/sequence/plan",
+      "file": "index.ts",
+      "caught": true,
+      "failingTests": [
+        "view privacy never exposes future-sequence indices or plans and reserves hold/preview for the owner"
+      ]
+    }
+  ]
+}
