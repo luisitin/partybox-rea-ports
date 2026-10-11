@@ -1,0 +1,1197 @@
+<!doctype html>
+<html lang="en" data-surface="phone">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Octo Rally done phone-tv</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>; 
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body,
+      #app {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      #app {
+        display: flex;
+        flex-direction: column;
+      }
+      body {
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+      }
+      ._stage_262f13 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+        min-height: 100%;
+        /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+        padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+          var(--pb-overscan-y, 54px);
+      }
+
+      ._center_262f13 {
+        /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+        justify-content: safe center;
+        align-items: safe center;
+        text-align: center;
+      }
+
+      ._stage_4a4209 {
+        flex: 1;
+        min-height: 0;
+      }
+
+      ._board_4a4209 {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) * 9);
+        align-items: center;
+        gap: var(--pb-space-7);
+        container-type: size;
+      }
+
+      ._arenaBox_4a4209 {
+        position: relative;
+        width: min(100%, 100cqh);
+        aspect-ratio: 1;
+        justify-self: center;
+        min-width: 0;
+      }
+
+      ._arenaCaption_4a4209 {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+        text-align: center;
+        font-size: calc(var(--pb-font-body) * 0.9);
+        line-height: 1.25;
+        font-weight: 800;
+      }
+
+      ._side_4a4209 {
+        display: grid;
+        gap: var(--pb-space-3);
+        align-content: center;
+        min-width: 0;
+      }
+
+      ._title_4a4209 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+        line-height: 1.1;
+        font-weight: 900;
+        overflow-wrap: anywhere;
+      }
+
+      ._clock_4a4209 {
+        display: grid;
+        justify-items: start;
+        gap: var(--pb-space-1);
+      }
+
+      ._clockLabel_4a4209 {
+        font-size: calc(var(--pb-font-body) * 0.9);
+        font-weight: 800;
+        color: var(--pb-text-muted);
+      }
+
+      ._clockValue_4a4209 {
+        font-size: calc(var(--pb-font-display) * 0.75);
+        line-height: 1;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._clock_4a4209[data-low='true'] ._clockValue_4a4209 {
+        color: var(--pb-accent-2);
+      }
+
+      ._standings_4a4209 {
+        display: grid;
+        gap: var(--pb-space-2);
+      }
+
+      ._rowHead_4a4209 {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-5) * 3.5) calc(
+            var(--pb-space-5) * 4
+          );
+        align-items: center;
+        gap: var(--pb-space-3);
+        font-size: calc(var(--pb-font-body) * 0.9);
+        line-height: 1.25;
+        color: var(--pb-text-muted);
+      }
+
+      ._rowHead_4a4209 span:not(:first-child) {
+        text-align: center;
+      }
+
+      ._rows_4a4209 {
+        display: grid;
+        gap: var(--pb-space-2);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      ._rows_4a4209 li {
+        display: grid;
+        grid-template-columns:
+          calc(var(--pb-space-6) * 1.5) minmax(0, 1fr) calc(var(--pb-space-5) * 3.5)
+          calc(var(--pb-space-5) * 4);
+        align-items: center;
+        gap: var(--pb-space-3);
+        min-width: 0;
+      }
+
+      ._slot_4a4209 {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: calc(var(--pb-space-6) * 1.5);
+        height: calc(var(--pb-space-6) * 1.5);
+        border: calc(var(--pb-space-1) * 0.75) solid var(--slot-color);
+        border-radius: var(--pb-radius);
+        font-size: var(--pb-font-body);
+        line-height: 1;
+        font-weight: 900;
+      }
+
+      ._name_4a4209 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: calc(var(--pb-font-body) * 0.9);
+        font-weight: 900;
+        line-height: 1.1;
+      }
+
+      ._rowStats_4a4209 {
+        font-size: calc(var(--pb-font-body) * 0.9);
+        color: var(--pb-text-muted);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        text-align: center;
+        font-weight: 800;
+      }
+
+      ._rows_4a4209 li[data-out='true'] ._slot_4a4209 {
+        border-style: dashed;
+        border-color: var(--pb-text-muted);
+      }
+
+      ._rows_4a4209 li[data-out='true'] ._name_4a4209 {
+        text-decoration: line-through;
+        text-decoration-thickness: calc(var(--pb-space-1) * 0.5);
+      }
+
+      ._winner_4a4209 {
+        padding-left: var(--pb-space-2);
+        color: var(--pb-accent-2);
+        font-size: calc(var(--pb-font-body) * 0.9);
+      }
+
+      ._rule_4a4209 {
+        margin: 0;
+        font-size: calc(var(--pb-font-body) * 0.9);
+        line-height: 1.25;
+        color: var(--pb-text-muted);
+      }
+
+      ._screen_766d6a {
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr) auto;
+        gap: var(--pb-space-3);
+        height: 100%;
+        min-height: 0;
+        padding: var(--pb-space-3);
+        overflow: hidden;
+        overscroll-behavior: none;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      ._header_766d6a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--pb-space-2);
+        min-width: 0;
+      }
+
+      ._title_766d6a {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+        font-weight: 900;
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+      }
+
+      ._clock_766d6a {
+        flex: none;
+        font-size: var(--pb-font-h1);
+        line-height: 1;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        color: var(--pb-accent-2);
+      }
+
+      ._identity_766d6a {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-3);
+        min-width: 0;
+      }
+
+      ._slot_766d6a {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: calc(var(--pb-touch) * 1.3);
+        height: calc(var(--pb-touch) * 1.3);
+        border: var(--pb-space-1) solid var(--slot-color);
+        border-radius: var(--pb-radius);
+        font-size: var(--pb-font-h1);
+        line-height: 1;
+        font-weight: 900;
+      }
+
+      ._personalStats_766d6a {
+        display: grid;
+        min-width: 0;
+        gap: var(--pb-space-1);
+      }
+
+      ._name_766d6a {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: var(--pb-font-body);
+        font-weight: 800;
+      }
+
+      ._nameLine_766d6a {
+        display: flex;
+        align-items: baseline;
+        gap: var(--pb-space-2);
+        min-width: 0;
+      }
+
+      ._rank_766d6a {
+        flex: none;
+        font-size: var(--pb-font-caption);
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      ._lives_766d6a {
+        white-space: nowrap;
+        font-size: var(--pb-font-body);
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._lifeMarks_766d6a {
+        display: flex;
+        flex: none;
+        gap: calc(var(--pb-space-1) * 0.75);
+        margin-left: auto;
+      }
+
+      ._lifeMarks_766d6a i {
+        width: var(--pb-space-2);
+        height: var(--pb-space-3);
+        border: calc(var(--pb-space-1) * 0.25) solid var(--pb-text-muted);
+        border-radius: calc(var(--pb-radius) * 0.25);
+      }
+
+      ._lifeMarks_766d6a i[data-full='true'] {
+        border-color: var(--slot-color);
+        background: var(--slot-color);
+      }
+
+      ._focus_766d6a {
+        display: grid;
+        align-content: center;
+        justify-items: center;
+        gap: var(--pb-space-3);
+        min-height: 0;
+        text-align: center;
+      }
+
+      ._find_766d6a {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        line-height: 1.2;
+        font-weight: 900;
+      }
+
+      ._hint_766d6a,
+      ._controlHint_766d6a {
+        margin: 0;
+        font-size: var(--pb-font-body);
+        line-height: 1.35;
+        color: var(--pb-text-muted);
+      }
+
+      ._survivors_766d6a {
+        margin: 0;
+        font-size: var(--pb-font-body);
+        font-weight: 800;
+      }
+
+      ._controls_766d6a {
+        display: grid;
+        gap: var(--pb-space-3);
+        padding: var(--pb-space-4) var(--pb-space-3);
+        padding-bottom: max(var(--pb-space-4), env(safe-area-inset-bottom));
+        background: var(--pb-surface);
+        border-radius: var(--pb-radius-lg);
+        border: calc(var(--pb-space-1) * 0.25) solid var(--pb-border);
+      }
+
+      ._controlLabel_766d6a {
+        text-align: center;
+        font-size: var(--pb-font-button);
+        font-weight: 900;
+      }
+
+      ._slider_766d6a {
+        -webkit-appearance: none;
+        appearance: none;
+        display: block;
+        width: 100%;
+        min-width: 0;
+        height: calc(var(--pb-touch) * 1.6);
+        margin: 0;
+        background: transparent;
+        cursor: pointer;
+        touch-action: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      ._slider_766d6a::-webkit-slider-runnable-track {
+        height: var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface-2);
+        border: calc(var(--pb-space-1) * 0.25) solid var(--pb-text-muted);
+      }
+
+      ._slider_766d6a::-moz-range-track {
+        height: var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface-2);
+        border: calc(var(--pb-space-1) * 0.25) solid var(--pb-text-muted);
+      }
+
+      ._slider_766d6a::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: calc(var(--pb-touch) * 1.4);
+        height: calc(var(--pb-touch) * 1.4);
+        margin-top: calc((var(--pb-space-4) - var(--pb-touch) * 1.4) / 2);
+        border: var(--pb-space-1) solid var(--pb-text);
+        border-radius: var(--pb-radius);
+        background: var(--slot-color);
+      }
+
+      ._slider_766d6a::-moz-range-thumb {
+        width: calc(var(--pb-touch) * 1.4);
+        height: calc(var(--pb-touch) * 1.4);
+        border: var(--pb-space-1) solid var(--pb-text);
+        border-radius: var(--pb-radius);
+        background: var(--slot-color);
+      }
+
+      ._slider_766d6a:focus-visible {
+        outline: var(--pb-space-1) solid var(--pb-focus);
+        outline-offset: var(--pb-space-2);
+        border-radius: var(--pb-radius);
+      }
+
+      ._slider_766d6a:disabled {
+        cursor: default;
+      }
+
+      ._controlHint_766d6a {
+        text-align: center;
+        font-size: var(--pb-font-caption);
+      }
+
+      ._directionLabels_766d6a {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--pb-space-2);
+        font-size: var(--pb-font-caption);
+        font-weight: 800;
+      }
+
+      ._arenaRegion_766d6a {
+        display: grid;
+        place-items: center;
+        min-height: 0;
+        container-type: size;
+      }
+
+      ._arenaWrap_766d6a {
+        width: min(100%, 100cqh);
+        aspect-ratio: 1;
+      }
+
+      ._rows_766d6a {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--pb-space-2);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      ._rows_766d6a li {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        min-width: 0;
+        padding: var(--pb-space-1);
+        border-radius: var(--pb-radius);
+      }
+
+      ._rows_766d6a li[data-me='true'] {
+        background: var(--pb-surface-2);
+        outline: calc(var(--pb-space-1) * 0.5) solid var(--slot-color);
+      }
+
+      ._rowSlot_766d6a {
+        flex: none;
+        width: var(--pb-space-5);
+        text-align: center;
+        border-bottom: calc(var(--pb-space-1) * 0.5) solid var(--slot-color);
+        font-size: var(--pb-font-body);
+        font-weight: 900;
+      }
+
+      ._rowInfo_766d6a {
+        display: grid;
+        min-width: 0;
+      }
+
+      ._rowName_766d6a {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: var(--pb-font-caption);
+      }
+
+      ._rowStats_766d6a {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+        font-variant-numeric: tabular-nums;
+        line-height: 1.2;
+      }
+
+      ._rows_766d6a li[data-out='true'] ._rowSlot_766d6a {
+        border-bottom-style: dashed;
+        border-bottom-color: var(--pb-text-muted);
+      }
+
+      ._winner_766d6a {
+        margin-left: auto;
+        color: var(--pb-accent-2);
+        font-size: var(--pb-font-h2);
+      }
+
+      ._screen_766d6a:not(:has(._identity_766d6a)) {
+        grid-template-rows: auto minmax(0, 1fr) auto;
+      }
+
+      /* No decorative movement: the native thumb and judged world remain directly tied to input, including reduced motion. */
+      @media (max-width: 340px) {
+        ._lifeMarks_766d6a {
+          display: none;
+        }
+
+        ._controls_766d6a {
+          padding-inline: var(--pb-space-2);
+        }
+      }
+
+      ._arena_bf6e5d {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        font-family: var(--pb-font-family);
+      }
+
+      ._court_bf6e5d {
+        fill: var(--pb-surface);
+        stroke: var(--pb-surface-2);
+        stroke-width: calc(var(--pb-space-1) * 0.2);
+      }
+
+      ._centerRing_bf6e5d,
+      ._centerMark_bf6e5d {
+        fill: none;
+        stroke: var(--pb-surface-2);
+        stroke-width: calc(var(--pb-space-1) * 0.12);
+      }
+
+      ._wall_bf6e5d {
+        stroke: var(--pb-text-muted);
+        stroke-width: calc(var(--pb-space-1) * 0.16);
+      }
+
+      ._goal_bf6e5d {
+        stroke: var(--slot-color);
+        stroke-width: calc(var(--pb-space-1) * 0.16);
+        stroke-dasharray: 1 1;
+      }
+
+      ._paddleEdge_bf6e5d {
+        stroke: var(--pb-bg);
+        stroke-width: calc(var(--pb-space-1) * 0.9);
+        stroke-linecap: round;
+      }
+
+      ._paddle_bf6e5d {
+        stroke: var(--slot-color);
+        stroke-width: calc(var(--pb-space-1) * 0.55);
+        stroke-linecap: round;
+      }
+
+      ._number_bf6e5d {
+        fill: var(--pb-text);
+        font-size: calc(var(--pb-font-body) * 0.16);
+        font-weight: 900;
+        text-anchor: middle;
+        dominant-baseline: central;
+      }
+
+      ._arena_bf6e5d[data-compact='true'] ._number_bf6e5d {
+        font-size: calc(var(--pb-font-body) * 0.4);
+      }
+
+      ._ownRing_bf6e5d {
+        fill: var(--pb-surface-2);
+        stroke: var(--slot-color);
+        stroke-width: calc(var(--pb-space-1) * 0.2);
+      }
+
+      ._ballEdge_bf6e5d {
+        fill: var(--pb-bg);
+      }
+
+      ._ball_bf6e5d {
+        fill: var(--pb-text);
+      }
+
+      ._serveRing_bf6e5d {
+        fill: none;
+        stroke: var(--pb-accent-2);
+        stroke-width: calc(var(--pb-space-1) * 0.18);
+        stroke-dasharray: 1 1;
+      }
+
+      [data-out='true'] ._number_bf6e5d {
+        fill: var(--pb-text-muted);
+      }
+
+      ._guide_4f68ce {
+        display: block;
+        width: calc(var(--pb-space-8) * 2.25);
+        aspect-ratio: 1;
+      }
+
+      ._court_4f68ce {
+        fill: var(--pb-surface);
+        stroke: var(--pb-text-muted);
+        stroke-width: calc(var(--pb-space-1) * 0.3);
+      }
+
+      ._edge_4f68ce {
+        stroke: var(--slot-color);
+        stroke-width: calc(var(--pb-space-1) * 0.3);
+      }
+
+      ._paddle_4f68ce {
+        stroke: var(--slot-color);
+        stroke-width: var(--pb-space-1);
+        stroke-linecap: round;
+      }
+
+      ._arrow_4f68ce {
+        fill: none;
+        stroke: var(--pb-text);
+        stroke-width: calc(var(--pb-space-1) * 0.6);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      ._number_4f68ce {
+        fill: var(--pb-text);
+        text-anchor: middle;
+        dominant-baseline: central;
+        font-size: calc(var(--pb-font-display) * 0.3);
+        font-family: var(--pb-font-family);
+        font-weight: 900;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="app" data-surface="phone">
+      <div
+        class="_screen_766d6a"
+        style="--slot-color: var(--pb-player-1); --position: 0.5"
+        data-stage="true"
+      >
+        <header class="_header_766d6a"><h2 class="_title_766d6a">A shared victory!</h2></header>
+        <div class="_identity_766d6a">
+          <span class="_slot_766d6a" aria-label="Paddle 1">1</span>
+          <div class="_personalStats_766d6a">
+            <span class="_nameLine_766d6a"
+              ><span class="_name_766d6a">Ana</span><span class="_rank_766d6a">Place 7</span></span
+            ><span class="_lives_766d6a"
+              ><span aria-live="polite" aria-atomic="true">5 lives</span
+              ><span aria-hidden="true"> · </span>1 save</span
+            >
+          </div>
+          <span class="_lifeMarks_766d6a" aria-hidden="true"
+            ><i data-full="true"></i><i data-full="true"></i><i data-full="true"></i
+            ><i data-full="true"></i><i data-full="true"></i
+          ></span>
+        </div>
+        <div class="_arenaRegion_766d6a">
+          <div class="_arenaWrap_766d6a">
+            <svg
+              class="_arena_bf6e5d"
+              data-compact="true"
+              viewBox="-8 -8 116 116"
+              role="img"
+              aria-label="Octagonal arena, 8 paddles defending and 4 balls"
+            >
+              <polygon
+                class="_court_bf6e5d"
+                points="90.65069943049662,33.16192897593605 90.65069943049662,66.83807102406395 66.83807102406395,90.65069943049662 33.16192897593605,90.65069943049662 9.349300569503384,66.83807102406395 9.349300569503377,33.16192897593605 33.16192897593602,9.349300569503392 66.83807102406396,9.349300569503392"
+              ></polygon>
+              <circle class="_centerRing_bf6e5d" cx="50" cy="50" r="8"></circle>
+              <path class="_centerMark_bf6e5d" d="M47 50h6M50 47v6"></path>
+              <g style="--slot-color: var(--pb-player-1)" data-own="true">
+                <line
+                  class="_goal_bf6e5d"
+                  x1="90.65069943049662"
+                  y1="33.16192897593605"
+                  x2="90.65069943049662"
+                  y2="66.83807102406395"
+                ></line>
+                <circle class="_ownRing_bf6e5d" cx="97.65069943049662" cy="50" r="4.2"></circle>
+                <text class="_number_bf6e5d" x="97.65069943049662" y="50">1</text>
+                <line
+                  class="_paddleEdge_bf6e5d"
+                  x1="90.65069943049662"
+                  y1="44.2"
+                  x2="90.65069943049662"
+                  y2="55.8"
+                ></line>
+                <line
+                  class="_paddle_bf6e5d"
+                  x1="90.65069943049662"
+                  y1="44.2"
+                  x2="90.65069943049662"
+                  y2="55.8"
+                ></line>
+              </g>
+              <g style="--slot-color: var(--pb-player-2)">
+                <line
+                  class="_goal_bf6e5d"
+                  x1="90.65069943049662"
+                  y1="66.83807102406395"
+                  x2="66.83807102406395"
+                  y2="90.65069943049662"
+                ></line>
+                <text class="_number_bf6e5d" x="83.6941326955861" y="83.6941326955861">2</text>
+                <line
+                  class="_paddleEdge_bf6e5d"
+                  x1="82.84560455816225"
+                  y1="74.6431658963983"
+                  x2="74.6431658963983"
+                  y2="82.84560455816225"
+                ></line>
+                <line
+                  class="_paddle_bf6e5d"
+                  x1="82.84560455816225"
+                  y1="74.6431658963983"
+                  x2="74.6431658963983"
+                  y2="82.84560455816225"
+                ></line>
+              </g>
+              <g style="--slot-color: var(--pb-player-3)">
+                <line
+                  class="_goal_bf6e5d"
+                  x1="66.83807102406395"
+                  y1="90.65069943049662"
+                  x2="33.16192897593605"
+                  y2="90.65069943049662"
+                ></line>
+                <text class="_number_bf6e5d" x="50" y="97.65069943049662">3</text>
+                <line
+                  class="_paddleEdge_bf6e5d"
+                  x1="55.8"
+                  y1="90.65069943049662"
+                  x2="44.2"
+                  y2="90.65069943049662"
+                ></line>
+                <line
+                  class="_paddle_bf6e5d"
+                  x1="55.8"
+                  y1="90.65069943049662"
+                  x2="44.2"
+                  y2="90.65069943049662"
+                ></line>
+              </g>
+              <g style="--slot-color: var(--pb-player-4)">
+                <line
+                  class="_goal_bf6e5d"
+                  x1="33.16192897593605"
+                  y1="90.65069943049662"
+                  x2="9.349300569503384"
+                  y2="66.83807102406395"
+                ></line>
+                <text class="_number_bf6e5d" x="16.305867304413887" y="83.6941326955861">4</text>
+                <line
+                  class="_paddleEdge_bf6e5d"
+                  x1="22.655895062843214"
+                  y1="80.14466551740378"
+                  x2="14.453456401079265"
+                  y2="71.94222685563983"
+                ></line>
+                <line
+                  class="_paddle_bf6e5d"
+                  x1="22.655895062843214"
+                  y1="80.14466551740378"
+                  x2="14.453456401079265"
+                  y2="71.94222685563983"
+                ></line>
+              </g>
+              <g style="--slot-color: var(--pb-player-5)">
+                <line
+                  class="_goal_bf6e5d"
+                  x1="9.349300569503384"
+                  y1="66.83807102406395"
+                  x2="9.349300569503377"
+                  y2="33.16192897593605"
+                ></line>
+                <text class="_number_bf6e5d" x="2.349300569503381" y="50">5</text>
+                <line
+                  class="_paddleEdge_bf6e5d"
+                  x1="9.34930056950338"
+                  y1="55.8"
+                  x2="9.34930056950338"
+                  y2="44.2"
+                ></line>
+                <line
+                  class="_paddle_bf6e5d"
+                  x1="9.34930056950338"
+                  y1="55.8"
+                  x2="9.34930056950338"
+                  y2="44.2"
+                ></line>
+              </g>
+              <g style="--slot-color: var(--pb-player-6)">
+                <line
+                  class="_goal_bf6e5d"
+                  x1="9.349300569503377"
+                  y1="33.16192897593605"
+                  x2="33.16192897593602"
+                  y2="9.349300569503392"
+                ></line>
+                <text class="_number_bf6e5d" x="16.305867304413866" y="16.305867304413887">6</text>
+                <line
+                  class="_paddleEdge_bf6e5d"
+                  x1="14.50845238519582"
+                  y1="28.002777160243603"
+                  x2="22.71089104695977"
+                  y2="19.800338498479647"
+                ></line>
+                <line
+                  class="_paddle_bf6e5d"
+                  x1="14.50845238519582"
+                  y1="28.002777160243603"
+                  x2="22.71089104695977"
+                  y2="19.800338498479647"
+                ></line>
+              </g>
+              <g style="--slot-color: var(--pb-player-7)">
+                <line
+                  class="_goal_bf6e5d"
+                  x1="33.16192897593602"
+                  y1="9.349300569503392"
+                  x2="66.83807102406396"
+                  y2="9.349300569503392"
+                ></line>
+                <text class="_number_bf6e5d" x="49.99999999999999" y="2.3493005695033915">7</text>
+                <line
+                  class="_paddleEdge_bf6e5d"
+                  x1="36.79770484257945"
+                  y1="9.349300569503395"
+                  x2="48.397704842579444"
+                  y2="9.349300569503392"
+                ></line>
+                <line
+                  class="_paddle_bf6e5d"
+                  x1="36.79770484257945"
+                  y1="9.349300569503395"
+                  x2="48.397704842579444"
+                  y2="9.349300569503392"
+                ></line>
+              </g>
+              <g style="--slot-color: var(--pb-player-8)">
+                <line
+                  class="_goal_bf6e5d"
+                  x1="66.83807102406396"
+                  y1="9.349300569503392"
+                  x2="90.65069943049662"
+                  y2="33.16192897593605"
+                ></line>
+                <text class="_number_bf6e5d" x="83.69413269558612" y="16.305867304413887">8</text>
+                <line
+                  class="_paddleEdge_bf6e5d"
+                  x1="74.64316589639832"
+                  y1="17.154395441837746"
+                  x2="82.84560455816226"
+                  y2="25.356834103601695"
+                ></line>
+                <line
+                  class="_paddle_bf6e5d"
+                  x1="74.64316589639832"
+                  y1="17.154395441837746"
+                  x2="82.84560455816226"
+                  y2="25.356834103601695"
+                ></line>
+              </g>
+              <g>
+                <circle
+                  class="_ballEdge_bf6e5d"
+                  cx="24.430910877149262"
+                  cy="70.16721104133379"
+                  r="1.615"
+                ></circle>
+                <circle
+                  class="_ball_bf6e5d"
+                  cx="24.430910877149262"
+                  cy="70.16721104133379"
+                  r="1.19"
+                ></circle>
+              </g>
+              <g>
+                <circle
+                  class="_ballEdge_bf6e5d"
+                  cx="42.59770484257941"
+                  cy="43.550533460746806"
+                  r="1.615"
+                ></circle>
+                <circle
+                  class="_ball_bf6e5d"
+                  cx="42.59770484257941"
+                  cy="43.550533460746806"
+                  r="1.19"
+                ></circle>
+              </g>
+              <g>
+                <circle
+                  class="_ballEdge_bf6e5d"
+                  cx="17.41239282124952"
+                  cy="72.62980616198988"
+                  r="1.615"
+                ></circle>
+                <circle
+                  class="_ball_bf6e5d"
+                  cx="17.41239282124952"
+                  cy="72.62980616198988"
+                  r="1.19"
+                ></circle>
+              </g>
+              <g>
+                <circle
+                  class="_ballEdge_bf6e5d"
+                  cx="35.043756991138906"
+                  cy="40.33564310442405"
+                  r="1.615"
+                ></circle>
+                <circle
+                  class="_ball_bf6e5d"
+                  cx="35.043756991138906"
+                  cy="40.33564310442405"
+                  r="1.19"
+                ></circle>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <ul class="_rows_766d6a" aria-label="Players, lives and saves">
+          <li style="--slot-color: var(--pb-player-4)">
+            <span class="_rowSlot_766d6a">4</span>
+            <div class="_rowInfo_766d6a">
+              <b class="_rowName_766d6a">Dee</b
+              ><span class="_rowStats_766d6a">5 lives · 13 saves</span>
+            </div>
+            <span class="_winner_766d6a" aria-label="Winner">★</span>
+          </li>
+          <li style="--slot-color: var(--pb-player-8)">
+            <span class="_rowSlot_766d6a">8</span>
+            <div class="_rowInfo_766d6a">
+              <b class="_rowName_766d6a">Hal</b
+              ><span class="_rowStats_766d6a">5 lives · 13 saves</span>
+            </div>
+            <span class="_winner_766d6a" aria-label="Winner">★</span>
+          </li>
+          <li style="--slot-color: var(--pb-player-2)">
+            <span class="_rowSlot_766d6a">2</span>
+            <div class="_rowInfo_766d6a">
+              <b class="_rowName_766d6a">Ben</b
+              ><span class="_rowStats_766d6a">5 lives · 10 saves</span>
+            </div>
+          </li>
+          <li style="--slot-color: var(--pb-player-3)">
+            <span class="_rowSlot_766d6a">3</span>
+            <div class="_rowInfo_766d6a">
+              <b class="_rowName_766d6a">Cy</b
+              ><span class="_rowStats_766d6a">5 lives · 9 saves</span>
+            </div>
+          </li>
+          <li style="--slot-color: var(--pb-player-7)">
+            <span class="_rowSlot_766d6a">7</span>
+            <div class="_rowInfo_766d6a">
+              <b class="_rowName_766d6a">Gus</b
+              ><span class="_rowStats_766d6a">5 lives · 9 saves</span>
+            </div>
+          </li>
+          <li style="--slot-color: var(--pb-player-6)">
+            <span class="_rowSlot_766d6a">6</span>
+            <div class="_rowInfo_766d6a">
+              <b class="_rowName_766d6a">Fay</b
+              ><span class="_rowStats_766d6a">5 lives · 8 saves</span>
+            </div>
+          </li>
+          <li style="--slot-color: var(--pb-player-1)" data-me="true">
+            <span class="_rowSlot_766d6a">1</span>
+            <div class="_rowInfo_766d6a">
+              <b class="_rowName_766d6a">Ana</b
+              ><span class="_rowStats_766d6a">5 lives · 1 save</span>
+            </div>
+          </li>
+          <li style="--slot-color: var(--pb-player-5)">
+            <span class="_rowSlot_766d6a">5</span>
+            <div class="_rowInfo_766d6a">
+              <b class="_rowName_766d6a">Eli</b
+              ><span class="_rowStats_766d6a">5 lives · 0 saves</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </main>
+  </body>
+</html>

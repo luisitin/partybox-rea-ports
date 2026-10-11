@@ -1,0 +1,224 @@
+{
+  "command": "pnpm.cmd vitest run games/pong-party --maxWorkers=1 -t mut:",
+  "planted": 20,
+  "caught": 20,
+  "required": 19,
+  "restored": true,
+  "bugs": [
+    {
+      "id": 1,
+      "bug": "only four initial lives",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > starts each paddle with five lives and one moving seeded ball"
+      ]
+    },
+    {
+      "id": 2,
+      "bug": "oversized paddles hide legal misses",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > maps the slider endpoints to a paddle fully inside its edge",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > a miss costs exactly one life and resets the ball for a 700 ms grace",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > losing the final life records the physics sample and turns that side into a wall"
+      ]
+    },
+    {
+      "id": 3,
+      "bug": "collision ignores ball radius",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > sweeps to the first outward plane with the ball radius included"
+      ]
+    },
+    {
+      "id": 4,
+      "bug": "round lasts ninety seconds",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > adds balls at 15, 30, 45 seconds and caps at four",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: match rules > starts playing immediately after the shell start stage and arms a 60-second match",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: match rules > a live deadline settles physics, shows score for six seconds, then reaches done"
+      ]
+    },
+    {
+      "id": 5,
+      "bug": "second ball arrives too late",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > adds balls at 15, 30, 45 seconds and caps at four"
+      ]
+    },
+    {
+      "id": 6,
+      "bug": "a fifth ball may spawn",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > starts each paddle with five lives and one moving seeded ball",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > adds balls at 15, 30, 45 seconds and caps at four"
+      ]
+    },
+    {
+      "id": 7,
+      "bug": "missing serve has no grace period",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > a miss costs exactly one life and resets the ball for a 700 ms grace"
+      ]
+    },
+    {
+      "id": 8,
+      "bug": "opening ball moves too slowly",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > starts each paddle with five lives and one moving seeded ball",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > sweeps to the first outward plane with the ball radius included",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > a paddle hit reflects inward, increases speed and credits exactly one save"
+      ]
+    },
+    {
+      "id": 9,
+      "bug": "save bonus can beat another life",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > caps speed and save bonuses so one life always dominates saves"
+      ]
+    },
+    {
+      "id": 10,
+      "bug": "two players get neighboring sides",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > separates seats evenly around all eight sides"
+      ]
+    },
+    {
+      "id": 11,
+      "bug": "a miss removes two lives",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > a miss costs exactly one life and resets the ball for a 700 ms grace"
+      ]
+    },
+    {
+      "id": 12,
+      "bug": "a hit grants two saves",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > a paddle hit reflects inward, increases speed and credits exactly one save"
+      ]
+    },
+    {
+      "id": 13,
+      "bug": "future serves move before release",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > a paddle hit reflects inward, increases speed and credits exactly one save",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > a miss costs exactly one life and resets the ball for a 700 ms grace",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > waits until a future serve is released",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > losing the final life records the physics sample and turns that side into a wall",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > unoccupied sides are reflecting walls and never cost another player a life",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > caps speed and save bonuses so one life always dominates saves"
+      ]
+    },
+    {
+      "id": 14,
+      "bug": "wall reflection points outside",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > losing the final life records the physics sample and turns that side into a wall"
+      ]
+    },
+    {
+      "id": 15,
+      "bug": "elimination does not record its time",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > losing the final life records the physics sample and turns that side into a wall"
+      ]
+    },
+    {
+      "id": 16,
+      "bug": "one survivor fails to end the match",
+      "file": "games/pong-party/server/world.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: arena physics > ends once at most one paddle is alive"
+      ]
+    },
+    {
+      "id": 17,
+      "bug": "lives have too little score weight",
+      "file": "games/pong-party/server/scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: match rules > scores lives before saves, retains departed players, and shares ties"
+      ]
+    },
+    {
+      "id": 18,
+      "bug": "done never produces results",
+      "file": "games/pong-party/server/scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: match rules > scores lives before saves, retains departed players, and shares ties",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: match rules > a live deadline settles physics, shows score for six seconds, then reaches done",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: match rules > VIP skip settles the rally into score and end produces complete final results",
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: match rules > disconnect/reconnect retains paddle position and never stalls completion"
+      ]
+    },
+    {
+      "id": 19,
+      "bug": "score deadline never exits",
+      "file": "games/pong-party/server/phases/score.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: match rules > a live deadline settles physics, shows score for six seconds, then reaches done"
+      ]
+    },
+    {
+      "id": 20,
+      "bug": "views expose future serve directions",
+      "file": "games/pong-party/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "FAIL  games/pong-party/__tests__/game.test.ts > mut: match rules > views carry public arena state and omit future launches and random state"
+      ]
+    }
+  ]
+}

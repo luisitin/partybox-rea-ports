@@ -1,0 +1,80 @@
+.arena {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  font-family: var(--pb-font-family);
+}
+
+.court {
+  fill: var(--pb-surface);
+  stroke: var(--pb-surface-2);
+  stroke-width: calc(var(--pb-space-1) * 0.2);
+}
+
+.centerRing,
+.centerMark {
+  fill: none;
+  stroke: var(--pb-surface-2);
+  stroke-width: calc(var(--pb-space-1) * 0.12);
+}
+
+.wall {
+  stroke: var(--pb-text-muted);
+  stroke-width: calc(var(--pb-space-1) * 0.16);
+}
+
+.goal {
+  stroke: var(--slot-color);
+  stroke-width: calc(var(--pb-space-1) * 0.16);
+  stroke-dasharray: 1 1;
+}
+
+.paddleEdge {
+  stroke: var(--pb-bg);
+  stroke-width: calc(var(--pb-space-1) * 0.9);
+  stroke-linecap: round;
+}
+
+.paddle {
+  stroke: var(--slot-color);
+  stroke-width: calc(var(--pb-space-1) * 0.55);
+  stroke-linecap: round;
+}
+
+.number {
+  fill: var(--pb-text);
+  font-size: calc(var(--pb-font-body) * 0.16);
+  font-weight: 900;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.arena[data-compact='true'] .number {
+  font-size: calc(var(--pb-font-body) * 0.4);
+}
+
+.ownRing {
+  fill: var(--pb-surface-2);
+  stroke: var(--slot-color);
+  stroke-width: calc(var(--pb-space-1) * 0.2);
+}
+
+.ballEdge {
+  fill: var(--pb-bg);
+}
+
+.ball {
+  fill: var(--pb-text);
+}
+
+.serveRing {
+  fill: none;
+  stroke: var(--pb-accent-2);
+  stroke-width: calc(var(--pb-space-1) * 0.18);
+  stroke-dasharray: 1 1;
+}
+
+[data-out='true'] .number {
+  fill: var(--pb-text-muted);
+}
