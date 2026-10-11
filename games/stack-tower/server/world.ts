@@ -82,7 +82,7 @@ export function drop(tower: Tower, now: number, course: number): Tower {
   const size = perfect ? tower.footprint[dim] : rounded(tower.footprint[dim] - lost);
   if (size < MIN_WIDTH)
     return { ...tower, crashedAt: now, lastAt: now, streak: 0, feedback: 'miss', cut: null };
-  const streak = tower.streak + 1;
+  const streak = perfect ? tower.streak + 1 : 0;
   const growth = perfect && streak >= GROW_STREAK ? GROW : 0;
   const footprint: Block = {
     ...tower.footprint,
