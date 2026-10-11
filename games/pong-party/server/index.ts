@@ -85,6 +85,13 @@ const advance = (state: State, now: number): State => {
 /** Settle a running arena before a VIP freezes or ends it; resumed clocks hold every serve too. */
 function prepare(state: State, event: GameEvent<Input>): State {
   if (state.phase.id !== 'play' || event.type !== 'vip') return state;
+  if (
+    event.action !== 'pause' &&
+    event.action !== 'resume' &&
+    event.action !== 'skip' &&
+    event.action !== 'end'
+  )
+    return state;
   if (event.action === 'resume' && state.phase.paused) {
     const duration = pausedFor(state, event.now);
     return duration <= 0

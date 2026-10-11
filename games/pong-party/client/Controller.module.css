@@ -63,11 +63,26 @@
 }
 
 .name {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: var(--pb-font-body);
   font-weight: 800;
+}
+
+.nameLine {
+  display: flex;
+  align-items: baseline;
+  gap: var(--pb-space-2);
+  min-width: 0;
+}
+
+.rank {
+  flex: none;
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 .lives {

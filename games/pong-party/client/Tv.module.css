@@ -1,7 +1,6 @@
 .stage {
   flex: 1;
   min-height: 0;
-  padding: var(--pb-space-4) var(--pb-space-6) var(--pb-space-5);
 }
 
 .board {
@@ -101,9 +100,9 @@
 
 .rows li {
   display: grid;
-  grid-template-columns: calc(var(--pb-space-6) * 1.5) minmax(0, 1fr) calc(
-      var(--pb-space-5) * 3.5
-    ) calc(var(--pb-space-5) * 4);
+  grid-template-columns:
+    calc(var(--pb-space-6) * 1.5) minmax(0, 1fr) calc(var(--pb-space-5) * 3.5)
+    calc(var(--pb-space-5) * 4);
   align-items: center;
   gap: var(--pb-space-3);
   min-width: 0;

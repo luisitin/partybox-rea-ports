@@ -88,7 +88,12 @@ export function Controller({
             {view.slot + 1}
           </span>
           <div className={styles.personalStats}>
-            <span className={styles.name}>{ownName}</span>
+            <span className={styles.nameLine}>
+              <span className={styles.name}>{ownName}</span>
+              {!playing && view.rank !== null ? (
+                <span className={styles.rank}>{L('Place {rank}', { rank: view.rank })}</span>
+              ) : null}
+            </span>
             <span className={styles.lives}>
               <span aria-live="polite" aria-atomic="true">
                 {view.lives === 1 ? L('1 life') : L('{n} lives', { n: view.lives })}

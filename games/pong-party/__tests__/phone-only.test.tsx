@@ -110,3 +110,20 @@ it('render: a remote player gets a stage even when the room has a TV', () => {
   expect(phone(remote, 'p1', false)).toContain('<svg');
   expect(phone(remote, 'p1', false)).not.toContain('on the TV');
 });
+
+it('render: score and done show your competition rank, including ties', () => {
+  for (const phase of ['score', 'done']) {
+    const state = loaded.fixtures[phase] as State;
+    expect(phone(state, 'p1', true)).toContain(`Place ${game.controllerView(state, 'p1').rank}`);
+    const tied = {
+      ...state,
+      scores: Object.fromEntries(
+        Object.keys(state.players).map((id) => [id, id === 'p1' || id === 'p2' ? 9999 : 0]),
+      ),
+    };
+    expect(game.controllerView(tied, 'p1')).toMatchObject({ rank: 1, tied: true });
+    expect(phone(tied, 'p1', true)).toContain('Place 1');
+    expect(phone(state, 'spectator-x', true)).not.toContain('Place ');
+  }
+  expect(phone(loaded.fixtures['play'] as State, 'p1', true)).not.toContain('Place ');
+});

@@ -146,8 +146,8 @@ const mutations = [
     id: 20,
     name: 'views expose future serve directions',
     file: 'games/pong-party/server/index.ts',
-    from: 'stepped: state.world.stepped,',
-    to: 'stepped: state.world.stepped, spawnAngles: state.world.spawnAngles,',
+    from: 'stepped: state.world.stepped',
+    to: 'stepped: state.world.stepped, spawnAngles: state.world.spawnAngles',
   },
 ];
 const files = [...new Set(mutations.map((mutation) => mutation.file))];

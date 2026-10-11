@@ -3,38 +3,51 @@ import { resolve } from 'node:path';
 import { expect, it } from 'vitest';
 import { createRng } from '@partybox/game-sdk';
 import type { GameEvent } from '@partybox/game-sdk';
-import { hashState, jsonSize, makePlayers } from '@partybox/game-sdk/testing';
+import { makePlayers } from '@partybox/game-sdk/testing';
 import { game } from '../server/index';
 import type { State } from '../server/types';
 import { MAX_BALLS, STEP_MS, tick } from '../server/world';
 import type { Input } from '../server/world';
 
 function frozen<T>(value: T): T {
-  if (value && typeof value === 'object') {
+  if (value && typeof value === 'object' && !Object.isFrozen(value)) {
     Object.freeze(value);
     for (const child of Object.values(value)) frozen(child);
   }
   return value;
 }
 
-function invariant(state: State, previous: State): void {
-  expect(game.phases).toContain(state.phase.id);
-  expect(JSON.parse(JSON.stringify(state))).toEqual(state);
-  expect(jsonSize(state)).toBeLessThanOrEqual(256 * 1024);
-  expect(state.world.balls.length).toBeLessThanOrEqual(MAX_BALLS);
+function ensure(condition: boolean, rule: string): void {
+  if (!condition) throw new Error(rule);
+}
+
+function jsonValue(value: unknown): void {
+  if (value === null || typeof value === 'string' || typeof value === 'boolean') return;
+  if (typeof value === 'number') {
+    ensure(Number.isFinite(value) && !Object.is(value, -0), 'non-JSON number');
+    return;
+  }
+  ensure(typeof value === 'object', 'non-JSON value');
+  for (const child of Object.values(value as object)) jsonValue(child);
+}
+
+function invariant(state: State, previous: State, bytes: string): void {
+  ensure(game.phases.includes(state.phase.id), 'undeclared phase');
+  jsonValue(state);
+  ensure(Buffer.byteLength(bytes) <= 256 * 1024, 'oversized state');
+  ensure(state.world.balls.length <= MAX_BALLS, 'ball count exceeds cap');
   for (const paddle of state.world.paddles) {
-    expect(paddle.position).toBeGreaterThanOrEqual(0);
-    expect(paddle.position).toBeLessThanOrEqual(1);
-    expect(paddle.lives).toBeGreaterThanOrEqual(0);
-    expect(paddle.lives).toBeLessThanOrEqual(
-      previous.world.paddles.find((old) => old.id === paddle.id)!.lives,
+    ensure(paddle.position >= 0 && paddle.position <= 1, 'paddle out of bounds');
+    ensure(paddle.lives >= 0 && Number.isInteger(paddle.lives), 'invalid lives');
+    ensure(
+      paddle.lives <= previous.world.paddles.find((old) => old.id === paddle.id)!.lives,
+      'lives increased',
     );
-    expect(Number.isInteger(paddle.lives)).toBe(true);
-    expect(Number.isFinite(paddle.saves)).toBe(true);
+    ensure(Number.isFinite(paddle.saves), 'invalid saves');
   }
   for (const ball of state.world.balls)
     for (const value of [ball.x, ball.y, ball.vx, ball.vy, ball.readyAt])
-      expect(Number.isFinite(value)).toBe(true);
+      ensure(Number.isFinite(value), 'nonfinite ball');
 }
 
 it('property: seeds 1, 2, 3 plus 1000 seeded random cases preserve purity, bounds, replay and totality', () => {
@@ -94,20 +107,24 @@ it('property: seeds 1, 2, 3 plus 1000 seeded random cases preserve purity, bound
         default:
           event = { type: 'vip', now, action: rng.int(0, 1) ? 'pause' : 'resume' };
       }
-      const before = hashState(state);
+      const before = JSON.stringify(state);
       const next = game.reduce(state, event);
       replayed = frozen(game.reduce(replayed, event));
-      expect(hashState(state), `mutated seed ${seed}/${i}`).toBe(before);
-      expect(hashState(next), `replay seed ${seed}/${i}`).toBe(hashState(replayed));
-      invariant(next, state);
+      const after = JSON.stringify(next);
+      ensure(JSON.stringify(state) === before, `mutated seed ${seed}/${i}`);
+      ensure(after === JSON.stringify(replayed), `replay seed ${seed}/${i}`);
+      invariant(next, state, after);
       state = frozen(next);
       eventCount++;
     }
     if (state.phase.id === 'play') {
       const to = state.world.stepped * STEP_MS + 400;
       const once = tick(state.world, to);
-      expect(tick(tick(state.world, to - 200), to), `tick partition seed ${seed}`).toEqual(once);
-      expect(tick(once, to)).toBe(once);
+      ensure(
+        JSON.stringify(tick(tick(state.world, to - 200), to)) === JSON.stringify(once),
+        `tick partition seed ${seed}`,
+      );
+      ensure(tick(once, to) === once, `tick not idempotent seed ${seed}`);
     }
   }
   const report = {
@@ -118,6 +135,7 @@ it('property: seeds 1, 2, 3 plus 1000 seeded random cases preserve purity, bound
     events: eventCount,
     passed: true,
   };
+  expect(eventCount).toBe(1003 * 24);
   const directory = resolve('jobs/P21-pong-party');
   mkdirSync(directory, { recursive: true });
   writeFileSync(

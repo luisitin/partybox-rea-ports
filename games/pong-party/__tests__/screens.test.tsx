@@ -16,8 +16,14 @@ import type { State } from '../server/types';
 
 function moduleCss(file: string, names: Record<string, string>): string {
   let css = readFileSync(resolve(file), 'utf8');
-  for (const [local, generated] of Object.entries(names))
+  const locals = new Set(
+    [...css.matchAll(/\.([a-zA-Z_][a-zA-Z0-9_-]*)/g)].map((match) => match[1]!),
+  );
+  for (const local of locals) {
+    const generated = names[local];
+    if (!generated) continue;
     css = css.replace(new RegExp(`\\.${local}(?![-_a-zA-Z0-9])`, 'g'), `.${generated}`);
+  }
   return css;
 }
 
@@ -25,7 +31,7 @@ it('screens: exports every phase through real React SSR at TV and phone viewport
   const loaded = await loadGame('pong-party');
   const css = [
     readFileSync(resolve('design/tokens.css'), 'utf8'),
-    '*{box-sizing:border-box}html,body,#app{margin:0;width:100%;height:100%;overflow:hidden}body{background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family)}',
+    '*{box-sizing:border-box}html,body,#app{margin:0;width:100%;height:100%;overflow:hidden}#app{display:flex;flex-direction:column}body{background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family)}',
     moduleCss('packages/game-sdk/src/tv/Stage.module.css', stageStyles),
     moduleCss('games/pong-party/client/Tv.module.css', tvStyles),
     moduleCss('games/pong-party/client/Controller.module.css', controllerStyles),
@@ -72,6 +78,9 @@ it('screens: exports every phase through real React SSR at TV and phone viewport
           {element}
         </ServerClockProvider>,
       );
+      for (const match of markup.matchAll(/class="([^"]+)"/g))
+        for (const className of match[1]!.split(/\s+/).filter(Boolean))
+          expect(css, `missing capture CSS for ${className}`).toContain(`.${className}`);
       const file = `${phase}-${variant.name}.html`;
       const surface = variant.tv ? 'tv' : 'phone';
       const html = `<!doctype html><html lang="en" data-surface="${surface}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Octo Rally ${phase} ${variant.name}</title><style>${css}</style></head><body><main id="app" data-surface="${surface}">${markup}</main></body></html>\n`;

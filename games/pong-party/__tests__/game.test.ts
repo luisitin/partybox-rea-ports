@@ -61,6 +61,13 @@ const world = (ball = shot(), paddles = [paddle('p1', 0), paddle('p2', 4)]): Wor
 });
 
 describe('mut: arena physics', () => {
+  it('accepts bounded numeric slider inputs and rejects nonfinite or out-of-range values', () => {
+    for (const position of [0, 0.5, 1])
+      expect(game.inputSchema.safeParse({ type: 'move', position }).success).toBe(true);
+    for (const position of [-0.1, 1.1, NaN, Infinity, '0.5'])
+      expect(game.inputSchema.safeParse({ type: 'move', position }).success).toBe(false);
+    expect(game.inputSchema.safeParse({ type: 'steer', position: 0.5 }).success).toBe(false);
+  });
   it('starts each paddle with five lives and one moving seeded ball', () => {
     const [w, rng] = makeWorld(seedRng(7), ['p1', 'p2', 'p3']);
     expect(INITIAL_LIVES).toBe(5);
