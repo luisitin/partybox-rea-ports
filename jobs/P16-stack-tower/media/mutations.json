@@ -1,0 +1,238 @@
+[
+  {
+    "id": "M01",
+    "fault": "floor scoring doubled",
+    "file": "server/world.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > places only the sender's tower and scores its best height",
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > ignores replayed and future levels, old attempts, stale time, and premature cooldown taps",
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > a cooldown boundary tap is eligible, but a duplicate cannot place the next floor",
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > a retry retains the best score, rejects a stale attempt, and scores only a new personal best",
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > refresh preserves a tower; disconnected input is ignored and reconnect can keep building",
+      "games/stack-tower/__tests__/world.test.ts > sliding geometry > a -20-unit x error keeps the intersection and shifts its center",
+      "games/stack-tower/__tests__/world.test.ts > sliding geometry > a 20-unit x error keeps the intersection and shifts its center",
+      "games/stack-tower/__tests__/world.test.ts > sliding geometry > the next floor trims depth rather than width and preserves the inactive coordinate",
+      "games/stack-tower/__tests__/world.test.ts > perfects and recovery > regrows only from the third consecutive perfect, on the current axis, and caps at the base",
+      "games/stack-tower/__tests__/world.test.ts > attempts and bounded state > retry unlocks at 650 ms, clears the attempt, and retains the best tower and perfect count",
+      "games/stack-tower/__tests__/world.test.ts > attempts and bounded state > keeps only twelve rendered floors while height and best continue to count"
+    ]
+  },
+  {
+    "id": "M02",
+    "fault": "best combines attempts",
+    "file": "server/world.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > ignores replayed and future levels, old attempts, stale time, and premature cooldown taps",
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > a retry retains the best score, rejects a stale attempt, and scores only a new personal best",
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > refresh preserves a tower; disconnected input is ignored and reconnect can keep building",
+      "games/stack-tower/__tests__/world.test.ts > attempts and bounded state > retry unlocks at 650 ms, clears the attempt, and retains the best tower and perfect count",
+      "games/stack-tower/__tests__/world.test.ts > attempts and bounded state > keeps only twelve rendered floors while height and best continue to count"
+    ]
+  },
+  {
+    "id": "M03",
+    "fault": "trim retains perfect streak",
+    "file": "server/world.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/world.test.ts > perfects and recovery > an imperfect floor resets the streak but retains accumulated perfects"
+    ]
+  },
+  {
+    "id": "M04",
+    "fault": "growth exceeds starting footprint",
+    "file": "server/world.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/world.test.ts > perfects and recovery > regrows only from the third consecutive perfect, on the current axis, and caps at the base"
+    ]
+  },
+  {
+    "id": "M05",
+    "fault": "trim moves center the wrong way",
+    "file": "server/world.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/world.test.ts > sliding geometry > a -20-unit x error keeps the intersection and shifts its center",
+      "games/stack-tower/__tests__/world.test.ts > sliding geometry > a 20-unit x error keeps the intersection and shifts its center",
+      "games/stack-tower/__tests__/world.test.ts > sliding geometry > the next floor trims depth rather than width and preserves the inactive coordinate"
+    ]
+  },
+  {
+    "id": "M06",
+    "fault": "only half overhang removed",
+    "file": "server/world.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > a retry retains the best score, rejects a stale attempt, and scores only a new personal best",
+      "games/stack-tower/__tests__/world.test.ts > sliding geometry > a -20-unit x error keeps the intersection and shifts its center",
+      "games/stack-tower/__tests__/world.test.ts > sliding geometry > a 20-unit x error keeps the intersection and shifts its center",
+      "games/stack-tower/__tests__/world.test.ts > sliding geometry > the next floor trims depth rather than width and preserves the inactive coordinate",
+      "games/stack-tower/__tests__/world.test.ts > sliding geometry > a sliver at the minimum size survives; one smaller and a complete miss crash",
+      "games/stack-tower/__tests__/world.test.ts > perfects and recovery > the perfect window is inclusive on the -1 side, with no center drift",
+      "games/stack-tower/__tests__/world.test.ts > perfects and recovery > the perfect window is inclusive on the 1 side, with no center drift",
+      "games/stack-tower/__tests__/world.test.ts > attempts and bounded state > retry unlocks at 650 ms, clears the attempt, and retains the best tower and perfect count"
+    ]
+  },
+  {
+    "id": "M07",
+    "fault": "axes never alternate",
+    "file": "server/world.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/world.test.ts > sliding geometry > alternates horizontal axes, uses a capped speed, and bounces symmetrically",
+      "games/stack-tower/__tests__/world.test.ts > sliding geometry > the next floor trims depth rather than width and preserves the inactive coordinate",
+      "games/stack-tower/__tests__/world.test.ts > perfects and recovery > the window shrinks to six percent of the active narrow dimension",
+      "games/stack-tower/__tests__/world.test.ts > perfects and recovery > regrows only from the third consecutive perfect, on the current axis, and caps at the base"
+    ]
+  },
+  {
+    "id": "M08",
+    "fault": "drop cooldown disabled",
+    "file": "server/world.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > ignores replayed and future levels, old attempts, stale time, and premature cooldown taps",
+      "games/stack-tower/__tests__/world.test.ts > attempts and bounded state > ignores cooldown taps, crashes, and additional placements at the height limit"
+    ]
+  },
+  {
+    "id": "M09",
+    "fault": "retry does not change attempt serial",
+    "file": "server/world.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > a retry retains the best score, rejects a stale attempt, and scores only a new personal best",
+      "games/stack-tower/__tests__/world.test.ts > attempts and bounded state > retry unlocks at 650 ms, clears the attempt, and retains the best tower and perfect count"
+    ]
+  },
+  {
+    "id": "M10",
+    "fault": "retry erases saved score",
+    "file": "server/world.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > a retry retains the best score, rejects a stale attempt, and scores only a new personal best",
+      "games/stack-tower/__tests__/world.test.ts > attempts and bounded state > retry unlocks at 650 ms, clears the attempt, and retains the best tower and perfect count"
+    ]
+  },
+  {
+    "id": "M11",
+    "fault": "reveal deadline extended",
+    "file": "server/types.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > race lifecycle > clamps a late wakeup to the race deadline and holds the reveal for six seconds"
+    ]
+  },
+  {
+    "id": "M12",
+    "fault": "round does not expire on time",
+    "file": "server/phases/play.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > race lifecycle > finishes even when all players disconnect or leave permanently"
+    ]
+  },
+  {
+    "id": "M13",
+    "fault": "stale floor input accepted",
+    "file": "server/phases/play.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > ignores replayed and future levels, old attempts, stale time, and premature cooldown taps"
+    ]
+  },
+  {
+    "id": "M14",
+    "fault": "stale attempt input accepted",
+    "file": "server/phases/play.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > ignores replayed and future levels, old attempts, stale time, and premature cooldown taps",
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > a retry retains the best score, rejects a stale attempt, and scores only a new personal best"
+    ]
+  },
+  {
+    "id": "M15",
+    "fault": "pause fails to shift slider clock",
+    "file": "server/index.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > pause and VIP actions > freezes inputs and timers, then shifts every race clock once on resume"
+    ]
+  },
+  {
+    "id": "M16",
+    "fault": "stale timer accepted",
+    "file": "server/phases/play.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > race lifecycle > only a due timer of this phase instance updates the observation time"
+    ]
+  },
+  {
+    "id": "M17",
+    "fault": "disconnect still accepts inputs",
+    "file": "server/phases/play.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > authoritative inputs > refresh preserves a tower; disconnected input is ignored and reconnect can keep building"
+    ]
+  },
+  {
+    "id": "M18",
+    "fault": "TV leaks future RNG",
+    "file": "server/index.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > standings and public projections > the TV exposes all towers; a TV phone receives its own timing stage without internal rng"
+    ]
+  },
+  {
+    "id": "M19",
+    "fault": "phone leaks future RNG",
+    "file": "server/index.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > standings and public projections > the TV exposes all towers; a TV phone receives its own timing stage without internal rng",
+      "games/stack-tower/__tests__/screens.test.tsx > rendered fixture: initial > TV-room phones show their own alignment tower and hide reducer randomness",
+      "games/stack-tower/__tests__/screens.test.tsx > rendered fixture: play > TV-room phones show their own alignment tower and hide reducer randomness",
+      "games/stack-tower/__tests__/screens.test.tsx > rendered fixture: score > TV-room phones show their own alignment tower and hide reducer randomness",
+      "games/stack-tower/__tests__/screens.test.tsx > rendered fixture: done > TV-room phones show their own alignment tower and hide reducer randomness"
+    ]
+  },
+  {
+    "id": "M20",
+    "fault": "terminal results never published",
+    "file": "server/scoring.ts",
+    "caught": true,
+    "status": 1,
+    "tests": [
+      "games/stack-tower/__tests__/game.test.ts > race lifecycle > clamps a late wakeup to the race deadline and holds the reveal for six seconds",
+      "games/stack-tower/__tests__/game.test.ts > race lifecycle > finishes even when all players disconnect or leave permanently",
+      "games/stack-tower/__tests__/game.test.ts > standings and public projections > height ties share first place and retain every original player, including one who left"
+    ]
+  }
+]

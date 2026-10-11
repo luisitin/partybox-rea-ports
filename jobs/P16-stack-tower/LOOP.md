@@ -1,0 +1,7 @@
+# KEEP GOING
+
+| Round | Five largest weaknesses considered                                                                    | Change and measured player-visible gain                                                                                                                                                                                                                                                                           |
+| ----- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | Inverted bot strengths; coarse phone motion; tall towers look equal; no cut slice; silent disconnects | Corrected bot observation window and normal accuracy. 1,000 identical seeds at each strength: easy mean 16.874 floors; normal 67 → 22; sharp 39 → 65. Skill order now matches the labels. Sharp gains 26 floors; every drop still uses actual event time. Evidence: media/bot-baseline.json and bot-cadence.json. |
+
+Continue the next round after its UI changes and measured fit/clarity gain; three consecutive no-gain rounds required before next claim.
