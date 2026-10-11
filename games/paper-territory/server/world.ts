@@ -21,7 +21,10 @@ export function neighbour(cell: number, dir: Direction, width = WIDTH, height = 
     (dir === 3 && x === 0)
   )
     return -1;
-  return cell + [-width, 1, width, -1][dir]!;
+  if (dir === 0) return cell - width;
+  if (dir === 1) return cell + 1;
+  if (dir === 2) return cell + width;
+  return cell - 1;
 }
 export function neighbours(cell: number, width: number, height: number): number[] {
   return ([0, 1, 2, 3] as Direction[])
@@ -128,8 +131,14 @@ export function captureCells(world: World, slot: number, trail: readonly number[
     push(y * world.width);
     push(y * world.width + world.width - 1);
   }
-  for (let q = 0; q < queue.length; q++)
-    for (const cell of neighbours(queue[q]!, world.width, world.height)) push(cell);
+  for (let q = 0; q < queue.length; q++) {
+    const cell = queue[q]!,
+      x = cell % world.width;
+    if (cell >= world.width) push(cell - world.width);
+    if (x < world.width - 1) push(cell + 1);
+    if (cell < world.width * (world.height - 1)) push(cell + world.width);
+    if (x > 0) push(cell - 1);
+  }
   const claims = new Set(trail);
   for (let cell = 0; cell < world.owners.length; cell++)
     if (!blocked[cell] && !outside[cell]) claims.add(cell);

@@ -1,7 +1,11 @@
-// Territory is solid, vulnerable trails are dashed and every runner carries their seat number.
+// Shape-coded territory and large numbered heads stay readable without relying on player colors.
 import { useId } from 'react';
 import type { JSX } from 'react';
+import type { Direction } from '../server/types';
 import { cellCenter, playerInk, territoryPaths, trailPath } from './mapMath';
+import { headingTriangle, markerGeometry } from './markerGeometry';
+import { OwnershipPattern } from './OwnershipPattern';
+import { OWNERSHIP_TEXTURES, ownershipTexture } from './textures';
 import styles from './Map.module.css';
 
 interface MapRunner {
@@ -11,6 +15,8 @@ interface MapRunner {
   cell: number;
   trail: number[];
   alive: boolean;
+  dir: Direction;
+  movingDir?: Direction;
 }
 
 export interface MapProps {
@@ -20,26 +26,49 @@ export interface MapProps {
   runners: MapRunner[];
   label: string;
   meId?: string;
+  compact?: boolean;
 }
 
-export function Map({ width, height, owners, runners, label, meId }: MapProps): JSX.Element {
+export function Map({
+  width,
+  height,
+  owners,
+  runners,
+  label,
+  meId,
+  compact = false,
+}: MapProps): JSX.Element {
   const gridId = useId();
   const paths = territoryPaths(owners, width, height);
+  const marker = markerGeometry(compact);
   return (
     <svg
       className={styles.map}
-      viewBox={`-1 -1 ${width + 2} ${height + 2}`}
+      viewBox={`-1.25 -1.25 ${width + 2.5} ${height + 2.5}`}
       role="img"
       aria-label={label}
+      data-compact={compact || undefined}
     >
       <defs>
         <pattern id={gridId} width="1" height="1" patternUnits="userSpaceOnUse">
           <path d="M1 0H0V1" className={styles.grid} />
         </pattern>
+        {OWNERSHIP_TEXTURES.map((_, slot) => (
+          <OwnershipPattern key={slot} id={`${gridId}-owner-${slot}`} slot={slot} />
+        ))}
       </defs>
       <rect width={width} height={height} className={styles.ground} />
       {[...paths].map(([slot, path]) => (
         <path key={slot} d={path} fill={playerInk(slot)} className={styles.territory} />
+      ))}
+      {[...paths].map(([slot, path]) => (
+        <path
+          key={slot}
+          d={path}
+          fill={`url(#${gridId}-owner-${slot})`}
+          data-owner={slot + 1}
+          data-texture={ownershipTexture(slot).name}
+        />
       ))}
       <rect width={width} height={height} fill={`url(#${gridId})`} />
       <rect width={width} height={height} className={styles.edge} />
@@ -59,6 +88,7 @@ export function Map({ width, height, owners, runners, label, meId }: MapProps): 
               x={x}
               y={y}
               className={styles.homeNumber}
+              data-marker="home"
               textAnchor="middle"
               dominantBaseline="central"
             >
@@ -79,18 +109,30 @@ export function Map({ width, height, owners, runners, label, meId }: MapProps): 
         ))}
       {runners
         .filter((runner) => runner.alive)
+        .sort((a, b) => Number(a.id === meId) - Number(b.id === meId))
         .map((runner) => {
           const [x, y] = cellCenter(runner.cell, width);
+          const direction = runner.movingDir ?? runner.dir;
           return (
             <g key={runner.id} transform={`translate(${x} ${y})`}>
-              {runner.id === meId ? <circle r="1.02" className={styles.mine} /> : null}
+              {runner.id === meId ? <circle r={marker.ringRadius} className={styles.mine} /> : null}
               <circle
-                r="0.7"
+                r={marker.radius}
                 fill="var(--pb-bg)"
                 stroke={playerInk(runner.slot)}
                 strokeWidth="0.18"
               />
-              <text className={styles.number} textAnchor="middle" dominantBaseline="central">
+              <polygon
+                points={headingTriangle(direction, marker.radius)}
+                className={styles.heading}
+                data-heading={direction}
+              />
+              <text
+                className={styles.number}
+                textAnchor="middle"
+                dominantBaseline="central"
+                data-marker="runner"
+              >
                 {runner.slot + 1}
               </text>
             </g>

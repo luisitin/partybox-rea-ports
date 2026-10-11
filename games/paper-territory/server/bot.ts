@@ -8,9 +8,16 @@ const directions = [0, 1, 2, 3] as const;
 const distance = (world: World, a: number, b: number): number =>
   Math.abs((a % world.width) - (b % world.width)) +
   Math.abs(Math.floor(a / world.width) - Math.floor(b / world.width));
-function safe(world: World, me: Runner, dir: Direction, watch: number): boolean {
+function safe(world: World, me: Runner, dir: Direction, watch: number, look = 3): boolean {
+  if (dir === (me.dir + 2) % 4) return false;
+  let cell = me.cell;
+  for (let step = 0; step < look; step++) {
+    cell = neighbour(cell, dir, world.width, world.height);
+    if (cell < 0 || me.trail.includes(cell)) return false;
+    // Closing removes the exposed trail before the next automatic move.
+    if (me.trail.length && world.owners[cell] === me.slot) break;
+  }
   const at = neighbour(me.cell, dir, world.width, world.height);
-  if (at < 0 || dir === (me.dir + 2) % 4 || me.trail.includes(at)) return false;
   return !world.runners.some(
     (r) =>
       r.slot !== me.slot &&
@@ -34,24 +41,30 @@ function segments(world: World, trail: number[]): number[] {
 }
 function homeRoute(world: World, me: Runner, options: readonly Direction[]): Direction | null {
   // A bounded BFS only for a long/blocked trail. First move obeys the no-reverse rule.
-  const occupied = new Set(me.trail);
+  const occupied = new Uint8Array(world.owners.length);
+  for (const cell of me.trail) occupied[cell] = 1;
   const seen = new Uint8Array(world.owners.length);
-  const queue: [number, Direction][] = [];
+  const queue = new Int32Array(world.owners.length);
+  const firstDirections = new Uint8Array(world.owners.length);
+  let tail = 0;
   for (const dir of options) {
     const at = neighbour(me.cell, dir, world.width, world.height);
     if (at >= 0) {
       seen[at] = 1;
-      queue.push([at, dir]);
+      queue[tail] = at;
+      firstDirections[tail++] = dir;
     }
   }
-  for (let q = 0; q < queue.length; q++) {
-    const [cell, first] = queue[q]!;
+  for (let q = 0; q < tail; q++) {
+    const cell = queue[q]!,
+      first = firstDirections[q]! as Direction;
     if (world.owners[cell] === me.slot) return first;
     for (const dir of directions) {
       const at = neighbour(cell, dir, world.width, world.height);
-      if (at < 0 || occupied.has(at) || seen[at]) continue;
+      if (at < 0 || occupied[at] || seen[at]) continue;
       seen[at] = 1;
-      queue.push([at, first]);
+      queue[tail] = at;
+      firstDirections[tail++] = first;
     }
   }
   return null;
@@ -70,11 +83,11 @@ export function botInput(
   const watch = skill === 'sharp' ? 2 : 1;
   let options = directions.filter((dir) => safe(world, me, dir, watch));
   if (!options.length) options = directions.filter((dir) => safe(world, me, dir, 1));
-  if (!options.length) return { type: 'direction', dir: me.dir };
+  if (!options.length) return me.dir === me.queued ? null : { type: 'direction', dir: me.dir };
   let choice: Direction = options[0]!;
   if (me.trail.length) {
     const runs = segments(world, me.trail);
-    const turning = runs.at(-1)! >= span;
+    const turning = runs.at(-1)! >= (runs.length === 3 ? Math.max(span, runs[0]!) : span);
     const turns = options.filter((dir) => dir !== me.dir);
     const threatDistance = skill === 'sharp' ? 4 : skill === 'normal' ? 2 : 0;
     const threatened =
@@ -119,7 +132,15 @@ export function botInput(
       }
       return value;
     };
-    choice = [...options].sort((a, b) => score(b) - score(a))[0]!;
+    let best = -Infinity;
+    for (const dir of options) {
+      const value = score(dir);
+      if (value > best) {
+        best = value;
+        choice = dir;
+      }
+    }
   }
-  return { type: 'direction', dir: choice };
+  // Yield to the physics clock when the same turn is already queued.
+  return choice === me.queued ? null : { type: 'direction', dir: choice };
 }

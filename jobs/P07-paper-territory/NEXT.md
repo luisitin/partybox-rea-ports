@@ -1,9 +1,9 @@
 # P07 resume point
 
-Owner r4-local, branch job/P07-paper-territory. Research, original pure game, TV/phone/stage clients, all four fixtures, scoped CI and28 styled screen renders are complete. Screens fit1920x1080 and390x844 with80px reserved phone shell top/bottom; min touch58.65px. Includes paused/out/spectator/remote screens. Media about3MB; hashes recorded.
+Owner r4-local, branch job/P07-paper-territory.
 
-Fast geometry/lifecycle checks30/30 andclient14/14 passed. Initial1003propertytracespassed.3000 seeded bot games are running; final run will measure600msbotbeats plusarea/capture/death bystrength. Audit fixed pause/end scoring, unknown-player catchup, spawn-before-control, blockedhomecountdown, and trail-wide sharp-bot threats. Final test sources include regressions.
+Research, pure server, four fixtures, TV/controller/stage clients, scoped CI and 28 reviewed screens are complete. All 3,000 simulations and 1,003 property traces passed; 20/20 source mutations caught/restored. The final full run's fast-scheduler failure was fixed by yielding redundant bot headings. Post-fix contract/fast checks passed 56/56; updated client/artifact checks passed 24/24.
 
-Next:20serialsource mutants (verification agent gets lock after this milestone push), restore, finaltypecheck/format/full own-game tests includingcontract, finalmetricJSON,VERIFYrecords. Then draft PR titleP07 Paper Territory/bodyjobREADME, awaitgreenCI, readyPRandKEEP GOING until3roundswithoutnoticeablegain. RefreshCLAIMSaftereverypush withpull--rebasebeforeclaimcommit.
+Next: finish typecheck/format, record final output, commit/push review milestone, refresh claim on main after pull --rebase. Create draft PR titled "P07 Paper Territory" with job README body. After green P07 CI, mark ready and perform KEEP GOING until three consecutive rounds gain nothing players notice. LOOP has not converged. Remaining candidates: rejected U-turn feedback, visible loop-gain feedback, clearer live leader.
 
-P04collision ispreserved separately onr4-local/P04-draw-and-guess-salvage; do notchange r2'sP04branchorclaim.
+P04 claim race was corrected. Independent work is preserved on r4-local/P04-draw-and-guess-salvage; r2 owns P04. Do not alter its claim/branch.

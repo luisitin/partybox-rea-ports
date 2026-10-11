@@ -80,15 +80,15 @@ const trials = [
     'M12',
     'ignore crossing own trail',
     'world.ts',
-    "if (r.trail.includes(at)) deaths.set(r.slot, 'trail');",
-    "if (false) deaths.set(r.slot, 'trail');",
+    "if (r.trail.includes(at)) markDeath(r.slot, 'trail');",
+    "if (false) markDeath(r.slot, 'trail');",
   ],
   [
     'M13',
     'a cut kills the cutter instead of the trail owner',
     'world.ts',
-    "deaths.set(other.slot, 'cut')",
-    "deaths.set(r.slot, 'cut')",
+    "markDeath(other.slot, 'cut')",
+    "markDeath(r.slot, 'cut')",
   ],
   [
     'M14',
@@ -140,7 +140,7 @@ const trials = [
   before,
   after,
 }));
-const tests = ['world', 'game', 'presence'].map(
+const tests = ['world', 'game', 'presence', 'bot'].map(
   (name) => `games/paper-territory/__tests__/${name}.test.ts`,
 );
 const scratch = mkdtempSync(resolve(tmpdir(), 'p07-mutations-'));
@@ -182,6 +182,7 @@ const results = {
   baseline: null,
   mutations: [],
   restored: false,
+  sourceRestoration: [],
   finalBaseline: null,
 };
 try {
@@ -243,6 +244,12 @@ try {
   results.restored = [...originals].every(
     ([file, bytes]) => sha(readFileSync(resolve(repo, file))) === sha(bytes),
   );
+  results.sourceRestoration = [...originals].map(([file, bytes]) => ({
+    file,
+    beforeSha256: sha(bytes),
+    afterSha256: sha(readFileSync(resolve(repo, file))),
+    identical: sha(bytes) === sha(readFileSync(resolve(repo, file))),
+  }));
   results.finalBaseline = summary(run());
   writeFileSync(
     resolve(repo, 'jobs/P07-paper-territory/tools/mutation-results.json'),

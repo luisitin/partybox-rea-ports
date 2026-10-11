@@ -132,12 +132,15 @@ describe('Paper Territory lifecycle', () => {
   it('bots return valid directions at every strength and stay silent in every other phase', () => {
     const ready = kit.start();
     const play = kit.timer(ready);
+    const moving = kit.timer(play, play.began + 1200);
     const score = kit.vip(play, 'skip');
     const done = kit.timer(score);
     for (const skill of ['easy', 'normal', 'sharp'] as const)
       for (let seed = 1; seed <= 30; seed++) {
         for (const p of players) {
-          const input = game.bot.sampleInput(play, p.id, createRng(seed), skill);
+          const initial = game.bot.sampleInput(play, p.id, createRng(seed), skill);
+          if (initial !== null) expect(game.inputSchema.safeParse(initial).success).toBe(true);
+          const input = game.bot.sampleInput(moving, p.id, createRng(seed), skill);
           expect(input).not.toBeNull();
           expect(game.inputSchema.safeParse(input).success).toBe(true);
           for (const state of [ready, score, done])

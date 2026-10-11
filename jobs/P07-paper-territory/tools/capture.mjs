@@ -4,13 +4,33 @@ import { readFile, readdir, writeFile, mkdir, rm } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
+import { homedir } from 'node:os';
 
 const folder = resolve('jobs/P07-paper-territory');
 const media = join(folder, 'media');
 const profile = join(folder, `.browser-profile-${process.pid}`);
+const browserCache = join(
+  process.env.LOCALAPPDATA ?? join(homedir(), 'AppData', 'Local'),
+  'ms-playwright',
+);
+const cachedVersions = (await readdir(browserCache).catch(() => []))
+  .filter((name) => name.startsWith('chromium_headless_shell-'))
+  .sort()
+  .reverse();
 const chrome =
   process.env.PB_CHROME ??
-  'C:/Users/luisi_xlnbc7h/AppData/Local/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-win64/chrome-headless-shell.exe';
+  (cachedVersions[0]
+    ? join(
+        browserCache,
+        cachedVersions[0],
+        'chrome-headless-shell-win64',
+        'chrome-headless-shell.exe',
+      )
+    : undefined);
+if (!chrome)
+  throw new Error(
+    'Set PB_CHROME to an existing Chromium executable; no browser is installed by this tool.',
+  );
 if (resolve(profile) !== resolve(folder, `.browser-profile-${process.pid}`))
   throw new Error('Invalid task-local profile');
 await rm(profile, { recursive: true, force: true });

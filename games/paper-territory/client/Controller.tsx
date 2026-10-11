@@ -10,6 +10,7 @@ import { DirectionPad } from './DirectionPad';
 import { Map } from './Map';
 import { areaPercent, playerInk } from './mapMath';
 import { standings } from './standings';
+import { SeatBadge } from './SeatBadge';
 import { STRINGS } from './strings';
 import styles from './Controller.module.css';
 
@@ -94,7 +95,7 @@ export function Controller({
         style={ink}
       >
         <header className={styles.header}>
-          {player ? <b className={styles.seat}>{view.slot + 1}</b> : null}
+          {player ? <SeatBadge className={styles.seat} slot={view.slot} /> : null}
           <div className={styles.heading}>
             <p>{L('Paper Territory')}</p>
             <h2>{title}</h2>
@@ -129,6 +130,7 @@ export function Controller({
         {stage && view.owners ? (
           <div className={styles.arena}>
             <Map
+              compact={!over}
               width={view.width}
               height={view.height}
               owners={view.owners}
@@ -137,10 +139,10 @@ export function Controller({
               label={
                 player
                   ? L(
-                      'Live map. Your numbered runner has a ring. Outlined numbered squares are protected homes.',
+                      'Live map. Your numbered runner has a ring. Each seat has its own land texture. Arrows show direction. Outlined numbered squares are protected homes.',
                     )
                   : L(
-                      'Live map. Numbered discs are players; outlined numbered squares are protected homes.',
+                      'Live map. Numbered discs and direction arrows are players. Each seat has its own land texture. Outlined numbered squares are protected homes.',
                     )
               }
             />
@@ -165,7 +167,7 @@ export function Controller({
                   style={{ ['--seat-ink' as string]: playerInk(row.slot) } as CSSProperties}
                 >
                   <span className={styles.rank}>{row.rank}</span>
-                  <span className={styles.rowSeat}>{row.slot + 1}</span>
+                  <SeatBadge className={styles.rowSeat} slot={row.slot} />
                   <b className={styles.name}>{row.name}</b>
                   <b>{row.area}</b>
                 </li>

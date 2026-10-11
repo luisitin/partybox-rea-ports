@@ -32,6 +32,8 @@ it('renders every phase for TV, player, stage, remote and spectator from a real 
   const states: Record<string, State> = { ready, play, score, done };
   const cssPaths = [
     '../client/Map.module.css',
+    '../client/OwnershipPattern.module.css',
+    '../client/SeatBadge.module.css',
     '../client/Controller.module.css',
     '../client/Tv.module.css',
     '../../../packages/game-sdk/src/controller/Screen.module.css',

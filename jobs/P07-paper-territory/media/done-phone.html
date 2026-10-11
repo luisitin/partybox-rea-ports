@@ -222,15 +222,18 @@ ight is the :root default above) ────────
 
     ._home_f40580 {
       fill: var(--pb-bg);
-      fill-opacity: 0.25;
+      fill-opacity: 0.1;
       stroke-width: 0.12;
     }
 
     ._homeNumber_f40580 {
-      font-size: 1px;
+      font-size: calc(var(--pb-font-body) * 0.04);
       font-family: var(--pb-font-family);
       font-weight: 900;
-      fill: var(--pb-text-muted);
+      fill: var(--pb-text);
+      paint-order: stroke;
+      stroke: var(--pb-bg);
+      stroke-width: 0.12;
     }
 
     ._edge_f40580 {
@@ -248,16 +251,62 @@ ight is the :root default above) ────────
     }
 
     ._number_f40580 {
-      font-size: 1.1px;
+      font-size: calc(var(--pb-font-body) * 0.04);
       font-family: var(--pb-font-family);
       font-weight: 900;
       fill: var(--pb-text);
+    }
+
+    ._map_f40580[data-compact] ._number_f40580,
+    ._map_f40580[data-compact] ._homeNumber_f40580 {
+      font-size: calc(var(--pb-font-body) * 0.1);
+    }
+
+    ._heading_f40580 {
+      fill: var(--pb-text);
+      stroke: var(--pb-bg);
+      stroke-width: 0.06;
+      stroke-linejoin: round;
     }
 
     ._mine_f40580 {
       fill: none;
       stroke: var(--pb-text);
       stroke-width: 0.1;
+    }
+
+    ._line_73a606 {
+      fill: none;
+      stroke: var(--pb-text);
+      stroke-opacity: 0.42;
+      stroke-width: 0.09;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    ._dot_73a606 {
+      fill: var(--pb-text);
+      fill-opacity: 0.42;
+    }
+
+    ._badge_cafdc5 {
+      position: relative;
+      overflow: hidden;
+    }
+
+    ._texture_cafdc5 {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    ._number_cafdc5 {
+      position: relative;
+      padding: 0 var(--pb-space-1);
+      background: var(--pb-bg);
+      border-radius: var(--pb-radius);
+      line-height: 1.1;
     }
 
     /* Play uses only the shell's remaining height. The map yields space to the four thumb targets. */
@@ -816,7 +865,7 @@ ight is the :root default above) ────────
       position: sticky;
       bottom: 0;
       padding: var(--pb-space-3) var(--pb-space-4)
-        calc(var(--pb-space-3) + env(safe-area-inset-bottom));
+        calc(var(--pb-space-3) + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
       background: linear-gradient(to top, var(--pb-bg) 70%, transparent);
     }
 
@@ -826,7 +875,8 @@ ight is the :root default above) ────────
         padding: var(--pb-space-2) var(--pb-space-4);
       }
       ._footer_72dfcc {
-        padding: 4px var(--pb-space-4) calc(4px + env(safe-area-inset-bottom));
+        padding: 4px var(--pb-space-4)
+          calc(4px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
       }
     }
 
@@ -967,7 +1017,8 @@ ight is the :root default above) ────────
     /* No footer: the row alone, in the bottom safe area. */
     ._cueOnly_72dfcc {
       flex-shrink: 0;
-      padding: var(--pb-space-3) var(--pb-space-4) calc(4px + env(safe-area-inset-bottom));
+      padding: var(--pb-space-3) var(--pb-space-4)
+        calc(4px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
     }
 
     @media (orientation: landscape) and (max-height: 420px) {
@@ -979,7 +1030,8 @@ ight is the :root default above) ────────
         inset: -4px 0 0;
       }
       ._cueOnly_72dfcc {
-        padding: 4px var(--pb-space-4) calc(2px + env(safe-area-inset-bottom));
+        padding: 4px var(--pb-space-4)
+          calc(2px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
       }
     }
 
@@ -1049,45 +1101,186 @@ ight is the :root default above) ────────
         <div class="_body_72dfcc">
           <div class="_content_9f25ac" data-results="true" style="--seat-ink: var(--pb-player-1)">
             <header class="_header_9f25ac">
-              <b class="_seat_9f25ac">1</b>
+              <span class="_seat_9f25ac _badge_cafdc5"
+                ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                  <defs>
+                    <pattern
+                      id="_R_16_"
+                      width="2"
+                      height="2"
+                      patternUnits="userSpaceOnUse"
+                      data-texture="Horizontal lines"
+                    >
+                      <path d="M0 1H2" class="_line_73a606"></path>
+                    </pattern>
+                  </defs>
+                  <rect width="4" height="4" fill="url(#_R_16_)"></rect></svg
+                ><b class="_number_cafdc5">1</b></span
+              >
               <div class="_heading_9f25ac">
                 <p>Paper Territory</p>
-                <h2>Eli takes the map!</h2>
+                <h2>Fay takes the map!</h2>
               </div>
             </header>
-            <p class="_summary_9f25ac">Place 7 · 41 cells · 3.7%</p>
+            <p class="_summary_9f25ac">Place 6 · 52 cells · 4.6%</p>
             <ul class="_rows_9f25ac" aria-label="Final standings">
+              <li style="--seat-ink: var(--pb-player-6)">
+                <span class="_rank_9f25ac">1</span
+                ><span class="_rowSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_46m_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Crosses"
+                      >
+                        <path d="M0.65 1H1.35M1 0.65V1.35" class="_line_73a606"></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_46m_)"></rect></svg
+                  ><b class="_number_cafdc5">6</b></span
+                ><b class="_name_9f25ac">Fay</b><b>184</b>
+              </li>
               <li style="--seat-ink: var(--pb-player-5)">
-                <span class="_rank_9f25ac">1</span><span class="_rowSeat_9f25ac">5</span
-                ><b class="_name_9f25ac">Eli</b><b>156</b>
+                <span class="_rank_9f25ac">2</span
+                ><span class="_rowSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_4am_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Dots"
+                      >
+                        <circle cx="1" cy="1" r="0.14" class="_dot_73a606"></circle>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_4am_)"></rect></svg
+                  ><b class="_number_cafdc5">5</b></span
+                ><b class="_name_9f25ac">Eli</b><b>139</b>
               </li>
               <li style="--seat-ink: var(--pb-player-3)">
-                <span class="_rank_9f25ac">2</span><span class="_rowSeat_9f25ac">3</span
-                ><b class="_name_9f25ac">Cy</b><b>110</b>
-              </li>
-              <li style="--seat-ink: var(--pb-player-7)">
-                <span class="_rank_9f25ac">3</span><span class="_rowSeat_9f25ac">7</span
-                ><b class="_name_9f25ac">Gus</b><b>76</b>
-              </li>
-              <li style="--seat-ink: var(--pb-player-2)">
-                <span class="_rank_9f25ac">4</span><span class="_rowSeat_9f25ac">2</span
-                ><b class="_name_9f25ac">Ben</b><b>72</b>
+                <span class="_rank_9f25ac">3</span
+                ><span class="_rowSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_4em_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Rising stripes"
+                      >
+                        <path
+                          d="M-0.5 0.5L0.5 -0.5M0 2L2 0M1.5 2.5L2.5 1.5"
+                          class="_line_73a606"
+                        ></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_4em_)"></rect></svg
+                  ><b class="_number_cafdc5">3</b></span
+                ><b class="_name_9f25ac">Cy</b><b>97</b>
               </li>
               <li style="--seat-ink: var(--pb-player-8)">
-                <span class="_rank_9f25ac">5</span><span class="_rowSeat_9f25ac">8</span
-                ><b class="_name_9f25ac">Hal</b><b>71</b>
+                <span class="_rank_9f25ac">4</span
+                ><span class="_rowSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_4im_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Diamonds"
+                      >
+                        <path d="M1 0.45L1.55 1L1 1.55L0.45 1Z" class="_line_73a606"></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_4im_)"></rect></svg
+                  ><b class="_number_cafdc5">8</b></span
+                ><b class="_name_9f25ac">Hal</b><b>84</b>
               </li>
-              <li style="--seat-ink: var(--pb-player-4)">
-                <span class="_rank_9f25ac">6</span><span class="_rowSeat_9f25ac">4</span
-                ><b class="_name_9f25ac">Dee</b><b>60</b>
+              <li style="--seat-ink: var(--pb-player-2)">
+                <span class="_rank_9f25ac">5</span
+                ><span class="_rowSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_4mm_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Vertical lines"
+                      >
+                        <path d="M1 0V2" class="_line_73a606"></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_4mm_)"></rect></svg
+                  ><b class="_number_cafdc5">2</b></span
+                ><b class="_name_9f25ac">Ben</b><b>60</b>
               </li>
               <li data-me="true" style="--seat-ink: var(--pb-player-1)">
-                <span class="_rank_9f25ac">7</span><span class="_rowSeat_9f25ac">1</span
-                ><b class="_name_9f25ac">Ana</b><b>41</b>
+                <span class="_rank_9f25ac">6</span
+                ><span class="_rowSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_4qm_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Horizontal lines"
+                      >
+                        <path d="M0 1H2" class="_line_73a606"></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_4qm_)"></rect></svg
+                  ><b class="_number_cafdc5">1</b></span
+                ><b class="_name_9f25ac">Ana</b><b>52</b>
               </li>
-              <li style="--seat-ink: var(--pb-player-6)">
-                <span class="_rank_9f25ac">8</span><span class="_rowSeat_9f25ac">6</span
-                ><b class="_name_9f25ac">Fay</b><b>9</b>
+              <li style="--seat-ink: var(--pb-player-4)">
+                <span class="_rank_9f25ac">7</span
+                ><span class="_rowSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_4um_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Falling stripes"
+                      >
+                        <path
+                          d="M-0.5 1.5L0.5 2.5M0 0L2 2M1.5 -0.5L2.5 0.5"
+                          class="_line_73a606"
+                        ></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_4um_)"></rect></svg
+                  ><b class="_number_cafdc5">4</b></span
+                ><b class="_name_9f25ac">Dee</b><b>40</b>
+              </li>
+              <li style="--seat-ink: var(--pb-player-7)">
+                <span class="_rank_9f25ac">8</span
+                ><span class="_rowSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_52m_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Grid"
+                      >
+                        <path d="M0 1H2M1 0V2" class="_line_73a606"></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_52m_)"></rect></svg
+                  ><b class="_number_cafdc5">7</b></span
+                ><b class="_name_9f25ac">Gus</b><b>9</b>
               </li>
             </ul>
           </div>

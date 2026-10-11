@@ -8,6 +8,9 @@ import { game } from '../server/index';
 
 const metrics: Record<string, unknown> = {};
 const T0 = 1_000_000;
+const count = Number(process.env['PB_SIM_GAMES'] ?? 1000);
+if (!Number.isInteger(count) || count < 1 || count > 1000)
+  throw new Error('PB_SIM_GAMES must be an integer from 1 to 1000');
 
 function simulate(
   n: number,
@@ -20,6 +23,8 @@ function simulate(
   areas: number[];
   captures: number[];
   deaths: number[];
+  botMs: number;
+  reducerMs: number;
 } {
   const rng = createRng(seed);
   const players = testPlayers(n, { bots: n });
@@ -28,6 +33,8 @@ function simulate(
   let now = T0;
   let events = 0;
   let nextDecision = T0;
+  let botMs = 0;
+  let reducerMs = 0;
   const playLengths: number[] = [];
   const budget = game.manifest.estimatedMinutes * 2 * 60_000;
   while (game.results(state) === null) {
@@ -44,17 +51,23 @@ function simulate(
     // gets a physics step between its input and another seat's input.
     const inputAt = Math.max(now, deadline - 1);
     for (const player of inputAt >= nextDecision ? rng.shuffle(players) : []) {
+      const botStarted = performance.now();
       const input = game.bot.sampleInput(state, player.id, rng, skill);
+      botMs += performance.now() - botStarted;
       if (input === null) continue;
       const parsed = game.inputSchema.safeParse(input);
       if (!parsed.success)
         throw new Error(`n=${n}, seed=${seed}: invalid bot input ${JSON.stringify(input)}`);
+      const inputStarted = performance.now();
       state = kit.input(state, player.id, parsed.data, inputAt);
+      reducerMs += performance.now() - inputStarted;
       events++;
     }
     if (inputAt >= nextDecision) nextDecision = inputAt + 600;
     now = Math.max(inputAt, deadline);
+    const timerStarted = performance.now();
     state = kit.timer(state, now);
+    reducerMs += performance.now() - timerStarted;
     events++;
     if (priorPhase === 'play' && state.phase.id !== 'play') playLengths.push(now - began);
   }
@@ -73,6 +86,8 @@ function simulate(
     areas: state.world.runners.map((r) => r.area),
     captures: state.world.runners.map((r) => r.captures),
     deaths: state.world.runners.map((r) => r.deaths),
+    botMs,
+    reducerMs,
   };
 }
 
@@ -83,6 +98,9 @@ describe('1000 seeded bot games at each party size', () => {
       const lengths: number[] = [];
       let maximumGameMs = 0;
       let maximumEvents = 0;
+      let botMs = 0;
+      let reducerMs = 0;
+      const started = performance.now();
       const bySkill = Object.fromEntries(
         (['easy', 'normal', 'sharp'] as const).map((skill) => [
           skill,
@@ -92,12 +110,14 @@ describe('1000 seeded bot games at each party size', () => {
         BotSkill,
         { games: number; areas: number[]; captures: number[]; deaths: number[] }
       >;
-      for (let seed = 1; seed <= 1000; seed++) {
+      for (let seed = 1; seed <= count; seed++) {
         const skill = (['easy', 'normal', 'sharp'] as const)[(seed - 1) % 3]!;
         const run = simulate(n, seed, skill);
         lengths.push(...run.playLengths);
         maximumGameMs = Math.max(maximumGameMs, run.milliseconds);
         maximumEvents = Math.max(maximumEvents, run.events);
+        botMs += run.botMs;
+        reducerMs += run.reducerMs;
         bySkill[skill].games++;
         bySkill[skill].areas.push(...run.areas);
         bySkill[skill].captures.push(...run.captures);
@@ -108,18 +128,21 @@ describe('1000 seeded bot games at each party size', () => {
         (lengths[Math.floor((lengths.length - 1) / 2)]! +
           lengths[Math.floor(lengths.length / 2)]!) /
         2;
-      expect(lengths.length).toBeGreaterThanOrEqual(1000);
+      expect(lengths.length).toBeGreaterThanOrEqual(count);
       expect(maximumGameMs).toBeLessThanOrEqual(game.manifest.estimatedMinutes * 2 * 60_000);
       expect(medianRoundMs).toBeGreaterThan(0);
       metrics[String(n)] = {
-        games: 1000,
-        seeds: '1..1000',
+        games: count,
+        seeds: `1..${count}`,
         strengths: ['easy', 'normal', 'sharp'],
         medianRoundMs,
         maximumRoundMs: Math.max(...lengths),
         maximumGameMs,
         maximumEvents,
         decisionBeatMs: 600,
+        wallMs: performance.now() - started,
+        botMs,
+        reducerMs,
         bySkill: Object.fromEntries(
           Object.entries(bySkill).map(([skill, values]) => {
             const median = (numbers: number[]): number => {
@@ -160,6 +183,13 @@ describe('1000 seeded bot games at each party size', () => {
           JSON.stringify(metrics, null, 2) + '\n',
           'utf8',
         );
+      }
+      for (const [skill, values] of Object.entries(bySkill)) {
+        if (values.games > 0)
+          expect(
+            values.captures.some((capture) => capture > 0),
+            `${n} players, ${skill} bots capture territory`,
+          ).toBe(true);
       }
     },
     180_000,

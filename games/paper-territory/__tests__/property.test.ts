@@ -22,7 +22,7 @@ function invariant(state: State, seed: number, step: number): void {
   if (!game.phases.includes(state.phase.id)) fail('undeclared phase');
   const json = JSON.stringify(state);
   if (JSON.stringify(JSON.parse(json)) !== json) fail('not JSON serializable');
-  if (Buffer.byteLength(json) > 256 * 1024) fail('state exceeds256KiB');
+  if (Buffer.byteLength(json) > 256 * 1024) fail('state exceeds 256 KiB');
   if (numericLeaves(state).some((value) => !Number.isFinite(value))) fail('nonfinite state number');
   const world = state.world;
   if (
@@ -51,10 +51,10 @@ function invariant(state: State, seed: number, step: number): void {
     if (view.me.id !== id) fail('wrong controller identity');
     if (view.me.role !== (Object.hasOwn(state.players, id) ? 'player' : 'spectator'))
       fail('prototype/spectator role confusion');
-    if (Buffer.byteLength(JSON.stringify(view)) > 64 * 1024) fail('controller view exceeds64KiB');
+    if (Buffer.byteLength(JSON.stringify(view)) > 64 * 1024) fail('controller view exceeds 64 KiB');
   }
   if (Buffer.byteLength(JSON.stringify(game.tvView(state))) > 64 * 1024)
-    fail('TV view exceeds64KiB');
+    fail('TV view exceeds 64 KiB');
 }
 
 function exercise(seed: number): void {
@@ -121,8 +121,8 @@ function exercise(seed: number): void {
 }
 
 describe('1003 seeded property traces', () => {
-  it.each([1, 2, 3])('preserves invariants for regression seed%i', exercise);
-  it('preserves invariants and replay for1000 reproducibly random seeds', () => {
+  it.each([1, 2, 3])('preserves invariants for regression seed %i', exercise);
+  it('preserves invariants and replay for 1000 reproducibly random seeds', () => {
     const rng = createRng(0x5eed07);
     const seeds = new Set<number>();
     while (seeds.size < 1000) seeds.add(rng.int(4, 0x7fffffff));

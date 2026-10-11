@@ -239,6 +239,21 @@ describe('simultaneous movement and deaths', () => {
     ).toEqual(normalized(next));
   });
 
+  it('head collision wins over simultaneous trail cuts independent of runner iteration order', () => {
+    const world = arena([
+      runner(0, cell(2, 3), 1, { trail: [cell(2, 3)] }),
+      runner(1, cell(3, 3), 3, { trail: [cell(3, 3)] }),
+    ]);
+    const next = stepWorld(world, ['p1', 'p2']);
+    expect(next.runners.map((r) => [r.alive, r.cause, r.deaths])).toEqual([
+      [false, 'head', 1],
+      [false, 'head', 1],
+    ]);
+    expect(
+      normalized(stepWorld({ ...world, runners: [...world.runners].reverse() }, ['p2', 'p1'])),
+    ).toEqual(normalized(next));
+  });
+
   it('same-tick overlapping captures stay neutral independent of runner iteration order', () => {
     const ring = (low: number, high: number): number[] => {
       const points: number[] = [];

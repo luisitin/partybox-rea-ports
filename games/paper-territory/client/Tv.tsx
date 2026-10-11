@@ -7,6 +7,7 @@ import { clockText } from './controls';
 import { Map } from './Map';
 import { areaPercent, playerInk } from './mapMath';
 import { standings } from './standings';
+import { SeatBadge } from './SeatBadge';
 import { STRINGS } from './strings';
 import styles from './Tv.module.css';
 
@@ -48,7 +49,7 @@ export function Tv({ view }: GameTvProps<PaperTerritoryTvView>): JSX.Element {
               owners={view.owners}
               runners={view.runners}
               label={L(
-                'Territory map. Numbered discs are players. Outlined numbered squares are protected homes. Dashed trails are vulnerable.',
+                'Territory map. Numbered discs and direction arrows are players. Each seat has its own land texture. Outlined numbered squares are protected homes. Dashed trails are vulnerable.',
               )}
             />
             {view.phaseId === 'ready' ? (
@@ -73,7 +74,7 @@ export function Tv({ view }: GameTvProps<PaperTerritoryTvView>): JSX.Element {
                 key={row.id}
                 style={{ ['--seat-ink' as string]: playerInk(row.slot) } as CSSProperties}
               >
-                <span className={styles.seat}>{row.slot + 1}</span>
+                <SeatBadge className={styles.seat} slot={row.slot} />
                 <div className={styles.person}>
                   <b>{row.name}</b>
                   <span>

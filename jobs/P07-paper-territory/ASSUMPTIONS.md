@@ -8,8 +8,9 @@
   2020 build identity is not authentication of mirror ownership or fidelity to the
   current official game. Its code/assets are not included in the repository.
 - Browser UI tooling had no available app/browser surfaces when checked in this
-  runner session. No P07 browser was launched and no original live play, sound
-  listening or multiplayer collision experiment is claimed. Written primary
+  runner session. No original live play, sound listening or multiplayer collision
+  experiment is claimed. A separate isolated browser later captured our authored
+  screens, and was closed after each capture. Written primary
   instructions, independent observations and readable client text are the fallback.
 - Older browser instructions make own-trail crossing fatal, while Voodoo's mobile
   4.33.0 notes make it nonfatal. The June 13 year is inferred as 2026 from the
