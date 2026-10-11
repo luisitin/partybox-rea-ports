@@ -3,7 +3,7 @@ import { enterPhase, hasPlayer, isTimerFor, shuffle } from '@partybox/game-sdk';
 import type { GameEvent } from '@partybox/game-sdk';
 import { normalize as normalizeAnswer } from '@partybox/game-sdk/match';
 import { guessPoints } from '../scoring';
-import { compactInk } from '../ink';
+import { appendInk, continuesInk, undoInk } from '../ink';
 import { BEAT_MS, MAX_STROKES } from '../types';
 import type { State, Input, Transition } from '../types';
 export function normalize(text: string): string {
@@ -73,19 +73,24 @@ export function reduceDraw(state: State, event: GameEvent<Input>, next: Transiti
     return state;
   const { playerId, input, now } = event;
   if (playerId === state.drawer) {
-    if (input.type === 'clear') return { ...state, clock: now, strokes: [] };
-    if (input.type === 'undo') return { ...state, clock: now, strokes: state.strokes.slice(0, -1) };
-    if (input.type === 'stroke' && state.strokes.length < MAX_STROKES)
+    if (input.type === 'clear')
+      return { ...state, clock: now, inkRevision: state.inkRevision + 1, strokes: [] };
+    if (input.type === 'undo')
       return {
         ...state,
         clock: now,
-        strokes: compactInk([
-          ...state.strokes,
-          {
-            ...input.stroke,
-            points: input.stroke.points.map(([x, y]) => [Math.round(x), Math.round(y)]),
-          },
-        ]),
+        inkRevision: state.inkRevision + 1,
+        strokes: undoInk(state.strokes),
+      };
+    if (
+      input.type === 'stroke' &&
+      (state.strokes.length < MAX_STROKES || continuesInk(state.strokes, input.stroke))
+    )
+      return {
+        ...state,
+        clock: now,
+        inkRevision: state.inkRevision + 1,
+        strokes: appendInk(state.strokes, input.stroke),
       };
     return state;
   }

@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties, FormEvent, JSX } from 'react';
-import { usePhoneOnly, useServerNow, useT } from '@partybox/game-sdk/ui';
+import { buzz, usePhoneOnly, useServerNow, useSound, useT } from '@partybox/game-sdk/ui';
 import type { GameControllerProps } from '@partybox/game-sdk/ui';
 import type { DrawControllerView, Input } from '../server/types';
 import { DrawingPad } from './DrawingPad';
@@ -15,6 +15,7 @@ export function Controller({
 }: GameControllerProps<DrawControllerView, Input>): JSX.Element {
   const L = useT(STRINGS);
   const phoneOnly = usePhoneOnly();
+  const play = useSound();
   const now = useServerNow(250, view.paused, view.clockHeldAt);
   const [draft, setDraft] = useState({ turn: -1, text: '' });
   const [submitted, setSubmitted] = useState({ turn: -1, text: '' });
@@ -39,6 +40,21 @@ export function Controller({
         };
   const phase = view.phaseId;
   const player = view.me.role === 'player';
+  const celebrated = useRef('');
+  useEffect(() => {
+    const key = `${view.turn}:${view.me.id}`;
+    if (
+      !player ||
+      view.isDrawer ||
+      !view.solved ||
+      view.myPoints <= 0 ||
+      celebrated.current === key
+    )
+      return;
+    celebrated.current = key;
+    play('correct');
+    buzz(40);
+  }, [view.turn, view.me.id, view.isDrawer, view.solved, view.myPoints, player, play]);
   const seconds = Math.max(0, Math.ceil((view.endsAt - now) / 1000));
   const stage = phoneOnly || view.phoneStage || !player;
   const text = draft.turn === view.turn ? draft.text : '';
@@ -91,6 +107,11 @@ export function Controller({
           <h2 className={styles.title} data-mask={phase === 'draw' && !view.isDrawer}>
             {title}
           </h2>
+          {phase === 'draw' && view.isDrawer && player ? (
+            <p className={styles.artistProgress} role="status">
+              {L('{n}/{m} guessed it', { n: view.solvedCount, m: view.guesserCount })}
+            </p>
+          ) : null}
         </div>
         {phase === 'draw' || phase === 'choose' ? (
           <p
@@ -122,7 +143,13 @@ export function Controller({
           </div>
         </div>
       ) : phase === 'draw' && view.isDrawer && player ? (
-        <DrawingPad key={view.turn} strokes={view.strokes} disabled={view.paused} send={send} />
+        <DrawingPad
+          key={view.turn}
+          strokes={view.strokes}
+          inkRevision={view.inkRevision}
+          disabled={view.paused}
+          send={send}
+        />
       ) : (
         <>
           {stage || phase === 'reveal' ? (
@@ -143,7 +170,7 @@ export function Controller({
               <p>{L('{n} of {m} guessed it', { n: view.solvedCount, m: view.guesserCount })}</p>
               {view.solved && player ? (
                 <p className={styles.correct} role="status">
-                  {L('Correct! Enjoy the picture.')}
+                  {L('Correct! +{n} points', { n: view.myPoints })}
                 </p>
               ) : null}
             </div>

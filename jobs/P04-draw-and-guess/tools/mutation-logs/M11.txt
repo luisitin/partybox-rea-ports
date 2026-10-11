@@ -1,24 +1,24 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 27ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 28ms
      × ignores choices from guessers and spectators, including prototype names 6ms
 
  Test Files  1 failed (1)
       Tests  1 failed | 20 passed (21)
-   Start at  16:04:50
-   Duration  710ms (transform 279ms, setup 0ms, import 435ms, tests 27ms, environment 0ms)
+   Start at  16:18:45
+   Duration  649ms (transform 285ms, setup 0ms, import 437ms, tests 28ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > ignores choices from guessers and spectators, including prototype names
-AssertionError: expected { phase: { id: 'draw', …(2) }, …(23) } to deeply equal { Object (phase, players, ...) }
+AssertionError: expected { phase: { id: 'draw', …(2) }, …(24) } to deeply equal { Object (phase, players, ...) }
 
 - Expected
 + Received
 
-@@ -1,32 +1,33 @@
+@@ -1,33 +1,34 @@
   {
 -   "began": 1000000,
 -   "choices": [
@@ -44,6 +44,7 @@ AssertionError: expected { phase: { id: 'draw', …(2) }, …(23) } to deeply eq
 +     3,
 +     0,
 +   ],
+    "inkRevision": 0,
     "lastGuessAt": {},
     "left": [],
     "order": [
@@ -64,7 +65,7 @@ AssertionError: expected { phase: { id: 'draw', …(2) }, …(23) } to deeply eq
     "players": {
       "p1": {
         "avatarId": "fox",
-@@ -53,11 +54,11 @@
+@@ -54,11 +55,11 @@
         "name": "Dee",
       },
     },
@@ -77,7 +78,7 @@ AssertionError: expected { phase: { id: 'draw', …(2) }, …(23) } to deeply eq
       "p1": 0,
       "p2": 0,
       "p3": 0,
-@@ -69,8 +70,10 @@
+@@ -70,8 +71,10 @@
       "laps": 1,
     },
     "solved": {},

@@ -3,19 +3,19 @@
 Windows11, Node24.19.0, pnpm12.4.2. `pnpm.cmd` is the Windows launcher for the
 documented pnpm commands; PowerShell blocks pnpm.ps1. Only this game was tested.
 
-| Check                        | Exact command                                                                                                   | Result                                                                                                                                    |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Install once                 | `corepack enable`; `pnpm.cmd install`                                                                           | Pass, frozen dependency graph; no new dependencies.                                                                                       |
-| Types                        | `pnpm.cmd typecheck`                                                                                            | Pass.                                                                                                                                     |
-| Format                       | `pnpm.cmd format`                                                                                               | Final check recorded after media formatting below.                                                                                        |
-| Game and actual SDK contract | `pnpm.cmd vitest run games/draw-and-guess --maxWorkers=1`                                                       | 65tests passed, including20SDK contract checks. No other game's tests are loaded.                                                         |
-| Properties                   | Same scoped command                                                                                             | Seeds1,2,3:100generated traces each; seed0x50404:1,000generated random game seeds; SDK fuzz across all phases.                            |
-| Bots                         | `$env:WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/draw-and-guess/__tests__/simulation.test.ts --maxWorkers=1` | 7,000seeded games:1,000per legal count2-8, distributed334easy/333normal/333sharp. All terminate.                                          |
-| Fixtures/screens             | `$env:WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/draw-and-guess/__tests__/evidence.test.tsx --maxWorkers=1`  | 7tests pass;5fixtures from one actual8seat match,25HTML screens: every phase TV/phone/phone-only/spectator/artist, including last reveal. |
-| Browser fit                  | `node jobs/P04-draw-and-guess/tools/capture.mjs`                                                                | 25PNG captures at1920×1080/390×844;0viewport overflows on each. One browser, finally closed.                                              |
-| Mutation                     | `node jobs/P04-draw-and-guess/tools/mutate.mjs`                                                                 | 20/20planted bugs caught by assertions, originals restored in finally, restored baseline passes.                                          |
-| Media/hash                   | `node jobs/P04-draw-and-guess/tools/hash-media.mjs`                                                             | 50media files under10MB, each SHA256 recorded after final formatting.                                                                     |
-| CI                           | `.github/workflows/P04.yml`                                                                                     | PR workflow runs frozen install, types, format, scoped tests, read-only permissions,30minute limit. Draft until green.                    |
+| Check                        | Exact command                                                                                                   | Result                                                                                                                                                          |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Install once                 | `corepack enable`; `pnpm.cmd install`                                                                           | Pass, frozen dependency graph; no new dependencies.                                                                                                             |
+| Types                        | `pnpm.cmd typecheck`                                                                                            | Pass.                                                                                                                                                           |
+| Format                       | `pnpm.cmd format`                                                                                               | Final check recorded after media formatting below.                                                                                                              |
+| Game and actual SDK contract | `pnpm.cmd vitest run games/draw-and-guess --maxWorkers=1`                                                       | 65tests passed, including20SDK contract checks. No other game's tests are loaded.                                                                               |
+| Properties                   | Same scoped command                                                                                             | Seeds1,2,3:100generated traces each; seed0x50404:1,000generated random game seeds; SDK fuzz across all phases.                                                  |
+| Bots                         | `$env:WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/draw-and-guess/__tests__/simulation.test.ts --maxWorkers=1` | 7,000seeded games:1,000per legal count2-8, distributed334easy/333normal/333sharp. All terminate.                                                                |
+| Fixtures/screens             | `$env:WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/draw-and-guess/__tests__/evidence.test.tsx --maxWorkers=1`  | 7tests pass;5fixtures from one actual8seat match,25HTML screens: every phase TV/phone/phone-only/spectator/artist, including last reveal.                       |
+| Browser fit                  | `node jobs/P04-draw-and-guess/tools/capture.mjs`                                                                | 25PNG captures at1920×1080/390×844;0viewport overflows on each. One browser, finally closed.                                                                    |
+| Mutation                     | `node jobs/P04-draw-and-guess/tools/mutate.mjs`                                                                 | 20/20planted bugs caught by assertions, originals restored in finally, restored baseline passes.                                                                |
+| Media/hash                   | `node jobs/P04-draw-and-guess/tools/hash-media.mjs`                                                             | 50media files under10MB, each SHA256 recorded after final formatting.                                                                                           |
+| CI                           | `.github/workflows/P04.yml`                                                                                     | PR #1 workflow38175082215 passed in39seconds; marked ready only after green. Frozen install, types, format, scoped tests, read-only permissions,30minute limit. |
 
 At2/4/8players median drawing duration (easy/normal/sharp) is
 32/4/4seconds,40/8/4seconds and40/12/4seconds. Longest8seat match417seconds,
@@ -43,3 +43,15 @@ Original interactive research was unavailable through CUA; public client
 inspection plus independent source documentation is recorded honestly in
 RESEARCH.md. The public repo omits the private registry/sim CLIs named by older
 reference instructions, so actual SDK contract and local evidence tools are used.
+
+R1: `node jobs/P04-draw-and-guess/tools/playcheck.mjs` runs the actual React
+controller and reducer through local Vite in one browser, closed in finally.
+Eight checks pass: real pointer chunk merging (20 packets/gesture), one Undo,
+delayed Clear/Undo ordering, actual canvas ink, phone-only guessing fit,
+390×500 keyboard-height guessing fit, immediate point receipt and solved fit.
+`tools/playcheck-results.json` records 62 accepted revisions and zero overflow.
+The 750-packet minute regression preserves its final point in one gesture,
+with ≤3,500 points and views below 64KiB. Disconnected solvers retain an accurate
+progress denominator; final two-player receipts survive immediate reveal/done.
+R1 evidence now has 27 HTML and 27 PNG files, all phases plus artist progress
+and solved feedback. Repeated mutation campaign catches all20bugs after R1.

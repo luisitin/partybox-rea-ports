@@ -23,6 +23,7 @@ export function enterChoose(state: State, now: number, turn: number): State {
       rng,
       word: '',
       strokes: [],
+      inkRevision: 0,
       solved: {},
       guesses: {},
       feedback: {},

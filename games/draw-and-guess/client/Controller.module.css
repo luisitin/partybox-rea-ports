@@ -59,6 +59,13 @@
   font-variant-numeric: tabular-nums;
 }
 
+.artistProgress {
+  margin: var(--pb-space-1) 0 0;
+  color: var(--pb-accent-3);
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+}
+
 .choose {
   flex: 1;
   display: flex;
@@ -219,7 +226,7 @@
     max-height: calc(var(--pb-space-8) * 2);
   }
 
-  .screen[data-phase='draw'] .status {
+  .screen[data-phase='draw'] .status p:not(.correct) {
     display: none;
   }
 

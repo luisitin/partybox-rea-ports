@@ -56,13 +56,18 @@ stage with no action controls.
 
 - `choose`: option index 0-2, artist only during `choose`.
 - `stroke`: 1-24 points on a 1000 × 600 logical pad, colour index 0-5,
-  width 4, 9 or 18; artist only during `draw`.
-- `undo` removes the latest accepted stroke; `clear` empties the pad.
+  width 4, 9 or 18, optional integer gesture ID 0-1,000,000,000;
+  artist only during `draw`. Contiguous chunks of a gesture join into one path.
+- `undo` removes the latest complete gesture; legacy packets without a gesture
+  ID each count as one stroke. `clear` empties the pad.
 - `guess`: 1-40 characters, non-artist only during `draw`. Case, outer
   whitespace, punctuation and leading articles use SDK normalization. An exact normalized word/phrase solves.
 
-Six colours and three brush sizes keep the tool row simple. At most 240 strokes
-are stored. Guesses are accepted at most once every 750 ms per seat, and only
+Six colours and three brush sizes keep the tool row simple. At most 240 paths
+are stored; a current gesture can keep drawing throughout the turn. A 3,500-point
+budget simplifies long paths while preserving their endpoints. Accepted ink
+and edits carry a per-turn revision for ordered phone acknowledgements.
+Guesses are accepted at most once every 750 ms per seat, and only
 the most recent 24 are retained. Raw guesses never appear on the shared stage;
 a one-letter mismatch gets private “Close!” feedback. A solved seat cannot
 score or submit more guesses that turn.
@@ -73,6 +78,8 @@ A correct guess earns `300 + floor(700 × remaining / duration)`, clamped to
 300-1000 points. The artist earns 250 per correct guess. No wrong-guess penalty.
 Points are awarded once per solver; match totals add across turns and ties
 share a rank. These are PartyBox scores, not a claim about an original formula.
+The artist sees successful-guess progress. A solver immediately sees their own
+earned points with one sound/haptic cue, while the word stays hidden until reveal.
 
 ## Edge cases
 

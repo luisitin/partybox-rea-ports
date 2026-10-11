@@ -167,6 +167,33 @@ describe('review evidence and every phone phase', () => {
     },
   );
 
+  it('shows the artist real solver progress and gives a solver an immediate private point receipt', () => {
+    const s = fixtures.draw!;
+    const id = s.order.find((playerId) => playerId !== s.drawer)!;
+    expect(render(s, 'artist')).toContain('0/7 guessed it');
+    const solved = kit.input(s, id, { type: 'guess', text: s.word }, s.began + 6000);
+    const artist = render(solved, 'artist');
+    const phone = render(solved, 'phone');
+    expect(artist).toContain('1/7 guessed it');
+    expect(phone).toContain('Correct! +860 points');
+    expect(phone).not.toContain('<input');
+    expect(phone).not.toContain(s.word);
+    expect(game.controllerView(solved, id).myPoints).toBe(860);
+    if (writing) {
+      mkdirSync(mediaDir, { recursive: true });
+      writeFileSync(
+        join(mediaDir, 'draw-artist-progress.html'),
+        document(artist, 'artist', 'Artist / one solver'),
+        'utf8',
+      );
+      writeFileSync(
+        join(mediaDir, 'draw-phone-solved.html'),
+        document(phone, 'phone', 'Solver / earned points'),
+        'utf8',
+      );
+    }
+  });
+
   it('records hashes and keeps all evidence below the job 10 MB limit', () => {
     if (!writing) return;
     const media = readdirSync(mediaDir)

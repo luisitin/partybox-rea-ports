@@ -1,13 +1,13 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 24ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 26ms
      × choices and the answer stay off every public surface until reveal, even after a correct guess 5ms
 
  Test Files  1 failed (1)
       Tests  1 failed | 20 passed (21)
-   Start at  16:04:47
-   Duration  595ms (transform 263ms, setup 0ms, import 409ms, tests 24ms, environment 0ms)
+   Start at  16:18:43
+   Duration  616ms (transform 272ms, setup 0ms, import 423ms, tests 26ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
@@ -16,7 +16,7 @@
 AssertionError: expected '{"gameId":"draw-and-guess","phaseId":…' not to contain 'zzzchoiceone'
 
 Expected: "zzzchoiceone"
-Received: "{"gameId":"draw-and-guess","phaseId":"choose","phaseAt":1000000,"deadline":1008000,"paused":false,"players":[{"id":"p1","name":"Ana","avatarId":"fox","connected":true,"status":"waiting","score":0},{"id":"p2","name":"Ben","avatarId":"owl","connected":true,"status":"waiting","score":0},{"id":"p3","name":"Cy","avatarId":"frog","connected":true,"status":"waiting","score":0},{"id":"p4","name":"Dee","avatarId":"cat","connected":true,"status":"active","score":0}],"me":{"id":"p2","role":"player"},"turn":1,"turns":4,"drawer":"p4","drawerName":"Dee","mask":"","strokes":[],"scores":{"p1":0,"p2":0,"p3":0,"p4":0},"gains":{},"solvedIds":[],"solvedCount":0,"guesserCount":3,"endsAt":1008000,"hintCount":0,"isDrawer":false,"choices":["zzzchoiceone","zzzchoicetwo","zzzchoicethree"],"solved":false,"feedback":"","lastGuess":"","phoneStage":false,"canGuess":false}"
+Received: "{"gameId":"draw-and-guess","phaseId":"choose","phaseAt":1000000,"deadline":1008000,"paused":false,"players":[{"id":"p1","name":"Ana","avatarId":"fox","connected":true,"status":"waiting","score":0},{"id":"p2","name":"Ben","avatarId":"owl","connected":true,"status":"waiting","score":0},{"id":"p3","name":"Cy","avatarId":"frog","connected":true,"status":"waiting","score":0},{"id":"p4","name":"Dee","avatarId":"cat","connected":true,"status":"active","score":0}],"me":{"id":"p2","role":"player"},"turn":1,"turns":4,"drawer":"p4","drawerName":"Dee","mask":"","strokes":[],"inkRevision":0,"scores":{"p1":0,"p2":0,"p3":0,"p4":0},"gains":{},"solvedIds":[],"solvedCount":0,"guesserCount":3,"endsAt":1008000,"hintCount":0,"isDrawer":false,"choices":["zzzchoiceone","zzzchoicetwo","zzzchoicethree"],"solved":false,"myPoints":0,"feedback":"","lastGuess":"","phoneStage":false,"canGuess":false}"
 
  ❯ games/draw-and-guess/__tests__/game.test.ts:244:83
     242|       ]) {

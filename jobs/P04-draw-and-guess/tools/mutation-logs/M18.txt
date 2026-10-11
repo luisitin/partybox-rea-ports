@@ -1,7 +1,7 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 4 failed) 25ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 4 failed) 26ms
      × the drawer picks the selected word; the choice timeout picks a valid fallback 4ms
      × timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer 1ms
      × awards 300 base plus 700 times remaining time, only once; the artist also earns points 1ms
@@ -9,8 +9,8 @@
 
  Test Files  1 failed (1)
       Tests  4 failed | 17 passed (21)
-   Start at  16:05:05
-   Duration  581ms (transform 252ms, setup 0ms, import 395ms, tests 25ms, environment 0ms)
+   Start at  16:18:55
+   Duration  620ms (transform 266ms, setup 0ms, import 414ms, tests 26ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
@@ -91,7 +91,3 @@ AssertionError: expected 2130 to be 2060 // Object.is equality
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
 
-[vitest-pool]: Timeout terminating forks worker for test files C:/dev/rea-runs/r2/games/draw-and-guess/__tests__/game.test.ts.
-close timed out after 10000ms
-Tests closed successfully but something prevents Vite server from exiting
-You can try to identify the cause by enabling "hanging-process" reporter. See https://vitest.dev/guide/reporters.html#hanging-process-reporter

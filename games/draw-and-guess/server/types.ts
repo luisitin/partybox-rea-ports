@@ -11,6 +11,7 @@ export const pointSchema = z.tuple([
   z.number().finite().min(0).max(600),
 ]);
 export const strokeSchema = z.object({
+  gesture: z.number().int().min(0).max(1_000_000_000).optional(),
   points: z.array(pointSchema).min(1).max(24),
   color: z.number().int().min(0).max(5),
   width: z.union([z.literal(4), z.literal(9), z.literal(18)]),
@@ -33,6 +34,7 @@ export interface State extends GameStateBase {
   choices: string[];
   word: string;
   strokes: Stroke[];
+  inkRevision: number;
   solved: Record<string, number>;
   guesses: Record<string, string[]>;
   feedback: Record<string, string>;
@@ -57,6 +59,7 @@ export interface PublicBoard {
   mask: string;
   answer?: string;
   strokes: Stroke[];
+  inkRevision: number;
   scores: Record<string, number>;
   gains: Record<string, number>;
   solvedIds: string[];
@@ -71,6 +74,7 @@ export interface DrawControllerView extends ControllerView, PublicBoard {
   choices?: string[];
   secret?: string;
   solved: boolean;
+  myPoints: number;
   feedback: string;
   lastGuess: string;
   phoneStage: boolean;

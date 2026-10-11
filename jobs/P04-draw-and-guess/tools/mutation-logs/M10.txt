@@ -1,14 +1,14 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 2 failed) 29ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 2 failed) 28ms
      × choices and the answer stay off every public surface until reveal, even after a correct guess 5ms
      × views are identical when unrevealed secrets alone change, and bots cannot peek at them 3ms
 
  Test Files  1 failed (1)
       Tests  2 failed | 19 passed (21)
-   Start at  16:04:49
-   Duration  641ms (transform 277ms, setup 0ms, import 442ms, tests 29ms, environment 0ms)
+   Start at  16:18:44
+   Duration  639ms (transform 278ms, setup 0ms, import 427ms, tests 28ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
@@ -17,7 +17,7 @@
 AssertionError: expected '{"gameId":"draw-and-guess","phaseId":…' not to contain 'zzzsafesecret'
 
 Expected: "zzzsafesecret"
-Received: "{"gameId":"draw-and-guess","phaseId":"draw","phaseAt":1001000,"deadline":1031000,"paused":false,"players":[{"id":"p1","name":"Ana","avatarId":"fox","connected":true,"status":"active","score":0},{"id":"p2","name":"Ben","avatarId":"owl","connected":true,"status":"active","score":0},{"id":"p3","name":"Cy","avatarId":"frog","connected":true,"status":"active","score":0},{"id":"p4","name":"Dee","avatarId":"cat","connected":true,"status":"active","score":0}],"me":{"id":"p2","role":"player"},"turn":1,"turns":4,"drawer":"p4","drawerName":"Dee","mask":"_ _ _ _ _ _ _ _ _ _ _ _ _","strokes":[],"scores":{"p1":0,"p2":0,"p3":0,"p4":0},"gains":{},"solvedIds":[],"solvedCount":0,"guesserCount":3,"endsAt":1031000,"hintCount":0,"isDrawer":false,"secret":"zzzsafesecret","solved":false,"feedback":"","lastGuess":"","phoneStage":false,"canGuess":true}"
+Received: "{"gameId":"draw-and-guess","phaseId":"draw","phaseAt":1001000,"deadline":1031000,"paused":false,"players":[{"id":"p1","name":"Ana","avatarId":"fox","connected":true,"status":"active","score":0},{"id":"p2","name":"Ben","avatarId":"owl","connected":true,"status":"active","score":0},{"id":"p3","name":"Cy","avatarId":"frog","connected":true,"status":"active","score":0},{"id":"p4","name":"Dee","avatarId":"cat","connected":true,"status":"active","score":0}],"me":{"id":"p2","role":"player"},"turn":1,"turns":4,"drawer":"p4","drawerName":"Dee","mask":"_ _ _ _ _ _ _ _ _ _ _ _ _","strokes":[],"inkRevision":0,"scores":{"p1":0,"p2":0,"p3":0,"p4":0},"gains":{},"solvedIds":[],"solvedCount":0,"guesserCount":3,"endsAt":1031000,"hintCount":0,"isDrawer":false,"secret":"zzzsafesecret","solved":false,"myPoints":0,"feedback":"","lastGuess":"","phoneStage":false,"canGuess":true}"
 
  ❯ games/draw-and-guess/__tests__/game.test.ts:244:83
     242|       ]) {
@@ -30,12 +30,12 @@ Received: "{"gameId":"draw-and-guess","phaseId":"draw","phaseAt":1001000,"deadli
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
 
  FAIL  games/draw-and-guess/__tests__/game.test.ts > secrets, lifecycle and determinism > views are identical when unrevealed secrets alone change, and bots cannot peek at them
-AssertionError: expected { gameId: 'draw-and-guess', …(26) } to deeply equal { gameId: 'draw-and-guess', …(26) }
+AssertionError: expected { gameId: 'draw-and-guess', …(28) } to deeply equal { gameId: 'draw-and-guess', …(28) }
 
 - Expected
 + Received
 
-@@ -58,11 +58,11 @@
+@@ -60,11 +60,11 @@
       "p1": 0,
       "p2": 0,
       "p3": 0,
