@@ -15,3 +15,4 @@
 - English only, no card packs, no gameplay settings; fixed three-round pacing follows P05. Bots use the same public arena information and controls as players.
 - Exact original audio and current music were not independently verified. The port uses existing PartyBox synthesized cues; no original recording or asset is added.
 - The full-suite command mentioned in games/AGENTS.md is superseded by the owner's CPU-care instruction: only this game's tests and required non-browser repo checks. At most one root-owned headless browser is permitted and it must close in `finally`.
+- The first full test process began at 21:13 UTC and imported the old pause handler before the 21:30 UTC pause-fix commit. It passed the 7,000-match simulation but failed the newer pause regression. The current tree passes that regression; a fresh complete run is required before PR creation. The failed historical result is retained rather than reported as green.

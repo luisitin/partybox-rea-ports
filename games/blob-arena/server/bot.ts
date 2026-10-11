@@ -51,8 +51,10 @@ export function botInput(
         return { type: 'split' };
       target = prey;
     } else {
-      const pellets = [...state.world.pellets].sort((a, b) => distance(me, a) - distance(me, b));
-      target = pellets[skill === 'easy' ? rng.int(0, Math.min(4, pellets.length - 1)) : 0];
+      const pellets = state.world.pellets
+        .map((pellet) => ({ pellet, distance: distance(me, pellet) }))
+        .sort((a, b) => a.distance - b.distance);
+      target = pellets[skill === 'easy' ? rng.int(0, Math.min(4, pellets.length - 1)) : 0]?.pellet;
     }
   }
   if (!target) return { type: 'steer', x: 0, y: 0 };

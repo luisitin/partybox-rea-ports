@@ -16,7 +16,7 @@ Fully swallowed players return after three seconds with 24 mass at a seeded safe
 
 ## Players
 
-2–8, with bots supported. Every cell carries its player's number/name as well as a stable player-token colour; colour alone never identifies a seat. Player numbering is the same on the TV and phone.
+2–8, with bots supported. Every piece carries its player's number as well as a stable player-token colour; the largest surviving piece also carries the player's name. Colour alone never identifies a seat. Player numbering is the same on the TV and phone.
 
 Bots use public arena information and the same inputs as humans. Easy bots graze nearby snacks with some variation. Normal bots choose nearby food and flee larger threats. Sharp bots look farther ahead for threats, chase edible rivals, and split only when the projected half can eat its target. All strengths steer away from walls when an escape route would otherwise pin them there.
 
@@ -63,11 +63,11 @@ Match points are the sum of the three round scores. Equal totals share rank and 
 
 - Physics runs on a fixed 100 ms grid. Time comes only from events; every snack replacement and spawn draw advances `state.rng`. The same initial seed and event sequence produce the same state.
 - Movement speed is `max(6, 20 × (mass / 24)^-0.23)` units/s. Radius is `min(24, 0.55 × sqrt(mass))` units. Split launch adds 55 units/s and retains 78% of that extra velocity each physics step. These are house values, not original-server claims.
-- Rival eating requires `big.mass >= small.mass × 1.25` and center distance `< bigRadius - 0.35 × smallRadius`. Collision order is stable by cell id. A cell already eaten cannot be credited again.
+- Rival eating requires `big.mass >= small.mass × 1.25` and center distance `< bigRadius - 0.35 × smallRadius`. For eligible unprotected rivals, the same overlap threshold also applies to their minimum relative separation during a physics step, so a lunge can swallow prey crossed between sampled positions. Collision order is stable by cell id. A cell already eaten cannot be credited again.
 - Same-owner pieces cannot eat one another as rivals. Before their locks end they separate on overlap; afterward they gather at up to 8 units/s toward siblings and merge on overlap. Merge preserves mass and uses a mass-weighted position.
-- A protected cell still eats snacks. Its protection blocks rival eating in both directions; its ring and phone label mark the protection.
+- A protected cell still eats snacks. Its protection blocks rival eating in both directions, and its ring marks the protection. The phone's SPLIT reason shows "Spawn shield" when a piece has reached 48 mass and protection is the blocking condition; below that growth threshold it instead shows "Grow one blob to 48 mass".
 - Respawns sample eight seeded candidate locations and choose the one with the most clearance from existing cells. Protection covers a crowded arena when no fully clear spot exists.
-- Pause settles play at the pause instant. Resume moves the round's absolute start/end clocks forward; relative split, merge, shield, and respawn times remain frozen during the pause.
+- Pause first settles play at the pause instant, then clears every seat's steering vector. Resume moves the round's absolute start/end clocks forward; relative split, merge, shield, and respawn times remain frozen during the pause. Ordinary movement resumes only after fresh steering input.
 - A disconnected seat stops steering and its cells remain in the arena. The match does not wait; reconnect restores the seat's current mass, position, and controls. A permanently departed player no longer respawns or enters later rounds.
 - Nothing in the arena is secret. TV and phone-only views expose the same public world. A phone with a TV receives its own status and public mass/score summaries, without the arena payload. RNG and server input histories are not views.
 - The final horn settles only to 90 seconds, even when a timer event arrives late. Score screens ignore ordinary game inputs, and terminal state cannot reopen play.
