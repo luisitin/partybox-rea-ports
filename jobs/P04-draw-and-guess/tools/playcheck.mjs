@@ -178,13 +178,86 @@ try {
   const check = (condition, message) => {
     if (!condition) throw new Error(message);
   };
+  const canvasProjection = async (height) => {
+    await rpc(socket, 'Emulation.setDeviceMetricsOverride', {
+      width: 390,
+      height,
+      deviceScaleFactor: 1,
+      mobile: true,
+    });
+    await settle();
+    const box = await evaluate(`(() => {
+      const c=document.querySelector('canvas'), r=c.getBoundingClientRect(), s=getComputedStyle(c);
+      const width=parseFloat(s.width), height=parseFloat(s.height);
+      const left=parseFloat(s.borderLeftWidth), right=parseFloat(s.borderRightWidth);
+      const top=parseFloat(s.borderTopWidth), bottom=parseFloat(s.borderBottomWidth);
+      const sx=r.width/(width+left+right), sy=r.height/(height+top+bottom);
+      return {left:r.left+left*sx,top:r.top+top*sy,width:width*sx,height:height*sy};
+    })()`);
+    check(
+      box.width > 0 && box.height > 0 && Math.abs(box.width / box.height - 5 / 3) < 0.005,
+      `${height}px artist bitmap must remain 5:3 (got ${box.width}×${box.height})`,
+    );
+    const start = { x: box.left + box.width * 0.05, y: box.top + box.height * 0.05 };
+    const end = { x: box.left + box.width * 0.95, y: box.top + box.height * 0.95 };
+    await rpc(socket, 'Input.dispatchMouseEvent', {
+      type: 'mousePressed',
+      ...start,
+      button: 'left',
+      buttons: 1,
+      clickCount: 1,
+    });
+    await rpc(socket, 'Input.dispatchMouseEvent', {
+      type: 'mouseMoved',
+      ...end,
+      button: 'none',
+      buttons: 1,
+    });
+    await rpc(socket, 'Input.dispatchMouseEvent', {
+      type: 'mouseReleased',
+      ...end,
+      button: 'left',
+      buttons: 0,
+      clickCount: 1,
+    });
+    await settle();
+    const points = await evaluate('p04.info().strokes.at(-1)?.points');
+    const first = points?.[0];
+    const last = points?.at(-1);
+    const projectionErrorPx =
+      first && last
+        ? Math.max(
+            (Math.abs(first[0] - 50) * box.width) / 1000,
+            (Math.abs(first[1] - 30) * box.height) / 600,
+            (Math.abs(last[0] - 950) * box.width) / 1000,
+            (Math.abs(last[1] - 570) * box.height) / 600,
+          )
+        : Infinity;
+    check(
+      projectionErrorPx <= 1.25,
+      `${height}px pointer endpoints must map inside the border (got ${JSON.stringify([first, last])})`,
+    );
+    await button('Clear');
+    await button('Tap again to clear');
+    return { ...box, first, last, projectionErrorPx };
+  };
   await evaluate('new Promise(done => setTimeout(done, 1000))');
   await settle();
+  const normalArtist = await canvasProjection(844);
+  const compactArtist = await canvasProjection(500);
+  await rpc(socket, 'Emulation.setDeviceMetricsOverride', {
+    width: 390,
+    height: 844,
+    deviceScaleFactor: 1,
+    mobile: true,
+  });
+  await settle();
+  const gestureBaseRevision = await evaluate('p04.info().revision');
   await evaluate('p04.hold(true)');
   await draw();
   const gesture = await evaluate('p04.info()');
   check(
-    gesture.strokes.length === 1 && gesture.revision > 2,
+    gesture.strokes.length === 1 && gesture.revision - gestureBaseRevision > 2,
     `Pointer chunks must form one gesture (lines=${gesture.strokes.length}, revisions=${gesture.revision}, sent=${gesture.sent.length})`,
   );
   await button('Undo');
@@ -218,6 +291,32 @@ try {
   check(pixels, 'Acknowledged canvas must paint actual ink');
   await evaluate('p04.hold(false); p04.guesser()');
   await settle();
+  const typeGuess = async (text) => {
+    await evaluate(
+      'document.querySelector("input").focus(); document.querySelector("input").select()',
+    );
+    await rpc(socket, 'Input.insertText', { text });
+    await settle();
+  };
+  const currentDraft = () => evaluate('document.querySelector("input").value');
+  await typeGuess('definitely wrong');
+  await button('Guess');
+  check((await currentDraft()) === '', 'An accepted guess must clear its draft');
+  await typeGuess('retry this guess');
+  await button('Guess');
+  const firstRefusal = await currentDraft();
+  check(firstRefusal === 'retry this guess', 'A refused guess must be retained without retyping');
+  await button('Guess');
+  const repeatedRefusal = await currentDraft();
+  check(repeatedRefusal === firstRefusal, 'A same-text retry must receive a fresh refusal receipt');
+  await evaluate('p04.hold(true)');
+  await button('Guess');
+  await typeGuess('my newer draft');
+  await evaluate('p04.ack(); p04.hold(false)');
+  await settle();
+  const newerDraft = await currentDraft();
+  check(newerDraft === 'my newer draft', 'An old refusal must not overwrite newer typing');
+  await evaluate('p04.advance(1000)');
   const fit = async () =>
     JSON.parse(
       await evaluate(
@@ -274,12 +373,20 @@ try {
   check((await evaluate('p04.cues().length')) === pausedCues, 'Paused views must remain quiet');
   const report = {
     checks: [
+      'normal artist 5:3 bitmap',
+      'compact artist 5:3 bitmap',
+      'normal pointer border projection',
+      'compact pointer border projection',
       'pointer chunk merge',
       'one Undo per gesture',
       'accidental Clear preserves ink',
       'second Clear confirms deletion',
       'delayed Clear/Undo acknowledgements',
       'real canvas paint',
+      'accepted guess clears draft',
+      'refused guess retained',
+      'same-text retry receipt',
+      'new draft survives old refusal',
       'phone-only guess fit',
       'keyboard-height guess fit',
       'immediate point receipt',
@@ -288,11 +395,14 @@ try {
       'five final-second ticks',
       'paused sound silence',
     ],
-    firstGestureChunks: gesture.revision,
+    firstGestureChunks: gesture.revision - gestureBaseRevision,
     finalRevision: restored.revision,
     normal,
     keyboard,
     solved,
+    normalArtist,
+    compactArtist,
+    refusedDrafts: { firstRefusal, repeatedRefusal, newerDraft },
   };
   writeFileSync(
     resolve('jobs/P04-draw-and-guess/tools/playcheck-results.json'),

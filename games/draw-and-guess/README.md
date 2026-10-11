@@ -1,31 +1,14 @@
 # Draw and Guess
 
-An original PartyBox drawing race inspired by the choose, draw and recognize
-flow of browser Pictionary games. One artist draws a secret word on a phone;
-the shared picture grows live while everyone else types guesses. Familiar
-shapes, questionable doodles and two late letter hints keep the room moving.
-English only; original content and artwork; no external runtime requests.
+An original PartyBox drawing race inspired by the choose, draw and recognize flow of browser Pictionary games. One artist draws a secret word on a phone; the shared picture grows live while everyone else types guesses. Familiar shapes, questionable doodles and two late letter hints keep the room moving. English only; original content and artwork; no external runtime requests.
 
 ## Overview
 
-The seeded turn order gives each seat one artist turn per lap. The artist
-chooses one of three words in eight seconds; no choice selects the first word.
-The drawing clock then begins, with 60 seconds by default. Guessers see blank
-letters and the drawing. Hints uncover one letter after one third and another
-after two thirds of the turn. Correct guesses score immediately; the turn ends
-when every connected guesser solves or time expires. The completed picture,
-word and gains share a reveal before the next artist. Highest total wins.
+The seeded turn order gives each seat one artist turn per lap. The artist chooses one of three words in eight seconds; no choice selects the first word. The drawing clock then begins, with 60 seconds by default. Guessers see blank letters and the drawing. Hints uncover one letter after one third and another after two thirds of the turn. Correct guesses score immediately; the turn ends when every connected guesser solves or time expires. The completed picture, word and gains share a reveal before the next artist. Highest total wins.
 
 ## Players
 
-2-8 players, including bots. Bots have easy, normal and sharp strengths. Artist
-bots choose words with original pictograms and produce actual strokes; guesser
-bots search seeded vocabulary using public letters and their guess history.
-They never read the private word to generate a guess. Spectators watch without
-choice, drawing or guess controls.
-Normal and sharp bots also compare public geometry with the 36 original
-pictograms, tolerating translation, uniform resizing, jitter, path order and
-packet boundaries. Other drawings use letter-constrained vocabulary guesses.
+2-8 players, including bots. Bots have easy, normal and sharp strengths. Artist bots choose words with original pictograms and produce actual strokes; guesser bots search seeded vocabulary using public letters and their guess history. They never read the private word to generate a guess. Spectators watch without choice, drawing or guess controls. Normal and sharp bots also compare public geometry with the 36 original pictograms, tolerating translation, uniform resizing, jitter, path order and packet boundaries. Other drawings use letter-constrained vocabulary guesses.
 
 ## Phases
 
@@ -36,15 +19,11 @@ packet boundaries. Other drawings use letter-constrained vocabulary guesses.
 | `reveal` | Frozen picture, word, round gains and totals.                      | Word, your gain and total; public drawing when the phone is the stage.                | At least 8 seconds, enlarged with SDK reading time → next `choose` or `done`. |
 | `done`   | Winner or shared winners and final standings.                      | Your result and standings.                                                            | Terminal; results include everyone who started.                               |
 
-VIP pause, resume, skip and end use the SDK contract. The drawing countdown
-shows the turn end while a two-second server beat advances hints and timeout.
-Reveal names the next connected artist so they can prepare during its reading
-window; the final reveal omits the handoff when the match will end.
+VIP pause, resume, skip and end use the SDK contract. The drawing countdown shows the turn end while a two-second server beat advances hints and timeout. Reveal names the next connected artist so they can prepare during its reading window; the final reveal omits the handoff when the match will end.
 
 ### Phone only (no TV)
 
-When `ctx.presence.phoneOnly` is true, or a seat cannot see the TV, the phone
-is the stage. It never asks anyone to look at a TV.
+When `ctx.presence.phoneOnly` is true, or a seat cannot see the TV, the phone is the stage. It never asks anyone to look at a TV.
 
 | Phase    | Phone stage                                                                                                                   |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
@@ -53,9 +32,7 @@ is the stage. It never asks anyone to look at a TV.
 | `reveal` | Frozen drawing, answer and compact gains/standings.                                                                           |
 | `done`   | Winner, personal result and compact final standings.                                                                          |
 
-Phone play fits 390 × 844. The drawing stage stays visible above the form;
-artist tools have labels and touch targets. A spectator sees the same public
-stage with no action controls.
+Phone play fits 390 × 844. The drawing stage stays visible above the form; artist tools have labels and touch targets. A spectator sees the same public stage with no action controls.
 
 ## Inputs
 
@@ -69,27 +46,13 @@ stage with no action controls.
   drawing, Undo, pause and a new turn cancel the armed state.
 - `guess`: 1-40 characters, non-artist only during `draw`. Case, outer
   whitespace, punctuation and leading articles use SDK normalization. An exact normalized word/phrase solves.
+  Optional integer `request` (1-1,000,000,000) correlates a private text-free receipt.
 
-Six colours and three brush sizes keep the tool row simple. At most 240 paths
-are stored; a current gesture can keep drawing throughout the turn. A 3,500-point
-budget simplifies long paths while preserving their endpoints. Accepted ink
-and edits carry a per-turn revision for ordered phone acknowledgements.
-Guesses are accepted at most once every 750 ms per seat, and only
-the most recent 24 are retained. Raw guesses never appear on the shared stage;
-a one-letter mismatch gets private “Close!” feedback. A solved seat cannot
-score or submit more guesses that turn.
+Six colours and three brush sizes keep the tool row simple. At most 240 paths are stored; a current gesture can keep drawing throughout the turn. A 3,500-point budget simplifies long paths while preserving their endpoints. Accepted ink and edits carry a per-turn revision for ordered phone acknowledgements. Guesses are accepted at most once every 750 ms per seat, and only the most recent 24 are retained. Raw guesses never appear on the shared stage; a one-letter mismatch gets private “Close!” feedback. A solved seat cannot score or submit more guesses that turn. Throttled guesses return to an untouched input for retry; late receipts cannot overwrite newer typing. Canvas proportions and finger registration match the shared drawing at ordinary and compact phone heights.
 
 ## Scoring
 
-A correct guess earns `300 + floor(700 × remaining / duration)`, clamped to
-300-1000 points. The artist earns 250 per correct guess. No wrong-guess penalty.
-Points are awarded once per solver; match totals add across turns and ties
-share a rank. These are PartyBox scores, not a claim about an original formula.
-Final standings explicitly mark every winner or joint winner and show tied ranks.
-The artist sees successful-guess progress. A solver immediately sees their own
-earned points with one sound/haptic cue, while the word stays hidden until reveal.
-The shared TV also cues new solves and the final five seconds, respecting shell
-audio preferences; repeated views and pauses do not repeat cues.
+A correct guess earns `300 + floor(700 × remaining / duration)`, clamped to 300-1000 points. The artist earns 250 per correct guess. No wrong-guess penalty. Points are awarded once per solver; match totals add across turns and ties share a rank. These are PartyBox scores, not a claim about an original formula. Final standings explicitly mark every winner or joint winner and show tied ranks. The artist sees successful-guess progress. A solver immediately sees their own earned points with one sound/haptic cue, while the word stays hidden until reveal. The shared TV also cues new solves and the final five seconds, respecting shell audio preferences; repeated views and pauses do not repeat cues.
 
 ## Edge cases
 
@@ -116,17 +79,9 @@ audio preferences; repeated views and pauses do not repeat cues.
 
 300 original family-friendly words: 100 each in `content/easy.json`,
 `medium.json` and `hard.json`, validated by `content/schema.ts`. Easy favours
-familiar objects/animals, medium adds compounds and scenes, hard needs more
-interpretation. Original bot pictograms use the same stroke format as people.
+familiar objects/animals, medium adds compounds and scenes, hard needs more interpretation. Original bot pictograms use the same stroke format as people: 54 pictures, 18 per deck, keep all 16 turns of a two-lap bot match distinct.
 
 ## Sources
 
-[Official skribbl tutorial](https://skribbl.io/) and the independent
-[ADRA handbook, p.23](https://adra.org.uk/wp-content/uploads/2023/07/ADRA-Appeal-Fundraising-Handbook-2022.pdf)
-corroborate private choice, shared drawing and typed guesses. The
-[official Gartic listing](https://play.google.com/store/apps/details?hl=en&id=io.gartic.Gartic),
-[Gartic learn page](https://gartic.com.br/aprenda/) and independent
-[Canaltech guide](https://canaltech.com.br/jogos-mobile/gartic-como-jogar/)
-support artist/guesser rewards and speed. Detailed evidence, access limitations
-and source distinctions are in `jobs/P04-draw-and-guess/RESEARCH.md` and
+[Official skribbl tutorial](https://skribbl.io/) and the independent [ADRA handbook, p.23](https://adra.org.uk/wp-content/uploads/2023/07/ADRA-Appeal-Fundraising-Handbook-2022.pdf) corroborate private choice, shared drawing and typed guesses. The [official Gartic listing](https://play.google.com/store/apps/details?hl=en&id=io.gartic.Gartic), [Gartic learn page](https://gartic.com.br/aprenda/) and independent [Canaltech guide](https://canaltech.com.br/jogos-mobile/gartic-como-jogar/) support artist/guesser rewards and speed. Detailed evidence, access limitations and source distinctions are in `jobs/P04-draw-and-guess/RESEARCH.md` and
 `SOURCES.md`. No source assets, sounds, code or word lists are included.

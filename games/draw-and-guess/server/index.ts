@@ -13,7 +13,7 @@ import {
   recheckOnResume,
   pausedFor,
 } from '@partybox/game-sdk';
-import type { GameDefinition, InitContext, PlayerStatus } from '@partybox/game-sdk';
+import type { GameDefinition, GameEvent, InitContext, PlayerStatus } from '@partybox/game-sdk';
 import manifestJson from '../manifest.json' with { type: 'json' };
 import { botInput } from './bot';
 import { enterChoose, reduceChoose } from './phases/choose';
@@ -47,6 +47,7 @@ function init(ctx: InitContext): State {
     guesses: {},
     feedback: {},
     lastGuessAt: {},
+    guessReceipts: {},
     scores: Object.fromEntries(ctx.players.map((p) => [p.id, 0])),
     gains: {},
     used: [],
@@ -96,7 +97,7 @@ function closeIfDone(state: State, now: number): State {
   if (state.phase.id === 'draw' && artistAway) return enterReveal(state, now);
   return state.phase.id === 'draw' && allSolved(state) ? enterReveal(state, now) : state;
 }
-const reduce = composeReduce<State, Input>({
+const reducePhases = composeReduce<State, Input>({
   phases: { choose: reduceChoose, draw: reduceDraw, reveal: reduceReveal },
   advance,
   end: enterDone,
@@ -117,6 +118,29 @@ const reduce = composeReduce<State, Input>({
   },
   afterVip: (_before, after, event) => recheckOnResume(after, event, closeIfDone),
 });
+function reduce(state: State, event: GameEvent<Input>): State {
+  const after = reducePhases(state, event);
+  if (
+    after === state ||
+    event.type !== 'input' ||
+    event.input.type !== 'guess' ||
+    state.phase.id !== 'draw' ||
+    state.phase.paused
+  )
+    return after;
+  const accepted = after.lastGuessAt[event.playerId] !== state.lastGuessAt[event.playerId];
+  return {
+    ...after,
+    guessReceipts: {
+      ...after.guessReceipts,
+      [event.playerId]: {
+        revision: (state.guessReceipts?.[event.playerId]?.revision ?? 0) + 1,
+        ...(event.input.request === undefined ? {} : { request: event.input.request }),
+        accepted,
+      },
+    },
+  };
+}
 function statusOf(state: State): (id: string) => PlayerStatus {
   return (id) => {
     if (state.phase.id === 'choose') return id === state.drawer ? 'active' : 'waiting';
@@ -185,6 +209,10 @@ function controllerView(state: State, playerId: string): DrawControllerView {
     myPoints: player ? (state.solved[playerId] ?? 0) : 0,
     feedback: player ? (state.feedback[playerId] ?? '') : '',
     lastGuess: player && !solved ? (state.guesses[playerId]?.at(-1) ?? '') : '',
+    guessReceipt:
+      player && Object.hasOwn(state.guessReceipts ?? {}, playerId)
+        ? state.guessReceipts[playerId]!
+        : { revision: 0, accepted: true },
     phoneStage,
     canGuess:
       drawing &&

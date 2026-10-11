@@ -125,3 +125,15 @@ compactions measure0.676ms median and0.950ms p95 on this desktop; no timing
 threshold is asserted. Tests also cover frozen input, deterministic output,
 endpoints, direction reversals, full-minute streaming, complete Undo and wire
 limits. R10 PR workflow38178466414 passed in41seconds.
+
+R12-R14: `$env:WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/draw-and-guess --maxWorkers=1 --disableConsoleIntercept`
+passes177tests in18files in82.16seconds, including7,000terminating matches,
+real SDK contract, seeded properties,54-picture recognition, no-repeat bot
+turns,75pointer coordinate probes and private draft/receipt boundaries.
+Easy/normal/sharp median drawing times at2/4/8seats are24/4/4,32/8/4 and
+32/12/4seconds. Worst8-seat elapsed is401seconds (<1,440). Easy completion
+is at least99.95% in this easy-deck template corpus; normal/sharp100%.
+This run exited0 despite Windows fork-cleanup timeout warnings under load;
+no warning is counted as an assertion success. R11 CI passed in36seconds.
+Typecheck and scoped formatting pass. Actual compact artist/retry browser
+measurements and refreshed PNG/hash evidence are the next verification step.

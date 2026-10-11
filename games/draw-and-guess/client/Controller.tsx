@@ -4,6 +4,8 @@ import { buzz, usePhoneOnly, useServerNow, useSound, useT } from '@partybox/game
 import type { GameControllerProps } from '@partybox/game-sdk/ui';
 import type { DrawControllerView, Input } from '../server/types';
 import { DrawingPad } from './DrawingPad';
+import { acknowledgeGuess, editGuess, nextGuessRequest, submitGuess } from './guessDraft';
+import type { GuessDraft } from './guessDraft';
 import { Pencil, Picture } from './Picture';
 import { leaderNames, Roster } from './Roster';
 import { STRINGS } from './strings';
@@ -17,8 +19,11 @@ export function Controller({
   const phoneOnly = usePhoneOnly();
   const play = useSound();
   const now = useServerNow(250, view.paused, view.clockHeldAt);
-  const [draft, setDraft] = useState({ turn: -1, text: '' });
-  const [submitted, setSubmitted] = useState({ turn: -1, text: '' });
+  const [draft, setDraft] = useState<GuessDraft>({ turn: -1, text: '', edit: 0 });
+  const requestSerial = useRef(0);
+  useEffect(() => {
+    setDraft((current) => acknowledgeGuess(current, view.turn, view.guessReceipt));
+  }, [view.turn, view.guessReceipt]);
   const [visibleHeight, setVisibleHeight] = useState<number>();
   useEffect(() => {
     // Mobile keyboards can shrink the visual viewport without shrinking 100dvh (notably Safari).
@@ -78,14 +83,14 @@ export function Controller({
     event.preventDefault();
     const value = text.trim();
     if (!value || !view.canGuess || view.paused) return;
-    send({ type: 'guess', text: value });
-    setSubmitted({ turn: view.turn, text: value });
-    setDraft({ turn: view.turn, text: '' });
+    requestSerial.current = nextGuessRequest(requestSerial.current, view.guessReceipt);
+    const request = requestSerial.current;
+    setDraft((current) =>
+      submitGuess(current, view.turn, request, value, view.guessReceipt.revision),
+    );
+    send({ type: 'guess', text: value, request });
   };
-  const awaiting =
-    submitted.turn === view.turn &&
-    submitted.text !== view.lastGuess &&
-    view.feedback !== 'Wait a moment';
+  const awaiting = draft.turn === view.turn && draft.pending !== undefined;
 
   return (
     <section
@@ -194,7 +199,10 @@ export function Controller({
                   spellCheck={false}
                   enterKeyHint="send"
                   disabled={view.paused || !view.canGuess}
-                  onChange={(event) => setDraft({ turn: view.turn, text: event.target.value })}
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    setDraft((current) => editGuess(current, view.turn, value));
+                  }}
                 />
                 <button type="submit" disabled={!text.trim() || view.paused || !view.canGuess}>
                   {L('Guess')}

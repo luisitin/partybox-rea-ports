@@ -62,6 +62,9 @@ function send(input: Input) {
   ack() {
     publish();
   },
+  advance(milliseconds: number) {
+    now += milliseconds;
+  },
   info() {
     return { sent, strokes: state.strokes, revision: state.inkRevision, phase: state.phase.id };
   },

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { JSX, PointerEvent } from 'react';
 import { useT, useThemeColor } from '@partybox/game-sdk/ui';
 import type { Input, Point, Stroke } from '../server/types';
+import { canvasContentRect, drawingPoint } from './drawingGeometry';
 import { gestureCount, nextGesture, previewInk } from './ink';
 import type { InkOperation, PendingInk } from './ink';
 import { COLORS, WIDTHS } from './palette';
@@ -140,13 +141,8 @@ export function DrawingPad({
       event.currentTarget.releasePointerCapture(event.pointerId);
     repaint();
   };
-  const pointAt = (x: number, y: number): Point => {
-    const rect = canvas.current!.getBoundingClientRect();
-    return [
-      Math.max(0, Math.min(1000, ((x - rect.left) / rect.width) * 1000)),
-      Math.max(0, Math.min(600, ((y - rect.top) / rect.height) * 600)),
-    ];
-  };
+  const paperBounds = (): ReturnType<typeof canvasContentRect> =>
+    canvasContentRect(canvas.current!.getBoundingClientRect(), getComputedStyle(canvas.current!));
   const start = (event: PointerEvent<HTMLCanvasElement>): void => {
     if (
       disabled ||
@@ -162,7 +158,7 @@ export function DrawingPad({
     serial.current = nextGesture(strokes, pending.current, serial.current);
     active.current = {
       id: event.pointerId,
-      points: [pointAt(event.clientX, event.clientY)],
+      points: [drawingPoint(event.clientX, event.clientY, paperBounds())],
       color,
       gesture: serial.current,
       width,
@@ -176,8 +172,9 @@ export function DrawingPad({
     if (drag.id !== event.pointerId || disabled) return;
     event.preventDefault();
     const events = event.nativeEvent.getCoalescedEvents?.() ?? [event.nativeEvent];
+    const rect = paperBounds();
     for (const sample of events.length ? events : [event.nativeEvent]) {
-      const point = pointAt(sample.clientX, sample.clientY);
+      const point = drawingPoint(sample.clientX, sample.clientY, rect);
       const last = drag.points.at(-1);
       if (last && Math.hypot(point[0] - last[0], point[1] - last[1]) < 2) continue;
       drag.points.push(point);

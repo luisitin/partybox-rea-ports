@@ -44,12 +44,20 @@ export function gestureCount(strokes: Stroke[]): number {
   ).length;
 }
 
-/** A refresh starts after the highest server gesture; clearing never reuses our local IDs. */
+/** Refresh starts above known IDs; bounded wrap skips every stored or unacknowledged gesture. */
 export function nextGesture(strokes: Stroke[], pending: PendingInk[], serial: number): number {
   let highest = serial;
-  for (const stroke of strokes) highest = Math.max(highest, stroke.gesture ?? 0);
+  const occupied = new Set<number>();
+  const remember = (stroke: Stroke): void => {
+    if (stroke.gesture === undefined) return;
+    occupied.add(stroke.gesture);
+    highest = Math.max(highest, stroke.gesture);
+  };
+  for (const stroke of strokes) remember(stroke);
   for (const { input } of pending) {
-    if (input.type === 'stroke') highest = Math.max(highest, input.stroke.gesture ?? 0);
+    if (input.type === 'stroke') remember(input.stroke);
   }
-  return highest + 1;
+  let candidate = highest >= 1_000_000_000 ? 0 : highest + 1;
+  while (occupied.has(candidate)) candidate = candidate >= 1_000_000_000 ? 0 : candidate + 1;
+  return candidate;
 }

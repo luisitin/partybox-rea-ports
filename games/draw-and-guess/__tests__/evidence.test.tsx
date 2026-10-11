@@ -247,6 +247,11 @@ describe('review evidence and every phone phase', () => {
         document(render(long, 'phone-only'), 'phone-only', 'Longest word / keyboard', 500),
         'utf8',
       );
+      writeFileSync(
+        join(mediaDir, 'draw-artist-keyboard.html'),
+        document(render(long, 'artist'), 'artist', 'Artist / compact screen', 500),
+        'utf8',
+      );
     }
   });
 

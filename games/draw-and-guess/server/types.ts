@@ -21,12 +21,21 @@ export const inputSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('stroke'), stroke: strokeSchema }),
   z.object({ type: z.literal('clear') }),
   z.object({ type: z.literal('undo') }),
-  z.object({ type: z.literal('guess'), text: z.string().min(1).max(40) }),
+  z.object({
+    type: z.literal('guess'),
+    text: z.string().min(1).max(40),
+    request: z.number().int().min(1).max(1_000_000_000).optional(),
+  }),
 ]);
 export type Input = z.infer<typeof inputSchema>;
 export type Stroke = z.infer<typeof strokeSchema>;
 export type Point = z.infer<typeof pointSchema>;
 export type Transition = (state: State, now: number) => State;
+export interface GuessReceipt {
+  revision: number;
+  request?: number;
+  accepted: boolean;
+}
 export interface State extends GameStateBase {
   order: string[];
   turn: number;
@@ -39,6 +48,7 @@ export interface State extends GameStateBase {
   guesses: Record<string, string[]>;
   feedback: Record<string, string>;
   lastGuessAt: Record<string, number>;
+  guessReceipts: Record<string, GuessReceipt>;
   scores: Record<string, number>;
   gains: Record<string, number>;
   used: string[];
@@ -78,6 +88,7 @@ export interface DrawControllerView extends ControllerView, PublicBoard {
   myPoints: number;
   feedback: string;
   lastGuess: string;
+  guessReceipt: GuessReceipt;
   phoneStage: boolean;
   canGuess: boolean;
 }
