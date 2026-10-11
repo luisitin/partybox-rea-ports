@@ -36,7 +36,6 @@ const child = spawn(
   { windowsHide: true, stdio: 'ignore' },
 );
 let socket;
-let browserPid;
 try {
   const portFile = resolve(profile, 'DevToolsActivePort');
   for (let i = 0; i < 150 && !existsSync(portFile); i++)
@@ -71,9 +70,6 @@ try {
       pending.set(id, { resolve, reject });
       socket.send(JSON.stringify({ id, method, params, ...(sessionId ? { sessionId } : {}) }));
     });
-  browserPid = (await call('SystemInfo.getProcessInfo')).processInfo.find(
-    (p) => p.type === 'browser',
-  )?.id;
   const { targetId } = await call('Target.createTarget', { url: 'about:blank' });
   const { sessionId } = await call('Target.attachToTarget', { targetId, flatten: true });
   const page = (method, params = {}) => call(method, params, sessionId);
@@ -127,9 +123,15 @@ try {
   if (socket?.readyState === WebSocket.OPEN)
     socket.send(JSON.stringify({ id: 999999, method: 'Browser.close' }));
   if (socket) socket.close();
-  for (const pid of [browserPid, child.pid].filter(Boolean))
-    spawnSync('C:/Windows/System32/taskkill.exe', ['/PID', String(pid), '/T', '/F'], {
-      windowsHide: true,
-      stdio: 'ignore',
-    });
+  // Edge can relaunch after its initial PID exits. Match only this unique profile.
+  const quotedProfile = profile.replaceAll("'", "''");
+  spawnSync(
+    'powershell.exe',
+    [
+      '-NoProfile',
+      '-Command',
+      `$profilePath = '${quotedProfile}'; Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'msedge.exe' -and $_.CommandLine -and $_.CommandLine.Contains($profilePath) } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }`,
+    ],
+    { windowsHide: true, stdio: 'ignore' },
+  );
 }

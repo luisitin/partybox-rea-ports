@@ -104,7 +104,7 @@ export function Controller({
       data-active={active || undefined}
     >
       <header>
-        <h1>{headline}</h1>
+        <h2>{headline}</h2>
         <p aria-live="polite">
           {lane
             ? `Best ${lane.best} floors · ${lane.lives} ${lane.lives === 1 ? 'life' : 'lives'}`

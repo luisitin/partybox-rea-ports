@@ -54,7 +54,11 @@ function screen(state: State, mode: 'tv' | 'phone' | 'phone-only', id = 'p1'): s
       </PhoneOnlyProvider>
     );
   return renderToStaticMarkup(
-    <ServerClockProvider offsetMs={s.phase.startedAt - Date.now()}>{element}</ServerClockProvider>,
+    <ServerClockProvider
+      offsetMs={(s.phase.id === 'play' ? s.began + s.checked : s.phase.startedAt) - Date.now()}
+    >
+      {element}
+    </ServerClockProvider>,
   );
 }
 
@@ -62,7 +66,7 @@ function save(name: string, mode: 'tv' | 'phone' | 'phone-only', html: string): 
   const tv = mode === 'tv';
   writeFileSync(
     `${media}/${name}-${mode}.html`,
-    `<!doctype html><html lang="en" data-surface="${tv ? 'tv' : 'controller'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Helix Drop ${name} ${mode}</title><style>${css}\n*{box-sizing:border-box}html,body{margin:0;width:${tv ? 1920 : 390}px;height:${tv ? 1080 : 844}px;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family)}body{display:flex;flex-direction:column}#shell{height:64px;flex:none;padding:var(--pb-space-3);font-size:var(--pb-font-body);display:flex;align-items:center}#view{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:${tv ? 0 : 32}px}svg{max-width:100%}</style></head><body><div id="shell">PartyBox Â· Helix Drop</div><main id="view">${html}</main></body></html>\n`,
+    `<!doctype html><html lang="en" data-surface="${tv ? 'tv' : 'controller'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Helix Drop ${name} ${mode}</title><style>${css}\n*{box-sizing:border-box}html,body{margin:0;width:${tv ? 1920 : 390}px;height:${tv ? 1080 : 844}px;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family)}body{display:flex;flex-direction:column}#shell{height:64px;flex:none;padding:var(--pb-space-3);font-size:var(--pb-font-body);display:flex;align-items:center}#view{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:${tv ? 0 : 32}px}svg{max-width:100%}</style></head><body><div id="shell">PartyBox · Helix Drop</div><main id="view">${html}</main></body></html>\n`,
   );
 }
 

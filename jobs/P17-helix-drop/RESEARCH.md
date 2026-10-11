@@ -16,7 +16,7 @@ The original is single-player and has cosmetic unlocks, missions and optional po
 
 ## Access attempts
 
-Web search and open retrieved the developer and distributor descriptions. CUA `createBrowserTab("iab", ...)` returned “Browser is not available”; `cua.getState()` returned no browsers or apps. Live original gameplay was therefore unavailable through the connector. This is a research limitation, not a claim to have played the original. Further public-page/bundle inspection is recorded in SOURCES.md when completed.
+Web search and open retrieved the developer and distributor descriptions. CUA `createBrowserTab("iab", ...)` returned “Browser is not available”; `cua.getState()` returned no browsers or apps. Live original gameplay was therefore unavailable through the connector. This is a research limitation, not a claim to have played the original. Public-page inspection retrieved 154,053 characters of distributor HTML, 16 script URLs and Unity references. The first public portal bundle (112,541 characters) contains no helix, gravity or bounce identifiers. It supplies browser compatibility code rather than the game physics. A bare Python HTTP request received 403; a normal browser User-Agent retrieved the page and bundle. No game code or assets were copied.
 
 ## PartyBox design
 

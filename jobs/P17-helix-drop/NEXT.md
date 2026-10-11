@@ -1,8 +1,8 @@
 # Next
 
 - Branch job/P17-helix-drop, runner r15-local.
-- Research, pure physics, bots, views, fixtures and per-job CI implemented.
-- 50 game tests passed, including the actual scoped SDK contract suite, 9,000 seeded bot races and property campaigns.
-- 21 static screen cases fit at 1920x1080 / 390x844; installed Edge used serially and closed in finally.
-- Mutation harness first attempt failed at process launch (no JSON report). Source restored; updated harness uses direct Node Vitest entry and threads.
-- Outstanding: rerun 20 actual mutations, final typecheck/format/media hashes, draft PR/green CI, KEEP GOING.
+- Research, deterministic game, bots, views, fixtures and per-job CI implemented and pushed.
+- 50 game tests passed, including actual scoped SDK contracts, 9,000 seeded bot races and property campaigns.
+- All 20 planted mutations caught by assertions; source restored.
+- Typecheck and format passed. 42 media files total 2.2 MB; hashes recorded. Continuous ring geometry and current clock captures verified.
+- Outstanding: draft PR, green per-job CI, KEEP GOING until three successive rounds produce no player-visible gain.

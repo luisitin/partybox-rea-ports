@@ -10,7 +10,8 @@ function point(degrees: number, radius: number, cy: number): string {
 }
 
 function wedge(from: number, to: number, cy: number): string {
-  return `M${point(from, 72, cy)} A72,18.72 0 0 0 ${point(to, 72, cy)} L${point(to, 23, cy)} A23,5.98 0 0 1 ${point(from, 23, cy)} Z`;
+  const large = to - from > 180 ? 1 : 0;
+  return `M${point(from, 72, cy)} A72,18.72 0 ${large} 0 ${point(to, 72, cy)} L${point(to, 23, cy)} A23,5.98 0 ${large} 1 ${point(from, 23, cy)} Z`;
 }
 
 export const slotStyle = (slot: number): CSSProperties =>
@@ -30,20 +31,27 @@ export function Tower({ lane }: { lane: Lane }): JSX.Element {
       <rect x="91" y="8" width="18" height="182" rx="7" className={styles.column} />
       {lane.rings.map((ring) => {
         const cy = 58 + (ring.index - base) * 52;
+        const start = ring.gap + lane.angle + ring.width / 2;
+        const end = start + 360 - ring.width;
+        const cuts = [start, end];
+        for (let turn = -2; turn <= 2; turn++)
+          for (const edge of [-1, 1]) {
+            const a = ring.danger + lane.angle + turn * 360 + (edge * ring.dangerWidth) / 2;
+            if (a > start && a < end) cuts.push(a);
+          }
+        cuts.sort((a, b) => a - b);
         return (
           <g key={ring.index}>
-            {Array.from({ length: 72 }, (_, i) => {
-              const from = i * 5;
-              const mid = from + 2.5;
-              if (Math.abs(angleDifference(mid, ring.gap + lane.angle)) < ring.width / 2)
-                return null;
+            {cuts.slice(0, -1).map((from, i) => {
+              const to = cuts[i + 1]!;
+              const mid = (from + to) / 2;
               const danger =
                 ring.dangerWidth > 0 &&
                 Math.abs(angleDifference(mid, ring.danger + lane.angle)) < ring.dangerWidth / 2;
               return (
                 <path
                   key={i}
-                  d={wedge(from, from + 5.1, cy)}
+                  d={wedge(from, to, cy)}
                   className={danger ? styles.danger : styles.safe}
                 />
               );

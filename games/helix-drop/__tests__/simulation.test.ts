@@ -6,7 +6,7 @@ import { testPlayers } from '@partybox/game-sdk/testing';
 import { game } from '../server/index';
 
 describe('1,000 seeded bot races per strength and player count', () => {
-  it('all 9,000 terminate within estimate Ã— 2 and rank every original player', () => {
+  it('all 9,000 terminate within estimate × 2 and rank every original player', () => {
     const rows: {
       skill: string;
       players: number;
