@@ -1,0 +1,34 @@
+{
+  "id": "dino-dash",
+  "name": "Dino Dash",
+  "icon": "☄️",
+  "tagline": "One course. Eight runners. Keep your feet moving.",
+  "description": "Race little comet creatures along the same seeded course. Tap to jump over rocks and hold to duck under birds. The course speeds up as you run. Distance at a crash counts, and the most total metres after three rounds wins.",
+  "howToPlay": [
+    "Your runner moves by itself. Tap JUMP to clear a rock.",
+    "Hold DUCK to slip under a bird. Release before the next rock.",
+    "A crash stops your distance for this round. Most total metres wins."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 4,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-10-11",
+  "noCards": true,
+  "settings": [
+    {
+      "key": "rounds",
+      "label": "Rounds",
+      "description": "Fresh shared courses in the match",
+      "type": "number",
+      "default": 3,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    }
+  ],
+  "supportsBots": true
+}
