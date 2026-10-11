@@ -1,9 +1,15 @@
 # CLAIMS: one line per job being worked: <ID> <run id> <UTC time> <branch>
 
 # DONE lines stay; BLOCKED lines point at BLOCKED.md in the job folder.
-P01 r1-local 2026-10-11T20:43:32Z job/P01-quiz-rush
+<!-- prettier-ignore-start -->
+
+P01 r1-local 2026-10-11T21:11:50Z job/P01-quiz-rush
 P02 r2-local 2026-10-11T20:44:31Z job/P02-quiz-rush-teams BLOCKED jobs/P02-quiz-rush-teams/BLOCKED.md
-P03 r3-local 2026-10-11T20:44:19Z job/P03-trivia-lightning
-P04 r2-local 2026-10-11T20:44:33Z job/P04-draw-and-guess
-P04 r4-local 2026-10-11T20:44:52Z job/P04-draw-and-guess
-P05 r5-local 2026-10-11T20:45:11Z job/P05-blob-arena
+P03 r3-local 2026-10-11T21:08:26Z job/P03-trivia-lightning
+P04 r2-local 2026-10-11T21:07:48Z job/P04-draw-and-guess
+P05 r5-local 2026-10-11T21:16:17Z job/P05-blob-arena
+P06 r6-local 2026-10-11T21:14:00Z job/P06-snake-royale
+
+P07 r4-local 2026-10-11T21:16:04Z job/P07-paper-territory
+
+<!-- prettier-ignore-end -->
