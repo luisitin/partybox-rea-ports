@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "scope": "Post-green opponent prediction at the supported 1200 ms bot decision cadence",
+  "scenario": {
+    "board": [40, 28],
+    "ourHead": [5, 5],
+    "ourHeading": "east",
+    "rivalHead": [13, 5],
+    "rivalMovingHeading": "north",
+    "rivalQueuedHeading": "west",
+    "rivalTrail": "A contiguous public trail from (32,22) west to (13,22), then north to (13,5), leaving the west side of the unchanged protected home.",
+    "before": "Both heads meet at (9,5) on tick 4 (800 ms), before a 1200 ms bot can decide again. All three strengths previously yielded null and kept the fatal east heading.",
+    "after": "All three strengths turn south immediately and remain alive at (5,11) after 6 ticks (1200 ms)."
+  },
+  "change": "Predict visible queued rival headings for six ticks, matching the longest supported wall/self lookahead. Keep the six-tick head horizon for shorter escape fallbacks, and stop prediction when either path reaches a wall.",
+  "before": {
+    "command": "node node_modules/vitest/vitest.mjs run games/paper-territory/__tests__/bot.test.ts --maxWorkers=1 -t 'avoids visible tick-four'",
+    "log": "r11-head-cadence-before.log",
+    "exitCode": 1,
+    "failed": 3,
+    "skipped": 8,
+    "durationSeconds": 1.07,
+    "assertion": "Expected south direction input, received null for easy, normal and sharp"
+  },
+  "after": {
+    "command": "node node_modules/vitest/vitest.mjs run games/paper-territory/__tests__/bot.test.ts games/paper-territory/__tests__/game.test.ts games/paper-territory/__tests__/world.test.ts games/paper-territory/__tests__/contract.test.ts --maxWorkers=1",
+    "log": "r11-head-cadence-after.log",
+    "exitCode": 0,
+    "filesPassed": 4,
+    "testsPassed": 67,
+    "durationSeconds": 5.08,
+    "strengthsChecked": ["easy", "normal", "sharp"],
+    "priorEscapeRegressions": "All three north-then-west 600 ms blocked-runway escape cases passed in this same final run."
+  },
+  "sourceHashes": {
+    "games/paper-territory/server/bot.ts": {
+      "before": "b7f0a9b54fe60295a7f020afc03607305f531187e175f8903352c8ddc09a5b9a",
+      "after": "886c6ddeed091d6c3eaa3a08cf552a4bdd36a67e8d3afe0a5bca05b973325ece"
+    },
+    "games/paper-territory/__tests__/bot.test.ts": {
+      "after": "a9d94bb1ed93a6148a12d1a25bc0b8486c4e33e0fc55a010e1ad00e6e3887215"
+    }
+  },
+  "provenance": "Historical full CI run 38179181153, property, simulation and mutation evidence remains unchanged and describes its recorded revision. This follow-up source is validated by the targeted run above; the next job-scoped CI validates the complete current revision. No heavy local simulation or browser was launched."
+}

@@ -9,7 +9,58 @@ import { testKit, testPlayers } from '@partybox/game-sdk/testing';
 import { Controller } from '../client/Controller';
 import { Tv } from '../client/Tv';
 import { game } from '../server/index';
-import type { State } from '../server/types';
+import type { Direction, State } from '../server/types';
+import { neighbour } from '../server/world';
+
+const LONG_NAMES = [
+  'Alexandria Montgomery',
+  'Benedict Cunningham',
+  'Cassandra Wellington',
+  'Dominic Featherstone',
+  'Elisabeth Rutherford',
+  'Frederick Kensington',
+  'Gabriella Worthington',
+  'Harrison Chamberlain',
+] as const;
+
+function adjacentFixture(fixture: State, horizontal: boolean): State {
+  const { width, homes } = fixture.world;
+  const rivalHome = fixture.world.runners[1]!.home;
+  const axis = horizontal ? 1 : width;
+  const dir: Direction = horizontal ? 0 : 1;
+  const owners = homes.map((owner) => (owner < 0 ? 0 : owner));
+  const runners = fixture.world.runners.map((runner) => ({
+    ...runner,
+    cell:
+      runner.slot === 0 ? rivalHome - axis * 2 : runner.slot === 1 ? rivalHome - axis : runner.home,
+    dir,
+    queued: dir,
+    trail: [],
+    alive: true,
+    respawnTick: null,
+    cause: null,
+    area: owners.filter((owner) => owner === runner.slot).length,
+    captures: runner.slot === 0 ? 1 : 0,
+    lastCapture: runner.slot === 0 ? 1048 : 0,
+  }));
+  return {
+    ...fixture,
+    players: Object.fromEntries(
+      runners.map((runner) => [
+        runner.id,
+        { ...fixture.players[runner.id]!, name: LONG_NAMES[runner.slot] ?? '' },
+      ]),
+    ),
+    world: { ...fixture.world, owners, runners },
+    scores: Object.fromEntries(runners.map((runner) => [runner.id, runner.area])),
+  };
+}
+
+function pageHtml(body: string, title: string, css: string, tv: boolean): string {
+  return `<!doctype html><html lang="en" data-surface="${tv ? 'tv' : 'phone'}"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>${css}
+      *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family);font-size:16px}body{display:flex;flex-direction:column}main{display:flex;min-height:0;flex:1}button,input{font-family:inherit}h1,h2,h3,p{line-height:1.25}.shell{height:${tv ? 0 : 80}px;flex:none;padding:var(--pb-space-4);font-size:var(--pb-font-body);color:var(--pb-text-muted)}
+      </style><body>${tv ? '' : '<div class="shell">PB · TERRITORY · Connected</div>'}<main>${body}</main>${tv ? '' : '<div class="shell">Paper Territory · phone shell reserved space</div>'}</body></html>`;
+}
 
 it('renders every phase for TV, player, stage, remote and spectator from a real match', async () => {
   const players = testPlayers(8, { bots: 8 });
@@ -116,10 +167,61 @@ it('renders every phase for TV, player, stage, remote and spectator from a real 
       if (only || mode === 'phone-remote') expect(body).not.toContain('on the TV');
       if (!build) continue;
       const tv = mode === 'tv';
-      const html = `<!doctype html><html lang="en" data-surface="${tv ? 'tv' : 'phone'}"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${phase} ${mode}</title><style>${css}
-      *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family);font-size:16px}body{display:flex;flex-direction:column}main{display:flex;min-height:0;flex:1}button,input{font-family:inherit}h1,h2,h3,p{line-height:1.25}.shell{height:${tv ? 0 : 80}px;flex:none;padding:var(--pb-space-4);font-size:var(--pb-font-body);color:var(--pb-text-muted)}
-      </style><body>${tv ? '' : '<div class="shell">PB · TERRITORY · Connected</div>'}<main>${body}</main>${tv ? '' : '<div class="shell">Paper Territory · phone shell reserved space</div>'}</body></html>`;
-      writeFileSync(resolve(media, `${phase}-${mode}.html`), html);
+      writeFileSync(
+        resolve(media, `${phase}-${mode}.html`),
+        pageHtml(body, `${phase} ${mode}`, css, tv),
+      );
+    }
+  }
+  if (build) {
+    for (const mode of ['tv', 'phone-only-spectator'] as const) {
+      const tv = mode === 'tv';
+      // One legal pair per surface: isolated protected homes and 1057/9×7 land
+      // cannot support two disjoint trail-free pairs in the same snapshot.
+      const fixture = adjacentFixture(play, tv);
+      expect(fixture.world.runners.map((runner) => runner.area)).toEqual([
+        1057, 9, 9, 9, 9, 9, 9, 9,
+      ]);
+      expect(new Set(fixture.world.runners.map((runner) => runner.cell)).size).toBe(8);
+      expect(fixture.world.runners[1]!.cell - fixture.world.runners[0]!.cell).toBe(
+        tv ? 1 : fixture.world.width,
+      );
+      for (const runner of fixture.world.runners) {
+        expect(runner.alive).toBe(true);
+        expect(runner.trail).toEqual([]);
+        expect(fixture.world.owners[runner.cell]).toBe(runner.slot);
+      }
+      expect(
+        fixture.world.homes.every((home, cell) => home < 0 || fixture.world.owners[cell] === home),
+      ).toBe(true);
+      const next = fixture.world.runners.map((runner) => neighbour(runner.cell, runner.dir));
+      expect(next).not.toContain(-1);
+      expect(new Set(next).size).toBe(8);
+      const body = renderToStaticMarkup(
+        <ServerClockProvider offsetMs={fixture.began + fixture.checked - Date.now()}>
+          <PhoneOnlyProvider value={!tv}>
+            {tv ? (
+              <Tv view={{ ...game.tvView(fixture), vip: null }} />
+            ) : (
+              <Controller
+                view={{
+                  ...game.controllerView({ ...fixture, phoneOnly: true }, 'audience'),
+                  vip: null,
+                }}
+                me={{ id: 'audience', name: 'Audience', avatarId: 'fox' }}
+                send={() => undefined}
+              />
+            )}
+          </PhoneOnlyProvider>
+        </ServerClockProvider>,
+      );
+      expect(body.match(/data-head-layer="label"/g)).toHaveLength(8);
+      for (const name of LONG_NAMES) expect(body).toContain(name);
+      if (!tv) expect(body).not.toContain('<button');
+      writeFileSync(
+        resolve(media, `play-adjacent-${mode}.html`),
+        pageHtml(body, `play adjacent ${mode}`, css, tv),
+      );
     }
   }
 });

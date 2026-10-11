@@ -640,6 +640,56 @@ ight is the :root default above) ────────
       text-overflow: ellipsis;
     }
 
+    ._liveRows_9f25ac {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--pb-space-1);
+      flex: none;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    ._liveRows_9f25ac li {
+      display: flex;
+      align-items: center;
+      gap: var(--pb-space-2);
+      min-width: 0;
+      min-height: var(--pb-touch);
+      padding: var(--pb-space-1) var(--pb-space-2);
+      border-bottom: 1px solid var(--pb-surface-2);
+      font-size: var(--pb-font-caption);
+    }
+
+    ._liveSeat_9f25ac {
+      width: 1.6em;
+      flex: none;
+      border: 2px solid var(--seat-ink);
+      border-radius: var(--pb-radius);
+      text-align: center;
+      font-size: var(--pb-font-body);
+      font-weight: 900;
+    }
+
+    ._livePerson_9f25ac {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      line-height: 1.2;
+    }
+
+    ._livePerson_9f25ac b {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    ._livePerson_9f25ac span {
+      white-space: nowrap;
+      color: var(--pb-text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
     ._content_9f25ac[data-results] ._arena_9f25ac {
       flex: none;
       height: calc(var(--pb-touch) * 2);
@@ -1551,113 +1601,316 @@ ight is the :root default above) ────────
                     8
                   </text>
                 </g>
-                <g transform="translate(9.5 9.5)">
+                <g transform="translate(9.5 9.5)" data-head-layer="background" data-head-owner="1">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-1)"
                     stroke-width="0.18"
                   ></circle>
-                  <polygon
-                    points="-0.32,1.13 0.00,1.67 0.32,1.13"
-                    class="_heading_f40580"
-                    data-heading="2"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    1
-                  </text>
                 </g>
-                <g transform="translate(29.5 6.5)">
+                <g transform="translate(29.5 6.5)" data-head-layer="background" data-head-owner="3">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-3)"
                     stroke-width="0.18"
                   ></circle>
-                  <polygon
-                    points="-1.13,-0.32 -1.67,0.00 -1.13,0.32"
-                    class="_heading_f40580"
-                    data-heading="3"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    3
-                  </text>
                 </g>
-                <g transform="translate(16.5 22.5)">
+                <g
+                  transform="translate(16.5 22.5)"
+                  data-head-layer="background"
+                  data-head-owner="4"
+                >
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-4)"
                     stroke-width="0.18"
                   ></circle>
-                  <polygon
-                    points="-1.13,-0.32 -1.67,0.00 -1.13,0.32"
-                    class="_heading_f40580"
-                    data-heading="3"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    4
-                  </text>
                 </g>
-                <g transform="translate(5.5 11.5)">
+                <g transform="translate(5.5 11.5)" data-head-layer="background" data-head-owner="7">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-7)"
                     stroke-width="0.18"
                   ></circle>
-                  <polygon
-                    points="0.32,-1.13 0.00,-1.67 -0.32,-1.13"
-                    class="_heading_f40580"
-                    data-heading="0"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    7
-                  </text>
                 </g>
-                <g transform="translate(28.5 15.5)">
+                <g
+                  transform="translate(28.5 15.5)"
+                  data-head-layer="background"
+                  data-head-owner="8"
+                >
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-8)"
                     stroke-width="0.18"
                   ></circle>
+                </g>
+                <g transform="translate(9.5 9.5)" data-head-layer="heading" data-head-owner="1">
+                  <polygon
+                    points="-0.32,1.13 0.00,1.67 0.32,1.13"
+                    class="_heading_f40580"
+                    data-heading="2"
+                  ></polygon>
+                </g>
+                <g transform="translate(29.5 6.5)" data-head-layer="heading" data-head-owner="3">
+                  <polygon
+                    points="-1.13,-0.32 -1.67,0.00 -1.13,0.32"
+                    class="_heading_f40580"
+                    data-heading="3"
+                  ></polygon>
+                </g>
+                <g transform="translate(16.5 22.5)" data-head-layer="heading" data-head-owner="4">
+                  <polygon
+                    points="-1.13,-0.32 -1.67,0.00 -1.13,0.32"
+                    class="_heading_f40580"
+                    data-heading="3"
+                  ></polygon>
+                </g>
+                <g transform="translate(5.5 11.5)" data-head-layer="heading" data-head-owner="7">
                   <polygon
                     points="0.32,-1.13 0.00,-1.67 -0.32,-1.13"
                     class="_heading_f40580"
                     data-heading="0"
                   ></polygon>
+                </g>
+                <g transform="translate(28.5 15.5)" data-head-layer="heading" data-head-owner="8">
+                  <polygon
+                    points="0.32,-1.13 0.00,-1.67 -0.32,-1.13"
+                    class="_heading_f40580"
+                    data-heading="0"
+                  ></polygon>
+                </g>
+                <g transform="translate(9.5 9.5)" data-head-layer="label" data-head-owner="1">
                   <text
                     class="_number_f40580"
                     text-anchor="middle"
                     dominant-baseline="central"
                     data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    1
+                  </text>
+                </g>
+                <g transform="translate(29.5 6.5)" data-head-layer="label" data-head-owner="3">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    3
+                  </text>
+                </g>
+                <g transform="translate(16.5 22.5)" data-head-layer="label" data-head-owner="4">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    4
+                  </text>
+                </g>
+                <g transform="translate(5.5 11.5)" data-head-layer="label" data-head-owner="7">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    7
+                  </text>
+                </g>
+                <g transform="translate(28.5 15.5)" data-head-layer="label" data-head-owner="8">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
                   >
                     8
                   </text>
                 </g>
               </svg>
             </div>
+            <ul class="_liveRows_9f25ac" aria-label="Live standings">
+              <li style="--seat-ink: var(--pb-player-4)">
+                <span class="_liveSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_25m_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Falling stripes"
+                      >
+                        <path
+                          d="M-0.5 1.5L0.5 2.5M0 0L2 2M1.5 -0.5L2.5 0.5"
+                          class="_line_73a606"
+                        ></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_25m_)"></rect></svg
+                  ><b class="_number_cafdc5">4</b></span
+                >
+                <div class="_livePerson_9f25ac"><b>Dee</b><span>Place 1 · 66 cells</span></div>
+              </li>
+              <li style="--seat-ink: var(--pb-player-7)">
+                <span class="_liveSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_29m_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Grid"
+                      >
+                        <path d="M0 1H2M1 0V2" class="_line_73a606"></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_29m_)"></rect></svg
+                  ><b class="_number_cafdc5">7</b></span
+                >
+                <div class="_livePerson_9f25ac"><b>Gus</b><span>Place 2 · 60 cells</span></div>
+              </li>
+              <li style="--seat-ink: var(--pb-player-3)">
+                <span class="_liveSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_2dm_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Rising stripes"
+                      >
+                        <path
+                          d="M-0.5 0.5L0.5 -0.5M0 2L2 0M1.5 2.5L2.5 1.5"
+                          class="_line_73a606"
+                        ></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_2dm_)"></rect></svg
+                  ><b class="_number_cafdc5">3</b></span
+                >
+                <div class="_livePerson_9f25ac"><b>Cy</b><span>Place 3 · 49 cells</span></div>
+              </li>
+              <li style="--seat-ink: var(--pb-player-1)">
+                <span class="_liveSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_2hm_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Horizontal lines"
+                      >
+                        <path d="M0 1H2" class="_line_73a606"></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_2hm_)"></rect></svg
+                  ><b class="_number_cafdc5">1</b></span
+                >
+                <div class="_livePerson_9f25ac"><b>Ana</b><span>Place 4 · 41 cells</span></div>
+              </li>
+              <li style="--seat-ink: var(--pb-player-8)">
+                <span class="_liveSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_2lm_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Diamonds"
+                      >
+                        <path d="M1 0.45L1.55 1L1 1.55L0.45 1Z" class="_line_73a606"></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_2lm_)"></rect></svg
+                  ><b class="_number_cafdc5">8</b></span
+                >
+                <div class="_livePerson_9f25ac"><b>Hal</b><span>Place 5 · 35 cells</span></div>
+              </li>
+              <li style="--seat-ink: var(--pb-player-2)">
+                <span class="_liveSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_2pm_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Vertical lines"
+                      >
+                        <path d="M1 0V2" class="_line_73a606"></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_2pm_)"></rect></svg
+                  ><b class="_number_cafdc5">2</b></span
+                >
+                <div class="_livePerson_9f25ac"><b>Ben</b><span>Place 6 · 9 cells</span></div>
+              </li>
+              <li style="--seat-ink: var(--pb-player-5)">
+                <span class="_liveSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_2tm_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Dots"
+                      >
+                        <circle cx="1" cy="1" r="0.14" class="_dot_73a606"></circle>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_2tm_)"></rect></svg
+                  ><b class="_number_cafdc5">5</b></span
+                >
+                <div class="_livePerson_9f25ac"><b>Eli</b><span>Place 6 · 9 cells</span></div>
+              </li>
+              <li style="--seat-ink: var(--pb-player-6)">
+                <span class="_liveSeat_9f25ac _badge_cafdc5"
+                  ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
+                    <defs>
+                      <pattern
+                        id="_R_31m_"
+                        width="2"
+                        height="2"
+                        patternUnits="userSpaceOnUse"
+                        data-texture="Crosses"
+                      >
+                        <path d="M0.65 1H1.35M1 0.65V1.35" class="_line_73a606"></path>
+                      </pattern>
+                    </defs>
+                    <rect width="4" height="4" fill="url(#_R_31m_)"></rect></svg
+                  ><b class="_number_cafdc5">6</b></span
+                >
+                <div class="_livePerson_9f25ac"><b>Fay</b><span>Place 6 · 9 cells</span></div>
+              </li>
+            </ul>
             <p class="_hint_9f25ac">Outlined squares are homes. Dashed trails can be cut.</p>
           </div>
         </div>

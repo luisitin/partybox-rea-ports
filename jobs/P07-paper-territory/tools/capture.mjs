@@ -56,10 +56,13 @@ const delay = (ms) => new Promise((done) => setTimeout(done, ms));
 function call(method, params = {}, sessionId) {
   return new Promise((done, fail) => {
     const seq = ++id;
-    const timeout = setTimeout(() => {
-      requests.delete(seq);
-      fail(new Error(`Timed out: ${method}`));
-    }, 15_000);
+    const timeout = setTimeout(
+      () => {
+        requests.delete(seq);
+        fail(new Error(`Timed out: ${method}`));
+      },
+      method === 'Page.captureScreenshot' ? 60_000 : method === 'Browser.close' ? 5_000 : 15_000,
+    );
     requests.set(seq, { done, fail, timeout });
     socket.send(JSON.stringify({ id: seq, method, params, ...(sessionId ? { sessionId } : {}) }));
   });
@@ -187,16 +190,18 @@ try {
     }
     socket.close();
   }
+  await delay(500);
+  // Terminate the owned tree before its parent, so a lingering network utility
+  // cannot become orphaned. Only the process started above and its children.
   if (child.exitCode === null) {
-    await delay(500);
-    if (child.exitCode === null) child.kill();
+    if (process.platform === 'win32')
+      spawnSync('taskkill.exe', ['/PID', String(child.pid), '/T', '/F'], {
+        windowsHide: true,
+        stdio: 'ignore',
+        timeout: 10_000,
+      });
+    else child.kill();
   }
-  // Only the process started above and its children; never another runner's browser.
-  if (child.exitCode === null)
-    spawnSync('taskkill.exe', ['/PID', String(child.pid), '/T', '/F'], {
-      windowsHide: true,
-      stdio: 'ignore',
-    });
   await delay(500);
   // Verified task-local absolute target before recursive cleanup on Windows.
   if (resolve(profile) !== resolve(folder, `.browser-profile-${process.pid}`))
@@ -213,3 +218,7 @@ try {
   }
   await writeFile(join(folder, 'SHA256SUMS.txt'), entries.join('\n') + '\n');
 }
+
+// Chromium is closed and every output is flushed. On Windows, its closed CDP
+// WebSocket can otherwise retain an idle Node handle after successful cleanup.
+process.exit(0);

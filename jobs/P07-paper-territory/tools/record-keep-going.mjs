@@ -70,6 +70,7 @@ for (const count of ['2', '4', '8'])
   if (simulations[count]?.games !== 1000 || simulations[count]?.decisionBeatMs !== 600)
     throw new Error(`Final simulation evidence for ${count} players is incomplete`);
 const snapshot = json('final-keep-going-source-hashes.json');
+const command = json('final-keep-going-command.json');
 const sourceComparison = snapshot.sources.map((source) => ({
   ...source,
   unchanged: sha(readFileSync(resolve(repo, source.file))) === source.sha256,
@@ -95,7 +96,8 @@ const metrics = Object.fromEntries(
 const results = {
   recordedAtUtc: new Date().toISOString(),
   status: 'passed',
-  command: 'PB_RECORD_VERIFY=1 pnpm.cmd vitest run games/paper-territory --maxWorkers=1',
+  command: command.actualCommand,
+  commandDetails: command,
   benchmarkOverride: false,
   browserLaunchedByVerification: false,
   fullRun: {

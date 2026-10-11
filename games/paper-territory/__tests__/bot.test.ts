@@ -6,6 +6,93 @@ import type { Runner, World } from '../server/types';
 import { applyDirection, tickWorld } from '../server/world';
 
 describe('public trail threat strategy', () => {
+  it.each(['easy', 'normal', 'sharp'] as const)(
+    '%s avoids visible tick-four head convergence at the 1200 ms decision beat',
+    (skill) => {
+      const kit = testKit(game, { players: testPlayers(2) });
+      const play = kit.timer(kit.start());
+      const at = (x: number, y: number): number => y * 40 + x;
+      // The rival left the west side of its protected home, travelled west,
+      // then north, and has legitimately queued a perpendicular west turn.
+      const trail = [
+        ...Array.from({ length: 20 }, (_, i) => at(32 - i, 22)),
+        ...Array.from({ length: 17 }, (_, i) => at(13, 21 - i)),
+      ];
+      const rival = {
+        ...play.world.runners[1]!,
+        cell: at(13, 5),
+        dir: 0 as const,
+        queued: 3 as const,
+        trail,
+      };
+      const state = {
+        ...play,
+        world: { ...play.world, runners: [play.world.runners[0]!, rival] },
+      };
+      const unchanged = tickWorld(state.world, 4, ['p1', 'p2']);
+      expect(unchanged.runners.map((runner) => runner.cause)).toEqual(['head', 'head']);
+      const input = game.bot.sampleInput(state, 'p1', createRng(1), skill);
+      expect(input).toEqual({ type: 'direction', dir: 2 });
+      const escaped = tickWorld(applyDirection(state.world, 'p1', input!), 6, ['p1', 'p2']);
+      expect(escaped.runners[0]!.alive).toBe(true);
+      expect(escaped.runners[0]!.cell).toBe(at(5, 11));
+    },
+  );
+
+  it.each(['easy', 'normal', 'sharp'] as const)(
+    '%s takes the longest escape when no six-tile runway survives, then turns at the 600 ms beat',
+    (skill) => {
+      const kit = testKit(game, { players: testPlayers(2) });
+      const play = kit.timer(kit.start());
+      const at = (x: number, y: number): number => y * 40 + x;
+      const owners = [...play.world.owners];
+      for (let y = 9; y <= 11; y++) for (let x = 33; x <= 34; x++) owners[at(x, y)] = 0;
+      const trail = [
+        [35, 10],
+        [36, 10],
+        [37, 10],
+        [38, 10],
+        [38, 9],
+        [37, 9],
+        [36, 9],
+        [35, 9],
+        [35, 8],
+        [35, 7],
+        [35, 6],
+        [35, 5],
+        [36, 5],
+        [37, 5],
+        [38, 5],
+      ].map(([x, y]) => at(x!, y!));
+      const me = {
+        ...play.world.runners[0]!,
+        cell: at(38, 5),
+        dir: 1 as const,
+        queued: 1 as const,
+        trail,
+        area: 15,
+      };
+      const state = {
+        ...play,
+        world: { ...play.world, owners, runners: [me, play.world.runners[1]!] },
+      };
+      const unchanged = tickWorld(state.world, 2, ['p1']);
+      expect(unchanged.runners[0]!.cause).toBe('wall');
+      // Up has five clear tiles, down crosses the existing trail at tile four,
+      // and left is a forbidden reverse. Every six-tile straight run is unsafe.
+      const input = game.bot.sampleInput(state, 'p1', createRng(1), skill);
+      expect(input).toEqual({ type: 'direction', dir: 0 });
+      const escaped = tickWorld(applyDirection(state.world, 'p1', input!), 3, ['p1']);
+      expect(escaped.runners[0]!.alive).toBe(true);
+      expect(escaped.runners[0]!.cell).toBe(at(38, 2));
+      const second = game.bot.sampleInput({ ...state, world: escaped }, 'p1', createRng(1), skill);
+      expect(second).toEqual({ type: 'direction', dir: 3 });
+      expect(tickWorld(applyDirection(escaped, 'p1', second!), 6, ['p1']).runners[0]!.alive).toBe(
+        true,
+      );
+    },
+  );
+
   it('turns before a wall beyond the three-tile horizon at the longest 1200 ms decision beat', () => {
     const kit = testKit(game, { players: testPlayers(2) });
     const play = kit.timer(kit.start());

@@ -80,6 +80,65 @@ function tv(view: TvSnapshot): string {
   );
 }
 
+function spectator(view: TvSnapshot, only: boolean): string {
+  const controller: PaperTerritoryControllerView & { vip: null } = {
+    ...view,
+    me: { id: 'audience', role: 'spectator' },
+    slot: -1,
+    area: 0,
+    alive: false,
+    dir: 0,
+    movingDir: 0,
+    deaths: 0,
+    captures: 0,
+    lastCapture: 0,
+    cause: null,
+    respawnAt: null,
+    rank: null,
+    tied: false,
+  };
+  return renderToStaticMarkup(
+    <ServerClockProvider offsetMs={NOW - Date.now()}>
+      <PhoneOnlyProvider value={only}>
+        <Controller
+          view={controller}
+          me={{ id: 'audience', name: 'Audience', avatarId: 'fox' }}
+          send={() => undefined}
+        />
+      </PhoneOnlyProvider>
+    </ServerClockProvider>,
+  );
+}
+
+describe('spectator live map and roster', () => {
+  it('identifies all eight map seats with public names, current areas and tied ranks in either room', () => {
+    const view = snapshot([90, 90, 44, 40, 30, 20, 10, 9]);
+    for (const only of [false, true]) {
+      const html = spectator(view, only);
+      const roster = html.match(/<ul[^>]*aria-label="Live standings"[^>]*>([\s\S]+?)<\/ul>/)?.[1];
+      expect(roster).toBeDefined();
+      expect(roster?.match(/<li\b/g)).toHaveLength(8);
+      for (const player of view.players) expect(roster).toContain(player.name);
+      expect(roster?.match(/Place 1 · 90 cells/g)).toHaveLength(2);
+      expect(roster).toContain('Place 3 · 44 cells');
+      expect(roster).toContain('Place 8 · 9 cells');
+      expect(html.indexOf('<svg')).toBeLessThan(html.indexOf('aria-label="Live standings"'));
+    }
+  });
+
+  it('keeps the public map and gives local and phone-only spectators no active controls', () => {
+    const view = snapshot();
+    for (const only of [false, true]) {
+      const html = spectator(view, only);
+      expect(html).toContain('role="img"');
+      expect(html).toContain('aria-label="Live standings"');
+      expect(html).not.toContain('<button');
+      expect(html).not.toContain('Direction controls');
+      expect(html).not.toContain('on the TV');
+    }
+  });
+});
+
 describe('crash rules before the first move', () => {
   it.each([false, true])(
     'teaches every crash and extra-land loss on the phone (stage=%s)',
@@ -198,6 +257,18 @@ describe('honest closure feedback', () => {
 });
 
 describe('live leaders from current owned cells', () => {
+  it('preserves long player identities and four-digit score labels in the TV markup', () => {
+    const view = snapshot([1057, 9, 9, 9, 9, 9, 9, 9]);
+    view.players = view.players.map((player, index) => ({
+      ...player,
+      name: `LongUnbrokenPlayerName${index + 1}`,
+    }));
+    const html = tv(view);
+    for (const player of view.players) expect(html).toContain(player.name);
+    expect(html).toContain('1057 cells');
+    expect(html).toContain('94.4%');
+  });
+
   it('names the sole leader and exact margin in existing header space', () => {
     const view = snapshot([42, 30, 20, 19, 18, 17, 16, 15]);
     expect(phone(view)).toContain('Leading · 12 ahead');

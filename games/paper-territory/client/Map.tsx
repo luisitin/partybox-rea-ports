@@ -30,26 +30,60 @@ export interface MapProps {
 }
 
 // Short trails stay attached to their numbered head; long trails get sparse owner pins.
-export function trailMarkerCells(trail: readonly number[], head: number, width: number): number[] {
+export function trailMarkerCells(
+  trail: readonly number[],
+  head: number,
+  width: number,
+  avoidCells: readonly number[] = [],
+): number[] {
   if (width < 1 || trail.length < 4) return [];
   const [headX, headY] = cellCenter(head, width);
   const spacing = Math.max(8, Math.ceil(trail.length / 8));
   const selected: number[] = [];
-  for (let index = 0; index < trail.length; index += spacing) {
-    const cell = trail[index];
-    if (cell === undefined) continue;
-    const [x, y] = cellCenter(cell, width);
-    if (Math.hypot(x - headX, y - headY) < 2.5) continue;
-    if (
-      selected.some((other) => {
-        const [otherX, otherY] = cellCenter(other, width);
-        return Math.hypot(x - otherX, y - otherY) < 2.5;
-      })
-    )
-      continue;
-    selected.push(cell);
+  let lastIndex = -8;
+  for (let start = 0; start < trail.length; start += spacing) {
+    const end = Math.min(start + spacing, trail.length);
+    // Search forward inside each sparse bucket so nearby seats get staggered labels.
+    for (let index = Math.max(start, lastIndex + 8); index < end; index++) {
+      const cell = trail[index];
+      if (cell === undefined) continue;
+      const [x, y] = cellCenter(cell, width);
+      if (Math.hypot(x - headX, y - headY) < 2.5) continue;
+      if (
+        [...avoidCells, ...selected].some((other) => {
+          const [otherX, otherY] = cellCenter(other, width);
+          return Math.hypot(x - otherX, y - otherY) < 2.5;
+        })
+      )
+        continue;
+      selected.push(cell);
+      lastIndex = index;
+      break;
+    }
   }
   return selected;
+}
+
+export interface TrailOwnerMarker {
+  id: string;
+  slot: number;
+  cell: number;
+}
+
+export function trailOwnerMarkers(
+  runners: readonly MapRunner[],
+  width: number,
+): TrailOwnerMarker[] {
+  const alive = runners.filter((runner) => runner.alive).sort((a, b) => a.slot - b.slot);
+  const heads = alive.map((runner) => runner.cell);
+  const reserved: number[] = [];
+  const markers: TrailOwnerMarker[] = [];
+  for (const runner of alive) {
+    const cells = trailMarkerCells(runner.trail, runner.cell, width, [...heads, ...reserved]);
+    for (const cell of cells) markers.push({ id: runner.id, slot: runner.slot, cell });
+    reserved.push(...cells);
+  }
+  return markers;
 }
 
 export function Map({
@@ -64,6 +98,10 @@ export function Map({
   const gridId = useId();
   const paths = territoryPaths(owners, width, height);
   const marker = markerGeometry(compact);
+  const trailPins = trailOwnerMarkers(runners, width);
+  const heads = runners
+    .filter((runner) => runner.alive)
+    .sort((a, b) => Number(a.id === meId) - Number(b.id === meId));
   return (
     <svg
       className={styles.map}
@@ -140,66 +178,106 @@ export function Map({
             </g>
           );
         })}
-      {runners
-        .filter((runner) => runner.alive)
-        .flatMap((runner) =>
-          trailMarkerCells(runner.trail, runner.cell, width).map((cell) => {
-            const [x, y] = cellCenter(cell, width);
-            return (
-              <g
-                key={`${runner.id}-${cell}`}
-                transform={`translate(${x} ${y})`}
-                data-trail-owner={runner.slot + 1}
-                data-trail-cell={cell}
-              >
-                <polygon
-                  points="0,-0.72 0.72,0 0,0.72 -0.72,0"
-                  className={styles.trailBadge}
-                  data-trail-shape="diamond"
-                />
-                <text
-                  className={styles.trailNumber}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  data-marker="trail"
-                >
-                  {runner.slot + 1}
-                </text>
-              </g>
-            );
-          }),
-        )}
-      {runners
-        .filter((runner) => runner.alive)
-        .sort((a, b) => Number(a.id === meId) - Number(b.id === meId))
+      {trailPins.map(({ id, slot, cell }) => {
+        const [x, y] = cellCenter(cell, width);
+        return (
+          <g
+            key={`${id}-${cell}`}
+            transform={`translate(${x} ${y})`}
+            data-trail-owner={slot + 1}
+            data-trail-cell={cell}
+          >
+            <polygon
+              points="0,-0.72 0.72,0 0,0.72 -0.72,0"
+              className={styles.trailBadge}
+              data-trail-shape="diamond"
+            />
+            <text
+              className={styles.trailNumber}
+              textAnchor="middle"
+              dominantBaseline="central"
+              data-marker="trail"
+            >
+              {slot + 1}
+            </text>
+          </g>
+        );
+      })}
+      {heads.map((runner) => {
+        const [x, y] = cellCenter(runner.cell, width);
+        return (
+          <g
+            key={runner.id}
+            transform={`translate(${x} ${y})`}
+            data-head-layer="background"
+            data-head-owner={runner.slot + 1}
+          >
+            <circle
+              r={marker.radius}
+              fill="var(--pb-bg)"
+              stroke={playerInk(runner.slot)}
+              strokeWidth="0.18"
+            />
+          </g>
+        );
+      })}
+      {heads
+        .filter((runner) => runner.id === meId)
         .map((runner) => {
           const [x, y] = cellCenter(runner.cell, width);
-          const direction = runner.movingDir ?? runner.dir;
           return (
-            <g key={runner.id} transform={`translate(${x} ${y})`}>
-              {runner.id === meId ? <circle r={marker.ringRadius} className={styles.mine} /> : null}
-              <circle
-                r={marker.radius}
-                fill="var(--pb-bg)"
-                stroke={playerInk(runner.slot)}
-                strokeWidth="0.18"
-              />
-              <polygon
-                points={headingTriangle(direction, marker.radius)}
-                className={styles.heading}
-                data-heading={direction}
-              />
-              <text
-                className={styles.number}
-                textAnchor="middle"
-                dominantBaseline="central"
-                data-marker="runner"
-              >
-                {runner.slot + 1}
-              </text>
-            </g>
+            <circle
+              key={runner.id}
+              cx={x}
+              cy={y}
+              r={marker.ringRadius}
+              className={styles.mine}
+              data-head-layer="highlight"
+              data-head-owner={runner.slot + 1}
+            />
           );
         })}
+      {heads.map((runner) => {
+        const [x, y] = cellCenter(runner.cell, width);
+        const direction = runner.movingDir ?? runner.dir;
+        return (
+          <g
+            key={runner.id}
+            transform={`translate(${x} ${y})`}
+            data-head-layer="heading"
+            data-head-owner={runner.slot + 1}
+          >
+            <polygon
+              points={headingTriangle(direction, marker.radius)}
+              className={styles.heading}
+              data-heading={direction}
+            />
+          </g>
+        );
+      })}
+      {heads.map((runner) => {
+        const [x, y] = cellCenter(runner.cell, width);
+        return (
+          <g
+            key={runner.id}
+            transform={`translate(${x} ${y})`}
+            data-head-layer="label"
+            data-head-owner={runner.slot + 1}
+          >
+            <text
+              className={styles.number}
+              textAnchor="middle"
+              dominantBaseline="central"
+              data-marker="runner"
+              stroke="var(--pb-bg)"
+              strokeWidth="0.1"
+              paintOrder="stroke"
+            >
+              {runner.slot + 1}
+            </text>
+          </g>
+        );
+      })}
     </svg>
   );
 }

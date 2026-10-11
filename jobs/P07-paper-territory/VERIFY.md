@@ -4,6 +4,10 @@ Install once: `corepack enable`; `pnpm.cmd install`, completed. Windows script p
 
 ## Tests and contracts
 
+Latest completed authoritative full check: `pnpm vitest run games/paper-territory --maxWorkers=1`, [CI 38179181153](https://github.com/luisitin/partybox-rea-ports/actions/runs/38179181153), head `18631b6eafa2079b832f570ff258cbe0535ecaab`: **120/120 tests in 14 files**, 63.79 s; typecheck and format also passed. This includes the real SDK contracts, all 1,003 property traces and all 3,000 simulations. Exact provenance and complete metrics are in tools/final-ci-run.json and tools/final-keep-going-results.json. Subsequent pin/head/roster/TV-fit changes and the shorter-runway bot fallback require the next CI. The property trace harness is unchanged; the old bot/source hashes are historical evidence.
+
+Historical local checks before KEEP GOING:
+
 - `PB_RECORD_VERIFY=1 pnpm.cmd vitest run games/paper-territory --maxWorkers=1`: 76/77 tests passed in 174.38 s. One real SDK fast-scheduler starvation failure: bots repeated an already queued heading just before a tick. Fixed by returning null when the heading is already queued.
 - Post-fix contract/world/lifecycle/presence/bot run: **56/56 passed**, 7.75 s, including all 20 real SDK contracts (fast/random/idle/skipper, views, purity, reconnect, VIP). Exact commands and aggregate evidence: tools/verification-results.json.
 - `PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/paper-territory/client games/paper-territory/__tests__/artifacts.test.tsx --maxWorkers=1`: **24/24 passed**, 1.87 s after ownership textures and enlarged markers. Fixtures and static HTML come from a real seeded eight-bot match.
@@ -11,15 +15,15 @@ Install once: `corepack enable`; `pnpm.cmd install`, completed. Windows script p
 
 ## Simulation and properties
 
-The full run executed 1,000 seeds at each player count, with 600 ms bot decisions and 200 ms physics. Each batch cycles easy/normal/sharp (334/333/333 games). All **3,000 terminated** within the manifest limit of 360,000 ms.
+The current authoritative CI executed 1,000 seeds at each player count, with 600 ms bot decisions and 200 ms physics. Each batch cycles easy/normal/sharp (334/333/333 games). All **3,000 terminated** within the manifest limit of 360,000 ms.
 
 | Players | Games | Median play | Maximum whole game | Wall time |
 | ------- | ----- | ----------- | ------------------ | --------- |
-| 2       | 1,000 | 120,000 ms  | 131,000 ms         | 6.55 s    |
-| 4       | 1,000 | 120,000 ms  | 131,000 ms         | 33.19 s   |
-| 8       | 1,000 | 120,000 ms  | 131,000 ms         | 60.70 s   |
+| 2       | 1,000 | 120,000 ms  | 131,000 ms         | 5.68 s    |
+| 4       | 1,000 | 120,000 ms  | 131,000 ms         | 11.03 s   |
+| 8       | 1,000 | 120,000 ms  | 131,000 ms         | 21.51 s   |
 
-tools/simulation-results.json records per-strength area, captures, deaths and growth beyond home. These are same-strength matches and do not establish mixed-match skill ordering. The null-input fix preserves chosen headings and RNG decisions; targeted scheduler checks passed without repeating this CPU-heavy batch. An obsolete early 200 ms decision batch was stopped and is not counted: tools/obsolete-batch.md.
+tools/simulation-results.json and tools/final-keep-going-simulation-results.json record current per-strength area, captures, deaths and growth beyond home. These are same-strength matches and do not establish mixed-match skill ordering. Compared with the retained pre-loop 1,000-game eight-seat batch, sharp median area rose 9→48, median captures 16→37 and mean deaths fell 9.966→5.954 (40.26%). The original local timings (6.55/33.19/60.70 s) and experiments remain historical evidence. An obsolete early 200 ms decision batch was stopped and is not counted: tools/obsolete-batch.md.
 
 Property tests passed seeds 1, 2, 3 plus **1,000 generated seeds** (generator 0x5eed07), 40 mixed events per trace. Checks: JSON/finite/view bounds, spectator identity, source immutability, deterministic replay, complete results. All seeds: tools/property-results.json.
 
@@ -65,3 +69,5 @@ Media totals 4,160,887 bytes, below 10 MB; all 63 SHA256SUMS.txt entries verifie
 .github/workflows/P07.yml uses read-only permissions, Ubuntu, 30-minute timeout, actions/* only and P07 paths. It installs, typechecks, formats and runs only this game. Draft PR leaves draft only after green CI. CI result and post-green audits will be recorded here/LOOP.md.
 
 Initial full CI passed: [run 38177872218](https://github.com/luisitin/partybox-rea-ports/actions/runs/38177872218), 1m30s. PR #4 left draft after this result. R1 targeted command: `pnpm.cmd vitest run games/paper-territory/client/DirectionPad.test.tsx games/paper-territory/client/controls.test.ts games/paper-territory/__tests__/views.test.ts games/paper-territory/__tests__/contract.test.ts --maxWorkers=1`; 3 existing files, 27/27 assertions passed in 4.57 s. The views glob has no separate file; projections are checked by SDK contract and the real-game controller regression.
+
+R1–R6 source changes and focused results are recorded in LOOP.md. The authoritative current full result above replaces the duplicate local attempt, which was stopped to preserve desktop CPU. Native PowerShell processes stalled after output; the equivalent installed CLI fallback was `env -u PB_SIM_GAMES PB_RECORD_VERIFY=1 node node_modules/vitest/vitest.mjs run games/paper-territory --maxWorkers=1`. Exact attempts are in tools/final-keep-going-command.json; partial local logs are explicitly non-final. The first fresh capture timed out at Page.captureScreenshot and is not counted. A subsequent 28-screen capture produced zero fit failures and 58.671875 px minimum touch; it was manually reviewed, and its owned browser/profile were closed/removed in cleanup. The Windows CDP handle retained an idle Node process after cleanup, so the tool now exits explicitly only after successful finally completion. Final adjacent-head stress captures and the next client CI remain pending.

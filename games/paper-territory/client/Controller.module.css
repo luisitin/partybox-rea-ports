@@ -295,6 +295,56 @@
   text-overflow: ellipsis;
 }
 
+.liveRows {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--pb-space-1);
+  flex: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.liveRows li {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+  min-width: 0;
+  min-height: var(--pb-touch);
+  padding: var(--pb-space-1) var(--pb-space-2);
+  border-bottom: 1px solid var(--pb-surface-2);
+  font-size: var(--pb-font-caption);
+}
+
+.liveSeat {
+  width: 1.6em;
+  flex: none;
+  border: 2px solid var(--seat-ink);
+  border-radius: var(--pb-radius);
+  text-align: center;
+  font-size: var(--pb-font-body);
+  font-weight: 900;
+}
+
+.livePerson {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.livePerson b {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.livePerson span {
+  white-space: nowrap;
+  color: var(--pb-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 .content[data-results] .arena {
   flex: none;
   height: calc(var(--pb-touch) * 2);

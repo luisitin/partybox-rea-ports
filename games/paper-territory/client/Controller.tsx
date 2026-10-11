@@ -227,9 +227,25 @@ export function Controller({
             </p>
           </>
         ) : (
-          <p className={styles.hint}>
-            {L('Outlined squares are homes. Dashed trails can be cut.')}
-          </p>
+          <>
+            <ul className={styles.liveRows} aria-label={L('Live standings')}>
+              {rows.map((row) => (
+                <li
+                  key={row.id}
+                  style={{ ['--seat-ink' as string]: playerInk(row.slot) } as CSSProperties}
+                >
+                  <SeatBadge className={styles.liveSeat} slot={row.slot} />
+                  <div className={styles.livePerson}>
+                    <b>{row.name}</b>
+                    <span>{L('Place {rank} · {n} cells', { rank: row.rank, n: row.area })}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <p className={styles.hint}>
+              {L('Outlined squares are homes. Dashed trails can be cut.')}
+            </p>
+          </>
         )}
       </div>
     </Screen>

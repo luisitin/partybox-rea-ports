@@ -24,11 +24,12 @@ function safe(world: World, me: Runner, dir: Direction, watch: number, look = 6)
     if (watch > 1 && distance(world, rival.cell, at) < watch && rival.trail.length) return false;
     let mine = me.cell,
       other = rival.cell;
-    // A visible queued heading predicts collisions during the next normal decision beat.
-    for (let step = 0; step < 3; step++) {
+    // Predict visible queued headings through the longest 1200 ms decision beat.
+    // Keep this horizon when the escape fallback shortens its own clear runway.
+    for (let step = 0; step < 6; step++) {
       const nextMine = neighbour(mine, dir, world.width, world.height);
       const nextOther = neighbour(other, rival.queued, world.width, world.height);
-      if (nextOther < 0) break;
+      if (nextMine < 0 || nextOther < 0) break;
       if (nextMine === nextOther || (nextMine === other && nextOther === mine)) return false;
       mine = nextMine;
       other = nextOther;
@@ -92,6 +93,10 @@ export function botInput(
   const watch = skill === 'sharp' ? 2 : 1;
   let options = directions.filter((dir) => safe(world, me, dir, watch));
   if (!options.length) options = directions.filter((dir) => safe(world, me, dir, 1));
+  // A cornered runner may have no straight runway for the longest decision beat.
+  // Prefer its longest clear escape so a normal 600 ms beat can turn again.
+  for (let look = 5; look >= 1 && !options.length; look--)
+    options = directions.filter((dir) => safe(world, me, dir, 1, look));
   if (!options.length) return me.dir === me.queued ? null : { type: 'direction', dir: me.dir };
   let choice: Direction = options[0]!;
   if (me.trail.length) {

@@ -640,6 +640,56 @@ ight is the :root default above) ────────
       text-overflow: ellipsis;
     }
 
+    ._liveRows_9f25ac {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--pb-space-1);
+      flex: none;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    ._liveRows_9f25ac li {
+      display: flex;
+      align-items: center;
+      gap: var(--pb-space-2);
+      min-width: 0;
+      min-height: var(--pb-touch);
+      padding: var(--pb-space-1) var(--pb-space-2);
+      border-bottom: 1px solid var(--pb-surface-2);
+      font-size: var(--pb-font-caption);
+    }
+
+    ._liveSeat_9f25ac {
+      width: 1.6em;
+      flex: none;
+      border: 2px solid var(--seat-ink);
+      border-radius: var(--pb-radius);
+      text-align: center;
+      font-size: var(--pb-font-body);
+      font-weight: 900;
+    }
+
+    ._livePerson_9f25ac {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      line-height: 1.2;
+    }
+
+    ._livePerson_9f25ac b {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    ._livePerson_9f25ac span {
+      white-space: nowrap;
+      color: var(--pb-text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
     ._content_9f25ac[data-results] ._arena_9f25ac {
       flex: none;
       height: calc(var(--pb-touch) * 2);
@@ -1519,171 +1569,246 @@ ight is the :root default above) ────────
                     8
                   </text>
                 </g>
-                <g transform="translate(34.5 22.5)">
+                <g
+                  transform="translate(34.5 22.5)"
+                  data-head-layer="background"
+                  data-head-owner="2"
+                >
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-2)"
                     stroke-width="0.18"
                   ></circle>
-                  <polygon
-                    points="-1.13,-0.32 -1.67,0.00 -1.13,0.32"
-                    class="_heading_f40580"
-                    data-heading="3"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    2
-                  </text>
                 </g>
-                <g transform="translate(33.5 5.5)">
+                <g transform="translate(33.5 5.5)" data-head-layer="background" data-head-owner="3">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-3)"
                     stroke-width="0.18"
                   ></circle>
-                  <polygon
-                    points="-0.32,1.13 0.00,1.67 0.32,1.13"
-                    class="_heading_f40580"
-                    data-heading="2"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    3
-                  </text>
                 </g>
-                <g transform="translate(6.5 22.5)">
+                <g transform="translate(6.5 22.5)" data-head-layer="background" data-head-owner="4">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-4)"
                     stroke-width="0.18"
                   ></circle>
-                  <polygon
-                    points="0.32,-1.13 0.00,-1.67 -0.32,-1.13"
-                    class="_heading_f40580"
-                    data-heading="0"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    4
-                  </text>
                 </g>
-                <g transform="translate(19.5 5.5)">
+                <g transform="translate(19.5 5.5)" data-head-layer="background" data-head-owner="5">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-5)"
                     stroke-width="0.18"
                   ></circle>
-                  <polygon
-                    points="1.13,0.32 1.67,0.00 1.13,-0.32"
-                    class="_heading_f40580"
-                    data-heading="1"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    5
-                  </text>
                 </g>
-                <g transform="translate(19.5 22.5)">
+                <g
+                  transform="translate(19.5 22.5)"
+                  data-head-layer="background"
+                  data-head-owner="6"
+                >
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-6)"
                     stroke-width="0.18"
                   ></circle>
-                  <polygon
-                    points="-1.13,-0.32 -1.67,0.00 -1.13,0.32"
-                    class="_heading_f40580"
-                    data-heading="3"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    6
-                  </text>
                 </g>
-                <g transform="translate(5.5 13.5)">
+                <g transform="translate(5.5 13.5)" data-head-layer="background" data-head-owner="7">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-7)"
                     stroke-width="0.18"
                   ></circle>
-                  <polygon
-                    points="0.32,-1.13 0.00,-1.67 -0.32,-1.13"
-                    class="_heading_f40580"
-                    data-heading="0"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    7
-                  </text>
                 </g>
-                <g transform="translate(34.5 13.5)">
+                <g
+                  transform="translate(34.5 13.5)"
+                  data-head-layer="background"
+                  data-head-owner="8"
+                >
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-8)"
                     stroke-width="0.18"
                   ></circle>
-                  <polygon
-                    points="-0.32,1.13 0.00,1.67 0.32,1.13"
-                    class="_heading_f40580"
-                    data-heading="2"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    8
-                  </text>
                 </g>
-                <g transform="translate(5.5 5.5)">
-                  <circle r="1.2" class="_mine_f40580"></circle>
+                <g transform="translate(5.5 5.5)" data-head-layer="background" data-head-owner="1">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
                     stroke="var(--pb-player-1)"
                     stroke-width="0.18"
                   ></circle>
+                </g>
+                <circle
+                  cx="5.5"
+                  cy="5.5"
+                  r="1.2"
+                  class="_mine_f40580"
+                  data-head-layer="highlight"
+                  data-head-owner="1"
+                ></circle>
+                <g transform="translate(34.5 22.5)" data-head-layer="heading" data-head-owner="2">
+                  <polygon
+                    points="-1.13,-0.32 -1.67,0.00 -1.13,0.32"
+                    class="_heading_f40580"
+                    data-heading="3"
+                  ></polygon>
+                </g>
+                <g transform="translate(33.5 5.5)" data-head-layer="heading" data-head-owner="3">
+                  <polygon
+                    points="-0.32,1.13 0.00,1.67 0.32,1.13"
+                    class="_heading_f40580"
+                    data-heading="2"
+                  ></polygon>
+                </g>
+                <g transform="translate(6.5 22.5)" data-head-layer="heading" data-head-owner="4">
+                  <polygon
+                    points="0.32,-1.13 0.00,-1.67 -0.32,-1.13"
+                    class="_heading_f40580"
+                    data-heading="0"
+                  ></polygon>
+                </g>
+                <g transform="translate(19.5 5.5)" data-head-layer="heading" data-head-owner="5">
                   <polygon
                     points="1.13,0.32 1.67,0.00 1.13,-0.32"
                     class="_heading_f40580"
                     data-heading="1"
                   ></polygon>
+                </g>
+                <g transform="translate(19.5 22.5)" data-head-layer="heading" data-head-owner="6">
+                  <polygon
+                    points="-1.13,-0.32 -1.67,0.00 -1.13,0.32"
+                    class="_heading_f40580"
+                    data-heading="3"
+                  ></polygon>
+                </g>
+                <g transform="translate(5.5 13.5)" data-head-layer="heading" data-head-owner="7">
+                  <polygon
+                    points="0.32,-1.13 0.00,-1.67 -0.32,-1.13"
+                    class="_heading_f40580"
+                    data-heading="0"
+                  ></polygon>
+                </g>
+                <g transform="translate(34.5 13.5)" data-head-layer="heading" data-head-owner="8">
+                  <polygon
+                    points="-0.32,1.13 0.00,1.67 0.32,1.13"
+                    class="_heading_f40580"
+                    data-heading="2"
+                  ></polygon>
+                </g>
+                <g transform="translate(5.5 5.5)" data-head-layer="heading" data-head-owner="1">
+                  <polygon
+                    points="1.13,0.32 1.67,0.00 1.13,-0.32"
+                    class="_heading_f40580"
+                    data-heading="1"
+                  ></polygon>
+                </g>
+                <g transform="translate(34.5 22.5)" data-head-layer="label" data-head-owner="2">
                   <text
                     class="_number_f40580"
                     text-anchor="middle"
                     dominant-baseline="central"
                     data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    2
+                  </text>
+                </g>
+                <g transform="translate(33.5 5.5)" data-head-layer="label" data-head-owner="3">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    3
+                  </text>
+                </g>
+                <g transform="translate(6.5 22.5)" data-head-layer="label" data-head-owner="4">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    4
+                  </text>
+                </g>
+                <g transform="translate(19.5 5.5)" data-head-layer="label" data-head-owner="5">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    5
+                  </text>
+                </g>
+                <g transform="translate(19.5 22.5)" data-head-layer="label" data-head-owner="6">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    6
+                  </text>
+                </g>
+                <g transform="translate(5.5 13.5)" data-head-layer="label" data-head-owner="7">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    7
+                  </text>
+                </g>
+                <g transform="translate(34.5 13.5)" data-head-layer="label" data-head-owner="8">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    8
+                  </text>
+                </g>
+                <g transform="translate(5.5 5.5)" data-head-layer="label" data-head-owner="1">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
                   >
                     1
                   </text>

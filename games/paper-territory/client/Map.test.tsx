@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import type { Direction } from '../server/types';
-import { Map, trailMarkerCells } from './Map';
+import { Map, trailMarkerCells, trailOwnerMarkers } from './Map';
 import type { MapProps } from './Map';
 import { headingTriangle, markerGeometry } from './markerGeometry';
 import { SeatBadge } from './SeatBadge';
@@ -67,6 +67,42 @@ describe('color-independent map identity', () => {
 });
 
 describe('readable player heads', () => {
+  it.each([false, true])(
+    'keeps both adjacent live identities above every opaque disc (compact=%s)',
+    (compact) => {
+      const props = board();
+      props.runners = props.runners.slice(0, 2).map((runner, slot) => ({
+        ...runner,
+        cell: 10 * 40 + 10 + slot,
+        dir: 3,
+        movingDir: 3,
+      }));
+      const html = renderToStaticMarkup(<Map {...props} compact={compact} meId="player-0" />);
+      expect(html.match(/data-head-layer="background"/g)).toHaveLength(2);
+      expect(html.match(/data-head-layer="heading"/g)).toHaveLength(2);
+      expect(html.match(/data-head-layer="label"/g)).toHaveLength(2);
+      const lastCircle = html.lastIndexOf('<circle');
+      const firstHeading = html.indexOf('data-head-layer="heading"');
+      const lastHeading = html.lastIndexOf('data-head-layer="heading"');
+      const firstLabel = html.indexOf('data-head-layer="label"');
+      expect(lastCircle).toBeLessThan(firstHeading);
+      expect(lastHeading).toBeLessThan(firstLabel);
+      for (let seat = 1; seat <= 2; seat++) {
+        const label = html.match(
+          new RegExp(
+            `<g[^>]*data-head-layer="label"[^>]*data-head-owner="${seat}"[^>]*>(.*?)<\\/g>`,
+          ),
+        )?.[1];
+        expect(label).toContain(`>${seat}</text>`);
+        expect(label).toContain('stroke="var(--pb-bg)"');
+        expect(label).toContain('paint-order="stroke"');
+        expect(label).not.toContain('<circle');
+        expect(label).not.toContain('data-heading=');
+      }
+      expect(html).toContain('data-head-layer="highlight" data-head-owner="1"');
+    },
+  );
+
   it('uses compact geometry for phones and leaves room around edge cells for every heading', () => {
     const props = board();
     props.runners[0]!.cell = 0;
@@ -131,6 +167,44 @@ describe('readable player heads', () => {
 });
 
 describe('identifiable vulnerable trails', () => {
+  it('staggers adjacent parallel trail owners and reserves space around every live head', () => {
+    const props = board();
+    props.runners = props.runners.slice(0, 2).map((runner, slot) => ({
+      ...runner,
+      cell: (10 + slot) * 40 + 25,
+      trail: Array.from({ length: 24 }, (_, index) => (10 + slot) * 40 + 2 + index),
+    }));
+    const pins = trailOwnerMarkers(props.runners, 40);
+    expect(pins.filter((pin) => pin.slot === 0).map((pin) => pin.cell % 40)).toEqual([2, 10, 18]);
+    expect(pins.filter((pin) => pin.slot === 1).map((pin) => pin.cell % 40)).toEqual([5, 13, 21]);
+    const distance = (a: number, b: number): number =>
+      Math.hypot((a % 40) - (b % 40), Math.floor(a / 40) - Math.floor(b / 40));
+    for (const pin of pins) {
+      for (const other of pins.filter((candidate) => candidate !== pin)) {
+        expect(distance(pin.cell, other.cell)).toBeGreaterThanOrEqual(2.5);
+      }
+      for (const head of props.runners) {
+        expect(distance(pin.cell, head.cell)).toBeGreaterThanOrEqual(2.5);
+      }
+    }
+    // Stable seat order makes ownership clarity independent of runner array ordering.
+    expect(trailOwnerMarkers([...props.runners].reverse(), 40)).toEqual(pins);
+    const html = renderToStaticMarkup(<Map {...props} compact />);
+    expect(html.match(/data-trail-owner="1"/g)).toHaveLength(3);
+    expect(html.match(/data-trail-owner="2"/g)).toHaveLength(3);
+  });
+
+  it('finds an offset pin instead of covering a rival head on an adjacent cell', () => {
+    const props = board();
+    props.runners = props.runners.slice(0, 2);
+    props.runners[0]!.cell = 10 * 40 + 25;
+    props.runners[0]!.trail = Array.from({ length: 24 }, (_, index) => 10 * 40 + 2 + index);
+    props.runners[1]!.cell = 11 * 40 + 2;
+    const pins = trailOwnerMarkers(props.runners, 40);
+    expect(pins.filter((pin) => pin.slot === 0).map((pin) => pin.cell % 40)).toEqual([5, 13, 21]);
+    expect(pins.some((pin) => pin.cell === 10 * 40 + 2)).toBe(false);
+  });
+
   it('adds legible ownership numbers for all eight seats independently of player color', () => {
     const props = board();
     props.runners = props.runners.map((runner, slot) => {
