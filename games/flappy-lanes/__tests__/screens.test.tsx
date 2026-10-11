@@ -152,6 +152,33 @@ describe('controller input availability and readable feedback', () => {
 });
 
 describe('client geometry and lane identity', () => {
+  it('matches TV lane numbers and colours for a shuffled paired-phone roster', () => {
+    const roster = ['f3ab-9110', '0a4c-2271', '8b22-6682', '2c71-0043'].map((id, index) => ({
+      id,
+      name: `Shuffled Pilot ${index + 1}`,
+      avatarId: 'fox',
+      connected: true,
+      canSeeTv: true,
+    }));
+    const state = game.init({ players: roster, settings: {}, seed: 13, now: 1000 });
+    const order = game.tvView(state).birds.map((bird) => bird.id);
+    for (const player of roster) {
+      const controller = game.controllerView(state, player.id);
+      const view = { ...controller, players: [...controller.players].reverse(), vip: null };
+      const before = view.players.map((p) => p.id);
+      const rows = standingsRows(view, player.id);
+      expect(rows.map((row) => row.id)).toEqual(order);
+      expect(rows.find((row) => row.me)?.slot).toBe(controller.slot);
+      expect(view.players.map((p) => p.id)).toEqual(before);
+      const html = renderToStaticMarkup(
+        <Controller view={view} me={player} send={() => undefined} />,
+      );
+      expect(html).toContain(`Lane ${controller.slot + 1} · ${player.name}`);
+      expect(html).toContain(`--pb-lane:var(--pb-player-${controller.slot + 1})`);
+      expect(elements(html, 'svg')).toBe(0);
+    }
+  });
+
   it('bounds extrapolation to one pushed beat and to the round cap', () => {
     expect(visualTime(1000, 800, 2000, false)).toBe(900);
     expect(visualTime(1000, 800, 1700, false)).toBe(700);

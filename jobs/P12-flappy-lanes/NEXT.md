@@ -2,15 +2,16 @@
 
 Run: r13-local · Branch: job/P12-flappy-lanes
 
-Research, deterministic engine, clients, fixtures and scoped SDK suite implemented.
-Latest local assertions: 74/74 before the extra simultaneous off-grid collision regression;
-that regression and property checks also pass. Full typecheck passed. Bot tuning now separates
-reaction cadence and precision. The 1,000-match-per-count-and-strength simulation and 20 source
-mutations are the remaining large checks. Every phase has real React HTML and PNG previews.
+Research, engine, clients, fixtures and verification are complete. Local types and formatting
+pass; scoped game + real SDK tests pass 76/76. Full simulation: 21,000/21,000 matches terminate
+within 159 s; mutations: 20/20 caught, originals restored and hashed. Twelve real React screen
+captures fit the required viewports; media hashes are current.
 
-Next: finish simulation/mutations, final formatting and scoped tests, record evidence in
-VERIFY.md, create PR with the job README as body, wait for CI, run KEEP GOING until three
-successive reviews find only cosmetic gains, then claim the next eligible job.
+Next: open the draft PR with this job README as body, wait for green CI, then run KEEP GOING.
+Priorities: live stage after a phone-only crash, next-round readiness, explicit winners/ties,
+flight visibility and essential reduced-motion tracking. Stop that loop only after three
+consecutive reviews find no player-visible gain, then claim the next eligible queue job.
 
-No server is running. Capture browsers are closed in finally; Windows can retain exited process
-records until command handles close. Use only this game's tests and one browser at a time.
+No server or capture browser is running. Use only this game for tests, one worker, and at most
+one headless capture browser, closed in finally. Initial clone-local capture profile cleanup
+was blocked by automatic review; it is ignored. Later captures use unique OS-temp profiles.

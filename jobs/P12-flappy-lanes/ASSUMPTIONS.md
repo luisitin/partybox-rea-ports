@@ -41,3 +41,8 @@
   or as the game name; research attribution still identifies the source game.
 - No new dependencies, tracking, secrets, or runtime external network calls
   are needed. Content is a seeded course, with no question or word packs.
+- Windows retained the initial capture profile despite the exact browser tree
+  being closed. The debugger endpoint is unreachable and no capture Chrome
+  process remains. The capture tool now creates a unique OS-temporary profile;
+  an EPERM/EBUSY cleanup failure is logged after closing the browser. The old
+  clone-local profile is excluded from Git and formatting.

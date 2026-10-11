@@ -93,9 +93,12 @@ for (const skill of skills) {
     console.log(JSON.stringify(row));
   }
 }
-const target = fileURLToPath(new URL('../simulation.json', import.meta.url));
+const target = fileURLToPath(
+  new URL(runs === 1000 ? '../simulation.json' : '../simulation-smoke.json', import.meta.url),
+);
 writeFileSync(
   target,
   `${JSON.stringify({ seedRange: [1, runs], budgetMs: budget, rows }, null, 2)}\n`,
   'utf8',
 );
+process.exit(0);

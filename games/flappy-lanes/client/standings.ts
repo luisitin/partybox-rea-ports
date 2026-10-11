@@ -1,3 +1,4 @@
+import { compareCodeUnits } from '@partybox/game-sdk';
 import type { Bird } from '../server/world';
 
 interface RowSource {
@@ -23,11 +24,13 @@ export function standingsRows(view: RowSource, meId = '', ranked = false): Stand
   const names = new Map(view.players.map((p) => [p.id, p.name]));
   const order =
     view.birds ??
-    view.players.map((p) =>
-      view.mine?.id === p.id
-        ? view.mine
-        : { id: p.id, died: p.status === 'waiting' ? 0 : null, passed: 0 },
-    );
+    [...view.players]
+      .sort((a, b) => compareCodeUnits(a.id, b.id))
+      .map((p) =>
+        view.mine?.id === p.id
+          ? view.mine
+          : { id: p.id, died: p.status === 'waiting' ? 0 : null, passed: 0 },
+      );
   const rows = order.map((bird, slot) => ({
     id: bird.id,
     slot,

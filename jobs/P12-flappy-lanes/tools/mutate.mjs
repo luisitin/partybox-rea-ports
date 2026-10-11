@@ -2,6 +2,7 @@
 // Mutates one real source file, runs the real scoped rule tests, and restores it
 // in finally. Compile errors do not count as caught mutations.
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { mkdtempSync, readFileSync, rmdirSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -101,7 +102,8 @@ const runTests = () => {
         '--reporter=json',
         `--outputFile=${reportPath}`,
       ],
-      { cwd: root, stdio: 'pipe' },
+      // Evidence goes to reportPath. Avoid extra inherited Windows pipe handles.
+      { cwd: root, stdio: 'ignore' },
     );
   } catch (error) {
     if (!error.status) throw error;
@@ -141,9 +143,19 @@ try {
   rmdirSync(temp);
 }
 const caught = results.filter((r) => r.caught).length;
+const sourceHashes = Object.fromEntries(
+  [...originals].map(([path, original]) => {
+    if (readFileSync(path, 'utf8') !== original)
+      throw new Error(`Original was not restored: ${path}`);
+    return [
+      path.slice(root.length).replaceAll('\\', '/'),
+      createHash('sha256').update(original).digest('hex'),
+    ];
+  }),
+);
 writeFileSync(
   fileURLToPath(new URL('../mutations.json', import.meta.url)),
-  `${JSON.stringify({ planted: mutations.length, caught, results }, null, 2)}\n`,
+  `${JSON.stringify({ planted: mutations.length, caught, originalsRestored: true, sourceHashes, results }, null, 2)}\n`,
   'utf8',
 );
 if (caught < 19) process.exitCode = 1;

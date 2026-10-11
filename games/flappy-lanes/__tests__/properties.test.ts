@@ -18,7 +18,7 @@ function checkWorld(seed: number, count: number, first: number, second: number):
   expect(again).toEqual(start);
   expect(againRng).toEqual(rng);
   const inputAt = Math.min(first, 400);
-  const changed = applyFlap(start, 'p1', inputAt);
+  const changed = applyFlap(tick(start, inputAt), 'p1', inputAt);
   const end = Math.max(first, second);
   expect(tick(tick(changed, Math.min(first, second)), end)).toEqual(tick(changed, end));
   const judged = tick(changed, end);
@@ -39,8 +39,8 @@ it('holds deterministic judging, partition independence and JSON safety for seed
     fc.property(
       fc.integer({ min: 0, max: 0x7fffffff }),
       fc.integer({ min: 2, max: 8 }),
-      fc.integer({ min: 0, max: ROUND_MS }),
-      fc.integer({ min: 0, max: ROUND_MS }),
+      fc.integer({ min: 0, max: 1200 }),
+      fc.integer({ min: 0, max: 4000 }),
       checkWorld,
     ),
     { seed: 20261011, numRuns: 1000 },

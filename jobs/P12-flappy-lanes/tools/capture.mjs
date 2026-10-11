@@ -1,19 +1,15 @@
 // One headless browser, one reused page, always closed in finally. No browser dependency needed.
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync, readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
-import { resolve, join } from 'node:path';
+import { existsSync, readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { resolve, join, dirname, basename } from 'node:path';
+import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
 
-const root = resolve('.');
 const media = resolve('jobs/P12-flappy-lanes/media');
-const profile = resolve('.preview-browser-r13');
-if (!profile.startsWith(`${root}\\`) && !profile.startsWith(`${root}/`))
-  throw new Error('Profile outside this clone');
-if (existsSync(profile))
-  throw new Error('Own capture profile exists; check for an unfinished capture');
+const captureTemp = resolve(tmpdir());
+const profile = mkdtempSync(join(captureTemp, 'partybox-flappy-r13-'));
 const browserPath =
   process.env.FLAPPY_BROWSER ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-mkdirSync(profile);
 const browser = spawn(
   browserPath,
   [
@@ -22,6 +18,8 @@ const browser = spawn(
     '--no-first-run',
     '--no-default-browser-check',
     '--disable-background-networking',
+    '--disable-component-update',
+    '--disable-background-mode',
     '--remote-debugging-port=0',
     `--user-data-dir=${profile}`,
     'about:blank',
@@ -119,7 +117,13 @@ try {
   websocket?.close();
   for (let attempt = 0; attempt < 30 && !closed; attempt++) await pause(100);
   if (!closed) browser.kill();
-  if (profile !== join(root, '.preview-browser-r13'))
+  if (dirname(profile) !== captureTemp || !basename(profile).startsWith('partybox-flappy-r13-'))
     throw new Error('Refusing unexpected profile cleanup');
-  rmSync(profile, { recursive: true, force: true, maxRetries: 20, retryDelay: 100 });
+  try {
+    rmSync(profile, { recursive: true, force: true, maxRetries: 20, retryDelay: 100 });
+  } catch (error) {
+    if (error.code !== 'EPERM' && error.code !== 'EBUSY') throw error;
+    console.warn(`Browser closed; Windows retained temporary profile: ${profile}`);
+  }
 }
+process.exit(0);
