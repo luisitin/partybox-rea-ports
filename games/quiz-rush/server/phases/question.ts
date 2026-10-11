@@ -14,10 +14,9 @@ export function enterQuestion(state: State, now: number, round: number): State {
     openedAt: now,
   };
   const q = currentQuestion(fresh);
-  const answerMs = Math.max(
-    state.settings.seconds * 1000,
-    readingMs(wordCount([q.prompt, ...q.options].join(' '))),
-  );
+  // The longest stage-phone branch: round (4), clock (1), retry status (8), button (2).
+  const screenWords = wordCount([q.prompt, ...q.options].join(' ')) + 15;
+  const answerMs = Math.max(state.settings.seconds * 1000, readingMs(screenWords, { ui: true }));
   return enterPhase({ ...fresh, answerMs }, 'question', now, answerMs);
 }
 

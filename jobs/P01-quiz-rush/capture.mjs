@@ -170,6 +170,7 @@ function measure() {
 
 let browser;
 let socket;
+let browserClosed = false;
 const metrics = [];
 try {
   browser = spawn(
@@ -190,7 +191,7 @@ try {
     { windowsHide: true, stdio: 'ignore' },
   );
   console.log(
-    `Started capture browser PID ${browser.pid}; waiting for its DevToolsActivePort file.`,
+    `Started capture browser PID ${browser.pid}; waiting for its DevToolsActivePort file in ${temp}.`,
   );
   writeFileSync(resolve(temp, 'browser-pid.txt'), String(browser.pid), 'utf8');
   let targets;
@@ -208,6 +209,7 @@ try {
   }
   const page = Array.isArray(targets) ? targets.find((target) => target.type === 'page') : null;
   if (!page) throw new Error('The browser did not expose a page within sixty seconds.');
+  console.log(`DevTools ready on port ${port}.`);
   socket = new WebSocket(page.webSocketDebuggerUrl);
   await new Promise((ready, reject) => {
     const timeout = setTimeout(
@@ -227,6 +229,7 @@ try {
   const dev = new Devtools(socket);
   await dev.call('Page.enable');
   await dev.call('Runtime.enable');
+  console.log('Page and runtime enabled.');
   for (const [index, frame] of cases.entries()) {
     await dev.call('Emulation.setDeviceMetricsOverride', {
       width: frame.width,
@@ -238,6 +241,7 @@ try {
       url: pathToFileURL(resolve(media, `${frame.name}.html`)).href,
     });
     if (navigation.errorText) throw new Error(navigation.errorText);
+    if (index === 0) console.log(`Navigated to ${frame.name}.`);
     let ready = false;
     for (let attempt = 0; attempt < 60; attempt++) {
       const state = await dev.call('Runtime.evaluate', {
@@ -275,6 +279,9 @@ try {
     JSON.stringify(metrics, null, 2) + '\n',
     'utf8',
   );
+} catch (error) {
+  console.error('Capture failed:', error);
+  throw error;
 } finally {
   socket?.close();
   if (browser?.pid) {
@@ -283,11 +290,46 @@ try {
       stdio: 'ignore',
     });
     await new Promise((done) => killer.once('exit', done));
+    // Windows can retain a terminated GUI process handle before Node receives its exit event.
+    // Verify that this exact owned PID is gone/terminated through the native process API.
+    const verifier = spawn(
+      'powershell.exe',
+      [
+        '-NoProfile',
+        '-NonInteractive',
+        '-Command',
+        `$pbOwnedProcess = Get-Process -Id ${browser.pid} -ErrorAction SilentlyContinue; if ($null -eq $pbOwnedProcess -or $pbOwnedProcess.HasExited) { exit 0 } else { exit 1 }`,
+      ],
+      { windowsHide: true, stdio: 'ignore' },
+    );
+    browserClosed =
+      (await new Promise((done) => {
+        const timeout = setTimeout(() => {
+          verifier.unref();
+          done(null);
+        }, 5000);
+        verifier.once('exit', (code) => {
+          clearTimeout(timeout);
+          done(code);
+        });
+        verifier.once('error', () => {
+          clearTimeout(timeout);
+          done(null);
+        });
+      })) === 0;
+    browser.unref();
+    if (!browserClosed)
+      console.warn(
+        `Owned browser PID ${browser.pid} has not reported exit; preserving its profile.`,
+      );
+    else console.log(`Owned browser PID ${browser.pid} is closed.`);
   }
   // Resolve and check this task's specific temporary directory before recursively removing it.
   if (!profile.startsWith(`${temp}\\`) && !profile.startsWith(`${temp}/`))
-    throw new Error('Refusing profile cleanup outside job/.tmp.');
+    throw new Error('Refusing profile cleanup outside owned capture temp.');
+  browserClosed ||= !browser;
   for (let attempt = 0; attempt < 20; attempt++) {
+    if (!browserClosed) break;
     try {
       rmSync(profile, { recursive: true, force: true });
       break;
@@ -301,7 +343,13 @@ try {
     !temp.startsWith(`${osTemp}/pb-quiz-rush-capture-`)
   )
     throw new Error('Refusing cleanup outside owned OS capture temp.');
-  rmSync(temp, { recursive: true, force: true });
+  if (browserClosed) {
+    try {
+      rmSync(temp, { recursive: true, force: true });
+    } catch (error) {
+      console.warn(`Owned temp cleanup deferred: ${error.message}`);
+    }
+  }
 }
 
 const files = readdirSync(media).sort();

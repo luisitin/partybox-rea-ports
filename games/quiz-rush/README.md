@@ -19,8 +19,8 @@ Spectators see the stage and have no answer controls. Phones without a visible T
 | -------- | ----------------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | question | Prompt, four shape-coded options, clock, answer count | Four large shape pads; locked-in confirmation                    | All connected eligible seats answered, no eligible seats, deadline or VIP skip |
 | reveal   | Correct shape, four answer counts, short explanation  | Correct / wrong / too slow; speed points, bonus, streak and rank | At least 4.5 s and SDK reading floor, or VIP skip                              |
-| score    | Eight-seat standings and question gains               | Points, rank, next-question cue                                  | 3.5 s or VIP skip → next question                                              |
-| podium   | Third, second, first rank tiers, preserving ties      | Stage reveal cue; no unrevealed final rank                       | 2.5 s per occupied tier; VIP skip advances one tier                            |
+| score    | Eight-seat standings and question gains               | Points, rank, next-question cue                                  | At least 3.5 s and reading floor; VIP skip → next question                     |
+| podium   | Third, second, first rank tiers, preserving ties      | Stage reveal cue; no unrevealed final rank                       | At least 2.5 s per occupied tier and reading floor; VIP skip advances one tier |
 | done     | Complete final standings                              | Your rank and points                                             | Terminal results                                                               |
 
 The final reveal goes directly to podium. Empty podium tiers are skipped. All phases advance
@@ -76,9 +76,10 @@ streak points: the bonus here is the required PartyBox adaptation, not a claim a
 | rounds  | 10      | 5–20                     |
 | seconds | 20      | 10–30, step 5            |
 
-The answer window is at least the SDK reading time of the prompt and all options. Reveal timing
-uses the same reading helper for the correct option and explanation. A 20-question match is
-bounded by twice the ten-minute manifest estimate, including reveals and standings.
+Every timed screen budgets its visible text with SDK `readingMs`/`wordCount`, including the
+phone stage and personal feedback. Standings and podium also reserve their animation settling
+time. Answer windows close early once everyone eligible has answered. Seeded 20-question matches
+are checked against twice the ten-minute manifest estimate, including reveals and standings.
 
 ## Content
 

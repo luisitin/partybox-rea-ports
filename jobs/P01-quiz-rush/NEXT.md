@@ -6,6 +6,8 @@
 - Server, original 60-question content and client implemented and independently reviewed.
 - Types green; 7000 bots at every supported count finish; 1003 property seeds pass.
 - Mutation rerun catches all 20 bugs with behavioral assertions, zero invalid mutations; source bytes restored.
-- 44 all-phase/adversarial HTML and PNG frames captured; measured phone standings and crowded tie overflow fixes in final recapture.
-- Remaining: final complete checks and format, draft PR and green CI, KEEP GOING.
+- 44 all-phase/adversarial frames fit without scrolling or clipping; independent visual review passes every frame.
+- Required visible-text floors now include question/reveal/standings/podium and animation settling; regenerated 7000 simulations pass, longest match 893.346 seconds under the 1200-second ceiling.
+- Final pacing capture and 20/20 mutation rerun are complete; all restored hashes match. Typecheck, format and all 106 game tests pass.
+- Remaining: draft PR, green CI and KEEP GOING. First milestone pushed at 21:13 UTC.
 - Capture agent owns at most one headless browser and closes it in finally; root started none.

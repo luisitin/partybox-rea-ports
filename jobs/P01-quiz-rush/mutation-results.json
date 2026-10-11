@@ -1,13 +1,13 @@
 {
   "command": "node jobs/P01-quiz-rush/mutate.mjs",
   "testCommand": "node node_modules/vitest/vitest.mjs run games/quiz-rush/__tests__/game.test.ts --maxWorkers=1 --reporter=json --outputFile=<temporary report>",
-  "baselineTests": 24,
+  "baselineTests": 25,
   "mutations": 20,
   "killed": 20,
   "invalidMutations": 0,
   "sourceHashes": {
     "games/quiz-rush/server/scoring.ts": "c571486ce2381f98ed42404e3d38873bd6fbeb3029b0a791f0acb9950307813b",
-    "games/quiz-rush/server/phases/question.ts": "fbea3413996bd5495a23037780c67c0de0869673d08a4b37daef6c681c1baefa",
+    "games/quiz-rush/server/phases/question.ts": "6e71b7c04adb6f2abba5e79e583beaf9dc932f380bf3bf0bcb552aad87f9fdd6",
     "games/quiz-rush/server/index.ts": "a92524d4a1694878f60d32357e69365e1d0d68690bf993a0627d115aae9629de",
     "games/quiz-rush/server/content.ts": "a8c5c7bcbcb2c7cb60f0707487651c1bfd9fb7de387f7e3a27c5c0d8df0779a9"
   },
@@ -18,7 +18,7 @@
       "file": "games/quiz-rush/server/scoring.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "scoring awards 1000 at zero, 750 halfway and 500 at the end; clamps both ends",
@@ -44,7 +44,7 @@
       "file": "games/quiz-rush/server/scoring.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "scoring awards 1000 at zero, 750 halfway and 500 at the end; clamps both ends",
@@ -70,7 +70,7 @@
       "file": "games/quiz-rush/server/scoring.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "scoring rounds speed points to the nearest integer",
@@ -84,7 +84,7 @@
       "file": "games/quiz-rush/server/scoring.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "scoring awards 1000 at zero, 750 halfway and 500 at the end; clamps both ends",
@@ -98,7 +98,7 @@
       "file": "games/quiz-rush/server/scoring.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "scoring wrong answers and timeouts score zero and break streaks",
@@ -112,7 +112,7 @@
       "file": "games/quiz-rush/server/scoring.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "scoring wrong answers and timeouts score zero and break streaks",
@@ -126,7 +126,7 @@
       "file": "games/quiz-rush/server/scoring.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "scoring builds streaks by 100 up to 500 and credits exactly once",
@@ -140,7 +140,7 @@
       "file": "games/quiz-rush/server/scoring.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "scoring builds streaks by 100 up to 500 and credits exactly once",
@@ -154,7 +154,7 @@
       "file": "games/quiz-rush/server/scoring.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "scoring builds streaks by 100 up to 500 and credits exactly once",
@@ -168,7 +168,7 @@
       "file": "games/quiz-rush/server/scoring.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "scoring builds streaks by 100 up to 500 and credits exactly once",
@@ -182,7 +182,7 @@
       "file": "games/quiz-rush/server/phases/question.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "scoring wrong answers and timeouts score zero and break streaks",
@@ -212,7 +212,7 @@
       "file": "games/quiz-rush/server/phases/question.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "scoring keeps equal scores at the same rank",
@@ -250,7 +250,7 @@
       "file": "games/quiz-rush/server/phases/question.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "one tap per question locks first answer, ignores duplicates and round-stale answers",
@@ -264,7 +264,7 @@
       "file": "games/quiz-rush/server/phases/question.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "one tap per question locks first answer, ignores duplicates and round-stale answers",
@@ -278,7 +278,7 @@
       "file": "games/quiz-rush/server/phases/question.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "one tap per question rejects unknown/prototype senders, pre-start and disconnected taps",
@@ -292,7 +292,7 @@
       "file": "games/quiz-rush/server/phases/question.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "one tap per question rejects a tap exactly at or past the deadline before scoring it",
@@ -306,7 +306,7 @@
       "file": "games/quiz-rush/server/phases/question.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "one tap per question rejects unknown/prototype senders, pre-start and disconnected taps",
@@ -320,7 +320,7 @@
       "file": "games/quiz-rush/server/index.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "pause and pacing holds inputs and timers; pause time earns no speed points",
@@ -334,7 +334,7 @@
       "file": "games/quiz-rush/server/content.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "views and bots the question views are identical when the key, explanation or other answers change",
@@ -348,7 +348,7 @@
       "file": "games/quiz-rush/server/index.ts",
       "status": "killed",
       "exitCode": 1,
-      "tests": 24,
+      "tests": 25,
       "failed": [
         {
           "name": "views and bots gates podium rank tiers on server time, including tied winners",

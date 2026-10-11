@@ -1,0 +1,2135 @@
+<!doctype html>
+<html lang="en" data-surface="phone" data-motion="off">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Quiz Rush · podium-2-spectator</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>;
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+
+      /* games/quiz-rush/client/Tv.module.css */
+      ._stage_729627 {
+        height: 100%;
+        min-height: 0;
+        gap: var(--pb-space-4);
+        color: var(--pb-text);
+      }
+
+      ._question_729627 {
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr);
+        gap: var(--pb-space-5);
+        height: 100%;
+        min-height: 0;
+      }
+
+      ._questionHeader_729627 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--pb-space-6);
+      }
+
+      ._progress_729627 {
+        display: grid;
+        gap: var(--pb-space-2);
+      }
+      ._kicker_729627 {
+        margin: 0;
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-body);
+        font-weight: 800;
+      }
+      ._answered_729627 {
+        margin: 0;
+        font-size: var(--pb-font-body);
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+      ._prompt_729627 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+        line-height: 1.15;
+        text-wrap: balance;
+      }
+
+      ._options_729627 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-5);
+        min-height: 0;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      ._option_729627 {
+        display: grid;
+        grid-template-columns: calc(var(--pb-space-8) * 1.5) minmax(0, 1fr);
+        align-items: center;
+        gap: var(--pb-space-5);
+        padding: var(--pb-space-5) var(--pb-space-6);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        border-left: var(--pb-space-2) solid var(--pb-quiz-choice-color);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-h2);
+        font-weight: 900;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+      }
+
+      ._shape_729627 {
+        width: calc(var(--pb-space-8) * 1.5);
+        height: calc(var(--pb-space-8) * 1.5);
+        color: var(--pb-quiz-choice-color);
+      }
+      ._reveal_729627 {
+        display: grid;
+        gap: var(--pb-space-4);
+      }
+      ._revealPrompt_729627 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+        font-weight: 900;
+        line-height: 1.2;
+        text-wrap: balance;
+      }
+      ._headline_729627 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+        line-height: 1.2;
+      }
+      ._scoreboard_729627 {
+        width: 100%;
+        min-width: 0;
+      }
+
+      /* games/quiz-rush/client/Controller.module.css */
+      ._screen_b07bb7 {
+        min-height: 0;
+        color: var(--pb-text);
+      }
+      ._question_b07bb7 {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: var(--pb-space-4);
+        flex: 1;
+        min-height: 0;
+      }
+      ._question_b07bb7[data-stage] {
+        grid-template-rows: auto auto minmax(0, 1fr) auto;
+      }
+      ._header_b07bb7 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--pb-space-3);
+      }
+      ._round_b07bb7 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+        font-weight: 900;
+      }
+      ._clock_b07bb7 {
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        color: var(--pb-accent-2);
+      }
+      ._prompt_b07bb7 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+        line-height: 1.3;
+        font-weight: 900;
+        overflow-wrap: anywhere;
+      }
+
+      ._pads_b07bb7 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-3);
+        min-height: calc(var(--pb-touch) * 4);
+      }
+      ._pad_b07bb7 {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-3);
+        min-width: 0;
+        min-height: var(--pb-touch);
+        padding: var(--pb-space-4) var(--pb-space-3);
+        border: var(--pb-space-1) solid var(--pb-quiz-choice-color);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-quiz-choice-color);
+        color: var(--pb-on-accent-2-fill);
+        font-family: var(--pb-font-family);
+        font-size: var(--pb-font-body);
+        font-weight: 900;
+        line-height: 1.25;
+        cursor: pointer;
+        touch-action: manipulation;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        transition:
+          transform var(--pb-motion-fast) var(--pb-ease),
+          background-color var(--pb-motion-fast) var(--pb-ease);
+      }
+      ._pad_b07bb7:active:not(:disabled) {
+        transform: scale(0.97);
+      }
+      ._pad_b07bb7:focus-visible {
+        outline: var(--pb-space-1) solid var(--pb-focus);
+        outline-offset: var(--pb-space-1);
+      }
+      ._pad_b07bb7:disabled {
+        cursor: default;
+      }
+      ._pad_b07bb7:disabled:not([data-selected]) {
+        background: var(--pb-surface);
+        color: var(--pb-quiz-choice-color);
+      }
+      ._pad_b07bb7[data-selected] {
+        border-color: var(--pb-text);
+      }
+      ._padShape_b07bb7 {
+        width: calc(var(--pb-space-8) * 1.5);
+        height: calc(var(--pb-space-8) * 1.5);
+        flex: none;
+      }
+      ._padText_b07bb7 {
+        overflow-wrap: anywhere;
+        color: var(--pb-on-accent-2-fill);
+      }
+      ._pad_b07bb7:disabled:not([data-selected]) ._padText_b07bb7 {
+        color: var(--pb-text);
+      }
+      ._question_b07bb7[data-stage] ._padShape_b07bb7 {
+        width: var(--pb-space-7);
+        height: var(--pb-space-7);
+      }
+      ._question_b07bb7[data-stage] ._pad_b07bb7 {
+        gap: var(--pb-space-2);
+      }
+      ._check_b07bb7 {
+        position: absolute;
+        top: var(--pb-space-2);
+        right: var(--pb-space-3);
+        font-size: var(--pb-font-h2);
+        font-weight: 900;
+      }
+      ._answerStatus_b07bb7 {
+        display: grid;
+        gap: var(--pb-space-2);
+        min-height: calc(var(--pb-font-body) * 2.5);
+      }
+      ._status_b07bb7 {
+        margin: 0;
+        text-align: center;
+        font-size: var(--pb-font-body);
+        font-weight: 800;
+        line-height: 1.25;
+      }
+
+      ._spectatorOptions_b07bb7 {
+        display: grid;
+        gap: var(--pb-space-3);
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        align-content: center;
+      }
+      ._spectatorOptions_b07bb7 li {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-3);
+        padding: var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-body);
+        font-weight: 800;
+      }
+      ._optionShape_b07bb7 {
+        width: var(--pb-space-6);
+        height: var(--pb-space-6);
+        flex: none;
+        color: var(--pb-quiz-choice-color);
+      }
+
+      ._verdict_b07bb7 {
+        display: grid;
+        justify-items: center;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-4);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-accent-3);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface);
+        text-align: center;
+      }
+      ._verdict_b07bb7[data-outcome='wrong'],
+      ._verdict_b07bb7[data-outcome='timeout'] {
+        border-color: var(--pb-text-muted);
+      }
+      ._verdictMark_b07bb7 {
+        font-size: var(--pb-font-display);
+        line-height: 1;
+        font-weight: 900;
+        color: var(--pb-accent-3);
+      }
+      ._verdict_b07bb7[data-outcome='wrong'] ._verdictMark_b07bb7,
+      ._verdict_b07bb7[data-outcome='timeout'] ._verdictMark_b07bb7 {
+        color: var(--pb-text-muted);
+      }
+      ._verdict_b07bb7 h3 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+      }
+      ._verdict_b07bb7 p {
+        margin: 0;
+        font-size: var(--pb-font-body);
+        line-height: 1.3;
+      }
+      ._verdict_b07bb7[data-compact] {
+        grid-template-columns: minmax(0, 1fr) auto;
+        justify-items: start;
+        text-align: left;
+      }
+      ._verdict_b07bb7[data-compact] ._verdictMark_b07bb7 {
+        display: none;
+      }
+      ._verdict_b07bb7[data-compact] h3,
+      ._verdict_b07bb7[data-compact] ._points_b07bb7 {
+        font-size: var(--pb-font-h2);
+      }
+      ._verdict_b07bb7[data-compact] p {
+        grid-column: 1 / -1;
+      }
+      ._points_b07bb7 {
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+      }
+      ._personal_b07bb7 {
+        display: grid;
+        justify-items: center;
+        gap: var(--pb-space-2);
+        text-align: center;
+      }
+      ._personal_b07bb7 b {
+        font-size: var(--pb-font-h1);
+      }
+      ._personal_b07bb7 span {
+        font-size: var(--pb-font-body);
+      }
+      ._personal_b07bb7[data-compact] {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: center;
+        gap: var(--pb-space-2) var(--pb-space-3);
+      }
+      ._personal_b07bb7[data-compact] b {
+        font-size: var(--pb-font-body);
+      }
+      ._watch_b07bb7 {
+        margin: auto 0;
+        text-align: center;
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-h2);
+        font-weight: 800;
+      }
+      ._podiumBeat_b07bb7 {
+        margin: 0;
+        text-align: center;
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+      }
+      ._standings_b07bb7 {
+        display: grid;
+        gap: var(--pb-space-2);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      ._standings_b07bb7 li {
+        display: grid;
+        grid-template-columns: auto auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-2) var(--pb-space-3);
+        min-height: var(--pb-touch);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-body);
+      }
+      ._standings_b07bb7 li[data-me] {
+        border-color: var(--pb-accent-2);
+      }
+      ._rank_b07bb7 {
+        min-width: 1.5ch;
+        text-align: center;
+        font-weight: 900;
+      }
+      ._playerName_b07bb7 {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      ._total_b07bb7 {
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        ._pad_b07bb7 {
+          transition: none;
+        }
+        ._pad_b07bb7:active:not(:disabled) {
+          transform: none;
+        }
+      }
+      :root[data-motion='off'] ._pad_b07bb7 {
+        transition: none;
+      }
+      :root[data-motion='off'] ._pad_b07bb7:active:not(:disabled) {
+        transform: none;
+      }
+
+      /* games/quiz-rush/client/QuestionParts.module.css */
+      ._choice0_ac8726 {
+        --pb-quiz-choice-color: var(--pb-player-1);
+      }
+      ._choice1_ac8726 {
+        --pb-quiz-choice-color: var(--pb-player-4);
+      }
+      ._choice2_ac8726 {
+        --pb-quiz-choice-color: var(--pb-player-2);
+      }
+      ._choice3_ac8726 {
+        --pb-quiz-choice-color: var(--pb-player-3);
+      }
+
+      ._reveal_ac8726 {
+        display: grid;
+        gap: var(--pb-space-4);
+        min-height: 0;
+      }
+
+      ._chart_ac8726 {
+        display: grid;
+        gap: var(--pb-space-3);
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      ._chart_ac8726 li {
+        display: grid;
+        grid-template-columns: var(--pb-space-8) minmax(0, 1fr) auto calc(var(--pb-font-body) * 5);
+        align-items: center;
+        gap: var(--pb-space-5);
+        padding: var(--pb-space-3) var(--pb-space-5);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-body);
+      }
+
+      ._chart_ac8726 li[data-correct] {
+        border-color: var(--pb-accent-3);
+      }
+
+      ._chartShape_ac8726 {
+        width: var(--pb-space-8);
+        height: var(--pb-space-8);
+        color: var(--pb-quiz-choice-color);
+      }
+
+      ._chartText_ac8726 {
+        min-width: 0;
+      }
+      ._optionText_ac8726 {
+        font-weight: 800;
+        overflow-wrap: anywhere;
+      }
+
+      ._barTrack_ac8726 {
+        overflow: hidden;
+        height: var(--pb-space-2);
+        margin-top: var(--pb-space-2);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface-2);
+      }
+
+      ._bar_ac8726 {
+        height: 100%;
+        background: var(--pb-quiz-choice-color);
+        transform-origin: left;
+        transform: scaleX(var(--pb-quiz-bar-scale));
+        transition: transform var(--pb-motion-slow) var(--pb-ease);
+        animation: _quiz-bar-in_ac8726 var(--pb-motion-slow) var(--pb-ease) backwards;
+      }
+
+      @keyframes _quiz-bar-in_ac8726 {
+        from {
+          transform: scaleX(0);
+        }
+        to {
+          transform: scaleX(var(--pb-quiz-bar-scale));
+        }
+      }
+
+      ._count_ac8726 {
+        font-size: var(--pb-font-h2);
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+      }
+      ._correct_ac8726 {
+        color: var(--pb-accent-3);
+        font-weight: 900;
+        white-space: nowrap;
+      }
+      ._explanation_ac8726 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+        font-weight: 900;
+        color: var(--pb-accent-3);
+      }
+      ._fact_ac8726 {
+        margin: 0;
+        font-size: var(--pb-font-body);
+        line-height: 1.35;
+      }
+      ._missed_ac8726 {
+        margin: 0;
+        font-size: var(--pb-font-body);
+        color: var(--pb-text-muted);
+      }
+
+      ._reveal_ac8726[data-compact] {
+        gap: var(--pb-space-3);
+      }
+      ._reveal_ac8726[data-compact] ._chart_ac8726 {
+        gap: var(--pb-space-2);
+      }
+      ._reveal_ac8726[data-compact] ._chart_ac8726 li {
+        grid-template-columns: var(--pb-space-5) minmax(0, 1fr) auto;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-2) var(--pb-space-3);
+      }
+      ._reveal_ac8726[data-compact] ._chartShape_ac8726 {
+        width: var(--pb-space-5);
+        height: var(--pb-space-5);
+      }
+      ._reveal_ac8726[data-compact] ._correct_ac8726 {
+        grid-column: 2 / -1;
+        font-size: var(--pb-font-caption);
+      }
+      ._reveal_ac8726[data-compact] ._correct_ac8726:empty {
+        display: none;
+      }
+      ._reveal_ac8726[data-compact] ._explanation_ac8726 {
+        display: none;
+      }
+
+      ._podium_ac8726 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--pb-space-5);
+        align-items: end;
+        width: 100%;
+        min-height: calc(var(--pb-font-display) * 3);
+      }
+
+      ._podiumPlace_ac8726 {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        min-width: 0;
+        text-align: center;
+      }
+
+      ._podiumPeople_ac8726 {
+        display: grid;
+        gap: var(--pb-space-3);
+        padding: var(--pb-space-4);
+      }
+      ._podiumPerson_ac8726 {
+        display: grid;
+        justify-items: center;
+        gap: var(--pb-space-2);
+      }
+      ._podiumPeople_ac8726[data-many] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      ._podiumPeople_ac8726[data-many] ._podiumName_ac8726 {
+        font-size: var(--pb-font-body);
+      }
+      ._podiumPeople_ac8726[data-many] ._podiumScore_ac8726 {
+        font-size: var(--pb-font-body);
+      }
+      ._podiumName_ac8726 {
+        max-width: 100%;
+        font-size: var(--pb-font-h2);
+        overflow-wrap: anywhere;
+      }
+      ._podiumScore_ac8726 {
+        font-size: var(--pb-font-body);
+        font-weight: 800;
+      }
+      ._plinth_ac8726 {
+        display: grid;
+        place-items: center;
+        min-height: calc(var(--pb-space-8) * 1.5);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        border-radius: var(--pb-radius-lg) var(--pb-radius-lg) 0 0;
+        background: var(--pb-surface-2);
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+      }
+      ._podiumPlace_ac8726[data-rank='1'] ._plinth_ac8726 {
+        min-height: calc(var(--pb-space-8) * 3);
+      }
+      ._podiumPlace_ac8726[data-rank='2'] ._plinth_ac8726 {
+        min-height: calc(var(--pb-space-8) * 2);
+      }
+      ._podiumPlace_ac8726[data-revealed] ._plinth_ac8726 {
+        border-color: var(--pb-accent-2);
+        color: var(--pb-accent-2);
+      }
+      ._podiumPlace_ac8726[data-revealed] ._podiumPeople_ac8726 {
+        animation: pb-pop var(--pb-motion-slow) var(--pb-ease) backwards;
+      }
+
+      ._podium_ac8726[data-compact] {
+        gap: var(--pb-space-2);
+        min-height: calc(var(--pb-font-display) * 4);
+      }
+      ._podium_ac8726[data-compact] ._podiumPeople_ac8726 {
+        padding: var(--pb-space-2) 0;
+        gap: var(--pb-space-2);
+      }
+      ._podium_ac8726[data-compact] ._podiumName_ac8726 {
+        font-size: var(--pb-font-body);
+      }
+      ._podium_ac8726[data-compact] ._podiumScore_ac8726 {
+        font-size: var(--pb-font-caption);
+      }
+      ._podium_ac8726[data-compact] ._plinth_ac8726 {
+        min-height: var(--pb-space-7);
+        font-size: var(--pb-font-h2);
+      }
+      ._podium_ac8726[data-compact] ._podiumPlace_ac8726[data-rank='1'] ._plinth_ac8726 {
+        min-height: calc(var(--pb-space-7) * 2);
+      }
+      ._podium_ac8726[data-compact] ._podiumPlace_ac8726[data-rank='2'] ._plinth_ac8726 {
+        min-height: calc(var(--pb-space-7) * 1.5);
+      }
+      ._podium_ac8726[data-compact] ._podiumPeople_ac8726[data-many] {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      ._podium_ac8726[data-compact]
+        ._podiumPeople_ac8726[data-many]
+        ._podiumPerson_ac8726
+        > :first-child {
+        display: none;
+      }
+      ._podium_ac8726[data-compact] ._podiumPeople_ac8726[data-many] ._podiumScore_ac8726 {
+        font-size: var(--pb-font-caption);
+      }
+
+      /* Large tied groups need the stage's width. Preserve every name and rank instead of stacking eight people over one narrow plinth. */
+      ._podium_ac8726[data-crowded] {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--pb-space-4);
+        min-height: 0;
+      }
+      ._podium_ac8726[data-crowded] ._podiumPlace_ac8726 {
+        flex-direction: row;
+        align-items: center;
+        gap: var(--pb-space-4);
+      }
+      ._podium_ac8726[data-crowded] ._podiumPlace_ac8726:not([data-revealed]) {
+        display: none;
+      }
+      ._podium_ac8726[data-crowded] ._podiumPeople_ac8726 {
+        order: 1;
+        flex: 1;
+        min-width: 0;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        padding: var(--pb-space-3);
+      }
+      ._podium_ac8726[data-crowded] ._podiumPerson_ac8726 {
+        grid-template-columns: var(--pb-space-7) minmax(0, 1fr);
+        align-items: center;
+        justify-items: start;
+        text-align: left;
+      }
+      ._podium_ac8726[data-crowded] ._podiumPerson_ac8726 > :first-child {
+        width: var(--pb-space-7);
+        height: var(--pb-space-7);
+      }
+      ._podium_ac8726[data-crowded] ._podiumName_ac8726 {
+        font-size: var(--pb-font-body);
+        line-height: 1.2;
+      }
+      ._podium_ac8726[data-crowded] ._podiumScore_ac8726 {
+        grid-column: 2;
+        font-size: var(--pb-font-body);
+        line-height: 1.2;
+      }
+      ._podium_ac8726[data-crowded] ._podiumPlace_ac8726 ._plinth_ac8726 {
+        order: 0;
+        flex: none;
+        align-self: stretch;
+        width: calc(var(--pb-space-8) * 2);
+        min-height: var(--pb-space-8);
+        font-size: var(--pb-font-h2);
+        border-radius: var(--pb-radius-lg);
+      }
+      ._podium_ac8726[data-compact][data-crowded] ._podiumPeople_ac8726 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: var(--pb-space-2);
+      }
+      ._podium_ac8726[data-compact][data-crowded] ._podiumPerson_ac8726 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      ._podium_ac8726[data-compact][data-crowded] ._podiumPerson_ac8726 > :first-child {
+        display: none;
+      }
+      ._podium_ac8726[data-compact][data-crowded] ._podiumScore_ac8726 {
+        grid-column: 1;
+        font-size: var(--pb-font-caption);
+      }
+      ._podium_ac8726[data-compact][data-crowded] ._podiumPlace_ac8726 ._plinth_ac8726 {
+        width: var(--pb-space-8);
+        font-size: var(--pb-font-h2);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        ._bar_ac8726 {
+          transition: none;
+          animation: none;
+        }
+        ._podiumPlace_ac8726[data-revealed] ._podiumPeople_ac8726 {
+          animation: none;
+        }
+      }
+      :root[data-motion='off'] ._bar_ac8726 {
+        transition: none;
+        animation: none;
+      }
+      :root[data-motion='off'] ._podiumPlace_ac8726[data-revealed] ._podiumPeople_ac8726 {
+        animation: none;
+      }
+
+      /* packages/game-sdk/src/tv/Stage.module.css */
+      ._stage_262f13 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+        min-height: 100%;
+        /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+        padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+          var(--pb-overscan-y, 54px);
+      }
+
+      ._center_262f13 {
+        /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+        justify-content: safe center;
+        align-items: safe center;
+        text-align: center;
+      }
+
+      /* packages/game-sdk/src/tv/Timer.module.css */
+      ._timer_4e1888 {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-3);
+        min-width: 2.2em;
+        padding: 0 var(--pb-space-4);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface);
+        color: var(--pb-accent-2);
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.1;
+        /* Leaving urgency at a phase boundary eases over the base token: the fast one read as a snap
+     next to the 300 ms phase rise (review-loop #17). */
+        transition:
+          transform var(--pb-motion-base) var(--pb-ease),
+          color var(--pb-motion-base) var(--pb-ease);
+      }
+
+      ._lg_4e1888 {
+        font-size: var(--pb-font-display);
+      }
+
+      ._md_4e1888 {
+        font-size: var(--pb-font-h1);
+      }
+
+      ._urgent_4e1888 {
+        color: var(--pb-danger);
+        transform: scale(1.15);
+        animation: _pb-timer-pulse_4e1888 var(--pb-motion-pulse) ease-in-out infinite;
+      }
+
+      /* One beat per second (≤ 3 flashes/s); reduced motion sets --pb-motion-pulse to 0 → no pulse. */
+      @keyframes _pb-timer-pulse_4e1888 {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        ._urgent_4e1888 {
+          transform: none;
+        }
+      }
+
+      ._paused_4e1888 {
+        color: var(--pb-text-muted);
+      }
+
+      ._pauseGlyph_4e1888 {
+        font-size: 0.5em;
+      }
+
+      ._digits_4e1888 {
+        display: inline-block;
+      }
+
+      /* The last five seconds say it in words as well as colour (T-0779 F15). Beside the digits, inside the
+   chip: a word hung under the chip ran into the deadline bar and the row below (T-0779 F2). The TV
+   body token is 36 px, above the 32 px floor. */
+      ._hurry_4e1888 {
+        color: var(--pb-danger);
+        font-size: var(--pb-font-body);
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      /* packages/game-sdk/src/tv/Scoreboard.module.css */
+      ._board_19260b {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--pb-space-2);
+        width: 100%;
+        max-width: 28em;
+      }
+
+      /* 5-6 rows under a heading: body-size rows (~60 px) so six fit in ≈ 400 px. */
+      ._tight_19260b ._row_19260b,
+      ._tight3_19260b ._row_19260b,
+      ._tight4_19260b ._row_19260b {
+        font-size: var(--pb-font-body);
+        --pb-row-py: var(--pb-space-1);
+        padding: var(--pb-row-py) var(--pb-space-3);
+        --pb-chip-size: 1.3em;
+      }
+
+      ._dense_19260b {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-2) var(--pb-space-4);
+        max-width: none;
+      }
+
+      ._dense_19260b ._row_19260b {
+        /* h2 digits still read from the couch (7-12 rows); 12 rows in two columns ≈ 470 px */
+        --pb-row-py: var(--pb-space-1);
+        padding: var(--pb-row-py) var(--pb-space-3);
+        --pb-chip-size: 1.3em;
+      }
+
+      /* 13+ rows: three body-size columns (16 players = 6 rows ≈ 400 px). */
+      ._tight3_19260b {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--pb-space-2) var(--pb-space-4);
+        max-width: none;
+      }
+
+      /* Four columns on request (`columns={4}`): 16 rows in four ≈ 270 px, for a board under a four-row
+   roster. ~420 px cells, so the gaps tighten like the three-column rows. */
+      ._tight4_19260b {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--pb-space-2) var(--pb-space-3);
+        max-width: none;
+      }
+
+      /* Small: body-size rows for a dense board that shares the stage with a tall header. */
+      ._sm_19260b ._row_19260b {
+        font-size: var(--pb-font-body);
+        --pb-row-py: var(--pb-space-1);
+        padding: var(--pb-row-py) var(--pb-space-3);
+        --pb-chip-size: 1.3em;
+      }
+
+      /* Large: the board owns the stage (results, 7–8 players in two columns of ≤ 4). 1.1× h2 with
+   roomier padding — h1 rows spilled their scores out of a 3/5-width column (review-loop #32). */
+      ._lg_19260b ._row_19260b {
+        font-size: calc(var(--pb-font-h2) * 1.1);
+        --pb-row-py: var(--pb-space-3);
+        padding: var(--pb-row-py) var(--pb-space-4);
+        --pb-chip-size: 1.4em;
+      }
+
+      ._lg_19260b ._name_19260b {
+        min-width: 4ch;
+      }
+
+      ._lg_19260b {
+        gap: var(--pb-space-3) var(--pb-space-5);
+      }
+
+      /* Column-major: ranks read down the left column, then the next (--pb-board-rows is set inline). */
+      ._dense_19260b,
+      ._tight3_19260b,
+      ._tight4_19260b {
+        grid-auto-flow: column;
+        grid-template-rows: repeat(var(--pb-board-rows, 1), auto);
+      }
+
+      ._row_19260b {
+        display: grid;
+        grid-template-columns: 1.6em auto 1fr auto auto;
+        align-items: center;
+        gap: var(--pb-space-3);
+        --pb-row-py: var(--pb-space-2);
+        padding: var(--pb-row-py) var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        border: 1px solid var(--pb-border);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-h2);
+        font-weight: 700;
+      }
+
+      ._compact_19260b ._row_19260b {
+        font-size: var(--pb-font-body);
+        --pb-row-py: var(--pb-space-2);
+        padding: var(--pb-row-py) var(--pb-space-3);
+        gap: var(--pb-space-2);
+      }
+
+      /* The phone board is measured in its rows' own text size, so 200 % text (≈ 10 em across a phone)
+   is told apart from an SE at 100 % (≈ 16 em): there the rank column, gaps and padding give their
+   room to the name, so "Maximiliano" fits whole (session-c ec3ea7). */
+      ._compact_19260b {
+        container-type: inline-size;
+        width: 100%;
+        font-size: var(--pb-font-body);
+      }
+
+      @container (max-width: 12em) {
+        ._compact_19260b ._row_19260b {
+          grid-template-columns: 1.05em auto 1fr auto auto;
+          gap: var(--pb-space-1);
+          padding-inline: var(--pb-space-1) var(--pb-space-2);
+        }
+
+        /* a row with no delta or wager mark drops that empty track and its gap: "Maximiliano" beside a
+     4-digit score needed 203 px against 197 (session-c 42aaee) */
+        ._compact_19260b ._row_19260b:not(:has(> ._delta_19260b, > ._mark_19260b)) {
+          grid-template-columns: 1.05em auto 1fr auto;
+        }
+
+        ._compact_19260b ._score_19260b {
+          font-size: 0.88em;
+        }
+      }
+
+      /* On a phone the delta and the score take the row's end: a name wraps to a second line instead of
+   losing its end to an ellipsis ("Tess's bo…", fake-out's SE play-test), at its spaces only; a word
+   wider than the row ends in its own ellipsis ("Maximili…" over "Guadalupe" at 200 %, session-c
+   ec3ea7: never broken mid-word). */
+      ._compact_19260b ._name_19260b {
+        white-space: normal;
+        line-height: 1.15;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      ._compact_19260b ._word_19260b {
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: top;
+      }
+
+      ._top_19260b {
+        background: var(--pb-surface-2);
+        outline: 3px solid var(--pb-accent-2);
+      }
+
+      ._me_19260b {
+        /* --pb-me: a team's card sets its own colour, so "you" never reads as the other team (Sun is the
+     accent pink: tune-in 243619) */
+        box-shadow: inset 4px 0 0 var(--pb-me, var(--pb-accent));
+      }
+
+      /* Phone (compact) only: my row pops in and, when not the winner's outlined row, gets its own
+   accent ring so "that one is me" reads at a glance. The ring is an inset shadow with the left bar
+   folded in: an outline drew outside the row (clipped by the scroller, doubled beside the bar and
+   the neighbours' edges: T-0282). */
+      ._compact_19260b ._me_19260b:not(._top_19260b) {
+        box-shadow:
+          inset 0 0 0 2px var(--pb-me, var(--pb-accent)),
+          inset 4px 0 0 var(--pb-me, var(--pb-accent));
+      }
+
+      ._compact_19260b ._me_19260b {
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      ._rank_19260b {
+        text-align: center;
+        color: var(--pb-text-muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* T-0257: a row's tags on their own line under the name (a hidden role, a power used). */
+      ._tags_19260b {
+        display: block;
+        font-size: 0.72em;
+        color: var(--pb-text-muted);
+        white-space: normal;
+      }
+
+      ._name_19260b {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        /* a centred Stage must not centre the names */
+        text-align: left;
+      }
+
+      /* Names keep a floor so they do not vanish, but never so much that the score column is pushed out
+   of the cell (9ch clipped a 4-digit winner's score in the results' 3/5-width board). */
+      ._dense_19260b ._name_19260b {
+        min-width: 5ch;
+      }
+
+      /* Three columns in a narrow results board leave ~100 px for the name: tighter rank + gaps. */
+      ._tight3_19260b ._row_19260b,
+      ._tight4_19260b ._row_19260b {
+        grid-template-columns: 1.2em auto 1fr auto auto;
+        gap: var(--pb-space-2);
+      }
+
+      ._delta_19260b {
+        color: var(--pb-accent-3);
+        font-size: 0.8em;
+      }
+      ._loss_19260b {
+        /* a touch toward the text colour: the night danger red was 4.4:1 on the row (T-0236) */
+        color: color-mix(in srgb, var(--pb-danger) 88%, var(--pb-text));
+      }
+
+      /* A ✓ in the delta slot (markIds): this row has acted, e._g_19260b. its wager is placed. */
+      ._mark_19260b {
+        color: var(--pb-accent-3);
+        font-weight: 900;
+      }
+
+      ._score_19260b {
+        font-variant-numeric: tabular-nums;
+        color: var(--pb-accent-2);
+        font-weight: 900;
+        /* T-0175: always the last column, so a row with no delta or ✓ ends where the others do (it
+     sat one gap short of the edge) */
+        grid-column: -2;
+      }
+
+      /* Entrance (R-056): rows rise one per --pb-stagger-step in --pb-i order; each delta lands a beat
+   after its row; the leader's trophy pops as its row settles (on `down`, the results screen, that
+   is first: T-0230). Tokens only, so reduced motion = instant. */
+      ._staggered_19260b {
+        --pb-stagger-step: var(--pb-motion-fast);
+      }
+
+      ._staggered_19260b._dense_19260b,
+      ._staggered_19260b._tight3_19260b,
+      ._staggered_19260b._tight4_19260b,
+      ._staggered_19260b._down_19260b {
+        --pb-stagger-step: calc(var(--pb-motion-fast) / 2);
+      }
+
+      ._staggered_19260b ._row_19260b {
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+        animation-delay: calc(var(--pb-i, 0) * var(--pb-stagger-step));
+      }
+
+      ._staggered_19260b ._delta_19260b {
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+        animation-delay: calc(var(--pb-i, 0) * var(--pb-stagger-step) + var(--pb-motion-base));
+      }
+
+      ._staggered_19260b ._top_19260b ._rank_19260b {
+        display: inline-block;
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+        animation-delay: calc(
+          var(--pb-i, 0) * var(--pb-stagger-step) + var(--pb-motion-base) + var(--pb-motion-slow)
+        );
+      }
+
+      /* On `down` the winner lands first (T-0230), so its trophy pops as that row settles, not a slow
+   beat later (the review: 0.6 s of a winner row without its trophy). */
+      ._staggered_19260b._down_19260b ._top_19260b ._rank_19260b {
+        animation-delay: calc(var(--pb-i, 0) * var(--pb-stagger-step) + var(--pb-motion-base));
+      }
+
+      /* ── I-027 A, T-0280: the climb (stagger="climb"). Rows fade in where they stood last round —
+   --pb-from rows away (a row's own height plus the board gap per row) — the deltas land a beat
+   later, the totals count from --pb-motion-base, and each mover slides to its new place over
+   --pb-motion-slow, starting at its own --pb-start (Scoreboard._tsx_19260b climbPlan: a fixed stagger, top
+   place first). One move per row: translateY only, no scale, no fade, no lift shadow; the z-order
+   is fixed for the whole climb (climbers over, holders mid, fallers under, set inline), so a row
+   never flips in front of another mid-slide; a climber also shrinks toward its right edge while
+   it passes, so the row it crosses keeps its rank, face and name in view (review of T-0280: with
+   the climbers under, or unshrunk, whole rows vanished mid-slide). A mover's delta and glow land with its own row
+   (--pb-land); a holder's delta lands at --pb-motion-base. Reduced motion drops every wait. */
+      ._climb_19260b ._row_19260b {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          _pb-climb_19260b var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both;
+      }
+      ._climb_19260b ._delta_19260b {
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease)
+          var(--pb-delta-at, var(--pb-motion-base)) both; /* prettier-ignore */
+      }
+      /* A lane cannot fix a full overlap (two neighbours swapping cross exactly), so the climber shrinks
+   toward its right edge instead: it covers only the passed row's score end, baring its rank, face
+   and name. It stays over; the right edge never moves. */
+      ._climb_19260b ._rose_19260b {
+        --pb-lift: 0.55;
+        transform-origin: right center;
+      }
+      ._columns_19260b._climb_19260b ._rose_19260b {
+        --pb-lift: 0.5;
+      }
+      /* T-0301 (F18): a climber shrunk toward its right edge still covers the passed row's score end,
+   and mid-slide it cuts that number through the glyphs. While the climbers are in their lane the
+   fallers' totals sit back (a dim number, not half of one) and come home once the board settles. */
+      ._climb_19260b ._fell_19260b ._score_19260b {
+        animation: _pb-score-dim_19260b var(--pb-lane-run, 0ms) ease-in-out 1100ms both;
+      }
+      @keyframes _pb-score-dim_19260b {
+        from,
+        to {
+          opacity: 1;
+        }
+        12%,
+        84% {
+          opacity: 0.12;
+        }
+      }
+      @keyframes _pb-lane_19260b {
+        from,
+        to {
+          scale: 1;
+        }
+        /* the run is the whole climb / 0.8 (Scoreboard._tsx_19260b), so the last row lands at 80 % and the
+     shrink is held until 84 %: it only ramps out on a settled board */
+        12%,
+        84% {
+          scale: var(--pb-lift, 1);
+        }
+      }
+      @keyframes _pb-climb_19260b {
+        from {
+          transform: translateY(calc(var(--pb-from, 0) * (100% + var(--pb-space-2))));
+        }
+        to {
+          transform: none;
+        }
+      }
+
+      /* ── I-027 B: movers glow once their row lands: a climbed row's outline is green and fades over
+   1 s, a fallen row's a dim red; a row that held its place gets nothing. The glow fills forwards
+   only (T-0280: with `both` it painted its first colour from 0 s, before the row had moved). The
+   rank digit and the slide itself carry the story — the colour is never alone. */
+      ._climb_19260b ._rose_19260b,
+      ._climb_19260b ._fell_19260b {
+        outline: 3px solid transparent;
+        outline-offset: -1px;
+      }
+      ._climb_19260b ._rose_19260b {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          _pb-climb_19260b var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+          _pb-glow-up_19260b var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards,
+          _pb-lane_19260b var(--pb-lane-run, var(--pb-motion-slow)) ease-in-out 1100ms both;
+      }
+      ._climb_19260b ._fell_19260b {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          _pb-climb_19260b var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+          _pb-glow-down_19260b var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards;
+      }
+      /* The old rank gives way to the new one as its row lands. */
+      ._swap_19260b {
+        display: inline-block;
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+      /* T-0191: a row that changes column does not fly across the board. T-0262: it stays at its old
+   place (--pb-col-from columns, --pb-from rows away; a column is its own width plus the column gap)
+   until the slide, fades out there as the others move, and fades in at its new place: the board
+   never shows a hole. `filter: opacity` keeps the mount fade (`opacity`) its own. */
+      ._board_19260b {
+        --pb-col-gap: var(--pb-space-2);
+      }
+      ._dense_19260b,
+      ._tight3_19260b {
+        --pb-col-gap: var(--pb-space-4);
+      }
+      ._tight4_19260b {
+        --pb-col-gap: var(--pb-space-3);
+      }
+      ._lg_19260b {
+        --pb-col-gap: var(--pb-space-5);
+      }
+      ._climb_19260b ._row_19260b._hop_19260b {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          _pb-hop_19260b var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both;
+      }
+      ._climb_19260b ._row_19260b._hop_19260b._rose_19260b {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          _pb-hop_19260b var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+          _pb-glow-up_19260b var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards;
+      }
+      ._climb_19260b ._row_19260b._hop_19260b._fell_19260b {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          _pb-hop_19260b var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+          _pb-glow-down_19260b var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards;
+      }
+      @keyframes _pb-hop_19260b {
+        from,
+        45% {
+          transform: translate(
+            calc(var(--pb-col-from, 0) * (100% + var(--pb-col-gap))),
+            calc(var(--pb-from, 0) * (100% + var(--pb-space-2)))
+          );
+        }
+        from,
+        25% {
+          filter: opacity(1);
+        }
+        45%,
+        46% {
+          filter: opacity(0);
+        }
+        46%,
+        to {
+          transform: none;
+        }
+        66%,
+        to {
+          filter: opacity(1);
+        }
+      }
+      @keyframes _pb-glow-up_19260b {
+        from {
+          outline-color: var(--pb-accent-3);
+        }
+        to {
+          outline-color: transparent;
+        }
+      }
+      @keyframes _pb-glow-down_19260b {
+        from {
+          outline-color: color-mix(in srgb, var(--pb-danger) 60%, transparent);
+        }
+        to {
+          outline-color: transparent;
+        }
+      }
+
+      /* The waits are literal (1200 / 1800 ms), so they collapse here — after the ._rose_19260b / ._fell_19260b rules,
+   which restate the animation list (pass 865: movers still sat 1.2 s in the old order). */
+      @media (prefers-reduced-motion: reduce) {
+        ._climb_19260b {
+          --pb-lane-run: 0ms !important; /* no lift held while the rows are already in place */
+        }
+        ._climb_19260b ._row_19260b,
+        ._climb_19260b ._rose_19260b,
+        ._climb_19260b ._fell_19260b,
+        ._climb_19260b ._row_19260b._hop_19260b,
+        ._climb_19260b ._row_19260b._hop_19260b._rose_19260b,
+        ._climb_19260b ._row_19260b._hop_19260b._fell_19260b,
+        ._climb_19260b ._delta_19260b {
+          animation-delay: 0ms;
+        }
+      }
+      :root[data-motion='off'] ._climb_19260b {
+        --pb-lane-run: 0ms !important;
+      }
+      :root[data-motion='off'] ._climb_19260b ._row_19260b,
+      :root[data-motion='off'] ._climb_19260b ._rose_19260b,
+      :root[data-motion='off'] ._climb_19260b ._fell_19260b,
+      :root[data-motion='off'] ._climb_19260b ._row_19260b._hop_19260b,
+      :root[data-motion='off'] ._climb_19260b ._row_19260b._hop_19260b._rose_19260b,
+      :root[data-motion='off'] ._climb_19260b ._row_19260b._hop_19260b._fell_19260b,
+      :root[data-motion='off'] ._climb_19260b ._delta_19260b {
+        animation-delay: 0ms;
+      }
+
+      /* ── I-146 B: the band a split column covers, over its first row. */
+      ._band_19260b {
+        position: absolute;
+        top: -1.35em;
+        left: var(--pb-space-3);
+        font-size: 0.62em;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: var(--pb-muted, rgba(255, 255, 255, 0.55));
+      }
+      ._board_19260b ._row_19260b {
+        position: relative;
+      }
+
+      /* ── I-146 C, T-0181, T-0280: a tie is a tinted chip inside each tied row's own rank cell — two
+   rows sharing a number. It replaced a pill that ran down through the row gaps (and a copy of the
+   winner's ring above it): that slab painted past the rows and, mid-climb, sat where the rows no
+   longer were. Now nothing is drawn outside a row. The winners' own tie is the trophies: no chip on
+   a 🏆 row. */
+      ._tied_19260b ._rank_19260b {
+        display: grid;
+        place-items: center;
+        align-self: stretch;
+        border-radius: 0.4em;
+        color: var(--pb-text);
+        background: color-mix(in srgb, var(--pb-accent) 34%, var(--pb-surface));
+      }
+
+      /* No ranks (a team's card, ADR-052): the rows drop the rank column along with its cell, so the
+   name takes that room (~110 px at 200 % text; reviewer 69417f). After the tiers so it wins. */
+      ._noRanks_19260b ._row_19260b,
+      ._noRanks_19260b._tight3_19260b ._row_19260b,
+      ._noRanks_19260b._tight4_19260b ._row_19260b {
+        grid-template-columns: auto 1fr auto auto;
+      }
+
+      @container (max-width: 12em) {
+        ._compact_19260b._noRanks_19260b ._row_19260b {
+          grid-template-columns: auto 1fr auto auto;
+        }
+
+        ._compact_19260b._noRanks_19260b ._row_19260b:not(:has(> ._delta_19260b, > ._mark_19260b)) {
+          grid-template-columns: auto 1fr auto;
+        }
+      }
+
+      /* A narrow phone (SE at 200 %) stacks the delta over its total: side by side with a 1-space gap
+   "−25 75" read as "−2575" (T-0043 F2), and the stack gives the name the row's width back. */
+      @container (max-width: 12em) {
+        ._compact_19260b ._row_19260b:has(> ._delta_19260b) {
+          grid-template-columns: 1.05em auto 1fr auto;
+          row-gap: 0;
+        }
+
+        ._compact_19260b._noRanks_19260b ._row_19260b:has(> ._delta_19260b) {
+          grid-template-columns: auto 1fr auto;
+        }
+
+        ._compact_19260b
+          ._row_19260b:has(> ._delta_19260b)
+          > :not(._delta_19260b, ._score_19260b, ._band_19260b) {
+          grid-row: 1 / span 2;
+        }
+
+        ._compact_19260b ._row_19260b > ._delta_19260b {
+          grid-column: -2;
+          grid-row: 1;
+          justify-self: end;
+          align-self: end;
+          line-height: 1.1;
+        }
+
+        ._compact_19260b ._row_19260b:has(> ._delta_19260b) > ._score_19260b {
+          grid-column: -2;
+          grid-row: 2;
+          justify-self: end;
+          align-self: start;
+          line-height: 1.1;
+        }
+      }
+
+      /* packages/game-sdk/src/controller/Screen.module.css */
+      /* Every screen rises on mount (the phone was the only surface that hard-cut). Fill `backwards`,
+   not `both`: a retained transform would make this frame the containing block for any future
+   position: fixed game element. Taps are never blocked (opacity does not gate pointer events). */
+      ._screen_72dfcc {
+        position: relative; /* the predecessor's snapshot overlays this frame (review-loop #18) */
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        overscroll-behavior: none;
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) backwards;
+        animation-delay: var(
+          --pb-screen-delay,
+          0ms
+        ); /* I-039 A: the shell can hold the rise a beat */
+      }
+
+      /* A leaving screen's snapshot, parked in the parent: on top, inert, fading over the base token. */
+      ._ghost_72dfcc {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        pointer-events: none;
+        animation: pb-fade-out var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      /* Cloned nodes would replay their entrance keyframes; freeze them where they were. */
+      ._ghost_72dfcc * {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      ._title_72dfcc {
+        padding: var(--pb-space-4) var(--pb-space-4) 0;
+        text-wrap: balance;
+      }
+
+      ._body_72dfcc {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: var(--pb-space-4);
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-4);
+      }
+
+      ._footer_72dfcc {
+        position: sticky;
+        bottom: 0;
+        padding: var(--pb-space-3) var(--pb-space-4)
+          calc(var(--pb-space-3) + env(safe-area-inset-bottom));
+        background: linear-gradient(to top, var(--pb-bg) 70%, transparent);
+      }
+
+      /* A sideways phone in Safari (≈ 330 px tall): tighter body padding, the height goes to the game. */
+      @media (orientation: landscape) and (max-height: 420px) {
+        ._body_72dfcc {
+          padding: var(--pb-space-2) var(--pb-space-4);
+        }
+        ._footer_72dfcc {
+          padding: 4px var(--pb-space-4) calc(4px + env(safe-area-inset-bottom));
+        }
+      }
+
+      /* A long body (six-row results, a wager list on an SE) folds under the footer and the last line is
+   cut mid-glyph (review-loop, six-player results on an iPhone). Browsers with scroll-driven animations fade the body's bottom 28 px
+   while there is more below and lift the fade at the end; a body that does not scroll has no
+   timeline, so no fade. Only meaningful overflow (the same threshold as the cue) folds: a few
+   pixels of card-arrival overshoot must not fade a whole row. Others keep the plain fold. */
+      @property --pb-fold {
+        syntax: '<length>';
+        inherits: false;
+        initial-value: 0px;
+      }
+
+      @supports (animation-timeline: scroll()) {
+        ._body_72dfcc {
+          mask-image: linear-gradient(to bottom, #000 calc(100% - var(--pb-fold)), transparent);
+        }
+        ._body_72dfcc[data-fold] {
+          animation: _pb-fold_72dfcc linear both;
+          animation-timeline: scroll(self);
+        }
+        /* fill1: a title drawn down to its bottom edge (the results' award chips) sat flush on the body's
+     clip line, so a row scrolled half out read as hidden under the chips — at 200 % text most of a
+     name. Scrolled away from the top, the body keeps the clear strip it has at rest (its own top
+     padding) and then fades in over twice the caption size, so nothing touches the title at any
+     text size. Paint only: every box stays where it was, and at the top there is no mask at all. */
+        ._body_72dfcc._fadeTop_72dfcc {
+          mask-image: linear-gradient(
+            to bottom,
+            transparent var(--pb-fold-clear),
+            #000 calc(var(--pb-fold-clear) + var(--pb-fold-top)),
+            #000 calc(100% - var(--pb-fold)),
+            transparent
+          );
+          animation: _pb-fold-top_72dfcc linear both;
+          animation-timeline: scroll(self);
+        }
+        ._body_72dfcc._fadeTop_72dfcc[data-fold] {
+          animation:
+            _pb-fold_72dfcc linear both,
+            _pb-fold-top_72dfcc linear both;
+          animation-timeline: scroll(self), scroll(self);
+        }
+      }
+
+      @property --pb-fold-top {
+        syntax: '<length>';
+        inherits: false;
+        initial-value: 0px;
+      }
+      @property --pb-fold-clear {
+        syntax: '<length>';
+        inherits: false;
+        initial-value: 0px;
+      }
+
+      @keyframes _pb-fold-top_72dfcc {
+        0% {
+          --pb-fold-clear: 0px;
+          --pb-fold-top: 0px;
+        }
+        8%,
+        100% {
+          --pb-fold-clear: var(--pb-space-4);
+          --pb-fold-top: calc(var(--pb-font-caption) * 2);
+        }
+      }
+
+      @keyframes _pb-fold_72dfcc {
+        0%,
+        92% {
+          --pb-fold: 72px; /* I-066 A: one cut row deep */
+        }
+        100% {
+          --pb-fold: 0px;
+        }
+      }
+
+      /* ── I-788 A (design review A, refines I-066 B / I-187): "more below" is a slim row of its own at the
+   top of the footer — a grab bar and the words — never a pill floating over the body's last line or
+   the button's own words. The row is laid out whenever the body overflows (the body gives up its
+   height), and only fades out at the end, so nothing shifts under a finger. With no footer the same
+   row sits in the bottom safe area. The whole row is the button: 28 px drawn, 40 px to the thumb. */
+      ._cue_72dfcc {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+        min-height: 28px;
+        margin: 0 0 2px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--pb-text-muted);
+        font: inherit;
+        font-size: calc(var(--pb-font-caption) * 0.86);
+        font-weight: 700;
+        line-height: 1.1;
+        cursor: pointer;
+        transition: opacity var(--pb-motion-base) var(--pb-ease);
+      }
+      ._cue_72dfcc::before {
+        content: '';
+        width: 28px;
+        height: 3px;
+        border-radius: 3px;
+        background: currentColor;
+        opacity: 0.6;
+        flex: none;
+      }
+      /* The thumb target reaches up to the footer's top edge (44 px), never down over the button. */
+      ._cue_72dfcc::after {
+        content: '';
+        position: absolute;
+        inset: calc(-1 * var(--pb-space-4)) 0 0;
+      }
+      ._cue_72dfcc[data-on='false'] {
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity var(--pb-motion-base) var(--pb-ease),
+          visibility 0s linear var(--pb-motion-base);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        ._cue_72dfcc,
+        ._cue_72dfcc[data-on='false'] {
+          transition: none;
+        }
+      }
+      :root[data-motion='off'] ._cue_72dfcc,
+      :root[data-motion='off'] ._cue_72dfcc[data-on='false'] {
+        transition: none;
+      }
+
+      /* No footer: the row alone, in the bottom safe area. */
+      ._cueOnly_72dfcc {
+        flex-shrink: 0;
+        padding: var(--pb-space-3) var(--pb-space-4) calc(4px + env(safe-area-inset-bottom));
+      }
+
+      @media (orientation: landscape) and (max-height: 420px) {
+        ._cue_72dfcc {
+          min-height: 22px;
+          margin: 0;
+        }
+        ._cue_72dfcc::after {
+          inset: -4px 0 0;
+        }
+        ._cueOnly_72dfcc {
+          padding: 4px var(--pb-space-4) calc(2px + env(safe-area-inset-bottom));
+        }
+      }
+
+      /* packages/game-sdk/src/controller/PrimaryButton.module.css */
+      ._button_380395 {
+        width: 100%;
+        min-height: 56px;
+        padding: var(--pb-space-3) var(--pb-space-5);
+        border-radius: var(--pb-radius);
+        font-size: var(--pb-font-button);
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        transition:
+          transform var(--pb-motion-fast) var(--pb-ease),
+          opacity var(--pb-motion-fast) var(--pb-ease);
+      }
+
+      ._button_380395:active:not([aria-disabled='true']) {
+        transform: scale(0.97);
+        /* brightens accent, danger, success and the neutral surface-2 fill in every theme (R-049) */
+        filter: brightness(1.12);
+      }
+
+      /* Disabled reads as "not yet", not as a dimmer version of the action (label contrast 6.9:1): an
+   empty dashed outline, never a filled neutral button (T-0392: that read like an enabled one). */
+      ._button_380395[aria-disabled='true'] {
+        background: transparent;
+        color: var(--pb-text-muted);
+        border: 2px dashed var(--pb-text-muted);
+        cursor: default;
+      }
+
+      ._wrap_380395 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-1);
+        width: 100%;
+      }
+
+      ._reason_380395 {
+        text-align: center;
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+
+      /* A tap on a disabled button: three sideways jolts (global keyframe; 0 ms under reduced motion). */
+      ._shake_380395 {
+        animation: pb-shake var(--pb-motion-base) var(--pb-ease);
+      }
+
+      ._accent_380395 {
+        background: var(--pb-accent);
+        color: var(--pb-on-accent);
+      }
+
+      ._neutral_380395 {
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        box-shadow: inset 0 0 0 1px var(--pb-border);
+      }
+
+      ._danger_380395 {
+        background: var(--pb-danger);
+        color: var(--pb-on-accent);
+      }
+
+      ._success_380395 {
+        background: var(--pb-accent-3);
+        color: var(--pb-on-accent);
+      }
+
+      ._done_380395,
+      ._done_380395[aria-disabled='true'] {
+        background: var(--pb-accent-3);
+        color: var(--pb-on-accent);
+        border-color: transparent; /* dashed is for the waiting state only */
+      }
+
+      /* The last 5 s for an unanswered phone (`data-urgent` on the controller shell): a danger outline
+   and one nudge when the attribute lands — no JS timer. A button disabled by an empty answer gets
+   nothing (there is nothing to press yet); the header cue and haptic still cover that player. */
+      [data-urgent] ._button_380395._accent_380395:not([aria-disabled='true']) {
+        outline: 3px solid var(--pb-danger);
+        outline-offset: 2px;
+        animation: _pb-nudge_380395 var(--pb-motion-slow) var(--pb-ease) 1;
+      }
+
+      @keyframes _pb-nudge_380395 {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+      }
+
+      /* The ✓ pops once each time a done button mounts (R-063); 0 ms under reduced motion. */
+      /* The gap is a margin: a trailing space inside an inline-block collapses, so every done button
+   read "✓Submitted" / "✓You're ready". */
+      ._check_380395 {
+        display: inline-block;
+        margin-right: 0.35em;
+        animation: pb-pop var(--pb-motion-fast) var(--pb-ease) both;
+      }
+
+      /* T-0225: sent, not yet taken. Neutral and quiet: no ✓, not the success green (that reads as
+   delivered and the phone goes down while the send may still be lost). */
+      ._busy_380395,
+      ._busy_380395[aria-disabled='true'] {
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        border-color: transparent;
+        box-shadow: inset 0 0 0 1px var(--pb-border);
+      }
+
+      /* packages/game-sdk/src/ui/Avatar.module.css */
+      /* The face's `size` as CSS, at no specificity: a caller's class or `._x_8c3e65 svg` rule still sizes it,
+   as it did over the old width/height attributes, which can't hold a CSS var (WebKit logged an
+   error for every face, T-0174). */
+      :where(._avatar_8c3e65) {
+        width: var(--pb-avatar-size);
+        height: var(--pb-avatar-size);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+        font-size: var(--pb-font-body);
+        line-height: 1.4;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h2 {
+        font-size: var(--pb-font-h1);
+        line-height: 1.2;
+        font-weight: 900;
+      }
+      button {
+        font: inherit;
+      }
+      .evidence-shell {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template-rows: 84px minmax(0, 1fr) 48px;
+      }
+      [data-surface='tv'] .evidence-shell {
+        grid-template-rows: 100px minmax(0, 1fr) 80px;
+      }
+      .evidence-header,
+      .evidence-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--pb-space-4);
+        background: var(--pb-surface);
+        gap: var(--pb-space-3);
+      }
+      .evidence-header {
+        border-bottom: 2px solid var(--pb-accent-2);
+      }
+      .evidence-footer {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+      .evidence-main {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        min-width: 0;
+        overflow: hidden;
+        --pb-stage-top: var(--pb-space-5);
+      }
+      .evidence-code {
+        font-weight: 900;
+        color: var(--pb-accent-2);
+      }
+      :root[data-motion='off'] *,
+      :root[data-motion='off'] *::before,
+      :root[data-motion='off'] *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="evidence-shell">
+      <header class="evidence-header">
+        <b>PartyBox</b><span class="evidence-code">QUIZ</span>
+      </header>
+      <main class="evidence-main" aria-label="Game stage">
+        <section class="_screen_72dfcc _screen_b07bb7">
+          <h2 class="_title_72dfcc">The podium</h2>
+          <div class="_body_72dfcc">
+            <p class="_podiumBeat_b07bb7">First place</p>
+            <div class="_podium_ac8726" data-compact="true" aria-label="Podium">
+              <section
+                class="_podiumPlace_ac8726"
+                data-rank="2"
+                data-revealed="true"
+                aria-label="2nd"
+              >
+                <div class="_podiumPeople_ac8726">
+                  <div class="_podiumPerson_ac8726">
+                    <svg
+                      viewBox="0 0 64 64"
+                      class="_avatar_8c3e65"
+                      role="img"
+                      aria-label="avatar owl"
+                      style="
+                        --pb-avatar-size: var(--pb-chip-size);
+                        color: var(--pb-player-2);
+                        opacity: 1;
+                        flex-shrink: 0;
+                        --pb-blink-delay: 0.2s;
+                        --pb-blink-name: pb-blink;
+                      "
+                    >
+                      <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                      <circle cx="23" cy="30" r="9" fill="#fff7fb"></circle>
+                      <circle cx="41" cy="30" r="9" fill="#fff7fb"></circle>
+                      <g class="pb-eyes" style="transform-origin: 32px 30px">
+                        <circle cx="23" cy="30" r="4" fill="#1a0b12"></circle>
+                        <circle cx="41" cy="30" r="4" fill="#1a0b12"></circle>
+                      </g>
+                      <path d="M32 36 l-4 6 h8 z" fill="#1a0b12"></path></svg
+                    ><b class="_podiumName_ac8726">Ben</b
+                    ><span class="_podiumScore_ac8726">5765 points</span>
+                  </div>
+                </div>
+                <span class="_plinth_ac8726">2nd</span>
+              </section>
+              <section
+                class="_podiumPlace_ac8726"
+                data-rank="1"
+                data-revealed="true"
+                aria-label="1st"
+              >
+                <div class="_podiumPeople_ac8726">
+                  <div class="_podiumPerson_ac8726">
+                    <svg
+                      viewBox="0 0 64 64"
+                      class="_avatar_8c3e65"
+                      role="img"
+                      aria-label="avatar fox"
+                      style="
+                        --pb-avatar-size: var(--pb-chip-size);
+                        color: var(--pb-player-1);
+                        opacity: 1;
+                        flex-shrink: 0;
+                        --pb-blink-delay: 5.3s;
+                        --pb-blink-name: pb-blink-twice;
+                      "
+                    >
+                      <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                      <path
+                        d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                        fill="#1a0b12"
+                        opacity="0.35"
+                      ></path>
+                      <g class="pb-eyes" style="transform-origin: 32px 32px">
+                        <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                        <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                      </g>
+                      <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+                    ><b class="_podiumName_ac8726">Ana</b
+                    ><span class="_podiumScore_ac8726">5865 points</span>
+                  </div>
+                </div>
+                <span class="_plinth_ac8726">1st</span>
+              </section>
+              <section
+                class="_podiumPlace_ac8726"
+                data-rank="3"
+                data-revealed="true"
+                aria-label="3rd"
+              >
+                <div class="_podiumPeople_ac8726">
+                  <div class="_podiumPerson_ac8726">
+                    <svg
+                      viewBox="0 0 64 64"
+                      class="_avatar_8c3e65"
+                      role="img"
+                      aria-label="avatar frog"
+                      style="
+                        --pb-avatar-size: var(--pb-chip-size);
+                        color: var(--pb-player-3);
+                        opacity: 1;
+                        flex-shrink: 0;
+                        --pb-blink-delay: 0.2s;
+                        --pb-blink-name: pb-blink;
+                      "
+                    >
+                      <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                      <circle cx="22" cy="20" r="7" fill="#fff7fb"></circle>
+                      <circle cx="42" cy="20" r="7" fill="#fff7fb"></circle>
+                      <g class="pb-eyes" style="transform-origin: 32px 20px">
+                        <circle cx="22" cy="20" r="3.2" fill="#1a0b12"></circle>
+                        <circle cx="42" cy="20" r="3.2" fill="#1a0b12"></circle>
+                      </g>
+                      <path
+                        d="M21 38 q11 9.9 22 0"
+                        stroke="#1a0b12"
+                        stroke-width="3"
+                        fill="none"
+                        stroke-linecap="round"
+                      ></path></svg
+                    ><b class="_podiumName_ac8726">Cy</b
+                    ><span class="_podiumScore_ac8726">5665 points</span>
+                  </div>
+                </div>
+                <span class="_plinth_ac8726">3rd</span>
+              </section>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer class="evidence-footer">
+        <span>Quiz Rush · spectator</span><span>390 × 844</span>
+      </footer>
+    </div>
+  </body>
+</html>

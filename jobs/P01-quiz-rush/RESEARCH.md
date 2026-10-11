@@ -63,8 +63,9 @@ The timings below are PartyBox choices and must be judged using this port's simu
   configurable ten to thirty, extended by a reading-time floor when text needs it.
 - Close the answer window as soon as every eligible connected player is locked in; disconnected
   seats do not hold the room. Restore the same submitted choice and points on reconnect.
-- Reveal holds for at least 4.5 seconds, extended by explanation reading time. Standings last
-  3.5 seconds. After the final reveal, go directly into podium ranks, 2.5 seconds per tier,
+- Reveal holds for at least 4.5 seconds, extended for all visible text. Standings hold at least
+  3.5 seconds plus their reading floor. After the final reveal, go directly into podium ranks,
+  at least 2.5 seconds per tier, extended for visible text and animation settling,
   then terminal results. Two players usually begin at second; a larger room usually begins at
   third. Empty tiers are skipped, so tied rooms have no blank podium wait.
 - Base points: `round(1000 * (1 - elapsed / answerWindow / 2))`, with elapsed clamped to the

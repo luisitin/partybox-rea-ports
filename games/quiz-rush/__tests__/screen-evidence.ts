@@ -65,7 +65,7 @@ export function evidenceCss(): string {
     readFileSync(resolve(ROOT, 'design/tokens.css'), 'utf8') +
     '\n' +
     modules.map(([path, map]) => scopedCss(path, map)).join('\n')
-  );
+  ).replace(/[ \t]+(?=\r?$)/gm, '');
 }
 
 // The application shell is not in this extracted repository. Reserve the real header/footer dimensions.

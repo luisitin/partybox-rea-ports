@@ -14,8 +14,9 @@ missing answers earn zero and break the streak. The bonus is an explicit PartyBo
 current Kahoot scoring no longer awards streak points.
 
 Choose a pack, 5-20 questions (default 10) and a 10-30 second answer window (default 20).
-Reading-time floors protect longer questions. Reveals last at least 4.5 seconds, standings
-3.5 seconds, and each occupied podium rank tier 2.5 seconds. Bots have three strengths.
+Every timed screen reserves SDK reading time. Minimum beats are 4.5 seconds for reveals,
+3.5 for standings and 2.5 per occupied podium tier, extended for text and animation settling.
+Bots have three strengths.
 
 Install once with Node 24 or newer:
 
