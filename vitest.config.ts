@@ -1,10 +1,11 @@
 import { defineConfig } from 'vitest/config';
+import { fileURLToPath } from 'node:url';
 
 // One project: every test under packages/ and games/. 20 s per test like the main repo.
 export default defineConfig({
   resolve: {
     alias: {
-      '@partybox/shared': new URL('./packages/shared/src/index.ts', import.meta.url).pathname,
+      '@partybox/shared': fileURLToPath(new URL('./packages/shared/src/index.ts', import.meta.url)),
     },
   },
   test: {

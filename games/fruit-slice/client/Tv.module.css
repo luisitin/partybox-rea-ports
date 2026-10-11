@@ -1,0 +1,99 @@
+.stage {
+  height: 100%;
+  min-height: 0;
+  gap: var(--pb-space-5);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pb-space-6);
+}
+
+.intro {
+  min-width: 0;
+}
+
+.intro h2 {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  line-height: 1.1;
+  font-weight: 900;
+}
+
+.intro p,
+.legend {
+  margin: var(--pb-space-2) 0 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.25;
+  color: var(--pb-text-muted);
+}
+
+.clock {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-5);
+  flex: none;
+}
+
+.clock span {
+  font-size: var(--pb-font-body);
+}
+
+.clock strong {
+  min-width: 2ch;
+  text-align: right;
+  font-size: calc(var(--pb-font-display) * 0.75);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.clock[data-low='true'] {
+  color: var(--pb-danger);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) * 8.5);
+  gap: var(--pb-space-7);
+  align-items: center;
+  flex: 1;
+  min-height: 0;
+}
+
+.arenaSlot {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  min-height: 0;
+  container-type: size;
+}
+
+.arena {
+  position: relative;
+  width: min(100%, 100cqh);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: var(--pb-space-1) solid var(--pb-surface-2);
+  border-radius: var(--pb-radius-lg);
+  background: var(--pb-surface);
+}
+
+.finished {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: var(--pb-space-7);
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  text-align: center;
+  background: var(--pb-scrim);
+}
+
+.legend {
+  margin: 0;
+  text-align: center;
+}

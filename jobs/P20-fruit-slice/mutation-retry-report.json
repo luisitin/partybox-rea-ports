@@ -1,0 +1,51 @@
+{
+  "game": "fruit-slice",
+  "command": "pnpm vitest run games/fruit-slice/__tests__/mutation.test.ts --maxWorkers=1 --reporter=json",
+  "baseline": {
+    "exitCode": 0,
+    "tests": 30,
+    "elapsedMs": 1204
+  },
+  "mutations": [
+    {
+      "id": "M09",
+      "label": "cut fruit can be scored again",
+      "file": "games/fruit-slice/server/phases/play.ts",
+      "before": "!seat.cut.includes(f.id) && crosses(input.points, f)",
+      "after": "crosses(input.points, f)",
+      "expectedWitness": "mutation: cut fruit cannot score twice",
+      "status": "killed",
+      "witnessFailed": true,
+      "failedTests": ["mutation witnesses mutation: cut fruit cannot score twice"],
+      "exitCode": 1,
+      "timedOut": false,
+      "elapsedMs": 1339,
+      "originalSha256": "e618073de581596843b099f0855f30d5ec9fca744fb674a9b598a850b7c4ae80",
+      "restoredSha256": "e618073de581596843b099f0855f30d5ec9fca744fb674a9b598a850b7c4ae80"
+    },
+    {
+      "id": "M10",
+      "label": "twenty-first stroke accepted",
+      "file": "games/fruit-slice/server/phases/play.ts",
+      "before": "seat.strokes >= 20",
+      "after": "seat.strokes > 20",
+      "expectedWitness": "mutation: strokes are capped at twenty per wave",
+      "status": "killed",
+      "witnessFailed": true,
+      "failedTests": ["mutation witnesses mutation: strokes are capped at twenty per wave"],
+      "exitCode": 1,
+      "timedOut": false,
+      "elapsedMs": 27792,
+      "originalSha256": "e618073de581596843b099f0855f30d5ec9fca744fb674a9b598a850b7c4ae80",
+      "restoredSha256": "e618073de581596843b099f0855f30d5ec9fca744fb674a9b598a850b7c4ae80"
+    }
+  ],
+  "planned": 2,
+  "killed": 2,
+  "survived": 0,
+  "invalid": 0,
+  "elapsedMs": 31184,
+  "restored": true,
+  "backupDirectory": "C:\\Users\\LUISI_~1\\AppData\\Local\\Temp\\r19-fruit-mutations-s5Ltbu",
+  "error": null
+}
