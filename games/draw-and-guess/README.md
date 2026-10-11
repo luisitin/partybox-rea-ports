@@ -23,6 +23,9 @@ bots choose words with original pictograms and produce actual strokes; guesser
 bots search seeded vocabulary using public letters and their guess history.
 They never read the private word to generate a guess. Spectators watch without
 choice, drawing or guess controls.
+Normal and sharp bots also compare public geometry with the 36 original
+pictograms, tolerating translation, uniform resizing, jitter, path order and
+packet boundaries. Other drawings use letter-constrained vocabulary guesses.
 
 ## Phases
 

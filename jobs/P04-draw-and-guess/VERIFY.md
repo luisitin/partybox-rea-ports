@@ -55,3 +55,12 @@ with ≤3,500 points and views below 64KiB. Disconnected solvers retain an accur
 progress denominator; final two-player receipts survive immediate reveal/done.
 R1 evidence now has 27 HTML and 27 PNG files, all phases plus artist progress
 and solved feedback. Repeated mutation campaign catches all20bugs after R1.
+
+R2: `$env:WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/draw-and-guess --maxWorkers=1`
+passes all86tests in47.08seconds, including the real20-check SDK contract,
+properties, 7,000matches, gesture regressions and five recognition checks.
+Recognition measures36exact pictures,144transformed cases,72reordered/chunked
+cases,50rejected unrelated scribbles and60private-information independence
+comparisons. The exact-only baseline recognizes0/144transformed cases; the
+public geometry matcher recognizes144/144. No mutable cache or new dependency.
+R1 PR workflow38176082254 passed in40seconds.
