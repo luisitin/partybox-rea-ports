@@ -81,6 +81,7 @@ export interface HoleControllerView extends ControllerView {
   city?: CityView;
   mine: HoleView | null;
   scores: Record<string, number>;
+  slots: Record<string, number>;
   slot: number;
   rank: number | null;
   stage: boolean;

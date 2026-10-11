@@ -1,0 +1,180 @@
+.city {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--pb-font-family);
+}
+
+.hole {
+  transition: transform var(--pb-motion-fast) linear;
+}
+
+.hole[data-respawn='true'],
+.hole[data-shield='true'] {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hole {
+    transition: none;
+  }
+}
+
+:global(:root[data-motion='off']) .hole {
+  transition: none;
+}
+
+.ground {
+  fill: var(--pb-surface-2);
+}
+.blocks {
+  fill: var(--pb-surface);
+  stroke: var(--pb-border);
+  stroke-width: 0.2;
+}
+.parks {
+  fill: color-mix(in srgb, var(--pb-accent-3) 14%, var(--pb-surface));
+}
+.roadLines {
+  fill: none;
+  stroke: var(--pb-text-muted);
+  stroke-width: 0.3;
+  stroke-dasharray: 1 2;
+  opacity: 0.5;
+}
+.crossings {
+  fill: none;
+  stroke: var(--pb-text-muted);
+  stroke-width: 0.8;
+  opacity: 0.5;
+}
+.props {
+  stroke-width: 0.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.bin {
+  fill: var(--pb-info);
+  stroke: var(--pb-bg);
+  stroke-width: 0.2;
+}
+.tree {
+  fill: var(--pb-accent-3);
+  stroke: var(--pb-bg);
+  stroke-width: 0.35;
+}
+.treeLight {
+  fill: color-mix(in srgb, var(--pb-accent-3) 65%, var(--pb-text));
+  stroke: none;
+}
+.bench {
+  fill: var(--pb-accent-2-fill);
+  stroke: var(--pb-bg);
+  stroke-width: 0.3;
+}
+.car {
+  fill: var(--pb-info);
+  stroke: var(--pb-bg);
+  stroke-width: 0.3;
+}
+.tyres {
+  stroke: var(--pb-bg);
+  stroke-width: 1;
+}
+.glass {
+  fill: var(--pb-bg);
+  stroke: none;
+}
+.headlights {
+  stroke: var(--pb-text);
+  stroke-width: 0.5;
+}
+.house {
+  fill: var(--pb-accent-2-fill);
+  stroke: var(--pb-bg);
+  stroke-width: 0.35;
+}
+.roof {
+  fill: var(--pb-surface-2);
+}
+.roofLine {
+  fill: none;
+  stroke: var(--pb-text-muted);
+  stroke-width: 0.3;
+}
+.window {
+  fill: var(--pb-info);
+  stroke: var(--pb-info);
+  stroke-width: 1;
+}
+.tower {
+  fill: var(--pb-text-muted);
+  stroke: var(--pb-bg);
+  stroke-width: 0.4;
+}
+.towerSide {
+  fill: color-mix(in srgb, var(--pb-text-muted) 60%, var(--pb-bg));
+}
+.rim {
+  fill: var(--pb-hole-color);
+  stroke: var(--pb-hole-color);
+  stroke-width: 0.35;
+}
+.void {
+  fill: var(--pb-bg);
+}
+.shine {
+  fill: none;
+  stroke: var(--pb-hole-color);
+  stroke-width: 0.3;
+}
+.shield {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: 0.3;
+  stroke-dasharray: 0.8 0.6;
+}
+.number {
+  fill: var(--pb-text);
+  font-weight: 1000;
+}
+.labelRing {
+  fill: var(--pb-bg);
+  stroke: var(--pb-hole-color);
+  stroke-width: 0.4;
+}
+.callout {
+  fill: none;
+  stroke: var(--pb-hole-color);
+  stroke-width: 0.3;
+}
+.you {
+  fill: var(--pb-text);
+  stroke: var(--pb-bg);
+  stroke-width: 0.3;
+}
+.gain {
+  fill: var(--pb-text);
+  stroke: var(--pb-bg);
+  stroke-width: 0.55;
+  paint-order: stroke;
+  font-weight: 900;
+}
+.returning {
+  fill: var(--pb-text);
+  stroke: var(--pb-bg);
+  stroke-width: 0.5;
+  paint-order: stroke;
+  font-weight: 900;
+}
+.hole[data-respawn='true'] .rim {
+  fill: none;
+  stroke-dasharray: 0.7 0.7;
+}
+.hole[data-respawn='true'] .void {
+  fill: var(--pb-surface);
+}
+.hole[data-me='true'] .rim {
+  stroke-width: 0.6;
+}

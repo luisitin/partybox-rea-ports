@@ -28,3 +28,10 @@
   They should be labeled as adaptation rules in the game README.
 - Art is original schematic city geometry. No trademarks, original maps,
   sounds, sprites, fonts or compiled bundles are included.
+
+- The inherited games/AGENTS.md references docs/ADDING_A_GAME.md, pnpm gen-registry
+  and pnpm verify from the private shell. Those are absent in this public workshop;
+  use its README, RULES and actual SDK contract suite rather than inventing registry files.
+- The computer-use inventory returned no available surfaces. Static React renders and
+  one own headless Edge supplied game-screen verification. Chrome navigation stalled,
+  so its own instance was closed before Edge was tried. No live original play occurred.

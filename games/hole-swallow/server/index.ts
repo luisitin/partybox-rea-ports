@@ -106,13 +106,14 @@ function tvView(s: State): HoleTvView {
 function controllerView(s: State, id: string): HoleControllerView {
   const city = cityView(s);
   const mine = city.holes.find((h) => h.id === id) ?? null;
-  const stage = s.phoneOnly || (hasPlayer(s, id) && s.players[id]?.canSeeTv === false);
+  const stage = s.phoneOnly || !hasPlayer(s, id) || s.players[id]?.canSeeTv === false;
   return {
     ...controllerEnvelope(s, manifest.id, id, { statusOf: statusOf(s) }),
     deadline: s.phase.id === 'play' ? s.endsAt : s.phase.deadline,
     ...(stage ? { city } : {}),
     mine,
     scores: s.scores,
+    slots: Object.fromEntries(city.holes.map((h) => [h.id, h.slot])),
     slot: mine?.slot ?? -1,
     stage,
     rank:

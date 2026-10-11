@@ -1,0 +1,439 @@
+{
+  "generatedAt": "2026-10-11T22:08:29.974Z",
+  "command": "node node_modules/.pnpm/vitest@4.1.11_@types+node@2_6f7f49d5f79f70060468fd578c50a0da/node_modules/vitest/vitest.mjs run games/hole-swallow --maxWorkers=1 --pool=threads --exclude games/hole-swallow/__tests__/contract.test.ts --exclude games/hole-swallow/__tests__/properties.test.ts --exclude games/hole-swallow/__tests__/screens.test.tsx",
+  "baseline": {
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "totalTests": 44,
+    "failedTests": [],
+    "failedLoads": [],
+    "invalid": false,
+    "killed": false
+  },
+  "sourceSha256": {
+    "games/hole-swallow/server/world.ts": "2c11ec55c3dab752ee84b0871fb42d1491e8eb99cb56af55e9c085c9f7b66329",
+    "games/hole-swallow/server/scoring.ts": "fb64d15f432f7e7d5c2ce01464b131b320e20e68475ea8a09faaa6df8b7efd98",
+    "games/hole-swallow/server/phases/play.ts": "bf750df620490376413d452dd8b002dff790689e51b97f7cd45a4f7cc4b785ae",
+    "games/hole-swallow/server/index.ts": "69383f9a831246c48fac303c565321fa7dad50c2b6baa15118746aab684d2a90",
+    "games/hole-swallow/server/bot.ts": "7343f863cbde030a65f9e121cc354e2f3035586517b2051411e5dbd6b860c7d7"
+  },
+  "requiredCaught": 19,
+  "caught": 20,
+  "survived": 0,
+  "invalid": 0,
+  "mutations": [
+    {
+      "id": "M01",
+      "name": "Double the intake score",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "hole.score += points;",
+      "to": "hole.score += points * 2;",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "a ninety-second round credits elapsed intake before skip and end, and freezes the reveal city",
+        "swallowing city objects credits the bin intake in score and growth exactly once",
+        "swallowing city objects credits the tree intake in score and growth exactly once",
+        "swallowing city objects credits the bench intake in score and growth exactly once",
+        "swallowing city objects credits the car intake in score and growth exactly once",
+        "swallowing city objects credits the house intake in score and growth exactly once",
+        "swallowing city objects credits the tower intake in score and growth exactly once",
+        "swallowing city objects requires a strictly wider rim and enough footprint overlap",
+        "swallowing city objects recycles small props after twenty seconds and never recycles buildings",
+        "swallowing city objects a contested prop goes once to the nearest hole, independently of array order",
+        "swallowing city objects exact ties rotate the priority across seats instead of permanently favouring seat zero",
+        "predation and a fair comeback credits the hunter, resets victim growth, retains victim points, and waits exactly three seconds",
+        "predation and a fair comeback resolves a simultaneous swarm largest first, so an eaten hole cannot eat another"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M02",
+      "name": "Lose growth from swallowed props",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "hole.mass += points;",
+      "to": "hole.mass += 0;",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "swallowing city objects credits the bin intake in score and growth exactly once",
+        "swallowing city objects credits the tree intake in score and growth exactly once",
+        "swallowing city objects credits the bench intake in score and growth exactly once",
+        "swallowing city objects credits the car intake in score and growth exactly once",
+        "swallowing city objects credits the house intake in score and growth exactly once",
+        "swallowing city objects credits the tower intake in score and growth exactly once",
+        "predation and a fair comeback credits the hunter, resets victim growth, retains victim points, and waits exactly three seconds",
+        "predation and a fair comeback resolves a simultaneous swarm largest first, so an eaten hole cannot eat another"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M03",
+      "name": "Award final growth instead of retained intake",
+      "file": "games/hole-swallow/server/scoring.ts",
+      "from": "world.holes.map((h) => [h.id, h.score])",
+      "to": "world.holes.map((h) => [h.id, h.mass])",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "a ninety-second round uses accumulated intake rather than current mass and gives true ties equal ranks",
+        "holds, identity, and connectivity settles and stops a disconnected hole, blocks its inputs, and reconnects without losing score"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M04",
+      "name": "Allow an equal-width object to fit",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "p.availableAt > at || p.radius >= radius",
+      "to": "p.availableAt > at || p.radius > radius",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "swallowing city objects requires a strictly wider rim and enough footprint overlap"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M05",
+      "name": "Consume an object without footprint overlap",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "distance > (radius - p.radius * 0.5) ** 2",
+      "to": "distance > (radius + p.radius * 0.5) ** 2",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "swallowing city objects requires a strictly wider rim and enough footprint overlap"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M06",
+      "name": "Let diagonal steering move faster",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "const norm = Math.max(1, Math.hypot(input.x, input.y));",
+      "to": "const norm = 1;",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "city growth and motion normalizes diagonal steering without increasing travel speed; release stops"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M07",
+      "name": "Accept an input from before the settled world",
+      "file": "games/hole-swallow/server/phases/play.ts",
+      "from": "event.now < state.began + state.world.elapsed",
+      "to": "false",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "holds, identity, and connectivity never mutates frozen input states, rejects earlier movement, and keeps scoring serializable"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M08",
+      "name": "Accept a stale timer phase stamp",
+      "file": "games/hole-swallow/server/phases/play.ts",
+      "from": "!isTimerFor(state, event) || event.now < (state.phase.deadline ?? Infinity)",
+      "to": "event.now < (state.phase.deadline ?? Infinity)",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "a ninety-second round ignores timers with a stale instance, wrong phase, and an early timestamp"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M09",
+      "name": "Keep the old round end after resuming a pause",
+      "file": "games/hole-swallow/server/index.ts",
+      "from": "endsAt: s.endsAt + ms",
+      "to": "endsAt: s.endsAt",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "holds, identity, and connectivity holds simulation and inputs while paused, then shifts every absolute clock exactly once"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M10",
+      "name": "Miss the phase exit at exactly ninety seconds",
+      "file": "games/hole-swallow/server/phases/play.ts",
+      "from": "return now >= s.endsAt ? next(s, now) : nextStep(s, Math.min(s.endsAt, now + TICK_MS));",
+      "to": "return now > s.endsAt ? next(s, now) : nextStep(s, Math.min(s.endsAt, now + TICK_MS));",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "a ninety-second round ends exactly at ninety seconds, reveals for seven seconds, then returns complete results",
+        "holds, identity, and connectivity holds simulation and inputs while paused, then shifts every absolute clock exactly once",
+        "holds, identity, and connectivity settles and stops a disconnected hole, blocks its inputs, and reconnects without losing score",
+        "three honest bot strengths does not act twice on one sample, while paused, disconnected, respawning, or after play"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M11",
+      "name": "Leak private RNG state through the stage view",
+      "file": "games/hole-swallow/server/index.ts",
+      "from": "elapsed: s.world.elapsed,",
+      "to": "elapsed: s.world.elapsed, rng: s.rng,",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "public stage and personal phone payloads shows every hole on the TV, only your hole on a nearby phone, and never simulation bookkeeping"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M12",
+      "name": "Remove sharp bots selective hunting strategy",
+      "file": "games/hole-swallow/server/bot.ts",
+      "from": "if (skill === 'sharp' && !threats.length)",
+      "to": "if (skill === 'easy' && !threats.length)",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "three honest bot strengths sharp hunts an edible rival when worthwhile; normal farms, and sharp respects rival shields"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M13",
+      "name": "Drop protection when a victim respawns",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "h.immuneUntil = at + IMMUNE_MS;",
+      "to": "h.immuneUntil = at;",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "public stage and personal phone payloads omits swallowed props, names comeback duration and shield, and expires gain feedback after a second",
+        "predation and a fair comeback credits the hunter, resets victim growth, retains victim points, and waits exactly three seconds"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M14",
+      "name": "Erase accumulated score when swallowed",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "small.mass = 0;",
+      "to": "small.mass = 0; small.score = 0;",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "predation and a fair comeback credits the hunter, resets victim growth, retains victim points, and waits exactly three seconds"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M15",
+      "name": "Allow equal holes to swallow one another",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "br < sr * 1.25",
+      "to": "br < sr",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "swallowing city objects a contested prop goes once to the nearest hole, independently of array order",
+        "swallowing city objects exact ties rotate the priority across seats instead of permanently favouring seat zero",
+        "predation and a fair comeback requires 25 percent wider size; equal holes cannot swallow each other"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M16",
+      "name": "Bypass the victims active shield",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "small === big || small.respawnAt !== null || small.immuneUntil > at",
+      "to": "small === big || small.respawnAt !== null",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "predation and a fair comeback a shield prevents both eating and being eaten and expires on its exact tick"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M17",
+      "name": "Double the forced respawn wait",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "small.respawnAt = at + RESPAWN_MS;",
+      "to": "small.respawnAt = at + RESPAWN_MS * 2;",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "predation and a fair comeback requires 25 percent wider size; equal holes cannot swallow each other",
+        "predation and a fair comeback credits the hunter, resets victim growth, retains victim points, and waits exactly three seconds",
+        "predation and a fair comeback a shield prevents both eating and being eaten and expires on its exact tick",
+        "predation and a fair comeback resolves a simultaneous swarm largest first, so an eaten hole cannot eat another"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M18",
+      "name": "Slow growing holes twice as quickly",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "19 - Math.sqrt(mass) * 0.35",
+      "to": "19 - Math.sqrt(mass) * 0.7",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "city growth and motion pins original size, capped square-root growth, and slower large holes"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M19",
+      "name": "Give a contested prop to the farther hole",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "distance < prev.distance",
+      "to": "distance > prev.distance",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "swallowing city objects a contested prop goes once to the nearest hole, independently of array order"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    },
+    {
+      "id": "M20",
+      "name": "Remove small-object recycling",
+      "file": "games/hole-swallow/server/world.ts",
+      "from": "p.radius <= 2.6 ? at + RECYCLE_MS : ROUND_MS + 1",
+      "to": "p.radius < 0 ? at + RECYCLE_MS : ROUND_MS + 1",
+      "status": "KILLED",
+      "restored": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "totalTests": 44,
+      "failedTests": [
+        "swallowing city objects recycles small props after twenty seconds and never recycles buildings"
+      ],
+      "failedLoads": [],
+      "invalid": false,
+      "killed": true
+    }
+  ],
+  "finishedAt": "2026-10-11T22:09:28.356Z",
+  "complete": true,
+  "passed": true
+}
