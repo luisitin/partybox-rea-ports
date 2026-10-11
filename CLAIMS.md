@@ -12,4 +12,6 @@ P06 r6-local 2026-10-11T21:32:03Z job/P06-snake-royale
 
 P07 r4-local 2026-10-11T21:24:14Z job/P07-paper-territory
 
+P08 r7-local 2026-10-11T21:40:17Z job/P08-hole-swallow
+
 <!-- prettier-ignore-end -->
