@@ -51,6 +51,7 @@ export interface FountainProps {
   trail?: Point[];
   label: string;
   numbered?: boolean;
+  animated?: boolean;
 }
 
 export function Fountain({
@@ -58,13 +59,24 @@ export function Fountain({
   trail = [],
   label,
   numbered = false,
+  animated = false,
 }: FountainProps): JSX.Element {
   let number = 0;
   return (
-    <svg viewBox="0 0 100 100" className={styles.fountain} role="img" aria-label={label}>
+    <svg
+      viewBox="0 0 100 100"
+      className={styles.fountain}
+      role="img"
+      aria-label={label}
+      data-animated={animated ? 'true' : undefined}
+    >
       <path d="M8 96q42-8 84 0" className={styles.rim} />
       {targets.map((target) => (
-        <g key={target.id} transform={`translate(${target.x} ${target.y})`}>
+        <g
+          key={target.id}
+          className={styles.target}
+          transform={`translate(${target.x} ${target.y})`}
+        >
           <FruitArt kind={target.kind} bomb={target.bomb} />
           {numbered && !target.bomb ? (
             <text y="1.5" className={styles.number}>

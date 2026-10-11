@@ -5,6 +5,20 @@
   overflow: hidden;
 }
 
+.fountain[data-animated='true'] .target {
+  transition: transform var(--pb-motion-fast) var(--pb-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .target {
+    transition: none;
+  }
+}
+
+:global(:root[data-motion='off']) .target {
+  transition: none;
+}
+
 .apple {
   fill: var(--pb-player-1);
 }

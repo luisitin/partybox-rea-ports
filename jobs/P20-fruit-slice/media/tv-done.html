@@ -428,6 +428,20 @@ ight is the :root default above) ────────
       overflow: hidden;
     }
 
+    ._fountain_11272d[data-animated='true'] ._target_11272d {
+      transition: transform var(--pb-motion-fast) var(--pb-ease);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      ._target_11272d {
+        transition: none;
+      }
+    }
+
+    :root[data-motion='off'] ._target_11272d {
+      transition: none;
+    }
+
     ._apple_11272d {
       fill: var(--pb-player-1);
     }
@@ -779,35 +793,35 @@ ight is the :root default above) ────────
                 aria-label="Shared fruit fountain. X marks a bomb."
               >
                 <path d="M8 96q42-8 84 0" class="_rim_11272d"></path>
-                <g transform="translate(10 92)">
+                <g class="_target_11272d" transform="translate(10 92)">
                   <g class="_pear_11272d">
                     <path d="M0-6c3 0 2 2 4 4 5 6 1 9-4 9s-9-3-4-9c2-2 1-4 4-4Z"></path>
                     <path d="M0-6v-3m0 2q3-3 4-1-1 2-4 1" class="_leaf_11272d"></path>
                     <path d="M-3 1q-2 3 0 4" class="_detail_11272d"></path>
                   </g>
                 </g>
-                <g transform="translate(36.33 92)">
+                <g class="_target_11272d" transform="translate(36.33 92)">
                   <g class="_pear_11272d">
                     <path d="M0-6c3 0 2 2 4 4 5 6 1 9-4 9s-9-3-4-9c2-2 1-4 4-4Z"></path>
                     <path d="M0-6v-3m0 2q3-3 4-1-1 2-4 1" class="_leaf_11272d"></path>
                     <path d="M-3 1q-2 3 0 4" class="_detail_11272d"></path>
                   </g>
                 </g>
-                <g transform="translate(56.67 92)">
+                <g class="_target_11272d" transform="translate(56.67 92)">
                   <g class="_pear_11272d">
                     <path d="M0-6c3 0 2 2 4 4 5 6 1 9-4 9s-9-3-4-9c2-2 1-4 4-4Z"></path>
                     <path d="M0-6v-3m0 2q3-3 4-1-1 2-4 1" class="_leaf_11272d"></path>
                     <path d="M-3 1q-2 3 0 4" class="_detail_11272d"></path>
                   </g>
                 </g>
-                <g transform="translate(79 92)">
+                <g class="_target_11272d" transform="translate(79 92)">
                   <g class="_pear_11272d">
                     <path d="M0-6c3 0 2 2 4 4 5 6 1 9-4 9s-9-3-4-9c2-2 1-4 4-4Z"></path>
                     <path d="M0-6v-3m0 2q3-3 4-1-1 2-4 1" class="_leaf_11272d"></path>
                     <path d="M-3 1q-2 3 0 4" class="_detail_11272d"></path>
                   </g>
                 </g>
-                <g transform="translate(48 92)">
+                <g class="_target_11272d" transform="translate(48 92)">
                   <g class="_bomb_11272d">
                     <path d="M2-6 3-9 6-9" class="_fuse_11272d"></path>
                     <circle r="6.5"></circle>

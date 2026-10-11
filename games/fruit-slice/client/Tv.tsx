@@ -59,7 +59,11 @@ export function Tv({ view }: GameTvProps<SliceTvView>): JSX.Element {
       <div className={styles.board}>
         <div className={styles.arenaSlot}>
           <div className={styles.arena}>
-            <Fountain targets={view.targets} label={L('Shared fruit fountain. X marks a bomb.')} />
+            <Fountain
+              targets={view.targets}
+              label={L('Shared fruit fountain. X marks a bomb.')}
+              animated={running && !view.paused}
+            />
             {!running ? (
               <p className={styles.finished}>{L('60 seconds. Every slice counts.')}</p>
             ) : null}

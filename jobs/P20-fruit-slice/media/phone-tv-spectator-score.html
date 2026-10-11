@@ -428,6 +428,20 @@ ight is the :root default above) ────────
       overflow: hidden;
     }
 
+    ._fountain_11272d[data-animated='true'] ._target_11272d {
+      transition: transform var(--pb-motion-fast) var(--pb-ease);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      ._target_11272d {
+        transition: none;
+      }
+    }
+
+    :root[data-motion='off'] ._target_11272d {
+      transition: none;
+    }
+
     ._apple_11272d {
       fill: var(--pb-player-1);
     }

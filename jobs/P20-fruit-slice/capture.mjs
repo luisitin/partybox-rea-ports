@@ -82,6 +82,47 @@ try {
     const loaded = once('Page.loadEventFired');
     await send('Page.navigate', { url: pathToFileURL(join(media, file)).href });
     await loaded;
+    let motion = null;
+    if (file === 'tv-play.html') {
+      const probe = await send('Runtime.evaluate', {
+        expression: `(async () => {
+          const target = document.querySelector('svg[data-animated=true] > g');
+          if (!target) throw new Error('Animated TV target missing');
+          const original = target.getAttribute('transform');
+          const from = getComputedStyle(target).transform;
+          const duration = getComputedStyle(target).transitionDuration;
+          target.setAttribute('transform', 'translate(50 50)');
+          await new Promise(r => setTimeout(r, 75));
+          const mid = getComputedStyle(target).transform;
+          await new Promise(r => setTimeout(r, 150));
+          const to = getComputedStyle(target).transform;
+          target.setAttribute('transform', original);
+          await new Promise(r => setTimeout(r, 180));
+          document.documentElement.setAttribute('data-motion', 'off');
+          const off = getComputedStyle(target).transitionDuration;
+          document.documentElement.removeAttribute('data-motion');
+          return {duration, from, mid, to, off};
+        })()`,
+        awaitPromise: true,
+        returnByValue: true,
+      });
+      if (probe.exceptionDetails) throw new Error('TV motion probe failed');
+      motion = probe.result.value;
+      if (motion.mid === motion.from || motion.mid === motion.to || motion.off !== '0s')
+        throw new Error('TV motion did not interpolate or motion-off failed');
+      await send('Emulation.setEmulatedMedia', {
+        features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
+      });
+      const reduced = await send('Runtime.evaluate', {
+        expression:
+          "getComputedStyle(document.querySelector('svg[data-animated=true] > g')).transitionDuration",
+        returnByValue: true,
+      });
+      motion.reduced = reduced.result.value;
+      if (motion.reduced !== '0s') throw new Error('Reduced motion failed');
+      await send('Emulation.setEmulatedMedia', { features: [] });
+      console.log(JSON.stringify({ motion }));
+    }
     const measurement = await send('Runtime.evaluate', {
       expression: `JSON.stringify((() => {
       const root = document.getElementById('root');
@@ -95,7 +136,7 @@ try {
       returnByValue: true,
     });
     const fit = JSON.parse(measurement.result.value);
-    report.push({ file, ...fit });
+    report.push({ file, ...fit, ...(motion ? { motion } : {}) });
     const png = await send('Page.captureScreenshot', {
       format: 'png',
       captureBeyondViewport: false,

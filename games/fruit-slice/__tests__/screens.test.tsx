@@ -20,10 +20,11 @@ const fixtures = { play, score, done } as unknown as Record<string, State>;
 const media = new URL('../../../jobs/P20-fruit-slice/media/', import.meta.url);
 const tokens = readFileSync(new URL('../../../design/tokens.css', import.meta.url), 'utf8');
 function css(name: string, mapping: Record<string, string>): string {
-  return readFileSync(new URL(`../client/${name}.module.css`, import.meta.url), 'utf8').replace(
-    /\.([A-Za-z][\w-]*)/g,
-    (full, key: string) => (mapping[key] ? `.${mapping[key]}` : full),
-  );
+  return readFileSync(new URL(`../client/${name}.module.css`, import.meta.url), 'utf8')
+    .replace(/\.([A-Za-z][\w-]*)/g, (full, key: string) =>
+      mapping[key] ? `.${mapping[key]}` : full,
+    )
+    .replace(/:global\(([^)]+)\)/g, '$1');
 }
 const styles =
   tokens +

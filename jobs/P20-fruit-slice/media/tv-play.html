@@ -428,6 +428,20 @@ ight is the :root default above) ────────
       overflow: hidden;
     }
 
+    ._fountain_11272d[data-animated='true'] ._target_11272d {
+      transition: transform var(--pb-motion-fast) var(--pb-ease);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      ._target_11272d {
+        transition: none;
+      }
+    }
+
+    :root[data-motion='off'] ._target_11272d {
+      transition: none;
+    }
+
     ._apple_11272d {
       fill: var(--pb-player-1);
     }
@@ -780,16 +794,17 @@ ight is the :root default above) ────────
                 class="_fountain_11272d"
                 role="img"
                 aria-label="Shared fruit fountain. X marks a bomb."
+                data-animated="true"
               >
                 <path d="M8 96q42-8 84 0" class="_rim_11272d"></path>
-                <g transform="translate(17.5 38)">
+                <g class="_target_11272d" transform="translate(17.5 38)">
                   <g class="_orange_11272d">
                     <circle r="6.5"></circle>
                     <path d="M0-5.8q1-4 4-3-1 3-4 3" class="_leaf_11272d"></path>
                     <path d="M-3-3h.1M0-4h.1M3-2h.1M-4 0h.1M2 3h.1" class="_detail_11272d"></path>
                   </g>
                 </g>
-                <g transform="translate(47 38)">
+                <g class="_target_11272d" transform="translate(47 38)">
                   <g class="_melon_11272d">
                     <circle r="6.5"></circle>
                     <path
@@ -798,14 +813,14 @@ ight is the :root default above) ────────
                     ></path>
                   </g>
                 </g>
-                <g transform="translate(79.5 38)">
+                <g class="_target_11272d" transform="translate(79.5 38)">
                   <g class="_apple_11272d">
                     <path d="M0-5q-6-4-7 2c-1 6 3 10 7 8 4 2 8-2 7-8Q6-9 0-5Z"></path>
                     <path d="M0-5v-4m0 1q3-4 5-2-1 3-5 3" class="_leaf_11272d"></path>
                     <path d="M-4-2q-2 2-1 4" class="_detail_11272d"></path>
                   </g>
                 </g>
-                <g transform="translate(43 60)">
+                <g class="_target_11272d" transform="translate(43 60)">
                   <g class="_bomb_11272d">
                     <path d="M2-6 3-9 6-9" class="_fuse_11272d"></path>
                     <circle r="6.5"></circle>

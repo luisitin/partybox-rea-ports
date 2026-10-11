@@ -18,3 +18,8 @@ ties are fair and intentional, and name truncation already keeps controls clear.
   one bounded label per scoring player, at least 32 px on TV. Personal cuts
   remain private; totals and accepted gains are public. Compact phones keep the
   same space, with the player's own feedback already above the board.
+- Round 3: TV targets now interpolate each 200 ms update for the 150 ms motion
+  token. Before: ten discrete positions per two-second flight; after: browser
+  transform interpolation between those positions, with zero new JS tickers.
+  Pause and both motion-off settings disable it. Phone targets remain exact
+  judged positions so the visible gesture and server collision geometry agree.
