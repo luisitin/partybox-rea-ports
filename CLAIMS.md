@@ -30,7 +30,7 @@ P15 r12-local 2026-10-11T21:48:14Z job/P15-doodle-climb
 
 P16 r16-local 2026-10-11T21:48:36Z job/P16-stack-tower
 
-P17 r15-local 2026-10-11T21:48:38Z job/P17-helix-drop
+P17 r15-local 2026-10-11T21:52:12Z job/P17-helix-drop
 
 P18 r17-local 2026-10-11T21:49:49Z job/P18-colour-gate
 
