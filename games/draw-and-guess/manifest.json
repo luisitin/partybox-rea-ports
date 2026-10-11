@@ -1,0 +1,56 @@
+{
+  "id": "draw-and-guess",
+  "name": "Draw and Guess",
+  "icon": "✏️",
+  "tagline": "Tiny doodles. Big discoveries.",
+  "description": "Take turns drawing a secret word on your phone while everyone races to guess. The shared picture grows live, letters help late in the turn, and quick guesses earn more points. Good drawings score too!",
+  "howToPlay": [
+    "The artist picks a secret word, then draws it. Draw pictures, not letters.",
+    "Everyone else types guesses on their phone. Watch the picture and the letter hints.",
+    "Quick guesses score more. The artist earns points for every solver. Most points wins."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 12,
+  "category": "arcade",
+  "tags": ["comedy"],
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-10-11",
+  "supportsBots": true,
+  "settings": [
+    {
+      "key": "laps",
+      "label": "Drawing turns each",
+      "description": "Everyone gets the same number of drawing turns",
+      "type": "number",
+      "default": 1,
+      "min": 1,
+      "max": 2,
+      "step": 1
+    },
+    {
+      "key": "drawSeconds",
+      "label": "Drawing time",
+      "description": "Seconds for each picture",
+      "type": "number",
+      "default": 60,
+      "min": 30,
+      "max": 60,
+      "step": 15
+    },
+    {
+      "key": "difficulty",
+      "label": "Word deck",
+      "description": "Simple objects, trickier pictures or a mixture",
+      "type": "select",
+      "default": "mixed",
+      "options": [
+        { "value": "easy", "label": "Easy" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "hard", "label": "Hard" },
+        { "value": "mixed", "label": "Mixed" }
+      ]
+    }
+  ]
+}
