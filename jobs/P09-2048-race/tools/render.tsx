@@ -60,7 +60,7 @@ button { font-family: inherit; }
 #shell-header span { color: var(--pb-text-muted); }
 #game-frame { display: flex; flex-direction: column; min-width: 0; min-height: 0; --pb-stage-top: 0px; }
 #game-frame > * { width: 100%; }
-#shell-footer { display: flex; align-items: center; justify-content: center; color: var(--pb-text-muted); font-size: var(--pb-font-caption); }
+#shell-footer { display: flex; align-items: center; justify-content: center; color: var(--pb-text-muted); font-size: var(--pb-font-body); }
 </style>
 </head>
 <body data-capture="${escape(title)}">

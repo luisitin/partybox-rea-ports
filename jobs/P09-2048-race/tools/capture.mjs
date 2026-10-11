@@ -1,5 +1,5 @@
 // One headless Chrome process and one reused page for static SSR evidence.
-import { spawn, execFileSync } from 'node:child_process';
+import { spawn, execFile } from 'node:child_process';
 import { mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
@@ -10,36 +10,172 @@ const job = fileURLToPath(new URL('../', import.meta.url));
 const media = join(job, 'media');
 const delay = (ms) => new Promise((done) => setTimeout(done, ms));
 
-function devToolsEndpoint(child) {
-  return new Promise((done, reject) => {
-    let output = '';
-    const timeout = setTimeout(
-      () => finish(new Error('Chrome did not expose CDP within 20 seconds')),
-      20000,
+async function devToolsEndpoint(child, profile) {
+  let output = '';
+  let launchError;
+  let lastRead = 'DevToolsActivePort has not appeared';
+  const deadline = Date.now() + 60000;
+  const observe = (chunk) => {
+    output = `${output}${chunk}`.slice(-32000);
+  };
+  const failed = (error) => {
+    launchError = error;
+  };
+  child.stderr.on('data', observe);
+  child.on('error', failed);
+  try {
+    while (Date.now() < deadline) {
+      // Windows Chrome may hand off to a new browser PID and exit its launcher with code 0.
+      // The unique profile's port file is authoritative; launcher exit is not browser exit.
+      try {
+        const lines = (await readFile(join(profile, 'DevToolsActivePort'), 'utf8'))
+          .trim()
+          .split(/\r?\n/);
+        const port = Number(lines[0]);
+        const path = lines[1];
+        if (
+          Number.isInteger(port) &&
+          port > 0 &&
+          port <= 65535 &&
+          /^\/devtools\/browser\/[a-zA-Z0-9-]+$/.test(path ?? '')
+        ) {
+          return `ws://127.0.0.1:${port}${path}`;
+        }
+        lastRead = 'DevToolsActivePort is incomplete or invalid';
+      } catch (error) {
+        lastRead = error.code === 'ENOENT' ? 'DevToolsActivePort has not appeared' : error.message;
+      }
+      if (launchError) throw launchError;
+      await delay(200);
+    }
+    throw new Error(
+      `Chrome did not expose DevToolsActivePort within 60 seconds (launcher PID ${child.pid ?? 'unassigned'}, exit ${child.exitCode ?? 'running'}; ${lastRead}). Collected stderr:\n${output || '<no stderr received>'}`,
     );
-    function finish(error, endpoint) {
-      clearTimeout(timeout);
-      child.stderr.off('data', observe);
-      child.off('error', failed);
-      child.off('exit', exited);
-      if (error) reject(error);
-      else done(endpoint);
+  } finally {
+    child.stderr.off('data', observe);
+    child.off('error', failed);
+  }
+}
+
+function ownedProfile(profile) {
+  const absolute = resolve(profile);
+  if (
+    dirname(absolute) !== resolve(tmpdir()) ||
+    !basename(absolute).startsWith('partybox-p09-capture-')
+  ) {
+    throw new Error(`Refusing cleanup outside the generated capture profile: ${absolute}`);
+  }
+  return absolute;
+}
+
+async function closeProfileProcesses(profile) {
+  // Pass ownership through an environment variable, never a string-built shell command.
+  // Enumerate/stop only chrome.exe processes with this exact user-data-dir argument.
+  const script = String.raw`
+$ErrorActionPreference = 'Stop'
+$taskCaptureProfile = $env:PB_P09_CAPTURE_PROFILE
+if ([string]::IsNullOrWhiteSpace($taskCaptureProfile)) { throw 'Missing capture profile' }
+$taskCapturePattern = '(?i)(?:^|\s|")--user-data-dir(?:=|\s+)"?' + [regex]::Escape($taskCaptureProfile) + '(?:"|\s|$)'
+$taskCaptureExited = [System.Collections.Generic.HashSet[int]]::new()
+function Get-TaskCaptureProcesses {
+  $taskCaptureCandidates = @(Get-CimInstance Win32_Process -Filter "Name='chrome.exe'" | Where-Object {
+    $_.CommandLine -and $_.CommandLine -match $taskCapturePattern
+  })
+  foreach ($taskCaptureCandidate in $taskCaptureCandidates) {
+    $taskCaptureCandidateHandle = Get-Process -Id ([int]$taskCaptureCandidate.ProcessId) -ErrorAction SilentlyContinue
+    if ($null -eq $taskCaptureCandidateHandle) {
+      [void]$taskCaptureExited.Add([int]$taskCaptureCandidate.ProcessId)
+      continue
     }
-    function observe(chunk) {
-      output = `${output}${chunk}`.slice(-32000);
-      const match = output.match(/DevTools listening on (ws:\/\/[^\s]+)/);
-      if (match) finish(null, match[1]);
+    try {
+      # CIM can retain records after Windows reports the actual process handle exited.
+      if ($taskCaptureCandidateHandle.HasExited) {
+        [void]$taskCaptureExited.Add([int]$taskCaptureCandidate.ProcessId)
+      } else {
+        $taskCaptureCandidate
+      }
+    } finally {
+      $taskCaptureCandidateHandle.Dispose()
     }
-    function failed(error) {
-      finish(error);
+  }
+}
+$taskCaptureInitial = @(Get-TaskCaptureProcesses)
+$taskCaptureIds = @($taskCaptureInitial | ForEach-Object { [int]$_.ProcessId })
+$taskCaptureRoots = @($taskCaptureInitial | Where-Object { [int]$_.ParentProcessId -notin $taskCaptureIds })
+$taskCaptureStopped = [System.Collections.Generic.List[int]]::new()
+foreach ($taskCaptureRoot in $taskCaptureRoots) {
+  try {
+    & taskkill.exe /PID ([string]$taskCaptureRoot.ProcessId) /T /F 2>$null | Out-Null
+  } catch {
+    # Force-stop/WaitForExit below still verifies every living matching PID.
+  }
+}
+$taskCaptureDeadline = [DateTime]::UtcNow.AddSeconds(25)
+do {
+  $taskCaptureRemaining = @(Get-TaskCaptureProcesses)
+  if ($taskCaptureRemaining.Count -eq 0) { break }
+  foreach ($taskCaptureEntry in $taskCaptureRemaining) {
+    $taskCaptureHandle = Get-Process -Id ([int]$taskCaptureEntry.ProcessId) -ErrorAction SilentlyContinue
+    if ($null -eq $taskCaptureHandle) { continue }
+    try {
+      Stop-Process -InputObject $taskCaptureHandle -Force -ErrorAction Stop
+      [void]$taskCaptureHandle.WaitForExit(500)
+      $taskCaptureStopped.Add([int]$taskCaptureEntry.ProcessId)
+    } catch {
+      # A concurrent graceful exit is harmless; the final liveness query decides success.
+    } finally {
+      $taskCaptureHandle.Dispose()
     }
-    function exited(code) {
-      finish(new Error(`Chrome exited before CDP opened (${code}): ${output.slice(-600)}`));
-    }
-    child.stderr.on('data', observe);
-    child.once('error', failed);
-    child.once('exit', exited);
+    if ([DateTime]::UtcNow -ge $taskCaptureDeadline) { break }
+  }
+  if ([DateTime]::UtcNow -ge $taskCaptureDeadline) { break }
+  Start-Sleep -Milliseconds 200
+} while ($true)
+$taskCaptureRemaining = @(Get-TaskCaptureProcesses)
+$taskCaptureReport = [pscustomobject]@{
+  matchedPids = @($taskCaptureIds)
+  rootPids = @($taskCaptureRoots | ForEach-Object { [int]$_.ProcessId })
+  forceStoppedPids = @($taskCaptureStopped)
+  remainingPids = @($taskCaptureRemaining | ForEach-Object { [int]$_.ProcessId })
+  ignoredExitedPids = @($taskCaptureExited)
+}
+$taskCaptureReport | ConvertTo-Json -Compress -Depth 4
+if ($taskCaptureRemaining.Count -ne 0) { throw 'Owned capture Chrome processes remain after bounded cleanup' }
+`;
+  const report = await new Promise((done, reject) => {
+    execFile(
+      'powershell.exe',
+      ['-NoProfile', '-NonInteractive', '-Command', script],
+      {
+        windowsHide: true,
+        timeout: 60000,
+        maxBuffer: 64 * 1024,
+        encoding: 'utf8',
+        env: { ...process.env, PB_P09_CAPTURE_PROFILE: ownedProfile(profile) },
+      },
+      (error, stdout, stderr) => {
+        if (error)
+          reject(
+            new Error(
+              `Owned-profile Chrome cleanup could not confirm zero processes: ${stdout.trim()} ${stderr.trim()}`,
+            ),
+          );
+        else {
+          try {
+            done(JSON.parse(stdout.trim()));
+          } catch (parseError) {
+            reject(
+              new Error(
+                `Chrome cleanup returned an invalid PID-only report: ${parseError.message}`,
+              ),
+            );
+          }
+        }
+      },
+    );
   });
+  if (report.remainingPids.length !== 0) throw new Error('Owned Chrome cleanup report is nonzero');
+  console.log(JSON.stringify({ cleanup: report }));
 }
 
 class Cdp {
@@ -70,8 +206,8 @@ class Cdp {
     await new Promise((done, reject) => {
       const timeout = setTimeout(() => {
         socket.close();
-        reject(new Error('CDP WebSocket open timed out'));
-      }, 10000);
+        reject(new Error('CDP WebSocket open timed out after 60 seconds'));
+      }, 60000);
       socket.addEventListener(
         'open',
         () => {
@@ -92,7 +228,7 @@ class Cdp {
     return new Cdp(socket);
   }
 
-  send(method, params = {}, sessionId, timeoutMs = 15000) {
+  send(method, params = {}, sessionId, timeoutMs = 60000) {
     const id = this.nextId++;
     return new Promise((done, reject) => {
       const timeout = setTimeout(() => {
@@ -262,6 +398,7 @@ function measure() {
 let browser;
 let cdp;
 let profile;
+let captureError;
 try {
   await stat(chromePath);
   await mkdir(media, { recursive: true });
@@ -287,7 +424,7 @@ try {
     ],
     { windowsHide: true, stdio: ['ignore', 'ignore', 'pipe'] },
   );
-  cdp = await Cdp.open(await devToolsEndpoint(browser));
+  cdp = await Cdp.open(await devToolsEndpoint(browser, profile));
   const { targetId } = await cdp.send('Target.createTarget', { url: 'about:blank' });
   const { sessionId } = await cdp.send('Target.attachToTarget', { targetId, flatten: true });
   await cdp.send('Page.enable', {}, sessionId);
@@ -330,7 +467,8 @@ try {
     if (navigation.errorText) throw new Error(`${filename}: ${navigation.errorText}`);
     // Wait for the correct local document, fonts, and two layout frames without adding a browser.
     let ready = false;
-    for (let attempt = 0; attempt < 50; attempt++) {
+    const readyDeadline = Date.now() + 60000;
+    while (Date.now() < readyDeadline) {
       const result = await cdp.send(
         'Runtime.evaluate',
         {
@@ -345,7 +483,8 @@ try {
       }
       await delay(100);
     }
-    if (!ready) throw new Error(`${filename}: local document did not become ready`);
+    if (!ready)
+      throw new Error(`${filename}: local document did not become ready within 60 seconds`);
     const settled = await cdp.send(
       'Runtime.evaluate',
       {
@@ -406,6 +545,9 @@ try {
   console.log(
     JSON.stringify({ captures: layouts.length, mediaBytes: bytes, report: 'media/layout.json' }),
   );
+} catch (error) {
+  captureError = error;
+  throw error;
 } finally {
   // Cleanup covers failures during launch, connection, navigation, layout inspection, or capture.
   if (cdp) {
@@ -414,30 +556,23 @@ try {
     } catch {
       /* close can end CDP before replying */
     }
-    cdp.socket.close();
-  }
-  if (browser && browser.exitCode === null && browser.signalCode === null) {
-    await Promise.race([new Promise((done) => browser.once('exit', done)), delay(1500)]);
-    if (browser.exitCode === null && browser.signalCode === null && browser.pid) {
-      try {
-        // Kill only the process tree this script launched if graceful CDP close failed.
-        execFileSync('taskkill.exe', ['/PID', String(browser.pid), '/T', '/F'], {
-          windowsHide: true,
-          stdio: 'ignore',
-          timeout: 4000,
-        });
-      } catch {
-        browser.kill('SIGKILL');
-      }
+    try {
+      cdp.socket.close();
+    } catch {
+      /* process cleanup must run even if the socket is already gone */
     }
   }
   if (profile) {
-    const absolute = resolve(profile);
-    if (
-      dirname(absolute) !== resolve(tmpdir()) ||
-      !basename(absolute).startsWith('partybox-p09-capture-')
-    ) {
-      throw new Error(`Refusing cleanup outside the generated capture profile: ${absolute}`);
+    const absolute = ownedProfile(profile);
+    try {
+      // Always run, even if the launcher exited, CDP never appeared, or Browser.close succeeded.
+      await closeProfileProcesses(absolute);
+    } catch (cleanupError) {
+      // Keep the exact ownership/profile evidence available for a manual PID audit.
+      throw new AggregateError(
+        captureError ? [captureError, cleanupError] : [cleanupError],
+        `Capture Chrome cleanup failed; profile retained for audit: ${absolute}`,
+      );
     }
     await rm(absolute, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 }).catch(
       () => undefined,

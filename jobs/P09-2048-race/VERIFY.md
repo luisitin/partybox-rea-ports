@@ -12,24 +12,24 @@ shim because machine policy blocks `pnpm.ps1`; CI uses `pnpm` on Ubuntu.
 | Install once       | `corepack enable`, then `pnpm.cmd install`                                                              | Passed; 87 packages, no dependency changes.                                                                                                              |
 | Original rules     | Original GameManager exercised in an ephemeral Node VM; transcript and seven rule probes in RESEARCH.md | Merge ordering, merge points, no-op spawning, target, and blocked-board behavior verified against the original engine. No copied source/assets retained. |
 | Independent source | Original creator and independently authored C++ engine, pinned URLs in SOURCES.md                       | Core rules cross-confirmed. Original visible-browser play unavailable; no visual/audio session claimed.                                                  |
-| TypeScript         | `pnpm.cmd typecheck`                                                                                    | Passed at first complete milestone; final run after subsequent edits **pending**.                                                                        |
-| Formatting         | `pnpm.cmd format`                                                                                       | Final whole-repository formatting check **pending**.                                                                                                     |
-| Own-game tests     | `pnpm.cmd vitest run games/merge-sprint --maxWorkers=1`                                                 | First complete milestone: 68 tests passed. Added coverage and final run **pending**.                                                                     |
-| SDK contract       | Included by `games/merge-sprint/__tests__/contract.test.ts` in the own-game command above               | Actual SDK contract suite passed at first milestone; discovery is filtered to this game. Final repeat **pending**.                                       |
+| TypeScript         | `pnpm.cmd typecheck`                                                                                    | Passed after the disconnect, privacy and readable-TV changes (exit 0).                                                                                   |
+| Formatting         | `pnpm.cmd format`                                                                                       | Passed: all matched files use Prettier code style (exit 0).                                                                                              |
+| Own-game tests     | `pnpm.cmd vitest run games/merge-sprint --maxWorkers=1`                                                 | Passed: 6 files, 76 tests, 24.43 seconds, exit 0.                                                                                                        |
+| SDK contract       | Included by `games/merge-sprint/__tests__/contract.test.ts` in the own-game command above               | Actual SDK contract suite passed in the 76-test run; discovery is filtered to this game.                                                                 |
 
 Tests cover deterministic replay, mass and scoring invariants, once-per-input
 merges, direction symmetry, identical shared draws independent of event order,
 stale/duplicate/rapid/spectator inputs, deadline boundaries, pause/resume,
 reconnection, dropped-player completion, all-phase views, private future draws,
 phone-only play, spectators, and three visible-board bot strategies. These are
-coverage descriptions; the latest pass count remains pending.
+coverage descriptions; all passed in the 76-test run.
 
 ## Seeded completion simulation — passed
 
 Exact command:
 
 ```text
-node --import tsx ./jobs/P09-2048-race/tools/simulation.ts
+pnpm.cmd exec tsx jobs/P09-2048-race/tools/simulation.ts
 ```
 
 [simulation.json](simulation.json) contains all 21 completed groups: every
@@ -57,7 +57,7 @@ race. It measures completion and standings, not touch latency or live browser
 performance. Every group records reasons, median score, accepted moves, and wall
 time in the JSON evidence. No other game's tests or browser were used.
 
-## Property seeds — final run pending
+## Property seeds — passed
 
 Included in the own-game command. Optional isolated reproduction:
 
@@ -70,14 +70,14 @@ under recorded fast-check seed **204809**. A separate replay property generates
 1,000 distinct race seeds and combines them with 1, 2, and 3, requiring exactly
 1,003 unique seeds. It checks identical initial state, matching player starts,
 deterministic timer transitions, equal public views, and absent future draws.
-Latest result: **pending**; source presence is not recorded as a test pass.
+Latest result: **passed** in the 76-test own-game run.
 
-## Mutation check — running, final result pending
+## Mutation check — passed, 20/20 caught
 
 Exact outer command:
 
 ```text
-node --import tsx ./jobs/P09-2048-race/tools/mutate.ts
+pnpm.cmd exec tsx jobs/P09-2048-race/tools/mutate.ts
 ```
 
 Each mutation runs this focused command after a passing baseline:
@@ -86,35 +86,41 @@ Each mutation runs this focused command after a passing baseline:
 pnpm.cmd vitest run games/merge-sprint/__tests__/board.test.ts games/merge-sprint/__tests__/game.test.ts --maxWorkers=1
 ```
 
-The script plants one bug at a time and restores each source in `finally`.
-Syntax/import/type failures do not count as caught rule bugs. Required result:
-at least **19/20** caught. `mutations.json` will record the actual failing tests
-and outcome of every entry; the complete result is not yet available.
+The script passed its unchanged-source baseline, planted one bug at a time,
+and restored each source in `finally`. [mutations.json](mutations.json) was read
+back: all **20 entries** have `caught: true`, `exitCode: 1`, `error: null`, and
+recorded failing-test labels. This exceeds the required **19/20**. Syntax,
+import, or type failures alone do not count as caught rule bugs. No mutant is
+retained in the implementation.
 
-| #   | Planted bug                          | Result  |
-| --- | ------------------------------------ | ------- |
-| 1   | Merge unequal tiles                  | Pending |
-| 2   | Wrong merged tile value              | Pending |
-| 3   | Half merge points                    | Pending |
-| 4   | Reuse the second tile                | Pending |
-| 5   | Reverse right input                  | Pending |
-| 6   | Ignore vertical merges               | Pending |
-| 7   | No empty-cell mobility               | Pending |
-| 8   | Wrong spawn normalization            | Pending |
-| 9   | Always spawn a four                  | Pending |
-| 10  | No-op spends a spawn                 | Pending |
-| 11  | Duplicate input accepted             | Pending |
-| 12  | No anti-flood interval               | Pending |
-| 13  | Deadline accepts final move          | Pending |
-| 14  | Target never ends race               | Pending |
-| 15  | Blocked boards never end race        | Pending |
-| 16  | Wrong draw index                     | Pending |
-| 17  | Score ignores earlier merges         | Pending |
-| 18  | Finished racer loses to higher score | Pending |
-| 19  | Reveal timer never exits             | Pending |
-| 20  | Future draws leak to public views    | Pending |
+The table lists each exact planted-bug name and its first recorded failing
+test, omitting only the output marker and elapsed milliseconds. The JSON keeps
+up to four original failure labels per mutant.
 
-## Screens, layout, and media hashes — final review pending
+| #   | Planted bug                       | Result         | First recorded failing test                                                             |
+| --- | --------------------------------- | -------------- | --------------------------------------------------------------------------------------- |
+| 1   | merge unequal tiles               | Caught; exit 1 | adds exactly the merged tile values and one spawn for an accepted move                  |
+| 2   | wrong merged tile value           | Caught; exit 1 | adds exactly the merged tile values and one spawn for an accepted move                  |
+| 3   | half merge points                 | Caught; exit 1 | adds exactly the merged tile values and one spawn for an accepted move                  |
+| 4   | reuse the second tile             | Caught; exit 1 | adds exactly the merged tile values and one spawn for an accepted move                  |
+| 5   | reverse right input               | Caught; exit 1 | merges once per tile from the edge being approached in all four directions              |
+| 6   | ignore vertical merges            | Caught; exit 1 | recognises blocked full boards, and finds vertical as well as horizontal merges         |
+| 7   | no empty-cell mobility            | Caught; exit 1 | recognises blocked full boards, and finds vertical as well as horizontal merges         |
+| 8   | wrong spawn normalization         | Caught; exit 1 | selects an empty cell by the shared normalized draw and never overwrites occupied cells |
+| 9   | always spawn a four               | Caught; exit 1 | selects an empty cell by the shared normalized draw and never overwrites occupied cells |
+| 10  | no-op spends a spawn              | Caught; exit 1 | does not spawn, score, count, or spend a draw on a direction that changes nothing       |
+| 11  | duplicate input accepted          | Caught; exit 1 | rejects duplicates, future counters, unknown ids and moves faster than 150ms            |
+| 12  | no anti-flood interval            | Caught; exit 1 | rejects duplicates, future counters, unknown ids and moves faster than 150ms            |
+| 13  | deadline accepts final move       | Caught; exit 1 | ends at the clock, rejects late moves, and lets identical highest scores share first    |
+| 14  | target never ends race            | Caught; exit 1 | the first 2048 ends every board and wins even against a higher merge score              |
+| 15  | blocked boards never end race     | Caught; exit 1 | ends early once the final live board blocks after a spawn                               |
+| 16  | wrong draw index                  | Caught; exit 1 | adds exactly the merged tile values and one spawn for an accepted move                  |
+| 17  | score ignores earlier merges      | Caught; exit 1 | adds exactly the merged tile values and one spawn for an accepted move                  |
+| 18  | finished loses to higher score    | Caught; exit 1 | the first 2048 ends every board and wins even against a higher merge score              |
+| 19  | reveal timer never exits          | Caught; exit 1 | the first 2048 ends every board and wins even against a higher merge score              |
+| 20  | future draws leak to public views | Caught; exit 1 | changing future spawn luck and RNG leaves every public view identical in play           |
+
+## Screens and layout — passed
 
 Exact SSR command:
 
@@ -128,19 +134,33 @@ TV is 1920 by 1080; phone is 390 by 844. The harness reserves shell space, embed
 the tokens and loaded SDK/game CSS modules, namespaces classes to avoid style
 collisions, supplies the SDK clock/provider, and starts no browser.
 
-Exact PNG/layout command, **pending**:
+Exact PNG/layout command, passed:
 
 ```text
 node ./jobs/P09-2048-race/tools/capture.mjs
 ```
 
-One headless Chrome process and one reused page capture every local HTML file.
-Chrome is closed in `finally`, with a bounded process-tree fallback. The report
-`media/layout.json` records viewport fit, scroll overflow, ancestor clipping,
-text bounds/font sizes, and the 44 px direction targets. Manual inspection must
-verify readable TV names/scores/best tiles, timer at least 96 px, phone play
-without scrolling, all eight result rows, spectators without controls, and
-phone-only race context. **No final fit verdict is claimed yet.**
+One headless browser and one reused page captured all 15 local HTML files.
+The Windows launcher required DevToolsActivePort discovery. Cleanup in finally
+closes CDP, terminates only exact-profile processes, and verifies zero living
+matches, ignoring exited CIM records. Initial failed attempts and their cleanup
+are recorded in ASSUMPTIONS.md; no original-game visual session is claimed.
+
+Manual fit verdict: **passed for all 15 PNGs**. Every document scroll size equals
+its viewport (1920×1080 TV or 390×844 phone), with zero outside elements and zero
+ancestor clipping. TV text is at least 32px, best tiles 64px, scores 48px, and the
+play timer 96px. All eight boards/rankings remain visible. Both active phone
+modes fit without scrolling and their four targets are 85.5×68px. Spectators
+have no buttons; phone-only players see the leader and all eight standings.
+Result player phones retain a clear personal result and all eight rows.
+
+The raw report conservatively flags visible font-EM bounds extending beyond
+tight line boxes: TV play 185 scroll-bound/122 text-bound flags, TV results
+214/149, active phones 4/2. These are not document scrolling or clipping.
+Manual review confirmed complete glyphs without collisions; name truncation
+uses intentional ellipsis. All spectator/result phones have zero such flags.
+The capture wrapper's original 28px TV footer was corrected to 36px and all
+screens recaptured; there are now zero TV text-below-32px flags.
 
 After final HTML formatting and PNG capture, refresh every media checksum:
 
@@ -148,8 +168,10 @@ After final HTML formatting and PNG capture, refresh every media checksum:
 node --import tsx --import ./jobs/P09-2048-race/tools/css-loader.mjs ./jobs/P09-2048-race/tools/render.tsx --hash-only
 ```
 
-Final `SHA256SUMS.txt` and the total media size below 10 MB are **pending**.
-Existing hashes must be refreshed after any formatted HTML or recapture.
+Final `SHA256SUMS.txt` contains **31 verified hashes**, one for every media file.
+Total media is **4,218,520 bytes**, below 10 MB. The hash-only command passed;
+an independent PowerShell Get-FileHash comparison verified every entry and the
+media count. `git diff --check` also passed. Refresh after any recapture.
 
 ## CI, pull request, and KEEP GOING — pending
 

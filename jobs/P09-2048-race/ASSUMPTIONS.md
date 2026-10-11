@@ -24,3 +24,9 @@
   no visual/audio playthrough is claimed. Static port captures remain required.
 - The public repo has no shell server or gen-registry/verify scripts. Use the
   published entry points, isolated SDK contract suite and binding RULES commands.
+- Chrome's Windows launcher can hand off to a child and exit without forwarding
+  DevTools stderr. Two initial capture attempts failed. A process audit found
+  leftover capture profiles/processes; only those task-specific processes were
+  terminated. Live-process count was verified zero before another launch. The
+  helper is being changed to discover DevToolsActivePort and verify actual child
+  process cleanup in finally; stale CIM records with HasExited=true are ignored.
