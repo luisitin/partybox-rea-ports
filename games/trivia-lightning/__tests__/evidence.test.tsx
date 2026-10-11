@@ -61,7 +61,12 @@ function fixtures(): Record<string, State> {
       ]),
     ),
   };
-  const tiePodium = kit.timer(kit.timer(kit.vip(tiedStart, 'skip', kit.t0 + 1000)));
+  let tiePodium = kit.vip(tiedStart, 'skip', kit.t0 + 1000);
+  let remainingTieBeats = 3;
+  while (tiePodium.phase.id === 'podium' && tiePodium.podiumStep < 3 && remainingTieBeats > 0) {
+    tiePodium = kit.timer(tiePodium);
+    remainingTieBeats -= 1;
+  }
   let finished = kit.start({ settings: { questions: 6 } });
   for (let n = 0; n < 6; n++) {
     const q = finished.deck[n]!;

@@ -230,23 +230,55 @@ describe('phase exits and results', () => {
     const overduePause = kit.vip(s, 'pause', s.endsAt + 100);
     expect(kit.vip(overduePause, 'resume', s.endsAt + 5100).phase.id).toBe('podium');
   });
-  it('reveals three timed podium beats, then reports all players and honest ties', () => {
-    let s = kit.vip(kit.start(), 'skip', 2000);
-    expect(s.podiumStep).toBe(1);
-    expect(s.phase.deadline).toBe(6500);
-    s = kit.timer(s);
-    expect(s.podiumStep).toBe(2);
-    s = kit.timer(s);
-    expect(s.podiumStep).toBe(3);
-    expect(game.results(s)).toBeNull();
-    s = kit.timer(s);
-    expect(s.phase.id).toBe('done');
-    expect(game.results(s)!.winnerIds).toEqual(['p1', 'p2']);
-    expect(game.results(s)!.ranking.map((r) => r.rank)).toEqual([1, 1]);
-    expect(kit.timer(s)).toBe(s);
-    expect(game.controllerView(s, 'p1').rank).toBe(1);
-    expect(game.controllerView(s, 'spectator').rank).toBeNull();
-  });
+  it.each([
+    ['two distinct players', [0, 1], [2, 3], [1, 2]],
+    ['eight shared winners', [0, 0, 0, 0, 0, 0, 0, 0], [3], [1, 1, 1, 1, 1, 1, 1, 1]],
+    ['two shared winners and third', [1, 1, 0], [1, 3], [1, 1, 3]],
+    ['three distinct players', [2, 1, 0], [1, 2, 3], [1, 2, 3]],
+  ] as const)(
+    '%s: reveals only occupied places, then reports all players and honest ties',
+    (_scenario, correctCounts, steps, ranks) => {
+      const players = testPlayers(correctCounts.length);
+      const party = testKit(game, { players, settings: { questions: 6 }, t0: 1000 });
+      let s = party.start();
+      // Earn the fixture scores through actual answers, retaining valid runner counters.
+      for (let seat = 0; seat < players.length; seat++) {
+        const id = players[seat]!.id;
+        for (let n = 0; n < correctCounts[seat]!; n++) {
+          const q = s.deck[n]!;
+          s = party.input(
+            s,
+            id,
+            { type: 'answer', questionId: q.id, index: n, choice: q.correctIndex },
+            s.clock + 10,
+          );
+          s = party.input(s, id, { type: 'next', index: n + 1 }, s.clock + 10);
+        }
+      }
+      const began = s.clock + 100;
+      s = party.vip(s, 'skip', began);
+      for (const step of steps) {
+        expect(s.phase.id).toBe('podium');
+        expect(s.podiumStep).toBe(step);
+        expect(s.phase.deadline).toBe(s.clock + 4500);
+        expect(game.results(s)).toBeNull();
+        expect(party.timer(s, s.phase.deadline! - 1)).toBe(s);
+        s = party.timer(s);
+      }
+      expect(s.phase.id).toBe('done');
+      expect(s.phase.startedAt - began).toBe(steps.length * 4500);
+      const top = Math.max(...correctCounts);
+      expect(game.results(s)!.winnerIds).toEqual(
+        players.filter((_player, seat) => correctCounts[seat] === top).map((player) => player.id),
+      );
+      expect(game.results(s)!.ranking.map((r) => r.rank)).toEqual(ranks);
+      expect(party.timer(s)).toBe(s);
+      expect(game.controllerView(s, players[0]!.id).rank).toBe(
+        1 + correctCounts.filter((count) => count > correctCounts[0]!).length,
+      );
+      expect(game.controllerView(s, 'spectator').rank).toBeNull();
+    },
+  );
   it('all disconnected exits and VIP end preserves departed scores', () => {
     let s = answer(kit.start());
     s = kit.player(s, 'p1', false, 'left', s.clock + 10);

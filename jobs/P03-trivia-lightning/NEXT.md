@@ -13,7 +13,10 @@
 - New ranking fixture has maximum question text, eight long names, a finished zero-score player
   and a partial-deck points leader. Round 2 fits full TV/spectator names: 24 clipped names become
   zero, all 65 captures have zero geometry findings. Native Chrome closure is independently proven;
-  profile deletion from the old retrying helper is settling before it writes final metadata.
-- Remaining: refresh final capture hashes and metadata; occupied podium beats, informed freeze targeting, live leader cue and
-  pending power feedback, followed by three stable audit passes and final green CI.
+  old retrying cleanup finished: 65 pages, zero issues, verifiedClosed=true; locked profile retained.
+- Round 3 implements occupied podium beats plus four real-answer scenarios. Current full local
+  typecheck/test command 54436 is still running under desktop load; game tests have not started.
+- Remaining: full verification/mutations for podium; informed freeze targeting, live leader cue,
+  power/Next acknowledgement and stale power retry protection; final captures/hashes; three
+  stable audit passes and final green CI. The real React interaction harness is ready to integrate.
 - Install completed using corepack enable and pnpm.cmd install (PowerShell blocks pnpm.ps1).

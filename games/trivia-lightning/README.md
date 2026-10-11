@@ -16,11 +16,11 @@ freezes a leading rival when there is time to catch up, otherwise doubles its ne
 
 ## Phases
 
-| Phase  | TV                                                                                     | Phone with TV                                                                   | Exit                                         |
-| ------ | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------- |
-| race   | Eight numbered lanes, answered count, scores, frozen/disconnected labels, shared clock | Own question/options; live place and points; verdict, explanation, Next; powers | All connected seats finish, cap, or VIP skip |
-| podium | Third → second → winner, shared places for ties                                        | Same staged podium; own rank/score appear at step 3, the winner reveal          | Three 4.5 s beats or VIP skips               |
-| done   | Winner/tie and final standings                                                         | Final standings and own score/rank                                              | Terminal; shell results available            |
+| Phase  | TV                                                                                     | Phone with TV                                                                   | Exit                                                 |
+| ------ | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| race   | Eight numbered lanes, answered count, scores, frozen/disconnected labels, shared clock | Own question/options; live place and points; verdict, explanation, Next; powers | All connected seats finish, cap, or VIP skip         |
+| podium | Occupied third → second → winner; ties share a place                                   | Same staged podium; own rank/score appear at step 3, the winner reveal          | One 4.5 s beat per occupied medal rank, or VIP skips |
+| done   | Winner/tie and final standings                                                         | Final standings and own score/rank                                              | Terminal; shell results available                    |
 
 ### Phone only
 
@@ -56,6 +56,7 @@ does not end another connected player's race and gives no extra points.
 - Pause shifts the cap, frozen-until times and race clock together; skips while paused use SDK resume ordering.
 - No phone can read another player's question/verdict or any answer key. Feedback reveals only a question the viewer has already answered.
 - The final answer may close the race directly into podium; the final own verdict stays available in the view.
+- Podium skips empty competition ranks. Each occupied top-three place gets 4.5 s; the winner always gets a full beat.
 - Repeated power requests are idempotent without new energy. Finished, offline, self and already frozen targets are refused without spending energy.
 
 ## Settings
