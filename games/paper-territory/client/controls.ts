@@ -18,6 +18,8 @@ interface ControlState {
   paused: boolean;
   alive: boolean;
   me: { role: 'player' | 'spectator' };
+  movingDir: Direction;
+  dir: Direction;
 }
 
 export function canSteer(view: ControlState): boolean {
@@ -25,7 +27,12 @@ export function canSteer(view: ControlState): boolean {
 }
 
 export function directionRequest(view: ControlState, dir: Direction): Input | null {
-  return canSteer(view) ? { type: 'direction', dir } : null;
+  if (!canSteer(view) || isReverse(view, dir) || dir === view.dir) return null;
+  return { type: 'direction', dir };
+}
+
+export function isReverse(view: ControlState, dir: Direction): boolean {
+  return dir === (view.movingDir + 2) % 4;
 }
 
 export function directionForKey(key: string): Direction | null {

@@ -63,3 +63,5 @@ Media totals 4,160,887 bytes, below 10 MB; all 63 SHA256SUMS.txt entries verifie
 ## CI and iteration
 
 .github/workflows/P07.yml uses read-only permissions, Ubuntu, 30-minute timeout, actions/* only and P07 paths. It installs, typechecks, formats and runs only this game. Draft PR leaves draft only after green CI. CI result and post-green audits will be recorded here/LOOP.md.
+
+Initial full CI passed: [run 38177872218](https://github.com/luisitin/partybox-rea-ports/actions/runs/38177872218), 1m30s. PR #4 left draft after this result. R1 targeted command: `pnpm.cmd vitest run games/paper-territory/client/DirectionPad.test.tsx games/paper-territory/client/controls.test.ts games/paper-territory/__tests__/views.test.ts games/paper-territory/__tests__/contract.test.ts --maxWorkers=1`; 3 existing files, 27/27 assertions passed in 4.57 s. The views glob has no separate file; projections are checked by SDK contract and the real-game controller regression.

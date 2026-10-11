@@ -4,7 +4,7 @@ import type { JSX } from 'react';
 import { buzz, useT } from '@partybox/game-sdk/ui';
 import type { PaperTerritoryControllerView } from '../server/index';
 import type { Direction, Input } from '../server/types';
-import { canSteer, directionForKey, directionRequest, DIRECTIONS } from './controls';
+import { canSteer, directionForKey, directionRequest, DIRECTIONS, isReverse } from './controls';
 import { STRINGS } from './strings';
 import styles from './Controller.module.css';
 
@@ -24,7 +24,7 @@ export function DirectionPad({
       send(request);
       buzz(8);
     },
-    [view.phaseId, view.paused, view.alive, view.me.role, send],
+    [view.phaseId, view.paused, view.alive, view.me.role, view.dir, view.movingDir, send],
   );
   useEffect(() => {
     if (disabled) return;
@@ -50,7 +50,7 @@ export function DirectionPad({
           key={button.dir}
           type="button"
           className={`${styles.direction} ${styles[button.position]}`}
-          disabled={disabled}
+          disabled={disabled || isReverse(view, button.dir)}
           aria-label={L('Go {direction}', { direction: L(button.name).toLowerCase() })}
           aria-pressed={view.dir === button.dir}
           onPointerDown={(event) => {

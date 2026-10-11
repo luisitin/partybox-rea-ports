@@ -3,7 +3,14 @@ import type { Direction } from '../server/types';
 import { canSteer, clockText, directionForKey, directionRequest, DIRECTIONS } from './controls';
 
 describe('absolute direction controls', () => {
-  const active = { phaseId: 'play', paused: false, alive: true, me: { role: 'player' as const } };
+  const active = {
+    phaseId: 'play',
+    paused: false,
+    alive: true,
+    me: { role: 'player' as const },
+    dir: 1 as Direction,
+    movingDir: 1 as Direction,
+  };
   it('sends the same fixed up/right/down/left semantics for touch and keyboard', () => {
     const keys = ['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft'];
     expect(DIRECTIONS.map((button) => directionRequest(active, button.dir))).toEqual(

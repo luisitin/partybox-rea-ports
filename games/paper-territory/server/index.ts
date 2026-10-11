@@ -29,6 +29,7 @@ import { createWorld, inputSchema, removeRunner } from './world';
 const manifest = gameManifestSchema.parse(manifestJson);
 export interface PublicRunner extends Omit<Runner, 'respawnTick' | 'queued'> {
   respawnAt: number | null;
+  movingDir: Direction;
 }
 interface MatchView {
   width: number;
@@ -48,6 +49,7 @@ export interface PaperTerritoryControllerView extends ControllerView, MatchView 
   area: number;
   alive: boolean;
   dir: Direction;
+  movingDir: Direction;
   deaths: number;
   captures: number;
   lastCapture: number;
@@ -156,6 +158,7 @@ function matchView(state: State): MatchView {
     runners: state.world.runners.map(({ respawnTick, queued, ...r }) => ({
       ...r,
       dir: queued,
+      movingDir: r.dir,
       respawnAt: respawnTick === null ? null : state.began + respawnTick * TICK_MS,
     })),
   };
@@ -185,6 +188,7 @@ function controllerView(state: State, playerId: string): PaperTerritoryControlle
     area: runner?.area ?? 0,
     alive: runner?.alive ?? false,
     dir: runner?.queued ?? 0,
+    movingDir: runner?.dir ?? 0,
     deaths: runner?.deaths ?? 0,
     captures: runner?.captures ?? 0,
     lastCapture: runner?.lastCapture ?? 0,
