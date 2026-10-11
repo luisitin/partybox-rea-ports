@@ -1,0 +1,1286 @@
+<!doctype html>
+<html lang="en" data-surface="tv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Helix Drop reveal tv</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>; 
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+      ._screen_5dec39 {
+        box-sizing: border-box;
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-3);
+        padding: var(--pb-space-3);
+        color: var(--pb-text);
+        overflow: hidden;
+        overscroll-behavior: none;
+      }
+      ._screen_5dec39 header {
+        flex: none;
+        text-align: center;
+      }
+      ._screen_5dec39 h2 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        line-height: 1.2;
+      }
+      ._screen_5dec39 p {
+        margin: var(--pb-space-1) 0 0;
+        font-size: var(--pb-font-body);
+      }
+      ._tower_5dec39 {
+        flex: 1;
+        min-height: 0;
+        max-height: calc(var(--pb-space-8) * 5);
+      }
+      ._screen_5dec39[data-stage] ._tower_5dec39 {
+        max-height: calc(var(--pb-space-8) * 3);
+      }
+      ._pads_5dec39 {
+        flex: none;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--pb-space-3);
+        min-height: calc(var(--pb-touch) * 2.5);
+      }
+      ._pads_5dec39 button {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--pb-space-2);
+        border: var(--pb-space-1) solid var(--pb-accent-2);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        color: var(--pb-text);
+        font: inherit;
+        font-size: var(--pb-font-button);
+        touch-action: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+        transition: background var(--pb-motion-fast) var(--pb-ease);
+      }
+      ._pads_5dec39 button span {
+        font-size: var(--pb-font-display);
+        line-height: 1;
+      }
+      ._pads_5dec39 button[data-held] {
+        background: var(--pb-accent-2-fill);
+        color: var(--pb-on-accent-2-fill);
+      }
+      ._pads_5dec39 button:focus-visible {
+        outline: var(--pb-space-1) solid var(--pb-focus);
+        outline-offset: var(--pb-space-1);
+      }
+      ._receipt_5dec39,
+      ._legend_5dec39 {
+        flex: none;
+        text-align: center;
+        color: var(--pb-text-muted);
+      }
+      ._standings_5dec39 {
+        flex: none;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: var(--pb-space-1);
+        font-size: var(--pb-font-body);
+      }
+      ._standings_5dec39 li {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        min-height: var(--pb-space-5);
+        padding: 0 var(--pb-space-2);
+        border-radius: var(--pb-radius);
+      }
+      ._standings_5dec39 li[data-me] {
+        background: var(--pb-surface-2);
+      }
+      ._standings_5dec39 b {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      ._standings_5dec39 li > span:last-child {
+        margin-left: auto;
+        white-space: nowrap;
+      }
+      ._mark_5dec39 {
+        color: var(--lane-color);
+      }
+      ._spectatorTowers_5dec39 {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-2);
+      }
+      ._spectatorTowers_5dec39 > div {
+        min-height: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      ._spectatorTowers_5dec39 b {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: var(--pb-font-caption);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        ._pads_5dec39 button {
+          transition: none;
+        }
+      }
+      :root[data-motion='off'] ._pads_5dec39 button {
+        transition: none;
+      }
+
+      ._stage_ff0b9a {
+        gap: var(--pb-space-5);
+        min-height: 0;
+        color: var(--pb-text);
+      }
+      ._header_ff0b9a {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--pb-space-5);
+      }
+      ._header_ff0b9a h1 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        line-height: 1.15;
+      }
+      ._header_ff0b9a p {
+        margin: var(--pb-space-2) 0 0;
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-body);
+      }
+      ._timer_ff0b9a {
+        font-size: calc(var(--pb-font-display) * 0.75);
+        line-height: 1;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        color: var(--pb-accent-2);
+      }
+      ._timer_ff0b9a small {
+        font-size: var(--pb-font-body);
+      }
+      ._lanes_ff0b9a {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-4);
+      }
+      ._lanes_ff0b9a[data-count='2'],
+      ._lanes_ff0b9a[data-count='3'],
+      ._lanes_ff0b9a[data-count='4'] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      ._lane_ff0b9a {
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        padding: var(--pb-space-3);
+        background: var(--pb-surface);
+        border-top: var(--pb-space-1) solid var(--lane-color);
+        border-radius: var(--pb-radius);
+      }
+      ._label_ff0b9a {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--pb-space-2);
+        font-size: var(--pb-font-body);
+      }
+      ._label_ff0b9a b {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      ._label_ff0b9a strong {
+        flex: none;
+        font-size: var(--pb-font-h2);
+        font-variant-numeric: tabular-nums;
+      }
+      ._label_ff0b9a small {
+        font-size: var(--pb-font-body);
+      }
+      ._tower_ff0b9a {
+        flex: 1;
+        min-height: 0;
+      }
+      ._lane_ff0b9a p {
+        font-size: var(--pb-font-body);
+        line-height: 1.2;
+        text-align: center;
+        margin: 0;
+      }
+      ._lane_ff0b9a[data-out] p {
+        color: var(--pb-text-muted);
+      }
+
+      /* The lane footer carries the readable floor number; SVG annotations are phone-only. */
+      ._tower_ff0b9a text {
+        display: none;
+      }
+
+      ._tower_132d9e {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+      }
+      ._column_132d9e {
+        fill: var(--pb-surface-2);
+      }
+      ._safe_132d9e {
+        fill: var(--lane-color, var(--pb-accent-3));
+      }
+      ._danger_132d9e {
+        fill: var(--pb-danger);
+        stroke: var(--pb-text);
+        stroke-width: 0.3;
+      }
+      ._cross_132d9e {
+        stroke: var(--pb-text);
+        stroke-width: 2;
+        fill: none;
+      }
+      ._ball_132d9e {
+        fill: var(--pb-text);
+        stroke: var(--pb-bg);
+        stroke-width: 2;
+      }
+      ._charged_132d9e {
+        fill: var(--pb-accent-2);
+        stroke: var(--pb-text);
+        stroke-width: 3;
+      }
+      ._arrow_132d9e {
+        fill: none;
+        stroke: var(--pb-text);
+        stroke-width: 2;
+      }
+      ._floor_132d9e {
+        fill: var(--pb-text-muted);
+        font-family: var(--pb-font-family);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      ._stage_262f13 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+        min-height: 100%;
+        /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+        padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+          var(--pb-overscan-y, 54px);
+      }
+
+      ._center_262f13 {
+        /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+        justify-content: safe center;
+        align-items: safe center;
+        text-align: center;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      #shell {
+        height: 64px;
+        flex: none;
+        padding: var(--pb-space-3);
+        font-size: var(--pb-font-body);
+        display: flex;
+        align-items: center;
+      }
+      #view {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 0px;
+      }
+      svg {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="shell">PartyBox · Helix Drop</div>
+    <main id="view">
+      <div class="_stage_262f13 _stage_ff0b9a">
+        <header class="_header_ff0b9a">
+          <div>
+            <h1>Gus wins!</h1>
+            <p>Deepest completed floor wins</p>
+          </div>
+        </header>
+        <div class="_lanes_ff0b9a" data-count="8">
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-1)"
+            data-out="true"
+            aria-label="Ana, 48 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>1. Ana</b><strong>48<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 48, best 48, 0 lives"
+                style="--lane-color: var(--pb-player-1)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M53.71929210256915,72.34035197518726 A72,18.72 0 0 0 75.37454968055187,75.5910458611122 L92.13353670350962,63.619361872299734 A23,5.98 0 0 1 85.21588497720958,62.58094576985149 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M75.37454968055187,75.5910458611122 A72,18.72 0 0 0 135.99999999999994,74.2119955588447 L111.49999999999999,63.17883191463095 A23,5.98 0 0 1 92.13353670350962,63.619361872299734 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M135.99999999999994,74.2119955588447 A72,18.72 0 1 0 48.20753437561714,44.99599530500756 L83.45518459221103,53.84594294465519 A23,5.98 0 1 1 111.49999999999999,63.17883191463095 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M88.6648874719873,67.29040075759235 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M105.33511252801264,67.29040075759235 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">49</text>
+                </g>
+                <g>
+                  <path
+                    d="M67.31268401875262,126.67964213280625 A72,18.72 0 0 0 91.22540727482934,128.58046395872555 L97.1970051016816,115.9354259868151 A23,5.98 0 0 1 89.55821850599042,115.32821901464644 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M91.22540727482934,128.58046395872555 A72,18.72 0 0 0 149.10388192449986,123.69094129431087 L115.68596228143745,114.37349513568265 A23,5.98 0 0 1 97.1970051016816,115.9354259868151 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M149.10388192449986,123.69094129431087 A72,18.72 0 1 0 38.28395434944794,100.35848723768378 L80.28515208385143,106.92007231203787 A23,5.98 0 1 1 115.68596228143745,114.37349513568265 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M99.5121258996613,119.46289659373709 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M115.75509416748508,118.48790057108646 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">50</text>
+                </g>
+                <g>
+                  <path
+                    d="M66.19804747941586,178.5287789383191 A72,18.72 0 0 0 89.97953673087525,180.5378182468422 L96.79901867791848,167.9218030510746 A23,5.98 0 0 1 89.20215405592451,167.28002660529637 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M89.97953673087525,180.5378182468422 A72,18.72 0 0 0 152.65746651658029,174.76700930036998 L116.82113513724093,166.07835019317375 A23,5.98 0 0 1 96.79901867791848,167.9218030510746 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M152.65746651658029,174.76700930036998 A72,18.72 0 1 0 38.94053707673738,152.07991137355438 L80.49489378840222,158.83108279988542 A23,5.98 0 1 1 116.82113513724093,166.07835019317375 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M98.67517584172002,171.4723975211983 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M114.98111648396377,170.5712545049935 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">51</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="69" r="8" class="_ball_132d9e"></circle>
+                <path d="M94,63 l12,12 m-12,0 l12,-12" class="_cross_132d9e"></path>
+              </svg>
+            </div>
+            <p>× Run complete</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-2)"
+            data-out="true"
+            aria-label="Ben, 36 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>2. Ben</b><strong>36<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 34, best 36, 0 lives"
+                style="--lane-color: var(--pb-player-2)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M70.71496169854231,75.10157096706948 A72,18.72 0 0 0 94.977533890423,76.67439902086392 L98.39560110388513,63.965433020553746 A23,5.98 0 0 1 90.64505720925658,63.46300183670275 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M94.977533890423,76.67439902086392 A72,18.72 0 0 0 147.23625008731648,72.1281633417703 L115.08935766678165,62.51316328973218 A23,5.98 0 0 1 98.39560110388513,63.965433020553746 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M147.23625008731648,72.1281633417703 A72,18.72 0 1 0 40.30929477603704,47.5319088470276 L80.93213583123406,54.65602643724493 A23,5.98 0 1 1 115.08935766678165,62.51316328973218 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M102.01736623684734,67.41163325419605 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M118.04181504587571,66.2169496978136 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">35</text>
+                </g>
+                <g>
+                  <path
+                    d="M87.49733120798099,128.43560113638853 A72,18.72 0 0 0 112.50266879201907,128.43560113638853 L103.99390808633942,115.889150363013 A23,5.98 0 0 1 96.0060919136606,115.889150363013 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M112.50266879201907,128.43560113638853 A72,18.72 0 0 0 158.9789471888074,120.73735088849158 L118.84049701864681,113.42998708937925 A23,5.98 0 0 1 103.99390808633942,115.889150363013 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M158.9789471888074,120.73735088849158 A72,18.72 0 1 0 32.34213130341465,103.59738291694345 L78.38706972192412,107.95471954291249 A23,5.98 0 1 1 118.84049701864681,113.42998708937925 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M113.41696687963211,118.72736390740813 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M127.85380526495388,116.56023465012484 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">36</text>
+                </g>
+                <g>
+                  <path
+                    d="M29.573372747165976,165.89210685210844 A72,18.72 0 0 0 38.94053707673734,171.9200886264456 L80.49489378840221,165.16891720011458 A23,5.98 0 0 1 77.50260518312247,163.2433119110902 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M38.94053707673734,171.9200886264456 A72,18.72 0 0 0 83.80352408724168,180.2402076127796 L94.8261257500911,167.8267329874157 A23,5.98 0 0 1 80.49489378840221,165.16891720011458 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M83.80352408724168,180.2402076127796 A72,18.72 0 1 0 97.48723623741988,143.29140371820253 L99.19731157584246,156.02364285442582 A23,5.98 0 1 1 94.8261257500911,167.8267329874157 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M61.32904837708506,167.35074996735855 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M74.46536498627724,170.0191859588794 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">37</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="69" r="8" class="_ball_132d9e"></circle>
+                <path d="M94,63 l12,12 m-12,0 l12,-12" class="_cross_132d9e"></path>
+              </svg>
+            </div>
+            <p>× Run complete</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-3)"
+            data-out="true"
+            aria-label="Cy, 36 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>3. Cy</b><strong>36<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 36, best 36, 0 lives"
+                style="--lane-color: var(--pb-player-3)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M57.67946183494192,73.14479813469902 A72,18.72 0 0 0 80.15411038117603,75.99481894796533 L93.660340816209,63.748344941711146 A23,5.98 0 0 1 86.48093919727312,62.83792162636219 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M80.15411038117603,75.99481894796533 A72,18.72 0 0 0 134.9062926577363,74.3728809176495 L111.15062126566576,63.230225848693586 A23,5.98 0 0 1 93.660340816209,63.748344941711146 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M134.9062926577363,74.3728809176495 A72,18.72 0 1 0 49.984597326952205,44.533958937660444 L84.02285747944306,53.69834799397486 A23,5.98 0 1 1 111.15062126566576,63.230225848693586 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M91.98263376315263,67.41163325419605 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M108.61225098878406,67.10929066392444 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">37</text>
+                </g>
+                <g>
+                  <path
+                    d="M68.43727743118646,126.82542454672041 A72,18.72 0 0 0 92.47395064472896,128.61744988129408 L97.59584534484397,115.94724093430227 A23,5.98 0 0 1 89.91746362385123,115.37478839686902 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M92.47395064472896,128.61744988129408 A72,18.72 0 0 0 145.31106815558826,124.5481723984745 L114.47436899414625,114.6473328495127 A23,5.98 0 0 1 97.59584534484397,115.94724093430227 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M145.31106815558826,124.5481723984745 A72,18.72 0 1 0 41.7507764050038,98.9966600770849 L81.39260912937621,106.48504419129101 A23,5.98 0 1 1 114.47436899414625,114.6473328495127 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M100.34831073971802,119.44959934724261 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M116.52335886763841,118.40104731137966 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">38</text>
+                </g>
+                <g>
+                  <path
+                    d="M52.763749912683465,176.1281633417703 A72,18.72 0 0 0 74.19750763273834,179.4766255840276 L91.75753716045809,167.58281095045328 A23,5.98 0 0 1 84.91064233321833,166.51316328973218 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M74.19750763273834,179.4766255840276 A72,18.72 0 0 0 129.28503830145758,179.1015709670695 L109.3549427907434,167.46300183670274 A23,5.98 0 0 1 91.75753716045809,167.58281095045328 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M129.28503830145758,179.1015709670695 A72,18.72 0 1 0 54.688931844411705,147.4518276015255 L85.52563100585374,157.35266715048732 A23,5.98 0 1 1 109.3549427907434,167.46300183670274 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M87.84116822192586,171.25070724942685 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M104.50885432193108,171.3263504906273 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">39</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="69" r="8" class="_ball_132d9e"></circle>
+                <path d="M94,63 l12,12 m-12,0 l12,-12" class="_cross_132d9e"></path>
+              </svg>
+            </div>
+            <p>× Run complete</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-4)"
+            data-out="true"
+            aria-label="Dee, 36 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>4. Dee</b><strong>36<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 36, best 36, 0 lives"
+                style="--lane-color: var(--pb-player-4)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M57.67946183494192,73.14479813469902 A72,18.72 0 0 0 80.15411038117603,75.99481894796533 L93.660340816209,63.748344941711146 A23,5.98 0 0 1 86.48093919727312,62.83792162636219 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M80.15411038117603,75.99481894796533 A72,18.72 0 0 0 134.9062926577363,74.3728809176495 L111.15062126566576,63.230225848693586 A23,5.98 0 0 1 93.660340816209,63.748344941711146 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M134.9062926577363,74.3728809176495 A72,18.72 0 1 0 49.984597326952205,44.533958937660444 L84.02285747944306,53.69834799397486 A23,5.98 0 1 1 111.15062126566576,63.230225848693586 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M91.98263376315263,67.41163325419605 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M108.61225098878406,67.10929066392444 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">37</text>
+                </g>
+                <g>
+                  <path
+                    d="M68.43727743118646,126.82542454672041 A72,18.72 0 0 0 92.47395064472896,128.61744988129408 L97.59584534484397,115.94724093430227 A23,5.98 0 0 1 89.91746362385123,115.37478839686902 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M92.47395064472896,128.61744988129408 A72,18.72 0 0 0 145.31106815558826,124.5481723984745 L114.47436899414625,114.6473328495127 A23,5.98 0 0 1 97.59584534484397,115.94724093430227 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M145.31106815558826,124.5481723984745 A72,18.72 0 1 0 41.7507764050038,98.9966600770849 L81.39260912937621,106.48504419129101 A23,5.98 0 1 1 114.47436899414625,114.6473328495127 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M100.34831073971802,119.44959934724261 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M116.52335886763841,118.40104731137966 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">38</text>
+                </g>
+                <g>
+                  <path
+                    d="M52.763749912683465,176.1281633417703 A72,18.72 0 0 0 74.19750763273834,179.4766255840276 L91.75753716045809,167.58281095045328 A23,5.98 0 0 1 84.91064233321833,166.51316328973218 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M74.19750763273834,179.4766255840276 A72,18.72 0 0 0 129.28503830145758,179.1015709670695 L109.3549427907434,167.46300183670274 A23,5.98 0 0 1 91.75753716045809,167.58281095045328 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M129.28503830145758,179.1015709670695 A72,18.72 0 1 0 54.688931844411705,147.4518276015255 L85.52563100585374,157.35266715048732 A23,5.98 0 1 1 109.3549427907434,167.46300183670274 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M87.84116822192586,171.25070724942685 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M104.50885432193108,171.3263504906273 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">39</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="69" r="8" class="_ball_132d9e"></circle>
+                <path d="M94,63 l12,12 m-12,0 l12,-12" class="_cross_132d9e"></path>
+              </svg>
+            </div>
+            <p>× Run complete</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-5)"
+            data-out="true"
+            aria-label="Eli, 36 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>5. Eli</b><strong>36<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 36, best 36, 0 lives"
+                style="--lane-color: var(--pb-player-5)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M57.67946183494192,73.14479813469902 A72,18.72 0 0 0 80.15411038117603,75.99481894796533 L93.660340816209,63.748344941711146 A23,5.98 0 0 1 86.48093919727312,62.83792162636219 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M80.15411038117603,75.99481894796533 A72,18.72 0 0 0 134.9062926577363,74.3728809176495 L111.15062126566576,63.230225848693586 A23,5.98 0 0 1 93.660340816209,63.748344941711146 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M134.9062926577363,74.3728809176495 A72,18.72 0 1 0 49.984597326952205,44.533958937660444 L84.02285747944306,53.69834799397486 A23,5.98 0 1 1 111.15062126566576,63.230225848693586 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M91.98263376315263,67.41163325419605 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M108.61225098878406,67.10929066392444 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">37</text>
+                </g>
+                <g>
+                  <path
+                    d="M68.43727743118646,126.82542454672041 A72,18.72 0 0 0 92.47395064472896,128.61744988129408 L97.59584534484397,115.94724093430227 A23,5.98 0 0 1 89.91746362385123,115.37478839686902 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M92.47395064472896,128.61744988129408 A72,18.72 0 0 0 145.31106815558826,124.5481723984745 L114.47436899414625,114.6473328495127 A23,5.98 0 0 1 97.59584534484397,115.94724093430227 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M145.31106815558826,124.5481723984745 A72,18.72 0 1 0 41.7507764050038,98.9966600770849 L81.39260912937621,106.48504419129101 A23,5.98 0 1 1 114.47436899414625,114.6473328495127 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M100.34831073971802,119.44959934724261 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M116.52335886763841,118.40104731137966 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">38</text>
+                </g>
+                <g>
+                  <path
+                    d="M52.763749912683465,176.1281633417703 A72,18.72 0 0 0 74.19750763273834,179.4766255840276 L91.75753716045809,167.58281095045328 A23,5.98 0 0 1 84.91064233321833,166.51316328973218 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M74.19750763273834,179.4766255840276 A72,18.72 0 0 0 129.28503830145758,179.1015709670695 L109.3549427907434,167.46300183670274 A23,5.98 0 0 1 91.75753716045809,167.58281095045328 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M129.28503830145758,179.1015709670695 A72,18.72 0 1 0 54.688931844411705,147.4518276015255 L85.52563100585374,157.35266715048732 A23,5.98 0 1 1 109.3549427907434,167.46300183670274 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M87.84116822192586,171.25070724942685 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M104.50885432193108,171.3263504906273 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">39</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="69" r="8" class="_ball_132d9e"></circle>
+                <path d="M94,63 l12,12 m-12,0 l12,-12" class="_cross_132d9e"></path>
+              </svg>
+            </div>
+            <p>× Run complete</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-6)"
+            data-out="true"
+            aria-label="Fay, 36 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>6. Fay</b><strong>36<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 19, best 36, 0 lives"
+                style="--lane-color: var(--pb-player-6)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M74.19750763273834,75.47662558402762 A72,18.72 0 0 0 98.74342673651552,76.71714885332764 L99.59859465194246,63.979089217035224 A23,5.98 0 0 1 91.75753716045809,63.582810950453265 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M98.74342673651552,76.71714885332764 A72,18.72 0 0 0 140.26188904989374,73.51958335823039 L112.86143677982716,62.95764468387915 A23,5.98 0 0 1 99.59859465194246,63.979089217035224 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M140.26188904989374,73.51958335823039 A72,18.72 0 1 0 42.49824327659496,46.73402276659364 L81.63138326891229,54.40114616155075 A23,5.98 0 1 1 112.86143677982716,62.95764468387915 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M104.50885432193107,67.32635049062732 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">20</text>
+                </g>
+                <g>
+                  <path
+                    d="M73.02832527405431,127.35688175749026 A72,18.72 0 0 0 97.48723623741994,128.70859628179747 L99.19731157584248,115.9763571455742 A23,5.98 0 0 1 91.38404835143402,115.5445594503094 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M97.48723623741994,128.70859628179747 A72,18.72 0 0 0 144.3276262234474,124.75156130751783 L114.16021393249014,114.7123043065682 A23,5.98 0 0 1 99.19731157584248,115.9763571455742 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M144.3276262234474,124.75156130751783 A72,18.72 0 1 0 43.26322574031602,98.47481718190367 L81.87575266704539,106.31834437755256 A23,5.98 0 1 1 114.16021393249014,114.7123043065682 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M103.6803088460831,119.3585454978948 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M119.53463501372273,118.01918595887942 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">21</text>
+                </g>
+                <g>
+                  <path
+                    d="M37.64617092752038,171.35999999999999 A72,18.72 0 0 0 53.71929210256919,176.34035197518728 L85.2158849772096,166.5809457698515 A23,5.98 0 0 1 80.08141571295789,164.98999999999998 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M53.71929210256919,176.34035197518728 A72,18.72 0 0 0 99.99999999999997,180.72 L99.99999999999999,167.98 A23,5.98 0 0 1 85.2158849772096,166.5809457698515 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M99.99999999999997,180.72 A72,18.72 0 1 0 82.58162351682391,143.83606400411335 L94.43579640120764,156.19763155686954 A23,5.98 0 1 1 99.99999999999999,167.98 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M72.99999999999997,169.8079970392298 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M88.6648874719873,171.29040075759235 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">22</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="69" r="8" class="_ball_132d9e"></circle>
+                <path d="M94,63 l12,12 m-12,0 l12,-12" class="_cross_132d9e"></path>
+              </svg>
+            </div>
+            <p>× Run complete</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-7)"
+            data-out="true"
+            aria-label="Gus, 66 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>7. Gus</b><strong>66<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 19, best 66, 0 lives"
+                style="--lane-color: var(--pb-player-7)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M49.088311754568565,71.23703894381217 A72,18.72 0 0 0 69.5714851546696,74.96608177332608 L90.2797799799639,63.419720566479164 A23,5.98 0 0 1 83.7365440327094,62.228498551495555 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M69.5714851546696,74.96608177332608 A72,18.72 0 0 0 112.50266879201895,76.43560113638854 L103.99390808633939,63.889150363013 A23,5.98 0 0 1 90.2797799799639,63.419720566479164 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M112.50266879201895,76.43560113638854 A72,18.72 0 1 0 65.09370734226373,41.62711908235051 L88.84937873433425,52.769774151306414 A23,5.98 0 1 1 103.99390808633939,63.889150363013 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M84.576685835079,67.05475431208757 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">20</text>
+                </g>
+                <g>
+                  <path
+                    d="M48.20753437561707,123.00400469499242 A72,18.72 0 0 0 68.43727743118646,126.82542454672041 L89.91746362385123,115.37478839686902 A23,5.98 0 0 1 83.45518459221101,114.1540570553448 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M68.43727743118646,126.82542454672041 A72,18.72 0 0 0 117.4183764831761,128.16393599588665 L105.56420359879237,115.80236844313046 A23,5.98 0 0 1 89.91746362385123,115.37478839686902 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M117.4183764831761,128.16393599588665 A72,18.72 0 1 0 66.1980474794159,93.47122106168088 L89.20215405592452,104.71997339470362 A23,5.98 0 1 1 105.56420359879237,115.80236844313046 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M83.76940692078401,118.99654596531022 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M100.348310739718,119.44959934724261 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">21</text>
+                </g>
+                <g>
+                  <path
+                    d="M28.39442353348433,163.9567728323705 A72,18.72 0 0 0 35.28682866645991,170.2063078678915 L79.32773693511913,164.62145945779866 A23,5.98 0 0 1 77.12599640652971,162.62508021034057 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M35.28682866645991,170.2063078678915 A72,18.72 0 0 0 70.71496169854231,179.10157096706948 L90.64505720925658,167.46300183670274 A23,5.98 0 0 1 79.32773693511913,164.62145945779866 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M70.71496169854231,179.10157096706948 A72,18.72 0 1 0 112.50266879201914,143.56439886361147 L103.99390808633945,156.11084963698698 A23,5.98 0 1 1 90.64505720925658,167.46300183670274 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M58.167184270002515,166.33555994861007 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M70.15874063340414,169.34638890548692 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">22</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="69" r="8" class="_ball_132d9e"></circle>
+                <path d="M94,63 l12,12 m-12,0 l12,-12" class="_cross_132d9e"></path>
+              </svg>
+            </div>
+            <p>× Run complete</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-8)"
+            data-out="true"
+            aria-label="Hal, 43 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>8. Hal</b><strong>43<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 36, best 43, 0 lives"
+                style="--lane-color: var(--pb-player-8)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M60.785989478918054,73.69991303193834 A72,18.72 0 0 0 83.8035240872417,76.2402076127796 L94.8261257500911,63.82673298741571 A23,5.98 0 0 1 87.47330219465438,63.015249996313635 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M83.8035240872417,76.2402076127796 A72,18.72 0 0 0 138.15418702479073,73.8754603600483 L112.1881430773637,63.07132761501543 A23,5.98 0 0 1 94.8261257500911,63.82673298741571 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M138.15418702479073,73.8754603600483 A72,18.72 0 1 0 47.34253348341972,45.23299069963003 L83.17886486275907,53.92164980682626 A23,5.98 0 1 1 112.1881430773637,63.07132761501543 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M94.4878741003387,67.46289659373709 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M111.03384182669137,66.93468335441868 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">37</text>
+                </g>
+                <g>
+                  <path
+                    d="M71.86735874877222,127.23185085662968 A72,18.72 0 0 0 96.23181115050801,128.69434489060563 L98.79627300641228,115.97180461783235 A23,5.98 0 0 1 91.01318404474668,115.50461902364559 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M96.23181115050801,128.69434489060563 A72,18.72 0 0 0 148.1774036578378,123.91167113293682 L115.39000394625374,114.44400605635482 A23,5.98 0 0 1 98.79627300641228,115.97180461783235 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M148.1774036578378,123.91167113293682 A72,18.72 0 1 0 39.61571910792955,99.80435726451867 L80.71057693725527,106.74305857061013 A23,5.98 0 1 1 115.39000394625374,114.44400605635482 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M102.84972848344708,119.3869759724837 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M118.79154398749824,118.11976142187083 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">38</text>
+                </g>
+                <g>
+                  <path
+                    d="M55.67237377655256,176.75156130751782 A72,18.72 0 0 0 77.75077640500378,179.80377798504526 L92.89260912937621,167.687317967445 A23,5.98 0 0 1 85.83978606750985,166.7123043065682 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M77.75077640500378,179.80377798504526 A72,18.72 0 0 0 132.68731598124742,178.67964213280624 L110.44178149400959,167.32821901464644 A23,5.98 0 0 1 92.89260912937621,167.687317967445 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M132.68731598124742,178.67964213280624 A72,18.72 0 1 0 51.82259634216229,148.08832886706315 L84.60999605374629,157.55599394364518 A23,5.98 0 1 1 110.44178149400959,167.32821901464644 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M90.31969115391686,171.3585454978948 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M106.97976115925245,171.2072820571579 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">39</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="69" r="8" class="_ball_132d9e"></circle>
+                <path d="M94,63 l12,12 m-12,0 l12,-12" class="_cross_132d9e"></path>
+              </svg>
+            </div>
+            <p>× Run complete</p>
+          </section>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

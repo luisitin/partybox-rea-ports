@@ -1,0 +1,35 @@
+{
+  "id": "helix-drop",
+  "name": "Helix Drop",
+  "description": "Spin your tower, thread the gaps, and dive deeper than your friends.",
+  "howToPlay": [
+    "Hold left or right to spin the tower. The ball bounces by itself; aim for the empty gaps.",
+    "Cross-marked danger costs a life. Three gaps without a bounce charge one smash.",
+    "Race for 60 seconds. Best depth stays after a crash; deepest wins. Three lives by default."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 2,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": {
+    "needs": "anywhere"
+  },
+  "addedOn": "2026-10-11",
+  "settings": [
+    {
+      "key": "lives",
+      "label": "Lives",
+      "description": "Attempts per player",
+      "type": "number",
+      "default": 3,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    }
+  ],
+  "supportsBots": true,
+  "icon": "🎯",
+  "tagline": "Spin the tower. Thread the gaps. Deepest wins."
+}

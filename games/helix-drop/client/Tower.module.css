@@ -1,0 +1,43 @@
+.tower {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+.column {
+  fill: var(--pb-surface-2);
+}
+.safe {
+  fill: var(--lane-color, var(--pb-accent-3));
+}
+.danger {
+  fill: var(--pb-danger);
+  stroke: var(--pb-text);
+  stroke-width: 0.3;
+}
+.cross {
+  stroke: var(--pb-text);
+  stroke-width: 2;
+  fill: none;
+}
+.ball {
+  fill: var(--pb-text);
+  stroke: var(--pb-bg);
+  stroke-width: 2;
+}
+.charged {
+  fill: var(--pb-accent-2);
+  stroke: var(--pb-text);
+  stroke-width: 3;
+}
+.arrow {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: 2;
+}
+.floor {
+  fill: var(--pb-text-muted);
+  font-family: var(--pb-font-family);
+  font-size: 12px;
+  font-weight: 800;
+}

@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="en" data-surface="tv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Helix Drop play tv</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>; 
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+      ._screen_5dec39 {
+        box-sizing: border-box;
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-3);
+        padding: var(--pb-space-3);
+        color: var(--pb-text);
+        overflow: hidden;
+        overscroll-behavior: none;
+      }
+      ._screen_5dec39 header {
+        flex: none;
+        text-align: center;
+      }
+      ._screen_5dec39 h2 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        line-height: 1.2;
+      }
+      ._screen_5dec39 p {
+        margin: var(--pb-space-1) 0 0;
+        font-size: var(--pb-font-body);
+      }
+      ._tower_5dec39 {
+        flex: 1;
+        min-height: 0;
+        max-height: calc(var(--pb-space-8) * 5);
+      }
+      ._screen_5dec39[data-stage] ._tower_5dec39 {
+        max-height: calc(var(--pb-space-8) * 3);
+      }
+      ._pads_5dec39 {
+        flex: none;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--pb-space-3);
+        min-height: calc(var(--pb-touch) * 2.5);
+      }
+      ._pads_5dec39 button {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--pb-space-2);
+        border: var(--pb-space-1) solid var(--pb-accent-2);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        color: var(--pb-text);
+        font: inherit;
+        font-size: var(--pb-font-button);
+        touch-action: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+        transition: background var(--pb-motion-fast) var(--pb-ease);
+      }
+      ._pads_5dec39 button span {
+        font-size: var(--pb-font-display);
+        line-height: 1;
+      }
+      ._pads_5dec39 button[data-held] {
+        background: var(--pb-accent-2-fill);
+        color: var(--pb-on-accent-2-fill);
+      }
+      ._pads_5dec39 button:focus-visible {
+        outline: var(--pb-space-1) solid var(--pb-focus);
+        outline-offset: var(--pb-space-1);
+      }
+      ._receipt_5dec39,
+      ._legend_5dec39 {
+        flex: none;
+        text-align: center;
+        color: var(--pb-text-muted);
+      }
+      ._standings_5dec39 {
+        flex: none;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: var(--pb-space-1);
+        font-size: var(--pb-font-body);
+      }
+      ._standings_5dec39 li {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        min-height: var(--pb-space-5);
+        padding: 0 var(--pb-space-2);
+        border-radius: var(--pb-radius);
+      }
+      ._standings_5dec39 li[data-me] {
+        background: var(--pb-surface-2);
+      }
+      ._standings_5dec39 b {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      ._standings_5dec39 li > span:last-child {
+        margin-left: auto;
+        white-space: nowrap;
+      }
+      ._mark_5dec39 {
+        color: var(--lane-color);
+      }
+      ._spectatorTowers_5dec39 {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-2);
+      }
+      ._spectatorTowers_5dec39 > div {
+        min-height: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      ._spectatorTowers_5dec39 b {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: var(--pb-font-caption);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        ._pads_5dec39 button {
+          transition: none;
+        }
+      }
+      :root[data-motion='off'] ._pads_5dec39 button {
+        transition: none;
+      }
+
+      ._stage_ff0b9a {
+        gap: var(--pb-space-5);
+        min-height: 0;
+        color: var(--pb-text);
+      }
+      ._header_ff0b9a {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--pb-space-5);
+      }
+      ._header_ff0b9a h1 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        line-height: 1.15;
+      }
+      ._header_ff0b9a p {
+        margin: var(--pb-space-2) 0 0;
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-body);
+      }
+      ._timer_ff0b9a {
+        font-size: calc(var(--pb-font-display) * 0.75);
+        line-height: 1;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        color: var(--pb-accent-2);
+      }
+      ._timer_ff0b9a small {
+        font-size: var(--pb-font-body);
+      }
+      ._lanes_ff0b9a {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-4);
+      }
+      ._lanes_ff0b9a[data-count='2'],
+      ._lanes_ff0b9a[data-count='3'],
+      ._lanes_ff0b9a[data-count='4'] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      ._lane_ff0b9a {
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        padding: var(--pb-space-3);
+        background: var(--pb-surface);
+        border-top: var(--pb-space-1) solid var(--lane-color);
+        border-radius: var(--pb-radius);
+      }
+      ._label_ff0b9a {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--pb-space-2);
+        font-size: var(--pb-font-body);
+      }
+      ._label_ff0b9a b {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      ._label_ff0b9a strong {
+        flex: none;
+        font-size: var(--pb-font-h2);
+        font-variant-numeric: tabular-nums;
+      }
+      ._label_ff0b9a small {
+        font-size: var(--pb-font-body);
+      }
+      ._tower_ff0b9a {
+        flex: 1;
+        min-height: 0;
+      }
+      ._lane_ff0b9a p {
+        font-size: var(--pb-font-body);
+        line-height: 1.2;
+        text-align: center;
+        margin: 0;
+      }
+      ._lane_ff0b9a[data-out] p {
+        color: var(--pb-text-muted);
+      }
+
+      /* The lane footer carries the readable floor number; SVG annotations are phone-only. */
+      ._tower_ff0b9a text {
+        display: none;
+      }
+
+      ._tower_132d9e {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+      }
+      ._column_132d9e {
+        fill: var(--pb-surface-2);
+      }
+      ._safe_132d9e {
+        fill: var(--lane-color, var(--pb-accent-3));
+      }
+      ._danger_132d9e {
+        fill: var(--pb-danger);
+        stroke: var(--pb-text);
+        stroke-width: 0.3;
+      }
+      ._cross_132d9e {
+        stroke: var(--pb-text);
+        stroke-width: 2;
+        fill: none;
+      }
+      ._ball_132d9e {
+        fill: var(--pb-text);
+        stroke: var(--pb-bg);
+        stroke-width: 2;
+      }
+      ._charged_132d9e {
+        fill: var(--pb-accent-2);
+        stroke: var(--pb-text);
+        stroke-width: 3;
+      }
+      ._arrow_132d9e {
+        fill: none;
+        stroke: var(--pb-text);
+        stroke-width: 2;
+      }
+      ._floor_132d9e {
+        fill: var(--pb-text-muted);
+        font-family: var(--pb-font-family);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      ._stage_262f13 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+        min-height: 100%;
+        /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+        padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+          var(--pb-overscan-y, 54px);
+      }
+
+      ._center_262f13 {
+        /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+        justify-content: safe center;
+        align-items: safe center;
+        text-align: center;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      #shell {
+        height: 64px;
+        flex: none;
+        padding: var(--pb-space-3);
+        font-size: var(--pb-font-body);
+        display: flex;
+        align-items: center;
+      }
+      #view {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 0px;
+      }
+      svg {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="shell">PartyBox · Helix Drop</div>
+    <main id="view">
+      <div class="_stage_262f13 _stage_ff0b9a">
+        <header class="_header_ff0b9a">
+          <div>
+            <h1>Helix Drop</h1>
+            <p>Line up the gaps · × danger · 3 gaps charge a smash</p>
+          </div>
+          <span class="_timer_ff0b9a" role="timer" aria-label="52 seconds remaining"
+            >52<small>s</small></span
+          >
+        </header>
+        <div class="_lanes_ff0b9a" data-count="8">
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-1)"
+            aria-label="Ana, 36 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>1. Ana</b><strong>36<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 0, best 36, 2 lives"
+                style="--lane-color: var(--pb-player-1)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M164.71317133354,49.79369213210847 A72,18.72 0 0 0 150.0154026730478,44.533958937660444 L115.97714252055694,53.69834799397486 A23,5.98 0 0 1 120.67226306488084,55.378540542201314 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M150.0154026730478,44.533958937660444 A72,18.72 0 0 0 150.0154026730478,44.533958937660444 L115.97714252055694,53.69834799397486 A23,5.98 0 0 1 115.97714252055694,53.69834799397486 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M150.0154026730478,44.533958937660444 A72,18.72 0 1 0 105.02246610957701,76.67439902086392 L101.60439889611487,63.965433020553746 A23,5.98 0 1 1 115.97714252055694,53.69834799397486 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">1</text>
+                </g>
+                <g>
+                  <path
+                    d="M169.86129229187173,105.47122211437421 A72,18.72 0 0 0 159.690705223963,99.53190884702762 L119.06786416876596,106.65602643724493 A23,5.98 0 0 1 122.31680170434792,108.55330706431398 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M159.690705223963,99.53190884702762 A72,18.72 0 0 0 159.690705223963,99.53190884702762 L119.06786416876596,106.65602643724493 A23,5.98 0 0 1 119.06786416876596,106.65602643724493 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M159.690705223963,99.53190884702762 A72,18.72 0 1 0 89.97953673087525,128.5378182468422 L96.79901867791848,115.92180305107459 A23,5.98 0 1 1 119.06786416876596,106.65602643724493 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">2</text>
+                </g>
+                <g>
+                  <path
+                    d="M163.57222668584274,153.21149234464812 A72,18.72 0 0 0 148.1774036578378,148.08832886706318 L115.39000394625374,157.55599394364518 A23,5.98 0 0 1 120.30779463575533,159.19256005454037 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M148.1774036578378,148.08832886706318 A72,18.72 0 0 0 148.1774036578378,148.08832886706318 L115.39000394625374,157.55599394364518 A23,5.98 0 0 1 115.39000394625374,157.55599394364518 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M148.1774036578378,148.08832886706318 A72,18.72 0 1 0 107.52604935527101,180.61744988129408 L102.40415465515602,167.94724093430227 A23,5.98 0 1 1 115.39000394625374,157.55599394364518 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">3</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="27.691200000000002" r="8" class="_ball_132d9e"></circle>
+              </svg>
+            </div>
+            <p>2 lives · floor 1</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-2)"
+            aria-label="Ben, 36 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>2. Ben</b><strong>36<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 8, best 36, 2 lives, smash charged"
+                style="--lane-color: var(--pb-player-2)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M147.7086434715331,72.02045109317012 A72,18.72 0 0 0 163.2748321116615,66.93241199205987 L120.2127935912252,60.85340938635245 A23,5.98 0 0 1 115.24026110896196,62.47875521031823 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M163.2748321116615,66.93241199205987 A72,18.72 0 0 0 171.97532739824013,57.509967527676615 L122.99211847443782,57.84346184911892 A23,5.98 0 0 1 120.2127935912252,60.85340938635245 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M171.97532739824013,57.509967527676615 A72,18.72 0 1 0 33.48067365918736,65.16383385387448 L78.75077075224041,60.288446925543234 A23,5.98 0 1 1 122.99211847443782,57.84346184911892 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M142.51953544989755,58.95996211193556 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">9</text>
+                </g>
+                <g>
+                  <path
+                    d="M157.87769396443963,121.13508256798512 A72,18.72 0 0 0 169.0350209105099,115.31676725285743 L122.05285390196843,111.69841176132945 A23,5.98 0 0 1 118.48870779419599,113.55704026477302 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M169.0350209105099,115.31676725285743 A72,18.72 0 0 0 170.0106342686327,105.62990278861747 L122.36450816914657,108.6039967241417 A23,5.98 0 0 1 122.05285390196843,111.69841176132945 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M170.0106342686327,105.62990278861747 A72,18.72 0 1 0 40.66291441921484,120.60312475523287 L81.04509766169363,113.3871092968105 A23,5.98 0 1 1 122.36450816914657,108.6039967241417 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M144.6914490724762,108.41277610782348 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">10</text>
+                </g>
+                <g>
+                  <path
+                    d="M158.61631732165498,172.87075933090878 A72,18.72 0 0 0 169.38139263102087,167.00270240018497 L122.16350042379833,163.598085488948 A23,5.98 0 0 1 118.72465692219535,165.47260367515142 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M169.38139263102087,167.00270240018497 A72,18.72 0 0 0 167.87018735863683,155.7511355951438 L121.6807542951201,160.00383498178206 A23,5.98 0 0 1 122.16350042379833,163.598085488948 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M167.87018735863683,155.7511355951438 A72,18.72 0 1 0 41.38368267834494,172.87075933090875 L81.27534307780464,165.47260367515142 A23,5.98 0 1 1 121.6807542951201,160.00383498178206 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M144.77901752162458,160.1961549914524 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">11</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="20.827200000000275" r="8" class="_charged_132d9e"></circle>
+              </svg>
+            </div>
+            <p>⚡ SMASH charged</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-3)"
+            aria-label="Cy, 36 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>3. Cy</b><strong>36<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 8, best 36, 2 lives, smash charged"
+                style="--lane-color: var(--pb-player-3)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M168.27930317484635,63.93994316790334 A72,18.72 0 0 0 171.97532739824013,57.509967527676615 L122.99211847443782,57.84346184911892 A23,5.98 0 0 1 121.81144406974258,59.89748184530245 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M171.97532739824013,57.509967527676615 A72,18.72 0 0 0 161.39009183349467,48.218826868517446 L119.61072378014413,54.87545858299863 A23,5.98 0 0 1 122.99211847443782,57.84346184911892 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M161.39009183349467,48.218826868517446 A72,18.72 0 1 0 56.16917711137208,72.85157453025191 L85.99848713279941,62.74425297494158 A23,5.98 0 1 1 119.61072378014413,54.87545858299863 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M144.03638582179983,52.511888178473384 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">9</text>
+                </g>
+                <g>
+                  <path
+                    d="M171.5371736087143,112.1191641617352 A72,18.72 0 0 0 170.0106342686327,105.62990278861747 L122.36450816914657,108.6039967241417 A23,5.98 0 0 1 122.85215268056152,110.67695521833208 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M170.0106342686327,105.62990278861747 A72,18.72 0 0 0 152.2269547128847,97.11400234301291 L116.6836105332826,105.88363963735135 A23,5.98 0 0 1 122.36450816914657,108.6039967241417 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M152.2269547128847,97.11400234301291 A72,18.72 0 1 0 69.00320102980267,126.89639652302938 L90.09824477340919,115.39746000041217 A23,5.98 0 1 1 116.6836105332826,105.88363963735135 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M141.01888357048597,102.02361161981294 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">10</text>
+                </g>
+                <g>
+                  <path
+                    d="M171.66852628243686,163.7942324871786 A72,18.72 0 0 0 169.70663010722376,157.31288632410084 L122.26739572869647,160.50272757575445 A23,5.98 0 0 1 122.89411256244512,162.57315760007094 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M169.70663010722376,157.31288632410084 A72,18.72 0 0 0 146.76025947977325,147.76520032396743 L114.93730511159424,157.4527723257118 A23,5.98 0 0 1 122.26739572869647,160.50272757575445 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M146.76025947977325,147.76520032396743 A72,18.72 0 1 0 70.14208652875075,179.0344749908089 L90.46205541890649,167.4415683998417 A23,5.98 0 1 1 114.93730511159424,157.4527723257118 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M140.67814100207409,153.82462833165013 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">11</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="20.827200000000275" r="8" class="_charged_132d9e"></circle>
+              </svg>
+            </div>
+            <p>⚡ SMASH charged</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-4)"
+            aria-label="Dee, 36 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>4. Dee</b><strong>36<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 8, best 36, 2 lives, smash charged"
+                style="--lane-color: var(--pb-player-4)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M150.46546702958923,71.35204840816628 A72,18.72 0 0 0 164.98614047318995,66.05916773225128 L120.7594615400468,60.57445635891361 A23,5.98 0 0 1 116.12091307889656,62.26523768594201 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M164.98614047318995,66.05916773225128 A72,18.72 0 0 0 171.7780480287852,56.53124572797474 L122.92909867586195,57.530814607547484 A23,5.98 0 0 1 120.7594615400468,60.57445635891361 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M171.7780480287852,56.53124572797474 A72,18.72 0 1 0 35.01385952681004,66.0591677322513 L79.2405384599532,60.57445635891361 A23,5.98 0 1 1 122.92909867586195,57.530814607547484 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M143.2542617540139,58.33513493345664 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">9</text>
+                </g>
+                <g>
+                  <path
+                    d="M160.0397791888361,120.33226036504173 A72,18.72 0 0 0 170.0106342686327,114.37009721138254 L122.36450816914656,111.39600327585832 A23,5.98 0 0 1 119.17937390754486,113.30058317216611 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M170.0106342686327,114.37009721138254 A72,18.72 0 0 0 169.0350209105099,104.68323274714258 L122.05285390196845,108.30158823867055 A23,5.98 0 0 1 122.36450816914656,111.39600327585832 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M169.0350209105099,104.68323274714258 A72,18.72 0 1 0 42.878559499031056,121.39601395104324 L81.7528731733016,113.64039334547215 A23,5.98 0 1 1 122.05285390196845,108.30158823867055 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M144.91047032424962,107.76188577339502 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">10</text>
+                </g>
+                <g>
+                  <path
+                    d="M160.72418409852776,172.05824866825256 A72,18.72 0 0 0 170.29331251263517,166.0517495729213 L122.45480816375846,163.29430889134986 A23,5.98 0 0 1 119.39800325369636,165.213051657914 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M170.29331251263517,166.0517495729213 A72,18.72 0 0 0 166.5193263408127,154.83616614612555 L121.24922924775962,159.71155307445676 A23,5.98 0 0 1 122.45480816375846,163.29430889134986 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M166.5193263408127,154.83616614612555 A72,18.72 0 1 0 43.65221270662613,173.65347399785622 L82.00001239239447,165.72263752709296 A23,5.98 0 1 1 121.24922924775962,159.71155307445676 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M144.95431463592917,159.5443699543194 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">11</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="20.827200000000275" r="8" class="_charged_132d9e"></circle>
+              </svg>
+            </div>
+            <p>⚡ SMASH charged</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-5)"
+            aria-label="Eli, 36 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>5. Eli</b><strong>36<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 8, best 36, 2 lives, smash charged"
+                style="--lane-color: var(--pb-player-5)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M150.46546702958923,71.35204840816628 A72,18.72 0 0 0 164.98614047318995,66.05916773225128 L120.7594615400468,60.57445635891361 A23,5.98 0 0 1 116.12091307889656,62.26523768594201 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M164.98614047318995,66.05916773225128 A72,18.72 0 0 0 171.7780480287852,56.53124572797474 L122.92909867586195,57.530814607547484 A23,5.98 0 0 1 120.7594615400468,60.57445635891361 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M171.7780480287852,56.53124572797474 A72,18.72 0 1 0 35.01385952681004,66.0591677322513 L79.2405384599532,60.57445635891361 A23,5.98 0 1 1 122.92909867586195,57.530814607547484 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M143.2542617540139,58.33513493345664 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">9</text>
+                </g>
+                <g>
+                  <path
+                    d="M160.0397791888361,120.33226036504173 A72,18.72 0 0 0 170.0106342686327,114.37009721138254 L122.36450816914656,111.39600327585832 A23,5.98 0 0 1 119.17937390754486,113.30058317216611 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M170.0106342686327,114.37009721138254 A72,18.72 0 0 0 169.0350209105099,104.68323274714258 L122.05285390196845,108.30158823867055 A23,5.98 0 0 1 122.36450816914656,111.39600327585832 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M169.0350209105099,104.68323274714258 A72,18.72 0 1 0 42.878559499031056,121.39601395104324 L81.7528731733016,113.64039334547215 A23,5.98 0 1 1 122.05285390196845,108.30158823867055 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M144.91047032424962,107.76188577339502 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">10</text>
+                </g>
+                <g>
+                  <path
+                    d="M160.72418409852776,172.05824866825256 A72,18.72 0 0 0 170.29331251263517,166.0517495729213 L122.45480816375846,163.29430889134986 A23,5.98 0 0 1 119.39800325369636,165.213051657914 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M170.29331251263517,166.0517495729213 A72,18.72 0 0 0 166.5193263408127,154.83616614612555 L121.24922924775962,159.71155307445676 A23,5.98 0 0 1 122.45480816375846,163.29430889134986 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M166.5193263408127,154.83616614612555 A72,18.72 0 1 0 43.65221270662613,173.65347399785622 L82.00001239239447,165.72263752709296 A23,5.98 0 1 1 121.24922924775962,159.71155307445676 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M144.95431463592917,159.5443699543194 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">11</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="20.827200000000275" r="8" class="_charged_132d9e"></circle>
+              </svg>
+            </div>
+            <p>⚡ SMASH charged</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-6)"
+            aria-label="Fay, 36 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>6. Fay</b><strong>36<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 8, best 36, 2 lives, smash charged"
+                style="--lane-color: var(--pb-player-6)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M150.46546702958923,71.35204840816628 A72,18.72 0 0 0 164.98614047318995,66.05916773225128 L120.7594615400468,60.57445635891361 A23,5.98 0 0 1 116.12091307889656,62.26523768594201 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M164.98614047318995,66.05916773225128 A72,18.72 0 0 0 171.7780480287852,56.53124572797474 L122.92909867586195,57.530814607547484 A23,5.98 0 0 1 120.7594615400468,60.57445635891361 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M171.7780480287852,56.53124572797474 A72,18.72 0 1 0 35.01385952681004,66.0591677322513 L79.2405384599532,60.57445635891361 A23,5.98 0 1 1 122.92909867586195,57.530814607547484 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M143.2542617540139,58.33513493345664 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">9</text>
+                </g>
+                <g>
+                  <path
+                    d="M160.0397791888361,120.33226036504173 A72,18.72 0 0 0 170.0106342686327,114.37009721138254 L122.36450816914656,111.39600327585832 A23,5.98 0 0 1 119.17937390754486,113.30058317216611 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M170.0106342686327,114.37009721138254 A72,18.72 0 0 0 169.0350209105099,104.68323274714258 L122.05285390196845,108.30158823867055 A23,5.98 0 0 1 122.36450816914656,111.39600327585832 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M169.0350209105099,104.68323274714258 A72,18.72 0 1 0 42.878559499031056,121.39601395104324 L81.7528731733016,113.64039334547215 A23,5.98 0 1 1 122.05285390196845,108.30158823867055 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M144.91047032424962,107.76188577339502 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">10</text>
+                </g>
+                <g>
+                  <path
+                    d="M160.72418409852776,172.05824866825256 A72,18.72 0 0 0 170.29331251263517,166.0517495729213 L122.45480816375846,163.29430889134986 A23,5.98 0 0 1 119.39800325369636,165.213051657914 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M170.29331251263517,166.0517495729213 A72,18.72 0 0 0 166.5193263408127,154.83616614612555 L121.24922924775962,159.71155307445676 A23,5.98 0 0 1 122.45480816375846,163.29430889134986 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M166.5193263408127,154.83616614612555 A72,18.72 0 1 0 43.65221270662613,173.65347399785622 L82.00001239239447,165.72263752709296 A23,5.98 0 1 1 121.24922924775962,159.71155307445676 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M144.95431463592917,159.5443699543194 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">11</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="20.827200000000275" r="8" class="_charged_132d9e"></circle>
+              </svg>
+            </div>
+            <p>⚡ SMASH charged</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-7)"
+            aria-label="Gus, 51 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>7. Gus</b><strong>51<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 51, best 51, 3 lives, smash charged"
+                style="--lane-color: var(--pb-player-7)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M169.86129229187173,62.5287778856258 A72,18.72 0 0 0 171.60557646651569,56.04322716762954 L122.87400359347029,57.37491978965944 A23,5.98 0 0 1 122.31680170434791,59.446692935686016 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M171.60557646651569,56.04322716762954 A72,18.72 0 0 0 134.90629265773632,41.62711908235052 L111.15062126566576,52.769774151306414 A23,5.98 0 0 1 122.87400359347029,57.37491978965944 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M134.90629265773632,41.62711908235052 A72,18.72 0 1 0 77.75077640500375,75.80377798504527 L92.8926091293762,63.68731796744502 A23,5.98 0 1 1 111.15062126566576,52.769774151306414 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M143.1405614050393,51.56004579940385 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M135.8328157299975,47.66444005138994 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">52</text>
+                </g>
+                <g>
+                  <path
+                    d="M171.82461161870734,111.30584118849004 A72,18.72 0 0 0 169.21084210755896,104.84006869910577 L122.10901900658133,108.35168861221435 A23,5.98 0 0 1 122.94397315597595,110.41714371298987 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M169.21084210755896,104.84006869910577 A72,18.72 0 0 0 123.44090712091536,92.2998922647808 L107.48806755251462,104.34579891791608 A23,5.98 0 0 1 122.10901900658133,108.35168861221435 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M123.44090712091536,92.2998922647808 A72,18.72 0 1 0 89.97953673087537,128.5378182468422 L96.79901867791853,115.92180305107459 A23,5.98 0 1 1 107.48806755251462,104.34579891791608 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M140.14211422236002,101.52912808807231 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M130.34360178203187,98.02263929177363 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">53</text>
+                </g>
+                <g>
+                  <path
+                    d="M170.6771572082318,158.42805560655108 A72,18.72 0 0 0 161.7160456505521,152.3584872376838 L119.71484791614859,158.9200723120379 A23,5.98 0 0 1 122.57742521929627,160.85896220764826 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M161.7160456505521,152.3584872376838 A72,18.72 0 0 0 105.02246610957712,143.32560097913608 L101.60439889611492,156.03456697944625 A23,5.98 0 0 1 119.71484791614859,158.9200723120379 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M105.02246610957712,143.32560097913608 A72,18.72 0 1 0 108.77459272517068,180.58046395872555 L102.80299489831842,167.93542598681512 A23,5.98 0 1 1 101.60439889611492,156.03456697944625 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M133.22605985069305,150.81238331819847 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M120.27086177182419,148.08474605490034 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">54</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="44.33119999999579" r="8" class="_charged_132d9e"></circle>
+              </svg>
+            </div>
+            <p>⚡ SMASH charged</p>
+          </section>
+          <section
+            class="_lane_ff0b9a"
+            style="--lane-color: var(--pb-player-8)"
+            aria-label="Hal, 34 floors"
+          >
+            <div class="_label_ff0b9a">
+              <b>8. Hal</b><strong>34<small> floors</small></strong>
+            </div>
+            <div class="_tower_ff0b9a">
+              <svg
+                class="_tower_132d9e"
+                viewBox="0 0 200 200"
+                role="img"
+                aria-label="Tower: floor 34, best 34, 2 lives"
+                style="--lane-color: var(--pb-player-8)"
+              >
+                <rect x="91" y="8" width="18" height="182" rx="7" class="_column_132d9e"></rect>
+                <g>
+                  <path
+                    d="M74.19750763273834,75.47662558402762 A72,18.72 0 0 0 98.74342673651563,76.71714885332764 L99.59859465194249,63.979089217035224 A23,5.98 0 0 1 91.75753716045807,63.582810950453265 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M98.74342673651563,76.71714885332764 A72,18.72 0 0 0 150.0154026730478,71.46604106233956 L115.97714252055692,62.30165200602514 A23,5.98 0 0 1 99.59859465194249,63.979089217035224 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M150.0154026730478,71.46604106233956 A72,18.72 0 1 0 38.283954349447946,48.358487237683775 L80.28515208385143,54.920072312037874 A23,5.98 0 1 1 115.97714252055692,62.30165200602514 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M104.50885432193107,67.32635049062732 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M120.27086177182419,65.91525394509966 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="63" class="_floor_132d9e">35</text>
+                </g>
+                <g>
+                  <path
+                    d="M91.22540727482938,128.58046395872555 A72,18.72 0 0 0 116.19647591275813,128.2402076127796 L105.17387424990885,115.82673298741571 A23,5.98 0 0 1 97.19700510168161,115.9354259868151 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M116.19647591275813,128.2402076127796 A72,18.72 0 0 0 161.05946292326269,119.92008862644559 L119.5051062115978,113.16891720011456 A23,5.98 0 0 1 105.17387424990885,115.82673298741571 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M161.05946292326269,119.92008862644559 A72,18.72 0 1 0 31.146057570661483,104.52680168759034 L78.0049906128502,108.25161720575802 A23,5.98 0 1 1 119.5051062115978,113.16891720011456 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M115.75509416748508,118.48790057108646 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M129.7359212829999,116.12729419620726 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="115" class="_floor_132d9e">36</text>
+                </g>
+                <g>
+                  <path
+                    d="M30.45334050718708,166.84509252431917 A72,18.72 0 0 0 41.02105281119262,172.7373508884916 L81.1595029813532,165.42998708937927 A23,5.98 0 0 1 77.78370599535143,163.54773788971306 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M41.02105281119262,172.7373508884916 A72,18.72 0 0 0 87.49733120798099,180.43560113638853 L96.0060919136606,167.88915036301302 A23,5.98 0 0 1 81.1595029813532,165.42998708937927 Z"
+                    class="_danger_132d9e"
+                  ></path>
+                  <path
+                    d="M87.49733120798099,180.43560113638853 A72,18.72 0 1 0 93.72478652216878,143.35123525172253 L97.99541791680392,156.04275570541137 A23,5.98 0 1 1 96.0060919136606,167.88915036301302 Z"
+                    class="_safe_132d9e"
+                  ></path>
+                  <path
+                    d="M63.058874503045715,167.8246926292081 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <path
+                    d="M76.71432343644639,170.31072118221738 l6,6 m-6,0 l6,-6"
+                    class="_cross_132d9e"
+                  ></path>
+                  <text x="12" y="167" class="_floor_132d9e">37</text>
+                </g>
+                <path d="M100,22 v14 m-5,-5 l5,5 5,-5" class="_arrow_132d9e"></path>
+                <circle cx="100" cy="69" r="8" class="_ball_132d9e"></circle>
+                <path d="M94,63 l12,12 m-12,0 l12,-12" class="_cross_132d9e"></path>
+              </svg>
+            </div>
+            <p>↻ Fresh attempt</p>
+          </section>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
