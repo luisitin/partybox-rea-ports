@@ -9,4 +9,5 @@
 - Public TV progress always omits letters, also after a player's individual solve or exhaustion. Only that player's own accepted words are returned privately; the shared answer appears only after the round exits. The phone cannot reveal it to an exhausted player before the rest of the room.
 - No connected players is not an all-finished early-exit case. The phase deadline remains armed; permanently left and disconnected seats retain their prior scores in final results.
 - Bot strengths operate only on the curated public answer universe and their own clue history, using supplied seeded RNG. Three strengths refer to easy, normal and sharp, following the SDK's skill names.
+- JOBS.md requests the reference manifest's tags, so the port keeps `["comedy"]` alongside its required `arcade` category.
 - CPU care from the owner wins over broader reference commands: only this game's Vitest path, no whole-suite browser run, and at most one headless browser managed by the root runner with cleanup in `finally`.

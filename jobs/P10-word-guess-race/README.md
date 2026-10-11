@@ -23,7 +23,7 @@ pnpm format
 pnpm vitest run games/word-guess-race
 ```
 
-The game suite includes the SDK contract, 1,000 seeded full matches at 2, 4 and 8 players, 1,003 property seeds, private-view comparisons, duplicate-letter cases, reconnect and late-input tests, phone-only screens and content validation. Exact results, simulation medians, 20 mutation trials and media review live in [VERIFY.md](VERIFY.md). CI is `.github/workflows/P10.yml`.
+The game suite covers the SDK contract, private-view comparisons, duplicate letters, reconnects, late inputs, phone-only screens and content validation. Properties run 1,000 cases under each generator seed 1, 2 and 3. `pnpm exec tsx jobs/P10-word-guess-race/simulation.ts 1000` separately runs 21,000 seeded matches across all counts 2–8 and all three bot strengths. Exact results, medians, 20 mutation trials and media review live in [VERIFY.md](VERIFY.md). CI is `.github/workflows/P10.yml`.
 
 ## Read
 
