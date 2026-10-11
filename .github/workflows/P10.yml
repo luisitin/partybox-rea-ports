@@ -1,0 +1,24 @@
+name: P10 Word Guess Race
+on:
+  pull_request:
+    paths:
+      - 'games/word-guess-race/**'
+      - 'jobs/P10-word-guess-race/**'
+      - '.github/workflows/P10.yml'
+permissions:
+  contents: read
+jobs:
+  word-guess-race:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm format
+      - run: pnpm vitest run games/word-guess-race --maxWorkers=1
+      - run: pnpm exec tsx jobs/P10-word-guess-race/simulation.ts 1000

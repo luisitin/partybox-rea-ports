@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en" data-surface="phone">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Word Guess Race</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>; 
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+
+      /* Eight readable progress boards within the TV stage. All visual values follow SDK tokens. */
+      ._stage_d1d76d {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-2) var(--pb-overscan-x) var(--pb-overscan-y);
+        min-height: 0;
+        height: 100%;
+      }
+      ._header_d1d76d {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--pb-space-5);
+      }
+      ._header_d1d76d h2 {
+        font-size: var(--pb-font-h2);
+        margin: 0;
+        line-height: 1.2;
+      }
+      ._kicker_d1d76d,
+      ._legend_d1d76d,
+      ._footer_d1d76d {
+        font-size: var(--pb-font-body);
+        margin: 0;
+        color: var(--pb-text-muted);
+      }
+      ._clock_d1d76d {
+        font-size: var(--pb-font-display);
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+        font-weight: 900;
+        color: var(--pb-accent-2);
+      }
+      ._players_d1d76d {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-auto-rows: minmax(0, 1fr);
+        gap: var(--pb-space-4);
+      }
+      ._card_d1d76d {
+        min-width: 0;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        align-content: center;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-2);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        border: var(--pb-space-1) solid var(--pb-surface-2);
+      }
+      ._card_d1d76d[data-solved='true'] {
+        border-color: var(--pb-accent-3);
+      }
+      ._name_d1d76d {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+      }
+      ._name_d1d76d strong {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      ._name_d1d76d span {
+        margin-left: auto;
+        white-space: nowrap;
+      }
+      ._grid_d1d76d {
+        display: grid;
+        grid-template-columns: repeat(5, var(--pb-space-7));
+        grid-template-rows: repeat(6, var(--pb-space-6));
+        gap: calc(var(--pb-space-1) / 2);
+        align-self: center;
+        justify-self: center;
+      }
+      ._tile_d1d76d {
+        display: grid;
+        place-items: center;
+        color: var(--pb-text-muted);
+        background: var(--pb-surface-2);
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+        font-weight: 900;
+        line-height: 1;
+        border-radius: calc(var(--pb-radius) / 3);
+      }
+      ._tile_d1d76d[data-mark='correct'] {
+        background: var(--pb-accent-3);
+        color: var(--pb-bg);
+      }
+      ._tile_d1d76d[data-mark='present'] {
+        background: var(--pb-accent-2-fill);
+        color: var(--pb-on-accent-2-fill);
+      }
+      ._tile_d1d76d[data-mark='absent'] {
+        color: var(--pb-text);
+      }
+      ._status_d1d76d {
+        margin: 0;
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+        text-align: center;
+      }
+      ._footer_d1d76d {
+        text-align: center;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        ._tile_d1d76d {
+          animation: none;
+        }
+      }
+      :root[data-motion='off'] ._tile_d1d76d {
+        animation: none;
+      }
+      /* Seven columns allow real 44px keys and 8px gaps at the 390px phone target. */
+      ._screen_02bc18 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-2);
+        height: 100%;
+        min-height: 0;
+        padding: var(--pb-space-3);
+        overflow: hidden;
+        overscroll-behavior: none;
+        color: var(--pb-text);
+      }
+      ._header_02bc18 {
+        display: flex;
+        gap: var(--pb-space-2);
+        align-items: center;
+        justify-content: space-between;
+      }
+      ._header_02bc18 h2 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+      }
+      ._header_02bc18 > span {
+        font-size: var(--pb-font-h1);
+        color: var(--pb-accent-2);
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+      }
+      ._hint_02bc18,
+      ._legend_02bc18,
+      ._feedback_02bc18 {
+        margin: 0;
+        font-size: var(--pb-font-caption);
+        line-height: 1.35;
+      }
+      ._hint_02bc18,
+      ._legend_02bc18 {
+        color: var(--pb-text-muted);
+      }
+      ._legend_02bc18 {
+        text-align: center;
+      }
+      ._feedback_02bc18 {
+        min-height: calc(var(--pb-space-5) + var(--pb-space-2));
+        display: grid;
+        align-content: center;
+        text-align: center;
+      }
+      ._board_02bc18 {
+        display: grid;
+        grid-template-columns: repeat(5, calc(var(--pb-space-7) - var(--pb-space-2)));
+        grid-template-rows: repeat(6, calc(var(--pb-space-6) + var(--pb-space-1)));
+        gap: var(--pb-space-1);
+        align-self: center;
+        flex: none;
+      }
+      ._tile_02bc18 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: calc(var(--pb-space-1) / 2);
+        border-radius: calc(var(--pb-radius) / 3);
+        background: var(--pb-surface-2);
+        font-size: var(--pb-font-button);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-surface-2);
+      }
+      ._tile_02bc18[data-draft='true'] {
+        border-color: var(--pb-text-muted);
+      }
+      ._tile_02bc18 small {
+        font-size: var(--pb-font-caption);
+        line-height: 1;
+      }
+      ._tile_02bc18[data-mark='correct'],
+      ._key_02bc18[data-mark='correct'],
+      ._miniGrid_02bc18 span[data-mark='correct'] {
+        background: var(--pb-accent-3);
+        color: var(--pb-bg);
+      }
+      ._tile_02bc18[data-mark='present'],
+      ._key_02bc18[data-mark='present'],
+      ._miniGrid_02bc18 span[data-mark='present'] {
+        background: var(--pb-accent-2-fill);
+        color: var(--pb-on-accent-2-fill);
+      }
+      ._tile_02bc18[data-mark='absent'],
+      ._miniGrid_02bc18 span[data-mark='absent'] {
+        color: var(--pb-text);
+      }
+      ._keyboard_02bc18 {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(var(--pb-touch), 1fr));
+        gap: var(--pb-space-2);
+        margin-top: auto;
+      }
+      ._key_02bc18,
+      ._actions_02bc18 button {
+        min-width: var(--pb-touch);
+        min-height: var(--pb-touch);
+        border: 0;
+        border-radius: var(--pb-radius);
+        font: inherit;
+        font-size: var(--pb-font-button);
+        font-weight: 800;
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        touch-action: manipulation;
+      }
+      ._key_02bc18 {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: calc(var(--pb-space-1) / 2);
+      }
+      ._key_02bc18 small {
+        position: absolute;
+        bottom: calc(var(--pb-space-1) / 2);
+        right: calc(var(--pb-space-1) / 2);
+        font-size: var(--pb-font-caption);
+        line-height: 1;
+      }
+      ._actions_02bc18 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--pb-space-2);
+      }
+      ._actions_02bc18 ._submit_02bc18 {
+        background: var(--pb-accent);
+        color: var(--pb-on-accent);
+      }
+      ._key_02bc18:disabled,
+      ._actions_02bc18 button:disabled {
+        opacity: 0.65;
+      }
+      ._key_02bc18:focus-visible,
+      ._actions_02bc18 button:focus-visible {
+        outline: var(--pb-space-1) solid var(--pb-focus);
+        outline-offset: calc(var(--pb-space-1) / 2);
+      }
+      ._standings_02bc18 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--pb-space-2);
+      }
+      ._row_02bc18 {
+        min-width: 0;
+        padding: var(--pb-space-2);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+      }
+      ._row_02bc18[data-me='true'] {
+        outline: calc(var(--pb-space-1) / 2) solid var(--pb-accent-2);
+      }
+      ._rowName_02bc18 {
+        display: flex;
+        gap: var(--pb-space-1);
+        font-size: var(--pb-font-caption);
+      }
+      ._rowName_02bc18 b {
+        min-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      ._rowName_02bc18 span {
+        margin-left: auto;
+        white-space: nowrap;
+      }
+      ._row_02bc18 small {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+      ._race_02bc18 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--pb-space-2);
+      }
+      ._miniGrid_02bc18 {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(6, var(--pb-space-3));
+        gap: calc(var(--pb-space-1) / 2);
+        margin: var(--pb-space-1) 0;
+      }
+      ._miniGrid_02bc18 span {
+        display: grid;
+        place-items: center;
+        font-size: calc(var(--pb-font-caption) * 0.75);
+        line-height: 1;
+        background: var(--pb-surface-2);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        ._tile_02bc18 {
+          animation: none;
+        }
+      }
+      :root[data-motion='off'] ._tile_02bc18 {
+        animation: none;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+      }
+      main {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      header.shell {
+        height: 64px;
+        flex: none;
+        padding: 16px;
+        font-size: 18px;
+        background: var(--pb-surface);
+      }
+      .viewport {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      [data-surface='tv'] header.shell {
+        height: 96px;
+        padding: 24px;
+        font-size: 36px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="shell">PB · HOUSE · Word Guess Race</header>
+      <div class="viewport">
+        <div class="_screen_02bc18" data-active="false">
+          <header class="_header_02bc18"><h2>Final standings</h2></header>
+          <p class="_hint_02bc18">Ana wins!</p>
+          <div class="_standings_02bc18" aria-label="Race standings">
+            <section class="_row_02bc18" data-me="false">
+              <div class="_rowName_02bc18"><b>#1 Ana</b><span>14 pts</span></div>
+              <small>✓ 4 guesses · 40.9s · +6</small>
+            </section>
+            <section class="_row_02bc18" data-me="false">
+              <div class="_rowName_02bc18"><b>#2 Fay</b><span>13 pts</span></div>
+              <small>✓ 4 guesses · 46.9s · +1</small>
+            </section>
+            <section class="_row_02bc18" data-me="false">
+              <div class="_rowName_02bc18"><b>#3 Dee</b><span>11 pts</span></div>
+              <small>✓ 4 guesses · 42.1s · +5</small>
+            </section>
+            <section class="_row_02bc18" data-me="false">
+              <div class="_rowName_02bc18"><b>#3 Eli</b><span>11 pts</span></div>
+              <small>✓ 4 guesses · 39.0s · +7</small>
+            </section>
+            <section class="_row_02bc18" data-me="false">
+              <div class="_rowName_02bc18"><b>#3 Gus</b><span>11 pts</span></div>
+              <small>✓ 4 guesses · 44.9s · +3</small>
+            </section>
+            <section class="_row_02bc18" data-me="false">
+              <div class="_rowName_02bc18"><b>#6 Hal</b><span>9 pts</span></div>
+              <small>✓ 4 guesses · 46.1s · +2</small>
+            </section>
+            <section class="_row_02bc18" data-me="false">
+              <div class="_rowName_02bc18"><b>#7 Ben</b><span>8 pts</span></div>
+              <small>✓ 4 guesses · 48.7s · +0</small>
+            </section>
+            <section class="_row_02bc18" data-me="false">
+              <div class="_rowName_02bc18"><b>#8 Cy</b><span>7 pts</span></div>
+              <small>✓ 4 guesses · 43.3s · +4</small>
+            </section>
+          </div>
+          <p class="_hint_02bc18">Three shared words. One race.</p>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

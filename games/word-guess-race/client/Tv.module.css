@@ -1,0 +1,118 @@
+/* Eight readable progress boards within the TV stage. All visual values follow SDK tokens. */
+.stage {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2) var(--pb-overscan-x) var(--pb-overscan-y);
+  min-height: 0;
+  height: 100%;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--pb-space-5);
+}
+.header h2 {
+  font-size: var(--pb-font-h2);
+  margin: 0;
+  line-height: 1.2;
+}
+.kicker,
+.legend,
+.footer {
+  font-size: var(--pb-font-body);
+  margin: 0;
+  color: var(--pb-text-muted);
+}
+.clock {
+  font-size: var(--pb-font-display);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  font-weight: 900;
+  color: var(--pb-accent-2);
+}
+.players {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: var(--pb-space-4);
+}
+.card {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-content: center;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  border: var(--pb-space-1) solid var(--pb-surface-2);
+}
+.card[data-solved='true'] {
+  border-color: var(--pb-accent-3);
+}
+.name {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+}
+.name strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.name span {
+  margin-left: auto;
+  white-space: nowrap;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, var(--pb-space-7));
+  grid-template-rows: repeat(6, var(--pb-space-6));
+  gap: calc(var(--pb-space-1) / 2);
+  align-self: center;
+  justify-self: center;
+}
+.tile {
+  display: grid;
+  place-items: center;
+  color: var(--pb-text-muted);
+  background: var(--pb-surface-2);
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  font-weight: 900;
+  line-height: 1;
+  border-radius: calc(var(--pb-radius) / 3);
+}
+.tile[data-mark='correct'] {
+  background: var(--pb-accent-3);
+  color: var(--pb-bg);
+}
+.tile[data-mark='present'] {
+  background: var(--pb-accent-2-fill);
+  color: var(--pb-on-accent-2-fill);
+}
+.tile[data-mark='absent'] {
+  color: var(--pb-text);
+}
+.status {
+  margin: 0;
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  text-align: center;
+}
+.footer {
+  text-align: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tile {
+    animation: none;
+  }
+}
+:global(:root[data-motion='off']) .tile {
+  animation: none;
+}

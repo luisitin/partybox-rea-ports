@@ -1,0 +1,182 @@
+[
+  {
+    "id": "M01",
+    "category": "scoring",
+    "bug": "An unsolved player beats every opponent",
+    "file": "games/word-guess-race/server/scoring.ts",
+    "before": "if (a.solvedElapsedMs === null) return false;",
+    "after": "if (a.solvedElapsedMs === null) return true;",
+    "test": "games/word-guess-race/server/scoring.test.ts"
+  },
+  {
+    "id": "M02",
+    "category": "scoring",
+    "bug": "A solved player loses to an unsolved opponent",
+    "file": "games/word-guess-race/server/scoring.ts",
+    "before": "if (b.solvedElapsedMs === null) return true;",
+    "after": "if (b.solvedElapsedMs === null) return false;",
+    "test": "games/word-guess-race/server/scoring.test.ts"
+  },
+  {
+    "id": "M03",
+    "category": "scoring",
+    "bug": "More guesses outrank fewer guesses",
+    "file": "games/word-guess-race/server/scoring.ts",
+    "before": "a.guesses.length < b.guesses.length",
+    "after": "a.guesses.length > b.guesses.length",
+    "test": "games/word-guess-race/server/scoring.test.ts"
+  },
+  {
+    "id": "M04",
+    "category": "scoring",
+    "bug": "Slower solves outrank faster solves",
+    "file": "games/word-guess-race/server/scoring.ts",
+    "before": "a.solvedElapsedMs < b.solvedElapsedMs",
+    "after": "a.solvedElapsedMs > b.solvedElapsedMs",
+    "test": "games/word-guess-race/server/scoring.test.ts"
+  },
+  {
+    "id": "M05",
+    "category": "scoring",
+    "bug": "Exact speed ties incorrectly earn comparison points",
+    "file": "games/word-guess-race/server/scoring.ts",
+    "before": "a.solvedElapsedMs < b.solvedElapsedMs",
+    "after": "a.solvedElapsedMs <= b.solvedElapsedMs",
+    "test": "games/word-guess-race/server/scoring.test.ts"
+  },
+  {
+    "id": "M06",
+    "category": "scoring",
+    "bug": "Round points subtract from cumulative scores",
+    "file": "games/word-guess-race/server/scoring.ts",
+    "before": "state.scores[id]! + lastPoints[id]!",
+    "after": "state.scores[id]! - lastPoints[id]!",
+    "test": "games/word-guess-race/server/scoring.test.ts"
+  },
+  {
+    "id": "M07",
+    "category": "scoring",
+    "bug": "Revisiting reveal scores the same round twice",
+    "file": "games/word-guess-race/server/scoring.ts",
+    "before": "if (state.roundScored) return state;",
+    "after": "if (false) return state;",
+    "test": "games/word-guess-race/server/scoring.test.ts"
+  },
+  {
+    "id": "M08",
+    "category": "phase exit",
+    "bug": "An early current-phase timer closes guessing",
+    "file": "games/word-guess-race/server/phases/guess.ts",
+    "before": "event.now >= (state.phase.deadline ?? Infinity) ? next(state, event.now) : state",
+    "after": "true ? next(state, event.now) : state",
+    "test": "games/word-guess-race/server/game.test.ts"
+  },
+  {
+    "id": "M09",
+    "category": "phase exit",
+    "bug": "Finished players can submit a seventh guess or guess after solving",
+    "file": "games/word-guess-race/server/phases/guess.ts",
+    "before": "!entry || finished(entry) ||",
+    "after": "!entry || false ||",
+    "test": "games/word-guess-race/server/game.test.ts"
+  },
+  {
+    "id": "M10",
+    "category": "phase exit",
+    "bug": "Disconnected players can change their locked progress",
+    "file": "games/word-guess-race/server/phases/guess.ts",
+    "before": "state.players[event.playerId]?.connected !== true",
+    "after": "false",
+    "test": "games/word-guess-race/server/game.test.ts"
+  },
+  {
+    "id": "M11",
+    "category": "phase exit",
+    "bug": "Previous-round submissions are accepted into the next round",
+    "file": "games/word-guess-race/server/phases/guess.ts",
+    "before": "event.input.round !== state.round",
+    "after": "false",
+    "test": "games/word-guess-race/server/game.test.ts"
+  },
+  {
+    "id": "M12",
+    "category": "phase exit",
+    "bug": "Guesses at the deadline are accepted instead of closing the phase",
+    "file": "games/word-guess-race/server/phases/guess.ts",
+    "before": "state.phase.deadline !== null && event.now >= state.phase.deadline",
+    "after": "false",
+    "test": "games/word-guess-race/server/game.test.ts"
+  },
+  {
+    "id": "M13",
+    "category": "phase exit",
+    "bug": "Duplicate words consume an extra guess",
+    "file": "games/word-guess-race/server/phases/guess.ts",
+    "before": "entry.guesses.some((guess) => guess.word === word)",
+    "after": "false",
+    "test": "games/word-guess-race/server/game.test.ts"
+  },
+  {
+    "id": "M14",
+    "category": "phase exit",
+    "bug": "The room waits after every connected player has finished",
+    "file": "games/word-guess-race/server/phases/guess.ts",
+    "before": "allConnectedDone(state, done) ? next(state, now) : state",
+    "after": "false ? next(state, now) : state",
+    "test": "games/word-guess-race/server/game.test.ts"
+  },
+  {
+    "id": "M15",
+    "category": "phase exit",
+    "bug": "The last reveal starts a fourth round instead of ending",
+    "file": "games/word-guess-race/server/index.ts",
+    "before": "state.round >= ROUNDS",
+    "after": "false",
+    "test": "games/word-guess-race/server/game.test.ts"
+  },
+  {
+    "id": "M16",
+    "category": "hidden information",
+    "bug": "The current solution leaks during guessing",
+    "file": "games/word-guess-race/server/index.ts",
+    "before": "state.phase.id === 'guess' ? null : (state.answers[state.round - 1] ?? null)",
+    "after": "state.phase.id === 'guess' ? (state.answers[state.round - 1] ?? null) : (state.answers[state.round - 1] ?? null)",
+    "test": "games/word-guess-race/server/game.test.ts"
+  },
+  {
+    "id": "M17",
+    "category": "hidden information",
+    "bug": "Future-round solutions leak in every public view",
+    "file": "games/word-guess-race/server/index.ts",
+    "before": "rounds: ROUNDS,",
+    "after": "rounds: ROUNDS, answers: state.answers,",
+    "test": "games/word-guess-race/server/game.test.ts"
+  },
+  {
+    "id": "M18",
+    "category": "hidden information",
+    "bug": "The TV displays guess letters in place of private feedback marks",
+    "file": "games/word-guess-race/server/index.ts",
+    "before": "rows: entry.guesses.map((guess) => [...guess.marks])",
+    "after": "rows: entry.guesses.map((guess) => [...guess.word])",
+    "test": "games/word-guess-race/server/game.test.ts"
+  },
+  {
+    "id": "M19",
+    "category": "hidden information",
+    "bug": "A player receives the first other player private history",
+    "file": "games/word-guess-race/server/index.ts",
+    "before": "state.entries[playerId] ?? emptyEntry()",
+    "after": "state.entries[Object.keys(state.players)[0]!] ?? emptyEntry()",
+    "test": "games/word-guess-race/server/game.test.ts"
+  },
+  {
+    "id": "M20",
+    "category": "hidden information",
+    "bug": "A spectator receives the first player private history",
+    "file": "games/word-guess-race/server/index.ts",
+    "before": "known ? (state.entries[playerId] ?? emptyEntry()) : emptyEntry()",
+    "after": "known ? (state.entries[playerId] ?? emptyEntry()) : (state.entries[Object.keys(state.players)[0]!] ?? emptyEntry())",
+    "test": "games/word-guess-race/server/game.test.ts"
+  }
+]
