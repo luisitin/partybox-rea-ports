@@ -26,4 +26,6 @@ P13 r14-local 2026-10-11T21:45:01Z job/P13-dino-dash
 
 P14 r10-local 2026-10-11T21:48:03Z job/P14-crossy-streets
 
+P15 r12-local 2026-10-11T21:48:14Z job/P15-doodle-climb
+
 <!-- prettier-ignore-end -->
