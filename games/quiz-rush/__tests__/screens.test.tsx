@@ -7,6 +7,7 @@ import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
 import { Controller } from '../client/Controller';
 import { Tv } from '../client/Tv';
 import { game } from '../server/index';
+import { enterQuestion } from '../server/phases/question';
 import type { State } from '../server/types';
 import { MEDIA, evidenceCss, standalone, writeEvidence } from './screen-evidence';
 import type { EvidenceCase, Surface } from './screen-evidence';
@@ -52,29 +53,42 @@ const longNames = (state: State): State => ({
     ]),
   ),
 });
-const maxContent: State = {
-  ...longNames(question),
-  deck: [
-    {
-      ...question.deck[0]!,
-      prompt:
-        'Which of these four carefully described answers best explains the observable result of this science experiment?'.slice(
-          0,
-          110,
-        ),
-      options: [
-        'A change in the motion of both objects',
-        'A change in the direction of the light',
-        'A change in the structure of the material',
-        'A change in the pressure inside the vessel',
-      ],
-      explanation:
-        'The evidence supports a change in the structure of the material rather than the three other proposed explanations.',
-    },
-    ...question.deck.slice(1),
-  ],
-};
+const maxContent = enterQuestion(
+  {
+    ...longNames(question),
+    deck: [
+      {
+        ...question.deck[0]!,
+        prompt:
+          'Which of these four carefully described answers best explains the observable result of this science experiment?'.slice(
+            0,
+            110,
+          ),
+        options: [
+          'A change in the motion of both objects',
+          'A change in the direction of the light',
+          'A change in the structure of the material',
+          'A change in the pressure inside the vessel',
+        ],
+        explanation:
+          'The evidence supports a change in the structure of the material rather than the three other proposed explanations.',
+      },
+      ...question.deck.slice(1),
+    ],
+  },
+  question.phase.startedAt,
+  question.round,
+);
 fixtures.push({ name: 'question-max-content', state: maxContent });
+fixtures.push({
+  name: 'question-max-content-locked',
+  state: game.reduce(maxContent, {
+    type: 'input',
+    playerId: 'p1',
+    now: maxContent.openedAt + 1000,
+    input: { type: 'answer', round: maxContent.round, choice: 0 },
+  }),
+});
 fixtures.push({
   name: 'podium-all-tied-long-names',
   state: {

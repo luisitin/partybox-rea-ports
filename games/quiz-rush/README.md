@@ -87,6 +87,7 @@ Three original packs of 20 questions. `content/schema.ts` validates bounded prom
 exactly four distinct options, one correct index, difficulty and unique question IDs; `packs`
 also validates the separate bot vocabulary. That vocabulary is server-only. Content is parsed
 once; no runtime network calls, new dependencies, ripped questions, logos or audio.
+The movie pack spans 16 films, with eight animated and twelve live-action questions.
 
 The shell sound plan uses a tense question bed, cuts to a quiet reveal, and warms the scoreboard.
 Answer verdicts use SDK sound/haptic cues. Original audio was studied as a pacing cue, never copied.

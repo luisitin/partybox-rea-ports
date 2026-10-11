@@ -3,17 +3,17 @@
 Run r1-local on Windows 11, Node 24 and pnpm 12.4.2. `pnpm.cmd` is the Windows entry point
 because this desktop blocks PowerShell shim scripts. No complete repository test suite was run.
 
-| Check                              | Exact command                                                                                            | Result                                                                                                                                                                                         |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Install                            | `corepack enable`; `pnpm.cmd install`                                                                    | PASS; frozen workspace dependencies reused, no new dependencies                                                                                                                                |
-| Types                              | `pnpm.cmd typecheck`                                                                                     | PASS                                                                                                                                                                                           |
-| Game + SDK + property + simulation | `pnpm.cmd vitest run games/quiz-rush --maxWorkers=1`                                                     | PASS; 106 tests, 1 opt-in fixture-generation test skipped; 18.11 s; separately generated fixtures and 7000 simulations also pass                                                               |
-| Published SDK contract             | Included by `games/quiz-rush/__tests__/sdk.test.ts` in the command above                                 | PASS; 20 unmodified SDK tests, discovery restricted to quiz-rush only                                                                                                                          |
-| Property tests                     | `pnpm.cmd vitest run games/quiz-rush/__tests__/properties.test.ts --maxWorkers=1` (also in game run)     | PASS; seeds 1, 2, 3 + 1000 independently sampled reproducible seeds; generated event traces, fuzz, immutable state, JSON, replay                                                               |
-| Mutations                          | `node jobs/P01-quiz-rush/mutate.mjs`                                                                     | PASS: 20/20 behavioral kills, zero invalid/load/syntax kills; 25 baseline tests green; original source hashes restored                                                                         |
-| Formatting                         | `pnpm.cmd format`                                                                                        | PASS; all matched files formatted                                                                                                                                                              |
-| Screens                            | Opt-in `screens.test.tsx` renders; `node jobs/P01-quiz-rush/capture.mjs`                                 | 44 HTML/PNG frames and 47 SSR assertions pass; zero scrolling, clipping or missing CSS, including maximum text and eight tied long names; final pacing recapture and all 90 checksums complete |
-| CI                                 | `.github/workflows/P01.yml`: install, types, format, this game's tests, ubuntu-latest, 30 min, read-only | PASS; GitHub run 38176682177 (40 s), PR #2 ready after success; integration includes updated main SDK                                                                                          |
+| Check                              | Exact command                                                                                            | Result                                                                                                                                                                                                |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Install                            | `corepack enable`; `pnpm.cmd install`                                                                    | PASS; frozen workspace dependencies reused, no new dependencies                                                                                                                                       |
+| Types                              | `pnpm.cmd typecheck`                                                                                     | PASS                                                                                                                                                                                                  |
+| Game + SDK + property + simulation | `pnpm.cmd vitest run games/quiz-rush --maxWorkers=1`                                                     | PASS; 116 tests, 1 opt-in fixture-generation test skipped; 35.19 s; separately generated fixtures and final 7000 simulations also pass                                                                |
+| Published SDK contract             | Included by `games/quiz-rush/__tests__/sdk.test.ts` in the command above                                 | PASS; 20 unmodified SDK tests, discovery restricted to quiz-rush only                                                                                                                                 |
+| Property tests                     | `pnpm.cmd vitest run games/quiz-rush/__tests__/properties.test.ts --maxWorkers=1` (also in game run)     | PASS; seeds 1, 2, 3 + 1000 independently sampled reproducible seeds; generated event traces, fuzz, immutable state, JSON, replay                                                                      |
+| Mutations                          | `node jobs/P01-quiz-rush/mutate.mjs`                                                                     | PASS: 20/20 behavioral kills, zero invalid/load/syntax kills; 25 baseline tests green; original source hashes restored                                                                                |
+| Formatting                         | `pnpm.cmd format`                                                                                        | PASS; all matched files formatted                                                                                                                                                                     |
+| Screens                            | Opt-in `screens.test.tsx` renders; `node jobs/P01-quiz-rush/capture.mjs`                                 | 48 HTML/PNG frames and 57 SSR assertions pass; zero scrolling, clipping or missing CSS, including locked maximum text and eight tied long names; final pacing recapture and all 98 checksums complete |
+| CI                                 | `.github/workflows/P01.yml`: install, types, format, this game's tests, ubuntu-latest, 30 min, read-only | PASS; GitHub run 38176682177 (40 s), PR #2 ready after success; integration includes updated main SDK                                                                                                 |
 
 ## Seeded bots
 
@@ -24,13 +24,13 @@ the final round includes the podium. Evidence: `sim-2.json` through `sim-8.json`
 
 | Players | Matches | Median round (s) | Longest match (s) |
 | ------- | ------- | ---------------- | ----------------- |
-| 2       | 1000    | 30.931           | 645.048           |
-| 3       | 1000    | 32.724           | 702.403           |
-| 4       | 1000    | 34.334           | 755.061           |
-| 5       | 1000    | 35.858           | 786.671           |
-| 6       | 1000    | 37.460           | 812.068           |
-| 7       | 1000    | 39.646           | 853.805           |
-| 8       | 1000    | 41.311           | 893.346           |
+| 2       | 1000    | 30.935           | 645.048           |
+| 3       | 1000    | 32.715           | 702.403           |
+| 4       | 1000    | 34.329           | 755.061           |
+| 5       | 1000    | 35.856           | 786.671           |
+| 6       | 1000    | 37.445           | 812.068           |
+| 7       | 1000    | 39.631           | 853.805           |
+| 8       | 1000    | 41.300           | 893.346           |
 
 ## Reproducibility
 
@@ -43,9 +43,9 @@ behavioral tests. CI skips fixture/media generation and checks the committed art
 Screen evidence command: `$env:PB_WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/quiz-rush/__tests__/screens.test.tsx --maxWorkers=1`, then `node jobs/P01-quiz-rush/capture.mjs`, `pnpm.cmd exec prettier --write jobs/P01-quiz-rush/media`, and `node jobs/P01-quiz-rush/hash-media.mjs`.
 One owned headless Chrome process captures sequentially and closes in `finally`. Static renders
 settle SDK animation hooks for readable final frames; actual components, views and module CSS run.
-Independent visual review covers all 44 frames. TV body text is at least 32.736 px; the smallest
+Independent visual review covers all 48 frames. TV body text is at least 32.736 px; the smallest
 answer target is 173 × 210.7 px. Phones reserve an 84 px header and 48 px footer. No second browser
-or whole-suite browser run was started. SHA256SUMS covers all 90 media files, below 10 MB.
+or whole-suite browser run was started. SHA256SUMS covers all 98 media files (5,631,194 bytes), below 10 MB.
 
 No secrets, tracking, runtime network calls, imported artwork or imported audio. Original live
 play was unavailable; source reconstruction is explicitly recorded in RESEARCH/ASSUMPTIONS.

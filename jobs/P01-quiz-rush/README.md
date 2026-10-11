@@ -3,6 +3,7 @@
 Quiz Rush is PartyBox's live house quiz for 2-8 players. It ships three original packs of twenty
 questions: general knowledge, movies and science. Phones beside the TV show four large shape
 buttons; phone-only and remote players also see the question and choices.
+The movie pack covers sixteen films across animation, comedy, adventure, sci-fi and fantasy.
 
 The TV carries the prompt and answer clock, then a correct-answer/count-chart reveal and a
 short standings beat. The final question goes straight to a top-three podium reveal. Questions

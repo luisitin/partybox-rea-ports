@@ -1630,7 +1630,7 @@ ight is the :root default above) ────────
         position: sticky;
         bottom: 0;
         padding: var(--pb-space-3) var(--pb-space-4)
-          calc(var(--pb-space-3) + env(safe-area-inset-bottom));
+          calc(var(--pb-space-3) + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
         background: linear-gradient(to top, var(--pb-bg) 70%, transparent);
       }
 
@@ -1640,7 +1640,8 @@ ight is the :root default above) ────────
           padding: var(--pb-space-2) var(--pb-space-4);
         }
         ._footer_72dfcc {
-          padding: 4px var(--pb-space-4) calc(4px + env(safe-area-inset-bottom));
+          padding: 4px var(--pb-space-4)
+            calc(4px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
         }
       }
 
@@ -1781,7 +1782,8 @@ ight is the :root default above) ────────
       /* No footer: the row alone, in the bottom safe area. */
       ._cueOnly_72dfcc {
         flex-shrink: 0;
-        padding: var(--pb-space-3) var(--pb-space-4) calc(4px + env(safe-area-inset-bottom));
+        padding: var(--pb-space-3) var(--pb-space-4)
+          calc(4px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
       }
 
       @media (orientation: landscape) and (max-height: 420px) {
@@ -1793,7 +1795,8 @@ ight is the :root default above) ────────
           inset: -4px 0 0;
         }
         ._cueOnly_72dfcc {
-          padding: 4px var(--pb-space-4) calc(2px + env(safe-area-inset-bottom));
+          padding: 4px var(--pb-space-4)
+            calc(2px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
         }
       }
 
@@ -2006,7 +2009,7 @@ ight is the :root default above) ────────
             <div class="_question_b07bb7" data-stage="true">
               <header class="_header_b07bb7">
                 <h2 class="_round_b07bb7">Question 1 of 5</h2>
-                <span class="_clock_b07bb7" role="timer" aria-label="19 seconds left">19</span>
+                <span class="_clock_b07bb7" role="timer" aria-label="29 seconds left">29</span>
               </header>
               <h3 class="_prompt_b07bb7">
                 Which of these four carefully described answers best explains the observable result
