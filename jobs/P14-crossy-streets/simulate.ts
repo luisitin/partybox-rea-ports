@@ -16,6 +16,10 @@ const runs = Number(arg('--runs', '1000'));
 const counts = arg('--players', '2,3,4,5,6,7,8').split(',').map(Number);
 const matrix = arg('--matrix', 'mixed');
 const reportPath = arg('--out', resolve(job, 'sim-results.json'));
+const directImport = process.execArgv.some(
+  (arg, index) => arg === '--import' && process.execArgv[index + 1] === 'tsx',
+);
+const invocation = directImport ? 'node --import tsx' : 'pnpm exec tsx';
 if (
   !Number.isInteger(runs) ||
   runs < 1 ||
@@ -83,7 +87,7 @@ function persist(completed: boolean): void {
     JSON.stringify(
       {
         command:
-          `pnpm exec tsx jobs/P14-crossy-streets/simulate.ts ${process.argv.slice(2).join(' ')}`.trim(),
+          `${invocation} jobs/P14-crossy-streets/simulate.ts ${process.argv.slice(2).join(' ')}`.trim(),
         seedRange: [1, runs],
         engine: 'real reduce + schema-checked sampleInput at every timer beat',
         matrix,
@@ -138,3 +142,5 @@ for (const players of counts) {
 }
 persist(true);
 console.log(`Saved ${reportPath}`);
+// All writes above are synchronous; do not leave a Windows tsx loader worker alive.
+process.exit(0);

@@ -60,13 +60,6 @@ export function Tv({ view }: GameTvProps<CrossyTvView>): JSX.Element {
               </li>
             ))}
           </ol>
-          <p className={styles.note}>
-            {playing
-              ? L(
-                  'No progress for 8 seconds? The eagle comes. A crash sends you back; your best stays.',
-                )
-              : L('Every racer keeps their furthest row. Equal distances share the win.')}
-          </p>
         </aside>
       </div>
     </Stage>

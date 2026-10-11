@@ -12,12 +12,17 @@ The host loads `games/crossy-streets/server/index.ts`, `client/tv-entry.ts` and 
 ```sh
 pnpm typecheck
 pnpm format
-pnpm vitest run games/crossy-streets --maxWorkers=1
-pnpm tsx jobs/P14-crossy-streets/fixtures.ts
-pnpm tsx jobs/P14-crossy-streets/simulate.ts
+pnpm vitest run games/crossy-streets --pool=threads --maxWorkers=1
+node --import tsx jobs/P14-crossy-streets/fixtures.ts
+node --import tsx jobs/P14-crossy-streets/simulate.ts
+node jobs/P14-crossy-streets/mutations.mjs
+node jobs/P14-crossy-streets/capture.mjs
+node jobs/P14-crossy-streets/hash-media.mjs
 ```
 
 VERIFY.md records real commands and results, simulations, property seeds, mutations and per-phase screen evidence. Media SHA256SUMS.txt records every rendered artifact. LOOP.md records the KEEP GOING passes after scoped PR CI is green.
+
+On this Windows runner use Git Bash with a TTY (or `pnpm.cmd` in PowerShell). The capture script uses one disposable Chromium, sequentially, and closes it in `finally`. After regenerating fixture HTML, format the generated JSON/HTML before `pnpm format` and refresh the media hashes.
 
 ## Evidence
 

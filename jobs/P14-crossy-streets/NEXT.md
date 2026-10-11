@@ -2,8 +2,8 @@
 
 Run: r10-local. Branch: job/P14-crossy-streets. Claim pushed on main.
 
-Research, deterministic server, original SVG UI, phase fixtures and scoped verification harness are implemented. Source is temporarily frozen while the final 20-mutation run executes. The initial run caught 20/20; its final restored-baseline worker stalled, so the recorded repeat uses direct Node, Vitest threads and `login:false` on Windows.
+Research, deterministic server, original SVG UI, final phase fixtures and verification are complete. The full scoped suite passes 55 tests; 7,000 seeded games terminate; the recorded mutation run catches 20/20 with a green restored baseline; twelve final screen captures fit and were inspected. Evidence is in VERIFY.md and JSON reports.
 
-Remaining: final typecheck/format/game tests; seeded simulations and properties; finish the recorded mutation repeat; render and inspect every surface with capture.mjs (one disposable browser, always closed); record commands and evidence; draft PR and wait for scoped CI; KEEP GOING improvements until three rounds have no player-visible gain.
+Remaining: final format check and media hashes, draft PR and scoped CI, then KEEP GOING improvements until three consecutive rounds have no player-visible gain. Review priorities: off-map TV racer status, explicit result rank on phones, accepted-hop feedback and shared-cell visibility.
 
-No local server or browser is running. Dependencies installed once through pnpm.cmd. Use `login:false` for exec commands and `pnpm.cmd` on this Windows runner. Run only this game's tests, with `--pool=threads --maxWorkers=1` locally.
+Dependencies installed once through pnpm.cmd. Use Git Bash, `login:false`, a TTY and one thread worker on this Windows runner; command shims and pipe-only sessions were slow to terminate. Simulators use direct Node/tsx and exit after persisting evidence. No local server is needed. Capture uses one disposable browser with unconditional CDP close.

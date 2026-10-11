@@ -1,0 +1,1417 @@
+<!doctype html>
+<html lang="en" data-surface="phone">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Crossy Streets fixture</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>; 
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+      ._stage_262f13 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+        min-height: 100%;
+        /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+        padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+          var(--pb-overscan-y, 54px);
+      }
+
+      ._center_262f13 {
+        /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+        justify-content: safe center;
+        align-items: safe center;
+        text-align: center;
+      }
+
+      /* Map geometry uses SVG units; presentation follows the room's tokens. */
+      ._map_3ae3c2 {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+      }
+      ._grass_3ae3c2 {
+        fill: var(--pb-surface-2);
+      }
+      ._road_3ae3c2 {
+        fill: var(--pb-bg);
+      }
+      ._river_3ae3c2 {
+        fill: var(--pb-info);
+        fill-opacity: 0.25;
+      }
+      ._dash_3ae3c2 {
+        stroke: var(--pb-text-muted);
+        stroke-width: 2;
+        stroke-dasharray: 16 20;
+        stroke-opacity: 0.5;
+      }
+      ._wave_3ae3c2 {
+        stroke: var(--pb-info);
+        stroke-width: 2;
+        stroke-dasharray: 20 40;
+        stroke-opacity: 0.5;
+      }
+      ._tree_3ae3c2 {
+        fill: var(--pb-accent-3);
+      }
+      ._trunk_3ae3c2 {
+        stroke: var(--pb-text-muted);
+        stroke-width: 8;
+      }
+      ._log_3ae3c2 {
+        fill: var(--pb-accent-2);
+      }
+      ._grain_3ae3c2 {
+        stroke: var(--pb-on-accent-2-fill);
+        stroke-opacity: 0.35;
+        stroke-width: 2;
+      }
+      ._car_3ae3c2 {
+        fill: var(--pb-accent);
+      }
+      ._window_3ae3c2 {
+        fill: var(--pb-on-accent-2-fill);
+      }
+      ._wheels_3ae3c2 {
+        stroke: var(--pb-text);
+        stroke-width: 8;
+        stroke-linecap: round;
+      }
+      ._row_3ae3c2 {
+        fill: var(--pb-text-muted);
+        font: 700 28px var(--pb-font-family);
+      }
+      ._racer_3ae3c2 {
+        fill: var(--racer);
+        stroke: var(--pb-text);
+        stroke-width: 3;
+      }
+      ._beak_3ae3c2 {
+        fill: none;
+        stroke: var(--pb-on-accent-2-fill);
+        stroke-width: 3;
+      }
+      ._number_3ae3c2 {
+        text-anchor: middle;
+        fill: var(--pb-on-accent-2-fill);
+        font: 900 30px var(--pb-font-family);
+      }
+      ._cross_3ae3c2 {
+        fill: none;
+        stroke: var(--pb-text);
+        stroke-width: 5;
+      }
+      ._runner_3ae3c2[data-out] ._racer_3ae3c2 {
+        fill: var(--pb-surface);
+      }
+      ._runner_3ae3c2[data-out] ._number_3ae3c2 {
+        fill: var(--pb-text);
+      }
+
+      ._screen_458311 {
+        flex: 1;
+        width: 100%;
+        min-width: 0;
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-3);
+        padding: var(--pb-space-3);
+        padding-bottom: max(var(--pb-space-3), env(safe-area-inset-bottom));
+        overflow: hidden;
+        overscroll-behavior: none;
+      }
+      ._header_458311 {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: var(--pb-space-2);
+      }
+      ._header_458311 h2 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+        line-height: 1.2;
+      }
+      ._header_458311 p {
+        margin: var(--pb-space-1) 0 0;
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-body);
+      }
+      ._clock_458311 {
+        color: var(--pb-accent-2);
+        font-size: var(--pb-font-h1);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      ._map_458311 {
+        flex: 1;
+        min-height: var(--pb-space-8);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+      }
+      ._identity_458311 {
+        display: grid;
+        flex: 1;
+        place-content: center;
+        justify-items: center;
+        gap: var(--pb-space-4);
+        text-align: center;
+      }
+      ._identity_458311 b {
+        display: grid;
+        place-items: center;
+        color: var(--pb-on-accent-2-fill);
+        background: var(--racer);
+        width: calc(var(--pb-space-8) * 2);
+        height: calc(var(--pb-space-8) * 2);
+        border-radius: var(--pb-radius-lg);
+        font-size: calc(var(--pb-font-display) * 2);
+      }
+      ._identity_458311 p {
+        margin: 0;
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-body);
+      }
+      ._feedback_458311 {
+        min-height: calc(var(--pb-space-6) * 2);
+        display: grid;
+        align-content: center;
+        text-align: center;
+        gap: var(--pb-space-1);
+        font-size: var(--pb-font-body);
+      }
+      ._feedback_458311 span {
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-caption);
+      }
+      ._feedback_458311[data-warning] {
+        color: var(--pb-accent-2);
+        border-top: var(--pb-space-1) solid var(--pb-accent-2);
+      }
+      ._pad_458311 {
+        flex: none;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(
+          2,
+          minmax(var(--pb-touch), calc(var(--pb-space-8) + var(--pb-space-5)))
+        );
+        gap: var(--pb-space-2);
+        touch-action: manipulation;
+        user-select: none;
+      }
+      ._pad_458311 button {
+        min-width: var(--pb-touch);
+        min-height: var(--pb-touch);
+        display: grid;
+        place-content: center;
+        gap: var(--pb-space-1);
+        border: var(--pb-space-1) solid var(--pb-surface-2);
+        background: var(--pb-surface);
+        color: var(--pb-text);
+        border-radius: var(--pb-radius);
+        font-family: var(--pb-font-family);
+        cursor: pointer;
+        transition: transform var(--pb-motion-fast) var(--pb-ease);
+        -webkit-tap-highlight-color: transparent;
+      }
+      ._pad_458311 button span {
+        font-size: var(--pb-font-display);
+        line-height: 0.8;
+      }
+      ._pad_458311 button small {
+        font-size: var(--pb-font-caption);
+        font-weight: 800;
+      }
+      ._pad_458311 button:active {
+        transform: scale(0.96);
+      }
+      ._pad_458311 button:focus-visible {
+        outline: var(--pb-space-1) solid var(--pb-focus);
+        outline-offset: var(--pb-space-1);
+      }
+      ._pad_458311 button:disabled {
+        color: var(--pb-text-muted);
+        cursor: default;
+      }
+      ._up_458311 {
+        grid-column: 2;
+        grid-row: 1;
+        background: var(--racer) !important;
+        color: var(--pb-on-accent-2-fill) !important;
+        border-color: var(--racer) !important;
+      }
+      ._left_458311 {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      ._down_458311 {
+        grid-column: 2;
+        grid-row: 2;
+      }
+      ._right_458311 {
+        grid-column: 3;
+        grid-row: 2;
+      }
+      ._standings_458311 {
+        display: grid;
+        flex: none;
+        list-style: none;
+        gap: var(--pb-space-1);
+        padding: 0;
+        margin: 0;
+      }
+      ._standings_458311 li {
+        display: flex;
+        gap: var(--pb-space-2);
+        align-items: center;
+        font-size: var(--pb-font-body);
+        min-height: var(--pb-space-6);
+      }
+      ._standings_458311 li[data-me] {
+        background: var(--pb-surface-2);
+        border-radius: var(--pb-radius);
+      }
+      ._badge_458311 {
+        display: grid;
+        place-items: center;
+        flex: none;
+        width: var(--pb-space-6);
+        height: var(--pb-space-6);
+        border-radius: var(--pb-radius);
+        background: var(--racer);
+        color: var(--pb-on-accent-2-fill);
+      }
+      ._standings_458311 span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      ._standings_458311 strong {
+        margin-left: auto;
+        font-variant-numeric: tabular-nums;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        ._pad_458311 button {
+          transition: none;
+        }
+      }
+      :root[data-motion='off'] ._pad_458311 button {
+        transition: none;
+      }
+
+      ._stage_269e91 {
+        flex: 1;
+        padding: var(--pb-space-5) var(--pb-space-6);
+        gap: var(--pb-space-5);
+        min-height: 0;
+      }
+      ._header_269e91 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--pb-space-6);
+      }
+      ._header_269e91 h1 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        line-height: 1.1;
+      }
+      ._header_269e91 p {
+        margin: var(--pb-space-2) 0 0;
+        font-size: var(--pb-font-body);
+        color: var(--pb-text-muted);
+      }
+      ._clock_269e91 {
+        display: flex;
+        align-items: baseline;
+        gap: var(--pb-space-4);
+        color: var(--pb-accent-2);
+      }
+      ._clock_269e91 b {
+        font-size: var(--pb-font-display);
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
+      ._clock_269e91 span {
+        font-size: var(--pb-font-body);
+      }
+      ._body_269e91 {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) * 7);
+        grid-template-rows: minmax(0, 1fr);
+        gap: var(--pb-space-6);
+      }
+      ._map_269e91 {
+        min-height: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+      ._rail_269e91 {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 0;
+        gap: var(--pb-space-4);
+      }
+      ._rail_269e91 h2 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+        line-height: 1.1;
+      }
+      ._standings_269e91 {
+        list-style: none;
+        display: grid;
+        gap: var(--pb-space-2);
+        margin: 0;
+        padding: 0;
+      }
+      ._standings_269e91 li {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-3);
+        padding: var(--pb-space-2);
+        border-left: var(--pb-space-1) solid var(--racer);
+      }
+      ._standings_269e91 li[data-leader] {
+        background: var(--pb-surface);
+      }
+      ._badge_269e91 {
+        display: grid;
+        place-items: center;
+        flex: none;
+        width: var(--pb-space-7);
+        height: var(--pb-space-7);
+        background: var(--racer);
+        color: var(--pb-on-accent-2-fill);
+        border-radius: var(--pb-radius);
+        font-size: var(--pb-font-body);
+      }
+      ._identity_269e91 {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        font-size: var(--pb-font-body);
+        line-height: 1.15;
+      }
+      ._identity_269e91 b {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      ._identity_269e91 span {
+        display: none;
+      }
+      ._standings_269e91 strong {
+        margin-left: auto;
+        font-size: var(--pb-font-h2);
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        font-family: var(--pb-font-family);
+        color: var(--pb-text);
+        background: var(--pb-bg);
+      }
+      .host {
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+      }
+      .chrome {
+        height: 64px;
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 var(--pb-space-5);
+        font-size: var(--pb-font-body);
+        background: var(--pb-surface);
+      }
+      main {
+        flex: 1;
+        display: flex;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .footer {
+        height: 24px;
+        flex: none;
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+        display: flex;
+        align-items: center;
+        padding: 0 var(--pb-space-5);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="host">
+      <header class="chrome"><b>PartyBox · Crossy Streets</b><span>Racer 1</span></header>
+      <main>
+        <section class="_screen_458311" style="--racer: var(--pb-player-1)" data-stage="true">
+          <header class="_header_458311">
+            <div>
+              <h2>Racer 1</h2>
+              <p>Best: 13 rows</p>
+            </div>
+            <b class="_clock_458311" role="timer" aria-label="Seconds left">45s</b>
+          </header>
+          <div class="_map_458311">
+            <svg
+              class="_map_3ae3c2"
+              viewBox="480 0 420 420"
+              role="img"
+              aria-label="Crossing map, rows 10 to 16. You are racer 1, row 12"
+            >
+              <defs>
+                <clipPath id="crossy-_R_2_">
+                  <rect x="480" width="420" height="420"></rect>
+                </clipPath>
+              </defs>
+              <g clip-path="url(#crossy-_R_2_)">
+                <g transform="translate(0 360)">
+                  <rect width="900" height="60" class="_grass_3ae3c2"></rect>
+                  <g transform="translate(90 30)">
+                    <path d="M-19 16 L0 -24 L19 16 Z" class="_tree_3ae3c2"></path>
+                    <path d="M0 4 V22" class="_trunk_3ae3c2"></path>
+                  </g>
+                  <g transform="translate(270 30)">
+                    <path d="M-19 16 L0 -24 L19 16 Z" class="_tree_3ae3c2"></path>
+                    <path d="M0 4 V22" class="_trunk_3ae3c2"></path>
+                  </g>
+                  <g transform="translate(330 30)">
+                    <path d="M-19 16 L0 -24 L19 16 Z" class="_tree_3ae3c2"></path>
+                    <path d="M0 4 V22" class="_trunk_3ae3c2"></path>
+                  </g>
+                </g>
+                <g transform="translate(0 300)">
+                  <rect width="900" height="60" class="_road_3ae3c2"></rect>
+                  <path d="M0 30 H900" class="_dash_3ae3c2"></path>
+                  <g transform="translate(22.019266717136077 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="95.80495299771428"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="79.80495299771428"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M86.80495299771428 8 V3 M86.80495299771428 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(1342.0192667171361 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="95.80495299771428"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="79.80495299771428"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M86.80495299771428 8 V3 M86.80495299771428 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(-857.9807332828642 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="104.58048806432635"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="88.58048806432635"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M95.58048806432635 8 V3 M95.58048806432635 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(462.0192667171358 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="104.58048806432635"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="88.58048806432635"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M95.58048806432635 8 V3 M95.58048806432635 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(-417.9807332828641 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="95.98566314345226"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="79.98566314345226"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M86.98566314345226 8 V3 M86.98566314345226 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(902.0192667171359 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="95.98566314345226"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="79.98566314345226"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M86.98566314345226 8 V3 M86.98566314345226 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                </g>
+                <g transform="translate(0 240)">
+                  <rect width="900" height="60" class="_road_3ae3c2"></rect>
+                  <path d="M0 30 H900" class="_dash_3ae3c2"></path>
+                  <g transform="translate(-409.44748479500447 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="99.47868230566382"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="83.47868230566382"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M90.47868230566382 8 V3 M90.47868230566382 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(910.5525152049955 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="99.47868230566382"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="83.47868230566382"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M90.47868230566382 8 V3 M90.47868230566382 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(-1289.4474847950046 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="77.86101809237154"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="61.86101809237154"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M68.86101809237154 8 V3 M68.86101809237154 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(30.55251520499546 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="77.86101809237154"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="61.86101809237154"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M68.86101809237154 8 V3 M68.86101809237154 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(-849.4474847950046 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="86.02611265843734"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="70.02611265843734"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M77.02611265843734 8 V3 M77.02611265843734 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(470.5525152049954 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="86.02611265843734"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="70.02611265843734"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M77.02611265843734 8 V3 M77.02611265843734 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                </g>
+                <g transform="translate(0 180)">
+                  <rect width="900" height="60" class="_road_3ae3c2"></rect>
+                  <path d="M0 30 H900" class="_dash_3ae3c2"></path>
+                  <g transform="translate(-309.9659817907958 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="103.1613705996424"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="87.1613705996424"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M94.1613705996424 8 V3 M94.1613705996424 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(1010.0340182092042 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="103.1613705996424"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="87.1613705996424"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M94.1613705996424 8 V3 M94.1613705996424 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(-1189.9659817907957 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="115.98303905827925"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="99.98303905827925"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M106.98303905827925 8 V3 M106.98303905827925 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(130.0340182092043 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="115.98303905827925"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="99.98303905827925"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M106.98303905827925 8 V3 M106.98303905827925 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(-749.9659817907959 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="83.28194029582664"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="67.28194029582664"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M74.28194029582664 8 V3 M74.28194029582664 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(570.0340182092041 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="83.28194029582664"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="67.28194029582664"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M74.28194029582664 8 V3 M74.28194029582664 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                </g>
+                <g transform="translate(0 120)">
+                  <rect width="900" height="60" class="_grass_3ae3c2"></rect>
+                  <g transform="translate(30 30)">
+                    <path d="M-19 16 L0 -24 L19 16 Z" class="_tree_3ae3c2"></path>
+                    <path d="M0 4 V22" class="_trunk_3ae3c2"></path>
+                  </g>
+                  <g transform="translate(510 30)">
+                    <path d="M-19 16 L0 -24 L19 16 Z" class="_tree_3ae3c2"></path>
+                    <path d="M0 4 V22" class="_trunk_3ae3c2"></path>
+                  </g>
+                  <g transform="translate(570 30)">
+                    <path d="M-19 16 L0 -24 L19 16 Z" class="_tree_3ae3c2"></path>
+                    <path d="M0 4 V22" class="_trunk_3ae3c2"></path>
+                  </g>
+                  <g transform="translate(750 30)">
+                    <path d="M-19 16 L0 -24 L19 16 Z" class="_tree_3ae3c2"></path>
+                    <path d="M0 4 V22" class="_trunk_3ae3c2"></path>
+                  </g>
+                </g>
+                <g transform="translate(0 60)">
+                  <rect width="900" height="60" class="_river_3ae3c2"></rect>
+                  <path d="M0 18 H900 M0 46 H900" class="_wave_3ae3c2"></path>
+                  <g transform="translate(-590.0791648426093 0)">
+                    <rect
+                      x="2"
+                      y="12"
+                      width="229.85266589699313"
+                      height="36"
+                      rx="8"
+                      class="_log_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M12 23 H221.85266589699313 M12 37 H221.85266589699313"
+                      class="_grain_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(729.9208351573907 0)">
+                    <rect
+                      x="2"
+                      y="12"
+                      width="229.85266589699313"
+                      height="36"
+                      rx="8"
+                      class="_log_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M12 23 H221.85266589699313 M12 37 H221.85266589699313"
+                      class="_grain_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(-260.0791648426093 0)">
+                    <rect
+                      x="2"
+                      y="12"
+                      width="212.04553616419435"
+                      height="36"
+                      rx="8"
+                      class="_log_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M12 23 H204.04553616419435 M12 37 H204.04553616419435"
+                      class="_grain_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(1059.9208351573907 0)">
+                    <rect
+                      x="2"
+                      y="12"
+                      width="212.04553616419435"
+                      height="36"
+                      rx="8"
+                      class="_log_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M12 23 H204.04553616419435 M12 37 H204.04553616419435"
+                      class="_grain_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(-1250.0791648426093 0)">
+                    <rect
+                      x="2"
+                      y="12"
+                      width="209.7218935340643"
+                      height="36"
+                      rx="8"
+                      class="_log_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M12 23 H201.7218935340643 M12 37 H201.7218935340643"
+                      class="_grain_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(69.92083515739068 0)">
+                    <rect
+                      x="2"
+                      y="12"
+                      width="209.7218935340643"
+                      height="36"
+                      rx="8"
+                      class="_log_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M12 23 H201.7218935340643 M12 37 H201.7218935340643"
+                      class="_grain_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(-920.0791648426093 0)">
+                    <rect
+                      x="2"
+                      y="12"
+                      width="206.04390138434246"
+                      height="36"
+                      rx="8"
+                      class="_log_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M12 23 H198.04390138434246 M12 37 H198.04390138434246"
+                      class="_grain_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(399.9208351573907 0)">
+                    <rect
+                      x="2"
+                      y="12"
+                      width="206.04390138434246"
+                      height="36"
+                      rx="8"
+                      class="_log_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M12 23 H198.04390138434246 M12 37 H198.04390138434246"
+                      class="_grain_3ae3c2"
+                    ></path>
+                  </g>
+                </g>
+                <g transform="translate(0 0)">
+                  <rect width="900" height="60" class="_road_3ae3c2"></rect>
+                  <path d="M0 30 H900" class="_dash_3ae3c2"></path>
+                  <g transform="translate(-948.8246021345255 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="102.70231397869065"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="86.70231397869065"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M93.70231397869065 8 V3 M93.70231397869065 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(371.1753978654744 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="102.70231397869065"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="86.70231397869065"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M93.70231397869065 8 V3 M93.70231397869065 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(-508.82460213452543 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="115.20953354332596"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="99.20953354332596"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M106.20953354332596 8 V3 M106.20953354332596 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(811.1753978654746 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="115.20953354332596"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="99.20953354332596"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M106.20953354332596 8 V3 M106.20953354332596 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(-68.82460213452532 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="100.49038016144186"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="84.49038016144186"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M91.49038016144186 8 V3 M91.49038016144186 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                  <g transform="translate(1251.1753978654747 0)">
+                    <rect
+                      x="2"
+                      y="8"
+                      width="100.49038016144186"
+                      height="44"
+                      rx="8"
+                      class="_car_3ae3c2"
+                    ></rect>
+                    <rect
+                      x="10"
+                      y="15"
+                      width="84.49038016144186"
+                      height="14"
+                      rx="4"
+                      class="_window_3ae3c2"
+                    ></rect>
+                    <path
+                      d="M13 8 V3 M13 52 V57 M91.49038016144186 8 V3 M91.49038016144186 52 V57"
+                      class="_wheels_3ae3c2"
+                    ></path>
+                  </g>
+                </g>
+                <g
+                  transform="translate(690.1963436365127 150)"
+                  style="--racer: var(--pb-player-7)"
+                  class="_runner_3ae3c2"
+                >
+                  <title>Racer 7</title>
+                  <path d="M0 -26 L24 -8 L18 24 L-18 24 L-24 -8 Z" class="_racer_3ae3c2"></path>
+                  <path d="M-9 -14 L0 -22 L9 -14" class="_beak_3ae3c2"></path>
+                  <text y="13" class="_number_3ae3c2">7</text>
+                </g>
+                <g
+                  transform="translate(799.7477389857164 270)"
+                  style="--racer: var(--pb-player-1)"
+                  class="_runner_3ae3c2"
+                >
+                  <title>Racer 1 · you</title>
+                  <path d="M0 -26 L24 -8 L18 24 L-18 24 L-24 -8 Z" class="_racer_3ae3c2"></path>
+                  <path d="M-9 -14 L0 -22 L9 -14" class="_beak_3ae3c2"></path>
+                  <text y="13" class="_number_3ae3c2">1</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+          <div class="_feedback_458311" role="status" aria-live="polite">
+            <b>Hop ahead. Ride the logs.</b><span>Crashes cost time, never your best.</span>
+          </div>
+          <div class="_pad_458311" role="group" aria-label="Hopping controls">
+            <button type="button" class="_up_458311" aria-label="Hop forward">
+              <span aria-hidden="true">↑</span><small>FORWARD</small></button
+            ><button type="button" class="_left_458311" aria-label="Hop left">
+              <span aria-hidden="true">←</span><small>LEFT</small></button
+            ><button type="button" class="_down_458311" aria-label="Hop back">
+              <span aria-hidden="true">↓</span><small>BACK</small></button
+            ><button type="button" class="_right_458311" aria-label="Hop right">
+              <span aria-hidden="true">→</span><small>RIGHT</small>
+            </button>
+          </div>
+        </section>
+      </main>
+      <footer class="footer">Connected</footer>
+    </div>
+  </body>
+</html>

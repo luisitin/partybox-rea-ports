@@ -21,7 +21,7 @@ function phone(state: State, id: string, phoneOnly: boolean): string {
   return renderToStaticMarkup(
     <PhoneOnlyProvider value={phoneOnly}>
       <Controller
-        view={view}
+        view={{ ...view, vip: null }}
         me={state.players[id] ?? { id, name: 'Spectator', avatarId: 'fox', connected: true }}
         send={() => undefined}
       />
@@ -31,7 +31,7 @@ function phone(state: State, id: string, phoneOnly: boolean): string {
 
 describe.each(Object.entries(fixtures))('surface contract: %s', (phase, state) => {
   it('renders every phase for TV, TV-connected phones and phone-only phones', () => {
-    const tv = renderToStaticMarkup(<Tv view={game.tvView(state)} />);
+    const tv = renderToStaticMarkup(<Tv view={{ ...game.tvView(state), vip: null }} />);
     expect(tv).toContain('<svg');
     for (const player of Object.values(state.players)) expect(tv).toContain(player.name);
     for (const phoneOnly of [false, true]) {

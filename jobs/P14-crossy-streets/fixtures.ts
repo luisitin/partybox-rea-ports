@@ -37,3 +37,5 @@ writeFileSync(resolve(fixtures, 'done.json'), JSON.stringify(done, null, 2) + '\
 console.log(
   'Generated play, score, done fixtures from seed 14, eight sharp bots; score → done is exact.',
 );
+// The executable is finished; close any Windows tsx loader worker as well.
+process.exit(0);

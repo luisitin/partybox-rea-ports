@@ -1,12 +1,9 @@
 {
-  "command": "pnpm exec tsx jobs/P14-crossy-streets/simulate.ts",
-  "seedRange": [
-    1,
-    1000
-  ],
+  "command": "node --import tsx jobs/P14-crossy-streets/simulate.ts",
+  "seedRange": [1, 1000],
   "engine": "real reduce + schema-checked sampleInput at every timer beat",
   "matrix": "mixed",
-  "completed": false,
+  "completed": true,
   "rows": [
     {
       "players": 2,
@@ -22,9 +19,9 @@
       "maxRoundMs": 60000,
       "maxTotalMs": 68000,
       "budgetMs": 240000,
-      "events": 481212,
-      "meanRowsPerPlayer": 41.834,
-      "deaths": 13075
+      "events": 496117,
+      "meanRowsPerPlayer": 46.4705,
+      "deaths": 8152
     },
     {
       "players": 3,
@@ -40,10 +37,100 @@
       "maxRoundMs": 60000,
       "maxTotalMs": 68000,
       "budgetMs": 240000,
-      "events": 572087,
-      "meanRowsPerPlayer": 42.10500000000004,
-      "deaths": 19408
+      "events": 594321,
+      "meanRowsPerPlayer": 46.47833333333335,
+      "deaths": 12355
+    },
+    {
+      "players": 4,
+      "strength": "mixed",
+      "runs": 1000,
+      "byStrength": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "terminated": 1000,
+      "medianRoundMs": 60000,
+      "maxRoundMs": 60000,
+      "maxTotalMs": 68000,
+      "budgetMs": 240000,
+      "events": 691554,
+      "meanRowsPerPlayer": 46.2835,
+      "deaths": 16289
+    },
+    {
+      "players": 5,
+      "strength": "mixed",
+      "runs": 1000,
+      "byStrength": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "terminated": 1000,
+      "medianRoundMs": 60000,
+      "maxRoundMs": 60000,
+      "maxTotalMs": 68000,
+      "budgetMs": 240000,
+      "events": 790040,
+      "meanRowsPerPlayer": 46.40999999999999,
+      "deaths": 20369
+    },
+    {
+      "players": 6,
+      "strength": "mixed",
+      "runs": 1000,
+      "byStrength": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "terminated": 1000,
+      "medianRoundMs": 60000,
+      "maxRoundMs": 60000,
+      "maxTotalMs": 68000,
+      "budgetMs": 240000,
+      "events": 888499,
+      "meanRowsPerPlayer": 46.63333333333338,
+      "deaths": 24123
+    },
+    {
+      "players": 7,
+      "strength": "mixed",
+      "runs": 1000,
+      "byStrength": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "terminated": 1000,
+      "medianRoundMs": 60000,
+      "maxRoundMs": 60000,
+      "maxTotalMs": 68000,
+      "budgetMs": 240000,
+      "events": 985165,
+      "meanRowsPerPlayer": 46.509571428571476,
+      "deaths": 28162
+    },
+    {
+      "players": 8,
+      "strength": "mixed",
+      "runs": 1000,
+      "byStrength": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "terminated": 1000,
+      "medianRoundMs": 60000,
+      "maxRoundMs": 60000,
+      "maxTotalMs": 68000,
+      "budgetMs": 240000,
+      "events": 1083975,
+      "meanRowsPerPlayer": 46.552375,
+      "deaths": 32361
     }
   ],
-  "wallMs": 47282
+  "wallMs": 291345
 }

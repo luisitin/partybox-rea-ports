@@ -1,6 +1,6 @@
 // One disposable headless Chrome, sequential static captures, closed unconditionally.
 import { spawn } from 'node:child_process';
-import { existsSync, readdirSync, writeFileSync, mkdtempSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
@@ -18,6 +18,7 @@ const child = spawn(
     '--no-default-browser-check',
     '--disable-background-networking',
     '--disable-extensions',
+    '--renderer-process-limit=1',
     '--remote-debugging-port=0',
     `--user-data-dir=${profile}`,
     'about:blank',
@@ -27,13 +28,24 @@ const child = spawn(
 let ws;
 try {
   const url = await new Promise((accept, reject) => {
-    const timer = setTimeout(
-      () => reject(new Error('Chromium debugging endpoint timed out')),
-      45_000,
-    );
+    const timer = setTimeout(() => {
+      clearInterval(poll);
+      reject(new Error('Chromium debugging endpoint timed out'));
+    }, 45_000);
+    // GUI-subsystem Chromium on Windows may not forward stderr to its parent.
+    const poll = setInterval(() => {
+      const activePort = join(profile, 'DevToolsActivePort');
+      if (!existsSync(activePort)) return;
+      const [port, path] = readFileSync(activePort, 'utf8').trim().split(/\r?\n/);
+      if (!port || !path) return;
+      clearInterval(poll);
+      clearTimeout(timer);
+      accept(`ws://127.0.0.1:${port}${path}`);
+    }, 100);
     let output = '';
     child.once('error', (error) => {
       clearTimeout(timer);
+      clearInterval(poll);
       reject(error);
     });
     child.stderr.on('data', (data) => {
@@ -41,6 +53,7 @@ try {
       const endpoint = output.match(/DevTools listening on (ws:\/\/[^\s]+)/);
       if (endpoint) {
         clearTimeout(timer);
+        clearInterval(poll);
         accept(endpoint[1]);
       }
     });
@@ -68,12 +81,14 @@ try {
       const timer = setTimeout(() => {
         pending.delete(id);
         reject(new Error(`${method} timed out`));
-      }, 30_000);
+      }, 60_000);
       pending.set(id, { accept, reject, timer });
       ws.send(JSON.stringify({ id, method, params, ...(sessionId ? { sessionId } : {}) }));
     });
   }
-  const { targetId } = await send('Target.createTarget', { url: 'about:blank' });
+  const { targetInfos } = await send('Target.getTargets');
+  const targetId = targetInfos.find((target) => target.type === 'page')?.targetId;
+  if (!targetId) throw new Error('The disposable browser has no page target.');
   const { sessionId } = await send('Target.attachToTarget', { targetId, flatten: true });
   const page = (method, params = {}) => send(method, params, sessionId);
   await page('Page.enable');
