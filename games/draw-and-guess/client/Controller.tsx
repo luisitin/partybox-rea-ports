@@ -208,6 +208,7 @@ export function Controller({
               players={view.players}
               ranked={phase !== 'draw'}
               gains={phase === 'reveal'}
+              final={phase === 'done'}
               me={view.me.id}
             />
           ) : null}

@@ -83,6 +83,7 @@ A correct guess earns `300 + floor(700 × remaining / duration)`, clamped to
 300-1000 points. The artist earns 250 per correct guess. No wrong-guess penalty.
 Points are awarded once per solver; match totals add across turns and ties
 share a rank. These are PartyBox scores, not a claim about an original formula.
+Final standings explicitly mark every winner or joint winner and show tied ranks.
 The artist sees successful-guess progress. A solver immediately sees their own
 earned points with one sound/haptic cue, while the word stays hidden until reveal.
 

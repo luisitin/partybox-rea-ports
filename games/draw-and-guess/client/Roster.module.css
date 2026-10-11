@@ -30,11 +30,33 @@
   color: var(--pb-accent-3);
 }
 
+.identity {
+  display: grid;
+  min-width: 0;
+}
+
 .name {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 800;
+}
+
+.winnerLabel {
+  color: var(--pb-accent-2);
+  font-size: inherit;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.rows[data-final='true'] .mark {
+  width: 2ch;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.rows li[data-winner='true'] .mark {
+  color: var(--pb-accent-2);
 }
 
 .gain {

@@ -69,14 +69,17 @@ export function Tv({ view }: GameTvProps<DrawTvView>): JSX.Element {
           {phase !== 'done' ? (
             <p className={styles.artist}>{L('Artist: {name}', { name: view.drawerName })}</p>
           ) : null}
-          <p className={styles.solvers}>
-            {L('{n} of {m} guessed it', { n: view.solvedCount, m: view.guesserCount })}
-          </p>
+          {phase !== 'done' ? (
+            <p className={styles.solvers}>
+              {L('{n} of {m} guessed it', { n: view.solvedCount, m: view.guesserCount })}
+            </p>
+          ) : null}
           <Roster
             board={view}
             players={view.players}
             ranked={phase === 'reveal' || phase === 'done'}
             gains={phase === 'reveal'}
+            final={phase === 'done'}
           />
           {phase === 'draw' ? (
             <p className={styles.rule}>

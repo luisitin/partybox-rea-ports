@@ -74,3 +74,8 @@ artists cannot apply queued choices to the next artist's turn. R2 PR workflow
 R4: `node jobs/P04-draw-and-guess/tools/playcheck.mjs` passes10livechecks.
 Its two new checks prove first-tap Clear leaves paths and revision unchanged,
 and the deliberate second tap clears. Remaining pointer/edit/fit checks pass.
+
+R5: `pnpm.cmd vitest run games/draw-and-guess/__tests__/final.test.tsx --maxWorkers=1`
+passes8checks in1.00seconds. Tests identify lone/joint winners, tied ranks,
+all-zero eight-way ties and all8scores across TV/phone/phone-only/spectator;
+previous-turn role/solve labels disappear only in final standings.

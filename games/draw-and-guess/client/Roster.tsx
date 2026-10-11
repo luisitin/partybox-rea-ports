@@ -10,36 +10,75 @@ export function Roster({
   players,
   ranked = false,
   gains = false,
+  final = false,
   me,
 }: {
   board: PublicBoard;
   players: ViewPlayer[];
   ranked?: boolean;
   gains?: boolean;
+  final?: boolean;
   me?: string;
 }): JSX.Element {
   const L = useT(STRINGS);
-  const rows = ranked
-    ? [...players].sort((a, b) => (board.scores[b.id] ?? 0) - (board.scores[a.id] ?? 0))
-    : players;
+  const rows =
+    ranked || final
+      ? [...players].sort((a, b) => (board.scores[b.id] ?? 0) - (board.scores[a.id] ?? 0))
+      : players;
+  const top = Math.max(0, ...players.map((player) => board.scores[player.id] ?? 0));
+  const tied = players.filter((player) => (board.scores[player.id] ?? 0) === top).length > 1;
   return (
-    <ul className={styles.rows} aria-label={L('Players and points')} data-phone={me !== undefined}>
+    <ul
+      className={styles.rows}
+      aria-label={final ? L('Final standings') : L('Players and points')}
+      data-phone={me !== undefined}
+      data-final={final}
+    >
       {rows.map((player) => {
         const drawing = player.id === board.drawer;
         const solved = board.solvedIds.includes(player.id);
+        const score = board.scores[player.id] ?? 0;
+        const rank = 1 + players.filter((other) => (board.scores[other.id] ?? 0) > score).length;
+        const winner = final && score === top;
+        const winnerLabel = tied ? L('Joint winner') : L('Winner');
         return (
-          <li key={player.id} data-me={player.id === me} data-solved={solved}>
+          <li
+            key={player.id}
+            data-me={player.id === me}
+            data-solved={!final && solved}
+            data-winner={winner}
+          >
             <span
               className={styles.mark}
-              aria-label={drawing ? L('Artist') : solved ? L('Solved') : L('Guessing')}
+              role={final ? 'img' : undefined}
+              aria-label={
+                final
+                  ? winner
+                    ? L('{result}, place {n}', { result: winnerLabel, n: rank })
+                    : L('Place {n}', { n: rank })
+                  : drawing
+                    ? L('Artist')
+                    : solved
+                      ? L('Solved')
+                      : L('Guessing')
+              }
             >
-              {drawing ? '✎' : solved ? '✓' : '·'}
+              {final ? (winner ? '★' : rank) : drawing ? '✎' : solved ? '✓' : '·'}
             </span>
-            <span className={styles.name} title={player.name}>
-              {player.name}
+            <span className={styles.identity}>
+              <span className={styles.name} title={player.name}>
+                {player.name}
+              </span>
+              {winner ? (
+                <span className={styles.winnerLabel} aria-hidden="true">
+                  {winnerLabel}
+                </span>
+              ) : null}
             </span>
-            {gains ? <span className={styles.gain}>+{board.gains[player.id] ?? 0}</span> : null}
-            <b className={styles.points}>{board.scores[player.id] ?? 0}</b>
+            {gains && !final ? (
+              <span className={styles.gain}>+{board.gains[player.id] ?? 0}</span>
+            ) : null}
+            <b className={styles.points}>{score}</b>
           </li>
         );
       })}
