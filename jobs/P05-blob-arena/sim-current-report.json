@@ -1,0 +1,96 @@
+{
+  "status": "running",
+  "codeCommit": "9f69f5f",
+  "command": "pnpm.cmd vitest run games/blob-arena --maxWorkers=1 --reporter=verbose --reporter=json --outputFile=jobs/P05-blob-arena/full-tests.json --disableConsoleIntercept",
+  "runsPerCount": 1000,
+  "seedRange": [1, 1000],
+  "requiredCounts": [2, 3, 4, 5, 6, 7, 8],
+  "completedGames": 6000,
+  "reports": [
+    {
+      "players": 2,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 306,
+      "maxScore": 2760,
+      "totalEvents": 1860237
+    },
+    {
+      "players": 3,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 87,
+      "maxScore": 3987,
+      "totalEvents": 2105730
+    },
+    {
+      "players": 4,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 27,
+      "maxScore": 4974,
+      "totalEvents": 2346442
+    },
+    {
+      "players": 5,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 63,
+      "maxScore": 5469,
+      "totalEvents": 2579399
+    },
+    {
+      "players": 6,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 0,
+      "maxScore": 6468,
+      "totalEvents": 2805048
+    },
+    {
+      "players": 7,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 0,
+      "maxScore": 7248,
+      "totalEvents": 3024559
+    }
+  ],
+  "provenance": "Exact console JSON from the fresh current-code full Vitest run, with PB_SIM_RUNS unset. Historical first-run evidence is separate in sim-first-report.json."
+}

@@ -17,6 +17,10 @@ failed the new regression. Historical evidence is retained. Cached bot distances
 preserve every input/RNG state across 37,380 comparisons and halve bot-call CPU.
 Fresh full suite is running with one worker (exec28512), PB_SIM_RUNS unset,
 verbose + JSON reporters and console interception disabled. Do not duplicate it.
+Six current-code counts (2–7), 6,000 complete matches, have passed. Count8 remains
+running; sim-current-report.json retains exact per-count console measurements.
+Worker PID105748 is healthy (normal priority, about220MB). The loaded desktop
+stretches elapsed time; no second test worker or owned browser is active.
 
 Remaining: record fresh full result, final format/checks, draft PR + green CI,
 then KEEP GOING. KEEP cannot begin until that PR is green.

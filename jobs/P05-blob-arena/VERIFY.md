@@ -26,6 +26,8 @@ The current game test command runs **1,000 complete three-round bot games at eac
 
 The required bound is `manifest.estimatedMinutes × 2 = 600,000 ms`. The first full simulation file passed all seven count cases, requiring complete finite results, three 90,000 ms rounds per match, a 90,000 ms median round and a maximum match duration within that bound. Its console reports were not retained; [sim-report.json](sim-report.json) records those asserted facts and labels the fixed 289,500 ms match duration as derived from the phase clocks. Fresh per-count records are pending. The interim `PB_SIM_RUNS=1` run is not the required 1,000-game sweep.
 
+Fresh progress: **6,000 complete matches at counts 2–7 have passed**. [sim-current-report.json](sim-current-report.json) retains exact fresh console records. Each reports a 90,000 ms median round and a 289,500 ms maximum match. Count 8 and the final full-suite status remain pending. The historical assertion-only report is also retained as [sim-first-report.json](sim-first-report.json).
+
 Equivalent standalone full-count command: `node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/sim.ts`.
 
 ## Mutation check

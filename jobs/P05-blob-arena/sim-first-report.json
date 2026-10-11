@@ -1,0 +1,42 @@
+{
+  "provenance": {
+    "command": "pnpm.cmd vitest run games/blob-arena --maxWorkers=1",
+    "sourceLog": "jobs/P05-blob-arena/full-tests.log",
+    "retainedVitestCache": "jobs/P05-blob-arena/full-first-cache.json",
+    "vitestVersion": "4.1.11",
+    "simulationSuite": "games/blob-arena/__tests__/sim.test.ts",
+    "simulationSuiteFailed": false,
+    "simulationSuiteDurationMs": 2379575.4897,
+    "fullRunSummary": { "passed": 104, "failed": 1, "total": 105, "durationSeconds": 2413.26 },
+    "fullRunFailure": "The newly added held-pad pause regression ran with the handler imported before the pause-clear patch.",
+    "sourceTiming": "This first full sweep loaded game modules before the pause-clear and pellet-distance-cache changes. It is not a green verification of the final tree.",
+    "rawPerCountConsoleReportsRetained": false,
+    "evidence": "The retained cache records the simulation file as passed. That file contains seven count-specific tests, each running 1,000 matches and asserting the median round length and match-time bound. Values below come from those passing assertions and their fixed test configuration; omitted score/event extrema were not retained."
+  },
+  "configuration": {
+    "counts": [2, 3, 4, 5, 6, 7, 8],
+    "seeds": { "first": 1, "last": 1000 },
+    "gamesPerCount": 1000,
+    "gamesTotal": 7000,
+    "gamesBySkillPerCount": { "easy": 334, "normal": 333, "sharp": 333 },
+    "roundsPerGame": 3,
+    "botDecisionMs": 1000,
+    "engineWakeMs": 200,
+    "physicsStepMs": 100
+  },
+  "assertionResults": [
+    { "players": 2, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 },
+    { "players": 3, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 },
+    { "players": 4, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 },
+    { "players": 5, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 },
+    { "players": 6, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 },
+    { "players": 7, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 },
+    { "players": 8, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 }
+  ],
+  "derivedTiming": {
+    "gameMs": 289500,
+    "formula": "3 * 90000 + 3 * 6500",
+    "basis": "Fixed 90-second play phases and 6.5-second score phases driven at exact deadlines; this is derived from the reducer/test configuration, not a retained per-count maximum report."
+  },
+  "currentTreeFullVerification": "Pending the fresh full sweep after the pause-clear and behavior-equivalent pellet cache changes."
+}
