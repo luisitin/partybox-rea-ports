@@ -1,6 +1,6 @@
 import { enterPhase, hasPlayer, isTimerFor, nextStep } from '@partybox/game-sdk';
 import type { GameEvent } from '@partybox/game-sdk';
-import { ROUND_MS, TICK_MS } from '../types';
+import { RESPAWN_TICKS, ROUND_MS, TICK_MS } from '../types';
 import type { Input, State, Transition } from '../types';
 import { applyDirection, tickWorld } from '../world';
 
@@ -9,7 +9,25 @@ function wake(state: State): number {
 }
 export function enterPlay(state: State, now: number): State {
   const open = enterPhase(
-    { ...state, began: now, endsAt: now + ROUND_MS, checked: 0 },
+    {
+      ...state,
+      began: now,
+      endsAt: now + ROUND_MS,
+      checked: 0,
+      world: {
+        ...state.world,
+        runners: state.world.runners.map((runner) => {
+          const gone = state.left.includes(runner.id);
+          const alive = !gone && state.players[runner.id]?.connected === true;
+          return {
+            ...runner,
+            alive,
+            respawnTick: alive || gone ? null : RESPAWN_TICKS,
+            cause: alive ? null : runner.cause,
+          };
+        }),
+      },
+    },
     'play',
     now,
     TICK_MS,

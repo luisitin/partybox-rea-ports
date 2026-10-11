@@ -8,6 +8,27 @@ const kit = testKit(game, { players, t0: 1_000_000 });
 const playing = () => kit.timer(kit.start());
 
 describe('pause, disconnect and return', () => {
+  it('starts a player refreshed during ready alongside everyone else, while departed seats stay out', () => {
+    const ready = kit.start();
+    const disconnected = kit.player(ready, 'p1', false, undefined, ready.phase.startedAt + 500);
+    const reconnected = kit.player(
+      disconnected,
+      'p1',
+      true,
+      undefined,
+      ready.phase.startedAt + 1000,
+    );
+    const departed = kit.player(reconnected, 'p2', false, 'left', ready.phase.startedAt + 1500);
+    const playing = kit.timer(departed);
+    expect(playing.world.runners[0]?.alive).toBe(true);
+    expect(playing.world.runners[0]?.respawnTick).toBeNull();
+    expect(playing.world.runners[1]?.alive).toBe(false);
+    expect(playing.world.runners[1]?.respawnTick).toBeNull();
+    const moved = kit.timer(playing);
+    expect(moved.world.runners[0]?.cell).not.toBe(playing.world.runners[0]?.cell);
+    expect(moved.world.runners[1]?.cell).toBe(playing.world.runners[1]?.cell);
+  });
+
   it('stops simulation and steering during pause, shifting all absolute clock views on resume', () => {
     const start = playing();
     const paused = kit.vip(start, 'pause', start.began + 100);
