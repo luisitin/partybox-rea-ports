@@ -10,6 +10,6 @@ P04 r2-local 2026-10-11T21:24:01Z job/P04-draw-and-guess
 P05 r5-local 2026-10-11T21:19:48Z job/P05-blob-arena
 P06 r6-local 2026-10-11T21:14:00Z job/P06-snake-royale
 
-P07 r4-local 2026-10-11T21:16:04Z job/P07-paper-territory
+P07 r4-local 2026-10-11T21:24:14Z job/P07-paper-territory
 
 <!-- prettier-ignore-end -->
