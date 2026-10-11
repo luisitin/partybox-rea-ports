@@ -1,13 +1,13 @@
 # P08 verification
 
-Runner r7-local; local evidence recorded on2026-10-11. CI is pending until the draft PR runs.
+Runner r7-local; local evidence recorded on2026-10-11. All local checks pass. CI is pending until the draft PR runs.
 
 | Check                          | Exact command                                                                                                | Result                                                                                 |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | Install                        | `corepack enable`; `pnpm.cmd install`                                                                        | Passed; pnpm12.4.2, lockfile unchanged                                                 |
-| TypeScript                     | `pnpm.cmd typecheck`                                                                                         | Final check running                                                                    |
-| Formatting                     | `pnpm.cmd format`                                                                                            | Final check pending                                                                    |
-| Own game + actual SDK contract | `pnpm.cmd vitest run games/hole-swallow --maxWorkers=1`                                                      | Initial67 assertions passed; final screen/regression run pending                       |
+| TypeScript                     | `pnpm.cmd typecheck`                                                                                         | Passed, exit0                                                                          |
+| Formatting                     | `pnpm.cmd format`                                                                                            | Passed, exit0                                                                          |
+| Own game + actual SDK contract | `pnpm.cmd vitest run games/hole-swallow --maxWorkers=1`                                                      | Passed90/90 (6 files),150.71s, exit0; includes20 actual SDK checks                     |
 | Bots                           | `pnpm.cmd tsx jobs/P08-hole-swallow/simulate.ts`                                                             | 7,000 passed; 1,000 each for2,3,4,5,6,7,8 players, seed1-1000, three strengths         |
 | Duration                       | Same simulation                                                                                              | All counts: median90,000ms play, max97,000ms including reveal; budget240,000ms         |
 | Properties                     | Own-game properties.test.ts, fast-check seeds1,2,3                                                           | 1,000 generated cases each; 3,000 total pass                                           |
@@ -50,7 +50,7 @@ Production React components, production CSS modules and design tokens rendered i
 with reserved header/footer space. Checked all12 PNGs and HTML. Play phone has no scrolling;
 stage/joystick and eight-player results fit. Initial TV clipping was corrected: the eighth row and
 all six growth labels now remain in the visible stage. Numbers and color both identify seats.
-Overlapping city rims use top-layer callouts. Final label-spacing recapture is pending.
+Overlapping city rims use top-layer callouts. Final label-spacing recapture passed; all eight crowded identities remain visible.
 
 The fit report retains element scroll-height probes. Inline text and SVG glyph bounds can report
 overflow without clipping; the meaningful button/heading/list outside-viewport count is zero
@@ -65,3 +65,11 @@ the prior stalled Chrome instance was closed first. Every capture browser closes
 
 Only this game tests and one worker ran; no whole-suite or whole-suite browser runs. No new
 dependencies, runtime network calls, tracking, secrets or copied original assets.
+
+The loaded-desktop90-test run took350.02s: transforms15.29s, imports28.52s.
+SDK random/fast strategy assertions completed in95.184s/126.167s and exceeded
+the inherited20s test clock. The game-local contract wrapper allows240s wall time;
+virtual estimated-duration checks, all roster sizes and all SDK assertions remain unchanged.
+
+The final rerun passed all90 assertions and exited0 in150.71s (74.97s test work).
+Windows fork-shutdown warnings did not change the pass or exit status.
