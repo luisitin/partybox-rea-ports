@@ -30,7 +30,7 @@ const send = (method, params = {}, session = sessionId) =>
     const timeout = setTimeout(() => {
       pending.delete(id);
       reject(new Error(`CDP timeout: ${method}`));
-    }, 15_000);
+    }, 60_000);
     pending.set(id, { resolve, reject, timeout });
     socket.send(JSON.stringify({ id, method, params, ...(session ? { sessionId: session } : {}) }));
   });
@@ -83,10 +83,22 @@ try {
     const before = await evaluate(
       '({url:location.href,text:document.body.innerText.slice(0,1500),canvas:document.querySelectorAll("canvas").length})',
     );
-    const point = await evaluate('(() => { const r=document.querySelector("canvas").getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+r.height/2}; })()');
+    const point = await evaluate(
+      '(() => { const r=document.querySelector("canvas").getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+r.height/2}; })()',
+    );
     for (let i = 0; i < 6; i++) {
-      await send('Input.dispatchMouseEvent', { type: 'mousePressed', ...point, button: 'left', clickCount: 1 });
-      await send('Input.dispatchMouseEvent', { type: 'mouseReleased', ...point, button: 'left', clickCount: 1 });
+      await send('Input.dispatchMouseEvent', {
+        type: 'mousePressed',
+        ...point,
+        button: 'left',
+        clickCount: 1,
+      });
+      await send('Input.dispatchMouseEvent', {
+        type: 'mouseReleased',
+        ...point,
+        button: 'left',
+        clickCount: 1,
+      });
       await sleep(1100);
     }
     const after = await evaluate('document.body.innerText.slice(0,1500)');

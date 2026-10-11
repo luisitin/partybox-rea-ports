@@ -1,5 +1,7 @@
 # Assumptions
 
+- Direct native-original play was unavailable. Independent first-person accounts and public recreation source supply the research. A headless browser reached the public recreation; keyboard attempts did not start it (observation JSON records zero), and a later mouse-play attempt was interrupted under desktop load. No exact original timing measurements are asserted.
+
 - The owner's explicit REA runner workflow overrides the older PartyBox team workflow for this public clone: work in r16, commit only claim updates on main, and open PRs with gh. The team board does not register this clone.
 - PowerShell execution policy blocks pnpm.ps1; commands use pnpm.cmd. Corepack enabled and dependencies installed once. No dependencies added.
 - Exact original perfect tolerance is unavailable. PartyBox uses 2.6 world units or 6% of the active dimension, whichever is smaller. This is an original tuning choice, not a claim about the original.

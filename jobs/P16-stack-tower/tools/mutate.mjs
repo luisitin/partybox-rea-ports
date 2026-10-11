@@ -131,8 +131,8 @@ const cases = [
     'M20',
     'terminal results never published',
     'server/scoring.ts',
-    "state.phase.id === 'done'",
-    "state.phase.id === 'never'",
+    "state.phase.id !== 'done'",
+    "state.phase.id !== 'never'",
   ],
 ];
 const files = ['world', 'game', 'bot', 'views', 'screens'].map(

@@ -22,7 +22,9 @@ const fixtures: Record<string, State> = {
 const withTv = (state: State): State => ({
   ...state,
   phoneOnly: false,
-  players: Object.fromEntries(Object.entries(state.players).map(([id, p]) => [id, { ...p, canSeeTv: true }])),
+  players: Object.fromEntries(
+    Object.entries(state.players).map(([id, p]) => [id, { ...p, canSeeTv: true }]),
+  ),
 });
 
 function phone(state: State, id: string, provider: boolean): string {
@@ -30,7 +32,11 @@ function phone(state: State, id: string, provider: boolean): string {
   return renderToStaticMarkup(
     <ServerClockProvider offsetMs={state.checked - Date.now()}>
       <PhoneOnlyProvider value={provider}>
-        <Controller view={view} me={state.players[id] ?? { id, name: '', avatarId: 'fox', connected: true }} send={() => undefined} />
+        <Controller
+          view={view}
+          me={state.players[id] ?? { id, name: '', avatarId: 'fox', connected: true }}
+          send={() => undefined}
+        />
       </PhoneOnlyProvider>
     </ServerClockProvider>,
   );
@@ -44,10 +50,13 @@ function tv(state: State): string {
   );
 }
 
-const count = (html: string, tag: string): number => (html.match(new RegExp(`<${tag}\\b`, 'g')) ?? []).length;
-const standings = (html: string): string => html.match(/<ol[^>]*aria-label="Final standings"[^>]*>([\s\S]*?)<\/ol>/)?.[1] ?? '';
+const count = (html: string, tag: string): number =>
+  (html.match(new RegExp(`<${tag}\\b`, 'g')) ?? []).length;
+const standings = (html: string): string =>
+  html.match(/<ol[^>]*aria-label="Final standings"[^>]*>([\s\S]*?)<\/ol>/)?.[1] ?? '';
 const noTvDirections = (html: string): void => {
-  for (const phrase of ['Look at the TV', 'on the TV', 'One moment']) expect(html).not.toContain(phrase);
+  for (const phrase of ['Look at the TV', 'on the TV', 'One moment'])
+    expect(html).not.toContain(phrase);
 };
 
 describe.each(Object.entries(fixtures))('rendered fixture: %s', (_phase, fixture) => {
@@ -72,7 +81,9 @@ describe.each(Object.entries(fixtures))('rendered fixture: %s', (_phase, fixture
     expect(count(html, 'svg')).toBe(1);
     expect(view.towers).toBeUndefined();
     expect(JSON.stringify(view)).not.toContain('"rng"');
-    expect(game.controllerView({ ...state, rng: { seed: 1_234_567_890, step: 999 } }, id)).toEqual(view);
+    expect(game.controllerView({ ...state, rng: { seed: 1_234_567_890, step: 999 } }, id)).toEqual(
+      view,
+    );
     expect(html).not.toContain('movingSince');
     expect(html).not.toContain('1,234,567,890');
     if (state.phase.id === 'play') {
@@ -94,7 +105,10 @@ describe.each(Object.entries(fixtures))('rendered fixture: %s', (_phase, fixture
   it('a remote phone shows the stage even when the provider says a TV is present', () => {
     const tvState = withTv(fixture);
     const id = tvState.towers[0]!.id;
-    const state = { ...tvState, players: { ...tvState.players, [id]: { ...tvState.players[id]!, canSeeTv: false } } };
+    const state = {
+      ...tvState,
+      players: { ...tvState.players, [id]: { ...tvState.players[id]!, canSeeTv: false } },
+    };
     expect(game.controllerView(state, id).stage).toBe(true);
     const html = phone(state, id, false);
     for (const p of Object.values(state.players)) expect(html).toContain(p.name);
@@ -131,7 +145,9 @@ describe('controller action and final rankings', () => {
     const id = base.towers[0]!.id;
     const state: State = {
       ...base,
-      towers: base.towers.map((t) => t.id === id ? { ...t, best: 12, crashedAt: base.checked - 700, feedback: 'miss' } : t),
+      towers: base.towers.map((t) =>
+        t.id === id ? { ...t, best: 12, crashedAt: base.checked - 700, feedback: 'miss' } : t,
+      ),
       scores: { ...base.scores, [id]: 12 },
     };
     const html = phone(state, id, false);
@@ -148,9 +164,13 @@ describe('controller action and final rankings', () => {
       const html = phone(state, state.towers[0]!.id, false);
       const rows = standings(html);
       expect(count(rows, 'li')).toBe(8);
-      const ordered = Object.values(state.players).sort((a, b) => (state.scores[b.id] ?? 0) - (state.scores[a.id] ?? 0));
+      const ordered = Object.values(state.players).sort(
+        (a, b) => (state.scores[b.id] ?? 0) - (state.scores[a.id] ?? 0),
+      );
       for (let index = 1; index < ordered.length; index++) {
-        expect(rows.indexOf(ordered[index - 1]!.name)).toBeLessThan(rows.indexOf(ordered[index]!.name));
+        expect(rows.indexOf(ordered[index - 1]!.name)).toBeLessThan(
+          rows.indexOf(ordered[index]!.name),
+        );
       }
       expect(count(html, 'button')).toBe(0);
     }
@@ -158,7 +178,11 @@ describe('controller action and final rankings', () => {
 
   it('ties use the shared skyline headline and give every tied finisher first place', () => {
     const base = fixtures.done!;
-    const state: State = { ...base, scores: Object.fromEntries(base.towers.map((t) => [t.id, 12])), towers: base.towers.map((t) => ({ ...t, best: 12 })) };
+    const state: State = {
+      ...base,
+      scores: Object.fromEntries(base.towers.map((t) => [t.id, 12])),
+      towers: base.towers.map((t) => ({ ...t, best: 12 })),
+    };
     for (const id of state.towers.map((t) => t.id)) {
       const html = phone(state, id, true);
       expect(html).toContain('A tie at the skyline!');
@@ -173,8 +197,16 @@ describe('fixed seats across arbitrary player ids', () => {
   it('TV, private phone and full roster use initial tower order, not envelope sort order', () => {
     const ids = ['z', 'p10', '__proto__', 'p2', 'constructor', 'a', 'toString', '00'];
     const state = game.init({
-      players: ids.map((id, index) => ({ id, name: `Seat-${index + 1}`, avatarId: 'fox', connected: true })),
-      settings: {}, seed: 16, now: 1000, presence: { mode: 'together', phoneOnly: false },
+      players: ids.map((id, index) => ({
+        id,
+        name: `Seat-${index + 1}`,
+        avatarId: 'fox',
+        connected: true,
+      })),
+      settings: {},
+      seed: 16,
+      now: 1000,
+      presence: { mode: 'together', phoneOnly: false },
     });
     const television = tv(state);
     for (let slot = 0; slot < ids.length; slot++) {
@@ -186,7 +218,9 @@ describe('fixed seats across arbitrary player ids', () => {
       expect(html).toContain(`--tower-ink:var(--pb-player-${slot + 1})`);
       expect(television).toContain(`Seat-${slot + 1}`);
       const stage = phone({ ...state, phoneOnly: true }, id, true);
-      expect(stage).toMatch(new RegExp(`--tower-ink:var\\(--pb-player-${slot + 1}\\)[^>]*>[\\s\\S]*?Seat-${slot + 1}`));
+      expect(stage).toMatch(
+        new RegExp(`--tower-ink:var\\(--pb-player-${slot + 1}\\)[^>]*>[\\s\\S]*?Seat-${slot + 1}`),
+      );
     }
     expect(slotOf({}, '__proto__')).toBe(0);
     expect(slotOf({}, 'constructor')).toBe(0);
