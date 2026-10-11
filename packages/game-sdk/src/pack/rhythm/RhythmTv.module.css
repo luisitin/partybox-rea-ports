@@ -1,0 +1,55 @@
+/* The kitchen is drawn behind the content: this stage is its own stacking context. */
+.room {
+  position: relative;
+  isolation: isolate;
+}
+
+/* The done screen: the text moves right, the team's tower stands big on the left (Kitchen). */
+.room.roomDone {
+  padding-inline-start: 20rem;
+}
+
+.head[data-done='true'] > * {
+  color: var(--pb-accent-2);
+  font-size: var(--pb-font-h1);
+}
+
+.track {
+  /* Narrower than the screen: the team's tower stands in the left gutter. Held in px (62rem at the 16 px root): a browser
+     with a bigger default font made the rem width fill the stage, and the gutter, and the tower, went with it (T-0905). */
+  width: min(100%, 992px);
+  margin-block: var(--pb-space-3);
+}
+
+/* With a big prop behind it the panel lets the prop show through; the notes keep their ink outline. */
+.track[data-scene='true'] {
+  --track-opacity: 26%;
+}
+
+.tally {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--pb-space-2) var(--pb-space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--pb-font-h2);
+  /* Leaves the team's tower its place at the left. */
+  padding-inline-start: 3rem;
+}
+
+.tally li {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+}
+
+.tally li[data-lead='true'] {
+  font-weight: 900;
+  color: var(--pb-accent-2);
+}
+
+.tally li[data-away='true'] {
+  opacity: 0.5;
+}

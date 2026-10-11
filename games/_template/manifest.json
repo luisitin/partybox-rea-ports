@@ -1,0 +1,33 @@
+{
+  "id": "template",
+  "name": "Quick Poll",
+  "icon": "🧩",
+  "tagline": "Type a word. See everyone's.",
+  "description": "The smallest complete PartyBox game: everyone types one word, the TV reveals them all, everyone who answered scores a point. Copy it to start a new game.",
+  "howToPlay": [
+    "Type one word on your phone.",
+    "The TV reveals everyone's words.",
+    "Everyone who answered scores a point."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 1,
+  "maxPlayers": 16,
+  "estimatedMinutes": 2,
+  "tags": ["words"],
+  "category": "classics",
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-01-01",
+  "settings": [
+    {
+      "key": "answerSeconds",
+      "label": "Answer time",
+      "description": "Seconds to type an answer",
+      "type": "number",
+      "default": 30,
+      "min": 10,
+      "max": 90,
+      "step": 5
+    }
+  ],
+  "supportsBots": true
+}

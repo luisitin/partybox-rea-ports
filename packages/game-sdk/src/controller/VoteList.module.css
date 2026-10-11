@@ -1,0 +1,188 @@
+.kicker {
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  color: var(--pb-accent-2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.prompt {
+  font-size: var(--pb-font-h2);
+  font-weight: 800;
+  text-wrap: balance;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-3);
+}
+
+/* The thing being voted on, above the prompt: it stays put while the options scroll under it. */
+.header {
+  position: sticky;
+  top: calc(-1 * var(--pb-space-4));
+  z-index: 1;
+  margin: calc(-1 * var(--pb-space-4)) calc(-1 * var(--pb-space-4)) 0;
+  padding: var(--pb-space-4) var(--pb-space-4) var(--pb-space-2);
+  background: var(--pb-bg);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-3);
+  min-height: 64px;
+  padding: var(--pb-space-3) var(--pb-space-4);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  border: 3px solid var(--pb-border);
+  text-align: left;
+  font-size: var(--pb-font-body);
+  font-weight: 700;
+}
+
+/* size="large": two or three tall cards that fill the thumb zone. */
+.large {
+  flex: 1;
+}
+
+.large .option {
+  flex: 1;
+  min-height: max(112px, 22dvh);
+  gap: var(--pb-space-4);
+  font-size: var(--pb-font-h2);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+/* A sideways phone has width for the large pair, not height for a vertical stack. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .large {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+}
+
+.letter {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--pb-touch);
+  height: var(--pb-touch);
+  border-radius: 50%;
+  /* gold, like the TV's vote-card discs (the phone's A is the TV's A) */
+  background: var(--pb-accent-2-fill);
+  color: var(--pb-on-accent-2-fill);
+  font-size: var(--pb-font-body);
+  font-weight: 900;
+  transition:
+    transform var(--pb-motion-fast) var(--pb-ease),
+    background-color var(--pb-motion-base) var(--pb-ease),
+    color var(--pb-motion-base) var(--pb-ease);
+}
+
+.voted .letter {
+  background: var(--pb-accent);
+  color: var(--pb-on-accent);
+}
+
+/* Placeholder answers ("(no answer)") look like what they are; still votable per the game's rules. */
+.muted .text {
+  color: var(--pb-text-muted);
+  font-style: italic;
+  font-weight: 600;
+}
+
+.option:disabled {
+  cursor: default;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.tag {
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* A row's text keeps its width: the tag takes a line of its own under the text instead of
+   squeezing a wrapped sentence into a narrow column (a Blanks card on an iPhone SE, review-loop
+   #138) — and the letter stays beside the text, where a short card used to leave it stranded on
+   a line by itself (Blanks review-loop #386). */
+.option:has(.tag) {
+  flex-wrap: wrap;
+}
+
+.option:has(.tag) .tag {
+  flex-basis: 100%;
+  text-align: right;
+  margin-top: calc(-1 * var(--pb-space-2));
+}
+
+.mark {
+  color: var(--pb-accent-3);
+  font-weight: 900;
+  animation: global(pb-pop) var(--pb-motion-fast) var(--pb-ease) both;
+}
+
+/* Lock-in: the chosen card settles with a small pop (0 ms under reduced motion via the token).
+   The global pb-pop starts from opacity 0, so the card uses a local settle that never hides an
+   already-visible button. */
+@keyframes pb-vote-settle {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.voted {
+  border-color: var(--pb-accent);
+  background: var(--pb-surface-2);
+  animation: pb-vote-settle var(--pb-motion-base) var(--pb-ease) both;
+}
+
+/* Dimmed by token, not opacity: muted text on the page bg keeps >= 6.4:1 in every theme (R-070);
+   opacity fell to ~2.2:1 in Daylight. .mine is disabled and can never be .voted. */
+.mine,
+.dim {
+  color: var(--pb-text-muted);
+  background: var(--pb-bg);
+}
+
+.mine .letter,
+.dim .letter {
+  background: var(--pb-surface);
+  color: var(--pb-text-muted);
+}
+
+.locked {
+  text-align: center;
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  color: var(--pb-accent-3);
+  animation: global(pb-rise) var(--pb-motion-base) var(--pb-ease) both;
+}
+
+/* The tap never reached the server: the list is live again and the line says so (not colour-only). */
+.failed {
+  color: var(--pb-danger);
+}
+
+/* The last 5 s for an unanswered phone (`data-urgent` on the controller shell): the letters turn
+   danger so the thumb zone, not only the header, says "now". */
+[data-urgent] .option:not(:disabled) .letter {
+  background: var(--pb-danger);
+  color: var(--pb-on-accent);
+}

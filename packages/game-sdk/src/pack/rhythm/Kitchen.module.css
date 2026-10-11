@@ -1,0 +1,163 @@
+/* The kitchen sits behind the stage's content (z-index -1 inside the stage's own stacking context). */
+.kitchen {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  /* Tiles: a faint grid on a wall of the game's colour, darker toward the floor. */
+  background:
+    linear-gradient(to bottom, var(--pb-bg, #0f1020), transparent 14%),
+    linear-gradient(to bottom, transparent 55%, hsl(var(--hue) 30% 8% / 0.7)),
+    repeating-linear-gradient(
+      to right,
+      transparent 0 5.9rem,
+      hsl(var(--hue) 40% 40% / 0.1) 5.9rem 6rem
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 5.9rem,
+      hsl(var(--hue) 40% 40% / 0.1) 5.9rem 6rem
+    ),
+    hsl(var(--hue) 34% 17%);
+}
+
+/* A ledge on each side of the title; the things stand on it. */
+.shelf {
+  position: absolute;
+  top: 1%;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.2rem;
+  padding: 0 1rem;
+  font-size: 3rem;
+  line-height: 1;
+  border-bottom: 0.7rem solid hsl(var(--hue) 35% 32%);
+  box-shadow: 0 0.5rem 0.8rem hsl(0 0% 0% / 0.35);
+}
+
+.shelf[data-side='left'] {
+  left: 4%;
+}
+
+.shelf[data-side='right'] {
+  right: 4%;
+}
+
+.shelf > span {
+  display: block;
+  filter: drop-shadow(0 0.3rem 0.2rem hsl(0 0% 0% / 0.3));
+}
+
+.counter {
+  position: absolute;
+  inset: auto 0 0;
+  height: 7%;
+  background: hsl(var(--hue) 28% 24%);
+  border-top: 0.5rem solid hsl(var(--hue) 40% 38%);
+  box-shadow: 0 -0.6rem 1.4rem hsl(0 0% 0% / 0.35);
+}
+
+/* The game's big prop: centred on the track, the band between the title and the scores. */
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 41%;
+  width: min(60%, 54rem);
+  height: 11rem;
+  translate: -50% -50%;
+}
+
+/* A perfect lights the wall behind the prop. */
+.glow {
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, hsl(var(--hue) 90% 70% / 0.5), transparent);
+  opacity: 0;
+}
+
+.glow[data-perfect='true'] {
+  animation: glow 700ms ease-out;
+}
+
+@keyframes glow {
+  20% {
+    opacity: 1;
+  }
+}
+
+/* The team's stack: pieces pile up on a labelled tray on the counter, left of the scores (T-0923). */
+.spares {
+  position: absolute;
+  /* Inside the TV's overscan-safe edge (the stage pads 5%). */
+  left: 4.5%;
+  bottom: 7%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 3.8rem;
+  line-height: 1;
+}
+
+.tower {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+
+/* The tray the stack stands on: a plate with its count printed on it (T-0923). */
+.tray {
+  display: grid;
+  place-items: center;
+  width: 1.7em;
+  height: 0.5em;
+  border-radius: 0.2em 0.2em 0.5em 0.5em;
+  background: hsl(var(--hue) 40% 46%);
+  border-bottom: 0.08em solid hsl(var(--hue) 40% 30%);
+  box-shadow: 0 0.1em 0.2em hsl(0 0% 0% / 0.4);
+  color: hsl(0 0% 100%);
+}
+
+.tray > span {
+  font-size: 0.32em;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.tower > span {
+  display: flex;
+  align-items: flex-end;
+  height: 1.9rem;
+  filter: drop-shadow(0 0.2rem 0.15rem hsl(0 0% 0% / 0.35));
+}
+
+.tower > span[data-top='true'] {
+  animation: land 420ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+/* The done screen: the tower is the trophy, big on the left of the floor. */
+.spares[data-done='true'] {
+  left: 5%;
+  /* Six pieces still stand under the shelf. */
+  font-size: 6.4rem;
+}
+
+.tower[data-done='true'] > span {
+  height: 2.4rem;
+}
+
+@keyframes land {
+  from {
+    translate: 0 -3rem;
+    opacity: 0;
+    scale: 1.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tower > span[data-top='true'],
+  .glow[data-perfect='true'] {
+    animation: none;
+  }
+}

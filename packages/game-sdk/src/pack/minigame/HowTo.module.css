@@ -1,0 +1,336 @@
+/* HowTo.tsx: the instruction screen (bible S15/S16). The TV is designed at 1920×1080 px inside 5 % overscan
+   (1728 × 972): the demo window is 1040 × 585 (16:9) and shows the game's own 1920 × 1080 TV screen at 0.5417. */
+.tv {
+  position: relative;
+  --demo-w: 1040px;
+  --demo-h: 585px;
+  width: 100%;
+  min-height: 100%;
+  display: grid;
+  grid-template-columns: var(--demo-w) minmax(0, 1fr);
+  grid-template-rows: auto var(--demo-h) minmax(0, 1fr);
+  gap: var(--pb-space-3) var(--pb-space-6);
+  align-content: start;
+  box-sizing: border-box;
+  text-align: start;
+}
+
+.title {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  font-size: var(--pb-font-h1);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.badge {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  font-size: var(--pb-font-h1);
+  line-height: 1;
+}
+
+.window {
+  grid-column: 1;
+  grid-row: 2;
+  position: relative;
+  width: var(--demo-w);
+  height: var(--demo-h);
+  overflow: hidden;
+  border-radius: var(--pb-radius-lg);
+  border: 3px solid var(--pb-border);
+  background: var(--pb-surface);
+}
+
+.scaled {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 1920px;
+  height: 1080px;
+  transform: scale(0.5417);
+  transform-origin: 0 0;
+}
+
+/* "Practice Time!": a pill on the title row, above the window, so it never prints over the game's own captions. */
+.watermark {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: end;
+  align-self: center;
+  padding: var(--pb-space-1) var(--pb-space-4);
+  border-radius: 999px;
+  background: var(--pb-accent);
+  color: var(--pb-on-accent);
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.side {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-4);
+  min-width: 0;
+  min-height: 0;
+}
+
+.controls {
+  min-width: 0;
+}
+
+.side .phonePic {
+  flex: 1;
+  min-height: 0;
+}
+
+.side .phoneBody {
+  width: 170px;
+  height: 300px;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-3);
+  border-width: 6px;
+  border-radius: 32px;
+}
+
+.side .phoneIcon {
+  font-size: 64px;
+}
+
+.controlsHead {
+  margin: 0 0 var(--pb-space-3);
+  padding-block-end: var(--pb-space-2);
+  border-block-end: 3px solid var(--pb-border);
+  font-size: var(--pb-font-h2);
+  font-weight: 800;
+}
+
+.controlList {
+  display: grid;
+  gap: var(--pb-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--pb-font-body);
+  line-height: 1.25;
+}
+
+.controlList li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--pb-space-3);
+}
+
+/* The input as a key cap, the way Jamboree draws its L / R / stick glyphs. */
+.key {
+  flex: none;
+  padding: 0 var(--pb-space-3);
+  border-radius: var(--pb-radius-md, 12px);
+  border: 2px solid var(--pb-text-muted);
+  background: var(--pb-surface);
+  font-family: inherit;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.says {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--pb-space-3);
+  min-width: 0;
+}
+
+.tv .says {
+  grid-column: 1;
+  grid-row: 3;
+  align-self: start;
+}
+
+.bubble {
+  flex: 1;
+  min-width: 0;
+  padding: var(--pb-space-4) var(--pb-space-5);
+  border-radius: 32px;
+  background: #fff6d6;
+  border: 4px solid #e8b52f;
+  color: #2b2118;
+  font-size: var(--pb-font-body);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* The TV page has 746 px under its top bar: a three-line speech bubble must end inside it (F29/F38). */
+.tv .bubble {
+  padding-block: var(--pb-space-3);
+  line-height: 1.2;
+}
+
+.bubble p {
+  margin: 0;
+}
+
+.bubble p + p {
+  margin-block-start: var(--pb-space-2);
+}
+
+.rail {
+  grid-column: 2;
+  grid-row: 3;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-3);
+  align-self: start;
+}
+
+.start {
+  margin: 0;
+  padding: var(--pb-space-2) var(--pb-space-5);
+  border-radius: 999px;
+  background: #ffe433;
+  color: #2b2118;
+  text-align: center;
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+}
+
+.readyList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pb-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.readyList li {
+  display: grid;
+  justify-items: center;
+  gap: var(--pb-space-1);
+  opacity: 0.6;
+}
+
+.readyList .isReady {
+  opacity: 1;
+}
+
+.readyMark {
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+}
+
+.isReady .readyMark {
+  color: var(--pb-accent-3);
+}
+
+.wait {
+  margin: 0;
+  color: var(--pb-text-muted);
+}
+
+/* The phone: one column that fills the screen: title, Toad's lines, the controls on one line, the demo taking the
+   rest of the height, and Start! under it (never over it). Its own side gutter, like a game's Screen. */
+.phone {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2) var(--pb-space-4) 0;
+  box-sizing: border-box;
+  text-align: start;
+}
+
+.phoneTitle {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.phone .bubble {
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border-radius: 20px;
+  border-width: 3px;
+  font-size: var(--pb-font-caption);
+  line-height: 1.2;
+}
+
+.phone .says {
+  align-items: center;
+  flex: none;
+}
+
+.controlsCompact {
+  flex: none;
+}
+
+.controlsCompact .controlList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pb-space-1) var(--pb-space-3);
+  font-size: var(--pb-font-caption);
+  line-height: 1.2;
+}
+
+.controlsCompact .key {
+  padding: 0 var(--pb-space-2);
+}
+
+.phoneDemo {
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 0;
+  min-height: 390px;
+  border-radius: var(--pb-radius-lg);
+  border: 2px solid var(--pb-border);
+  background: var(--pb-surface);
+}
+
+/* Start! sits under the demo, always on the screen, never over the pad. */
+.startBar {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-2);
+  padding-block: var(--pb-space-2) var(--pb-space-3);
+}
+
+/* No demo (text games): a phone with the controls drawn on its screen, centred in the window. */
+.phonePic {
+  display: grid;
+  place-items: center;
+  height: 100%;
+}
+
+.phoneBody {
+  display: grid;
+  gap: var(--pb-space-3);
+  justify-items: center;
+  align-content: center;
+  width: 250px;
+  height: 480px;
+  padding: var(--pb-space-4);
+  box-sizing: border-box;
+  border-radius: 44px;
+  border: 8px solid var(--pb-text-muted);
+  background: var(--pb-bg);
+}
+
+.phoneIcon {
+  font-size: 96px;
+  line-height: 1;
+}
+
+.phoneKey {
+  padding: var(--pb-space-2) var(--pb-space-4);
+  border-radius: 999px;
+  background: var(--pb-accent);
+  color: var(--pb-bg);
+  font-size: var(--pb-font-body);
+  font-weight: 900;
+  text-align: center;
+}

@@ -1,0 +1,110 @@
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: var(--pb-space-3);
+  max-width: 100%;
+}
+
+.row {
+  /* Wraps so 16 players stay visible (two rows of sm chips at 1080p) instead of being clipped. */
+  flex-wrap: wrap;
+  gap: var(--pb-space-2) var(--pb-space-3);
+}
+
+.grid {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.start {
+  justify-content: flex-start;
+}
+
+.item {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* A new chip pops into place (opt-in via `enter`; keys are player ids, so only a fresh mount pops). */
+/* I-029 A: a joiner walks in from the left (the QR's side on the lobby) as it pops. */
+.enter {
+  animation: pb-chip-walk var(--pb-motion-base) var(--pb-ease) both;
+  transform-origin: center;
+}
+@keyframes pb-chip-walk {
+  0% {
+    opacity: 0;
+    transform: translateX(-40px) scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(4px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* I-029 C: the newest chip is welcomed — a gold ring that fades over a second, once the walk has
+   landed (the one easing; the chip's own rings — active, back — are its own rules). */
+.enter > *:not([class*='_active_']) {
+  outline: 3px solid transparent;
+  outline-offset: 2px;
+  border-radius: 999px;
+  animation: pb-chip-welcome var(--pb-motion-pulse) var(--pb-ease) var(--pb-motion-base) both;
+}
+@keyframes pb-chip-welcome {
+  from {
+    outline-color: var(--pb-accent-2);
+  }
+  to {
+    outline-color: transparent;
+  }
+}
+
+/* Empty seats: the outline of a `lg` chip (the size in force whenever seats are shown). */
+.seat {
+  --pb-chip-size: calc(var(--pb-font-h2) * 1.6);
+  display: inline-flex;
+  align-items: center;
+  width: 7em;
+  font-size: var(--pb-font-h2);
+  padding: var(--pb-space-1) var(--pb-space-4) var(--pb-space-1) var(--pb-space-1);
+  border-radius: 999px;
+  border: 2px dashed var(--pb-text-muted);
+  opacity: 0.45;
+}
+
+.seatDisc {
+  width: var(--pb-chip-size);
+  height: var(--pb-chip-size);
+  border-radius: 50%;
+  background: var(--pb-surface-2);
+  flex-shrink: 0;
+}
+
+/* Materials R2: source adaptations and new relief paint are recorded in SOURCES.md. */
+.seat {
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--pb-surface-2) 40%, transparent)
+  );
+}
+.seatDisc {
+  background: radial-gradient(
+    circle at 50% 55%,
+    var(--pb-bg) 0 63%,
+    var(--pb-surface-2) 67% 74%,
+    color-mix(in srgb, var(--pb-text) 18%, var(--pb-surface-2)) 78%,
+    var(--pb-surface-2) 82%
+  );
+}
+:global(:root[data-theme='contrast']) .seat {
+  background: transparent;
+}
+:global(:root[data-theme='contrast']) .seatDisc {
+  background: var(--pb-surface-2);
+}

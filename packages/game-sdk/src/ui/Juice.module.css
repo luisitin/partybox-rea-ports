@@ -1,0 +1,121 @@
+/* A burst is positioned by its origin (`--j-x`, `--j-y`, any length) inside the nearest positioned ancestor.
+   Every particle moves by transform + opacity only (compositor, 60 fps on a phone). */
+.burst {
+  position: absolute;
+  left: var(--j-x, 50%);
+  top: var(--j-y, 50%);
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.p {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  animation: fly var(--j-ms, 900ms) cubic-bezier(0.2, 0.7, 0.3, 1) var(--j-delay, 0ms) 1 both;
+  will-change: transform, opacity;
+}
+
+.sparks {
+  width: 6px;
+  height: 18px;
+  margin: -9px -3px;
+  border-radius: 3px;
+}
+
+/* A coin, not a dot: gold face, darker rim, an inner ring and a glint. Fixed colours, so it reads as money
+   on every theme (the accent tones are green on some). */
+.coins {
+  width: 36px;
+  height: 36px;
+  margin: -18px;
+  border-radius: 50%;
+  border: 4px solid #b27a12;
+  background: radial-gradient(circle at 35% 30%, #fff3b0 0 14%, #f6c744 15% 100%);
+  box-shadow:
+    inset 0 0 0 3px #e0a623,
+    0 2px 6px rgb(0 0 0 / 45%);
+}
+
+.confetti {
+  width: 12px;
+  height: 20px;
+  margin: -10px -6px;
+  border-radius: 3px;
+}
+
+.dust {
+  width: 28px;
+  height: 28px;
+  margin: -14px;
+  border-radius: 50%;
+}
+
+.t0 {
+  background-color: var(--pb-accent);
+}
+.t1 {
+  background-color: var(--pb-accent-2);
+}
+.t2 {
+  background-color: var(--pb-accent-3);
+}
+.t3 {
+  background-color: var(--pb-info);
+}
+
+/* Dust is always grey: the tone only varies sparks and confetti. */
+.dust.t0,
+.dust.t1,
+.dust.t2,
+.dust.t3 {
+  background-color: var(--pb-text-muted);
+}
+
+@keyframes fly {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(var(--j-scale, 1));
+  }
+  55% {
+    opacity: 1;
+    transform: translate3d(var(--j-dx), var(--j-dy), 0) rotate(calc(var(--j-rot) * 0.6))
+      scale(var(--j-scale, 1));
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(var(--j-dx) * 1.1), calc(var(--j-dy) + var(--j-fall)), 0)
+      rotate(var(--j-rot)) scale(calc(var(--j-scale, 1) * 0.8));
+  }
+}
+
+/* The number: a pop on every change (the keyed re-mount restarts it). */
+.num {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  animation: pop 420ms cubic-bezier(0.2, 1.6, 0.4, 1) 1;
+}
+.num[data-first] {
+  animation: none;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .num {
+    animation: none;
+  }
+}

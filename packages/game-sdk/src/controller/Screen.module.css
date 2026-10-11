@@ -1,0 +1,216 @@
+/* Every screen rises on mount (the phone was the only surface that hard-cut). Fill `backwards`,
+   not `both`: a retained transform would make this frame the containing block for any future
+   position: fixed game element. Taps are never blocked (opacity does not gate pointer events). */
+.screen {
+  position: relative; /* the predecessor's snapshot overlays this frame (review-loop #18) */
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overscroll-behavior: none;
+  animation: global(pb-rise) var(--pb-motion-base) var(--pb-ease) backwards;
+  animation-delay: var(--pb-screen-delay, 0ms); /* I-039 A: the shell can hold the rise a beat */
+}
+
+/* A leaving screen's snapshot, parked in the parent: on top, inert, fading over the base token. */
+.ghost {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  animation: global(pb-fade-out) var(--pb-motion-base) var(--pb-ease) both;
+}
+
+/* Cloned nodes would replay their entrance keyframes; freeze them where they were. */
+.ghost * {
+  animation: none !important;
+  transition: none !important;
+}
+
+.title {
+  padding: var(--pb-space-4) var(--pb-space-4) 0;
+  text-wrap: balance;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--pb-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-4);
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+  padding: var(--pb-space-3) var(--pb-space-4) calc(var(--pb-space-3) + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--pb-bg) 70%, transparent);
+}
+
+/* A sideways phone in Safari (≈ 330 px tall): tighter body padding, the height goes to the game. */
+@media (orientation: landscape) and (max-height: 420px) {
+  .body {
+    padding: var(--pb-space-2) var(--pb-space-4);
+  }
+  .footer {
+    padding: 4px var(--pb-space-4) calc(4px + env(safe-area-inset-bottom));
+  }
+}
+
+/* A long body (six-row results, a wager list on an SE) folds under the footer and the last line is
+   cut mid-glyph (review-loop, six-player results on an iPhone). Browsers with scroll-driven animations fade the body's bottom 28 px
+   while there is more below and lift the fade at the end; a body that does not scroll has no
+   timeline, so no fade. Only meaningful overflow (the same threshold as the cue) folds: a few
+   pixels of card-arrival overshoot must not fade a whole row. Others keep the plain fold. */
+@property --pb-fold {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@supports (animation-timeline: scroll()) {
+  .body {
+    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--pb-fold)), transparent);
+  }
+  .body[data-fold] {
+    animation: pb-fold linear both;
+    animation-timeline: scroll(self);
+  }
+  /* fill1: a title drawn down to its bottom edge (the results' award chips) sat flush on the body's
+     clip line, so a row scrolled half out read as hidden under the chips — at 200 % text most of a
+     name. Scrolled away from the top, the body keeps the clear strip it has at rest (its own top
+     padding) and then fades in over twice the caption size, so nothing touches the title at any
+     text size. Paint only: every box stays where it was, and at the top there is no mask at all. */
+  .body.fadeTop {
+    mask-image: linear-gradient(
+      to bottom,
+      transparent var(--pb-fold-clear),
+      #000 calc(var(--pb-fold-clear) + var(--pb-fold-top)),
+      #000 calc(100% - var(--pb-fold)),
+      transparent
+    );
+    animation: pb-fold-top linear both;
+    animation-timeline: scroll(self);
+  }
+  .body.fadeTop[data-fold] {
+    animation:
+      pb-fold linear both,
+      pb-fold-top linear both;
+    animation-timeline: scroll(self), scroll(self);
+  }
+}
+
+@property --pb-fold-top {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+@property --pb-fold-clear {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes pb-fold-top {
+  0% {
+    --pb-fold-clear: 0px;
+    --pb-fold-top: 0px;
+  }
+  8%,
+  100% {
+    --pb-fold-clear: var(--pb-space-4);
+    --pb-fold-top: calc(var(--pb-font-caption) * 2);
+  }
+}
+
+@keyframes pb-fold {
+  0%,
+  92% {
+    --pb-fold: 72px; /* I-066 A: one cut row deep */
+  }
+  100% {
+    --pb-fold: 0px;
+  }
+}
+
+/* ── I-788 A (design review A, refines I-066 B / I-187): "more below" is a slim row of its own at the
+   top of the footer — a grab bar and the words — never a pill floating over the body's last line or
+   the button's own words. The row is laid out whenever the body overflows (the body gives up its
+   height), and only fades out at the end, so nothing shifts under a finger. With no footer the same
+   row sits in the bottom safe area. The whole row is the button: 28 px drawn, 40 px to the thumb. */
+.cue {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 28px;
+  margin: 0 0 2px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--pb-text-muted);
+  font: inherit;
+  font-size: calc(var(--pb-font-caption) * 0.86);
+  font-weight: 700;
+  line-height: 1.1;
+  cursor: pointer;
+  transition: opacity var(--pb-motion-base) var(--pb-ease);
+}
+.cue::before {
+  content: '';
+  width: 28px;
+  height: 3px;
+  border-radius: 3px;
+  background: currentColor;
+  opacity: 0.6;
+  flex: none;
+}
+/* The thumb target reaches up to the footer's top edge (44 px), never down over the button. */
+.cue::after {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--pb-space-4)) 0 0;
+}
+.cue[data-on='false'] {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--pb-motion-base) var(--pb-ease),
+    visibility 0s linear var(--pb-motion-base);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cue,
+  .cue[data-on='false'] {
+    transition: none;
+  }
+}
+:global(:root[data-motion='off']) .cue,
+:global(:root[data-motion='off']) .cue[data-on='false'] {
+  transition: none;
+}
+
+/* No footer: the row alone, in the bottom safe area. */
+.cueOnly {
+  flex-shrink: 0;
+  padding: var(--pb-space-3) var(--pb-space-4) calc(4px + env(safe-area-inset-bottom));
+}
+
+@media (orientation: landscape) and (max-height: 420px) {
+  .cue {
+    min-height: 22px;
+    margin: 0;
+  }
+  .cue::after {
+    inset: -4px 0 0;
+  }
+  .cueOnly {
+    padding: 4px var(--pb-space-4) calc(2px + env(safe-area-inset-bottom));
+  }
+}

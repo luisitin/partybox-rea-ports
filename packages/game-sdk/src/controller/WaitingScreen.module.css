@@ -1,0 +1,62 @@
+.center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-3);
+  text-align: center;
+  padding: var(--pb-space-6) 0;
+}
+
+.glyph {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  font-size: 48px;
+  font-weight: 900;
+  background: var(--pb-surface);
+  color: var(--pb-text-muted);
+}
+
+.done {
+  background: var(--pb-accent-3);
+  color: var(--pb-on-accent);
+}
+
+.watch {
+  color: var(--pb-info);
+}
+
+.oops {
+  color: var(--pb-accent-2);
+}
+
+.title {
+  text-wrap: balance;
+}
+
+.hint {
+  color: var(--pb-text-muted);
+}
+
+/* Waiting for others / watching the TV: the glyph breathes on a 2 s loop so a glance confirms the
+   phone is alive (review-loop #22). Reduced motion zeroes the pulse token → no loop. */
+.wait,
+.watch {
+  animation: pb-breathe calc(var(--pb-motion-pulse) * 2) ease-in-out infinite;
+}
+
+@keyframes pb-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.8;
+  }
+}

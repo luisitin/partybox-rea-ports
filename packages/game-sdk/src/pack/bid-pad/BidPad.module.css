@@ -1,0 +1,292 @@
+/* BidPad: sized in the phone's rem tokens, so a larger-text phone scales the words; targets never
+   under --pb-touch. Every control is fidget-proof: no text selection, no callout, no double-tap
+   zoom, no tap flash. */
+
+.screen {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-3);
+}
+
+.below {
+  min-width: 0;
+}
+
+.pad {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--pb-space-3);
+  margin-top: var(--pb-space-2);
+}
+
+.have {
+  margin: 0;
+  text-align: center;
+  font-size: var(--pb-font-caption);
+  /* Information, not a disabled control (review: the grey read as disabled). */
+  color: var(--pb-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.dial {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--pb-space-3);
+}
+
+.step,
+.chip,
+.pass {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.step {
+  width: calc(var(--pb-touch) + var(--pb-space-4));
+  height: calc(var(--pb-touch) + var(--pb-space-4));
+  border-radius: 50%;
+  border: 0;
+  background: var(--pb-surface-2);
+  color: var(--pb-text);
+  box-shadow: inset 0 0 0 1px var(--pb-border);
+  font-size: var(--pb-font-h1);
+  font-weight: 900;
+  line-height: 1;
+  transition: transform var(--pb-motion-fast) var(--pb-ease);
+}
+
+.step:active:not([aria-disabled='true']) {
+  transform: scale(0.92);
+}
+
+.step[aria-disabled='true'],
+.chip[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.amount {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--pb-space-2);
+  min-width: 0;
+  color: var(--pb-accent-2);
+  font-size: var(--pb-font-display);
+  font-weight: 900;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.coin {
+  font-size: var(--pb-font-h1);
+}
+
+/* A new amount squeezes in from 1.3× and is readable from its first frame (pb-tick). */
+.digits {
+  display: inline-block;
+  animation: global(pb-tick) var(--pb-motion-fast) var(--pb-ease);
+}
+
+.chips {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--pb-space-2);
+}
+
+.chip {
+  min-height: var(--pb-touch);
+  padding: var(--pb-space-2) var(--pb-space-1);
+  border-radius: var(--pb-radius);
+  border: 0;
+  background: var(--pb-surface);
+  color: var(--pb-text);
+  box-shadow: inset 0 0 0 2px var(--pb-surface-2);
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+  transition: transform var(--pb-motion-fast) var(--pb-ease);
+}
+
+.chip:active:not([aria-disabled='true']) {
+  transform: scale(0.94);
+}
+
+.allIn {
+  box-shadow: inset 0 0 0 2px var(--pb-accent-2);
+  color: var(--pb-accent-2);
+}
+
+/* The line that follows the bid (its return, a limit): quiet, never shaken. */
+.readout {
+  margin: 0;
+  text-align: center;
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  color: var(--pb-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.notice {
+  margin: 0;
+  text-align: center;
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text);
+  animation: global(pb-shake) var(--pb-motion-base) var(--pb-ease);
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-2);
+}
+
+.pass {
+  min-height: var(--pb-touch);
+  border: 0;
+  border-radius: var(--pb-radius);
+  background: transparent;
+  color: var(--pb-text-muted);
+  font-size: var(--pb-font-body);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.passed {
+  color: var(--pb-accent-3);
+  text-decoration: none;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .digits,
+  .notice {
+    animation: none;
+  }
+}
+
+:global(:root[data-motion='off']) .digits,
+:global(:root[data-motion='off']) .notice {
+  animation: none;
+}
+
+/* Sideways on a phone: the pad and what is being bid on sit side by side, and Pass joins the
+   confirm on one row, so nothing needs a scroll. */
+@media (orientation: landscape) and (max-height: 540px) {
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--pb-space-5);
+  }
+  .footer {
+    flex-direction: row;
+    align-items: center;
+  }
+  .footer > :first-child {
+    flex: 1 1 auto;
+  }
+  .pass {
+    flex: none;
+    padding-inline: var(--pb-space-4);
+  }
+  .pad {
+    gap: var(--pb-space-2);
+    margin-top: 0;
+  }
+  .step {
+    width: var(--pb-touch);
+    height: var(--pb-touch);
+    font-size: var(--pb-font-h2);
+  }
+  .amount {
+    font-size: var(--pb-font-h1);
+  }
+}
+
+/* Short portrait phones (an SE at 568 px): the dial and chips tighten so the stake sits on screen
+   with the choice above it (a blind-auction review: the stepper was half under the fade). */
+@media (orientation: portrait) and (max-height: 600px) {
+  .pad {
+    gap: var(--pb-space-2);
+  }
+  .step {
+    height: var(--pb-touch);
+  }
+  .amount {
+    font-size: var(--pb-font-h1);
+  }
+  .chip {
+    min-height: 40px;
+    padding: var(--pb-space-1);
+  }
+}
+
+/* pinPad: the dial and chips ride in the footer, tight above the confirm. */
+.footer .pad {
+  margin-top: 0;
+  gap: var(--pb-space-2);
+}
+
+/* Pinned, the pad is compact: a footer that grows past ~45 % of a large-text phone pushes the
+   thing being bet on under the fade (review [84a77f]). */
+.footer .dial {
+  gap: var(--pb-space-2);
+}
+
+.footer .step {
+  height: var(--pb-touch);
+  font-size: var(--pb-font-h2);
+}
+
+.footer .amount {
+  font-size: var(--pb-font-h1);
+}
+
+.footer .chip {
+  min-height: 36px;
+  padding: 2px var(--pb-space-1);
+  font-size: var(--pb-font-caption);
+}
+
+.footer .pass {
+  min-height: 36px;
+}
+
+/* On a short portrait phone, Pass shares the confirm row when the pad is pinned. The choices gain
+   one row of visible space without shrinking either tap target. */
+@media (orientation: portrait) and (max-height: 600px) {
+  .pinned .footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: stretch;
+    column-gap: var(--pb-space-2);
+  }
+  .pinned .footer .pad {
+    grid-column: 1 / -1;
+  }
+  .pinned .footer .pass {
+    max-width: 120px;
+    padding-inline: var(--pb-space-1);
+    font-size: var(--pb-font-caption);
+    line-height: 1.1;
+  }
+  .pinned .footer:not(:has(.pass)) > :last-child {
+    grid-column: 1 / -1;
+  }
+}

@@ -1,0 +1,47 @@
+/* Full-screen, behind every word: z -1 inside the TV frame's own stacking context (TvFrame
+   isolation) paints above the frame background and under all content, so a piece shows only in the
+   gaps and never over text. Fixed to the viewport (the TV surface is a zoomed 1920×1080 design, so
+   px, never vh). The fall is transform + opacity only. */
+.confetti {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.piece {
+  position: absolute;
+  top: -32px;
+  width: 16px;
+  height: 26px;
+  border-radius: 3px;
+  opacity: 0.95;
+  animation: global(pb-confetti) var(--pb-motion-confetti, 3000ms) linear infinite;
+  will-change: transform;
+}
+
+/* One faster fall: each piece waits above the screen for its stagger, then goes back up there
+   when it lands. Never held at the last frame: a 16:10 or 4:3 stage (1200, 1440 px) is deeper
+   than the 1180 px fall, so the pieces would rest on the results (T-0171 review). */
+.confetti[data-once] .piece {
+  animation-duration: calc(var(--pb-motion-confetti, 3000ms) * 2 / 3);
+  animation-iteration-count: 1;
+  animation-fill-mode: backwards;
+}
+
+.c0 {
+  background: var(--pb-accent);
+}
+
+.c1 {
+  background: var(--pb-accent-2);
+}
+
+.c2 {
+  background: var(--pb-accent-3);
+}
+
+.c3 {
+  background: var(--pb-info);
+}

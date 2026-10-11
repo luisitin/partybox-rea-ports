@@ -1,0 +1,361 @@
+.kicker {
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  color: var(--pb-accent-2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* tone="final": the kicker matches the TV's accent "final question" kicker (R-064). */
+.kickerFinal {
+  color: var(--pb-accent);
+}
+
+.prompt {
+  font-size: var(--pb-font-h2);
+  font-weight: 800;
+  text-wrap: balance;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-3);
+}
+
+/* fill (I-789 B, the design review): the answers share the height left under the question —
+   each 66 px when there is room, down to its own content (one line: 50 px; the flex item's auto
+   minimum, never a fixed one — a two-line label must not spill onto the next tile) on a short
+   phone, so four fit an SE with no scroll. The tiles never stretch past 66 px, so nothing drifts
+   when the status line lands. */
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-4);
+  flex: 1 1 auto;
+  /* min-height stays auto: the block never shrinks below its tiles' content, so a long label
+     scrolls the body instead of sliding under the status line */
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-2);
+}
+
+.plain {
+  display: contents;
+}
+
+.fill {
+  flex: 1 1 auto;
+  gap: var(--pb-space-2);
+}
+
+/* Basis 0 + grow: a tile's floor is its content (one line: 50 px — the block never shrinks below
+   it, so nothing slides under the status line), its ceiling 66 px or two lines of its own text,
+   whichever is taller (a two-line answer is never clipped). */
+.fill .choice {
+  flex: 1 1 0;
+  min-height: auto;
+  max-height: max(66px, calc(2lh + 2 * var(--pb-space-2) + 6px));
+  padding: var(--pb-space-2) var(--pb-space-4);
+}
+
+.fill .letter {
+  width: max(28px, 1.5em); /* grows with 200 % text, so the letter never spills out of its disc */
+  height: max(28px, 1.5em);
+}
+
+/* Four short answers: two by two, each tile at least 66 px; the ✓/✗ goes to the corner so the
+   label keeps the width… */
+.fill.two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+}
+
+.fill.two .choice {
+  min-height: 66px;
+  max-height: none;
+}
+
+/* …unless half the width holds under 7 em of the tiles' own text (200 % text): then one column of
+   content-high tiles. The query measures the layout, whose font is the tiles' body size. */
+.layout {
+  container-type: inline-size;
+  font-size: var(--pb-font-body);
+}
+
+@container (max-width: 14em) {
+  .fill.two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fill.two .choice {
+    min-height: 44px;
+  }
+}
+
+.two .choice {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pb-space-1) var(--pb-space-2);
+  padding-inline: var(--pb-space-3);
+}
+
+/* a word is never split: the label is at least its longest word, and drops under the letter when
+   the two do not fit side by side */
+.two .label {
+  flex: 1 1 0;
+  min-width: min-content;
+  overflow-wrap: break-word;
+}
+
+.two .mark {
+  position: absolute;
+  top: 2px;
+  right: var(--pb-space-2);
+  font-size: var(--pb-font-caption);
+}
+
+/* The reserved status line: the space of "✓ Locked in", held from the first frame. */
+.reserved {
+  visibility: hidden;
+  animation: none;
+}
+
+/* A phone wraps "✓ Locked in with 12 s to spare — look at the TV" to two lines (an iPhone 15
+   too): the line holds two from the start, so the tiles above never give up height on the tap. */
+@media (max-width: 440px) {
+  .layout ~ .locked {
+    min-height: 2lh;
+  }
+}
+
+/* A short phone (an SE, 568 px): the question steps down to body size and the gaps tighten. */
+@media (max-height: 600px) and (orientation: portrait) {
+  .layout {
+    gap: var(--pb-space-2);
+  }
+  .layout .prompt {
+    font-size: var(--pb-font-body);
+  }
+  .layout .kicker {
+    letter-spacing: 0;
+  }
+  .fill .choice {
+    padding-block: 7px; /* with the 24 px disc a one-line answer is 44 px: the touch floor */
+  }
+  .fill .letter {
+    width: max(24px, 1.3em);
+    height: max(24px, 1.3em);
+  }
+}
+
+/* Sideways: the question holds the left, the answers the right, filling the height — a 2×2 for
+   short answers (the review's drawing), a column of four when an answer is long (half a sideways
+   phone would break its words). */
+@media (orientation: landscape) and (max-height: 500px) {
+  .layout {
+    flex-direction: row;
+    align-items: stretch;
+    gap: var(--pb-space-4);
+  }
+  .layout > .head {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+  }
+  .layout .prompt {
+    font-size: var(--pb-font-body);
+  }
+  .layout > .fill {
+    flex: 1.3 1 0;
+    min-width: 0;
+  }
+  .layout > .fill .choice {
+    max-height: none;
+  }
+  .layout > .fill.two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(0, 1fr);
+    align-content: stretch;
+  }
+  .layout > .fill.two .choice {
+    min-height: 0;
+  }
+}
+
+.choice {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--pb-space-3);
+  min-height: 64px;
+  padding: var(--pb-space-3) var(--pb-space-4);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  border: 3px solid var(--pb-border);
+  text-align: left;
+  font-size: var(--pb-font-body);
+  font-weight: 700;
+  transition:
+    transform var(--pb-motion-fast) var(--pb-ease),
+    border-color var(--pb-motion-base) var(--pb-ease),
+    background-color var(--pb-motion-base) var(--pb-ease),
+    color var(--pb-motion-base) var(--pb-ease);
+}
+
+/* Press: the accent edge + darker fill land the instant the finger is down (R-049); the scale
+   comes from the controller-surface rule in global.css. */
+.choice:active:not(:disabled) {
+  border-color: var(--pb-accent);
+  background: var(--pb-surface-2);
+}
+
+.choice:active:not(:disabled) .letter {
+  transform: scale(1.12);
+}
+
+.choice:disabled {
+  cursor: default;
+}
+
+/* letters={false}: label + mark only. */
+.noLetters {
+  grid-template-columns: 1fr auto;
+}
+
+.letter {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--pb-surface-2);
+  font-weight: 900;
+  transition:
+    transform var(--pb-motion-fast) var(--pb-ease),
+    background-color var(--pb-motion-base) var(--pb-ease),
+    color var(--pb-motion-base) var(--pb-ease);
+}
+
+.label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.mark {
+  font-weight: 900;
+  min-width: 1em;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* I-790 C: the reveal's words on the tiles ("✓ the answer", "you"); a two-by-two tile keeps the
+   glyph only (its mark is a corner badge), where a wrong pick shows ✗ instead of the word. */
+.tag {
+  margin-left: 0.35em;
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+}
+
+.glyphTight {
+  display: none;
+}
+
+.two .tag {
+  display: none;
+}
+
+.two .glyphTight {
+  display: inline;
+}
+
+/* Lock-in: the chosen card settles with a small pop and its ✓ pops in (both 0 ms under reduced
+   motion via the tokens; the border/fill/✓ state changes remain). The global pb-pop starts from
+   opacity 0, so the card itself uses a local settle that never hides an already-visible button. */
+@keyframes pb-choice-settle {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.selected {
+  border-color: var(--pb-accent);
+  background: var(--pb-surface-2);
+  animation: pb-choice-settle var(--pb-motion-base) var(--pb-ease) both;
+}
+
+.selected .mark {
+  animation: global(pb-pop) var(--pb-motion-fast) var(--pb-ease) both;
+}
+
+.correct {
+  border-color: var(--pb-accent-3);
+  background: var(--pb-surface-2);
+}
+
+.correct .mark {
+  color: var(--pb-accent-3);
+}
+
+/* Reveal: the glyph is what newly appears, so it pops (not the card — pb-pop starts at opacity 0). */
+.correct .mark,
+.wrong .mark {
+  animation: global(pb-pop) var(--pb-motion-base) var(--pb-ease) both;
+}
+
+.wrong {
+  border-color: var(--pb-danger);
+}
+
+.wrong .mark {
+  color: var(--pb-danger);
+}
+
+/* Dimmed by token, not opacity: muted text on the page bg keeps >= 6.4:1 in every theme (R-070);
+   opacity fell to ~3.5:1 in Daylight. Never co-occurs with .selected/.correct/.wrong. */
+.dim {
+  color: var(--pb-text-muted);
+  background: var(--pb-bg);
+}
+
+.dim .letter {
+  background: var(--pb-surface);
+  color: var(--pb-text-muted);
+}
+
+.locked {
+  text-align: center;
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  color: var(--pb-accent-3);
+  animation: global(pb-rise) var(--pb-motion-base) var(--pb-ease) both;
+}
+
+/* The tap never reached the server: the grid is live again and the line says so (not colour-only). */
+.failed {
+  color: var(--pb-danger);
+}
+
+/* The last 5 s for an unanswered phone (`data-urgent` on the controller shell): the letters turn
+   danger so the thumb zone, not only the header, says "now". */
+[data-urgent] .choice:not(:disabled) .letter {
+  background: var(--pb-danger);
+  color: var(--pb-on-accent);
+}
+
+/* The revealed answer's disc is filled (shape + ✓, never colour alone), mirroring the TV card. */
+.correct .letter {
+  background: var(--pb-accent-3);
+  color: var(--pb-on-accent);
+}

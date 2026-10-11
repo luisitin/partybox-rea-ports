@@ -1,0 +1,209 @@
+/* OrderPicker: five full-width rows that never move, each with a round badge on its left. An empty
+   badge is a dashed ring showing the number the next tap gives (shape and digit, never colour
+   alone); a placed one is a solid accent disc with its number. Sized so five rows, the question
+   and a sticky button fit an iPhone SE (320 x 568) without scrolling. */
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-2);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pb-space-2);
+  min-height: var(--pb-touch);
+}
+
+.barPlain {
+  min-height: 0;
+}
+
+.hint {
+  min-width: 0;
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  color: var(--pb-text-muted);
+}
+
+.reset {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pb-space-1);
+  min-height: var(--pb-touch);
+  padding: 0 var(--pb-space-3);
+  border-radius: 999px;
+  border: 2px solid var(--pb-border);
+  color: var(--pb-text);
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+  transition:
+    opacity var(--pb-motion-base) var(--pb-ease),
+    transform var(--pb-motion-fast) var(--pb-ease);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.reset:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.slot {
+  display: flex;
+}
+
+.row {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  align-items: center;
+  gap: var(--pb-space-3);
+  min-height: 46px;
+  padding: 2px var(--pb-space-3);
+  border-radius: var(--pb-radius);
+  border: 2px solid var(--pb-border);
+  background: var(--pb-surface);
+  text-align: left;
+  font-size: var(--pb-font-body);
+  font-weight: 700;
+  line-height: 1.2;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  transition:
+    transform var(--pb-motion-fast) var(--pb-ease),
+    border-color var(--pb-motion-base) var(--pb-ease),
+    background-color var(--pb-motion-base) var(--pb-ease);
+}
+
+.row:active:not(:disabled) {
+  background: var(--pb-surface-2);
+}
+
+.placed {
+  border-color: var(--pb-accent);
+  background: var(--pb-surface-2);
+}
+
+.lifted {
+  border-color: var(--pb-accent-2);
+  border-style: dashed;
+  transform: translateY(-2px) scale(1.02);
+}
+
+.row:disabled {
+  cursor: default;
+}
+
+.label {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.long {
+  font-size: calc(var(--pb-font-body) * 0.88);
+}
+
+/* The badge: a coin that turns over when its row is placed. */
+.badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 2px dashed var(--pb-text-muted);
+  perspective: 240px;
+  transition:
+    background-color var(--pb-motion-base) var(--pb-ease),
+    border-color var(--pb-motion-base) var(--pb-ease);
+}
+
+.placed .badge {
+  border: 2px solid var(--pb-accent);
+  background: var(--pb-accent);
+  color: var(--pb-on-accent);
+}
+
+.num {
+  display: block;
+  font-size: var(--pb-font-body);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.next {
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+  color: var(--pb-text-muted);
+  opacity: 0.7;
+}
+
+.flip {
+  animation: coin var(--pb-motion-base) var(--pb-ease) both;
+}
+
+.tick {
+  animation: global(pb-tick) var(--pb-motion-fast) var(--pb-ease) both;
+}
+
+/* Transform only (a 3D turn with opacity flattens in Chromium, DESIGN_SYSTEM "pb-flip"). */
+@keyframes coin {
+  0% {
+    transform: rotateY(-180deg) scale(0.55);
+  }
+  70% {
+    transform: rotateY(12deg) scale(1.12);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* A sideways phone: two columns of rows, so the question and all five fit above the button. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .rows {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--pb-space-2) var(--pb-space-3);
+  }
+  .row {
+    min-height: 44px;
+  }
+}
+
+/* The shortest sideways phones (iPhone SE, 568 x 320): the rows and the hint line shrink so all five
+   stay above the sticky button. */
+@media (orientation: landscape) and (max-height: 340px) {
+  .bar {
+    min-height: 0;
+  }
+  .rows {
+    gap: var(--pb-space-1) var(--pb-space-3);
+  }
+  .row {
+    min-height: 36px;
+    grid-template-columns: 28px 1fr;
+    gap: var(--pb-space-2);
+    padding: 0 var(--pb-space-2);
+    font-size: calc(var(--pb-font-body) * 0.9);
+    line-height: 1.1;
+  }
+  .badge {
+    width: 28px;
+    height: 28px;
+  }
+}

@@ -1,0 +1,237 @@
+/* The phone dial (DialInput.tsx): the TV dial's semicircle box, so a position sits at the same angle
+   on both. The dial owns every touch in it (no scroll, no zoom, no text selection, no callout), and
+   every moving part is placed by percentages of the box. */
+.dial {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-2);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.disabled {
+  opacity: 0.55;
+}
+
+/* The two ends share a row while they fit; with big text they take a row each (left above,
+   right below, pushed to its side) — a label never breaks inside a word. */
+.ends {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--pb-space-1) var(--pb-space-3);
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.endLeft,
+.endRight {
+  flex: 1 1 0;
+  min-width: min-content;
+}
+
+.endRight {
+  text-align: right;
+}
+
+/* The semicircle: the TV dial's 1000 × 560 box, so a position sits at the same angle on both. The
+   padding keeps a teammate's face on the rim's very end inside the dial's own width. */
+.hit {
+  position: relative;
+  padding: 0 16px;
+  touch-action: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.box {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  aspect-ratio: 1000 / 560;
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.bezel {
+  fill: var(--pb-surface);
+  stroke: var(--pb-surface-2);
+  stroke-width: 4;
+}
+
+.face {
+  fill: var(--pb-surface-2);
+}
+
+.tick,
+.tickMid {
+  stroke: var(--pb-text-muted);
+  stroke-width: 4;
+  opacity: 0.6;
+}
+
+.tickMid {
+  stroke-width: 6;
+}
+
+.needle {
+  stroke: var(--pb-text);
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+/* Faces ride just outside the rim; a position is a percentage of the box, so they glide by it. */
+.mark {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  pointer-events: none;
+  transition:
+    left var(--pb-motion-base) var(--pb-ease),
+    top var(--pb-motion-base) var(--pb-ease);
+}
+
+.thumbSlot {
+  position: absolute;
+  width: 0;
+  height: 0;
+  transition:
+    left var(--pb-motion-fast) var(--pb-ease),
+    top var(--pb-motion-fast) var(--pb-ease);
+}
+
+.dragging .thumbSlot {
+  transition: none;
+}
+
+.thumb {
+  position: absolute;
+  left: -24px;
+  top: -24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--pb-accent);
+  border: 4px solid var(--pb-bg);
+  outline: 2px solid var(--pb-accent);
+  outline-offset: 0;
+  pointer-events: auto;
+}
+
+.dragging .thumb {
+  transform: scale(1.12);
+}
+
+.untouched {
+  background: var(--pb-surface);
+  outline: 3px dashed var(--pb-text-muted);
+  animation: global(pb-breathe) calc(var(--pb-motion-pulse) * 2) ease-in-out infinite;
+}
+
+.locked {
+  outline: 4px solid var(--pb-accent-3);
+  outline-offset: 2px;
+}
+
+.thumb:focus-visible {
+  outline: 4px solid var(--pb-focus);
+  outline-offset: 3px;
+}
+
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pb-space-2);
+}
+
+.step {
+  flex: 0 0 auto;
+  width: var(--pb-touch);
+  height: var(--pb-touch);
+  border-radius: 50%;
+  border: 0;
+  background: var(--pb-surface-2);
+  color: var(--pb-text);
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  line-height: 1;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.step:active {
+  transform: scale(0.92);
+}
+
+.hint {
+  flex: 1;
+  text-align: center;
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+}
+
+/* A sideways phone (the shell's query): − and + either side of a short dial, under the ends, and
+   the untouched hint goes (the dashed thumb says it). */
+@media (orientation: landscape) and (max-height: 420px) {
+  .dial {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: end;
+    column-gap: var(--pb-space-3);
+  }
+  .ends {
+    grid-column: 1 / -1;
+  }
+  .hit {
+    grid-column: 2;
+    grid-row: 2;
+    padding: 0;
+  }
+  .box {
+    max-width: 200px;
+  }
+  .steps {
+    display: contents;
+  }
+  .step {
+    grid-row: 2;
+  }
+  .step:first-of-type {
+    grid-column: 1;
+  }
+  .step:last-of-type {
+    grid-column: 3;
+  }
+  .hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark,
+  .thumbSlot {
+    transition: none;
+  }
+  .untouched {
+    animation: none;
+  }
+}
+:global(:root[data-motion='off']) .mark,
+:global(:root[data-motion='off']) .thumbSlot {
+  transition: none;
+}
+:global(:root[data-motion='off']) .untouched {
+  animation: none;
+}

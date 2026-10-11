@@ -1,0 +1,420 @@
+/* The TV dial (Dial.tsx). Tokens only; transform and opacity are the only animated properties
+   (docs/DESIGN_SYSTEM.md "Performance budget"). The box keeps the viewBox's 1000 × 560 ratio, so
+   the HTML faces line up with the SVG by percentages; the two ends sit at the feet, one each side
+   (a TV is wide, and labels under the arc cost the dial its height). */
+.wrap {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: end;
+  /* A face on the rim's very end sticks out of the box by half its width: the ends keep clear. */
+  column-gap: var(--pb-space-7);
+  perspective: 1800px;
+  container-type: size;
+}
+
+/* The biggest 1000 × 560 box that fits, leaving each end label a third of what is left over. */
+.box {
+  position: relative;
+  width: min(
+    calc(100cqw - 2 * min(360px, 22cqw) - 2 * var(--pb-space-7)),
+    calc(100cqh * 1000 / 560)
+  );
+  aspect-ratio: 1000 / 560;
+  transform-origin: 50% 92.9%;
+}
+
+/* A new dial turns its face toward the room: a quarter turn up from the table, in 3D. */
+.entrance .box {
+  animation: tune-flip-up var(--pb-motion-slow) var(--pb-ease) both;
+}
+
+@keyframes tune-flip-up {
+  from {
+    transform: rotateX(-68deg) scale(0.92);
+    opacity: 0.35;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.bezel {
+  fill: var(--pb-surface);
+  stroke: var(--pb-surface-2);
+  stroke-width: 4;
+}
+
+.face {
+  fill: var(--pb-surface-2);
+}
+
+.zone2 {
+  fill: var(--pb-info);
+}
+.zone3 {
+  fill: var(--pb-accent);
+}
+.zone4 {
+  fill: var(--pb-accent-2-fill);
+}
+
+/* The wedges' stroke reaches the numbers too: behind the fill it is a halo, not a thinner glyph. */
+.zoneText {
+  paint-order: stroke;
+  fill: var(--pb-on-accent);
+  font-family: var(--pb-font-family);
+  font-size: 44px;
+  font-weight: 900;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+/* The 4 sits on the accent-2 fill: its own ink (white on yellow was unreadable in Daylight). */
+.zoneText4 {
+  fill: var(--pb-on-accent-2-fill);
+  stroke: none;
+}
+
+.wedges {
+  stroke: var(--pb-surface-2);
+  stroke-width: 3;
+}
+
+.tick {
+  stroke: var(--pb-text-muted);
+  stroke-width: 4;
+  stroke-linecap: round;
+  opacity: 0.7;
+}
+
+/* The shutter swings around the pivot (the Wavelength lid): a short unlatch, then away. Its own
+   layer, clipped at the baseline so it vanishes under the dial as it turns. */
+.shutterClip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: calc(521 / 560 * 100%);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.shutter {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  aspect-ratio: 1000 / 560;
+  transform-origin: 50% calc(520 / 560 * 100%);
+}
+
+.swing {
+  will-change: transform;
+  animation:
+    tune-unlatch var(--pb-motion-fast) ease-out both,
+    tune-swing var(--pb-motion-slow) var(--pb-ease) var(--pb-motion-fast) forwards;
+}
+
+@keyframes tune-unlatch {
+  0% {
+    transform: rotate(0deg);
+  }
+  60% {
+    transform: rotate(-6deg);
+  }
+  100% {
+    transform: rotate(-4deg);
+  }
+}
+
+/* Past 180° the lid's far edge tilts back above the baseline (a sliver with its grille dots stayed
+   on the left after every reveal — p08), so it fades out over the last few degrees. */
+@keyframes tune-swing {
+  from {
+    transform: rotate(-4deg);
+  }
+  92% {
+    opacity: 1;
+  }
+  to {
+    transform: rotate(182deg);
+    opacity: 0;
+  }
+}
+
+/* The glint: a soft band from the pivot to the lid's edge, turning slowly across it and resting a
+   beat at each end. Transform only, on its own layer. */
+.glint {
+  position: absolute;
+  left: 50%;
+  top: calc(520 / 560 * 100% - 9%);
+  width: calc(430 / 1000 * 100%);
+  height: 18%;
+  transform-origin: 0 50%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--pb-text) 10%, transparent) 50%,
+    transparent
+  );
+  animation: tune-glint calc(var(--pb-motion-pulse) * 4) ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes tune-glint {
+  0%,
+  8% {
+    transform: rotate(-178deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  92%,
+  100% {
+    transform: rotate(-2deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glint {
+    display: none;
+  }
+}
+:global(:root[data-motion='off']) .glint {
+  display: none;
+}
+
+.shutterFace {
+  fill: var(--pb-surface);
+  stroke: var(--pb-surface-2);
+  stroke-width: 3;
+}
+
+.shutterHub {
+  fill: var(--pb-surface-2);
+}
+
+.grille {
+  fill: none;
+  stroke: var(--pb-surface-2);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 2 22;
+}
+
+/* The needle and the hub are HTML layers turning around the pivot (composited, never a repaint). */
+.needle {
+  position: absolute;
+  left: 50%;
+  top: calc(520 / 560 * 100% - 1.25%);
+  width: calc(422 / 1000 * 100%);
+  height: 2.5%;
+  border-radius: 999px;
+  background: var(--pb-text);
+  transform-origin: 0 50%;
+  transform: rotate(var(--deg));
+  transition: transform var(--pb-motion-base) var(--pb-ease);
+}
+
+/* The reveal: the needle swings up from rest to its spot once the shutter is away. */
+.settle {
+  animation: tune-needle var(--pb-motion-slow) var(--pb-ease) both;
+  animation-delay: calc(var(--pb-motion-fast) + var(--pb-motion-slow));
+}
+
+@keyframes tune-needle {
+  from {
+    transform: rotate(-90deg);
+  }
+  to {
+    transform: rotate(var(--deg));
+  }
+}
+
+.hub {
+  position: absolute;
+  left: 50%;
+  top: calc(520 / 560 * 100%);
+  width: 6%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--pb-text);
+  border: 4px solid var(--pb-surface);
+}
+
+.end {
+  align-self: end;
+  /* Its last line sits on the dial's baseline (the pivot is 40 of 560 units above the box's foot). */
+  padding-bottom: calc(min(calc(100cqw - 2 * min(360px, 22cqw)), calc(100cqh * 1000 / 560)) * 0.03);
+  /* The size follows the dial's (a small demo dial on the intro card broke "Cold" in two). */
+  font-size: clamp(var(--pb-font-body), 5cqw, var(--pb-font-h2));
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--pb-text);
+  /* Break between words; inside one only when a single word is wider than its column. */
+  overflow-wrap: break-word;
+  text-wrap: balance;
+  container-type: inline-size;
+}
+
+/* T-0110: a long word shrinks to its column rather than break ("Unfashionabl / e" at 1080p).
+   --end-chars is the longest word plus its arrow; a heavy glyph is under 0.62 em wide. */
+.endText {
+  font-size: min(1em, calc(100cqi / (var(--end-chars, 1) * 0.62)));
+}
+
+.endLeft {
+  text-align: right;
+}
+
+.endRight {
+  text-align: left;
+}
+
+/* A face fanned out from a crowd keeps a thin line to its true spot on the rim. */
+.leader {
+  stroke: var(--pb-text-muted);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+/* The leaders fade in together, as one layer, once the faces have landed. */
+.leaders {
+  animation: global(pb-fade-in) var(--pb-motion-base) var(--pb-ease) both;
+  animation-delay: calc(var(--pb-motion-fast) + var(--pb-motion-slow) * 2);
+}
+
+/* A face rides an arm from the pivot: the arm turns, the face turns back upright. */
+.arm {
+  position: absolute;
+  left: 50%;
+  top: calc(520 / 560 * 100%);
+  width: var(--arm);
+  height: 0;
+  transform-origin: 0 0;
+  transform: rotate(var(--deg));
+  pointer-events: none;
+}
+
+.upright {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translate(50%, -50%) rotate(calc(-1 * var(--deg)));
+  display: block;
+}
+
+/* The huddle: faces glide along the rim as teammates drag. */
+.arm.glide,
+.upright.glide {
+  transition: transform var(--pb-motion-base) var(--pb-ease);
+}
+
+.face40 {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+
+/* The reveal: each face lands on the rim in turn, after the shutter is away. */
+.land {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 40px;
+  animation: global(pb-land) var(--pb-motion-slow) var(--pb-ease) both;
+  animation-delay: calc(var(--pb-motion-fast) + var(--pb-motion-slow) + var(--i) * var(--gap));
+}
+
+/* A face's points: a small pill on its own chin, inside the face's footprint, sized from the
+   40 px face — the old corner tag was as big as a face, and a crowd at one end of the dial packed
+   the tags onto the neighbours' faces (p09). */
+.badge {
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  min-width: 26px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--pb-accent-2-fill);
+  color: var(--pb-on-accent-2-fill);
+  border: 2px solid var(--pb-bg);
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  animation: tune-badge var(--pb-motion-base) var(--pb-ease) both;
+  animation-delay: calc(var(--i) * 40ms);
+}
+
+.badgeZero {
+  background: var(--pb-surface);
+  color: var(--pb-text-muted);
+}
+
+.needleBadge {
+  left: 0;
+  bottom: auto;
+  top: 0;
+  min-width: 0;
+  padding: var(--pb-space-1) var(--pb-space-3);
+  font-size: var(--pb-font-h2);
+  transform: translate(-50%, -50%);
+  animation-name: tune-badge-center;
+}
+
+@keyframes tune-badge {
+  from {
+    transform: translateX(-50%) scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%);
+    opacity: 1;
+  }
+}
+
+@keyframes tune-badge-center {
+  from {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arm.glide,
+  .upright.glide,
+  .needle {
+    transition: none;
+  }
+}
+:global(:root[data-motion='off']) .arm.glide,
+:global(:root[data-motion='off']) .upright.glide,
+:global(:root[data-motion='off']) .needle {
+  transition: none;
+}

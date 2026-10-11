@@ -1,0 +1,12 @@
+/* I-268: "1st" in a thin ring of its own colour — size and colour come from the caller. */
+.lead {
+  flex-shrink: 0;
+  display: inline-block;
+  padding: 0 0.45em;
+  border: 0.12em solid currentColor;
+  border-radius: 999px;
+  font-weight: 900;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}

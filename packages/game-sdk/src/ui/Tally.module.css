@@ -1,0 +1,77 @@
+/* Fixed to the viewport: TallyFlights measures its own box against the boxes it flies between, so it
+   holds on the zoomed 1920×1080 TV surface at any size. Transform + opacity only. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.token {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.face {
+  border-radius: 50%;
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 35%));
+}
+
+.face > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.points {
+  padding: 0.05em 0.5em;
+  border-radius: 999px;
+  background: var(--pb-fill, #ffd166);
+  color: var(--pb-on-fill, #1a0b12);
+  font-size: var(--pb-font-h2, 32px);
+  font-weight: 900;
+  line-height: 1.3;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgb(0 0 0 / 30%);
+}
+
+/* A landing slot: empty until its face arrives, then it pops once under the landed token. */
+.wait {
+  visibility: hidden;
+}
+
+.land {
+  animation: tally-land calc(var(--pb-motion-base, 300ms) * 0.9) var(--pb-ease, ease-out);
+}
+
+@keyframes tally-land {
+  0% {
+    transform: scale(1.35);
+  }
+
+  60% {
+    transform: scale(0.94);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.tick {
+  display: inline-block;
+  animation: tally-tick var(--pb-motion-base, 300ms) var(--pb-ease, ease-out);
+}
+
+@keyframes tally-tick {
+  0% {
+    transform: scale(1.4);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.base.json",
+  "include": [
+    "packages/*/src/**/*",
+    "games/**/*.ts",
+    "games/**/*.tsx",
+    "vitest.config.ts",
+    "types/**/*.d.ts"
+  ],
+  "exclude": ["**/node_modules", "**/dist"]
+}

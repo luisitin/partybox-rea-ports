@@ -1,0 +1,227 @@
+/* Phone for Curve Fever: two big halves to hold. Nothing may zoom, select, scroll or flash under a finger. */
+.screen,
+.ready {
+  display: grid;
+  gap: var(--pb-space-3);
+  height: 100%;
+  padding: var(--pb-space-3);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.screen {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.ready {
+  grid-template-rows: auto auto auto auto 1fr;
+  justify-items: center;
+  align-content: center;
+  text-align: center;
+}
+
+.kicker {
+  margin: 0;
+  min-height: 1.5em;
+  text-align: center;
+  font-size: var(--pb-font-h2);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.pads {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--pb-space-3);
+  min-height: 0;
+}
+
+/* Each half lights up in your worm's colour while it is held. */
+.pad {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  border-radius: var(--pb-radius-md, 1rem);
+  border: 0.2rem solid hsl(var(--hue) 85% 58%);
+  background: hsl(var(--hue) 60% 30% / 0.35);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+}
+
+.pad[data-lit='true'] {
+  background: hsl(var(--hue) 85% 58%);
+}
+
+.arrow {
+  font-size: 4rem;
+  line-height: 1;
+  color: var(--pb-text);
+}
+
+.pad[data-lit='true'] .arrow {
+  color: hsl(0 0% 100%);
+}
+
+.swatch {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  background: hsl(var(--hue) 85% 58%);
+  box-shadow: 0 0 2rem hsl(var(--hue) 85% 58% / 0.6);
+}
+
+.big {
+  margin: 0;
+  font-size: var(--pb-font-h1);
+  font-weight: 900;
+}
+
+.hint {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--pb-text-muted);
+}
+
+.count {
+  margin: 0;
+  font-size: 4rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Phone only (no TV): the phone is the stage, so the arena sits above the buttons and the standings below it. */
+.screen[data-arena='true'] {
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.stage {
+  display: grid;
+  gap: var(--pb-space-3);
+  align-content: start;
+  /* Every row is as tall as its content, so a short phone scrolls the stage instead of squeezing the arena over the standings. */
+  grid-auto-rows: max-content;
+  height: 100%;
+  padding: var(--pb-space-3);
+  overflow-y: auto;
+}
+
+/* Between rounds the full eight-player roster matters more than the frozen arena. */
+.stage[data-phase='ready'],
+.stage[data-phase='score'],
+.stage[data-phase='done'] {
+  gap: 8px;
+  padding: 12px;
+}
+
+.stage[data-phase='ready'] .arena,
+.stage[data-phase='score'] .arena,
+.stage[data-phase='done'] .arena {
+  width: min(100%, 256px);
+  justify-self: center;
+}
+
+.stage[data-phase='ready'] .rows,
+.stage[data-phase='score'] .rows,
+.stage[data-phase='done'] .rows {
+  gap: 4px;
+}
+
+.stage[data-phase='ready'] .rows li,
+.stage[data-phase='score'] .rows li,
+.stage[data-phase='done'] .rows li {
+  min-height: 36px;
+  padding: 4px 8px;
+}
+
+.stage[data-phase='ready'] .points,
+.stage[data-phase='score'] .points,
+.stage[data-phase='done'] .points {
+  font-size: 1.25rem;
+}
+
+.arena {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 160 / 100;
+  overflow: hidden;
+  border: 0.15rem solid var(--pb-accent);
+  border-radius: var(--pb-radius-md, 1rem);
+  background: radial-gradient(ellipse at 50% 40%, hsl(250 35% 16%), hsl(250 40% 8%));
+}
+
+.arenaCount {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 4rem;
+  font-weight: 900;
+  color: hsl(0 0% 100% / 0.9);
+  text-shadow: 0 0.2rem 1rem hsl(0 0% 0% / 0.6);
+  pointer-events: none;
+}
+
+.headline {
+  margin: 0;
+  text-align: center;
+  font-size: var(--pb-font-h1);
+  font-weight: 900;
+}
+
+.rows {
+  display: grid;
+  gap: var(--pb-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1.1rem;
+}
+
+.rows li {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border-radius: var(--pb-radius-md, 1rem);
+}
+
+.rows li[data-me='true'] {
+  background: hsl(var(--hue) 60% 30% / 0.35);
+  outline: 0.12rem solid hsl(var(--hue) 85% 58%);
+}
+
+.rows li[data-out='true'] b {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.dot {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: hsl(var(--hue) 85% 58%);
+}
+
+.name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gain {
+  font-weight: 900;
+  color: var(--pb-accent-2);
+}
+
+.points {
+  min-width: 2ch;
+  margin-left: auto;
+  font-size: 1.6rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}

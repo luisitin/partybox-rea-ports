@@ -1,0 +1,388 @@
+/* CardHand (docs/sdk/card-hand.md): the hand fills its box: a slim sort bar, then the fan. Cards are
+   absolutely placed by transform (the layout), raised by `translate` (picked, playable), so the two
+   animate apart. A dragged card is fixed and placed by the frame loop; a played card's copy glides
+   to its target. The spring overshoots a little; under reduced motion the tokens collapse every
+   duration. */
+.hand {
+  --hand-spring: cubic-bezier(0.3, 1.35, 0.5, 1);
+  --card-paper: #fffaf0;
+  --card-edge: rgb(20 18 40 / 18%);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+.bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 var(--pb-space-2);
+  min-height: var(--pb-touch);
+}
+
+/* One line while it fits: "11 cartas" gives way first (a word that does not fit wraps onto the
+   hidden second line, so "11" stays), the sort words never break ("1 2 / 3"). At 320 px in Spanish
+   at 200 % the buttons wrap to a second row instead of running off the edge (T-0342 replay). */
+.count {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.3em;
+  min-width: 0;
+  height: 1.2em;
+  overflow: hidden;
+  line-height: 1.2;
+  white-space: nowrap;
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+  color: var(--pb-text-muted);
+}
+
+.sorts {
+  flex: 0 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-left: auto;
+  gap: var(--pb-space-1);
+}
+
+.sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--pb-touch);
+  min-width: var(--pb-touch);
+  padding: 0 var(--pb-space-3);
+  border: 2px solid var(--pb-surface-2);
+  border-radius: 999px;
+  background: var(--pb-surface);
+  color: var(--pb-text);
+  font: inherit;
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    background var(--pb-motion-fast) var(--pb-ease),
+    transform var(--pb-motion-fast) var(--pb-ease);
+}
+
+.sort:active {
+  transform: scale(0.94);
+}
+
+.sort[aria-pressed='true'] {
+  border-color: var(--pb-accent);
+  background: color-mix(in srgb, var(--pb-accent) 22%, var(--pb-surface));
+}
+
+.sort:focus-visible {
+  outline: 3px solid var(--pb-focus);
+  outline-offset: 2px;
+}
+
+.dots {
+  display: inline-grid;
+  grid-template-columns: repeat(2, 6px);
+  gap: 2px;
+}
+
+.dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e5484d;
+}
+
+.dots i:nth-child(2) {
+  background: #f5c400;
+}
+
+.dots i:nth-child(3) {
+  background: #30a46c;
+}
+
+.dots i:nth-child(4) {
+  background: #0090ff;
+}
+
+.fan {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  touch-action: none;
+}
+
+.card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--card-r, 9% / 6.4%);
+  background: var(--card-paper);
+  box-shadow:
+    0 1px 0 var(--card-edge),
+    -3px 4px 10px rgb(10 8 30 / 28%);
+  transform-origin: 50% 100%;
+  container-type: size;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--pb-motion-base) var(--hand-spring),
+    translate var(--pb-motion-fast) var(--hand-spring),
+    filter var(--pb-motion-fast) var(--pb-ease),
+    box-shadow var(--pb-motion-fast) var(--pb-ease);
+}
+
+.hand[data-frame='art'] .card {
+  background: transparent;
+}
+
+/* While a card is on the finger the others slide apart in half the time: a sliding card restyles
+   on the main thread every frame, even composited, so fewer at once keeps a slow phone smooth
+   (T-0342 review: 4x CPU, a 24-card group drag spends about a third as long on style). */
+.fan[data-dragging] .card:not([data-drag], [data-fly]) {
+  transition-duration: var(--pb-motion-fast);
+}
+
+/* The face: CardFace, or the game's art (an <svg> or <img> fills the card). */
+.skin {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.skin > svg,
+.skin > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Where `position: fixed` puts (0, 0) in here: a transformed ancestor moves it off the viewport's. */
+.probe {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.card[data-glow]:not([data-picked]) {
+  translate: 0 calc(var(--lift) * 0.45);
+}
+
+.card[data-picked] {
+  translate: 0 var(--lift);
+  box-shadow:
+    0 0 0 3px var(--pb-accent),
+    -3px 10px 18px rgb(10 8 30 / 38%);
+}
+
+.card[data-glow] {
+  box-shadow:
+    0 0 0 3px var(--pb-accent-3),
+    0 0 14px 2px color-mix(in srgb, var(--pb-accent-3) 60%, transparent),
+    -3px 4px 10px rgb(10 8 30 / 28%);
+}
+
+.card[data-glow][data-picked] {
+  box-shadow:
+    0 0 0 3px var(--pb-accent),
+    0 0 16px 3px color-mix(in srgb, var(--pb-accent-3) 70%, transparent),
+    -3px 10px 18px rgb(10 8 30 / 38%);
+}
+
+.card[data-dim] {
+  filter: brightness(0.62) saturate(0.55);
+}
+
+.card[data-fresh] {
+  /* backwards, not both: once it lands, the picked and playable lifts own `translate` again. */
+  animation: arrive var(--pb-motion-slow) var(--hand-spring) backwards;
+}
+
+/* Riding the finger: fixed, so no scroll box clips it; the frame loop owns its transform. */
+.card[data-drag] {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  translate: none;
+  transform-origin: var(--grab-x, 50%) var(--grab-y, 50%);
+  cursor: grabbing;
+  will-change: transform;
+  transition: box-shadow var(--pb-motion-fast) var(--pb-ease);
+  box-shadow:
+    0 0 0 3px var(--pb-accent),
+    -6px 18px 28px rgb(10 8 30 / 45%);
+}
+
+/* A played card's copy gliding into its target, shrinking and fading as it lands. */
+.card[data-fly] {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999;
+  pointer-events: none;
+  transform-origin: var(--grab-x, 50%) var(--grab-y, 100%);
+  transition:
+    transform var(--pb-motion-base) cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity var(--pb-motion-fast) linear;
+}
+
+@keyframes arrive {
+  from {
+    translate: 0 -70%;
+    opacity: 0;
+  }
+  to {
+    translate: 0 0;
+    opacity: 1;
+  }
+}
+
+.card:focus-visible {
+  outline: 3px solid var(--pb-focus);
+  outline-offset: 2px;
+}
+
+/* ── CardFace: sized by the card (container units), so it reads the same at every size ── */
+.face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: inherit;
+  background: var(--card-paper);
+  color: var(--ink);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.face[data-look='solid'] {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: inset 0 0 0 4cqw #fff;
+}
+
+.face[data-look='rainbow'] {
+  background: conic-gradient(from 45deg, #e5484d 0 25%, #f5c400 0 50%, #30a46c 0 75%, #0090ff 0);
+  color: #fff;
+  box-shadow: inset 0 0 0 4cqw #fff;
+}
+
+.index {
+  position: absolute;
+  top: 4cqh;
+  left: 5cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1cqh;
+  font-size: 20cqw;
+  letter-spacing: -0.08em;
+  text-shadow: 0 0 1px currentColor;
+}
+
+.flip {
+  top: auto;
+  left: auto;
+  bottom: 4cqh;
+  right: 5cqw;
+  rotate: 180deg;
+}
+
+.mark {
+  display: inline-flex;
+  width: 14cqw;
+  height: 14cqw;
+}
+
+.centre {
+  display: grid;
+  place-items: center;
+  font-size: 50cqw;
+  letter-spacing: -0.04em;
+}
+
+.face[data-look='solid'] .centre,
+.face[data-look='rainbow'] .centre {
+  width: 74cqw;
+  height: 50cqh;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--ink);
+  rotate: -24deg;
+  font-size: 40cqw;
+}
+
+.face[data-look='rainbow'] .centre {
+  color: #1a1a2e;
+}
+
+/* ── CardDropTarget: a plain box until cards are on the way ── */
+.target {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: var(--pb-radius);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  transition:
+    box-shadow var(--pb-motion-fast) var(--pb-ease),
+    scale var(--pb-motion-fast) var(--hand-spring);
+}
+
+.target[data-state='ready'] {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--pb-accent-3) 80%, transparent);
+  animation: beckon var(--pb-motion-pulse) var(--pb-ease) infinite alternate;
+}
+
+.target[data-state='over'] {
+  box-shadow:
+    0 0 0 4px var(--pb-accent-3),
+    0 0 24px 6px color-mix(in srgb, var(--pb-accent-3) 55%, transparent);
+  scale: 1.05;
+}
+
+.target[data-state='refuse'] {
+  box-shadow: 0 0 0 4px var(--pb-danger);
+}
+
+.target:focus-visible {
+  outline: 3px solid var(--pb-focus);
+  outline-offset: 3px;
+}
+
+@keyframes beckon {
+  to {
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--pb-accent-3) 45%, transparent);
+  }
+}
+
+.said {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

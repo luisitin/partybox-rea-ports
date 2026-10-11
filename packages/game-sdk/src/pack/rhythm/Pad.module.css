@@ -1,0 +1,66 @@
+.pads {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: var(--pb-space-3);
+  flex: 1;
+  min-height: 12rem;
+}
+
+.pad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-2);
+  border: 0;
+  border-radius: var(--pb-radius-lg);
+  background: var(--pb-accent);
+  color: var(--pb-on-accent);
+  font: inherit;
+  font-weight: 900;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pad:active {
+  scale: 0.97;
+  filter: brightness(1.15);
+}
+
+.pad:nth-child(2) {
+  background: var(--pb-accent-2, var(--pb-accent));
+}
+
+.icon {
+  display: block;
+  font-size: 4.5rem;
+  line-height: 1;
+}
+
+.label {
+  font-size: var(--pb-font-h2);
+}
+
+/* A stray tap locks the pads for a moment: they dim and shake once so the player knows it is not their thumb. */
+.pads[data-locked='true'] .pad {
+  filter: grayscale(0.8) brightness(0.7);
+  animation: shake 300ms ease-out;
+}
+
+@keyframes shake {
+  25% {
+    translate: -0.5rem 0;
+  }
+  75% {
+    translate: 0.5rem 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pads[data-locked='true'] .pad {
+    animation: none;
+  }
+}

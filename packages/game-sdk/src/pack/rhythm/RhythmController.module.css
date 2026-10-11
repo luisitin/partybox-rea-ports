@@ -1,0 +1,69 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-3);
+  height: 100%;
+  padding: var(--pb-space-3);
+}
+
+.kicker {
+  margin: 0;
+  text-align: center;
+  font-weight: 800;
+  font-size: var(--pb-font-h2);
+}
+
+.verdict {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--pb-space-3);
+  min-height: 2.4rem;
+  margin: 0;
+  font-weight: 900;
+  font-size: var(--pb-font-h2);
+}
+
+.verdict[data-cue='true'] {
+  color: var(--pb-accent-2);
+}
+
+.verdict b {
+  /* The word pops in, stays a moment, then fades: an old Miss must not sit there through a good run. */
+  animation:
+    pop 420ms ease-out,
+    fade 400ms ease-in 1100ms forwards;
+}
+
+.verdict b[data-v='Perfect!'] {
+  color: var(--pb-accent-2);
+}
+
+.verdict b[data-v='Miss'],
+.verdict b[data-v='Dry'] {
+  color: var(--pb-danger, #e5484d);
+}
+
+.result {
+  font-size: var(--pb-font-h1);
+  font-weight: 900;
+}
+
+@keyframes fade {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes pop {
+  from {
+    scale: 1.6;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .verdict b {
+    animation: fade 400ms ease-in 1100ms forwards;
+  }
+}

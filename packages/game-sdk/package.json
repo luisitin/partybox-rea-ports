@@ -1,0 +1,45 @@
+{
+  "name": "@partybox/game-sdk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "types": "./src/index.ts",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./match": "./src/match.ts",
+    "./ui": "./src/ui.ts",
+    "./ui/felt.css": "./src/ui/felt.css",
+    "./pieces": "./src/pieces.ts",
+    "./speech": "./src/speech.ts",
+    "./reading": "./src/reading.ts",
+    "./ui/secret-card": "./src/ui-secret-card.ts",
+    "./ui/face-picker": "./src/ui-face-picker.ts",
+    "./ui/dial": "./src/ui-dial.ts",
+    "./ui/team-banner": "./src/ui-team-banner.ts",
+    "./ui/minigame": "./src/ui-minigame.ts",
+    "./rhythm": "./src/rhythm.ts",
+    "./ui/rhythm": "./src/ui-rhythm.ts",
+    "./kaboom": "./src/kaboom.ts",
+    "./ui/kaboom": "./src/ui-kaboom.ts",
+    "./ui/word-grid": "./src/ui-word-grid.ts",
+    "./ui/order-picker": "./src/ui-order-picker.ts",
+    "./ui/bid-pad": "./src/ui-bid-pad.ts",
+    "./ui/card-hand": "./src/ui-card-hand.ts",
+    "./ui/table3d": "./src/ui-table3d.ts",
+    "./testing": "./src/testing.ts"
+  },
+  "dependencies": {
+    "@partybox/shared": "workspace:*",
+    "@react-three/fiber": "^9.8.1",
+    "@react-three/rapier": "^2.2.0",
+    "react": "catalog:",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "@types/three": "^0.186.0"
+  }
+}

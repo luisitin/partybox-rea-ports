@@ -1,0 +1,10 @@
+* text=auto eol=lf
+*.png binary
+*.woff2 binary
+*.bat text eol=crlf
+# T-0141: a host's download (GitHub's Download ZIP, `pnpm release:zip`) leaves out the team's
+# reports and captures; they stay in the repo and its history.
+/reports/ export-ignore
+# Party World's doc gets one changelog bullet per task at the same section tail; parallel
+# branches always collided there. Union keeps both sides' lines (lead, 2026-10-07).
+/docs/games/party-world.md merge=union

@@ -1,0 +1,550 @@
+.board {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--pb-space-2);
+  width: 100%;
+  max-width: 28em;
+}
+
+/* 5-6 rows under a heading: body-size rows (~60 px) so six fit in ≈ 400 px. */
+.tight .row,
+.tight3 .row,
+.tight4 .row {
+  font-size: var(--pb-font-body);
+  --pb-row-py: var(--pb-space-1);
+  padding: var(--pb-row-py) var(--pb-space-3);
+  --pb-chip-size: 1.3em;
+}
+
+.dense {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--pb-space-2) var(--pb-space-4);
+  max-width: none;
+}
+
+.dense .row {
+  /* h2 digits still read from the couch (7-12 rows); 12 rows in two columns ≈ 470 px */
+  --pb-row-py: var(--pb-space-1);
+  padding: var(--pb-row-py) var(--pb-space-3);
+  --pb-chip-size: 1.3em;
+}
+
+/* 13+ rows: three body-size columns (16 players = 6 rows ≈ 400 px). */
+.tight3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--pb-space-2) var(--pb-space-4);
+  max-width: none;
+}
+
+/* Four columns on request (`columns={4}`): 16 rows in four ≈ 270 px, for a board under a four-row
+   roster. ~420 px cells, so the gaps tighten like the three-column rows. */
+.tight4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--pb-space-2) var(--pb-space-3);
+  max-width: none;
+}
+
+/* Small: body-size rows for a dense board that shares the stage with a tall header. */
+.sm .row {
+  font-size: var(--pb-font-body);
+  --pb-row-py: var(--pb-space-1);
+  padding: var(--pb-row-py) var(--pb-space-3);
+  --pb-chip-size: 1.3em;
+}
+
+/* Large: the board owns the stage (results, 7–8 players in two columns of ≤ 4). 1.1× h2 with
+   roomier padding — h1 rows spilled their scores out of a 3/5-width column (review-loop #32). */
+.lg .row {
+  font-size: calc(var(--pb-font-h2) * 1.1);
+  --pb-row-py: var(--pb-space-3);
+  padding: var(--pb-row-py) var(--pb-space-4);
+  --pb-chip-size: 1.4em;
+}
+
+.lg .name {
+  min-width: 4ch;
+}
+
+.lg {
+  gap: var(--pb-space-3) var(--pb-space-5);
+}
+
+/* Column-major: ranks read down the left column, then the next (--pb-board-rows is set inline). */
+.dense,
+.tight3,
+.tight4 {
+  grid-auto-flow: column;
+  grid-template-rows: repeat(var(--pb-board-rows, 1), auto);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1.6em auto 1fr auto auto;
+  align-items: center;
+  gap: var(--pb-space-3);
+  --pb-row-py: var(--pb-space-2);
+  padding: var(--pb-row-py) var(--pb-space-4);
+  border-radius: var(--pb-radius);
+  border: 1px solid var(--pb-border);
+  background: var(--pb-surface);
+  font-size: var(--pb-font-h2);
+  font-weight: 700;
+}
+
+.compact .row {
+  font-size: var(--pb-font-body);
+  --pb-row-py: var(--pb-space-2);
+  padding: var(--pb-row-py) var(--pb-space-3);
+  gap: var(--pb-space-2);
+}
+
+/* The phone board is measured in its rows' own text size, so 200 % text (≈ 10 em across a phone)
+   is told apart from an SE at 100 % (≈ 16 em): there the rank column, gaps and padding give their
+   room to the name, so "Maximiliano" fits whole (session-c ec3ea7). */
+.compact {
+  container-type: inline-size;
+  width: 100%;
+  font-size: var(--pb-font-body);
+}
+
+@container (max-width: 12em) {
+  .compact .row {
+    grid-template-columns: 1.05em auto 1fr auto auto;
+    gap: var(--pb-space-1);
+    padding-inline: var(--pb-space-1) var(--pb-space-2);
+  }
+
+  /* a row with no delta or wager mark drops that empty track and its gap: "Maximiliano" beside a
+     4-digit score needed 203 px against 197 (session-c 42aaee) */
+  .compact .row:not(:has(> .delta, > .mark)) {
+    grid-template-columns: 1.05em auto 1fr auto;
+  }
+
+  .compact .score {
+    font-size: 0.88em;
+  }
+}
+
+/* On a phone the delta and the score take the row's end: a name wraps to a second line instead of
+   losing its end to an ellipsis ("Tess's bo…", fake-out's SE play-test), at its spaces only; a word
+   wider than the row ends in its own ellipsis ("Maximili…" over "Guadalupe" at 200 %, session-c
+   ec3ea7: never broken mid-word). */
+.compact .name {
+  white-space: normal;
+  line-height: 1.15;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.compact .word {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: top;
+}
+
+.top {
+  background: var(--pb-surface-2);
+  outline: 3px solid var(--pb-accent-2);
+}
+
+.me {
+  /* --pb-me: a team's card sets its own colour, so "you" never reads as the other team (Sun is the
+     accent pink: tune-in 243619) */
+  box-shadow: inset 4px 0 0 var(--pb-me, var(--pb-accent));
+}
+
+/* Phone (compact) only: my row pops in and, when not the winner's outlined row, gets its own
+   accent ring so "that one is me" reads at a glance. The ring is an inset shadow with the left bar
+   folded in: an outline drew outside the row (clipped by the scroller, doubled beside the bar and
+   the neighbours' edges: T-0282). */
+.compact .me:not(.top) {
+  box-shadow:
+    inset 0 0 0 2px var(--pb-me, var(--pb-accent)),
+    inset 4px 0 0 var(--pb-me, var(--pb-accent));
+}
+
+.compact .me {
+  animation: global(pb-pop) var(--pb-motion-base) var(--pb-ease) both;
+}
+
+.rank {
+  text-align: center;
+  color: var(--pb-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* T-0257: a row's tags on their own line under the name (a hidden role, a power used). */
+.tags {
+  display: block;
+  font-size: 0.72em;
+  color: var(--pb-text-muted);
+  white-space: normal;
+}
+
+.name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* a centred Stage must not centre the names */
+  text-align: left;
+}
+
+/* Names keep a floor so they do not vanish, but never so much that the score column is pushed out
+   of the cell (9ch clipped a 4-digit winner's score in the results' 3/5-width board). */
+.dense .name {
+  min-width: 5ch;
+}
+
+/* Three columns in a narrow results board leave ~100 px for the name: tighter rank + gaps. */
+.tight3 .row,
+.tight4 .row {
+  grid-template-columns: 1.2em auto 1fr auto auto;
+  gap: var(--pb-space-2);
+}
+
+.delta {
+  color: var(--pb-accent-3);
+  font-size: 0.8em;
+}
+.loss {
+  /* a touch toward the text colour: the night danger red was 4.4:1 on the row (T-0236) */
+  color: color-mix(in srgb, var(--pb-danger) 88%, var(--pb-text));
+}
+
+/* A ✓ in the delta slot (markIds): this row has acted, e.g. its wager is placed. */
+.mark {
+  color: var(--pb-accent-3);
+  font-weight: 900;
+}
+
+.score {
+  font-variant-numeric: tabular-nums;
+  color: var(--pb-accent-2);
+  font-weight: 900;
+  /* T-0175: always the last column, so a row with no delta or ✓ ends where the others do (it
+     sat one gap short of the edge) */
+  grid-column: -2;
+}
+
+/* Entrance (R-056): rows rise one per --pb-stagger-step in --pb-i order; each delta lands a beat
+   after its row; the leader's trophy pops as its row settles (on `down`, the results screen, that
+   is first: T-0230). Tokens only, so reduced motion = instant. */
+.staggered {
+  --pb-stagger-step: var(--pb-motion-fast);
+}
+
+.staggered.dense,
+.staggered.tight3,
+.staggered.tight4,
+.staggered.down {
+  --pb-stagger-step: calc(var(--pb-motion-fast) / 2);
+}
+
+.staggered .row {
+  animation: global(pb-rise) var(--pb-motion-base) var(--pb-ease) both;
+  animation-delay: calc(var(--pb-i, 0) * var(--pb-stagger-step));
+}
+
+.staggered .delta {
+  animation: global(pb-rise) var(--pb-motion-base) var(--pb-ease) both;
+  animation-delay: calc(var(--pb-i, 0) * var(--pb-stagger-step) + var(--pb-motion-base));
+}
+
+.staggered .top .rank {
+  display: inline-block;
+  animation: global(pb-pop) var(--pb-motion-base) var(--pb-ease) both;
+  animation-delay: calc(
+    var(--pb-i, 0) * var(--pb-stagger-step) + var(--pb-motion-base) + var(--pb-motion-slow)
+  );
+}
+
+/* On `down` the winner lands first (T-0230), so its trophy pops as that row settles, not a slow
+   beat later (the review: 0.6 s of a winner row without its trophy). */
+.staggered.down .top .rank {
+  animation-delay: calc(var(--pb-i, 0) * var(--pb-stagger-step) + var(--pb-motion-base));
+}
+
+/* ── I-027 A, T-0280: the climb (stagger="climb"). Rows fade in where they stood last round —
+   --pb-from rows away (a row's own height plus the board gap per row) — the deltas land a beat
+   later, the totals count from --pb-motion-base, and each mover slides to its new place over
+   --pb-motion-slow, starting at its own --pb-start (Scoreboard.tsx climbPlan: a fixed stagger, top
+   place first). One move per row: translateY only, no scale, no fade, no lift shadow; the z-order
+   is fixed for the whole climb (climbers over, holders mid, fallers under, set inline), so a row
+   never flips in front of another mid-slide; a climber also shrinks toward its right edge while
+   it passes, so the row it crosses keeps its rank, face and name in view (review of T-0280: with
+   the climbers under, or unshrunk, whole rows vanished mid-slide). A mover's delta and glow land with its own row
+   (--pb-land); a holder's delta lands at --pb-motion-base. Reduced motion drops every wait. */
+.climb .row {
+  animation:
+    global(pb-fade-in) var(--pb-motion-base) var(--pb-ease) both,
+    pb-climb var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both;
+}
+.climb .delta {
+  animation: global(pb-rise) var(--pb-motion-base) var(--pb-ease)
+    var(--pb-delta-at, var(--pb-motion-base)) both; /* prettier-ignore */
+}
+/* A lane cannot fix a full overlap (two neighbours swapping cross exactly), so the climber shrinks
+   toward its right edge instead: it covers only the passed row's score end, baring its rank, face
+   and name. It stays over; the right edge never moves. */
+.climb .rose {
+  --pb-lift: 0.55;
+  transform-origin: right center;
+}
+.columns.climb .rose {
+  --pb-lift: 0.5;
+}
+/* T-0301 (F18): a climber shrunk toward its right edge still covers the passed row's score end,
+   and mid-slide it cuts that number through the glyphs. While the climbers are in their lane the
+   fallers' totals sit back (a dim number, not half of one) and come home once the board settles. */
+.climb .fell .score {
+  animation: pb-score-dim var(--pb-lane-run, 0ms) ease-in-out 1100ms both;
+}
+@keyframes pb-score-dim {
+  from,
+  to {
+    opacity: 1;
+  }
+  12%,
+  84% {
+    opacity: 0.12;
+  }
+}
+@keyframes pb-lane {
+  from,
+  to {
+    scale: 1;
+  }
+  /* the run is the whole climb / 0.8 (Scoreboard.tsx), so the last row lands at 80 % and the
+     shrink is held until 84 %: it only ramps out on a settled board */
+  12%,
+  84% {
+    scale: var(--pb-lift, 1);
+  }
+}
+@keyframes pb-climb {
+  from {
+    transform: translateY(calc(var(--pb-from, 0) * (100% + var(--pb-space-2))));
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* ── I-027 B: movers glow once their row lands: a climbed row's outline is green and fades over
+   1 s, a fallen row's a dim red; a row that held its place gets nothing. The glow fills forwards
+   only (T-0280: with `both` it painted its first colour from 0 s, before the row had moved). The
+   rank digit and the slide itself carry the story — the colour is never alone. */
+.climb .rose,
+.climb .fell {
+  outline: 3px solid transparent;
+  outline-offset: -1px;
+}
+.climb .rose {
+  animation:
+    global(pb-fade-in) var(--pb-motion-base) var(--pb-ease) both,
+    pb-climb var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+    pb-glow-up var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards,
+    pb-lane var(--pb-lane-run, var(--pb-motion-slow)) ease-in-out 1100ms both;
+}
+.climb .fell {
+  animation:
+    global(pb-fade-in) var(--pb-motion-base) var(--pb-ease) both,
+    pb-climb var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+    pb-glow-down var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards;
+}
+/* The old rank gives way to the new one as its row lands. */
+.swap {
+  display: inline-block;
+  animation: global(pb-pop) var(--pb-motion-base) var(--pb-ease) both;
+}
+/* T-0191: a row that changes column does not fly across the board. T-0262: it stays at its old
+   place (--pb-col-from columns, --pb-from rows away; a column is its own width plus the column gap)
+   until the slide, fades out there as the others move, and fades in at its new place: the board
+   never shows a hole. `filter: opacity` keeps the mount fade (`opacity`) its own. */
+.board {
+  --pb-col-gap: var(--pb-space-2);
+}
+.dense,
+.tight3 {
+  --pb-col-gap: var(--pb-space-4);
+}
+.tight4 {
+  --pb-col-gap: var(--pb-space-3);
+}
+.lg {
+  --pb-col-gap: var(--pb-space-5);
+}
+.climb .row.hop {
+  animation:
+    global(pb-fade-in) var(--pb-motion-base) var(--pb-ease) both,
+    pb-hop var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both;
+}
+.climb .row.hop.rose {
+  animation:
+    global(pb-fade-in) var(--pb-motion-base) var(--pb-ease) both,
+    pb-hop var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+    pb-glow-up var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards;
+}
+.climb .row.hop.fell {
+  animation:
+    global(pb-fade-in) var(--pb-motion-base) var(--pb-ease) both,
+    pb-hop var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+    pb-glow-down var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards;
+}
+@keyframes pb-hop {
+  from,
+  45% {
+    transform: translate(
+      calc(var(--pb-col-from, 0) * (100% + var(--pb-col-gap))),
+      calc(var(--pb-from, 0) * (100% + var(--pb-space-2)))
+    );
+  }
+  from,
+  25% {
+    filter: opacity(1);
+  }
+  45%,
+  46% {
+    filter: opacity(0);
+  }
+  46%,
+  to {
+    transform: none;
+  }
+  66%,
+  to {
+    filter: opacity(1);
+  }
+}
+@keyframes pb-glow-up {
+  from {
+    outline-color: var(--pb-accent-3);
+  }
+  to {
+    outline-color: transparent;
+  }
+}
+@keyframes pb-glow-down {
+  from {
+    outline-color: color-mix(in srgb, var(--pb-danger) 60%, transparent);
+  }
+  to {
+    outline-color: transparent;
+  }
+}
+
+/* The waits are literal (1200 / 1800 ms), so they collapse here — after the .rose / .fell rules,
+   which restate the animation list (pass 865: movers still sat 1.2 s in the old order). */
+@media (prefers-reduced-motion: reduce) {
+  .climb {
+    --pb-lane-run: 0ms !important; /* no lift held while the rows are already in place */
+  }
+  .climb .row,
+  .climb .rose,
+  .climb .fell,
+  .climb .row.hop,
+  .climb .row.hop.rose,
+  .climb .row.hop.fell,
+  .climb .delta {
+    animation-delay: 0ms;
+  }
+}
+:global(:root[data-motion='off']) .climb {
+  --pb-lane-run: 0ms !important;
+}
+:global(:root[data-motion='off']) .climb .row,
+:global(:root[data-motion='off']) .climb .rose,
+:global(:root[data-motion='off']) .climb .fell,
+:global(:root[data-motion='off']) .climb .row.hop,
+:global(:root[data-motion='off']) .climb .row.hop.rose,
+:global(:root[data-motion='off']) .climb .row.hop.fell,
+:global(:root[data-motion='off']) .climb .delta {
+  animation-delay: 0ms;
+}
+
+/* ── I-146 B: the band a split column covers, over its first row. */
+.band {
+  position: absolute;
+  top: -1.35em;
+  left: var(--pb-space-3);
+  font-size: 0.62em;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--pb-muted, rgba(255, 255, 255, 0.55));
+}
+.board .row {
+  position: relative;
+}
+
+/* ── I-146 C, T-0181, T-0280: a tie is a tinted chip inside each tied row's own rank cell — two
+   rows sharing a number. It replaced a pill that ran down through the row gaps (and a copy of the
+   winner's ring above it): that slab painted past the rows and, mid-climb, sat where the rows no
+   longer were. Now nothing is drawn outside a row. The winners' own tie is the trophies: no chip on
+   a 🏆 row. */
+.tied .rank {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  border-radius: 0.4em;
+  color: var(--pb-text);
+  background: color-mix(in srgb, var(--pb-accent) 34%, var(--pb-surface));
+}
+
+/* No ranks (a team's card, ADR-052): the rows drop the rank column along with its cell, so the
+   name takes that room (~110 px at 200 % text; reviewer 69417f). After the tiers so it wins. */
+.noRanks .row,
+.noRanks.tight3 .row,
+.noRanks.tight4 .row {
+  grid-template-columns: auto 1fr auto auto;
+}
+
+@container (max-width: 12em) {
+  .compact.noRanks .row {
+    grid-template-columns: auto 1fr auto auto;
+  }
+
+  .compact.noRanks .row:not(:has(> .delta, > .mark)) {
+    grid-template-columns: auto 1fr auto;
+  }
+}
+
+/* A narrow phone (SE at 200 %) stacks the delta over its total: side by side with a 1-space gap
+   "−25 75" read as "−2575" (T-0043 F2), and the stack gives the name the row's width back. */
+@container (max-width: 12em) {
+  .compact .row:has(> .delta) {
+    grid-template-columns: 1.05em auto 1fr auto;
+    row-gap: 0;
+  }
+
+  .compact.noRanks .row:has(> .delta) {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .compact .row:has(> .delta) > :not(.delta, .score, .band) {
+    grid-row: 1 / span 2;
+  }
+
+  .compact .row > .delta {
+    grid-column: -2;
+    grid-row: 1;
+    justify-self: end;
+    align-self: end;
+    line-height: 1.1;
+  }
+
+  .compact .row:has(> .delta) > .score {
+    grid-column: -2;
+    grid-row: 2;
+    justify-self: end;
+    align-self: start;
+    line-height: 1.1;
+  }
+}

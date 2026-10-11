@@ -1,0 +1,374 @@
+/* MinigameFrame.tsx: title card, instructions, count, play chrome, result (bible S15–S18). */
+.card,
+.count,
+.result,
+.play {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-5);
+  text-align: center;
+}
+
+/* The title card keeps a side gutter on a phone: a team row of three avatars must not touch the edges. */
+.card {
+  padding-inline: var(--pb-space-4);
+  box-sizing: border-box;
+}
+
+.icon {
+  font-size: var(--pb-font-display);
+  line-height: 1;
+}
+
+.cardTitle,
+.title,
+.headline {
+  margin: 0;
+  font-weight: 900;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.cardTitle {
+  font-size: var(--pb-font-h1);
+}
+
+.title {
+  font-size: var(--pb-font-h2);
+}
+
+.headline {
+  font-size: var(--pb-font-h1);
+  color: var(--pb-accent-2);
+}
+
+.teams {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--pb-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A side is its shape, its name and a band of colour: never the tint alone. */
+.team {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-3);
+  padding: var(--pb-space-3) var(--pb-space-5);
+  border-radius: var(--pb-radius-lg);
+  background: var(--pb-surface);
+  border: 2px solid var(--pb-border);
+  border-inline-start: 10px solid var(--team);
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+}
+
+.members {
+  display: inline-flex;
+  gap: var(--pb-space-2);
+}
+
+.digit {
+  font-size: calc(var(--pb-font-display) * 2.2);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--pb-accent);
+  animation: mg-pop var(--pb-motion-base) ease-out both;
+}
+
+@keyframes mg-pop {
+  from {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* The phone's frame sits in the shell's bare column: its own side gutter, like a game's Screen (T-0583 review). */
+.phone,
+.gutter {
+  padding-inline: var(--pb-space-4);
+  box-sizing: border-box;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pb-space-4);
+  width: 100%;
+}
+
+.gameName {
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+}
+
+.chip {
+  padding: var(--pb-space-2) var(--pb-space-5);
+  border-radius: 999px;
+  background: var(--pb-surface);
+  border: 2px solid var(--pb-border);
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.urgent {
+  color: var(--pb-danger);
+}
+
+.play {
+  justify-content: flex-start;
+  gap: var(--pb-space-3);
+  position: relative;
+}
+
+.stage {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+}
+
+/* A held TV title or result keeps a slow sheen crossing it (T-0946): the TV never sits still on a card. Phones get none: it crossed the Start! button.
+   The sheen is its own clipped layer, so the card's content never clips or widens. Transform only. */
+.card,
+.result {
+  position: relative;
+}
+
+/* Above the cards too (z-index): the glint crosses the whole held screen, not only the gaps between cards. */
+.sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sheenBand {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 45%,
+    color-mix(in srgb, var(--pb-accent) 5%, transparent) 47%,
+    color-mix(in srgb, var(--pb-accent) 12%, transparent) 49%,
+    color-mix(in srgb, var(--pb-accent) 18%, transparent) 50%,
+    color-mix(in srgb, var(--pb-accent) 12%, transparent) 51%,
+    color-mix(in srgb, var(--pb-accent) 5%, transparent) 53%,
+    transparent 55%
+  );
+  transform: translateX(-100%);
+  animation: mg-sheen 3.2s linear infinite;
+}
+
+@keyframes mg-sheen {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Overtime on the TV (T-0946): the round's clock is out and the game still waits on a player, so the
+   stage's edge breathes and a red band sweeps across it. The breath alone moves too little from one
+   frame to the next to read as motion, so the sweep carries it. A wait is visible, never a frozen frame. */
+.overtime {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.overtimeGlow {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 120px 28px var(--pb-danger);
+  animation: mg-breathe 1s ease-in-out infinite alternate;
+}
+
+.overtimeSweep {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 42%,
+    color-mix(in srgb, var(--pb-danger) 45%, transparent) 50%,
+    transparent 58%
+  );
+  transform: translateX(-100%);
+  animation: mg-overtime-sweep 1.6s linear infinite;
+}
+
+@keyframes mg-breathe {
+  from {
+    opacity: 0.1;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes mg-overtime-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheenBand,
+  .overtimeGlow,
+  .overtimeSweep {
+    animation: none;
+  }
+}
+
+/* The in-app motion switch counts as reduced motion too, as in the rest of the kit. */
+:global(:root[data-motion='off']) .sheenBand,
+:global(:root[data-motion='off']) .overtimeGlow,
+:global(:root[data-motion='off']) .overtimeSweep {
+  animation: none;
+}
+
+.finish {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--pb-bg, #000) 55%, transparent);
+  font-size: calc(var(--pb-font-display) * 1.2);
+  font-weight: 900;
+  color: var(--pb-accent-2);
+  animation: mg-pop var(--pb-motion-base) ease-out both;
+}
+
+.ribbon {
+  margin: 0;
+  padding: var(--pb-space-2) var(--pb-space-6);
+  border-radius: 999px;
+  background: var(--pb-accent-2);
+  color: var(--pb-bg, #000);
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+}
+
+.ranks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--pb-space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rank {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: var(--pb-space-2);
+  min-width: 12rem;
+  padding: var(--pb-space-5);
+  border-radius: var(--pb-radius-lg);
+  background: var(--pb-surface);
+  border: 2px solid var(--pb-border);
+}
+
+.winner {
+  border-color: var(--pb-accent-2);
+}
+
+.place {
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+}
+
+.rankName {
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.score {
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.coins {
+  padding: var(--pb-space-1) var(--pb-space-4);
+  border-radius: 999px;
+  background: var(--pb-accent-2);
+  color: var(--pb-bg, #000);
+  font-size: var(--pb-font-body);
+  font-weight: 900;
+}
+
+.phoneLine {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  font-weight: 800;
+}
+
+.won {
+  color: var(--pb-accent-3);
+}
+
+/* The phone's one-line reminder of the controls while the game plays (T-0620): small, under the bar, never wraps. */
+.hint {
+  margin: 0;
+  padding-inline: var(--pb-space-4);
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+}
+
+.phonePlace {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  color: var(--pb-text-muted);
+}
+
+.phoneRanks {
+  display: grid;
+  gap: var(--pb-space-1);
+  width: 100%;
+  max-width: 320px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--pb-font-body);
+}
+
+.phoneRanks li {
+  display: grid;
+  grid-template-columns: 2ch 1fr auto;
+  gap: var(--pb-space-3);
+  padding: var(--pb-space-1) var(--pb-space-3);
+  border-radius: var(--pb-radius);
+  text-align: start;
+}
+
+.phoneRanks .mine {
+  background: var(--pb-surface-2);
+  font-weight: 800;
+}
+
+.phoneName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

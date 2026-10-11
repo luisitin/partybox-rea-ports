@@ -1,0 +1,88 @@
+/* The scene's box: centred behind the beat track, a little taller than the panel so the prop rises above and below it. */
+.box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* A backdrop: muted next to the notes, which cross it in the same glyphs at full colour. */
+  filter: saturate(0.55) brightness(0.8);
+}
+
+.item {
+  position: absolute;
+  display: block;
+  line-height: 1;
+  translate: -50% -50%;
+  rotate: var(--tilt, 0deg);
+  filter: drop-shadow(0 0.5rem 0.4rem hsl(0 0% 0% / 0.35));
+}
+
+.inner {
+  display: block;
+  line-height: 0;
+  transform-origin: 50% 70%;
+}
+
+.inner[data-react='pop'] {
+  animation: pop 520ms cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+.inner[data-react='dip'] {
+  animation: dip 620ms ease-in-out;
+}
+
+.inner[data-react='spin'] {
+  animation: spin 700ms cubic-bezier(0.3, 1.2, 0.5, 1);
+}
+
+.inner[data-react='wobble'] {
+  animation: wobble 640ms ease-in-out;
+}
+
+.inner[data-react='bounce'] {
+  animation: bounce 560ms cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+@keyframes pop {
+  35% {
+    scale: calc(1 + 0.3 * var(--k, 1));
+  }
+}
+
+@keyframes dip {
+  40% {
+    translate: 0 calc(2.2rem * var(--k, 1));
+    rotate: calc(-14deg * var(--k, 1));
+  }
+}
+
+@keyframes spin {
+  to {
+    rotate: calc(360deg * var(--k, 1));
+  }
+}
+
+@keyframes wobble {
+  20% {
+    rotate: calc(-9deg * var(--k, 1));
+  }
+  60% {
+    rotate: calc(7deg * var(--k, 1));
+  }
+}
+
+@keyframes bounce {
+  40% {
+    translate: 0 calc(-3rem * var(--k, 1));
+    scale: 1 1.08;
+  }
+  70% {
+    translate: 0 0;
+    scale: 1.1 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inner[data-react] {
+    animation: none;
+  }
+}

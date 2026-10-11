@@ -1,0 +1,138 @@
+.kicker {
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  color: var(--pb-accent-2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.prompt {
+  font-size: var(--pb-font-h2);
+  font-weight: 800;
+  text-wrap: balance;
+}
+
+.input {
+  width: 100%;
+  min-height: 120px;
+  padding: var(--pb-space-3) var(--pb-space-4);
+  border-radius: var(--pb-radius);
+  border: 2px solid var(--pb-surface-2);
+  background: var(--pb-surface);
+  font-size: var(--pb-font-h2);
+  font-weight: 600;
+  line-height: 1.3;
+  resize: none;
+}
+
+/* I-795 I: a lead (the drawing to guess) takes the height left over; the field is one line that
+   grows with its text (field-sizing where supported), so the box and Send are always on screen. */
+.lead {
+  flex: 1 1 0;
+  min-height: 64px;
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+}
+
+/* The keyboard is up (visual viewport short): the lead may shrink to nothing and the prompt
+   drops to body size, so the field and Send stay above the keys even on a 320 × 568 phone. */
+.squeezed .lead {
+  min-height: 0;
+  margin-top: calc(-1 * var(--pb-space-4)); /* the body's top padding goes to the field too */
+}
+
+.squeezed .prompt {
+  font-size: var(--pb-font-body);
+}
+
+.inputOne {
+  flex: none;
+  min-height: 0;
+  padding: var(--pb-space-2) var(--pb-space-3);
+  font-size: var(--pb-font-body);
+  field-sizing: content;
+  max-height: calc(3lh + 2 * var(--pb-space-2));
+}
+
+.input:focus {
+  border-color: var(--pb-accent);
+  outline: none;
+}
+
+.input:disabled {
+  opacity: 0.7;
+}
+
+/* Submitted: the answer as a card in place of the input. */
+.sent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-1);
+  padding: var(--pb-space-4);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  border: 2px solid var(--pb-accent-3);
+}
+
+.sentLabel,
+.sentHint {
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+}
+
+.sentText {
+  font-size: var(--pb-font-h2);
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.sentHint {
+  margin-top: var(--pb-space-2);
+}
+
+.late {
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  color: var(--pb-accent-2);
+}
+
+.counter {
+  text-align: right;
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── I-001 A: the field joins the last 5 s (`data-urgent` on the controller shell, as the primary
+   button does): a danger border and the shell's once-a-second beat, so the whole card escalates,
+   not one label. --pb-motion-pulse is 0 under reduced motion → no beat, the border alone. */
+[data-urgent] .input:not(:disabled) {
+  border-color: var(--pb-danger);
+  animation: pb-urge var(--pb-motion-pulse) ease-in-out infinite;
+}
+@keyframes pb-urge {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* ── I-001 B: the counter bumps on each keystroke (transform only; remounted per change). */
+.typed {
+  transform-origin: right center;
+  animation: global(pb-bump) var(--pb-motion-fast) var(--pb-ease) both;
+}
+
+/* ── I-001 C: an empty field breathes after 3 s (pb-breathe, the lobby's idle cue — defined only
+   without reduced motion, so it is simply absent there). The urgent rule above outranks it. */
+.stalled {
+  animation: global(pb-breathe) calc(var(--pb-motion-pulse) * 2) ease-in-out infinite;
+}
+/* The in-app motion switch: no beat, no breath (the tokens already collapse to 0; be explicit). */
+:global(:root[data-motion='off']) .stalled,
+:global(:root[data-motion='off']) [data-urgent] .input:not(:disabled) {
+  animation: none;
+}

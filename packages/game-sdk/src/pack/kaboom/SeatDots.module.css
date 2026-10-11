@@ -1,0 +1,56 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* With names, the row leaves room under the dots; the names hang there and take no height from the scene (T-0902). */
+.row[data-names='true'] {
+  padding-block-end: 1.1rem;
+}
+
+.dot {
+  position: relative;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  border: 0.2rem solid hsl(var(--hue) 70% 70%);
+  background: hsl(var(--hue) 40% 30% / 0.6);
+  transition: background 0.15s;
+}
+
+/* One line under its dot; a long name ends in "…" within its seat's column. */
+.name {
+  position: absolute;
+  top: calc(100% + 0.2rem);
+  left: 50%;
+  translate: -50% 0;
+  width: 3.2rem;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.dot[data-state='good'] {
+  background: hsl(var(--hue) 75% 68%);
+}
+
+.dot[data-state='bad'] {
+  background: hsl(0 0% 62%);
+}
+
+.dot[data-state='busy'] {
+  background: hsl(var(--hue) 60% 55%);
+}
+
+.dot[data-away='true'] {
+  opacity: 0.45;
+}

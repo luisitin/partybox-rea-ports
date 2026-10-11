@@ -1,0 +1,35 @@
+{
+  "id": "curve-fever",
+  "name": "Curve Fever",
+  "icon": "🐍",
+  "tagline": "Steer your worm. Never touch a trail.",
+  "description": "Everyone steers a worm that never stops, leaving a trail across the same arena. Hold left or right on your phone to turn; crash into a wall or any trail and you are out. Each round you score a point for every worm that died before you, and now and then your worm leaves a gap others can slip through.",
+  "howToPlay": [
+    "Hold the left or right button to turn your worm. It never stops.",
+    "Hit a wall or any trail, even your own, and you are out for the round.",
+    "Every worm that dies before you is a point for you. Most points after the last round wins."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 4,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": {
+    "needs": "anywhere"
+  },
+  "addedOn": "2026-10-10",
+  "settings": [
+    {
+      "key": "rounds",
+      "label": "Rounds",
+      "description": "Rounds in the match",
+      "type": "number",
+      "default": 3,
+      "min": 1,
+      "max": 6,
+      "step": 1
+    }
+  ],
+  "supportsBots": true
+}

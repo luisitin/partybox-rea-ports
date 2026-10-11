@@ -1,0 +1,193 @@
+/* FacePicker: tiles never change size when picked — the ring and the ✓ sit in reserved space, so
+   the grid never shifts under a finger. */
+.grid {
+  display: grid;
+  gap: var(--pb-space-2);
+  width: 100%;
+}
+.one {
+  grid-template-columns: minmax(0, 1fr);
+}
+.one .tile {
+  min-height: 4.5rem;
+}
+.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+/* A narrow phone gives two columns ~140 px each: a smaller face leaves the name its room. */
+@media (max-width: 360px) {
+  .two .tile {
+    gap: var(--pb-space-1);
+    padding: var(--pb-space-2) var(--pb-space-1);
+  }
+  .two .tile {
+    --fp-face: 2rem;
+  }
+}
+.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+  min-height: 3.5rem;
+  padding: var(--pb-space-2);
+  border: 2px solid transparent;
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  color: var(--pb-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    border-color var(--pb-motion-fast) ease,
+    background-color var(--pb-motion-fast) ease,
+    transform var(--pb-motion-fast) ease;
+}
+.three .tile {
+  flex-direction: column;
+  text-align: center;
+  gap: var(--pb-space-1);
+}
+.tile:active:not(.off) {
+  transform: scale(0.97);
+}
+.tile:focus-visible {
+  outline: 3px solid var(--pb-accent-2);
+  outline-offset: 2px;
+}
+.on {
+  border-color: var(--pb-accent);
+  background: color-mix(in srgb, var(--pb-accent) 18%, var(--pb-surface));
+}
+.off {
+  cursor: default;
+  opacity: 0.55;
+}
+.locked .tile:not(.on) {
+  opacity: 0.55;
+}
+.face {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+}
+.check {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--pb-on-accent);
+  background: var(--pb-accent);
+  transform: scale(0);
+  transition: transform var(--pb-motion-fast) cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.on .check {
+  transform: scale(1);
+}
+.text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.three .text {
+  width: 100%;
+  align-items: center;
+}
+.name {
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.detail {
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  color: var(--pb-text);
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.bubble {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  z-index: 2;
+  width: max-content;
+  max-width: 16rem;
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface-2);
+  border: 1px solid var(--pb-accent-2);
+  color: var(--pb-text);
+  font-size: var(--pb-font-body);
+  white-space: normal;
+  text-align: center;
+  transform: translateX(-50%);
+  pointer-events: none;
+  animation: global(pb-pop) var(--pb-motion-fast) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .check {
+    transition: none;
+  }
+}
+:global(:root[data-motion='off']) .tile,
+:global(:root[data-motion='off']) .check {
+  transition: none;
+}
+/* Three columns (9+ faces): face over name, both smaller, so a full name fits a ~96 px tile. */
+.three .tile {
+  --fp-face: 2rem;
+  min-height: 4.25rem;
+  padding: var(--pb-space-1);
+}
+.three .name {
+  font-size: var(--pb-font-caption);
+}
+/* Larger text (the phone column is rem): when two tiles no longer have ~9rem each, one column —
+   a container query in rem follows the phone's text size, a viewport query would not. */
+.frame {
+  container-type: inline-size;
+  width: 100%;
+}
+@container (max-width: 15rem) {
+  .two,
+  .three {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .three .tile {
+    flex-direction: row;
+    text-align: left;
+  }
+  .three .text {
+    align-items: flex-start;
+  }
+}
+@container (min-width: 15rem) and (max-width: 22rem) {
+  .three {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

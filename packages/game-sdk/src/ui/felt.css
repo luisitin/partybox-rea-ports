@@ -1,0 +1,37 @@
+/* The play surface a game paints (felt, table cloth, backdrop) and the frame round it, per theme (T-0536).
+   Loaded by the games that use it (rummikub, phase-10, chess), not by the shell entry: the join download stays small.
+   -lit is the cloth under the key light, -rim the frame. Read from 3D by useThemeColor. */
+:root {
+  --pb-felt: #0f5b3f;
+  --pb-felt-dark: #083826;
+  --pb-felt-lit: #13704f;
+  --pb-rim: #3a2112;
+}
+
+[data-theme='daylight'] {
+  --pb-felt: #2a7f5d;
+  --pb-felt-dark: #1c5d43;
+  --pb-felt-lit: #3a9a74;
+  --pb-rim: #8a5a34;
+}
+
+[data-theme='arcade'] {
+  --pb-felt: #3a0f66;
+  --pb-felt-dark: #1d0640;
+  --pb-felt-lit: #5a1a9a;
+  --pb-rim: #0b6a78;
+}
+
+[data-theme='cabin'] {
+  --pb-felt: #7a3b2a;
+  --pb-felt-dark: #4a2018;
+  --pb-felt-lit: #94503a;
+  --pb-rim: #2a180c;
+}
+
+[data-theme='contrast'] {
+  --pb-felt: #000000;
+  --pb-felt-dark: #000000;
+  --pb-felt-lit: #111111;
+  --pb-rim: #ffffff;
+}

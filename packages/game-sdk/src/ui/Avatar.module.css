@@ -1,0 +1,7 @@
+/* The face's `size` as CSS, at no specificity: a caller's class or `.x svg` rule still sizes it,
+   as it did over the old width/height attributes, which can't hold a CSS var (WebKit logged an
+   error for every face, T-0174). */
+:where(.avatar) {
+  width: var(--pb-avatar-size);
+  height: var(--pb-avatar-size);
+}

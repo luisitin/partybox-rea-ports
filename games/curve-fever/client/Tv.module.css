@@ -1,0 +1,127 @@
+/* Fill the stage with the arena and reserve a narrow, readable standings rail. */
+.stage {
+  flex: 1;
+  min-height: 0;
+  padding: var(--pb-stage-top, 24px) 48px 32px;
+}
+
+.board {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Size from the actual stage's two dimensions, preserving 16:10 under the TV shell. */
+.arena {
+  position: relative;
+  width: 100%;
+  max-height: 100%;
+  aspect-ratio: 160 / 100;
+  overflow: hidden;
+  border: 0.2rem solid var(--pb-accent);
+  border-radius: var(--pb-radius-md, 1rem);
+  background: radial-gradient(ellipse at 50% 40%, hsl(250 35% 16%), hsl(250 40% 8%));
+}
+
+.side {
+  display: grid;
+  gap: var(--pb-space-4, 2rem);
+  align-content: start;
+  min-width: 0;
+}
+
+.count {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: calc(var(--pb-font-display) * 1.5);
+  font-weight: 900;
+  color: hsl(0 0% 100% / 0.9);
+  text-shadow: 0 0.2rem 1rem hsl(0 0% 0% / 0.6);
+  pointer-events: none;
+}
+
+/* The round clock: a labelled pill at top centre while the worms run. Its digits are a TV timer, so they are 96 px (the TV minimum). */
+.clock {
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--pb-space-1);
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border: 1px solid var(--pb-border);
+  border-radius: 999px;
+  background: var(--pb-surface);
+}
+
+.clockLabel {
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+  color: var(--pb-text-muted);
+}
+
+.clockValue {
+  font-size: calc(var(--pb-font-display) * 0.75);
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The last five seconds: the digits take the accent colour (the tick says it as well). */
+.clock[data-low='true'] .clockValue {
+  color: var(--pb-accent-2);
+}
+
+.rows {
+  display: grid;
+  gap: var(--pb-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--pb-font-h2);
+}
+
+.rows li {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+}
+
+/* A worm that has crashed this round: its row dims. */
+.rows li[data-out='true'] {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+.dot {
+  flex: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  background: hsl(var(--hue) 85% 58%);
+}
+
+.name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.points {
+  min-width: 2ch;
+  margin-left: auto;
+  font-size: 2.5rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.gain {
+  font-weight: 900;
+  color: var(--pb-accent-2);
+}

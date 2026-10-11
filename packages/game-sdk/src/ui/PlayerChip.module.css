@@ -1,0 +1,437 @@
+.chip {
+  border: 1px solid var(--pb-border);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-1) var(--pb-space-3) var(--pb-space-1) var(--pb-space-1);
+  border-radius: 999px;
+  background: var(--pb-surface);
+  max-width: 100%;
+  transition:
+    opacity var(--pb-motion-fast) var(--pb-ease),
+    transform var(--pb-motion-fast) var(--pb-ease);
+}
+
+.sm {
+  --pb-chip-size: max(28px, calc(var(--pb-font-caption) * 1.45));
+  font-size: var(--pb-font-caption);
+}
+
+.md {
+  font-size: var(--pb-font-body);
+}
+
+.lg {
+  --pb-chip-size: calc(var(--pb-font-h2) * 1.6);
+  font-size: var(--pb-font-h2);
+  padding-right: var(--pb-space-4);
+}
+
+.avatar {
+  position: relative;
+  display: inline-flex;
+}
+
+.you {
+  flex-shrink: 0;
+  padding: 0 0.45em;
+  border-radius: 999px;
+  background: var(--pb-surface-2);
+  color: var(--pb-text-muted);
+  font-size: 0.7em;
+  font-weight: 800;
+  line-height: 1.6;
+}
+
+.bot {
+  flex-shrink: 0;
+  padding: 0 0.35em;
+  border-radius: 999px;
+  background: var(--pb-surface-2);
+  font-size: 0.75em;
+  line-height: 1.5;
+}
+
+/* ✕ to remove (bots you own): a full 44 px target that does not enlarge the chip visually. */
+.remove {
+  flex-shrink: 0;
+  width: var(--pb-touch);
+  height: var(--pb-touch);
+  margin: calc(-1 * var(--pb-space-2)) calc(-1 * var(--pb-space-2)) calc(-1 * var(--pb-space-2)) 0;
+  border-radius: 50%;
+  color: var(--pb-text-muted);
+  font-size: 1em;
+  font-weight: 900;
+}
+
+.remove:hover,
+.remove:focus-visible {
+  color: var(--pb-danger);
+}
+
+/* Readable from the couch (the old 0.7em star over the avatar was 12–20 px on the TV strip). */
+/* A badge that just moved here pops (a handover), a badge that was always here does not. */
+.vipPop {
+  animation: global(pb-pop) var(--pb-motion-slow) var(--pb-ease) both;
+}
+
+.vip {
+  flex-shrink: 0;
+  padding: 0 0.45em;
+  border-radius: 999px;
+  background: var(--pb-accent-2-fill);
+  color: var(--pb-on-accent-2-fill);
+  font-size: 0.7em;
+  font-weight: 900;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+.name {
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  /* A name of sixteen wide glyphs made a 640 px chip and wrapped a four-player strip under the
+     timer (pass 882): past 9 em the name ellipsizes — "Bartholomew XVII" still fits whole. */
+  max-width: 9em;
+}
+
+/* faces only (the TV strip past two rows, a claim): no empty name slot, so the chips close up */
+/* A bot's owner part ellipsizes; its "bot 2" tail stays (reviewer 90838c). The person cap (9 em)
+   plus room for the tail, so "Maximiliano's bot 2" is whole where the row has room and only the
+   owner part gives way where it hasn't (reviewer 277967). */
+.split {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 13em;
+}
+.nameHead {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* The lobby's removable chip (T-0025): the owner's first name, or, in a cell too narrow for it (a
+   320 px phone's two columns, `pb-chip-cell` in Lobby.module.css), the owner's initial alone. The
+   tail never gives way. */
+.nameInitial {
+  display: none;
+  flex-shrink: 0;
+}
+@container pb-chip-cell (max-width: 150px) {
+  .nameFirst {
+    display: none;
+  }
+  .nameInitial {
+    display: inline;
+  }
+}
+.nameTail {
+  flex-shrink: 0;
+  margin-left: 0.25em;
+  white-space: nowrap;
+}
+
+.name:empty {
+  display: none;
+}
+
+/* A fixed slot: empty and invisible until there is a glyph, then it scales in (no layout shift). */
+.glyph {
+  display: inline-grid;
+  place-items: center;
+  width: 1.3em;
+  min-width: 1.3em;
+  height: 1.3em;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--pb-text-muted);
+  opacity: 0;
+  transform: scale(0.6);
+  transform-origin: 50% 50%;
+  transition:
+    opacity var(--pb-motion-fast) var(--pb-ease),
+    transform var(--pb-motion-fast) var(--pb-ease);
+}
+
+.glyph.shown {
+  opacity: 1;
+  transform: none;
+}
+
+/* Locked in: a solid success disc that pops, plus an inner ring on the whole pill (box-shadow,
+   not outline, so it coexists with .active's outline when a game passes activeIds). */
+.ok {
+  border-radius: 50%;
+  background: var(--pb-accent-3);
+  color: var(--pb-on-accent);
+  font-size: 1em;
+  animation: global(pb-pop) var(--pb-motion-base) var(--pb-ease) both;
+}
+
+.locked {
+  box-shadow: inset 0 0 0 2px var(--pb-accent-3);
+}
+
+/* Reconnecting: the ⟳ actually turns (pb-spin is defined only under no-preference). */
+.spin {
+  animation: global(pb-spin) 2s linear infinite;
+}
+
+/* Running total (R-068): keyed on the value, so a change pops in place ("value changed"). */
+.score {
+  margin-left: var(--pb-space-2);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  color: var(--pb-accent-2);
+  animation: global(pb-pop) var(--pb-motion-base) var(--pb-ease) both;
+}
+
+.leader {
+  margin-left: var(--pb-space-2);
+  font-size: 0.62em;
+  color: var(--pb-accent-2);
+}
+
+/* Held-over number while the game withholds the strip: quiet, and it must not pop again. */
+.scoreMuted {
+  color: var(--pb-text-muted);
+  animation: none;
+}
+
+.leader + .score {
+  margin-left: var(--pb-space-1);
+}
+
+/* the ghost's gold total at 0.75 read 4.1:1 on daylight (T-0224): an away total is plain text */
+.off .score {
+  color: var(--pb-text);
+}
+
+.active {
+  outline: 3px solid var(--pb-accent-2);
+  transform: scale(1.04);
+}
+
+/* ── I-009 A: the link drops — the chip flickers out (opacity steps over --pb-motion-slow) and
+   sits as a ghost at 0.75 (its name in full text colour: muted under 0.6 read 2.8:1, T-0224); the
+   link returns — the chip pops back with a green ring that fades over
+   a second. Opacity + transform + outline-colour only; both collapse under reduced motion. The
+   ring skips an .active chip (its gold outline is the judge's mark and must survive the fade). */
+.off {
+  opacity: 0.75;
+}
+.flicker {
+  animation: pb-signal-lost var(--pb-motion-slow) steps(1, end) both;
+}
+@keyframes pb-signal-lost {
+  0% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 0.9;
+  }
+  45% {
+    opacity: 0.15;
+  }
+  60% {
+    opacity: 0.7;
+  }
+  75% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 0.75;
+  }
+}
+.snap {
+  animation: global(pb-pop) var(--pb-motion-base) var(--pb-ease) both;
+}
+.snap:not(.active) {
+  outline: 3px solid transparent;
+  animation:
+    global(pb-pop) var(--pb-motion-base) var(--pb-ease) both,
+    pb-back-ring var(--pb-motion-pulse) ease-out both;
+}
+@keyframes pb-back-ring {
+  from {
+    outline-color: var(--pb-accent-3);
+  }
+  to {
+    outline-color: transparent;
+  }
+}
+
+.spectator {
+  opacity: 0.6;
+}
+
+/* ── I-045 B + the owner's note: the thinking dots OVER the avatar — the portrait dims to 0.35
+   under three gold dots pulsing in turn (opacity only, 1.2 s); the twins hold them steady. */
+.portrait {
+  display: inline-flex;
+}
+.avatarThinking > .portrait {
+  opacity: 0.35;
+}
+.dots {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+.dots > i {
+  width: 22%;
+  height: 22%;
+  border-radius: 50%;
+  background: var(--pb-accent-2);
+  animation: pb-think 1200ms ease-in-out infinite;
+}
+.dots > i:nth-child(2) {
+  animation-delay: 200ms;
+}
+.dots > i:nth-child(3) {
+  animation-delay: 400ms;
+}
+@keyframes pb-think {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dots > i {
+    animation: none;
+    opacity: 0.8;
+  }
+}
+:global(:root[data-motion='off']) .dots > i {
+  animation: none;
+  opacity: 0.8;
+}
+
+/* ── I-070 C: a wave — ±12° twice over 500 ms (transform only), on the nudger's chip. */
+.wave {
+  animation: pb-wave-chip 500ms var(--pb-ease) 2;
+  transform-origin: 50% 90%;
+}
+@keyframes pb-wave-chip {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-12deg);
+  }
+  75% {
+    transform: rotate(12deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wave {
+    animation: none;
+  }
+}
+:global(:root[data-motion='off']) .wave {
+  animation: none;
+}
+
+/* ── I-089 A: the grace left, small, after the name of a dropped player. */
+.away {
+  flex-shrink: 0;
+  font-size: 0.7em;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--pb-text-muted);
+}
+
+/* ── I-089 B: a thin ring drains around the dimmed face (one CSS var, repainted per second). */
+.draining {
+  position: relative;
+  border-radius: 50%;
+}
+.draining::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: conic-gradient(var(--pb-text-muted) var(--pb-away, 360deg), transparent 0);
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 3px),
+    currentColor calc(100% - 2px)
+  );
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), currentColor calc(100% - 2px));
+  pointer-events: none;
+}
+
+/* ── I-268 C: "+N" rises over a score that just went up, and fades (2 s, the component's timer). */
+.scoreBox {
+  position: relative;
+  display: inline-flex;
+}
+.leader + .scoreBox > .score {
+  margin-left: var(--pb-space-1);
+}
+.rise {
+  position: absolute;
+  left: 50%;
+  bottom: 78%;
+  font-size: 0.7em;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--pb-accent-2);
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 1px 2px var(--pb-scrim);
+  animation: rise 2s var(--pb-ease) both;
+}
+@keyframes rise {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0.4em);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -0.3em);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+    transform: translateX(-50%);
+  }
+}
+
+/* Materials R2: source adaptations and new relief paint are recorded in SOURCES.md. */
+.chip {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--pb-text) 12%, transparent), transparent 7px),
+    linear-gradient(90deg, color-mix(in srgb, var(--pb-text) 2%, transparent) 50%, transparent 50%)
+      0 0 / 3px 3px,
+    linear-gradient(0deg, color-mix(in srgb, var(--pb-bg) 35%, transparent), transparent 55%),
+    var(--pb-surface);
+  border-color: color-mix(in srgb, var(--pb-border) 70%, var(--pb-surface-2));
+}
+:global(:root[data-theme='contrast']) .chip {
+  background: var(--pb-surface);
+  border-color: var(--pb-border);
+}

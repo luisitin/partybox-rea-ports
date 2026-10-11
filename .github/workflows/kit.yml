@@ -1,0 +1,27 @@
+name: kit
+on:
+  pull_request:
+    paths:
+      - 'packages/**'
+      - 'games/curve-fever/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'tsconfig*.json'
+      - 'vitest.config.ts'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  kit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm vitest run games/curve-fever packages/shared

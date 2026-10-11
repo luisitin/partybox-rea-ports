@@ -1,0 +1,18 @@
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-5);
+  min-height: 100%;
+  /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+  padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+    var(--pb-overscan-y, 54px);
+}
+
+.center {
+  /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+  justify-content: safe center;
+  align-items: safe center;
+  text-align: center;
+}

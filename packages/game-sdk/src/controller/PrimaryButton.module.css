@@ -1,0 +1,111 @@
+.button {
+  width: 100%;
+  min-height: 56px;
+  padding: var(--pb-space-3) var(--pb-space-5);
+  border-radius: var(--pb-radius);
+  font-size: var(--pb-font-button);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  transition:
+    transform var(--pb-motion-fast) var(--pb-ease),
+    opacity var(--pb-motion-fast) var(--pb-ease);
+}
+
+.button:active:not([aria-disabled='true']) {
+  transform: scale(0.97);
+  /* brightens accent, danger, success and the neutral surface-2 fill in every theme (R-049) */
+  filter: brightness(1.12);
+}
+
+/* Disabled reads as "not yet", not as a dimmer version of the action (label contrast 6.9:1): an
+   empty dashed outline, never a filled neutral button (T-0392: that read like an enabled one). */
+.button[aria-disabled='true'] {
+  background: transparent;
+  color: var(--pb-text-muted);
+  border: 2px dashed var(--pb-text-muted);
+  cursor: default;
+}
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-1);
+  width: 100%;
+}
+
+.reason {
+  text-align: center;
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+}
+
+/* A tap on a disabled button: three sideways jolts (global keyframe; 0 ms under reduced motion). */
+.shake {
+  animation: global(pb-shake) var(--pb-motion-base) var(--pb-ease);
+}
+
+.accent {
+  background: var(--pb-accent);
+  color: var(--pb-on-accent);
+}
+
+.neutral {
+  background: var(--pb-surface-2);
+  color: var(--pb-text);
+  box-shadow: inset 0 0 0 1px var(--pb-border);
+}
+
+.danger {
+  background: var(--pb-danger);
+  color: var(--pb-on-accent);
+}
+
+.success {
+  background: var(--pb-accent-3);
+  color: var(--pb-on-accent);
+}
+
+.done,
+.done[aria-disabled='true'] {
+  background: var(--pb-accent-3);
+  color: var(--pb-on-accent);
+  border-color: transparent; /* dashed is for the waiting state only */
+}
+
+/* The last 5 s for an unanswered phone (`data-urgent` on the controller shell): a danger outline
+   and one nudge when the attribute lands — no JS timer. A button disabled by an empty answer gets
+   nothing (there is nothing to press yet); the header cue and haptic still cover that player. */
+[data-urgent] .button.accent:not([aria-disabled='true']) {
+  outline: 3px solid var(--pb-danger);
+  outline-offset: 2px;
+  animation: pb-nudge var(--pb-motion-slow) var(--pb-ease) 1;
+}
+
+@keyframes pb-nudge {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+/* The ✓ pops once each time a done button mounts (R-063); 0 ms under reduced motion. */
+/* The gap is a margin: a trailing space inside an inline-block collapses, so every done button
+   read "✓Submitted" / "✓You're ready". */
+.check {
+  display: inline-block;
+  margin-right: 0.35em;
+  animation: global(pb-pop) var(--pb-motion-fast) var(--pb-ease) both;
+}
+
+/* T-0225: sent, not yet taken. Neutral and quiet: no ✓, not the success green (that reads as
+   delivered and the phone goes down while the send may still be lost). */
+.busy,
+.busy[aria-disabled='true'] {
+  background: var(--pb-surface-2);
+  color: var(--pb-text);
+  border-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--pb-border);
+}

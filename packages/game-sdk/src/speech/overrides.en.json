@@ -1,0 +1,69 @@
+{
+  "_about": "The SDK's global pronunciation list (Part 00 §5.4): words every game's reader gets wrong. A game's content/pronunciations.json beats it. Each entry was checked on 2026-09-24 against what the Kokoro sidecar's phonemiser (espeak-ng) actually produces; phonemes marked 'Blanks' were already vetted by Session B's recogniser check in games/blanks/content/pronounce.json. `say` is a lowercase respelling for Zira: espeak spells a capitalised syllable ('YON') letter by letter. Keys match case-sensitively unless anyCase.",
+  "words": {
+    "COVID": {
+      "ipa": "kˈəʊvɪd",
+      "say": "koh-vid",
+      "anyCase": true,
+      "why": "espeak says KAH-vid for every casing, and rule 8 would spell COVID (Blanks' phonemes)"
+    },
+    "LEGO": {
+      "say": "Lego",
+      "why": "rule 8 spells 2-5 capitals; espeak says 'Lego' right"
+    },
+    "YOLO": {
+      "say": "Yolo",
+      "why": "rule 8 spells 2-5 capitals; espeak says 'Yolo' right"
+    },
+    "FOMO": {
+      "say": "Fomo",
+      "why": "rule 8 spells 2-5 capitals; espeak says 'Fomo' right"
+    },
+    "GIF": {
+      "say": "gif",
+      "why": "rule 8 spells 2-5 capitals; said as a word"
+    },
+    "SWAT": {
+      "say": "Swat",
+      "why": "rule 8 spells 2-5 capitals; espeak says 'Swat' right"
+    },
+    "quinoa": {
+      "ipa": "kˈiːnwɑː",
+      "say": "keen-wah",
+      "anyCase": true,
+      "why": "espeak says kwin-OH-uh"
+    },
+    "gnocchi": {
+      "ipa": "njˈɒki",
+      "say": "nyoh-kee",
+      "anyCase": true,
+      "why": "espeak says NAH-kye"
+    },
+    "sriracha": {
+      "ipa": "sɪɹˈɑːtʃə",
+      "say": "sih-rah-chuh",
+      "anyCase": true,
+      "why": "espeak says sur-RAH-chuh"
+    },
+    "Beyoncé": {
+      "ipa": "biːˈɒnseɪ",
+      "say": "bee-yon-say",
+      "why": "espeak says bay-un-SAY (Blanks' phonemes)"
+    },
+    "Kanye": {
+      "ipa": "kˈɑːnjeɪ",
+      "say": "kahn-yay",
+      "why": "espeak says KAN-eye (Blanks' phonemes)"
+    },
+    "Pokémon": {
+      "say": "Pokemon",
+      "anyCase": true,
+      "why": "with the accent espeak says PAH-kay-mun; without it, POH-kay-mon"
+    },
+    "jalapeño": {
+      "say": "jalapeno",
+      "anyCase": true,
+      "why": "with the tilde espeak says jal-uh-PEE-nyoh; without it, hah-luh-PAY-nyoh"
+    }
+  }
+}

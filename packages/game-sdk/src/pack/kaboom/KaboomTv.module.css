@@ -1,0 +1,56 @@
+.room {
+  gap: var(--pb-space-1);
+}
+
+.head[data-done='true'] > * {
+  color: var(--pb-accent-2);
+  font-size: var(--pb-font-h1);
+}
+
+/* The game's picture: a stage the Scene fills, tinted by the game's hue. */
+.scene {
+  position: relative;
+  width: min(100%, 66rem);
+  flex: 1 1 auto;
+  min-height: 44vh;
+  overflow: hidden;
+  border-radius: var(--pb-radius-lg);
+  background: linear-gradient(hsl(var(--hue) 30% 24%), hsl(var(--hue) 34% 14%));
+  box-shadow: inset 0 0 0 0.15rem hsl(var(--hue) 60% 60% / 0.5);
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+}
+
+.bar {
+  width: min(100%, 52rem);
+  padding-block-end: 24px;
+}
+
+.tally {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--pb-space-2) var(--pb-space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--pb-font-body);
+}
+
+.tally li {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+}
+
+.tally li[data-lead='true'] {
+  font-weight: 900;
+  color: var(--pb-accent-2);
+}
+
+.tally li[data-away='true'] {
+  opacity: 0.5;
+}

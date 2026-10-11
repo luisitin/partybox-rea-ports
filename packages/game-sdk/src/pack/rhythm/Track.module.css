@@ -1,0 +1,131 @@
+/* The beat track: lanes across, a marker on the left, notes sliding in from the right. */
+.track {
+  position: relative;
+  width: 100%;
+  height: calc(var(--lanes) * 4.5rem);
+  overflow: hidden;
+  border-radius: var(--pb-radius-lg);
+  background: color-mix(in srgb, var(--pb-surface, #222) var(--track-opacity, 82%), transparent);
+  border: 2px solid color-mix(in srgb, var(--pb-accent) 40%, transparent);
+}
+
+.track[data-big='true'] {
+  /* A lane is 7rem with one, 5.5rem with two: a two-lane track must not push the scores under the host bar. */
+  height: calc(var(--lanes) * (8.5rem - var(--lanes) * 1.5rem));
+  font-size: 1.6em;
+}
+
+/* Two lanes on the TV: tighter lanes, a smaller ring and notes, and room under the shelves, so the panel stays clear of the
+   scores row, the team's tower and the host bar (T-0642). */
+.track[data-big='true'][data-lanes='2'] {
+  height: 7rem;
+  margin-top: 0.4rem;
+}
+
+.track[data-big='true'][data-lanes='2'] .ring {
+  width: 3rem;
+  height: 3rem;
+  font-size: 2.2rem;
+}
+
+.track[data-big='true'][data-lanes='2'] .note {
+  font-size: 1.4em;
+}
+
+.lane {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 2px dashed color-mix(in srgb, currentColor 25%, transparent);
+}
+
+.ring {
+  position: absolute;
+  left: var(--hit);
+  width: 3.4rem;
+  height: 3.4rem;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 3px solid var(--pb-accent);
+  background: color-mix(in srgb, var(--pb-accent) 18%, transparent);
+  font-size: 2.5rem;
+}
+
+.ring[data-flash] {
+  animation: flash-ok 520ms ease-out;
+}
+
+.ring[data-flash='perfect'] {
+  animation-name: flash-perfect;
+}
+
+@keyframes flash-ok {
+  from {
+    scale: 1.15;
+    background: color-mix(in srgb, var(--pb-accent) 55%, transparent);
+  }
+}
+
+@keyframes flash-perfect {
+  from {
+    scale: 1.4;
+    background: var(--pb-accent-2, var(--pb-accent));
+    box-shadow: 0 0 2.5rem var(--pb-accent-2, var(--pb-accent));
+  }
+}
+
+.track[data-big='true'] .ring {
+  width: 5rem;
+  height: 5rem;
+  font-size: 3.8rem;
+}
+
+.note {
+  position: absolute;
+  translate: -50% -50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 2.2em;
+  line-height: 1;
+  opacity: var(--fade, 1);
+  will-change: left;
+}
+
+.note[data-scenery='true'] {
+  opacity: calc(0.7 * var(--fade, 1));
+  filter: saturate(0.6);
+}
+
+.note[data-mark='p'],
+.note[data-mark='e'],
+.note[data-mark='l'] {
+  scale: 1.35;
+  filter: drop-shadow(0 0 0.4em var(--pb-accent));
+  opacity: calc(0.85 * var(--fade, 1));
+}
+
+.note[data-mark='x'],
+.note[data-mark='d'] {
+  opacity: calc(0.35 * var(--fade, 1));
+  filter: grayscale(1);
+}
+
+.who {
+  display: flex;
+  gap: 0.1rem;
+  font-size: 0.35em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring[data-flash] {
+    animation: none;
+  }
+
+  .note {
+    will-change: auto;
+  }
+}
