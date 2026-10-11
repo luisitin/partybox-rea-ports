@@ -1,0 +1,51 @@
+.tower {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.ground {
+  fill: var(--pb-surface-2);
+  stroke: var(--pb-border);
+  stroke-width: 1;
+}
+
+.block polygon {
+  stroke: color-mix(in srgb, var(--tower-ink) 35%, var(--pb-bg));
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+.top {
+  fill: var(--tower-ink);
+}
+.left {
+  fill: color-mix(in srgb, var(--tower-ink) 58%, var(--pb-bg));
+}
+.right {
+  fill: color-mix(in srgb, var(--tower-ink) 76%, var(--pb-bg));
+}
+.block[data-moving='true'] polygon {
+  stroke: var(--pb-text);
+  stroke-width: 2;
+}
+
+.target {
+  fill: var(--pb-surface);
+  stroke: var(--pb-text);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+}
+
+.guide {
+  stroke: var(--pb-text);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.continuation {
+  fill: none;
+  stroke: var(--tower-ink);
+  stroke-width: 3;
+}
