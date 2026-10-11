@@ -157,8 +157,8 @@ function tvView(state: State): CurveFeverTvView {
   return {
     ...envelope(state, manifest.id, { statusOf: statusOf(state) }),
     deadline: roundEnds(state),
-    // The TV draws the countdown and the round clock itself (Tv.tsx); the shell keeps its bar and drops its bare digits.
-    timerMode: 'quiet',
+    // The TV owns its countdown and clock (Tv.tsx); the arena gets the shell timer's space too.
+    timerMode: 'hidden',
     ...matchView(state),
     worms: state.world.worms,
     alive: aliveCount(state.world),

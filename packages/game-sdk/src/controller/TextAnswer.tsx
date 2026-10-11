@@ -152,7 +152,6 @@ export function TextAnswer(props: TextAnswerProps): JSX.Element {
   return (
     <Screen
       className={`${className ?? ''} ${inset > 0 ? styles.squeezed : ''}`}
-      style={inset > 0 ? { paddingBottom: inset } : undefined}
       footer={
         <PrimaryButton
           onClick={() => canSubmit && send()}
