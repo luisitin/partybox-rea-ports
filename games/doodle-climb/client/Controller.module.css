@@ -1,0 +1,207 @@
+.screen {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  height: 100%;
+  min-height: 0;
+  gap: var(--pb-space-3);
+  padding: var(--pb-space-3);
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.screen[data-standings='true'] {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: var(--pb-space-2);
+}
+
+.header {
+  display: grid;
+  gap: var(--pb-space-1);
+  min-width: 0;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--pb-space-2);
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+  color: var(--pb-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.hint,
+.tip {
+  margin: 0;
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+  line-height: 1.3;
+}
+
+.tip {
+  text-align: center;
+}
+
+.course {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: var(--pb-space-1);
+  min-height: 0;
+}
+
+.scene {
+  position: relative;
+  min-height: 0;
+  border-top: var(--pb-space-1) solid var(--climber-color);
+  border-radius: var(--pb-radius);
+}
+
+.out {
+  position: absolute;
+  inset: auto var(--pb-space-3) var(--pb-space-3);
+  padding: var(--pb-space-2);
+  border-radius: var(--pb-radius);
+  background: var(--pb-bg);
+  color: var(--pb-text);
+  text-align: center;
+  font-size: var(--pb-font-body);
+  font-weight: 900;
+}
+
+.height {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--pb-space-2);
+  margin: 0;
+  font-size: var(--pb-font-body);
+  font-variant-numeric: tabular-nums;
+}
+
+.height span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.height b {
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+}
+
+.pads {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--pb-space-3);
+  min-height: calc(var(--pb-touch) * 2);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pad {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  padding: var(--pb-space-2);
+  border: calc(var(--pb-space-1) / 2) solid var(--climber-color);
+  border-radius: var(--pb-radius-lg);
+  background: var(--pb-surface-2);
+  color: var(--pb-text);
+  font-family: var(--pb-font-family);
+  font-size: var(--pb-font-button);
+  line-height: 1.2;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  transition: transform var(--pb-motion-fast) var(--pb-ease);
+}
+
+.pad[data-held='true'] {
+  border-color: var(--pb-text);
+  background: var(--pb-accent);
+  color: var(--pb-on-accent);
+  transform: translateY(calc(var(--pb-space-1) / 2));
+}
+
+.pad:focus-visible {
+  outline: var(--pb-space-1) solid var(--pb-focus);
+  outline-offset: calc(var(--pb-space-1) / 2);
+}
+
+.arrow {
+  font-size: var(--pb-font-display);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.rows {
+  display: grid;
+  gap: var(--pb-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rows li {
+  display: flex;
+  align-items: center;
+  min-height: var(--pb-space-6);
+  gap: var(--pb-space-2);
+  padding: 0 var(--pb-space-2);
+  border-radius: var(--pb-radius);
+  font-size: var(--pb-font-body);
+}
+
+.rows li[data-me='true'] {
+  background: var(--pb-surface-2);
+}
+
+.slot {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--pb-space-5);
+  height: var(--pb-space-5);
+  border: calc(var(--pb-space-1) / 2) solid var(--climber-color);
+  border-radius: calc(var(--pb-radius) / 2);
+  font-size: var(--pb-font-caption);
+  font-weight: 900;
+}
+
+.name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowState {
+  margin-left: auto;
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+}
+
+.points {
+  margin-left: auto;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pad {
+    transition: none;
+  }
+}
+
+:global(:root[data-motion='off']) .pad {
+  transition: none;
+}

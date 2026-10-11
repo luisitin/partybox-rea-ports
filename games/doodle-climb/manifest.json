@@ -1,0 +1,43 @@
+{
+  "id": "doodle-climb",
+  "name": "Doodle Climb",
+  "icon": "🚀",
+  "tagline": "Keep bouncing. Climb higher than your friends.",
+  "description": "Steer an automatic jumper through the same seeded platform route. Wrap around the edges, catch spring platforms and climb as high as you can in three quick rounds.",
+  "howToPlay": [
+    "Hold left or right to steer. Your jumper bounces automatically.",
+    "Land while falling. Spring platforms boost you higher; the sides wrap around.",
+    "Fall below your screen and you're out. Each round's best height adds to your score."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 4,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-10-11",
+  "settings": [
+    {
+      "key": "rounds",
+      "label": "Rounds",
+      "description": "Climbs in the match",
+      "type": "number",
+      "default": 3,
+      "min": 1,
+      "max": 3,
+      "step": 1
+    },
+    {
+      "key": "seconds",
+      "label": "Round length",
+      "description": "Seconds to climb each route",
+      "type": "number",
+      "default": 60,
+      "min": 30,
+      "max": 60,
+      "step": 15
+    }
+  ],
+  "supportsBots": true
+}

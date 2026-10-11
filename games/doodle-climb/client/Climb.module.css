@@ -1,0 +1,87 @@
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--pb-surface);
+  border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+  border-radius: var(--pb-radius);
+}
+
+.world {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ruler,
+.margin {
+  fill: none;
+  stroke: var(--pb-surface-2);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.margin {
+  stroke-dasharray: 4 8;
+}
+
+.platform {
+  fill: var(--pb-accent-3);
+}
+
+.springPlatform {
+  fill: var(--pb-accent-2-fill);
+}
+
+.spring {
+  fill: none;
+  stroke: var(--pb-accent-2-fill);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.character {
+  position: absolute;
+  width: calc(var(--pb-font-display) / 2);
+  height: auto;
+  overflow: visible;
+  transform: translateX(-50%);
+}
+
+.body {
+  fill: var(--climber-color, var(--pb-accent));
+  stroke: var(--pb-text);
+  stroke-width: 2;
+}
+
+.boots,
+.antenna {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.visor {
+  fill: var(--pb-bg);
+}
+
+.eye {
+  fill: var(--pb-text);
+}
+
+.number {
+  fill: var(--pb-bg);
+  font-family: var(--pb-font-family);
+  font-weight: 900;
+}
+
+.cross {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
