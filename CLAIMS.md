@@ -2,3 +2,4 @@
 
 # DONE lines stay; BLOCKED lines point at BLOCKED.md in the job folder.
 P01 r1-local 2026-10-11T20:43:32Z job/P01-quiz-rush
+P02 r2-local 2026-10-11T20:44:01Z job/P02-quiz-rush-teams
