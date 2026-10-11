@@ -59,7 +59,7 @@ Three rounds and six accepted guesses are fixed. A round may finish sooner when 
 
 ## Content
 
-`content/words.json` has `lang: "en"`, 260 independently selected all-ages answer words and 1204 accepted five-letter words. Each list is unique, ASCII and lowercase; every answer is accepted. `content/schema.ts` validates those invariants. It is the local house dictionary, not an imported source-game list. No runtime network calls or third-party assets are needed.
+`content/words.json` has `lang: "en"`, 260 independently selected all-ages answer words and 1264 accepted five-letter words. Each list is unique, ASCII and lowercase; every answer is accepted. `content/schema.ts` validates those invariants. It is the local house dictionary, not an imported source-game list. No runtime network calls or third-party assets are needed.
 
 ## Sources
 

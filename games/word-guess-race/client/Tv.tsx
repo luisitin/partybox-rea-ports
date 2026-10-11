@@ -3,7 +3,7 @@ import type { JSX } from 'react';
 import { Stage, useServerNow } from '@partybox/game-sdk/ui';
 import type { GameTvProps } from '@partybox/game-sdk/ui';
 import type { WordGuessTvView } from '../server/index';
-import { clockText, MARK_LABEL, MARK_SYMBOL } from './tiles';
+import { clockText, MARK_LABEL, MARK_SYMBOL, roundWinnerIds, solveTime } from './tiles';
 import styles from './Tv.module.css';
 
 export function Tv({ view }: GameTvProps<WordGuessTvView>): JSX.Element {
@@ -14,6 +14,13 @@ export function Tv({ view }: GameTvProps<WordGuessTvView>): JSX.Element {
   );
   const names = Object.fromEntries(view.players.map((p) => [p.id, p.name]));
   const winnerNames = rows.filter((r) => view.ranks[r.id] === 1).map((r) => names[r.id]);
+  const roundWinners = roundWinnerIds(view);
+  const roundHeadline =
+    roundWinners.length === 1
+      ? `${names[roundWinners[0]!]} wins this round!`
+      : roundWinners.length > 1
+        ? `${roundWinners.length} players share the round win.`
+        : 'No solves this round.';
   const headline = playing
     ? 'One word. Six chances.'
     : view.phaseId === 'done'
@@ -73,7 +80,7 @@ export function Tv({ view }: GameTvProps<WordGuessTvView>): JSX.Element {
               <p className={styles.status}>
                 {playing
                   ? status
-                  : `${grid.solved ? `${grid.rows.length} guesses · ${(grid.elapsedMs! / 1000).toFixed(1)}s` : 'Not solved'} · +${view.lastPoints[grid.id] ?? 0}`}
+                  : `${view.phaseId === 'reveal' && roundWinners.includes(grid.id) ? '★ Round win · ' : ''}${grid.solved ? `${grid.rows.length} guesses · ${solveTime(grid.elapsedMs!)}` : 'Not solved'} · +${view.lastPoints[grid.id] ?? 0}`}
               </p>
             </section>
           );
@@ -84,7 +91,7 @@ export function Tv({ view }: GameTvProps<WordGuessTvView>): JSX.Element {
           ? 'Guess on your phone. Fewer guesses wins; speed breaks a tie.'
           : view.phaseId === 'done'
             ? 'Three shared words. One race.'
-            : `Fewer guesses, then speed. ${view.round < view.rounds ? 'Next word starts automatically.' : 'Final standings next.'}`}
+            : `${roundHeadline} ${view.round < view.rounds ? 'Next word starts automatically.' : 'Final standings next.'}`}
       </p>
     </Stage>
   );

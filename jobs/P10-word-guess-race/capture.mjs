@@ -1,5 +1,5 @@
 // One native Chromium instance, always closed in finally; no browser dependencies.
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { mkdtemp, readFile, writeFile, readdir, rm } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
@@ -34,7 +34,7 @@ function call(method, params = {}) {
     const timer = setTimeout(() => {
       pending.delete(id);
       reject(new Error(`CDP timeout: ${method}`));
-    }, 15000);
+    }, 45000);
     pending.set(id, { resolve, reject, timer });
     socket.send(JSON.stringify({ id, method, params }));
   });
@@ -107,7 +107,13 @@ try {
       deviceScaleFactor: 1,
       mobile: !tv,
     });
-    await call('Page.navigate', { url: `http://127.0.0.1:${port}/${file}` });
+    const url = `http://127.0.0.1:${port}/${file}`;
+    // Confirm the local page is readable before asking Chrome to navigate under desktop load.
+    const probe = await fetch(url);
+    if (!probe.ok) throw new Error(`Local capture page unavailable: ${file}`);
+    await probe.arrayBuffer();
+    console.log(`Capturing ${file}`);
+    await call('Page.navigate', { url });
     // Local pages have no runtime or external assets; two animation frames settle all layout.
     await call('Runtime.evaluate', {
       expression: 'new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))',
@@ -152,6 +158,26 @@ try {
     const exited = new Promise((resolve) => browser.once('exit', resolve));
     browser.kill();
     await Promise.race([exited, new Promise((resolve) => setTimeout(resolve, 5000))]);
+  }
+  // Elevated Windows Chrome relaunches outside its launcher PID. Close only this unique profile.
+  if (process.platform === 'win32') {
+    const cleanup = spawnSync(
+      'C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe',
+      [
+        '-NoProfile',
+        '-NonInteractive',
+        '-Command',
+        "$captureProfile = [Environment]::GetEnvironmentVariable('P10_CAPTURE_PROFILE'); Get-CimInstance Win32_Process -Filter \"Name = 'chrome.exe'\" | Where-Object { $captureProfile -and $_.CommandLine -and $_.CommandLine.Contains($captureProfile) } | ForEach-Object { Stop-Process -Id $_.ProcessId -ErrorAction SilentlyContinue }",
+      ],
+      {
+        windowsHide: true,
+        stdio: 'ignore',
+        timeout: 15000,
+        env: { ...process.env, P10_CAPTURE_PROFILE: profile },
+      },
+    );
+    if (cleanup.error || cleanup.status !== 0)
+      console.error('Scoped Windows Chrome cleanup failed');
   }
   browser?.stderr?.destroy();
   browser?.unref();

@@ -2,7 +2,7 @@
 
 Same hidden five-letter word, six guesses, eight phones and three rounds. Each phone has a private clue board and touch keyboard. The TV tracks every player's colored grid with check/arrow/cross marks and no letters. The shared word and points appear together after each round.
 
-This port uses 260 original curated answers and a local house dictionary of 1204 accepted words. Fewer guesses wins a round; equal counts compare active solve time. Earn one point per opponent beaten and add the three rounds. Unsolved players tie at zero.
+This port uses 260 original curated answers and a local house dictionary of 1264 accepted words. Fewer guesses wins a round; equal counts compare active solve time. Earn one point per opponent beaten and add the three rounds. Unsolved players tie at zero.
 
 ## Run
 

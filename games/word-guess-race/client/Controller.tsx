@@ -7,6 +7,8 @@ import type { WordGuessControllerView } from '../server/index';
 import type { Input } from '../server/types';
 import { Board } from './Board';
 import { Standings } from './Standings';
+import { submissionState } from './submission';
+import type { Draft, Pending } from './submission';
 import { clockText, keyboardMarks, MARK_LABEL, MARK_SYMBOL } from './tiles';
 import styles from './Controller.module.css';
 
@@ -18,25 +20,28 @@ export function Controller({
 }: GameControllerProps<WordGuessControllerView, Input>): JSX.Element {
   const phoneOnly = usePhoneOnly();
   const now = useServerNow(250, view.paused, view.clockHeldAt);
-  const [draft, setDraft] = useState({
+  const [draft, setDraft] = useState<Draft>({
     round: view.round,
+    guessCount: view.guesses.length,
     version: view.submissionVersion,
     value: '',
   });
-  const [pending, setPending] = useState({ round: 0, version: -1 });
+  const [pending, setPending] = useState<Pending | null>(null);
   const [localError, setLocalError] = useState('');
   const playing = view.phaseId === 'guess';
   const player = view.me.role === 'player';
   const active = playing && player && !view.finished && !view.paused;
-  const waiting = pending.round === view.round && pending.version === view.submissionVersion;
-  const value =
-    draft.round === view.round && (draft.version === view.submissionVersion || view.error !== null)
-      ? draft.value
-      : '';
+  const { waiting, value, timedOut, error } = submissionState(view, draft, pending, now);
   const marks = keyboardMarks(view.guesses);
   const edit = (next: string): void => {
     if (!active || waiting) return;
-    setDraft({ round: view.round, version: view.submissionVersion, value: next });
+    setDraft({
+      round: view.round,
+      guessCount: view.guesses.length,
+      version: view.submissionVersion,
+      value: next,
+    });
+    setPending(null);
     setLocalError('');
   };
   const submit = (): void => {
@@ -45,7 +50,13 @@ export function Controller({
       setLocalError('Use five letters.');
       return;
     }
-    setPending({ round: view.round, version: view.submissionVersion });
+    setDraft({
+      round: view.round,
+      guessCount: view.guesses.length,
+      version: view.submissionVersion,
+      value,
+    });
+    setPending({ round: view.round, version: view.submissionVersion, sentAt: now });
     send({ type: 'guess', word: value, round: view.round });
   };
   useEffect(() => {
@@ -63,7 +74,7 @@ export function Controller({
     };
     window.addEventListener('keydown', key);
     return () => window.removeEventListener('keydown', key);
-  }, [active, waiting, value, view.round, view.submissionVersion]);
+  }, [active, waiting, value, view.round, view.submissionVersion, view.guesses.length]);
   const stage = phoneOnly || view.stage;
   const solved = view.grids.filter((g) => g.solved).length;
   const leaders = view.players.filter((p) => view.ranks[p.id] === 1);
@@ -112,7 +123,11 @@ export function Controller({
           <p className={styles.feedback} role="status" aria-live="polite">
             {waiting
               ? 'Checking…'
-              : localError || view.error || 'House dictionary · common five-letter words'}
+              : localError ||
+                error ||
+                (timedOut
+                  ? 'No reply yet. Try Guess again.'
+                  : 'House dictionary · common five-letter words')}
           </p>
           <div className={styles.keyboard} aria-label="Letter keyboard">
             {LETTERS.map((letter) => (

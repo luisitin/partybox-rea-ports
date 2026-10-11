@@ -4,11 +4,13 @@ import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
+import { defaultSettingsOf, testPlayers, T0 } from '@partybox/game-sdk/testing';
 import { game } from '../server/index';
+import { ACCEPTED } from '../server/content';
 import type { State } from '../server/types';
 import { Controller } from './Controller';
 import { Tv } from './Tv';
-import { keyboardMarks, clockText } from './tiles';
+import { keyboardMarks, clockText, solveTime, roundWinnerIds } from './tiles';
 import phoneStyles from './Controller.module.css';
 import tvStyles from './Tv.module.css';
 
@@ -109,4 +111,83 @@ it('retains the strongest keyboard clue and formats the clock without negative s
   ).toMatchObject({ a: 'correct', p: 'present' });
   expect(clockText(-100)).toBe('0:00');
   expect(clockText(61001)).toBe('1:02');
+});
+
+describe.each(['solved', 'exhausted', 'paused'] as const)('phone boundary: %s', (boundary) => {
+  it.each(['phone', 'phone-only'] as const)(
+    'keeps a complete %s stage with eight long names',
+    (mode) => {
+      const players = testPlayers(8).map((player, index) => ({
+        ...player,
+        name: `Alexandria Wonderland ${index + 1}`,
+      }));
+      let state = game.init({
+        players,
+        now: T0,
+        seed: 146,
+        settings: defaultSettingsOf(game),
+        ...(mode === 'phone-only'
+          ? { presence: { mode: 'together' as const, phoneOnly: true } }
+          : {}),
+      });
+      const id = players[0]!.id;
+      const wrong = ACCEPTED.filter((word) => word !== state.answers[0]).slice(0, 6);
+      const words = boundary === 'solved' ? [...wrong.slice(0, 5), state.answers[0]!] : wrong;
+      for (const [index, word] of words.entries()) {
+        state = game.reduce(state, {
+          type: 'input',
+          playerId: id,
+          input: { type: 'guess', word, round: 1 },
+          now: T0 + (index + 1) * 1000,
+        });
+        if (boundary === 'paused' && index === 2) break;
+      }
+      if (boundary === 'paused')
+        state = game.reduce(state, { type: 'vip', action: 'pause', now: T0 + 4000 });
+      expect(state.phase.id).toBe('guess');
+      const html = renderToStaticMarkup(
+        <ServerClockProvider offsetMs={T0 + 7000 - Date.now()}>
+          <PhoneOnlyProvider value={mode === 'phone-only'}>
+            <Controller
+              view={{ ...game.controllerView(state, id), vip: null }}
+              me={players[0]!}
+              send={() => undefined}
+            />
+          </PhoneOnlyProvider>
+        </ServerClockProvider>,
+      );
+      expect(html).not.toContain('<button');
+      expect(html).toContain('Race standings');
+      for (const player of players) expect(html).toContain(player.name);
+      expect(html).toContain(
+        boundary === 'solved'
+          ? 'Solved in 6'
+          : boundary === 'exhausted'
+            ? 'Six chances used'
+            : 'Your word stays private',
+      );
+      if (process.env['P10_CAPTURE'] === '1')
+        writeFileSync(join(job, 'media', `${boundary}-${mode}.html`), page(html, 'phone'), 'utf8');
+    },
+  );
+});
+
+it('makes millisecond speed differences and the round winner visible independently of match rank', () => {
+  expect(solveTime(40101)).toBe('40.101s');
+  expect(solveTime(40109)).toBe('40.109s');
+  const state = JSON.parse(
+    readFileSync('games/word-guess-race/fixtures/reveal.json', 'utf8'),
+  ) as State;
+  const view = { ...game.tvView(state), vip: null };
+  const winners = roundWinnerIds(view);
+  expect(winners.length).toBeGreaterThan(0);
+  // A different match leader must not erase the current round's result.
+  view.ranks = Object.fromEntries(
+    view.grids.map((grid) => [grid.id, winners.includes(grid.id) ? 2 : 1]),
+  );
+  const html = renderToStaticMarkup(<Tv view={view} />);
+  expect(html).toContain('Round win');
+  expect(html).toContain(winners.length === 1 ? 'wins this round!' : 'share the round win');
+  for (const grid of view.grids.filter((grid) => grid.solved))
+    expect(html).toContain(solveTime(grid.elapsedMs!));
 });

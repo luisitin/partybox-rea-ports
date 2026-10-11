@@ -1,7 +1,7 @@
 // One compact stage for spectators and for phones waiting on the next word.
 import type { JSX } from 'react';
 import type { WordGuessControllerView } from '../server/index';
-import { MARK_SYMBOL } from './tiles';
+import { MARK_SYMBOL, roundWinnerIds, solveTime } from './tiles';
 import styles from './Controller.module.css';
 
 export function Standings({
@@ -12,6 +12,7 @@ export function Standings({
   grids?: boolean;
 }): JSX.Element {
   const playing = view.phaseId === 'guess';
+  const roundWinners = view.phaseId === 'reveal' ? roundWinnerIds(view) : [];
   const rows = [...view.grids].sort((a, b) =>
     playing ? 0 : (view.ranks[a.id] ?? 1) - (view.ranks[b.id] ?? 1),
   );
@@ -45,8 +46,9 @@ export function Standings({
               </div>
             ) : null}
             <small>
+              {roundWinners.includes(grid.id) ? '★ Round win · ' : ''}
               {grid.solved
-                ? `✓ ${grid.rows.length} guesses${!playing ? ` · ${(grid.elapsedMs! / 1000).toFixed(1)}s` : ''}`
+                ? `✓ ${grid.rows.length} guesses${!playing ? ` · ${solveTime(grid.elapsedMs!)}` : ''}`
                 : grid.finished
                   ? `${grid.rows.length}/6 · Not solved`
                   : !player?.connected

@@ -1,3 +1,4 @@
 # P10 improvement loop
 
 - Pre-PR inspection: fixed spectator phone overflow (four clipped sections → zero), changed the duplicate-letter legend to “No match here”, made private clue summaries accessible, exposed solve times, corrected incomplete-round statuses, and named the winner on the phone. All 12 retained screens now report zero overflow; 44px controls preserved. Formal KEEP GOING starts after green PR CI.
+- Pre-PR independent review: addressed all five substantive findings: unbounded pending wait → 3 s retry (eight reducer-backed recovery tests); 60 rejected familiar words → accepted while 260-answer hash stays unchanged; identical displayed tenths → exact millisecond times; round winners now labeled despite cumulative ordering; stale errors clear after draft edits. Added solved, exhausted and paused phone captures with eight long names: all 18 captures fit with zero overflow, 44px keys; retained media is 2,078,494 bytes.

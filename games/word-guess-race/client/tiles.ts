@@ -1,5 +1,5 @@
 // Symbols duplicate the colour feedback, including for the letterless public grids.
-import type { Guess, Mark } from '../server/types';
+import type { Guess, Mark, PublicGrid } from '../server/types';
 
 export const MARK_SYMBOL: Record<Mark, string> = { correct: '✓', present: '↔', absent: '×' };
 export const MARK_LABEL: Record<Mark, string> = {
@@ -25,4 +25,17 @@ export function keyboardMarks(guesses: Guess[]): Record<string, Mark> {
 export function clockText(ms: number): string {
   const seconds = Math.max(0, Math.ceil(ms / 1000));
   return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+}
+
+export function solveTime(ms: number): string {
+  return `${(ms / 1000).toFixed(3)}s`;
+}
+
+export function roundWinnerIds(view: {
+  grids: PublicGrid[];
+  lastPoints: Record<string, number>;
+}): string[] {
+  const solved = view.grids.filter((grid) => grid.solved);
+  const best = Math.max(0, ...solved.map((grid) => view.lastPoints[grid.id] ?? 0));
+  return solved.filter((grid) => view.lastPoints[grid.id] === best).map((grid) => grid.id);
 }

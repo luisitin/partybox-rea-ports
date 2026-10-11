@@ -3,7 +3,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 folder = Path(__file__).parent / "media"
-sheet = Image.new("RGB", (1260, 1350), (15, 16, 32))
+sheet = Image.new("RGB", (1260, 2700), (15, 16, 32))
 draw = ImageDraw.Draw(sheet)
 positions = [(0, 640), (650, 195), (855, 195), (1060, 195)]
 for row, phase in enumerate(["guess", "reveal", "done"]):
@@ -13,4 +13,10 @@ for row, phase in enumerate(["guess", "reveal", "done"]):
         with Image.open(folder / f"{phase}-{mode}.png") as screen:
             height = 360 if mode == "tv" else 422
             sheet.paste(screen.resize((width, height)), (x, row * 450 + 24))
+for row, boundary in enumerate(["solved", "exhausted", "paused"], start=3):
+    for col, mode in enumerate(["phone", "phone-only"]):
+        x = 650 + col * 205
+        draw.text((x, row * 450), f"{boundary} / {mode}", fill="white")
+        with Image.open(folder / f"{boundary}-{mode}.png") as screen:
+            sheet.paste(screen.resize((195, 422)), (x, row * 450 + 24))
 sheet.save(folder / "contact-sheet.png")
