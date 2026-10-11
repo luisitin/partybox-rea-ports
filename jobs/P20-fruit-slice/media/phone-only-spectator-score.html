@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="en" data-surface="controller">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Fruit Slice phase QA</title
+  ><style>
+    /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+    :root {
+      --pb-bg: #0f1020;
+      /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+      --pb-art-wash: 16%;
+      --pb-tile-wash: 0%;
+      --pb-surface: #1c1e3a;
+      --pb-surface-2: #272a52;
+      --pb-text: #f5f6ff;
+      --pb-text-muted: #b3b7d9;
+      --pb-accent: #ff5d8f;
+      --pb-accent-2: #ffd166;
+      --pb-accent-3: #06d6a0;
+      --pb-danger: #ef476f;
+      --pb-info: #4cc9f0;
+      --pb-focus: #ffd166;
+      --pb-on-accent: #1a0b12;
+      /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+      --pb-accent-2-fill: #ffd166;
+      --pb-on-accent-2-fill: #1a0b12;
+      /* optional edge for surfaces; only High Contrast sets it */
+      --pb-border: transparent;
+      /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+      --pb-scrim: rgb(15 16 32 / 62%);
+
+      --pb-player-1: #ff5d8f;
+      --pb-player-2: #ffd166;
+      --pb-player-3: #06d6a0;
+      --pb-player-4: #4cc9f0;
+      --pb-player-5: #b388ff;
+      --pb-player-6: #ff9f43;
+      --pb-player-7: #48dbfb;
+      --pb-player-8: #f368e0;
+
+      /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+      --pb-team-sun: var(--pb-accent);
+      --pb-team-moon: var(--pb-info);
+
+      --pb-font-family:
+        'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+        Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+      --pb-space-1: 4px;
+      --pb-space-2: 8px;
+      --pb-space-3: 12px;
+      --pb-space-4: 16px;
+      --pb-space-5: 24px;
+      --pb-space-6: 32px;
+      --pb-space-7: 48px;
+      --pb-space-8: 64px;
+
+      --pb-radius: 12px;
+      --pb-radius-lg: 24px;
+      --pb-touch: 44px;
+
+      --pb-motion-fast: 150ms;
+      --pb-motion-base: 300ms;
+      --pb-motion-slow: 600ms;
+      --pb-motion-pulse: 1000ms;
+      --pb-motion-confetti: 3000ms;
+      --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+      /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+      --pb-font-display: 3rem;
+      --pb-font-h1: 1.75rem;
+      --pb-font-h2: 1.375rem;
+      --pb-font-body: 1.125rem;
+      --pb-font-caption: 0.875rem;
+      --pb-font-button: 1.25rem;
+      --pb-chip-size: 40px;
+    }
+
+    /* ── Themes (src/theme.ts sets data-theme on <html>; 
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+    [data-theme='daylight'] {
+      color-scheme: light;
+      --pb-bg: #f6f5ff;
+      --pb-art-wash: 90%;
+      --pb-tile-wash: 45%;
+      --pb-surface: #ffffff;
+      --pb-surface-2: #e9e7fb;
+      --pb-text: #171633;
+      --pb-text-muted: #4a4c6e;
+      --pb-accent: #c2185b;
+      --pb-accent-2: #7a4b00;
+      --pb-accent-3: #0b6b4e;
+      --pb-danger: #c0143c;
+      --pb-info: #0b6e99;
+      --pb-focus: #c2185b;
+      --pb-on-accent: #ffffff;
+      --pb-accent-2-fill: #ffd166;
+      --pb-on-accent-2-fill: #1a0b12;
+      --pb-scrim: rgb(23 22 51 / 45%);
+    }
+
+    [data-theme='arcade'] {
+      --pb-bg: #050014;
+      --pb-surface: #14002e;
+      --pb-surface-2: #23064a;
+      --pb-text: #f0f6ff;
+      --pb-text-muted: #a8b3d6;
+      --pb-accent: #ff2bd6;
+      --pb-accent-2: #00f0ff;
+      --pb-accent-3: #39ff14;
+      --pb-danger: #ff3860;
+      --pb-info: #8f96ff;
+      --pb-focus: #00f0ff;
+      --pb-on-accent: #050014;
+      --pb-accent-2-fill: #00f0ff;
+      --pb-on-accent-2-fill: #050014;
+      --pb-scrim: rgb(5 0 20 / 62%);
+    }
+
+    [data-theme='cabin'] {
+      --pb-bg: #1d1410;
+      --pb-surface: #2c211b;
+      --pb-surface-2: #3d2e26;
+      --pb-text: #fbf3e8;
+      --pb-text-muted: #cbb8a6;
+      --pb-accent: #ee8050;
+      --pb-accent-2: #f2c14e;
+      --pb-accent-3: #8fbf5a;
+      --pb-danger: #f07070;
+      --pb-info: #6fb3d2;
+      --pb-focus: #f2c14e;
+      --pb-on-accent: #1d1410;
+      --pb-accent-2-fill: #f2c14e;
+      --pb-on-accent-2-fill: #1d1410;
+      --pb-scrim: rgb(29 20 16 / 62%);
+    }
+
+    [data-theme='contrast'] {
+      --pb-bg: #000000;
+      --pb-surface: #111111;
+      --pb-surface-2: #242424;
+      --pb-text: #ffffff;
+      --pb-text-muted: #e6e6e6;
+      --pb-accent: #ff4fa3;
+      --pb-accent-2: #ffff00;
+      --pb-accent-3: #00ff88;
+      --pb-danger: #ff5555;
+      --pb-info: #66ccff;
+      --pb-focus: #ffffff;
+      --pb-on-accent: #000000;
+      --pb-accent-2-fill: #ffff00;
+      --pb-on-accent-2-fill: #000000;
+      --pb-border: #ffffff;
+      --pb-scrim: rgb(0 0 0 / 78%);
+    }
+    [data-surface='tv'] {
+      --pb-font-display: 128px;
+      --pb-font-h1: 72px;
+      --pb-font-h2: 48px;
+      --pb-font-body: 36px;
+      --pb-font-caption: 28px;
+      --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+      --pb-font-button: 36px;
+      --pb-chip-size: 72px;
+      /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+      --pb-overscan-x: 96px;
+      --pb-overscan-y: 54px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :root {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+    }
+
+    /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+    :root[data-motion='off'] {
+      --pb-motion-fast: 0ms;
+      --pb-motion-base: 0ms;
+      --pb-motion-slow: 0ms;
+      --pb-motion-pulse: 0ms;
+      --pb-motion-confetti: 0ms;
+    }
+    ._stage_262f13 {
+      display: flex;
+      flex-direction: column;
+      gap: var(--pb-space-5);
+      min-height: 100%;
+      /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+      padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+        var(--pb-overscan-y, 54px);
+    }
+
+    ._center_262f13 {
+      /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+      justify-content: safe center;
+      align-items: safe center;
+      text-align: center;
+    }
+    ._screen_2790ac {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto auto;
+      height: 100%;
+      min-height: 0;
+      padding: var(--pb-space-3);
+      gap: var(--pb-space-2);
+      overflow: hidden;
+    }
+
+    ._screen_2790ac[data-stage='true'][data-player='true'] {
+      grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+    }
+
+    ._screen_2790ac[data-player='false'] {
+      grid-template-rows: auto minmax(0, 1fr) auto auto;
+    }
+
+    ._header_2790ac {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--pb-space-3);
+      min-width: 0;
+    }
+
+    ._header_2790ac h2 {
+      margin: 0;
+      font-size: var(--pb-font-h2);
+      line-height: 1.2;
+    }
+
+    ._header_2790ac p {
+      margin: 0;
+      font-size: var(--pb-font-caption);
+    }
+
+    ._score_2790ac {
+      font-size: var(--pb-font-h1);
+      font-variant-numeric: tabular-nums;
+    }
+
+    ._score_2790ac span {
+      font-size: var(--pb-font-caption);
+      font-weight: 400;
+    }
+
+    ._clock_2790ac,
+    ._streak_2790ac {
+      display: grid;
+      justify-items: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    ._clock_2790ac strong {
+      font-size: var(--pb-font-display);
+      line-height: 1;
+    }
+
+    ._clock_2790ac span,
+    ._streak_2790ac span {
+      font-size: var(--pb-font-caption);
+    }
+
+    ._clock_2790ac[data-low='true'] {
+      color: var(--pb-danger);
+    }
+
+    ._streak_2790ac strong {
+      font-size: var(--pb-font-h2);
+    }
+
+    ._arenaSlot_2790ac {
+      display: grid;
+      place-items: center;
+      min-height: 0;
+      container-type: size;
+    }
+
+    ._field_2790ac {
+      position: relative;
+      width: min(100%, 100cqh);
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: var(--pb-surface);
+      border: var(--pb-space-1) solid var(--pb-surface-2);
+      border-radius: var(--pb-radius-lg);
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    ._field_2790ac[data-locked='true'] {
+      border-color: var(--pb-danger);
+    }
+
+    ._overlay_2790ac {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      padding: var(--pb-space-5);
+      background: var(--pb-scrim);
+      font-size: var(--pb-font-h2);
+      font-weight: 900;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    ._feedback_2790ac {
+      min-height: 2.5em;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-size: var(--pb-font-body);
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    ._feedback_2790ac[data-bomb='true'] {
+      color: var(--pb-danger);
+    }
+
+    ._controls_2790ac {
+      min-width: 0;
+    }
+
+    ._buttons_2790ac {
+      display: flex;
+      gap: var(--pb-space-2);
+    }
+
+    ._buttons_2790ac button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--pb-space-1);
+      min-width: var(--pb-touch);
+      min-height: var(--pb-touch);
+      padding: var(--pb-space-1);
+      color: var(--pb-text);
+      background: var(--pb-surface-2);
+      border: 0;
+      border-radius: var(--pb-radius);
+      font-family: var(--pb-font-family);
+      font-size: var(--pb-font-body);
+      font-weight: 800;
+      flex: 1;
+    }
+
+    ._buttons_2790ac button:focus-visible {
+      outline: var(--pb-space-1) solid var(--pb-focus);
+      outline-offset: var(--pb-space-1);
+    }
+
+    ._buttons_2790ac button:disabled {
+      color: var(--pb-text-muted);
+    }
+
+    ._buttons_2790ac svg {
+      width: var(--pb-space-5);
+      height: var(--pb-space-5);
+    }
+
+    ._controls_2790ac p {
+      margin: var(--pb-space-1) 0 0;
+      font-size: var(--pb-font-caption);
+      line-height: 1.2;
+      color: var(--pb-text-muted);
+      text-align: center;
+    }
+
+    ._summary_2790ac {
+      display: grid;
+      gap: var(--pb-space-4);
+      align-content: center;
+      height: 100%;
+      padding: var(--pb-space-4);
+      text-align: center;
+    }
+
+    ._summary_2790ac h2 {
+      margin: 0;
+      font-size: var(--pb-font-h1);
+    }
+
+    ._summary_2790ac p {
+      margin: 0;
+      font-size: var(--pb-font-body);
+    }
+
+    ._summary_2790ac ._total_2790ac {
+      font-size: var(--pb-font-display);
+      font-weight: 900;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      ._field_2790ac,
+      ._buttons_2790ac button {
+        transition: none;
+        animation: none;
+      }
+    }
+
+    ._fountain_11272d {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    ._apple_11272d {
+      fill: var(--pb-player-1);
+    }
+
+    ._orange_11272d {
+      fill: var(--pb-player-6);
+    }
+
+    ._pear_11272d {
+      fill: var(--pb-player-2);
+    }
+
+    ._melon_11272d {
+      fill: var(--pb-player-3);
+    }
+
+    ._apple_11272d,
+    ._orange_11272d,
+    ._pear_11272d,
+    ._melon_11272d {
+      stroke: var(--pb-bg);
+      stroke-width: 0.6;
+    }
+
+    ._leaf_11272d {
+      fill: var(--pb-player-3);
+      stroke: var(--pb-bg);
+      stroke-width: 0.6;
+      stroke-linecap: round;
+    }
+
+    ._detail_11272d {
+      fill: none;
+      stroke: var(--pb-on-accent-2-fill);
+      stroke-width: 0.8;
+      stroke-linecap: round;
+    }
+
+    ._stripe_11272d {
+      fill: none;
+      stroke: var(--pb-bg);
+      stroke-width: 0.9;
+    }
+
+    ._bomb_11272d {
+      fill: var(--pb-surface-2);
+      stroke: var(--pb-danger);
+      stroke-width: 1;
+    }
+
+    ._fuse_11272d {
+      fill: none;
+      stroke: var(--pb-accent-2);
+      stroke-linecap: round;
+    }
+
+    ._cross_11272d {
+      fill: none;
+      stroke: var(--pb-text);
+      stroke-width: 1.4;
+      stroke-linecap: round;
+    }
+
+    ._rim_11272d {
+      fill: none;
+      stroke: var(--pb-accent-3);
+      stroke-width: 1;
+    }
+
+    ._trail_11272d {
+      fill: none;
+      stroke: var(--pb-focus);
+      stroke-width: 1.2;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      pointer-events: none;
+    }
+
+    ._number_11272d {
+      fill: var(--pb-on-accent-2-fill);
+      font-family: var(--pb-font-family);
+      font-size: calc(var(--pb-font-caption) * 0.3);
+      font-weight: 900;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    ._standings_026ce6 {
+      min-width: 0;
+      font-size: var(--pb-font-body);
+    }
+
+    ._head_026ce6,
+    ._rows_026ce6 li {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto calc(var(--pb-space-8) * 1.5);
+      align-items: center;
+      gap: var(--pb-space-3);
+    }
+
+    ._head_026ce6 {
+      margin-bottom: var(--pb-space-3);
+      color: var(--pb-text-muted);
+      font-size: calc(var(--pb-font-body) * 0.9);
+    }
+
+    ._head_026ce6 span:last-child {
+      text-align: right;
+    }
+
+    ._rows_026ce6 {
+      display: grid;
+      gap: var(--pb-space-2);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    ._rows_026ce6 li {
+      min-height: calc(var(--pb-space-7) + var(--pb-space-2));
+      padding: var(--pb-space-1) var(--pb-space-3);
+      border-radius: var(--pb-radius);
+      background: var(--pb-surface);
+    }
+
+    ._rows_026ce6 li[data-me='true'] {
+      outline: var(--pb-space-1) solid var(--pb-accent-3);
+      outline-offset: calc(var(--pb-space-1) * -1);
+    }
+
+    ._name_026ce6 {
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    ._points_026ce6 {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    ._streak_026ce6 {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    ._standings_026ce6[data-compact='true'] {
+      font-size: var(--pb-font-caption);
+    }
+
+    ._standings_026ce6[data-compact='true'] ._head_026ce6 {
+      display: none;
+    }
+
+    ._standings_026ce6[data-compact='true'] ._rows_026ce6 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-flow: row;
+      gap: var(--pb-space-1);
+    }
+
+    ._standings_026ce6[data-compact='true'] ._rows_026ce6 li {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: var(--pb-space-1);
+      min-height: calc(var(--pb-space-5) + var(--pb-space-1));
+      padding: var(--pb-space-1) var(--pb-space-2);
+    }
+
+    ._standings_026ce6[data-compact='true'] ._streak_026ce6 {
+      min-width: 2ch;
+    }
+
+    ._stage_798ff3 {
+      height: 100%;
+      min-height: 0;
+      gap: var(--pb-space-5);
+    }
+
+    ._header_798ff3 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--pb-space-6);
+    }
+
+    ._intro_798ff3 {
+      min-width: 0;
+    }
+
+    ._intro_798ff3 h2 {
+      margin: 0;
+      font-size: var(--pb-font-h2);
+      line-height: 1.1;
+      font-weight: 900;
+    }
+
+    ._intro_798ff3 p,
+    ._legend_798ff3 {
+      margin: var(--pb-space-2) 0 0;
+      font-size: var(--pb-font-body);
+      line-height: 1.25;
+      color: var(--pb-text-muted);
+    }
+
+    ._clock_798ff3 {
+      display: flex;
+      align-items: center;
+      gap: var(--pb-space-5);
+      flex: none;
+    }
+
+    ._clock_798ff3 span {
+      font-size: var(--pb-font-body);
+    }
+
+    ._clock_798ff3 strong {
+      min-width: 2ch;
+      text-align: right;
+      font-size: calc(var(--pb-font-display) * 0.75);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    ._clock_798ff3[data-low='true'] {
+      color: var(--pb-danger);
+    }
+
+    ._board_798ff3 {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) * 8.5);
+      gap: var(--pb-space-7);
+      align-items: center;
+      flex: 1;
+      min-height: 0;
+    }
+
+    ._arenaSlot_798ff3 {
+      display: grid;
+      place-items: center;
+      height: 100%;
+      min-height: 0;
+      container-type: size;
+    }
+
+    ._arena_798ff3 {
+      position: relative;
+      width: min(100%, 100cqh);
+      aspect-ratio: 1;
+      overflow: hidden;
+      border: var(--pb-space-1) solid var(--pb-surface-2);
+      border-radius: var(--pb-radius-lg);
+      background: var(--pb-surface);
+    }
+
+    ._finished_798ff3 {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      padding: var(--pb-space-7);
+      font-size: var(--pb-font-h2);
+      font-weight: 900;
+      text-align: center;
+      background: var(--pb-scrim);
+    }
+
+    ._legend_798ff3 {
+      margin: 0;
+      text-align: center;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--pb-bg);
+      color: var(--pb-text);
+      font-family: var(--pb-font-family);
+    }
+    body {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    #chrome {
+      flex: none;
+      padding: var(--pb-space-4);
+      height: 64px;
+      font-size: var(--pb-font-body);
+      background: var(--pb-surface);
+    }
+    #root {
+      height: calc(100% - 128px);
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    #footer {
+      height: 64px;
+      flex: none;
+      padding: var(--pb-space-4);
+      color: var(--pb-text-muted);
+    }
+    [data-surface='tv'] #chrome {
+      height: 100px;
+      padding: var(--pb-space-6) var(--pb-overscan-x);
+    }
+    [data-surface='tv'] #root {
+      height: calc(100% - 180px);
+      --pb-stage-top: 0px;
+    }
+    [data-surface='tv'] #footer {
+      height: 80px;
+      padding: var(--pb-space-4) var(--pb-overscan-x);
+      font-size: var(--pb-font-body);
+    }
+  </style>
+  <body>
+    <div id="chrome">PartyBox · Fruit Slice · ROOM</div>
+    <main id="root">
+      <div class="_summary_2790ac">
+        <h2>Time’s up!</h2>
+        <div class="_standings_026ce6" data-compact="true">
+          <div class="_head_026ce6" aria-hidden="true">
+            <span>Players</span><span>Points</span><span>Best combo</span>
+          </div>
+          <ol class="_rows_026ce6" aria-label="Players, points and streaks">
+            <li>
+              <b class="_name_026ce6">1. Cy</b><strong class="_points_026ce6">2630</strong
+              ><span class="_streak_026ce6" aria-label="Best combo: 5 fruit"
+                ><span aria-hidden="true">◆ </span>5</span
+              >
+            </li>
+            <li>
+              <b class="_name_026ce6">1. Eli</b><strong class="_points_026ce6">2630</strong
+              ><span class="_streak_026ce6" aria-label="Best combo: 5 fruit"
+                ><span aria-hidden="true">◆ </span>5</span
+              >
+            </li>
+            <li>
+              <b class="_name_026ce6">1. Fay</b><strong class="_points_026ce6">2630</strong
+              ><span class="_streak_026ce6" aria-label="Best combo: 5 fruit"
+                ><span aria-hidden="true">◆ </span>5</span
+              >
+            </li>
+            <li>
+              <b class="_name_026ce6">1. Hal</b><strong class="_points_026ce6">2630</strong
+              ><span class="_streak_026ce6" aria-label="Best combo: 5 fruit"
+                ><span aria-hidden="true">◆ </span>5</span
+              >
+            </li>
+            <li>
+              <b class="_name_026ce6">5. Ben</b><strong class="_points_026ce6">2490</strong
+              ><span class="_streak_026ce6" aria-label="Best combo: 5 fruit"
+                ><span aria-hidden="true">◆ </span>5</span
+              >
+            </li>
+            <li>
+              <b class="_name_026ce6">6. Dee</b><strong class="_points_026ce6">258</strong
+              ><span class="_streak_026ce6" aria-label="Best combo: 2 fruit"
+                ><span aria-hidden="true">◆ </span>2</span
+              >
+            </li>
+            <li>
+              <b class="_name_026ce6">7. Ana</b><strong class="_points_026ce6">248</strong
+              ><span class="_streak_026ce6" aria-label="Best combo: 2 fruit"
+                ><span aria-hidden="true">◆ </span>2</span
+              >
+            </li>
+            <li>
+              <b class="_name_026ce6">7. Gus</b><strong class="_points_026ce6">248</strong
+              ><span class="_streak_026ce6" aria-label="Best combo: 2 fruit"
+                ><span aria-hidden="true">◆ </span>2</span
+              >
+            </li>
+          </ol>
+        </div>
+        <p>Highest points wins. Everyone stays in the game.</p>
+      </div>
+    </main>
+    <footer id="footer">Connected · seat held · ★ host menu</footer>
+  </body>
+</html>
