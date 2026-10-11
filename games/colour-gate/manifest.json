@@ -1,0 +1,34 @@
+{
+  "id": "colour-gate",
+  "name": "Colour Gate",
+  "icon": "🔷",
+  "tagline": "Tap to climb. Match the moving gate.",
+  "description": "Race up identical moving colour gates in your own lane. Tap to bounce, cross a matching shape and watch your colour change. A crash returns you to your checkpoint. Climb farthest across three quick rounds to win.",
+  "howToPlay": [
+    "Tap to bounce upward. Tap steadily to hover below a gate.",
+    "Cross when the gate's shape matches yours. Each clear changes your shape.",
+    "Crashes return you to your checkpoint. Climb farthest before the clock ends."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 3,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-10-11",
+  "settings": [
+    {
+      "key": "rounds",
+      "label": "Rounds",
+      "description": "Number of 45-second races",
+      "type": "number",
+      "default": 3,
+      "min": 1,
+      "max": 3,
+      "step": 1
+    }
+  ],
+  "supportsBots": true,
+  "noCards": true
+}
