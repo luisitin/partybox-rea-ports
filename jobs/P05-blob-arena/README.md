@@ -9,6 +9,8 @@ Original SVG art, pure deterministic server, three bot strengths, three-second r
 `corepack enable` then `pnpm install` (Windows PowerShell: `pnpm.cmd`).
 The port exports `game` from `games/blob-arena/server/index.ts` and TV/phone entry modules.
 This workshop has no room host; integrate these entries in the PartyBox shell.
+For a local mounted-controller preview: `node jobs/P05-blob-arena/preview.mjs`.
+It reports an ephemeral loopback URL; inputs are captured, not reduced into a live match.
 
 ## Check
 
@@ -16,6 +18,8 @@ This workshop has no room host; integrate these entries in the PartyBox shell.
 - `pnpm format`
 - `pnpm vitest run games/blob-arena --maxWorkers=1`
 - `node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/generate.mjs`
+- `node jobs/P05-blob-arena/mutations.mjs`
+- `node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/screens.mjs`
 
 RESEARCH.md and SOURCES.md document the original and the living-room adaptations.
 VERIFY.md records exact commands and measured results; NEXT.md is the current handoff.

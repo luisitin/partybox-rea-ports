@@ -157,6 +157,48 @@ try {
           throw new Error(`Expected ${delta / 44}, received ${moving.x}`);
         interactions.push({ phoneOnly, delta, pad, inputs });
       }
+      const controls = await evaluate(
+        `(()=>{window.__blobClearInputs();const center=e=>{const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};};return {pad:center(document.querySelector('[data-pad-primary="true"]')),split:center(document.querySelector('[aria-describedby="blob-split-reason"]'))};})()`,
+      );
+      await ask('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 2 });
+      const finger = { id: 1, x: controls.pad.x + 44, y: controls.pad.y };
+      const tap = { id: 2, x: controls.split.x, y: controls.split.y };
+      await ask('Input.dispatchTouchEvent', {
+        type: 'touchStart',
+        touchPoints: [{ ...finger, x: controls.pad.x }],
+      });
+      await ask('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [finger] });
+      await ask('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [finger, tap] });
+      await ask('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [finger] });
+      await ask('Input.dispatchTouchEvent', { type: 'touchCancel', touchPoints: [] });
+      await sleep(50);
+      const touchInputs = await evaluate('window.__blobInputs');
+      if (
+        touchInputs.filter((input) => input.type === 'split').length !== 1 ||
+        touchInputs.at(-1)?.x !== 0
+      )
+        throw new Error(`Two-finger steer/split/cancel failed: ${JSON.stringify(touchInputs)}`);
+      interactions.push({
+        phoneOnly,
+        action: 'two-finger steer, split, cancel',
+        inputs: touchInputs,
+      });
+      await evaluate('window.__blobClearInputs()');
+      for (const event of [
+        { type: 'keyDown', key: 'ArrowRight', code: 'ArrowRight', windowsVirtualKeyCode: 39 },
+        { type: 'keyDown', key: ' ', code: 'Space', windowsVirtualKeyCode: 32 },
+        { type: 'keyUp', key: ' ', code: 'Space', windowsVirtualKeyCode: 32 },
+        { type: 'keyUp', key: 'ArrowRight', code: 'ArrowRight', windowsVirtualKeyCode: 39 },
+      ])
+        await ask('Input.dispatchKeyEvent', event);
+      await sleep(50);
+      const keyInputs = await evaluate('window.__blobInputs');
+      if (
+        keyInputs.filter((input) => input.type === 'split').length !== 1 ||
+        keyInputs.at(-1)?.x !== 0
+      )
+        throw new Error('Keyboard steer/split/release failed');
+      interactions.push({ phoneOnly, action: 'keyboard steer, split, release', inputs: keyInputs });
     }
     writeFileSync(
       join(

@@ -74,5 +74,6 @@ CI check command: `gh pr checks <PR-number>`. PR creation and the job workflow's
 ## Additional measured checks
 
 - Final `pnpm.cmd typecheck` and `pnpm.cmd format`: exit 0 after the pause steering fix and preview additions.
-- Interactive preview + `capture.mjs`: four real drag/release checks passed. A 22 px drag sends 0.17 with a TV and 0.21 in phone-only; 44 px sends 0.34 / 0.43. Both release to zero. This is the pre-KEEP-GOING baseline in interactive-baseline.json.
+- Interactive preview + `capture.mjs`: eight real input sequences passed across both room modes: four drag/release checks, two two-finger steer/split/cancel sequences, and two keyboard steer/split/release sequences. Each split sequence sends exactly one split and ends at zero steering. A 22 px drag sends 0.17 with a TV and 0.21 in phone-only; 44 px sends 0.34 / 0.43. This is the pre-KEEP-GOING reach baseline in interactive-baseline.json.
+- Before the pointer-down fix, a second-finger tap produced no split (only steering and STOP). Repeating the same real touch sequence after the fix produces exactly one split in each mode.
 - Latest interactive capture closed its only headless browser in `finally` and exited 0.

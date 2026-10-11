@@ -161,7 +161,16 @@ export function Joystick({
           type="button"
           className={styles.split}
           disabled={!active || !canSplit}
-          onClick={() => send({ type: 'split' })}
+          onPointerDown={(event) => {
+            if (!active || !canSplit || event.button !== 0) return;
+            // A second touch does not reliably synthesize click while the first touch holds capture.
+            event.preventDefault();
+            send({ type: 'split' });
+          }}
+          onClick={(event) => {
+            // Keyboard and assistive activation have detail 0; pointer activation was already sent.
+            if (event.detail === 0 && active && canSplit) send({ type: 'split' });
+          }}
           aria-describedby="blob-split-reason"
         >
           <span aria-hidden="true">↗</span> {L('SPLIT')}
