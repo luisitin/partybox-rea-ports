@@ -116,3 +116,12 @@ failed on the now-valid equal100% solve fractions and was replaced by
 monotonic completion plus strict speed/score comparisons.
 The corrected simulation command passes all9checks and all7,000games in30.51s
 with one worker. CI for R9 (workflow38178011652) passed in29seconds.
+
+R11: `pnpm.cmd vitest run games/draw-and-guess/__tests__/ink.test.ts games/draw-and-guess/__tests__/ink-geometry.test.ts --maxWorkers=1`
+passes14checks. Maximum original-trace distance to simplified segments falls
+from200to0logical pixels for an isolated sharp tip, and from200to0.499pixels
+for the curved trace with ten large bends. Thirty warmed3,501-point curved
+compactions measure0.676ms median and0.950ms p95 on this desktop; no timing
+threshold is asserted. Tests also cover frozen input, deterministic output,
+endpoints, direction reversals, full-minute streaming, complete Undo and wire
+limits. R10 PR workflow38178466414 passed in41seconds.

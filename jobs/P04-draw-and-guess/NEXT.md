@@ -11,7 +11,9 @@ R4-R9 protect Clear, identify final winners, announce the next artist,
 cue public solves/final ticks, meet all-theme ink contrast, and show full names.
 32 HTML/PNG screens fit, all8long names visible; 13live checks pass. R10 restricts
 bot guesses to the public selected deck; all7,000matches terminate and easy
-bots solve faster. Finish R11 geometry-aware dense-ink simplification, repeat
-the scoped checks, then review until three consecutive rounds find no
-player-visible gain. No-gain count is zero after the latest substantive fix.
+bots solve faster. R11 preserves dense corners with14passing ink checks.
+Finish R12 compact-canvas geometry, R13 unique two-lap bot drawings and R14
+throttled-guess draft retention. Repeat the scoped checks and browser evidence,
+then review until three consecutive rounds find no player-visible gain.
+No-gain count is zero after the latest substantive fix.
 Original interactive play was unavailable (CUA exposes no browser); see research.
