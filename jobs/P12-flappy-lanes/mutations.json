@@ -1,0 +1,202 @@
+{
+  "planted": 20,
+  "caught": 20,
+  "originalsRestored": true,
+  "sourceHashes": {
+    "games/flappy-lanes/server/scoring.ts": "8ca4891fc356bc309300fc2a2cb12daad04a533c82c9e13d70710e347b9c6451",
+    "games/flappy-lanes/server/phases/score.ts": "f87a246bc2a1c0d93484a1850fb62c891a45291feaaafb9bf025bb5e0caa7d50",
+    "games/flappy-lanes/server/index.ts": "7bcbdcfbc108853f842f2add1db3473a06e19ba2acc5c16c53df70d1ae746389",
+    "games/flappy-lanes/server/world.ts": "019128d3d55882bebb294ad8937e56017a201985e824b2c52217bb0d60029619",
+    "games/flappy-lanes/server/phases/play.ts": "424e753afdcd30823954d576c1c20df448224cf3dc80b109db6305659811f8e6"
+  },
+  "results": [
+    {
+      "number": 1,
+      "name": "ties earn points",
+      "file": "games/flappy-lanes/server/scoring.ts",
+      "caught": true,
+      "caughtBy": [
+        "survival scoring and phases awards one point for every strictly earlier death, with sample ties and cap ties",
+        "survival scoring and phases ties simultaneous off-grid crashes regardless of which phone sends its flap first",
+        "survival scoring and phases scores once, accumulates across exactly three rounds, and returns every player",
+        "survival scoring and phases ends at the configured cap and scores living birds equally"
+      ]
+    },
+    {
+      "number": 2,
+      "name": "survivors rank as first dead",
+      "file": "games/flappy-lanes/server/scoring.ts",
+      "caught": true,
+      "caughtBy": [
+        "survival scoring and phases awards one point for every strictly earlier death, with sample ties and cap ties",
+        "survival scoring and phases scores once, accumulates across exactly three rounds, and returns every player",
+        "survival scoring and phases ends at the configured cap and scores living birds equally"
+      ]
+    },
+    {
+      "number": 3,
+      "name": "scores replace previous rounds",
+      "file": "games/flappy-lanes/server/phases/score.ts",
+      "caught": true,
+      "caughtBy": [
+        "survival scoring and phases scores once, accumulates across exactly three rounds, and returns every player"
+      ]
+    },
+    {
+      "number": 4,
+      "name": "one extra round",
+      "file": "games/flappy-lanes/server/index.ts",
+      "caught": true,
+      "caughtBy": [
+        "survival scoring and phases ties simultaneous off-grid crashes regardless of which phone sends its flap first",
+        "survival scoring and phases scores once, accumulates across exactly three rounds, and returns every player"
+      ]
+    },
+    {
+      "number": 5,
+      "name": "one survivor does not finish",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": [
+        "shared course and collisions judges fixed samples, halts immediately at one survivor and is idempotent",
+        "survival scoring and phases scores once, accumulates across exactly three rounds, and returns every player"
+      ]
+    },
+    {
+      "number": 6,
+      "name": "flap cooldown removed",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": [
+        "flight ignores unknown and dead birds, backwards inputs and repeat taps inside cooldown"
+      ]
+    },
+    {
+      "number": 7,
+      "name": "flap has no upward impulse",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": ["flight integrates a flap analytically at the input timestamp"]
+    },
+    {
+      "number": 8,
+      "name": "gravity displacement doubled",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": ["flight integrates a flap analytically at the input timestamp"]
+    },
+    {
+      "number": 9,
+      "name": "falling velocity is unbounded",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": ["flight caps falling velocity and keeps the displacement continuous at the cap"]
+    },
+    {
+      "number": 10,
+      "name": "top ignores bird radius",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": [
+        "flight cannot rescue a bird overlapping a wall between grid samples",
+        "shared course and collisions top and floor collisions account for the bird radius",
+        "survival scoring and phases ties simultaneous off-grid crashes regardless of which phone sends its flap first"
+      ]
+    },
+    {
+      "number": 11,
+      "name": "floor ignores bird radius",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": [
+        "shared course and collisions top and floor collisions account for the bird radius",
+        "shared course and collisions judges fixed samples, halts immediately at one survivor and is idempotent"
+      ]
+    },
+    {
+      "number": 12,
+      "name": "gap edge ignores bird radius",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": [
+        "shared course and collisions a centered bird clears a gate; overlapping its gap edge crashes"
+      ]
+    },
+    {
+      "number": 13,
+      "name": "horizontal collision ignores radius",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": [
+        "shared course and collisions the horizontal edge accounts for radius and only checks a nearby gate"
+      ]
+    },
+    {
+      "number": 14,
+      "name": "gate counts before its trailing edge clears",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": [
+        "shared course and collisions passes a gate only after its trailing edge clears the bird"
+      ]
+    },
+    {
+      "number": 15,
+      "name": "world cap removed",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": [
+        "shared course and collisions clamps world judging to the round cap even if the event arrives late"
+      ]
+    },
+    {
+      "number": 16,
+      "name": "judges a sample in the future",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": [
+        "shared course and collisions judges fixed samples, halts immediately at one survivor and is idempotent",
+        "survival scoring and phases ties simultaneous off-grid crashes regardless of which phone sends its flap first",
+        "survival scoring and phases applies a flap at its exact timestamp and refuses old input after judging"
+      ]
+    },
+    {
+      "number": 17,
+      "name": "future gates leak",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": [
+        "shared course and collisions only exposes gates inside the stage window",
+        "survival scoring and phases keeps future course data hidden from every surface, including phone-only spectators"
+      ]
+    },
+    {
+      "number": 18,
+      "name": "stale play timer accepted",
+      "file": "games/flappy-lanes/server/phases/play.ts",
+      "caught": true,
+      "caughtBy": [
+        "survival scoring and phases rejects stale and early timers, spectators, prototype ids and disconnected inputs"
+      ]
+    },
+    {
+      "number": 19,
+      "name": "resume leaves start clock behind",
+      "file": "games/flappy-lanes/server/index.ts",
+      "caught": true,
+      "caughtBy": [
+        "survival scoring and phases freezes play during pause and shifts both absolute clocks on resume"
+      ]
+    },
+    {
+      "number": 20,
+      "name": "flap rescues an already overlapping bird",
+      "file": "games/flappy-lanes/server/world.ts",
+      "caught": true,
+      "caughtBy": [
+        "flight cannot rescue a bird overlapping a wall between grid samples",
+        "survival scoring and phases ties simultaneous off-grid crashes regardless of which phone sends its flap first"
+      ]
+    }
+  ]
+}

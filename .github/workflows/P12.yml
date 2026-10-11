@@ -1,0 +1,23 @@
+name: P12 Flappy Lanes
+on:
+  pull_request:
+    paths:
+      - 'games/flappy-lanes/**'
+      - 'jobs/P12-flappy-lanes/**'
+      - '.github/workflows/P12.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm format
+      - run: pnpm vitest run games/flappy-lanes --maxWorkers=1
