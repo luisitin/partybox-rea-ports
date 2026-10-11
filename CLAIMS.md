@@ -8,7 +8,7 @@ P02 r2-local 2026-10-11T20:44:31Z job/P02-quiz-rush-teams BLOCKED jobs/P02-quiz-
 P03 r3-local 2026-10-11T22:31:04Z job/P03-trivia-lightning
 P04 r2-local 2026-10-11T22:26:36Z job/P04-draw-and-guess
 P05 r5-local 2026-10-11T22:33:37Z job/P05-blob-arena
-P06 r6-local 2026-10-11T22:09:03Z job/P06-snake-royale
+P06 r6-local 2026-10-11T22:35:43Z job/P06-snake-royale
 
 P07 r4-local 2026-10-11T22:09:22Z job/P07-paper-territory
 
