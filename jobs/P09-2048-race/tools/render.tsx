@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import React from 'react';
 import type { ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { format, resolveConfig } from 'prettier';
 import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
 import { Controller } from '../../../games/merge-sprint/client/Controller';
 import { Tv } from '../../../games/merge-sprint/client/Tv';
@@ -22,6 +23,7 @@ const media = resolve(job, 'media');
 const tokens = await readFile(resolve(repository, 'design/tokens.css'), 'utf8');
 const fixtures = resolve(repository, 'games/merge-sprint/fixtures');
 const outputs: string[] = [];
+const formatOptions = await resolveConfig(resolve(repository, '.prettierrc'));
 
 // The direct Node/tsx capture emits classic JSX factory calls.
 // Supply that factory in the capture process without changing the game's bundler output.
@@ -83,14 +85,17 @@ async function capture(name: string, surface: 'tv' | 'phone', state: State, node
   const markup = renderToStaticMarkup(clock(state, node));
   await writeFile(
     resolve(media, `${name}.html`),
-    html(surface, name, markup, Object.keys(state.players).length),
+    await format(html(surface, name, markup, Object.keys(state.players).length), {
+      ...formatOptions,
+      parser: 'html',
+    }),
     'utf8',
   );
   outputs.push(`${name}.html`);
 }
 
 await mkdir(media, { recursive: true });
-for (const phase of game.phases) {
+for (const phase of process.argv.includes('--hash-only') ? [] : game.phases) {
   const state = JSON.parse(await readFile(resolve(fixtures, `${phase}.json`), 'utf8')) as State;
   const first = Object.values(state.players)[0];
   if (!first) throw new Error(`Fixture ${phase} has no players`);

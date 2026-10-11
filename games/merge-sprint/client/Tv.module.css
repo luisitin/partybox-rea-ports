@@ -38,7 +38,7 @@
 }
 
 .clock strong {
-  font-size: var(--pb-font-display);
+  font-size: calc(var(--pb-font-display) * 0.75);
   line-height: 1;
   color: var(--pb-accent-2);
   font-variant-numeric: tabular-nums;
@@ -79,9 +79,9 @@
 
 .racer {
   display: grid;
-  gap: var(--pb-space-3);
+  gap: var(--pb-space-2);
   min-width: 0;
-  padding: var(--pb-space-4);
+  padding: var(--pb-space-3);
   background: var(--pb-surface);
   border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
   border-top: var(--pb-space-1) solid var(--racer-color);
@@ -96,7 +96,7 @@
   display: flex;
   align-items: center;
   gap: var(--pb-space-3);
-  font-size: var(--pb-font-body);
+  font-size: calc(var(--pb-font-body) * 8 / 9);
   line-height: 1.2;
 }
 
@@ -116,39 +116,26 @@
 .racerHeader > span {
   margin-left: auto;
   color: var(--pb-accent-2);
+  flex: none;
 }
 
-.racerBody {
+.summary {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: end;
   gap: var(--pb-space-3);
-}
-
-.racerBody > [role='grid'] {
-  max-width: calc(var(--pb-space-8) * 3);
-  justify-self: center;
-}
-
-.racers[data-count='2'] .racerBody > [role='grid'] {
-  max-width: calc(var(--pb-space-8) * 6);
-}
-
-.racers[data-count='3'] .racerBody > [role='grid'] {
-  max-width: calc(var(--pb-space-8) * 4);
 }
 
 .best {
   display: grid;
-  justify-items: center;
+  justify-items: start;
   gap: var(--pb-space-2);
   min-width: 0;
-  font-size: var(--pb-font-body);
-  text-align: center;
+  font-size: calc(var(--pb-font-body) * 8 / 9);
 }
 
 .best strong {
-  font-size: var(--pb-font-h2);
+  font-size: calc(var(--pb-font-display) * 0.5);
   font-weight: 900;
   font-variant-numeric: tabular-nums;
   line-height: 1;
@@ -159,11 +146,15 @@
   color: var(--pb-text-muted);
 }
 
+.racerHeader > .status {
+  color: var(--pb-text-muted);
+}
+
 .score {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: var(--pb-font-body);
+  display: grid;
+  justify-items: end;
+  gap: var(--pb-space-2);
+  font-size: calc(var(--pb-font-body) * 8 / 9);
   color: var(--pb-text-muted);
 }
 

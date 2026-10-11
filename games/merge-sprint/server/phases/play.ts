@@ -1,9 +1,18 @@
 // The live race: exact-deadline closure, versioned inputs and one spawn per legal move.
-import { hasPlayer, isTimerFor } from '@partybox/game-sdk';
+import { allConnectedDone, hasPlayer, isTimerFor } from '@partybox/game-sdk';
 import type { GameEvent, Transition } from '@partybox/game-sdk';
 import { canMove, slide, spawn } from '../board';
 import { MAX_MOVES, MOVE_MS, TARGET } from '../types';
 import type { Input, State } from '../types';
+
+export function raceFinished(state: State): boolean {
+  return allConnectedDone(
+    state,
+    Object.entries(state.racers)
+      .filter(([, r]) => r.status !== 'racing')
+      .map(([id]) => id),
+  );
+}
 
 export function reducePlay(state: State, event: GameEvent<Input>, next: Transition<State>): State {
   if (isTimerFor(state, event))
@@ -44,7 +53,5 @@ export function reducePlay(state: State, event: GameEvent<Input>, next: Transiti
     },
   };
   if (won) return next({ ...fresh, reason: 'target' }, event.now);
-  return Object.values(fresh.racers).every((r) => r.status !== 'racing')
-    ? next({ ...fresh, reason: 'blocked' }, event.now)
-    : fresh;
+  return raceFinished(fresh) ? next({ ...fresh, reason: 'blocked' }, event.now) : fresh;
 }

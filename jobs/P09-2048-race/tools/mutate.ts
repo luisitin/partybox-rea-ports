@@ -7,7 +7,7 @@ import { spawnSync } from 'node:child_process';
 interface Mutant {
   name: string;
   file: string;
-  before: string;
+  before: string | RegExp;
   after: string;
 }
 const prefix = 'games/merge-sprint/server/';
@@ -72,8 +72,8 @@ const mutants: Mutant[] = [
   {
     name: 'deadline accepts final move',
     file: 'phases/play.ts',
-    before: 'event.now >= state.phase.deadline',
-    after: 'event.now > state.phase.deadline',
+    before: /if \(state\.phase\.deadline !== null && event\.now >= state\.phase\.deadline\)/,
+    after: 'if (state.phase.deadline !== null && event.now > state.phase.deadline)',
   },
   {
     name: 'target never ends race',
@@ -84,8 +84,8 @@ const mutants: Mutant[] = [
   {
     name: 'blocked boards never end race',
     file: 'phases/play.ts',
-    before: ".every((r) => r.status !== 'racing')",
-    after: '.every(() => false)',
+    before: 'return raceFinished(fresh)',
+    after: 'return false',
   },
   {
     name: 'wrong draw index',
@@ -108,8 +108,8 @@ const mutants: Mutant[] = [
   {
     name: 'reveal timer never exits',
     file: 'phases/reveal.ts',
-    before: 'isTimerFor(state, event) ? next(state, event.now) : state',
-    after: 'state',
+    before: '? next(state, event.now)',
+    after: '? state',
   },
   {
     name: 'future draws leak to public views',
@@ -147,7 +147,11 @@ if (baseline.status !== 0) {
 try {
   for (const mutant of mutants) {
     const original = originals.get(mutant.file)!;
-    if (!original.includes(mutant.before))
+    if (
+      typeof mutant.before === 'string'
+        ? !original.includes(mutant.before)
+        : !mutant.before.test(original)
+    )
       throw new Error(`Missing mutation target: ${mutant.name}`);
     try {
       writeFileSync(
@@ -156,14 +160,20 @@ try {
         'utf8',
       );
       const run = runTests();
-      const log = `${run.stdout ?? ''}\n${run.stderr ?? ''}`;
+      const log = `${run.stdout ?? ''}\n${run.stderr ?? ''}`.replace(/\u001b\[[0-9;]*m/g, '');
       // Syntax/type/import errors do not count as detected rule violations.
-      const caught = run.status !== 0 && /Tests\s+\d+ failed|\d+ failed\s*\|/.test(log);
+      const caught = run.status !== 0 && /\bTests\s+\d+ failed\b/.test(log);
+      const failedTests = log
+        .split('\n')
+        .filter((line) => line.includes('FAIL ') || line.includes('× '))
+        .slice(0, 4)
+        .map((line) => line.trim().slice(0, 200));
       const result = {
         name: mutant.name,
         file: mutant.file,
         caught,
         exitCode: run.status,
+        failedTests,
         error: run.error?.message ?? null,
       };
       results.push(result);

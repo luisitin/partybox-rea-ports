@@ -205,6 +205,65 @@ describe('Merge Sprint race rules', () => {
     expect(reveal.reason).toBe('blocked');
   });
 
+  it('closes when every connected racer blocks even if a disconnected board can still move', () => {
+    let state = withBoard(kit.start(), 'p1', [2, 2, 8, 16, 8, 16, 4, 8, 4, 8, 2, 4, 8, 16, 4, 8]);
+    state = kit.player(state, 'p2', false, undefined, T0 + 300);
+    expect(state.phase.id).toBe('play');
+    expect(state.racers.p2?.status).toBe('racing');
+    const reveal = move(state, 'p1', 'left', T0 + 500);
+    expect(reveal.racers.p1?.status).toBe('blocked');
+    expect(reveal.racers.p2?.status).toBe('racing');
+    expect(reveal.phase.id).toBe('reveal');
+    expect(reveal.reason).toBe('blocked');
+    expect(reveal.phase.startedAt).toBe(T0 + 500);
+    expect(Object.keys(game.results(kit.timer(reveal))!.scores).sort()).toEqual(['p1', 'p2']);
+  });
+
+  it('a drop finishes the race when only blocked connected boards remain', () => {
+    const source = withBoard(kit.start(), 'p1', [...blocked], 96);
+    const state: State = {
+      ...source,
+      racers: { ...source.racers, p1: { ...source.racers.p1!, status: 'blocked' } },
+    };
+    const reveal = kit.player(state, 'p2', false, undefined, T0 + 700);
+    expect(reveal.phase.id).toBe('reveal');
+    expect(reveal.reason).toBe('blocked');
+    expect(reveal.phase.startedAt).toBe(T0 + 700);
+    expect(reveal.racers.p2).toEqual(state.racers.p2);
+    expect(reveal.racers.p1?.score).toBe(96);
+  });
+
+  it('a drop during pause closes on resume without spending paused time or awaiting the old timer', () => {
+    const source = withBoard(kit.start(), 'p1', [...blocked]);
+    const state: State = {
+      ...source,
+      racers: { ...source.racers, p1: { ...source.racers.p1!, status: 'blocked' } },
+    };
+    const paused = kit.vip(state, 'pause', T0 + 1000);
+    const dropped = kit.player(paused, 'p2', false, undefined, T0 + 2000);
+    expect(dropped.phase.id).toBe('play');
+    expect(dropped.phase.paused).toEqual({ at: T0 + 1000 });
+    const reveal = kit.vip(dropped, 'resume', T0 + 6000);
+    expect(reveal.phase.id).toBe('reveal');
+    expect(reveal.reason).toBe('blocked');
+    expect(reveal.phase.paused).toBeUndefined();
+    expect(reveal.phase.startedAt).toBe(T0 + 6000);
+    expect(reveal.phase.deadline).toBe(T0 + 14_000);
+    expect(
+      game.reduce(reveal, { type: 'timer', now: T0 + 180_000, phaseId: 'play', startedAt: T0 }),
+    ).toBe(reveal);
+  });
+
+  it('rejoining while a rival is active preserves the accepted board and permits the next move', () => {
+    const state = move(withBoard(kit.start(), 'p1', row(2, 2, 4)), 'p1', 'left', T0 + 500);
+    const dropped = kit.player(state, 'p1', false, undefined, T0 + 1000);
+    expect(dropped.phase.id).toBe('play');
+    const returned = kit.player(dropped, 'p1', true, undefined, T0 + 1500);
+    expect(returned.phase.id).toBe('play');
+    expect(returned.racers.p1).toEqual(state.racers.p1);
+    expect(move(returned, 'p1', 'right', T0 + 2000).racers.p1?.moves).toBe(2);
+  });
+
   it('marks the 1200th accepted move blocked while other racers continue', () => {
     const state = withBoard(kit.start(), 'p1', row(2, 2));
     const almost: State = {
@@ -229,6 +288,27 @@ describe('Merge Sprint race rules', () => {
 });
 
 describe('public views and bots', () => {
+  it.each(['play', 'reveal', 'done'] as const)(
+    'changing future spawn luck and RNG leaves every public view identical in %s',
+    (phase) => {
+      const initial = kit.start();
+      const reveal = kit.vip(initial, 'skip');
+      const state = phase === 'play' ? initial : phase === 'reveal' ? reveal : kit.timer(reveal);
+      const privateChange: State = {
+        ...state,
+        rng: { seed: (state.rng.seed ^ 0x5a5a5a5a) >>> 0, step: state.rng.step + 17 },
+        spawns: state.spawns.map((draw, index) =>
+          index < 2 ? draw : { slot: 65535 - draw.slot, value: draw.value === 2 ? 4 : 2 },
+        ),
+      };
+      expect(privateChange.rng).not.toEqual(state.rng);
+      expect(privateChange.spawns).not.toEqual(state.spawns);
+      expect(game.tvView(privateChange)).toEqual(game.tvView(state));
+      for (const id of ['p1', 'p2', 'spectator-x'])
+        expect(game.controllerView(privateChange, id)).toEqual(game.controllerView(state, id));
+    },
+  );
+
   it('publishes completed boards while keeping all future spawns and RNG private', () => {
     const state = kit.start();
     for (const view of [

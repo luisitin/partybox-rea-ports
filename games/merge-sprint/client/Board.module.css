@@ -96,6 +96,25 @@
   font-size: min(var(--pb-font-body), 10cqw);
 }
 
+/* Wide TV map cells hold four-digit numbers at the sofa-readable 32px minimum.
+   The playing board on a phone stays square. */
+.board[data-tv-map='true'] {
+  aspect-ratio: auto;
+  height: calc(var(--pb-font-body) * 32 / 9 + var(--pb-space-1) * 5);
+  gap: var(--pb-space-1);
+  padding: var(--pb-space-1);
+  border-radius: var(--pb-radius);
+}
+
+.board[data-tv-map='true'] .row {
+  gap: var(--pb-space-1);
+}
+
+.board[data-tv-map='true'] .tile {
+  border-radius: calc(var(--pb-radius) / 2);
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tile[data-pop='true'] {
     animation: none;

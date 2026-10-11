@@ -127,6 +127,7 @@ describe('Merge Sprint TV', () => {
     s.phase = { id: phase, startedAt: 0, deadline: phase === 'done' ? null : 180000 };
     const html = renderToStaticMarkup(<Tv view={{ ...game.tvView(s), vip: null }} />);
     expect(html.match(/role="grid"/g)).toHaveLength(8);
+    expect(html.match(/data-tv-map="true"/g)).toHaveLength(8);
     for (const player of PLAYERS) expect(html).toContain(player.name);
     expect(html.match(/Best tile/g)).toHaveLength(8);
     expect(html).not.toContain('<button');

@@ -6,7 +6,9 @@ import {
   gameManifestSchema,
   hasPlayer,
   numberSetting,
+  onPlayerEvent,
   pausedFor,
+  recheckOnResume,
   seedRng,
 } from '@partybox/game-sdk';
 import type { GameDefinition, InitContext, PlayerStatus } from '@partybox/game-sdk';
@@ -15,7 +17,7 @@ import { spawn } from './board';
 import { botInput } from './bot';
 import { spawnStream } from './content';
 import { enterDone } from './phases/done';
-import { reducePlay } from './phases/play';
+import { raceFinished, reducePlay } from './phases/play';
 import { enterReveal, reduceReveal } from './phases/reveal';
 import { compareRacers, results, winners } from './scoring';
 import { MOVE_MS, PHASES, TARGET, inputSchema } from './types';
@@ -61,6 +63,8 @@ const reduce = composeReduce<State, Input>({
   phases: { play: reducePlay, reveal: reduceReveal },
   advance,
   end: enterDone,
+  onPlayer: (state, event) => onPlayerEvent(state, event, { closeIfDone }),
+  afterVip: (_before, after, event) => recheckOnResume(after, event, closeIfDone),
   prepare: (state, event) => {
     if (event.type !== 'vip' || event.action !== 'resume' || state.phase.id !== 'play')
       return state;
@@ -75,6 +79,12 @@ const reduce = composeReduce<State, Input>({
         };
   },
 });
+
+function closeIfDone(state: State, now: number): State {
+  return state.phase.id === 'play' && raceFinished(state)
+    ? enterReveal({ ...state, reason: 'blocked' }, now)
+    : state;
+}
 
 function statusOf(state: State): (id: string) => PlayerStatus {
   return (id) =>

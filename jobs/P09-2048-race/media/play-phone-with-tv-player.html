@@ -3183,7 +3183,7 @@ ight is the :root default above) ────────
         min-width: 0;
         border-radius: var(--pb-radius);
         background: var(--pb-surface);
-        font-size: var(--pb-font-h1);
+        font-size: min(var(--pb-font-h1), 13cqw);
         font-weight: 900;
         line-height: 1;
         font-variant-numeric: tabular-nums;
@@ -3219,8 +3219,12 @@ ight is the :root default above) ────────
         color: var(--pb-on-accent-2-fill);
       }
 
+      .pb_Board_fede4cf3_tile[data-digits='3'] {
+        font-size: min(var(--pb-font-h1), 10cqw);
+      }
+
       .pb_Board_fede4cf3_tile[data-digits='4'] {
-        font-size: var(--pb-font-h2);
+        font-size: min(var(--pb-font-h2), 8cqw);
       }
 
       .pb_Board_fede4cf3_tile[data-pop='true'] {
@@ -3244,7 +3248,30 @@ ight is the :root default above) ────────
       }
 
       .pb_Board_fede4cf3_board[data-mini='true'] .pb_Board_fede4cf3_tile[data-digits='4'] {
-        font-size: min(calc(var(--pb-font-body) * 0.75), 9cqw);
+        font-size: min(calc(var(--pb-font-body) * 0.75), 8cqw);
+      }
+
+      .pb_Board_fede4cf3_board[data-mini='true'] .pb_Board_fede4cf3_tile[data-digits='3'] {
+        font-size: min(var(--pb-font-body), 10cqw);
+      }
+
+      /* Wide TV map cells hold four-digit numbers at the sofa-readable 32px minimum.
+   The playing board on a phone stays square. */
+      .pb_Board_fede4cf3_board[data-tv-map='true'] {
+        aspect-ratio: auto;
+        height: calc(var(--pb-font-body) * 32 / 9 + var(--pb-space-1) * 5);
+        gap: var(--pb-space-1);
+        padding: var(--pb-space-1);
+        border-radius: var(--pb-radius);
+      }
+
+      .pb_Board_fede4cf3_board[data-tv-map='true'] .pb_Board_fede4cf3_row {
+        gap: var(--pb-space-1);
+      }
+
+      .pb_Board_fede4cf3_board[data-tv-map='true'] .pb_Board_fede4cf3_tile {
+        border-radius: calc(var(--pb-radius) / 2);
+        font-size: calc(var(--pb-font-body) * 8 / 9);
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -3406,6 +3433,49 @@ ight is the :root default above) ────────
         text-align: center;
       }
 
+      /* games/merge-sprint/client/StandingsStrip.module.css */
+      .pb_StandingsStrip_a42958ad_rows {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-flow: row;
+        gap: var(--pb-space-1) var(--pb-space-3);
+        margin: 0;
+        padding: var(--pb-space-2);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        list-style: none;
+        font-size: var(--pb-font-caption);
+        line-height: 1.2;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .pb_StandingsStrip_a42958ad_rows li {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-1);
+        min-width: 0;
+      }
+
+      .pb_StandingsStrip_a42958ad_rank {
+        flex: none;
+        color: var(--pb-text-muted);
+      }
+
+      .pb_StandingsStrip_a42958ad_name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .pb_StandingsStrip_a42958ad_rows b {
+        margin-left: auto;
+      }
+
+      .pb_StandingsStrip_a42958ad_rows li[data-me='true'] {
+        color: var(--pb-accent-2);
+        font-weight: 900;
+      }
+
       /* games/merge-sprint/client/Controller.module.css */
       .pb_Controller_705355ba_screen {
         display: grid;
@@ -3417,6 +3487,10 @@ ight is the :root default above) ────────
         padding-bottom: max(var(--pb-space-3), env(safe-area-inset-bottom));
         overscroll-behavior: none;
         color: var(--pb-text);
+      }
+
+      .pb_Controller_705355ba_screen[data-phone-only='true'] {
+        grid-template-rows: auto auto minmax(0, 1fr) auto auto auto auto;
       }
 
       .pb_Controller_705355ba_header {
@@ -3507,23 +3581,6 @@ ight is the :root default above) ────────
       .pb_Controller_705355ba_direction:focus-visible {
         outline: var(--pb-space-1) solid var(--pb-focus);
         outline-offset: var(--pb-space-1);
-      }
-
-      .pb_Controller_705355ba_blocked {
-        position: absolute;
-        inset: 0;
-        display: grid;
-        place-content: center;
-        gap: var(--pb-space-2);
-        padding: var(--pb-space-5);
-        border-radius: var(--pb-radius-lg);
-        background: var(--pb-scrim);
-        text-align: center;
-        font-size: var(--pb-font-body);
-      }
-
-      .pb_Controller_705355ba_blocked strong {
-        font-size: var(--pb-font-h1);
       }
 
       .pb_Controller_705355ba_hint,
@@ -3624,7 +3681,7 @@ ight is the :root default above) ────────
       }
 
       .pb_Tv_e5f54191_clock strong {
-        font-size: var(--pb-font-display);
+        font-size: calc(var(--pb-font-display) * 0.75);
         line-height: 1;
         color: var(--pb-accent-2);
         font-variant-numeric: tabular-nums;
@@ -3665,9 +3722,9 @@ ight is the :root default above) ────────
 
       .pb_Tv_e5f54191_racer {
         display: grid;
-        gap: var(--pb-space-3);
+        gap: var(--pb-space-2);
         min-width: 0;
-        padding: var(--pb-space-4);
+        padding: var(--pb-space-3);
         background: var(--pb-surface);
         border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
         border-top: var(--pb-space-1) solid var(--racer-color);
@@ -3682,7 +3739,7 @@ ight is the :root default above) ────────
         display: flex;
         align-items: center;
         gap: var(--pb-space-3);
-        font-size: var(--pb-font-body);
+        font-size: calc(var(--pb-font-body) * 8 / 9);
         line-height: 1.2;
       }
 
@@ -3702,39 +3759,26 @@ ight is the :root default above) ────────
       .pb_Tv_e5f54191_racerHeader > span {
         margin-left: auto;
         color: var(--pb-accent-2);
+        flex: none;
       }
 
-      .pb_Tv_e5f54191_racerBody {
+      .pb_Tv_e5f54191_summary {
         display: grid;
-        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-        align-items: center;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: end;
         gap: var(--pb-space-3);
-      }
-
-      .pb_Tv_e5f54191_racerBody > [role='grid'] {
-        max-width: calc(var(--pb-space-8) * 3);
-        justify-self: center;
-      }
-
-      .pb_Tv_e5f54191_racers[data-count='2'] .pb_Tv_e5f54191_racerBody > [role='grid'] {
-        max-width: calc(var(--pb-space-8) * 6);
-      }
-
-      .pb_Tv_e5f54191_racers[data-count='3'] .pb_Tv_e5f54191_racerBody > [role='grid'] {
-        max-width: calc(var(--pb-space-8) * 4);
       }
 
       .pb_Tv_e5f54191_best {
         display: grid;
-        justify-items: center;
+        justify-items: start;
         gap: var(--pb-space-2);
         min-width: 0;
-        font-size: var(--pb-font-body);
-        text-align: center;
+        font-size: calc(var(--pb-font-body) * 8 / 9);
       }
 
       .pb_Tv_e5f54191_best strong {
-        font-size: var(--pb-font-h2);
+        font-size: calc(var(--pb-font-display) * 0.5);
         font-weight: 900;
         font-variant-numeric: tabular-nums;
         line-height: 1;
@@ -3745,11 +3789,15 @@ ight is the :root default above) ────────
         color: var(--pb-text-muted);
       }
 
+      .pb_Tv_e5f54191_racerHeader > .pb_Tv_e5f54191_status {
+        color: var(--pb-text-muted);
+      }
+
       .pb_Tv_e5f54191_score {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        font-size: var(--pb-font-body);
+        display: grid;
+        justify-items: end;
+        gap: var(--pb-space-2);
+        font-size: calc(var(--pb-font-body) * 8 / 9);
         color: var(--pb-text-muted);
       }
 

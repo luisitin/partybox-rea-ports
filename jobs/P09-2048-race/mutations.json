@@ -1,0 +1,245 @@
+{
+  "command": "pnpm.cmd vitest run games/merge-sprint/__tests__/board.test.ts games/merge-sprint/__tests__/game.test.ts --maxWorkers=1",
+  "results": [
+    {
+      "name": "merge unequal tiles",
+      "file": "board.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× adds exactly the merged tile values and one spawn for an accepted move 7ms",
+        "× does not spawn, score, count, or spend a draw on a direction that changes nothing 32ms",
+        "× the first 2048 ends every board and wins even against a higher merge score 2ms",
+        "× holds inputs and timers during pause and preserves the remaining race time on resume 1ms"
+      ],
+      "error": null
+    },
+    {
+      "name": "wrong merged tile value",
+      "file": "board.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× adds exactly the merged tile values and one spawn for an accepted move 5ms",
+        "× ends early once the final live board blocks after a spawn 1ms",
+        "× closes when every connected racer blocks even if a disconnected board can still move 1ms",
+        "× slides [2,2,2,2] left to [4,4,0,0], adding 8 points 5ms"
+      ],
+      "error": null
+    },
+    {
+      "name": "half merge points",
+      "file": "board.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× adds exactly the merged tile values and one spawn for an accepted move 5ms",
+        "× the first 2048 ends every board and wins even against a higher merge score 1ms",
+        "× slides [2,2,2,2] left to [4,4,0,0], adding 8 points 5ms",
+        "× slides [2,2,4,0] left to [4,4,0,0], adding 4 points 1ms"
+      ],
+      "error": null
+    },
+    {
+      "name": "reuse the second tile",
+      "file": "board.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× adds exactly the merged tile values and one spawn for an accepted move 6ms",
+        "× slides [2,2,2,2] left to [4,4,0,0], adding 8 points 6ms",
+        "× slides [2,2,4,0] left to [4,4,0,0], adding 4 points 1ms",
+        "× slides [4,4,8,8] left to [8,16,0,0], adding 24 points 1ms"
+      ],
+      "error": null
+    },
+    {
+      "name": "reverse right input",
+      "file": "board.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× merges once per tile from the edge being approached in all four directions 5ms",
+        "FAIL  games/merge-sprint/__tests__/board.test.ts > 2048 merge rules > merges once per tile from the edge being approached in all four directions"
+      ],
+      "error": null
+    },
+    {
+      "name": "ignore vertical merges",
+      "file": "board.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× recognises blocked full boards, and finds vertical as well as horizontal merges 4ms",
+        "FAIL  games/merge-sprint/__tests__/board.test.ts > 2048 merge rules > recognises blocked full boards, and finds vertical as well as horizontal merges"
+      ],
+      "error": null
+    },
+    {
+      "name": "no empty-cell mobility",
+      "file": "board.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× recognises blocked full boards, and finds vertical as well as horizontal merges 3ms",
+        "× keeps a blocked player on stage while a rival races 4ms",
+        "FAIL  games/merge-sprint/__tests__/board.test.ts > 2048 merge rules > recognises blocked full boards, and finds vertical as well as horizontal merges",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > keeps a blocked player on stage while a rival races"
+      ],
+      "error": null
+    },
+    {
+      "name": "wrong spawn normalization",
+      "file": "board.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× selects an empty cell by the shared normalized draw and never overwrites occupied cells 5ms",
+        "FAIL  games/merge-sprint/__tests__/board.test.ts > 2048 merge rules > selects an empty cell by the shared normalized draw and never overwrites occupied cells"
+      ],
+      "error": null
+    },
+    {
+      "name": "always spawn a four",
+      "file": "board.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× selects an empty cell by the shared normalized draw and never overwrites occupied cells 5ms",
+        "× adds exactly the merged tile values and one spawn for an accepted move 6ms",
+        "FAIL  games/merge-sprint/__tests__/board.test.ts > 2048 merge rules > selects an empty cell by the shared normalized draw and never overwrites occupied cells",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > adds exactly the merged tile values and one spawn for an accepted move"
+      ],
+      "error": null
+    },
+    {
+      "name": "no-op spends a spawn",
+      "file": "phases/play.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× does not spawn, score, count, or spend a draw on a direction that changes nothing 27ms",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > does not spawn, score, count, or spend a draw on a direction that changes nothing"
+      ],
+      "error": null
+    },
+    {
+      "name": "duplicate input accepted",
+      "file": "phases/play.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× rejects duplicates, future counters, unknown ids and moves faster than 150ms 26ms",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > rejects duplicates, future counters, unknown ids and moves faster than 150ms"
+      ],
+      "error": null
+    },
+    {
+      "name": "no anti-flood interval",
+      "file": "phases/play.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× rejects duplicates, future counters, unknown ids and moves faster than 150ms 25ms",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > rejects duplicates, future counters, unknown ids and moves faster than 150ms"
+      ],
+      "error": null
+    },
+    {
+      "name": "deadline accepts final move",
+      "file": "phases/play.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× ends at the clock, rejects late moves, and lets identical highest scores share first 4ms",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > ends at the clock, rejects late moves, and lets identical highest scores share first"
+      ],
+      "error": null
+    },
+    {
+      "name": "target never ends race",
+      "file": "phases/play.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× the first 2048 ends every board and wins even against a higher merge score 5ms",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > the first 2048 ends every board and wins even against a higher merge score"
+      ],
+      "error": null
+    },
+    {
+      "name": "blocked boards never end race",
+      "file": "phases/play.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× ends early once the final live board blocks after a spawn 4ms",
+        "× closes when every connected racer blocks even if a disconnected board can still move 1ms",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > ends early once the final live board blocks after a spawn",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > closes when every connected racer blocks even if a disconnected board can still move"
+      ],
+      "error": null
+    },
+    {
+      "name": "wrong draw index",
+      "file": "phases/play.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× adds exactly the merged tile values and one spawn for an accepted move 6ms",
+        "× marks the 1200th accepted move blocked while other racers continue 1ms",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > adds exactly the merged tile values and one spawn for an accepted move",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > marks the 1200th accepted move blocked while other racers continue"
+      ],
+      "error": null
+    },
+    {
+      "name": "score ignores earlier merges",
+      "file": "phases/play.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× adds exactly the merged tile values and one spawn for an accepted move 35ms",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > adds exactly the merged tile values and one spawn for an accepted move"
+      ],
+      "error": null
+    },
+    {
+      "name": "finished loses to higher score",
+      "file": "scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× the first 2048 ends every board and wins even against a higher merge score 5ms",
+        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > the first 2048 ends every board and wins even against a higher merge score"
+      ],
+      "error": null
+    },
+    {
+      "name": "reveal timer never exits",
+      "file": "phases/reveal.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× the first 2048 ends every board and wins even against a higher merge score 611ms",
+        "× ends at the clock, rejects late moves, and lets identical highest scores share first 7ms",
+        "× preserves a board through refresh and finishes without waiting for disconnected players 1ms",
+        "× closes when every connected racer blocks even if a disconnected board can still move 1ms"
+      ],
+      "error": null
+    },
+    {
+      "name": "future draws leak to public views",
+      "file": "index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "failedTests": [
+        "× changing future spawn luck and RNG leaves every public view identical in play 113ms",
+        "× changing future spawn luck and RNG leaves every public view identical in reveal 118ms",
+        "× changing future spawn luck and RNG leaves every public view identical in done 114ms",
+        "× publishes completed boards while keeping all future spawns and RNG private 1ms"
+      ],
+      "error": null
+    }
+  ]
+}

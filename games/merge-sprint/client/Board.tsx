@@ -7,11 +7,13 @@ export function Board({
   board,
   label,
   miniature = false,
+  tvMap = false,
   moves = 0,
 }: {
   board: readonly number[];
   label: string;
   miniature?: boolean;
+  tvMap?: boolean;
   moves?: number;
 }): JSX.Element {
   const L = useT(STRINGS);
@@ -22,6 +24,7 @@ export function Board({
       aria-label={label}
       aria-readonly="true"
       data-mini={miniature ? 'true' : undefined}
+      data-tv-map={tvMap ? 'true' : undefined}
     >
       {[0, 1, 2, 3].map((row) => (
         <div key={row} role="row" className={styles.row}>

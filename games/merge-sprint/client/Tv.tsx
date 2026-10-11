@@ -62,32 +62,29 @@ export function Tv({ view }: GameTvProps<TvMergeView>): JSX.Element {
               <header className={styles.racerHeader}>
                 <b className={styles.rank}>#{racer.rank}</b>
                 <h2>{names[racer.id] ?? racer.id}</h2>
-                {!playing && view.winners.includes(racer.id) ? (
+                {view.winners.includes(racer.id) ? (
                   <span aria-label={L('Winner')}>★</span>
-                ) : null}
+                ) : racer.status === 'blocked' ? (
+                  <span className={styles.status}>{L('No moves')}</span>
+                ) : (
+                  <span className={styles.status}>{playing ? L('Racing') : L('Locked')}</span>
+                )}
               </header>
-              <div className={styles.racerBody}>
-                <Board
-                  board={racer.board}
-                  label={L('{name}’s board', { name: names[racer.id] ?? racer.id })}
-                  miniature
-                />
+              <div className={styles.summary}>
                 <div className={styles.best}>
                   <span>{L('Best tile')}</span>
                   <strong>{racer.best}</strong>
-                  <span className={styles.status}>
-                    {racer.status === 'blocked'
-                      ? L('No moves')
-                      : racer.status === 'finished'
-                        ? L('Target hit!')
-                        : L('Racing')}
-                  </span>
+                </div>
+                <div className={styles.score}>
+                  <span>{L('Score')}</span>
+                  <strong>{racer.score}</strong>
                 </div>
               </div>
-              <footer className={styles.score}>
-                <span>{L('Score')}</span>
-                <strong>{racer.score}</strong>
-              </footer>
+              <Board
+                board={racer.board}
+                label={L('{name}’s board', { name: names[racer.id] ?? racer.id })}
+                tvMap
+              />
             </article>
           );
         })}

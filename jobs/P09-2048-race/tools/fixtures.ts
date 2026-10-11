@@ -57,14 +57,12 @@ console.log(
     Object.fromEntries(
       Object.entries(captured).map(([phase, s]) => [
         phase,
-        game
-          .tvView(s)
-          .racers.map((r) => ({
-            name: names[Number(r.id.slice(1)) - 1],
-            best: r.best,
-            score: r.score,
-            moves: r.moves,
-          })),
+        game.tvView(s).racers.map((r) => ({
+          name: names[Number(r.id.slice(1)) - 1],
+          best: r.best,
+          score: r.score,
+          moves: r.moves,
+        })),
       ]),
     ),
     null,

@@ -12,15 +12,18 @@ describe('2048 merge rules', () => {
     [[2, 0, 2, 2], [4, 2, 0, 0], 4],
     [[4, 2, 2, 4], [4, 4, 4, 0], 4],
     [[0, 0, 0, 2], [2, 0, 0, 0], 0],
-  ])('slides %j left to %j, adding %i points', (row, expected, gain) => {
-    const source = board(row, [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]);
-    const snapshot = [...source];
-    const result = slide(source, 'left');
-    expect(result.board.slice(0, 4)).toEqual(expected);
-    expect(result.gain).toBe(gain);
-    expect(result.changed).toBe(true);
-    expect(source).toEqual(snapshot);
-  });
+  ] as [number[], number[], number][])(
+    'slides %j left to %j, adding %i points',
+    (row, expected, gain) => {
+      const source = board(row, [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]);
+      const snapshot = [...source];
+      const result = slide(source, 'left');
+      expect(result.board.slice(0, 4)).toEqual(expected);
+      expect(result.gain).toBe(gain);
+      expect(result.changed).toBe(true);
+      expect(source).toEqual(snapshot);
+    },
+  );
 
   it('merges once per tile from the edge being approached in all four directions', () => {
     const source = board([2, 2, 2, 2], [2, 4, 0, 0], [0, 4, 4, 0], [2, 0, 0, 2]);
@@ -59,8 +62,7 @@ describe('2048 merge rules', () => {
     const horizontal = [...blocked];
     horizontal[1] = 2;
     expect(canMove(horizontal)).toBe(true);
-    const vertical = [...blocked];
-    vertical[4] = 2;
+    const vertical = board([2, 4, 8, 16], [2, 8, 16, 4], [4, 2, 4, 8], [8, 4, 8, 16]);
     expect(canMove(vertical)).toBe(true);
   });
 
