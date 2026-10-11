@@ -76,7 +76,7 @@ streak points: the bonus here is the required PartyBox adaptation, not a claim a
 | rounds  | 10      | 5–20                     |
 | seconds | 20      | 10–30, step 5            |
 
-Every timed screen budgets its visible text with SDK `readingMs`/`wordCount`, including the
+The seconds setting is a minimum answer window. Every timed screen budgets its visible text with SDK `readingMs`/`wordCount`, including the
 phone stage and personal feedback. Standings and podium also reserve their animation settling
 time. Answer windows close early once everyone eligible has answered. Seeded 20-question matches
 are checked against twice the ten-minute manifest estimate, including reveals and standings.

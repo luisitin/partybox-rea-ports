@@ -14,7 +14,7 @@ streak bonus rises by 100 after the first consecutive correct answer, capped at 
 missing answers earn zero and break the streak. The bonus is an explicit PartyBox adaptation;
 current Kahoot scoring no longer awards streak points.
 
-Choose a pack, 5-20 questions (default 10) and a 10-30 second answer window (default 20).
+Choose a pack, 5-20 questions (default 10) and a 10-30 second minimum answer window (default 20).
 Every timed screen reserves SDK reading time. Minimum beats are 4.5 seconds for reveals,
 3.5 for standings and 2.5 per occupied podium tier, extended for text and animation settling.
 Bots have three strengths.

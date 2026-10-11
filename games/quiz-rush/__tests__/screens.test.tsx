@@ -219,18 +219,22 @@ describe.each([
     status: 'Disconnected. Waiting to reconnect.',
   },
 ])('$name', ({ left, connected, disabled, status }) => {
-  it('allows answers only for a connected active seat, on both phone layouts', () => {
+  it('allows answers only for a connected active seat, with a hint for its phone layout', () => {
     const state: State = {
       ...question,
       left: left ? ['p1'] : [],
       players: { ...question.players, p1: { ...question.players.p1!, connected } },
     };
-    for (const surface of ['phone-tv', 'phone-only'] as const) {
-      const html = render(state, surface);
+    for (const [surface, remote, hint] of [
+      ['phone-tv', false, 'Tap the matching shape'],
+      ['phone-only', false, 'Tap your answer'],
+      ['phone-tv', true, 'Tap your answer'],
+    ] as const) {
+      const html = render(state, surface, remote);
       const pads = html.match(/<button\b[^>]*>/g) ?? [];
       expect(pads).toHaveLength(4);
       expect(pads.filter((pad) => /\bdisabled=""/.test(pad))).toHaveLength(disabled ? 4 : 0);
-      expect(html).toContain(status);
+      expect(html).toContain(disabled ? status : hint);
       expect(html).not.toContain('Send again');
     }
   });

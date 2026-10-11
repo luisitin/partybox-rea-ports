@@ -24,13 +24,13 @@ the final round includes the podium. Evidence: `sim-2.json` through `sim-8.json`
 
 | Players | Matches | Median round (s) | Longest match (s) |
 | ------- | ------- | ---------------- | ----------------- |
-| 2       | 1000    | 30.935           | 645.048           |
-| 3       | 1000    | 32.715           | 702.403           |
-| 4       | 1000    | 34.329           | 755.061           |
-| 5       | 1000    | 35.856           | 786.671           |
-| 6       | 1000    | 37.445           | 812.068           |
-| 7       | 1000    | 39.631           | 853.805           |
-| 8       | 1000    | 41.300           | 893.346           |
+| 2       | 1000    | 31.557           | 657.602           |
+| 3       | 1000    | 33.361           | 715.391           |
+| 4       | 1000    | 34.956           | 768.915           |
+| 5       | 1000    | 36.487           | 800.523           |
+| 6       | 1000    | 38.093           | 825.489           |
+| 7       | 1000    | 40.276           | 867.659           |
+| 8       | 1000    | 41.970           | 907.200           |
 
 ## Reproducibility
 
@@ -39,6 +39,14 @@ Fixtures come from a single fully played eight-seat match via:
 The SDK checks that `done.json` is the podium fixture played to completion. Mutations restore the
 exact original bytes in `finally`; `mutation-results.json` lists all planted defects and failing
 behavioral tests. CI skips fixture/media generation and checks the committed artifacts instead.
+
+Final fixtures and simulations were regenerated together with
+`$env:PB_WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/quiz-rush/__tests__/generate.test.ts games/quiz-rush/__tests__/simulation.test.ts --maxWorkers=1 --pool=threads`:
+8 tests passed, exit 0, 69.05 s. A focused default-fork run passed all 31 assertions but failed
+Windows worker cleanup and ended at -1 after its verified owned process tree was terminated;
+that command is not counted as green. Final local verification uses one thread worker. Linux CI
+keeps its default pool. The new reveal regression counts actual phone-rendered text and checks
+433–1732 ms of formerly omitted repeated-answer reading time.
 
 Screen evidence command: `$env:PB_WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/quiz-rush/__tests__/screens.test.tsx --maxWorkers=1`, then `node jobs/P01-quiz-rush/capture.mjs`, `pnpm.cmd exec prettier --write jobs/P01-quiz-rush/media`, and `node jobs/P01-quiz-rush/hash-media.mjs`.
 One owned headless Chrome process captures sequentially and closes in `finally`. Static renders

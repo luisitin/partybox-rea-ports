@@ -32,7 +32,7 @@ export function enterReveal(state: State, now: number): State {
           (v.bonus > 0 ? `· +${v.bonus} streak bonus ` : '') +
           `Place 1 · ${v.streak} correct in a row`
         : `${v.outcome === 'timeout' ? 'Too slow' : 'Not this time'} +${v.points} points Place 1`;
-    return wordCount(`${round} ${summary} ${chart}`);
+    return wordCount(`${round} ${summary} ${chart} ${q.options[q.correct]}`);
   });
   const words = Math.max(wordCount(tv), ...phoneWords);
   const ms = Math.max(4500, REVEAL_SETTLE_MS + readingMs(words, { ui: true }));

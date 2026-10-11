@@ -1,7 +1,11 @@
 // Readable score/podium holds protect a room of strangers, including long names and ties.
 import { describe, expect, it } from 'vitest';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { readingMs, wordCount } from '@partybox/game-sdk';
 import { testKit, testPlayers } from '@partybox/game-sdk/testing';
+import { PhoneOnlyProvider } from '@partybox/game-sdk/ui';
+import { Controller } from '../client/Controller';
 import { game } from '../server/index';
 import { enterScore } from '../server/phases/score';
 import { enterPodium } from '../server/phases/podium';
@@ -16,6 +20,25 @@ const earlyTimer = (state: State) => ({
   startedAt: state.phase.startedAt,
   now: state.phase.deadline! - 1,
 });
+
+function phoneRevealWords(state: State): number {
+  const view = game.controllerView({ ...state, phoneOnly: true }, 'p1');
+  const html = renderToStaticMarkup(
+    createElement(PhoneOnlyProvider, {
+      value: true,
+      children: createElement(Controller, {
+        view: { ...view, vip: null },
+        me: state.players.p1!,
+        send: () => undefined,
+      }),
+    }),
+  );
+  // Decorative shapes and the compact verdict's hidden mark are not visible reading text.
+  const text = html
+    .replace(/<([a-z][a-z0-9-]*)\b[^>]*aria-hidden="true"[^>]*>[\s\S]*?<\/\1>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ');
+  return wordCount(text);
+}
 
 function board(count: number, longNames = false): State {
   const players = testPlayers(count).map((p, i) => ({
@@ -140,15 +163,40 @@ describe('question and reveal reading time', () => {
       },
     };
     const bonus = enterReveal(answered, 1000);
-    // Phone: round4 + correct verdict18 + options4 + counts4 + correct flag2 + fact4 = 36.
-    expect(duration(bonus)).toBe(readingMs(36, { ui: true }) + 600);
+    // The phone repeats the correct option below its chart, as well as in its option row.
+    const phoneWords = phoneRevealWords(bonus);
+    expect(phoneWords).toBe(37);
+    expect(duration(bonus)).toBe(readingMs(phoneWords, { ui: true }) + 600);
     expect(bonus.verdicts.p1!.bonus).toBe(100);
     expect(game.reduce(bonus, earlyTimer(bonus))).toBe(bonus);
     expect(testKit(game).timer(bonus).phase.id).toBe('score');
 
+    const correctLabels = ['Tokyo', 'Tokyo city', 'Metropolitan Tokyo city', 'The city of Tokyo'];
+    const corrections = [433, 866, 1299, 1732];
+    for (const [index, correctLabel] of correctLabels.entries()) {
+      const variant = {
+        ...q,
+        options: q.options.map((option, choice) =>
+          choice === q.correct ? correctLabel : option,
+        ) as State['deck'][number]['options'],
+      };
+      const revealed = enterReveal({ ...answered, deck: [variant, ...base.deck.slice(1)] }, 1000);
+      // Both the chart row and the footer display this label. Each must receive reading time.
+      const visibleWords = phoneRevealWords(revealed);
+      expect(visibleWords).toBe(phoneWords + 2 * (wordCount(correctLabel) - 1));
+      const omittedFooterWords = visibleWords - wordCount(correctLabel);
+      expect(duration(revealed)).toBe(readingMs(visibleWords, { ui: true }) + 600);
+      expect(
+        readingMs(visibleWords, { ui: true }) - readingMs(omittedFooterWords, { ui: true }),
+      ).toBe(corrections[index]);
+    }
+
     const timeout = enterReveal({ ...answered, answers: {} }, 1000);
     // TV: round4 + prompt7 + options4 + counts4 + correct flag2 + fact4 + missed4 + answer1 = 30.
     expect(duration(timeout)).toBe(readingMs(30, { ui: true }) + 600);
+    expect(duration(timeout)).toBeGreaterThanOrEqual(
+      readingMs(phoneRevealWords(timeout), { ui: true }) + 600,
+    );
     expect(Object.values(timeout.verdicts).every((v) => v.outcome === 'timeout')).toBe(true);
     expect(game.reduce(timeout, earlyTimer(timeout))).toBe(timeout);
   });

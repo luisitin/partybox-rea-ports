@@ -56,7 +56,9 @@ export function AnswerScreen({
               ? retry
                 ? L('Not confirmed yet. Send your answer again.')
                 : L('Sending your answer…')
-              : L('Tap the matching shape');
+              : stage
+                ? L('Tap your answer')
+                : L('Tap the matching shape');
   return (
     <Screen key={`question:${view.round}`} className={styles.screen} ghost={false}>
       <div
