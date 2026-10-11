@@ -7,13 +7,13 @@ because this desktop blocks PowerShell shim scripts. No complete repository test
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Install                            | `corepack enable`; `pnpm.cmd install`                                                                    | PASS; frozen workspace dependencies reused, no new dependencies                                                                                                                                       |
 | Types                              | `pnpm.cmd typecheck`                                                                                     | PASS                                                                                                                                                                                                  |
-| Game + SDK + property + simulation | `pnpm.cmd vitest run games/quiz-rush --maxWorkers=1`                                                     | PASS; 116 tests, 1 opt-in fixture-generation test skipped; 35.19 s; separately generated fixtures and final 7000 simulations also pass                                                                |
+| Game + SDK + property + simulation | `pnpm.cmd vitest run games/quiz-rush --maxWorkers=1 --pool=threads`                                      | PASS; 116 tests, 1 opt-in fixture-generation test skipped; exit 0, 87.96 s; separately generated fixtures and final 7000 simulations also pass                                                        |
 | Published SDK contract             | Included by `games/quiz-rush/__tests__/sdk.test.ts` in the command above                                 | PASS; 20 unmodified SDK tests, discovery restricted to quiz-rush only                                                                                                                                 |
 | Property tests                     | `pnpm.cmd vitest run games/quiz-rush/__tests__/properties.test.ts --maxWorkers=1` (also in game run)     | PASS; seeds 1, 2, 3 + 1000 independently sampled reproducible seeds; generated event traces, fuzz, immutable state, JSON, replay                                                                      |
 | Mutations                          | `node jobs/P01-quiz-rush/mutate.mjs`                                                                     | PASS: 20/20 behavioral kills, zero invalid/load/syntax kills; 25 baseline tests green; original source hashes restored                                                                                |
 | Formatting                         | `pnpm.cmd format`                                                                                        | PASS; all matched files formatted                                                                                                                                                                     |
 | Screens                            | Opt-in `screens.test.tsx` renders; `node jobs/P01-quiz-rush/capture.mjs`                                 | 48 HTML/PNG frames and 57 SSR assertions pass; zero scrolling, clipping or missing CSS, including locked maximum text and eight tied long names; final pacing recapture and all 98 checksums complete |
-| CI                                 | `.github/workflows/P01.yml`: install, types, format, this game's tests, ubuntu-latest, 30 min, read-only | PASS; GitHub run 38176682177 (40 s), PR #2 ready after success; integration includes updated main SDK                                                                                                 |
+| CI                                 | `.github/workflows/P01.yml`: install, types, format, this game's tests, ubuntu-latest, 30 min, read-only | PASS; final source GitHub run 38180027626; PR #2 ready after success; integration includes updated main SDK; artifact-only follow-up is checked on the PR                                             |
 
 ## Seeded bots
 
@@ -48,12 +48,19 @@ that command is not counted as green. Final local verification uses one thread w
 keeps its default pool. The new reveal regression counts actual phone-rendered text and checks
 433–1732 ms of formerly omitted repeated-answer reading time.
 
-Screen evidence command: `$env:PB_WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/quiz-rush/__tests__/screens.test.tsx --maxWorkers=1`, then `node jobs/P01-quiz-rush/capture.mjs`, `pnpm.cmd exec prettier --write jobs/P01-quiz-rush/media`, and `node jobs/P01-quiz-rush/hash-media.mjs`.
+Screen evidence command: `$env:PB_WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/quiz-rush/__tests__/screens.test.tsx --maxWorkers=1 --pool=threads`, then `node jobs/P01-quiz-rush/capture.mjs`, `pnpm.cmd exec prettier --write jobs/P01-quiz-rush/media`, and `node jobs/P01-quiz-rush/hash-media.mjs`.
 One owned headless Chrome process captures sequentially and closes in `finally`. Static renders
 settle SDK animation hooks for readable final frames; actual components, views and module CSS run.
 Independent visual review covers all 48 frames. TV body text is at least 32.736 px; the smallest
 answer target is 173 × 210.7 px. Phones reserve an 84 px header and 48 px footer. No second browser
-or whole-suite browser run was started. SHA256SUMS covers all 98 media files (5,631,194 bytes), below 10 MB.
+or whole-suite browser run was started. SHA256SUMS covers all 98 media files (5,629,999 bytes), below 10 MB.
+The final 57-assertion SSR run exited 0 in 254.50 s under shared-desktop load. Two file-navigation
+capture attempts timed out and closed their owned browsers; the final capture loaded each exact
+self-contained HTML fixture with CDP `Page.setDocumentContent` and completed all 48 frames.
+Its finally block terminated only its owned browser tree (PID 103932); a subsequent native process
+check confirmed `HasExited=True` and no owned children. The five-second in-tool exit verifier timed
+out under load, so the temporary profile was conservatively preserved. No game assertion or fit
+failure was hidden by this cleanup delay.
 
 No secrets, tracking, runtime network calls, imported artwork or imported audio. Original live
 play was unavailable; source reconstruction is explicitly recorded in RESEARCH/ASSUMPTIONS.

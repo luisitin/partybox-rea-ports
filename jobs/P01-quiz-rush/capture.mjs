@@ -14,7 +14,6 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
 
 const job = import.meta.dirname;
 const media = resolve(job, 'media');
@@ -77,7 +76,7 @@ class Devtools {
       const timer = setTimeout(() => {
         this.pending.delete(id);
         reject(new Error(`DevTools timed out: ${method}`));
-      }, 10000);
+      }, 30000);
       this.pending.set(id, {
         resolve: (result) => {
           clearTimeout(timer);
@@ -229,6 +228,7 @@ try {
   const dev = new Devtools(socket);
   await dev.call('Page.enable');
   await dev.call('Runtime.enable');
+  const { frameTree } = await dev.call('Page.getFrameTree');
   console.log('Page and runtime enabled.');
   for (const [index, frame] of cases.entries()) {
     await dev.call('Emulation.setDeviceMetricsOverride', {
@@ -237,11 +237,13 @@ try {
       deviceScaleFactor: 1,
       mobile: frame.surface !== 'tv',
     });
-    const navigation = await dev.call('Page.navigate', {
-      url: pathToFileURL(resolve(media, `${frame.name}.html`)).href,
+    // Every fixture is self-contained. Write its exact HTML into the owned blank page instead
+    // of depending on Windows file navigation, which can stall under desktop contention.
+    await dev.call('Page.setDocumentContent', {
+      frameId: frameTree.frame.id,
+      html: readFileSync(resolve(media, `${frame.name}.html`), 'utf8'),
     });
-    if (navigation.errorText) throw new Error(navigation.errorText);
-    if (index === 0) console.log(`Navigated to ${frame.name}.`);
+    if (index === 0) console.log(`Loaded inline HTML for ${frame.name}.`);
     let ready = false;
     for (let attempt = 0; attempt < 60; attempt++) {
       const state = await dev.call('Runtime.evaluate', {

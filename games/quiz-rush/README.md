@@ -53,7 +53,7 @@ Correct: `round(1000 * (1 - clamp(elapsed / answerMs, 0, 1) / 2))`, so 500–100
 Consecutive correct answers add `min(500, 100 * (streak - 1))`. Wrong answers and timeouts give zero
 and reset the streak. Speed and streak points are separately visible. Credits happen once on
 reveal. Total points determine rank; equal totals share rank and all tied winners are retained.
-Final ranks are withheld on phones until their podium tier is public. Current Kahoot has no
+Unrevealed top-three ranks are withheld on phones; the podium screen shows no personal rank. Current Kahoot has no
 streak points: the bonus here is the required PartyBox adaptation, not a claim about its scoring.
 
 ## Edge cases
