@@ -21,7 +21,7 @@ const localCss = [
 ] as const;
 function style(): string {
   return (
-    readFileSync(resolve(root, 'design/tokens.css'), 'utf8') +
+    readFileSync(resolve(root, 'design/tokens.css'), 'utf8').replace(/[ \t]+$/gm, '') +
     localCss
       .map(([name, names]) =>
         readFileSync(resolve(root, `games/block-clash/client/${name}.module.css`), 'utf8').replace(

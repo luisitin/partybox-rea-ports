@@ -1,554 +1,604 @@
-<!doctype html><html lang="en" data-surface="phone"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Block Clash phase capture</title><style>/* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+<!doctype html>
+<html lang="en" data-surface="phone">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Block Clash phase capture</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
    Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
    The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
    <html> by main.tsx and on the shell element). */
-:root {
-  --pb-bg: #0f1020;
-  /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
      the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
      far more, so text drawn on the stage keeps its contrast. */
-  --pb-art-wash: 16%;
-  --pb-tile-wash: 0%;
-  --pb-surface: #1c1e3a;
-  --pb-surface-2: #272a52;
-  --pb-text: #f5f6ff;
-  --pb-text-muted: #b3b7d9;
-  --pb-accent: #ff5d8f;
-  --pb-accent-2: #ffd166;
-  --pb-accent-3: #06d6a0;
-  --pb-danger: #ef476f;
-  --pb-info: #4cc9f0;
-  --pb-focus: #ffd166;
-  --pb-on-accent: #1a0b12;
-  /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
-  --pb-accent-2-fill: #ffd166;
-  --pb-on-accent-2-fill: #1a0b12;
-  /* optional edge for surfaces; only High Contrast sets it */
-  --pb-border: transparent;
-  /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
-  --pb-scrim: rgb(15 16 32 / 62%);
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
 
-  --pb-player-1: #ff5d8f;
-  --pb-player-2: #ffd166;
-  --pb-player-3: #06d6a0;
-  --pb-player-4: #4cc9f0;
-  --pb-player-5: #b388ff;
-  --pb-player-6: #ff9f43;
-  --pb-player-7: #48dbfb;
-  --pb-player-8: #f368e0;
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
 
-  /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
      colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
-  --pb-team-sun: var(--pb-accent);
-  --pb-team-moon: var(--pb-info);
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
 
-  --pb-font-family:
-    'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system, Roboto,
-    'Helvetica Neue', Arial, sans-serif;
-  --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
 
-  --pb-space-1: 4px;
-  --pb-space-2: 8px;
-  --pb-space-3: 12px;
-  --pb-space-4: 16px;
-  --pb-space-5: 24px;
-  --pb-space-6: 32px;
-  --pb-space-7: 48px;
-  --pb-space-8: 64px;
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
 
-  --pb-radius: 12px;
-  --pb-radius-lg: 24px;
-  --pb-touch: 44px;
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
 
-  --pb-motion-fast: 150ms;
-  --pb-motion-base: 300ms;
-  --pb-motion-slow: 600ms;
-  --pb-motion-pulse: 1000ms;
-  --pb-motion-confetti: 3000ms;
-  --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
      setting scales the words (16 px root = the same sizes as before). */
-  --pb-font-display: 3rem;
-  --pb-font-h1: 1.75rem;
-  --pb-font-h2: 1.375rem;
-  --pb-font-body: 1.125rem;
-  --pb-font-caption: 0.875rem;
-  --pb-font-button: 1.25rem;
-  --pb-chip-size: 40px;
-}
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
 
-/* ── Themes (src/theme.ts sets data-theme on <html>; 
+      /* ── Themes (src/theme.ts sets data-theme on <html>;
 ight is the :root default above) ────────
    Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
    colours stay bright in every theme — they are avatar discs, not text. */
-[data-theme='daylight'] {
-  color-scheme: light;
-  --pb-bg: #f6f5ff;
-  --pb-art-wash: 90%;
-  --pb-tile-wash: 45%;
-  --pb-surface: #ffffff;
-  --pb-surface-2: #e9e7fb;
-  --pb-text: #171633;
-  --pb-text-muted: #4a4c6e;
-  --pb-accent: #c2185b;
-  --pb-accent-2: #7a4b00;
-  --pb-accent-3: #0b6b4e;
-  --pb-danger: #c0143c;
-  --pb-info: #0b6e99;
-  --pb-focus: #c2185b;
-  --pb-on-accent: #ffffff;
-  --pb-accent-2-fill: #ffd166;
-  --pb-on-accent-2-fill: #1a0b12;
-  --pb-scrim: rgb(23 22 51 / 45%);
-}
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
 
-[data-theme='arcade'] {
-  --pb-bg: #050014;
-  --pb-surface: #14002e;
-  --pb-surface-2: #23064a;
-  --pb-text: #f0f6ff;
-  --pb-text-muted: #a8b3d6;
-  --pb-accent: #ff2bd6;
-  --pb-accent-2: #00f0ff;
-  --pb-accent-3: #39ff14;
-  --pb-danger: #ff3860;
-  --pb-info: #8f96ff;
-  --pb-focus: #00f0ff;
-  --pb-on-accent: #050014;
-  --pb-accent-2-fill: #00f0ff;
-  --pb-on-accent-2-fill: #050014;
-  --pb-scrim: rgb(5 0 20 / 62%);
-}
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
 
-[data-theme='cabin'] {
-  --pb-bg: #1d1410;
-  --pb-surface: #2c211b;
-  --pb-surface-2: #3d2e26;
-  --pb-text: #fbf3e8;
-  --pb-text-muted: #cbb8a6;
-  --pb-accent: #ee8050;
-  --pb-accent-2: #f2c14e;
-  --pb-accent-3: #8fbf5a;
-  --pb-danger: #f07070;
-  --pb-info: #6fb3d2;
-  --pb-focus: #f2c14e;
-  --pb-on-accent: #1d1410;
-  --pb-accent-2-fill: #f2c14e;
-  --pb-on-accent-2-fill: #1d1410;
-  --pb-scrim: rgb(29 20 16 / 62%);
-}
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
 
-[data-theme='contrast'] {
-  --pb-bg: #000000;
-  --pb-surface: #111111;
-  --pb-surface-2: #242424;
-  --pb-text: #ffffff;
-  --pb-text-muted: #e6e6e6;
-  --pb-accent: #ff4fa3;
-  --pb-accent-2: #ffff00;
-  --pb-accent-3: #00ff88;
-  --pb-danger: #ff5555;
-  --pb-info: #66ccff;
-  --pb-focus: #ffffff;
-  --pb-on-accent: #000000;
-  --pb-accent-2-fill: #ffff00;
-  --pb-on-accent-2-fill: #000000;
-  --pb-border: #ffffff;
-  --pb-scrim: rgb(0 0 0 / 78%);
-}
-[data-surface='tv'] {
-  --pb-font-display: 128px;
-  --pb-font-h1: 72px;
-  --pb-font-h2: 48px;
-  --pb-font-body: 36px;
-  --pb-font-caption: 28px;
-  --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
-  --pb-font-button: 36px;
-  --pb-chip-size: 72px;
-  /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
-  --pb-overscan-x: 96px;
-  --pb-overscan-y: 54px;
-}
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
 
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --pb-motion-fast: 0ms;
-    --pb-motion-base: 0ms;
-    --pb-motion-slow: 0ms;
-    --pb-motion-pulse: 0ms;
-    --pb-motion-confetti: 0ms;
-  }
-}
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
 
-/* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
-:root[data-motion='off'] {
-  --pb-motion-fast: 0ms;
-  --pb-motion-base: 0ms;
-  --pb-motion-slow: 0ms;
-  --pb-motion-pulse: 0ms;
-  --pb-motion-confetti: 0ms;
-}
-._stage_1db545 {
-  flex: 1;
-  min-height: 0;
-  padding: var(--pb-space-5) var(--pb-space-6);
-  gap: var(--pb-space-5);
-}
-._header_1db545 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--pb-space-6);
-}
-._header_1db545 h2 {
-  font-size: var(--pb-font-h1);
-  margin: 0;
-}
-._header_1db545 p {
-  font-size: var(--pb-font-body);
-  margin: var(--pb-space-2) 0 0;
-  color: var(--pb-text-muted);
-}
-._clock_1db545 {
-  font-size: calc(var(--pb-font-display) * 0.75);
-  line-height: 1;
-  font-weight: 900;
-  font-variant-numeric: tabular-nums;
-  color: var(--pb-accent-2);
-}
-._boards_1db545 {
-  flex: 1;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: repeat(var(--boards), minmax(0, 1fr));
-  gap: var(--pb-space-4);
-}
-._well_1db545 {
-  min-width: 0;
-  min-height: 0;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: var(--pb-space-2);
-}
-._well_1db545 h3 {
-  margin: 0;
-  font-size: var(--pb-font-body);
-  border-bottom: var(--pb-space-1) solid var(--player);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-._picture_1db545 {
-  min-height: 0;
-  display: grid;
-  place-items: center;
-}
-._stats_1db545 {
-  font-size: var(--pb-font-body);
-  line-height: 1.2;
-}
-._stats_1db545 b {
-  font-size: var(--pb-font-h2);
-}
-._stats_1db545 b span {
-  font-size: var(--pb-font-body);
-}
-._stats_1db545 p {
-  margin: var(--pb-space-1) 0 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-._standings_1db545 {
-  margin: auto;
-  padding: 0;
-  width: 100%;
-  max-width: calc(var(--pb-space-8) * 23);
-  display: grid;
-  gap: var(--pb-space-3);
-  list-style: none;
-  font-size: var(--pb-font-body);
-}
-._standings_1db545 li {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: var(--pb-space-5);
-  padding: var(--pb-space-3) var(--pb-space-5);
-  background: var(--pb-surface);
-  border-radius: var(--pb-radius);
-}
-._standings_1db545 small {
-  font-size: var(--pb-font-body);
-  color: var(--pb-text-muted);
-}
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+      ._stage_1db545 {
+        flex: 1;
+        min-height: 0;
+        padding: var(--pb-space-5) var(--pb-space-6);
+        gap: var(--pb-space-5);
+      }
+      ._header_1db545 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--pb-space-6);
+      }
+      ._header_1db545 h2 {
+        font-size: var(--pb-font-h1);
+        margin: 0;
+      }
+      ._header_1db545 p {
+        font-size: var(--pb-font-body);
+        margin: var(--pb-space-2) 0 0;
+        color: var(--pb-text-muted);
+      }
+      ._clock_1db545 {
+        font-size: calc(var(--pb-font-display) * 0.75);
+        line-height: 1;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        color: var(--pb-accent-2);
+      }
+      ._boards_1db545 {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: repeat(var(--boards), minmax(0, 1fr));
+        gap: var(--pb-space-4);
+      }
+      ._well_1db545 {
+        min-width: 0;
+        min-height: 0;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: var(--pb-space-2);
+      }
+      ._well_1db545 h3 {
+        margin: 0;
+        font-size: var(--pb-font-body);
+        border-bottom: var(--pb-space-1) solid var(--player);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      ._picture_1db545 {
+        min-height: 0;
+        display: grid;
+        place-items: center;
+      }
+      ._stats_1db545 {
+        font-size: var(--pb-font-body);
+        line-height: 1.2;
+      }
+      ._stats_1db545 b {
+        font-size: var(--pb-font-h2);
+      }
+      ._stats_1db545 b span {
+        font-size: var(--pb-font-body);
+      }
+      ._stats_1db545 p {
+        margin: var(--pb-space-1) 0 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      ._standings_1db545 {
+        margin: auto;
+        padding: 0;
+        width: 100%;
+        max-width: calc(var(--pb-space-8) * 23);
+        display: grid;
+        gap: var(--pb-space-3);
+        list-style: none;
+        font-size: var(--pb-font-body);
+      }
+      ._standings_1db545 li {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: var(--pb-space-5);
+        padding: var(--pb-space-3) var(--pb-space-5);
+        background: var(--pb-surface);
+        border-radius: var(--pb-radius);
+      }
+      ._standings_1db545 small {
+        font-size: var(--pb-font-body);
+        color: var(--pb-text-muted);
+      }
 
-._screen_0e27b0,
-._stage_0e27b0 {
-  height: 100%;
-  min-height: 0;
-  box-sizing: border-box;
-  padding: var(--pb-space-3);
-  gap: var(--pb-space-2);
-  display: grid;
-  color: var(--pb-text);
-  font-family: var(--pb-font-family);
-}
-._screen_0e27b0 {
-  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
-  touch-action: none;
-  user-select: none;
-}
-._header_0e27b0 {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: var(--pb-space-1);
-  align-items: center;
-}
-._header_0e27b0 h2 {
-  margin: 0;
-  font-size: var(--pb-font-h2);
-}
-._header_0e27b0 h2 span {
-  font-size: var(--pb-font-caption);
-  font-weight: 600;
-}
-._header_0e27b0 > b {
-  font-size: var(--pb-font-h2);
-  font-variant-numeric: tabular-nums;
-}
-._header_0e27b0 p {
-  grid-column: 1 / -1;
-  margin: 0;
-  min-height: calc(var(--pb-font-caption) * 2.8);
-  line-height: 1.4;
-  font-size: var(--pb-font-caption);
-  color: var(--pb-text-muted);
-}
-._boardZone_0e27b0 {
-  min-height: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) + var(--pb-space-3));
-  gap: var(--pb-space-3);
-}
-._picture_0e27b0 {
-  min-height: 0;
-  overflow: hidden;
-  touch-action: none;
-}
-._next_0e27b0 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 0;
-  font-size: var(--pb-font-caption);
-  gap: var(--pb-space-1);
-}
-._next_0e27b0 p {
-  margin: 0;
-  text-align: center;
-  line-height: 1.5;
-}
-._preview_0e27b0 {
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  max-height: var(--pb-space-8);
-  fill: var(--pb-accent-2-fill);
-  background: var(--pb-surface);
-  border-radius: var(--pb-radius);
-}
-._preview_0e27b0 text {
-  fill: var(--pb-text-muted);
-  font-size: 2px;
-}
-._target_0e27b0 {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: var(--pb-space-2);
-  font-size: var(--pb-font-caption);
-}
-._target_0e27b0 select {
-  width: 100%;
-  min-width: 0;
-  min-height: var(--pb-touch);
-  padding: var(--pb-space-2);
-  border-radius: var(--pb-radius);
-  border: calc(var(--pb-space-1) / 4) solid var(--pb-text-muted);
-  color: var(--pb-text);
-  background: var(--pb-surface);
-  font: inherit;
-}
-._controls_0e27b0 {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--pb-space-2);
-}
-._controls_0e27b0 button {
-  min-height: calc(var(--pb-touch) + var(--pb-space-2));
-  padding: var(--pb-space-2);
-  border: 0;
-  border-radius: var(--pb-radius);
-  font-size: var(--pb-font-button);
-  font-weight: 800;
-  font-family: inherit;
-  background: var(--pb-surface-2);
-  color: var(--pb-text);
-  touch-action: manipulation;
-}
-._controls_0e27b0 button:active {
-  transform: scale(0.96);
-}
-._controls_0e27b0 button:disabled {
-  opacity: 0.55;
-}
-._controls_0e27b0 ._drop_0e27b0 {
-  background: var(--pb-accent-2-fill);
-  color: var(--pb-on-accent-2-fill);
-}
-._controls_0e27b0 button:focus-visible,
-._target_0e27b0 select:focus-visible {
-  outline: var(--pb-space-1) solid var(--pb-focus);
-  outline-offset: calc(var(--pb-space-1) / 2);
-}
-._hint_0e27b0 {
-  margin: 0;
-  text-align: center;
-  font-size: var(--pb-font-caption);
-  line-height: 1.4;
-  color: var(--pb-text-muted);
-}
-._stage_0e27b0 {
-  grid-template-rows: auto minmax(0, 1fr) auto;
-}
-._stage_0e27b0 header h2 {
-  margin: 0;
-  font-size: var(--pb-font-h1);
-}
-._stage_0e27b0 header p {
-  margin: var(--pb-space-1) 0 0;
-  font-size: var(--pb-font-body);
-}
-._match_0e27b0 {
-  min-height: 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--pb-space-2);
-}
-._match_0e27b0 figure {
-  min-height: 0;
-  min-width: 0;
-  margin: 0;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-}
-._match_0e27b0 figcaption {
-  font-size: var(--pb-font-caption);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-._standings_0e27b0 {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  display: grid;
-  gap: var(--pb-space-1);
-  font-size: var(--pb-font-body);
-}
-._standings_0e27b0 li {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: var(--pb-space-2);
-  min-height: var(--pb-space-6);
-  padding: var(--pb-space-1) var(--pb-space-2);
-  background: var(--pb-surface);
-  border-radius: var(--pb-radius);
-}
-._standings_0e27b0 li[data-me='true'] {
-  outline: calc(var(--pb-space-1) / 2) solid var(--pb-accent-2);
-}
-._standings_0e27b0 b {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-._standings_0e27b0 small {
-  color: var(--pb-text-muted);
-  font-size: var(--pb-font-caption);
-}
-@media (prefers-reduced-motion: reduce) {
-  ._controls_0e27b0 button:active {
-    transform: none;
-  }
-}
+      ._screen_0e27b0,
+      ._stage_0e27b0 {
+        height: 100%;
+        min-height: 0;
+        box-sizing: border-box;
+        padding: var(--pb-space-3);
+        gap: var(--pb-space-2);
+        display: grid;
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+      }
+      ._screen_0e27b0 {
+        grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+        touch-action: none;
+        user-select: none;
+      }
+      ._header_0e27b0 {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: var(--pb-space-1);
+        align-items: center;
+      }
+      ._header_0e27b0 h2 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+      }
+      ._header_0e27b0 h2 span {
+        font-size: var(--pb-font-caption);
+        font-weight: 600;
+      }
+      ._header_0e27b0 > b {
+        font-size: var(--pb-font-h2);
+        font-variant-numeric: tabular-nums;
+      }
+      ._header_0e27b0 p {
+        grid-column: 1 / -1;
+        margin: 0;
+        min-height: calc(var(--pb-font-caption) * 2.8);
+        line-height: 1.4;
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+      ._boardZone_0e27b0 {
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) + var(--pb-space-3));
+        gap: var(--pb-space-3);
+      }
+      ._picture_0e27b0 {
+        min-height: 0;
+        overflow: hidden;
+        touch-action: none;
+      }
+      ._next_0e27b0 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 0;
+        font-size: var(--pb-font-caption);
+        gap: var(--pb-space-1);
+      }
+      ._next_0e27b0 p {
+        margin: 0;
+        text-align: center;
+        line-height: 1.5;
+      }
+      ._preview_0e27b0 {
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+        max-height: var(--pb-space-8);
+        fill: var(--pb-accent-2-fill);
+        background: var(--pb-surface);
+        border-radius: var(--pb-radius);
+      }
+      ._preview_0e27b0 text {
+        fill: var(--pb-text-muted);
+        font-size: 2px;
+      }
+      ._target_0e27b0 {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: var(--pb-space-2);
+        font-size: var(--pb-font-caption);
+      }
+      ._target_0e27b0 select {
+        width: 100%;
+        min-width: 0;
+        min-height: var(--pb-touch);
+        padding: var(--pb-space-2);
+        border-radius: var(--pb-radius);
+        border: calc(var(--pb-space-1) / 4) solid var(--pb-text-muted);
+        color: var(--pb-text);
+        background: var(--pb-surface);
+        font: inherit;
+      }
+      ._controls_0e27b0 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--pb-space-2);
+      }
+      ._controls_0e27b0 button {
+        min-height: calc(var(--pb-touch) + var(--pb-space-2));
+        padding: var(--pb-space-2);
+        border: 0;
+        border-radius: var(--pb-radius);
+        font-size: var(--pb-font-button);
+        font-weight: 800;
+        font-family: inherit;
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        touch-action: manipulation;
+      }
+      ._controls_0e27b0 button:active {
+        transform: scale(0.96);
+      }
+      ._controls_0e27b0 button:disabled {
+        opacity: 0.55;
+      }
+      ._controls_0e27b0 ._drop_0e27b0 {
+        background: var(--pb-accent-2-fill);
+        color: var(--pb-on-accent-2-fill);
+      }
+      ._controls_0e27b0 button:focus-visible,
+      ._target_0e27b0 select:focus-visible {
+        outline: var(--pb-space-1) solid var(--pb-focus);
+        outline-offset: calc(var(--pb-space-1) / 2);
+      }
+      ._hint_0e27b0 {
+        margin: 0;
+        text-align: center;
+        font-size: var(--pb-font-caption);
+        line-height: 1.4;
+        color: var(--pb-text-muted);
+      }
+      ._stage_0e27b0 {
+        grid-template-rows: auto minmax(0, 1fr) auto;
+      }
+      ._stage_0e27b0 header h2 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+      }
+      ._stage_0e27b0 header p {
+        margin: var(--pb-space-1) 0 0;
+        font-size: var(--pb-font-body);
+      }
+      ._match_0e27b0 {
+        min-height: 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--pb-space-2);
+      }
+      ._match_0e27b0 figure {
+        min-height: 0;
+        min-width: 0;
+        margin: 0;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+      }
+      ._match_0e27b0 figcaption {
+        font-size: var(--pb-font-caption);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      ._standings_0e27b0 {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        display: grid;
+        gap: var(--pb-space-1);
+        font-size: var(--pb-font-body);
+      }
+      ._standings_0e27b0 li {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        align-items: center;
+        gap: var(--pb-space-2);
+        min-height: var(--pb-space-6);
+        padding: var(--pb-space-1) var(--pb-space-2);
+        background: var(--pb-surface);
+        border-radius: var(--pb-radius);
+      }
+      ._standings_0e27b0 li[data-me='true'] {
+        outline: calc(var(--pb-space-1) / 2) solid var(--pb-accent-2);
+      }
+      ._standings_0e27b0 b {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      ._standings_0e27b0 small {
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-caption);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        ._controls_0e27b0 button:active {
+          transform: none;
+        }
+      }
 
-._board_d76627 {
-  display: block;
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  overflow: hidden;
-  border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
-  border-radius: var(--pb-radius);
-}
-._background_d76627 {
-  fill: var(--pb-bg);
-}
-._grid_d76627 {
-  stroke: var(--pb-surface-2);
-  stroke-width: 0.025;
-}
-._block_d76627 {
-  fill: var(--pb-info);
-}
-._block_d76627[data-kind='2'] {
-  fill: var(--pb-accent-2-fill);
-}
-._block_d76627[data-kind='3'] {
-  fill: var(--pb-player-5);
-}
-._block_d76627[data-kind='4'] {
-  fill: var(--pb-player-3);
-}
-._block_d76627[data-kind='5'] {
-  fill: var(--pb-player-1);
-}
-._block_d76627[data-kind='6'] {
-  fill: var(--pb-player-7);
-}
-._block_d76627[data-kind='7'] {
-  fill: var(--pb-player-6);
-}
-._block_d76627[data-kind='8'] {
-  fill: var(--pb-text-muted);
-}
-._mark_d76627 {
-  stroke: var(--pb-bg);
-  stroke-width: 0.09;
-  opacity: 0.5;
-}
-._falling_d76627 {
-  fill: var(--pb-text);
-}
-._ghost_d76627 {
-  fill: none;
-  stroke: var(--pb-text);
-  stroke-width: 0.07;
-  stroke-dasharray: 0.15 0.1;
-}
-._out_d76627 rect {
-  fill: var(--pb-surface);
-  stroke: var(--pb-danger);
-  stroke-width: 0.08;
-}
-._out_d76627 text {
-  fill: var(--pb-text);
-  font-size: 1.6px;
-  font-weight: 900;
-}
+      ._board_d76627 {
+        display: block;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        overflow: hidden;
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        border-radius: var(--pb-radius);
+      }
+      ._background_d76627 {
+        fill: var(--pb-bg);
+      }
+      ._grid_d76627 {
+        stroke: var(--pb-surface-2);
+        stroke-width: 0.025;
+      }
+      ._block_d76627 {
+        fill: var(--pb-info);
+      }
+      ._block_d76627[data-kind='2'] {
+        fill: var(--pb-accent-2-fill);
+      }
+      ._block_d76627[data-kind='3'] {
+        fill: var(--pb-player-5);
+      }
+      ._block_d76627[data-kind='4'] {
+        fill: var(--pb-player-3);
+      }
+      ._block_d76627[data-kind='5'] {
+        fill: var(--pb-player-1);
+      }
+      ._block_d76627[data-kind='6'] {
+        fill: var(--pb-player-7);
+      }
+      ._block_d76627[data-kind='7'] {
+        fill: var(--pb-player-6);
+      }
+      ._block_d76627[data-kind='8'] {
+        fill: var(--pb-text-muted);
+      }
+      ._mark_d76627 {
+        stroke: var(--pb-bg);
+        stroke-width: 0.09;
+        opacity: 0.5;
+      }
+      ._falling_d76627 {
+        fill: var(--pb-text);
+      }
+      ._ghost_d76627 {
+        fill: none;
+        stroke: var(--pb-text);
+        stroke-width: 0.07;
+        stroke-dasharray: 0.15 0.1;
+      }
+      ._out_d76627 rect {
+        fill: var(--pb-surface);
+        stroke: var(--pb-danger);
+        stroke-width: 0.08;
+      }
+      ._out_d76627 text {
+        fill: var(--pb-text);
+        font-size: 1.6px;
+        font-weight: 900;
+      }
 
-*{box-sizing:border-box}body{margin:0;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family)}#app{height:100dvh;overflow:hidden}#app>div{height:100%;min-height:0}html[data-surface=tv] #app>div{display:flex;flex-direction:column;padding:var(--pb-overscan-y) var(--pb-overscan-x)}
-</style></head><body><main id="app"><div class="_stage_0e27b0"><header><h2>Match complete</h2><p>Ben wins!</p></header><ol class="_standings_0e27b0" aria-label="Match standings"><li data-me="false"><b>1. Ben</b><span>9144 pts</span><small>●</small></li><li data-me="false"><b>2. Eli</b><span>9118 pts</span><small>●</small></li><li data-me="false"><b>3. Gus</b><span>9076 pts</span><small>●</small></li><li data-me="false"><b>4. Cy</b><span>8944 pts</span><small>●</small></li><li data-me="false"><b>5. Hal</b><span>6534 pts</span><small>OUT</small></li><li data-me="false"><b>6. Fay</b><span>6256 pts</span><small>OUT</small></li><li data-me="false"><b>7. Dee</b><span>5564 pts</span><small>OUT</small></li><li data-me="false"><b>8. Ana</b><span>2308 pts</span><small>OUT</small></li></ol></div></main></body></html>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+      }
+      #app {
+        height: 100dvh;
+        overflow: hidden;
+      }
+      #app > div {
+        height: 100%;
+        min-height: 0;
+      }
+      html[data-surface='tv'] #app > div {
+        display: flex;
+        flex-direction: column;
+        padding: var(--pb-overscan-y) var(--pb-overscan-x);
+      }
+    </style>
+  </head>
+  <body>
+    <main id="app">
+      <div class="_stage_0e27b0">
+        <header>
+          <h2>Match complete</h2>
+          <p>Ben wins!</p>
+        </header>
+        <ol class="_standings_0e27b0" aria-label="Match standings">
+          <li data-me="false"><b>1. Ben</b><span>9144 pts</span><small>●</small></li>
+          <li data-me="false"><b>2. Eli</b><span>9118 pts</span><small>●</small></li>
+          <li data-me="false"><b>3. Gus</b><span>9076 pts</span><small>●</small></li>
+          <li data-me="false"><b>4. Cy</b><span>8944 pts</span><small>●</small></li>
+          <li data-me="false"><b>5. Hal</b><span>6534 pts</span><small>OUT</small></li>
+          <li data-me="false"><b>6. Fay</b><span>6256 pts</span><small>OUT</small></li>
+          <li data-me="false"><b>7. Dee</b><span>5564 pts</span><small>OUT</small></li>
+          <li data-me="false"><b>8. Ana</b><span>2308 pts</span><small>OUT</small></li>
+        </ol>
+      </div>
+    </main>
+  </body>
+</html>

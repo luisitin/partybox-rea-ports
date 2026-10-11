@@ -25,6 +25,8 @@ const browser = spawn(
   { windowsHide: true, stdio: ['ignore', 'ignore', 'pipe'] },
 );
 let socket;
+let input;
+let call;
 let nextId = 1;
 const pending = new Map();
 try {
@@ -52,15 +54,32 @@ try {
     if (response.error) p?.reject(response.error);
     else p?.resolve(response.result);
   };
-  const call = (method, params = {}) =>
+  socket.onclose = () => {
+    for (const request of pending.values()) request.reject(new Error('Browser connection closed'));
+    pending.clear();
+  };
+  call = (method, params = {}) =>
     new Promise((resolveCall, reject) => {
       const id = nextId++;
-      pending.set(id, { resolve: resolveCall, reject });
+      const timeout = setTimeout(() => {
+        pending.delete(id);
+        reject(new Error(`${method} timed out`));
+      }, 10_000);
+      pending.set(id, {
+        resolve: (value) => {
+          clearTimeout(timeout);
+          resolveCall(value);
+        },
+        reject: (error) => {
+          clearTimeout(timeout);
+          reject(error);
+        },
+      });
       socket.send(JSON.stringify({ id, method, params }));
     });
   await call('Page.enable');
   console.log(JSON.stringify({ ready: true, scratch }));
-  const input = createInterface({ input: process.stdin, crlfDelay: Infinity });
+  input = createInterface({ input: process.stdin, crlfDelay: Infinity });
   for await (const line of input) {
     const command = JSON.parse(line);
     if (command.quit) break;
@@ -87,6 +106,16 @@ try {
     }
   }
 } finally {
+  input?.close();
+  process.stdin.pause();
+  // Chrome can relaunch itself on Windows; close the browser through CDP before
+  // killing the original spawned process, which may already have exited.
+  if (socket?.readyState === WebSocket.OPEN) {
+    await Promise.race([
+      call('Browser.close').catch(() => {}),
+      new Promise((ok) => setTimeout(ok, 2000)),
+    ]);
+  }
   socket?.close();
   if (browser.exitCode === null) {
     browser.kill();

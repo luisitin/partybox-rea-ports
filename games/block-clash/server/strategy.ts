@@ -5,30 +5,73 @@ import { dropY, fits, pieceCells } from './pieces';
 import { H, W } from './types';
 import type { ActivePiece, Grid, Plan, Rotation } from './types';
 
-function evaluate(grid: Grid, piece: ActivePiece, skill: BotSkill): number {
-  const trial = grid.map((row) => [...row]);
-  for (const [dx, dy] of pieceCells(piece.kind, piece.rotation)) {
+type Shape = readonly (readonly [number, number])[];
+interface Occupancy {
+  rows: number[];
+  columns: number[];
+}
+
+// These masks are local to one search. All four-cell trials copy flat numeric
+// arrays rather than cloning a 20-row grid or allocating cleared-row arrays.
+function occupancy(grid: Grid): Occupancy {
+  const rows = Array<number>(H).fill(0);
+  const columns = Array<number>(W).fill(0);
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      if (grid[y]![x] !== 0) {
+        rows[y] = rows[y]! | (1 << x);
+        columns[x] = columns[x]! | (1 << y);
+      }
+    }
+  }
+  return { rows, columns };
+}
+
+function evaluate(base: Occupancy, piece: ActivePiece, shape: Shape, skill: BotSkill): number {
+  const rows = base.rows.slice();
+  const columns = base.columns.slice();
+  for (const [dx, dy] of shape) {
     const y = piece.y + dy;
     if (y < 0) return -1e9;
-    trial[y]![piece.x + dx] = 1;
+    const x = piece.x + dx;
+    rows[y] = rows[y]! | (1 << x);
+    columns[x] = columns[x]! | (1 << y);
   }
-  const cleared = trial.filter((row) => row.every((cell) => cell !== 0)).length;
-  const rows = trial.filter((row) => row.some((cell) => cell === 0));
-  while (rows.length < H) rows.unshift(Array<number>(W).fill(0));
+  let cleared = 0;
+  const fullRow = (1 << W) - 1;
+  for (let y = 0; y < H; y++) {
+    if (rows[y] !== fullRow) continue;
+    cleared++;
+    // Row zero is the low bit. Removing row y and padding an empty row at the
+    // top shifts only rows above y down one. Ascending y preserves the original
+    // index of every later row selected for clearing.
+    const above = (1 << y) - 1;
+    const through = (1 << (y + 1)) - 1;
+    for (let x = 0; x < W; x++) {
+      const bits = columns[x]!;
+      columns[x] = ((bits & above) << 1) | (bits & ~through);
+    }
+  }
   const heights = Array<number>(W).fill(0);
   let holes = 0;
   let covered = 0;
   for (let x = 0; x < W; x++) {
+    let remaining = columns[x]!;
+    if (remaining === 0) continue;
+    const first = remaining & -remaining;
+    heights[x] = H - (31 - Math.clz32(first));
     let blocks = 0;
-    for (let y = 0; y < H; y++) {
-      if (rows[y]![x] !== 0) {
-        if (heights[x] === 0) heights[x] = H - y;
-        blocks++;
-      } else if (heights[x]! > 0) {
-        holes++;
-        covered += blocks;
-      }
+    let rowSum = 0;
+    while (remaining !== 0) {
+      const bit = remaining & -remaining;
+      rowSum += 31 - Math.clz32(bit);
+      blocks++;
+      remaining ^= bit;
     }
+    holes += heights[x]! - blocks;
+    // Sum, for every block, the holes below it. This is exactly the original
+    // scan's sum of blocks-above for every hole, with integer arithmetic.
+    covered += blocks * (H - blocks) - rowSum + (blocks * (blocks - 1)) / 2;
   }
   const sum = heights.reduce((a, b) => a + b, 0);
   const max = Math.max(...heights);
@@ -51,6 +94,7 @@ function evaluate(grid: Grid, piece: ActivePiece, skill: BotSkill): number {
 export function placement(grid: Grid, active: ActivePiece, skill: BotSkill, salt: string): Plan {
   let best: Plan = { x: active.x, rotation: active.rotation };
   let highest = -Infinity;
+  const base = occupancy(grid);
   const count =
     active.kind === 'O'
       ? 1
@@ -58,12 +102,13 @@ export function placement(grid: Grid, active: ActivePiece, skill: BotSkill, salt
         ? 2
         : 4;
   for (let rotation = 0; rotation < count; rotation++) {
+    const shape = pieceCells(active.kind, rotation as Rotation);
     for (let x = -2; x < W; x++) {
       const candidate = { ...active, x, rotation: rotation as Rotation };
       if (!fits(grid, candidate)) continue;
       const y = dropY(grid, candidate);
       const noise = skill === 'easy' ? (hashString(`${salt}:${rotation}:${x}`) % 100) / 25 : 0;
-      const score = evaluate(grid, { ...candidate, y }, skill) + noise;
+      const score = evaluate(base, { ...candidate, y }, shape, skill) + noise;
       if (score > highest) {
         highest = score;
         best = { x, rotation: rotation as Rotation };

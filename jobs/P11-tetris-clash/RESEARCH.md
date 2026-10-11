@@ -19,7 +19,7 @@ Read public guideline summaries, original implementation source, licensed produc
 
 The [public SRS summary](https://tetris.wiki/Super_Rotation_System) agrees with the paper and independently inspected implementations: four orientations; shared kick offsets for J/L/S/T/Z; separate I offsets; O has no visible turn. Canonical offsets use positive y upward. Our board coordinates increase downward, so negate the vertical offset when checking a candidate. Test both rotation directions, floor kicks, I wall kicks, blocked turns, and four turns returning to the same cells.
 
-The [public random-generator summary](https://tetris.wiki/Random_Generator) agrees with the two bag implementations. Use the SDK's seeded shuffle, not a comparator-based random sort or random draws with replacement. Store the generated sequence and each seat's cursor. Hold may advance a player's cursor without affecting anyone else's order. Show a small preview, but do not serialize the seed, RNG state, complete future sequence, or another seat's private hold/next data into views.
+The [public random-generator summary](https://tetris.wiki/Random_Generator) agrees with the two bag implementations. Use the SDK's seeded shuffle, not a comparator-based random sort or random draws with replacement. Block Clash generates each bag by its deterministic index from the match's piece seed and stores each seat's cursor; it does not store a growing sequence. Hold may advance a player's cursor without affecting anyone else's order. Show a small preview, but do not serialize the seed, RNG state, future sequence cursor, or another seat's private hold/next data into views.
 
 ## Scoring and attacks
 
