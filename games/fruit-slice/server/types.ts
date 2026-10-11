@@ -47,6 +47,7 @@ export interface Row {
   id: string;
   name: string;
   score: number;
+  gain: number;
   streak: number;
   bestCombo: number;
   bombed: boolean;

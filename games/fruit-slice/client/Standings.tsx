@@ -30,6 +30,15 @@ export function Standings({
             <b className={styles.name}>
               {final ? `${1 + rows.filter((other) => other.score > row.score).length}. ` : ''}
               {row.name}
+              {!final && row.gain > 0 ? (
+                <span
+                  className={styles.gain}
+                  aria-label={L('Last swipe: +{n} points', { n: row.gain })}
+                >
+                  {' '}
+                  +{row.gain}
+                </span>
+              ) : null}
             </b>
             <strong className={styles.points}>{row.score}</strong>
             <span

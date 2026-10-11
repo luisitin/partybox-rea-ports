@@ -53,6 +53,15 @@
   font-variant-numeric: tabular-nums;
 }
 
+.gain {
+  color: var(--pb-accent-2);
+  font-size: calc(var(--pb-font-body) * 0.9);
+}
+
+.standings[data-compact='true'] .gain {
+  display: none;
+}
+
 .streak {
   text-align: right;
   font-variant-numeric: tabular-nums;

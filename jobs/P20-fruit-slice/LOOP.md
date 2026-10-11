@@ -9,6 +9,12 @@ for accepted combos; stepped TV flight; tied bot fixtures can obscure one clear
 winner; long phone names need truncation. The first three can improve play;
 ties are fair and intentional, and name truncation already keeps controls clear.
 
-- Round 1: late input now receives an explicit retry hint within 1,000 ms if no
+- Round 1: late input now receives an explicit retry hint after 1,000 ms plus one
+  100 ms SDK clock beat if no
   sequence acknowledgement arrives. Before: zero rejection feedback; after:
   one actionable hint. Accepted input clears it. Uses the existing SDK clock.
+- Round 2: the public stage shows each accepted swipe's +points beside the
+  player's name until the next wave. Before: zero visible gain labels; after:
+  one bounded label per scoring player, at least 32 px on TV. Personal cuts
+  remain private; totals and accepted gains are public. Compact phones keep the
+  same space, with the player's own feedback already above the board.

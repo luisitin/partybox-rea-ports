@@ -62,6 +62,7 @@ function rows(state: State): Row[] {
     id,
     name: state.players[id]!.name,
     score: seat.score,
+    gain: seat.feedbackPoints,
     streak: seat.streak,
     bestCombo: seat.bestCombo,
     bombed: seat.bombed,

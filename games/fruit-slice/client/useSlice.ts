@@ -124,6 +124,7 @@ export function useSlice(view: SliceControllerView, send: (input: Input) => void
           points: [normalizePoint(event.clientX, event.clientY, rect)],
         };
         stroke.current = active;
+        pending.current = null;
         setDrawing({ ...active });
         setHint('');
       },
