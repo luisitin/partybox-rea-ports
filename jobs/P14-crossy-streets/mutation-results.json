@@ -1,0 +1,343 @@
+{
+  "command": "node jobs/P14-crossy-streets/mutations.mjs",
+  "testCommand": "pnpm vitest run games/crossy-streets/__tests__/game.test.ts --pool=threads --maxWorkers=1",
+  "process": "Node invokes node_modules/vitest/vitest.mjs directly (no Windows shim)",
+  "baseline": {
+    "exitCode": 0,
+    "wallMs": 867
+  },
+  "planted": 20,
+  "caught": 20,
+  "records": [
+    {
+      "id": "M01",
+      "bug": "score current row instead of highest row",
+      "file": "scoring.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 870,
+      "failures": [
+        "× the cap reveals highest-row scores once, then results close after the score hold 6ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > match lifecycle and views > the cap reveals highest-row scores once, then results close after the score hold",
+        "AssertionError: expected { p1: +0, p2: +0, p3: +0, p4: +0 } to deeply equal { p1: 7, p2: 7, p3: 3, p4: +0 }"
+      ]
+    },
+    {
+      "id": "M02",
+      "bug": "give a lethal hop a new high score",
+      "file": "world.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 846,
+      "failures": [
+        "× a lethal car destination scores no new row and starts one respawn 5ms",
+        "× a lethal water destination scores no new row and starts one respawn 1ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > a lethal car destination scores no new row and starts one respawn",
+        "AssertionError: expected { id: 'p1', slot: +0, x: 7, …(11) } to match object { alive: false, maxRow: +0, …(3) }",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > a lethal water destination scores no new row and starts one respawn",
+        "AssertionError: expected { id: 'p1', slot: +0, x: 7, …(11) } to match object { alive: false, maxRow: +0, …(3) }"
+      ]
+    },
+    {
+      "id": "M03",
+      "bug": "eagle ignores the exact idle deadline",
+      "file": "world.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 1596,
+      "failures": [
+        "× the eagle uses new progress, so sideways movement cannot keep an idle racer alive 6ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > the eagle uses new progress, so sideways movement cannot keep an idle racer alive",
+        "AssertionError: expected { id: 'p1', slot: +0, x: 6, …(11) } to match object { alive: false, …(2) }"
+      ]
+    },
+    {
+      "id": "M04",
+      "bug": "sideways hops reset the eagle clock",
+      "file": "world.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 1963,
+      "failures": [
+        "× remembers the farthest safe row across backward hops and crashes 5ms",
+        "× the eagle uses new progress, so sideways movement cannot keep an idle racer alive 1ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > remembers the farthest safe row across backward hops and crashes",
+        "AssertionError: expected { id: 'p1', slot: +0, x: 7, …(11) } to match object { row: 2, maxRow: 2, …(2) }",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > the eagle uses new progress, so sideways movement cannot keep an idle racer alive",
+        "AssertionError: expected 7000 to be 1000 // Object.is equality"
+      ]
+    },
+    {
+      "id": "M05",
+      "bug": "remove hop throttling",
+      "file": "world.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 1684,
+      "failures": [
+        "× hops one cell, clamps the bottom, and rejects unknown racers and too-fast repeats 8ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > hops one cell, clamps the bottom, and rejects unknown racers and too-fast repeats",
+        "AssertionError: expected { lanes: [ …(20) ], …(2) } to be { lanes: [ …(20) ], …(2) } // Object.is equality"
+      ]
+    },
+    {
+      "id": "M06",
+      "bug": "respawn immediately at the next sample",
+      "file": "world.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 1572,
+      "failures": [
+        "× a lethal car destination scores no new row and starts one respawn 4ms",
+        "× a lethal water destination scores no new row and starts one respawn 1ms",
+        "× the eagle uses new progress, so sideways movement cannot keep an idle racer alive 0ms",
+        "× judges intermediate samples, with identical results for a delayed or partitioned tick 1ms",
+        "× logs carry racers with the current and can carry them over an edge 2ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > a lethal car destination scores no new row and starts one respawn",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > a lethal water destination scores no new row and starts one respawn",
+        "AssertionError: expected true to be false // Object.is equality",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > the eagle uses new progress, so sideways movement cannot keep an idle racer alive",
+        "AssertionError: expected true to be false // Object.is equality",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > judges intermediate samples, with identical results for a delayed or partitioned tick",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > logs carry racers with the current and can carry them over an edge",
+        "AssertionError: expected { id: 'p1', slot: +0, x: 7, …(11) } to match object { alive: false, lastDeath: 'edge' }"
+      ]
+    },
+    {
+      "id": "M07",
+      "bug": "erase the farthest row on death",
+      "file": "world.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 1624,
+      "failures": [
+        "× remembers the farthest safe row across backward hops and crashes 4ms",
+        "× the eagle uses new progress, so sideways movement cannot keep an idle racer alive 2ms",
+        "× the cap reveals highest-row scores once, then results close after the score hold 2ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > remembers the farthest safe row across backward hops and crashes",
+        "AssertionError: expected +0 to be 2 // Object.is equality",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > the eagle uses new progress, so sideways movement cannot keep an idle racer alive",
+        "AssertionError: expected { id: 'p1', slot: +0, x: 6, …(11) } to match object { alive: false, …(2) }",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > match lifecycle and views > the cap reveals highest-row scores once, then results close after the score hold",
+        "AssertionError: expected { p1: +0, p2: +0, p3: +0, p4: +0 } to deeply equal { p1: 7, p2: 7, p3: 3, p4: +0 }"
+      ]
+    },
+    {
+      "id": "M08",
+      "bug": "logs no longer carry runners",
+      "file": "world.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 1723,
+      "failures": [
+        "× logs carry racers with the current and can carry them over an edge 2ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > logs carry racers with the current and can carry them over an edge",
+        "AssertionError: expected 7 to be close to 8, received difference is 1, but expected 5e-7"
+      ]
+    },
+    {
+      "id": "M09",
+      "bug": "cars never collide with runners",
+      "file": "world.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 1603,
+      "failures": [
+        "× tests the whole runner radius for cars/logs and never treats water gaps as land 4ms",
+        "× a lethal car destination scores no new row and starts one respawn 2ms",
+        "× judges intermediate samples, with identical results for a delayed or partitioned tick 0ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > seeded lanes and public geometry > tests the whole runner radius for cars/logs and never treats water gaps as land",
+        "AssertionError: expected true to be false // Object.is equality",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > a lethal car destination scores no new row and starts one respawn",
+        "AssertionError: expected { id: 'p1', slot: +0, x: 7, …(11) } to match object { alive: false, maxRow: +0, …(3) }",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > judges intermediate samples, with identical results for a delayed or partitioned tick",
+        "AssertionError: expected null to be 'car' // Object.is equality"
+      ]
+    },
+    {
+      "id": "M10",
+      "bug": "water gaps count as safe land",
+      "file": "world.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 24593,
+      "failures": [
+        "× tests the whole runner radius for cars/logs and never treats water gaps as land 61ms",
+        "× a lethal water destination scores no new row and starts one respawn 102ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > seeded lanes and public geometry > tests the whole runner radius for cars/logs and never treats water gaps as land",
+        "AssertionError: expected true to be false // Object.is equality",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > a lethal water destination scores no new row and starts one respawn",
+        "AssertionError: expected { id: 'p1', slot: +0, x: 7, …(11) } to match object { alive: false, maxRow: +0, …(3) }"
+      ]
+    },
+    {
+      "id": "M11",
+      "bug": "trees permit hopping through them",
+      "file": "world.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 2727,
+      "failures": [
+        "× a tree blocks a hop without consuming it or awarding points 6ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > a tree blocks a hop without consuming it or awarding points",
+        "AssertionError: expected { …(3) } to be { …(3) } // Object.is equality"
+      ]
+    },
+    {
+      "id": "M12",
+      "bug": "side edges no longer kill",
+      "file": "world.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 2048,
+      "failures": [
+        "× side edges kill rather than wrapping to the other side 5ms",
+        "× remembers the farthest safe row across backward hops and crashes 1ms",
+        "× logs carry racers with the current and can carry them over an edge 1ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > side edges kill rather than wrapping to the other side",
+        "AssertionError: expected { id: 'p1', slot: +0, x: -1, …(11) } to match object { x: -1, alive: false, …(2) }",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > remembers the farthest safe row across backward hops and crashes",
+        "AssertionError: expected { id: 'p1', slot: +0, x: -1, …(11) } to match object { Object (row, x, ...) }",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > logs carry racers with the current and can carry them over an edge",
+        "AssertionError: expected { id: 'p1', slot: +0, …(12) } to match object { alive: false, lastDeath: 'edge' }"
+      ]
+    },
+    {
+      "id": "M13",
+      "bug": "judge only the last sample of a delayed timer",
+      "file": "world.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 2185,
+      "failures": [
+        "× judges intermediate samples, with identical results for a delayed or partitioned tick 3ms",
+        "× logs carry racers with the current and can carry them over an edge 1ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > judges intermediate samples, with identical results for a delayed or partitioned tick",
+        "AssertionError: expected null to be 'car' // Object.is equality",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > hops, crashes, progress and respawning > logs carry racers with the current and can carry them over an edge",
+        "AssertionError: expected 7.05 to be close to 8, received difference is 0.9500000000000002, but expected 5e-7"
+      ]
+    },
+    {
+      "id": "M14",
+      "bug": "race lasts 61 seconds",
+      "file": "index.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 2119,
+      "failures": [
+        "× starts immediately, judges at 50 ms, and re-arms data beats without moving the phase key 5ms",
+        "× the cap reveals highest-row scores once, then results close after the score hold 2ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > match lifecycle and views > starts immediately, judges at 50 ms, and re-arms data beats without moving the phase key",
+        "AssertionError: expected 61000 to be 60000 // Object.is equality",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > match lifecycle and views > the cap reveals highest-row scores once, then results close after the score hold",
+        "AssertionError: expected 61000 to be 60000 // Object.is equality"
+      ]
+    },
+    {
+      "id": "M15",
+      "bug": "accept a timer before its deadline",
+      "file": "phases/play.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 1870,
+      "failures": [
+        "× ignores early, wrong-phase, stale-generation timers and old inputs 45ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > match lifecycle and views > ignores early, wrong-phase, stale-generation timers and old inputs",
+        "AssertionError: expected { phase: { id: 'play', …(2) }, …(8) } to be { phase: { id: 'play', …(2) }, …(8) } // Object.is equality"
+      ]
+    },
+    {
+      "id": "M16",
+      "bug": "accept stale or wrong-phase timer keys",
+      "file": "phases/play.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 1112,
+      "failures": [
+        "× ignores early, wrong-phase, stale-generation timers and old inputs 39ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > match lifecycle and views > ignores early, wrong-phase, stale-generation timers and old inputs",
+        "AssertionError: expected { phase: { id: 'play', …(2) }, …(8) } to be { phase: { id: 'play', …(2) }, …(8) } // Object.is equality"
+      ]
+    },
+    {
+      "id": "M17",
+      "bug": "score phase never exits",
+      "file": "phases/score.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 2025,
+      "failures": [
+        "× a disconnected racer can reconnect in place, while the clock ends without waiting 5ms",
+        "× the cap reveals highest-row scores once, then results close after the score hold 2ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > match lifecycle and views > a disconnected racer can reconnect in place, while the clock ends without waiting",
+        "AssertionError: expected 'score' to be 'done' // Object.is equality",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > match lifecycle and views > the cap reveals highest-row scores once, then results close after the score hold",
+        "AssertionError: expected 'score' to be 'done' // Object.is equality"
+      ]
+    },
+    {
+      "id": "M18",
+      "bug": "leak the authoritative RNG into stage views",
+      "file": "index.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 11643,
+      "failures": [
+        "× sends public stage geometry without RNG or future map generation details 6ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > match lifecycle and views > sends public stage geometry without RNG or future map generation details",
+        "AssertionError: expected '{\"gameId\":\"crossy-streets\",\"phaseId\":…' not to contain '\"rng\"'"
+      ]
+    },
+    {
+      "id": "M19",
+      "bug": "send every future lane to every screen",
+      "file": "index.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 29912,
+      "failures": [
+        "× sends public stage geometry without RNG or future map generation details 188ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > match lifecycle and views > sends public stage geometry without RNG or future map generation details",
+        "AssertionError: expected 256 to be less than 256"
+      ]
+    },
+    {
+      "id": "M20",
+      "bug": "resume without shifting the simulation epoch",
+      "file": "index.ts",
+      "planted": true,
+      "caught": true,
+      "exitCode": 1,
+      "wallMs": 989,
+      "failures": [
+        "× holds all simulation clocks while paused and shifts absolute time on resume 6ms",
+        "FAIL  games/crossy-streets/__tests__/game.test.ts > match lifecycle and views > holds all simulation clocks while paused and shifts absolute time on resume",
+        "AssertionError: expected 1000000 to be 1005000 // Object.is equality"
+      ]
+    }
+  ],
+  "restored": {
+    "exitCode": 0,
+    "wallMs": 1706
+  }
+}
