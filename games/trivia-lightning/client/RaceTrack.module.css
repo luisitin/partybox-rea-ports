@@ -1,0 +1,205 @@
+/* Equal-height lanes keep all eight racers readable inside the TV overscan frame. */
+.lanes {
+  display: grid;
+  grid-auto-rows: minmax(0, 1fr);
+  gap: var(--pb-space-2);
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lane {
+  display: grid;
+  grid-template-columns:
+    calc(var(--pb-chip-size) * 0.7) minmax(0, 0.9fr) minmax(0, 1.15fr)
+    minmax(0, 3fr) minmax(0, 0.6fr);
+  align-items: center;
+  gap: var(--pb-space-3);
+  padding: var(--pb-space-1) var(--pb-space-4);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  border: 1px solid var(--pb-border);
+}
+
+.identity {
+  display: contents;
+}
+
+.avatar {
+  width: calc(var(--pb-chip-size) * 0.7);
+  height: calc(var(--pb-chip-size) * 0.7);
+}
+
+.nameBlock {
+  display: contents;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--pb-font-body);
+  line-height: 1.4;
+}
+
+.state {
+  color: var(--pb-text-muted);
+  font-size: calc(var(--pb-font-body) * 0.9);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.track {
+  position: relative;
+  height: calc(var(--pb-chip-size) * 0.7);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: var(--pb-space-2);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface-2);
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--pb-text-muted) 0,
+    var(--pb-text-muted) var(--pb-space-1),
+    var(--pb-surface-2) var(--pb-space-1),
+    var(--pb-surface-2) var(--pb-space-6)
+  );
+}
+
+.path {
+  position: absolute;
+  inset: 0 calc(var(--pb-chip-size) * 0.6) 0 0;
+}
+
+.runner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--pb-lane-color);
+  transform: translateX(calc(var(--pb-runner-progress) * 100%));
+  transition: transform var(--pb-motion-base) var(--pb-ease);
+}
+
+.runner svg {
+  width: calc(var(--pb-chip-size) * 0.6);
+  height: 100%;
+  fill: currentColor;
+  stroke: var(--pb-bg);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.finish {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: var(--pb-font-h2);
+  color: var(--pb-text-muted);
+}
+
+.score {
+  display: flex;
+  align-items: baseline;
+  justify-content: end;
+  gap: var(--pb-space-1);
+  font-size: var(--pb-font-body);
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.score span {
+  font-size: calc(var(--pb-font-body) * 0.9);
+  color: var(--pb-text-muted);
+}
+
+.lane[data-frozen] .state,
+.lane[data-frozen] .runner {
+  color: var(--pb-info);
+}
+
+.lane[data-me] {
+  outline: var(--pb-space-1) solid var(--pb-accent-2);
+  outline-offset: calc(-1 * var(--pb-space-1));
+}
+
+.lanes[data-compact] {
+  gap: var(--pb-space-1);
+  grid-auto-rows: minmax(var(--pb-touch), 1fr);
+}
+
+.lanes[data-compact] .lane {
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 0.4fr);
+  gap: var(--pb-space-2);
+  padding: 0 var(--pb-space-2);
+}
+
+.lanes[data-compact] .identity {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+  min-width: 0;
+}
+
+.lanes[data-compact] .nameBlock {
+  display: grid;
+  gap: calc(var(--pb-space-1) / 2);
+  min-width: 0;
+}
+
+.lanes[data-compact] .avatar {
+  width: calc(var(--pb-chip-size) * 0.7);
+  height: calc(var(--pb-chip-size) * 0.7);
+}
+
+.lanes[data-compact] .name,
+.lanes[data-compact] .score {
+  font-size: var(--pb-font-caption);
+}
+
+.lanes[data-compact] .state {
+  font-size: calc(var(--pb-font-caption) * 0.9);
+}
+
+.lanes[data-compact] .score span {
+  font-size: var(--pb-font-caption);
+}
+
+.lanes[data-compact] .score {
+  display: grid;
+  justify-items: end;
+  gap: 0;
+}
+
+.lanes[data-compact] .track {
+  height: calc(var(--pb-chip-size) * 0.7);
+}
+
+.lanes[data-compact] .finish {
+  font-size: var(--pb-font-h2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runner {
+    transition: none;
+  }
+}
+
+:global(:root[data-motion='off']) .runner {
+  transition: none;
+}

@@ -1,0 +1,173 @@
+/* The winning column is the single focal point. Names stay withheld until its server beat. */
+.podium {
+  display: grid;
+  grid-template-columns: var(--pb-podium-columns);
+  gap: var(--pb-space-5);
+  align-items: center;
+  flex: 1;
+  min-height: 0;
+}
+
+.place {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--pb-space-3);
+  padding: var(--pb-space-5);
+  min-width: 0;
+  border-radius: var(--pb-radius-lg);
+  border: var(--pb-space-1) solid var(--pb-surface-2);
+  background: var(--pb-surface);
+}
+
+.place[data-rank='1'] {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.place[data-rank='2'] {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.place[data-rank='3'] {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.place[data-shown][data-rank='1'] {
+  border-color: var(--pb-accent-2);
+}
+
+.medal {
+  display: grid;
+  place-items: center;
+  width: var(--pb-space-8);
+  height: var(--pb-space-8);
+  border-radius: 50%;
+  background: var(--pb-surface-2);
+  color: var(--pb-text);
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.place[data-shown][data-rank='1'] .medal {
+  background: var(--pb-accent-2-fill);
+  color: var(--pb-on-accent-2-fill);
+}
+
+.names {
+  display: grid;
+  gap: var(--pb-space-2);
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.names li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-3);
+  min-width: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.4;
+}
+
+.place[data-many] .names {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.names b {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.avatar {
+  width: calc(var(--pb-chip-size) * 0.65);
+  height: calc(var(--pb-chip-size) * 0.65);
+}
+
+.points,
+.unrevealed {
+  font-size: var(--pb-font-body);
+  line-height: 1.4;
+  text-align: center;
+}
+
+.points strong {
+  font-size: var(--pb-font-h2);
+  font-variant-numeric: tabular-nums;
+}
+
+.points span {
+  margin-left: var(--pb-space-2);
+  color: var(--pb-text-muted);
+}
+
+.unrevealed {
+  padding: var(--pb-space-6) 0;
+  color: var(--pb-text-muted);
+}
+
+.podium[data-compact] {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--pb-space-3);
+}
+
+.podium[data-compact] .place {
+  display: grid;
+  grid-template-columns: var(--pb-touch) minmax(0, 1fr) auto;
+  gap: var(--pb-space-3);
+  padding: var(--pb-space-3);
+  border-width: calc(var(--pb-space-1) / 2);
+  border-radius: var(--pb-radius);
+}
+
+.podium[data-compact] .medal {
+  width: var(--pb-touch);
+  height: var(--pb-touch);
+  font-size: var(--pb-font-h2);
+}
+
+.podium[data-compact] .names li {
+  justify-content: start;
+  font-size: var(--pb-font-body);
+}
+
+.podium[data-compact] .points,
+.podium[data-compact] .points strong,
+.podium[data-compact] .unrevealed {
+  font-size: var(--pb-font-body);
+}
+
+.podium[data-compact] .unrevealed {
+  grid-column: 2 / 4;
+  padding: 0;
+  text-align: left;
+}
+
+.podium[data-compact] .points span {
+  font-size: var(--pb-font-caption);
+}
+
+.podium[data-compact] .place[data-many] {
+  grid-template-columns: var(--pb-touch) minmax(0, 1fr);
+}
+
+.podium[data-compact] .place[data-many] .names {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+.podium[data-compact] .place[data-many] .points {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}

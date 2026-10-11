@@ -1,0 +1,146 @@
+{
+  "tested": 20,
+  "caught": 20,
+  "results": [
+    {
+      "fault": "base score +10",
+      "file": "server/scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "uncapped streak",
+      "file": "server/scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "wrong answers score",
+      "file": "server/scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "triple instead of double",
+      "file": "server/scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "invert correct verdict",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "miss keeps streak",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "energy every two correct",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "double costs no energy",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "accept answer before Next",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "accept stale question ID",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "accept stale answer cursor",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "accept stale Next cursor",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "answer at exact cap accepted",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "shorten freeze to two seconds",
+      "file": "server/types.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "answer while frozen",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "allow self freeze",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "stack active freezes",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "end when only one finishes",
+      "file": "server/phases/race.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "skip winner podium beat",
+      "file": "server/phases/podium.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    },
+    {
+      "fault": "leak answer key on phones",
+      "file": "server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "detail": "Rule assertion failed on planted bug"
+    }
+  ]
+}
