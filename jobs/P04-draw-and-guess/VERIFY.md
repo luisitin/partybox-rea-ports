@@ -89,3 +89,10 @@ R7: `pnpm.cmd vitest run games/draw-and-guess/client/palettecontrast.test.ts --m
 passes31checks. Thirty computed ink/background pairs across all5themes exceed
 3:1; minimum5.243:1. Daylight sixth ink improves2.464:1→7.617:1. Values come
 from shipped palette/tokens rather than expected token assignments. Typecheck passes.
+
+R8: `node jobs/P04-draw-and-guess/tools/playcheck.mjs` passes13checks. Actual
+SDK SoundProvider captures one public solve cue, exactly5final-second ticks,
+no replay on repeated views, and silence while paused. Each countdown second
+has a per-turn deduplication bit. Browser closes in finally before Vite cleanup.
+The harness pins existing React/Zod prebundling and waits for the250ms SDK clock
+sample; development reloads and premature clock assertions are avoided.

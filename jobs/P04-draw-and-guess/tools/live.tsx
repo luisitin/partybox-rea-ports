@@ -1,7 +1,8 @@
 // Local verification harness: the real controller/reducer with deliberately delayed views.
 import { createRoot } from 'react-dom/client';
-import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
+import { PhoneOnlyProvider, ServerClockProvider, SoundProvider } from '@partybox/game-sdk/ui';
 import { Controller } from '../../../games/draw-and-guess/client/Controller';
+import { Tv } from '../../../games/draw-and-guess/client/Tv';
 import { game } from '../../../games/draw-and-guess/server/index';
 import type { Input } from '../../../games/draw-and-guess/server/types';
 import '../../../design/tokens.css';
@@ -27,13 +28,24 @@ state = game.reduce(state, {
 });
 let id = state.drawer;
 let held = false;
+let tv = false;
+const cues: string[] = [];
+const play = (cue: string) => {
+  cues.push(cue);
+};
 const sent: Input[] = [];
 const root = createRoot(document.getElementById('root')!);
 function publish() {
   root.render(
     <ServerClockProvider offsetMs={state.clock - Date.now()}>
       <PhoneOnlyProvider value={true}>
-        <Controller view={game.controllerView(state, id)} me={state.players[id]!} send={send} />
+        <SoundProvider play={play}>
+          {tv ? (
+            <Tv view={game.tvView(state)} />
+          ) : (
+            <Controller view={game.controllerView(state, id)} me={state.players[id]!} send={send} />
+          )}
+        </SoundProvider>
       </PhoneOnlyProvider>
     </ServerClockProvider>,
   );
@@ -59,6 +71,34 @@ function send(input: Input) {
   },
   solve() {
     send({ type: 'guess', text: state.word });
+  },
+  tv() {
+    tv = true;
+    publish();
+  },
+  cues() {
+    return cues;
+  },
+  solveAnother() {
+    const playerId = players.find(
+      (p) => p.id !== state.drawer && !Object.hasOwn(state.solved, p.id),
+    )!.id;
+    state = game.reduce(state, {
+      type: 'input',
+      playerId,
+      input: { type: 'guess', text: state.word },
+      now: (now += 1000),
+    });
+    publish();
+  },
+  seconds(value: number) {
+    now = state.endsAt - value * 1000;
+    state = { ...state, clock: now };
+    publish();
+  },
+  pause(value: boolean) {
+    state = game.reduce(state, { type: 'vip', action: value ? 'pause' : 'resume', now });
+    publish();
   },
 };
 publish();

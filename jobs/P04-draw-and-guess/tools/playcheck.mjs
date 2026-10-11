@@ -10,6 +10,10 @@ const vr = createRequire(require.resolve('vitest/package.json'));
 const { createServer } = await import(pathToFileURL(vr.resolve('vite')).href);
 const server = await createServer({
   configFile: false,
+  optimizeDeps: {
+    noDiscovery: true,
+    include: ['react', 'react-dom/client', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'zod'],
+  },
   resolve: {
     alias: {
       '@partybox/shared': resolve('packages/shared/src/index.ts'),
@@ -174,13 +178,14 @@ try {
   const check = (condition, message) => {
     if (!condition) throw new Error(message);
   };
+  await evaluate('new Promise(done => setTimeout(done, 1000))');
   await settle();
   await evaluate('p04.hold(true)');
   await draw();
   const gesture = await evaluate('p04.info()');
   check(
     gesture.strokes.length === 1 && gesture.revision > 2,
-    'Pointer chunks must form one gesture',
+    `Pointer chunks must form one gesture (lines=${gesture.strokes.length}, revisions=${gesture.revision}, sent=${gesture.sent.length})`,
   );
   await button('Undo');
   check((await evaluate('p04.info().strokes.length')) === 0, 'One Undo must remove the gesture');
@@ -238,6 +243,35 @@ try {
   );
   const solved = await fit();
   check(solved.overflow.length === 0, 'Keyboard-height solved layout must fit');
+  await evaluate('p04.tv()');
+  await settle();
+  const initialCues = await evaluate('p04.cues().length');
+  await evaluate('p04.solveAnother()');
+  await settle();
+  check((await evaluate('p04.cues().slice(-1)[0]')) === 'correct', 'Public solve must cue the TV');
+  check(
+    (await evaluate('p04.cues().length')) === initialCues + 1,
+    'One public solve must cue once',
+  );
+  await evaluate('p04.ack()');
+  await settle();
+  check(
+    (await evaluate('p04.cues().length')) === initialCues + 1,
+    'Repeated views must not replay success',
+  );
+  for (const second of [5, 4, 3, 2, 1]) {
+    await evaluate(`p04.seconds(${second})`);
+    await evaluate('new Promise(done => setTimeout(done, 300))');
+    await settle();
+  }
+  const finalTicks = await evaluate('p04.cues().filter(c=>c==="tick").length');
+  check(finalTicks === 5, `Five final seconds must cue five ticks (got ${finalTicks})`);
+  await evaluate('p04.pause(true)');
+  await settle();
+  const pausedCues = await evaluate('p04.cues().length');
+  await evaluate('p04.ack()');
+  await settle();
+  check((await evaluate('p04.cues().length')) === pausedCues, 'Paused views must remain quiet');
   const report = {
     checks: [
       'pointer chunk merge',
@@ -250,6 +284,9 @@ try {
       'keyboard-height guess fit',
       'immediate point receipt',
       'keyboard-height solved fit',
+      'public solve sound once',
+      'five final-second ticks',
+      'paused sound silence',
     ],
     firstGestureChunks: gesture.revision,
     finalRevision: restored.revision,
@@ -262,8 +299,10 @@ try {
     JSON.stringify(report, null, 2) + '\n',
   );
   console.log(JSON.stringify(report));
+} catch (error) {
+  console.error(error);
+  process.exitCode = 1;
 } finally {
-  await server.close();
   if (browserSocket?.readyState === WebSocket.OPEN) {
     try {
       await rpc(browserSocket, 'Browser.close');
@@ -279,4 +318,5 @@ try {
       stdio: 'ignore',
     });
   }
+  await server.close();
 }

@@ -88,6 +88,8 @@ share a rank. These are PartyBox scores, not a claim about an original formula.
 Final standings explicitly mark every winner or joint winner and show tied ranks.
 The artist sees successful-guess progress. A solver immediately sees their own
 earned points with one sound/haptic cue, while the word stays hidden until reveal.
+The shared TV also cues new solves and the final five seconds, respecting shell
+audio preferences; repeated views and pauses do not repeat cues.
 
 ## Edge cases
 

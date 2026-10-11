@@ -5,12 +5,14 @@ import type { DrawTvView } from '../server/types';
 import { Pencil, Picture } from './Picture';
 import { leaderNames, Roster } from './Roster';
 import { STRINGS } from './strings';
+import { useStageCues } from './useStageCues';
 import styles from './Tv.module.css';
 
 export function Tv({ view }: GameTvProps<DrawTvView>): JSX.Element {
   const L = useT(STRINGS);
   const now = useServerNow(250, view.paused, view.clockHeldAt);
   const seconds = Math.max(0, Math.ceil((view.endsAt - now) / 1000));
+  useStageCues(view, seconds);
   const phase = view.phaseId;
   const leaders = leaderNames(view, view.players);
   const title =
