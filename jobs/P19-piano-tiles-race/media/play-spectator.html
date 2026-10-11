@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en" data-surface="controller" data-motion="off">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Tile Tempo play spectator</title
+  ><style>
+    /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+    :root {
+      --pb-bg: #0f1020;
+      /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+      --pb-art-wash: 16%;
+      --pb-tile-wash: 0%;
+      --pb-surface: #1c1e3a;
+      --pb-surface-2: #272a52;
+      --pb-text: #f5f6ff;
+      --pb-text-muted: #b3b7d9;
+      --pb-accent: #ff5d8f;
+      --pb-accent-2: #ffd166;
+      --pb-accent-3: #06d6a0;
+      --pb-danger: #ef476f;
+      --pb-info: #4cc9f0;
+      --pb-focus: #ffd166;
+      --pb-on-accent: #1a0b12;
+      /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+      --pb-accent-2-fill: #ffd166;
+      --pb-on-accent-2-fill: #1a0b12;
+      /* optional edge for surfaces; only High Contrast sets it */
+      --pb-border: transparent;
+      /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+      --pb-scrim: rgb(15 16 32 / 62%);
+
+      --pb-player-1: #ff5d8f;
+      --pb-player-2: #ffd166;
+      --pb-player-3: #06d6a0;
+      --pb-player-4: #4cc9f0;
+      --pb-player-5: #b388ff;
+      --pb-player-6: #ff9f43;
+      --pb-player-7: #48dbfb;
+      --pb-player-8: #f368e0;
+
+      /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+      --pb-team-sun: var(--pb-accent);
+      --pb-team-moon: var(--pb-info);
+
+      --pb-font-family:
+        'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+        Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+      --pb-space-1: 4px;
+      --pb-space-2: 8px;
+      --pb-space-3: 12px;
+      --pb-space-4: 16px;
+      --pb-space-5: 24px;
+      --pb-space-6: 32px;
+      --pb-space-7: 48px;
+      --pb-space-8: 64px;
+
+      --pb-radius: 12px;
+      --pb-radius-lg: 24px;
+      --pb-touch: 44px;
+
+      --pb-motion-fast: 150ms;
+      --pb-motion-base: 300ms;
+      --pb-motion-slow: 600ms;
+      --pb-motion-pulse: 1000ms;
+      --pb-motion-confetti: 3000ms;
+      --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+      /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+      --pb-font-display: 3rem;
+      --pb-font-h1: 1.75rem;
+      --pb-font-h2: 1.375rem;
+      --pb-font-body: 1.125rem;
+      --pb-font-caption: 0.875rem;
+      --pb-font-button: 1.25rem;
+      --pb-chip-size: 40px;
+    }
+
+    /* ── Themes (src/theme.ts sets data-theme on <html>; 
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+    [data-theme='daylight'] {
+      color-scheme: light;
+      --pb-bg: #f6f5ff;
+      --pb-art-wash: 90%;
+      --pb-tile-wash: 45%;
+      --pb-surface: #ffffff;
+      --pb-surface-2: #e9e7fb;
+      --pb-text: #171633;
+      --pb-text-muted: #4a4c6e;
+      --pb-accent: #c2185b;
+      --pb-accent-2: #7a4b00;
+      --pb-accent-3: #0b6b4e;
+      --pb-danger: #c0143c;
+      --pb-info: #0b6e99;
+      --pb-focus: #c2185b;
+      --pb-on-accent: #ffffff;
+      --pb-accent-2-fill: #ffd166;
+      --pb-on-accent-2-fill: #1a0b12;
+      --pb-scrim: rgb(23 22 51 / 45%);
+    }
+
+    [data-theme='arcade'] {
+      --pb-bg: #050014;
+      --pb-surface: #14002e;
+      --pb-surface-2: #23064a;
+      --pb-text: #f0f6ff;
+      --pb-text-muted: #a8b3d6;
+      --pb-accent: #ff2bd6;
+      --pb-accent-2: #00f0ff;
+      --pb-accent-3: #39ff14;
+      --pb-danger: #ff3860;
+      --pb-info: #8f96ff;
+      --pb-focus: #00f0ff;
+      --pb-on-accent: #050014;
+      --pb-accent-2-fill: #00f0ff;
+      --pb-on-accent-2-fill: #050014;
+      --pb-scrim: rgb(5 0 20 / 62%);
+    }
+
+    [data-theme='cabin'] {
+      --pb-bg: #1d1410;
+      --pb-surface: #2c211b;
+      --pb-surface-2: #3d2e26;
+      --pb-text: #fbf3e8;
+      --pb-text-muted: #cbb8a6;
+      --pb-accent: #ee8050;
+      --pb-accent-2: #f2c14e;
+      --pb-accent-3: #8fbf5a;
+      --pb-danger: #f07070;
+      --pb-info: #6fb3d2;
+      --pb-focus: #f2c14e;
+      --pb-on-accent: #1d1410;
+      --pb-accent-2-fill: #f2c14e;
+      --pb-on-accent-2-fill: #1d1410;
+      --pb-scrim: rgb(29 20 16 / 62%);
+    }
+
+    [data-theme='contrast'] {
+      --pb-bg: #000000;
+      --pb-surface: #111111;
+      --pb-surface-2: #242424;
+      --pb-text: #ffffff;
+      --pb-text-muted: #e6e6e6;
+      --pb-accent: #ff4fa3;
+      --pb-accent-2: #ffff00;
+      --pb-accent-3: #00ff88;
+      --pb-danger: #ff5555;
+      --pb-info: #66ccff;
+      --pb-focus: #ffffff;
+      --pb-on-accent: #000000;
+      --pb-accent-2-fill: #ffff00;
+      --pb-on-accent-2-fill: #000000;
+      --pb-border: #ffffff;
+      --pb-scrim: rgb(0 0 0 / 78%);
+    }
+    [data-surface='tv'] {
+      --pb-font-display: 128px;
+      --pb-font-h1: 72px;
+      --pb-font-h2: 48px;
+      --pb-font-body: 36px;
+      --pb-font-caption: 28px;
+      --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+      --pb-font-button: 36px;
+      --pb-chip-size: 72px;
+      /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+      --pb-overscan-x: 96px;
+      --pb-overscan-y: 54px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :root {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+    }
+
+    /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+    :root[data-motion='off'] {
+      --pb-motion-fast: 0ms;
+      --pb-motion-base: 0ms;
+      --pb-motion-slow: 0ms;
+      --pb-motion-pulse: 0ms;
+      --pb-motion-confetti: 0ms;
+    }
+
+    /* Four separated thumb targets remain visible with a complete eight-player phone stage. */
+    ._screen_483785 {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: var(--pb-space-2);
+      height: 100%;
+      min-height: 0;
+      padding: var(--pb-space-3);
+      padding-bottom: max(var(--pb-space-3), env(safe-area-inset-bottom));
+      overflow: hidden;
+      overscroll-behavior: none;
+      color: var(--pb-text);
+      font-family: var(--pb-font-family);
+    }
+
+    ._header_483785 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--pb-space-2);
+      flex: none;
+    }
+
+    ._header_483785 > div:first-child {
+      min-width: 0;
+    }
+
+    ._kicker_483785,
+    ._headline_483785,
+    ._hint_483785,
+    ._stats_483785,
+    ._footnote_483785 {
+      margin: 0;
+    }
+
+    ._kicker_483785,
+    ._clockLabel_483785,
+    ._footnote_483785 {
+      color: var(--pb-text-muted);
+      font-size: var(--pb-font-caption);
+      line-height: 1.3;
+    }
+
+    ._headline_483785 {
+      font-size: var(--pb-font-h2);
+      font-weight: 900;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    ._clock_483785 {
+      display: grid;
+      justify-items: end;
+      flex: none;
+      font-variant-numeric: tabular-nums;
+    }
+
+    ._clock_483785 strong {
+      font-size: var(--pb-font-display);
+      line-height: 1;
+      font-weight: 900;
+      color: var(--pb-accent-2);
+    }
+
+    ._stats_483785 {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--pb-font-body);
+      font-variant-numeric: tabular-nums;
+    }
+
+    ._stats_483785 b {
+      font-size: var(--pb-font-h1);
+      font-weight: 900;
+    }
+
+    ._hint_483785 {
+      flex: none;
+      font-size: var(--pb-font-body);
+      line-height: 1.3;
+    }
+
+    ._grid_483785 {
+      display: grid;
+      grid-template-rows: repeat(4, minmax(var(--pb-touch), 1fr));
+      flex: 1;
+      min-height: calc(var(--pb-touch) * 4 + var(--pb-space-2) * 3);
+      gap: var(--pb-space-2);
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    ._tileRow_483785 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--pb-space-2);
+      min-height: var(--pb-touch);
+    }
+
+    ._tile_483785 {
+      display: grid;
+      place-items: center;
+      min-width: var(--pb-touch);
+      min-height: var(--pb-touch);
+      border: 0;
+      border-radius: var(--pb-radius);
+      background: var(--pb-surface-2);
+      color: var(--pb-text-muted);
+      font: 900 var(--pb-font-h1) / 1 var(--pb-font-family);
+      padding: 0;
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    ._tile_483785[data-note='true'] {
+      background: var(--pb-bg);
+      color: var(--pb-text);
+      outline: calc(var(--pb-space-1) / 2) solid var(--pb-text-muted);
+      outline-offset: calc(var(--pb-space-1) / -2);
+    }
+
+    ._tileRow_483785[data-current='true'] ._tile_483785[data-note='true'] {
+      outline: var(--pb-space-1) solid var(--pb-accent-2);
+      outline-offset: calc(var(--pb-space-1) * -1);
+      color: var(--pb-accent-2);
+      font-size: var(--pb-font-display);
+    }
+
+    button._tile_483785 {
+      cursor: pointer;
+    }
+
+    button._tile_483785:focus-visible {
+      outline: var(--pb-space-1) solid var(--pb-focus);
+      outline-offset: calc(var(--pb-space-1) / -2);
+    }
+
+    button._tile_483785:active {
+      transform: scale(0.96);
+    }
+
+    button._tile_483785:disabled {
+      cursor: default;
+    }
+
+    ._footnote_483785 {
+      flex: none;
+      text-align: center;
+      min-height: 1.3em;
+    }
+
+    ._standings_483785 {
+      flex: none;
+    }
+
+    ._standingsTitle_483785 {
+      font-size: var(--pb-font-caption);
+      color: var(--pb-text-muted);
+      margin: 0 0 var(--pb-space-1);
+      font-weight: 800;
+    }
+
+    ._rows_483785 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--pb-space-2);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    ._rows_483785 li {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      gap: var(--pb-space-1);
+      min-height: var(--pb-touch);
+      padding: var(--pb-space-1) var(--pb-space-2);
+      background: var(--pb-surface);
+      border-radius: var(--pb-radius);
+    }
+
+    ._rows_483785 li[data-me='true'] {
+      outline: calc(var(--pb-space-1) / 2) solid var(--pb-accent-2);
+      outline-offset: calc(var(--pb-space-1) / -2);
+    }
+
+    ._rank_483785,
+    ._status_483785 {
+      font-size: var(--pb-font-caption);
+      color: var(--pb-text-muted);
+    }
+
+    ._rank_483785 {
+      width: 1ch;
+      flex: none;
+    }
+
+    ._player_483785 {
+      display: grid;
+      min-width: 0;
+      flex: 1;
+    }
+
+    ._name_483785 {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: var(--pb-font-body);
+      line-height: 1;
+    }
+
+    ._status_483785 {
+      line-height: 1;
+    }
+
+    ._rowCount_483785 {
+      font-size: var(--pb-font-button);
+      font-variant-numeric: tabular-nums;
+    }
+
+    ._screen_483785:not([data-grid='true']) ._rows_483785 {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    ._screen_483785:not([data-grid='true']) ._rows_483785 li {
+      min-height: calc(var(--pb-touch) + var(--pb-space-2));
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      button._tile_483785:active {
+        transform: none;
+      }
+    }
+
+    :root[data-motion='off'] button._tile_483785:active {
+      transform: none;
+    }
+
+    /* Eight lanes share one race clock. All sofa-readable copy uses the TV body scale. */
+    ._stage_ced498 {
+      box-sizing: border-box;
+      height: 100%;
+      min-height: 0;
+      gap: var(--pb-space-5);
+      color: var(--pb-text);
+      font-family: var(--pb-font-family);
+    }
+
+    ._header_ced498 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--pb-space-7);
+      flex: none;
+    }
+
+    ._intro_ced498 {
+      min-width: 0;
+    }
+
+    ._kicker_ced498,
+    ._headline_ced498,
+    ._instructions_ced498,
+    ._footer_ced498 {
+      margin: 0;
+    }
+
+    ._kicker_ced498 {
+      font-size: var(--pb-font-body);
+      font-weight: 800;
+      color: var(--pb-accent-2);
+    }
+
+    ._headline_ced498 {
+      font-size: var(--pb-font-h1);
+      font-weight: 900;
+      line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+
+    ._instructions_ced498 {
+      margin-top: var(--pb-space-2);
+      color: var(--pb-text-muted);
+      font-size: var(--pb-font-body);
+      line-height: 1.25;
+    }
+
+    ._clock_ced498 {
+      display: grid;
+      justify-items: center;
+      flex: none;
+      min-width: calc(var(--pb-space-8) * 5);
+      font-variant-numeric: tabular-nums;
+    }
+
+    ._clock_ced498 > span {
+      font-size: var(--pb-font-body);
+      color: var(--pb-text-muted);
+    }
+
+    ._clock_ced498 > strong {
+      font-size: var(--pb-font-display);
+      line-height: 1.1;
+      font-weight: 900;
+    }
+
+    ._clock_ced498[data-low='true'] strong {
+      color: var(--pb-accent-2);
+    }
+
+    ._racers_ced498 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: minmax(0, 1fr);
+      gap: var(--pb-space-3) var(--pb-space-5);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      min-height: 0;
+      flex: 1;
+    }
+
+    ._racers_ced498 li {
+      display: grid;
+      grid-template-rows: auto auto auto;
+      align-content: center;
+      gap: var(--pb-space-1);
+      min-width: 0;
+      padding: var(--pb-space-2) var(--pb-space-4);
+      border-radius: var(--pb-radius-lg);
+      border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+      background: var(--pb-surface);
+      font-size: calc(var(--pb-font-body) * 8 / 9);
+    }
+
+    ._racers_ced498 li[data-leader='true'] {
+      border-color: var(--pb-accent-2);
+    }
+
+    ._rowHead_ced498,
+    ._rowFoot_ced498 {
+      display: flex;
+      align-items: center;
+      gap: var(--pb-space-3);
+    }
+
+    ._rank_ced498 {
+      flex: none;
+      min-width: 1.5ch;
+      font-size: calc(var(--pb-font-body) * 8 / 9);
+      color: var(--pb-text-muted);
+      font-weight: 900;
+    }
+
+    ._name_ced498 {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    ._count_ced498 {
+      font-size: var(--pb-font-h2);
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    ._track_ced498 {
+      height: var(--pb-space-2);
+      overflow: hidden;
+      border-radius: var(--pb-radius);
+      background: var(--pb-surface-2);
+    }
+
+    ._track_ced498 > span {
+      display: block;
+      height: 100%;
+      background: var(--player-color);
+      transform-origin: left center;
+      transform: scaleX(var(--progress));
+      transition: transform var(--pb-motion-fast) var(--pb-ease);
+    }
+
+    ._rowFoot_ced498 {
+      justify-content: space-between;
+      color: var(--pb-text-muted);
+      font-size: calc(var(--pb-font-body) * 8 / 9);
+      line-height: 1;
+    }
+
+    ._racers_ced498 li[data-out='true'] ._status_ced498 {
+      color: var(--pb-text);
+      font-weight: 800;
+    }
+
+    ._speed_ced498 {
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    ._footer_ced498 {
+      flex: none;
+      text-align: center;
+      color: var(--pb-text-muted);
+      font-size: var(--pb-font-body);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      ._track_ced498 > span {
+        transition: none;
+      }
+    }
+
+    :root[data-motion='off'] ._track_ced498 > span {
+      transition: none;
+    }
+
+    ._stage_262f13 {
+      display: flex;
+      flex-direction: column;
+      gap: var(--pb-space-5);
+      min-height: 100%;
+      /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+      padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+        var(--pb-overscan-y, 54px);
+    }
+
+    ._center_262f13 {
+      /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+      justify-content: safe center;
+      align-items: safe center;
+      text-align: center;
+    }
+
+    /* The face's `size` as CSS, at no specificity: a caller's class or `._x_8c3e65 svg` rule still sizes it,
+   as it did over the old width/height attributes, which can't hold a CSS var (WebKit logged an
+   error for every face, T-0174). */
+    :where(._avatar_8c3e65) {
+      width: var(--pb-avatar-size);
+      height: var(--pb-avatar-size);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    body {
+      background: var(--pb-bg);
+      color: var(--pb-text);
+      font-family: var(--pb-font-family);
+    }
+    .chrome {
+      height: 60px;
+      padding: 16px;
+      font-size: 18px;
+      display: flex;
+      justify-content: space-between;
+    }
+    main {
+      height: calc(100% - 104px);
+      min-height: 0;
+    }
+    .bottom {
+      height: 44px;
+      padding: 12px;
+      text-align: center;
+    }
+    [data-surface='tv'] .chrome {
+      height: 100px;
+      padding: 32px 96px;
+      font-size: 36px;
+    }
+    [data-surface='tv'] main {
+      height: calc(100% - 176px);
+    }
+    [data-surface='tv'] .bottom {
+      height: 76px;
+      padding: 20px;
+      font-size: 32px;
+    }
+  </style>
+  <body>
+    <header class="chrome"><b>PartyBox</b><span>ABCD · Player 1</span></header>
+    <main>
+      <section class="_screen_483785" data-stage="true">
+        <header class="_header_483785">
+          <div>
+            <p class="_kicker_483785">30-second tile race</p>
+            <h2 class="_headline_483785">Watch the race</h2>
+          </div>
+          <div class="_clock_483785" role="timer" aria-label="Time left">
+            <span class="_clockLabel_483785">Time left</span><strong>0:22</strong>
+          </div>
+        </header>
+        <p class="_hint_483785" role="status">Most tiles in 30 seconds wins.</p>
+        <section class="_standings_483785" aria-label="Standings">
+          <h3 class="_standingsTitle_483785">Standings · tiles</h3>
+          <ol class="_rows_483785">
+            <li>
+              <span class="_rank_483785">1</span
+              ><span class="_player_483785"
+                ><b class="_name_483785" title="Player 1">Player 1</b
+                ><span class="_status_483785">Playing</span></span
+              ><b class="_rowCount_483785">24</b>
+            </li>
+            <li>
+              <span class="_rank_483785">1</span
+              ><span class="_player_483785"
+                ><b class="_name_483785" title="Player 2">Player 2</b
+                ><span class="_status_483785">Playing</span></span
+              ><b class="_rowCount_483785">24</b>
+            </li>
+            <li>
+              <span class="_rank_483785">3</span
+              ><span class="_player_483785"
+                ><b class="_name_483785" title="Player 3">Player 3</b
+                ><span class="_status_483785">Playing</span></span
+              ><b class="_rowCount_483785">22</b>
+            </li>
+            <li>
+              <span class="_rank_483785">4</span
+              ><span class="_player_483785"
+                ><b class="_name_483785" title="Player 4">Player 4</b
+                ><span class="_status_483785">Playing</span></span
+              ><b class="_rowCount_483785">20</b>
+            </li>
+            <li>
+              <span class="_rank_483785">5</span
+              ><span class="_player_483785"
+                ><b class="_name_483785" title="Player 5">Player 5</b
+                ><span class="_status_483785">Playing</span></span
+              ><b class="_rowCount_483785">18</b>
+            </li>
+            <li>
+              <span class="_rank_483785">6</span
+              ><span class="_player_483785"
+                ><b class="_name_483785" title="Player 6">Player 6</b
+                ><span class="_status_483785">Playing</span></span
+              ><b class="_rowCount_483785">16</b>
+            </li>
+            <li>
+              <span class="_rank_483785">7</span
+              ><span class="_player_483785"
+                ><b class="_name_483785" title="Player 7">Player 7</b
+                ><span class="_status_483785">Out</span></span
+              ><b class="_rowCount_483785">14</b>
+            </li>
+            <li>
+              <span class="_rank_483785">8</span
+              ><span class="_player_483785"
+                ><b class="_name_483785" title="Player 8">Player 8</b
+                ><span class="_status_483785">Playing</span></span
+              ><b class="_rowCount_483785">12</b>
+            </li>
+          </ol>
+        </section>
+      </section>
+    </main>
+    <footer class="bottom">Room controls</footer>
+  </body>
+</html>
