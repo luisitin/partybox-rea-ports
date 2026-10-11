@@ -63,6 +63,8 @@ stage with no action controls.
   artist only during `draw`. Contiguous chunks of a gesture join into one path.
 - `undo` removes the latest complete gesture; legacy packets without a gesture
   ID each count as one stroke. `clear` empties the pad.
+  The phone arms Clear on the first tap and sends it only on the second;
+  drawing, Undo, pause and a new turn cancel the armed state.
 - `guess`: 1-40 characters, non-artist only during `draw`. Case, outer
   whitespace, punctuation and leading articles use SDK normalization. An exact normalized word/phrase solves.
 

@@ -70,3 +70,7 @@ passes35checks. Three new regressions prove a departed choosing artist cannot
 cause an empty reveal, pause/resume rotates at the resume time, and rejoined
 artists cannot apply queued choices to the next artist's turn. R2 PR workflow
 38176201266 passed in40seconds.
+
+R4: `node jobs/P04-draw-and-guess/tools/playcheck.mjs` passes10livechecks.
+Its two new checks prove first-tap Clear leaves paths and revision unchanged,
+and the deliberate second tap clears. Remaining pointer/edit/fit checks pass.

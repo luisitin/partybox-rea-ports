@@ -45,6 +45,7 @@ export function DrawingPad({
   const [width, setWidth] = useState<4 | 9 | 18>(9);
   const [localCount, setLocalCount] = useState(gestureCount(strokes));
   const [localFragments, setLocalFragments] = useState(strokes.length);
+  const [clearArmed, setClearArmed] = useState(false);
   const ink = useThemeColor('--pb-text', '');
   const rose = useThemeColor('--pb-accent', '');
   const gold = useThemeColor('--pb-accent-2', '');
@@ -94,6 +95,7 @@ export function DrawingPad({
   }, [strokes, inkRevision, colors]);
   useEffect(() => {
     if (!disabled) return;
+    setClearArmed(false);
     const id = active.current.id;
     active.current.id = -1;
     active.current.points = [];
@@ -155,6 +157,7 @@ export function DrawingPad({
     )
       return;
     event.preventDefault();
+    setClearArmed(false);
     event.currentTarget.setPointerCapture(event.pointerId);
     serial.current = nextGesture(strokes, pending.current, serial.current);
     active.current = {
@@ -186,6 +189,7 @@ export function DrawingPad({
     repaint();
   };
   const edit = (type: 'clear' | 'undo'): void => {
+    setClearArmed(false);
     const id = active.current.id;
     active.current.id = -1;
     active.current.points = [];
@@ -245,11 +249,20 @@ export function DrawingPad({
         <button type="button" disabled={disabled || localCount === 0} onClick={() => edit('undo')}>
           {L('Undo')}
         </button>
-        <button type="button" disabled={disabled || localCount === 0} onClick={() => edit('clear')}>
-          {L('Clear')}
+        <button
+          type="button"
+          disabled={disabled || localCount === 0}
+          aria-pressed={clearArmed}
+          onClick={() => (clearArmed ? edit('clear') : setClearArmed(true))}
+        >
+          {clearArmed ? L('Tap again to clear') : L('Clear')}
         </button>
         <span role="status">
-          {full ? L('Canvas full — undo or clear to keep drawing.') : L('Pictures, not letters!')}
+          {clearArmed
+            ? L('Tap again to clear the whole picture.')
+            : full
+              ? L('Canvas full — undo or clear to keep drawing.')
+              : L('Pictures, not letters!')}
         </span>
       </div>
     </div>

@@ -185,7 +185,19 @@ try {
   await button('Undo');
   check((await evaluate('p04.info().strokes.length')) === 0, 'One Undo must remove the gesture');
   await draw();
+  const beforeClear = await evaluate('p04.info()');
   await button('Clear');
+  const armedClear = await evaluate('p04.info()');
+  check(
+    armedClear.revision === beforeClear.revision &&
+      armedClear.strokes.length === beforeClear.strokes.length,
+    'First Clear tap must preserve ink and revision',
+  );
+  await button('Tap again to clear');
+  check(
+    (await evaluate('p04.info().strokes.length')) === 0,
+    'Second Clear tap must clear intentionally',
+  );
   await draw();
   check(
     (await evaluate('p04.info().strokes.length')) === 1,
@@ -230,6 +242,8 @@ try {
     checks: [
       'pointer chunk merge',
       'one Undo per gesture',
+      'accidental Clear preserves ink',
+      'second Clear confirms deletion',
       'delayed Clear/Undo acknowledgements',
       'real canvas paint',
       'phone-only guess fit',
