@@ -28,4 +28,6 @@ P14 r10-local 2026-10-11T21:48:03Z job/P14-crossy-streets
 
 P15 r12-local 2026-10-11T21:48:14Z job/P15-doodle-climb
 
+P16 r16-local 2026-10-11T21:48:36Z job/P16-stack-tower
+
 <!-- prettier-ignore-end -->
