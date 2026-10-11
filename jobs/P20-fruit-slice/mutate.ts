@@ -201,6 +201,10 @@ const mutations: Mutation[] = [
     witness: 'bot rejects disconnected player',
   },
 ];
+const onlyAt = process.argv.indexOf('--only');
+const requested = onlyAt >= 0 ? new Set(process.argv[onlyAt + 1]?.split(',')) : null;
+const selected = mutations.filter((mutation) => !requested || requested.has(mutation.id));
+if (selected.length === 0) throw new Error('--only matched no mutation IDs');
 
 const originals = new Map<string, string>();
 let activeFile: string | null = null;
@@ -316,7 +320,7 @@ let backupDirectory = '';
 let error = '';
 try {
   if (!existsSync(join(repo, probe))) throw new Error(`Mutation witness file missing: ${probe}`);
-  for (const mutation of mutations) {
+  for (const mutation of selected) {
     const path = join(repo, server, mutation.file);
     const original = originals.get(path) ?? readFileSync(path, 'utf8');
     originals.set(path, original);
@@ -344,11 +348,11 @@ try {
   const witnesses = baseline.report.testResults.flatMap((test) =>
     test.assertionResults.map((assertion) => assertion.title),
   );
-  for (const mutation of mutations) {
+  for (const mutation of selected) {
     if (!witnesses.includes(`mutation: ${mutation.witness}`))
       throw new Error(`${mutation.id} missing named witness: ${mutation.witness}`);
   }
-  for (const mutation of mutations) {
+  for (const mutation of selected) {
     if (interrupted) break;
     for (const [path, original] of originals) {
       if (readFileSync(path, 'utf8') !== original)
@@ -417,7 +421,7 @@ const reportText =
           }
         : null,
       mutations: completed,
-      planned: mutations.length,
+      planned: selected.length,
       killed,
       survived: completed.filter((mutation) => mutation.status === 'survived').length,
       invalid: completed.filter((mutation) => mutation.status === 'invalid').length,
@@ -435,4 +439,10 @@ if (outAt >= 0) {
   if (!path) throw new Error('--out needs a report path');
   writeFileSync(path, reportText, 'utf8');
 } else process.stdout.write(reportText);
-process.exitCode = error || !restored || completed.length !== 20 || killed < 19 ? 1 : 0;
+process.exitCode =
+  error ||
+  !restored ||
+  completed.length !== selected.length ||
+  killed < Math.min(19, selected.length)
+    ? 1
+    : 0;

@@ -1,13 +1,13 @@
 // Single local Chromium, one recycled tab, closed in finally. No browser dependency required.
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { join, resolve } from 'node:path';
+import { join, resolve, sep } from 'node:path';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const media = join(root, 'jobs/P20-fruit-slice/media');
 const profile = resolve(root, 'node_modules/.cache/r19-chrome');
-if (!profile.startsWith(resolve(root, 'node_modules/.cache') + '\\'))
+if (!profile.startsWith(resolve(root, 'node_modules/.cache') + sep))
   throw new Error('Profile must stay in this workspace cache');
 mkdirSync(profile, { recursive: true });
 rmSync(join(profile, 'DevToolsActivePort'), { force: true });
@@ -126,5 +126,18 @@ try {
       new Promise((r) => setTimeout(r, 2000)),
     ]);
     if (browser.exitCode === null) browser.kill();
+  }
+  if (process.platform === 'win32') {
+    // Crashpad can outlive a closed browser on Windows; match only this verified private profile.
+    const literal = profile.replace(/'/g, "''");
+    spawnSync(
+      'powershell.exe',
+      [
+        '-NoProfile',
+        '-Command',
+        `$owned = Get-CimInstance Win32_Process -Filter "Name = 'chrome.exe'" | Where-Object { $_.CommandLine -like '*--user-data-dir=${literal}*' }; foreach ($p in $owned) { Stop-Process -Id $p.ProcessId -ErrorAction SilentlyContinue }`,
+      ],
+      { windowsHide: true, stdio: 'ignore' },
+    );
   }
 }
