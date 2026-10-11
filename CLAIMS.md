@@ -7,4 +7,4 @@ P03 r3-local 2026-10-11T20:44:19Z job/P03-trivia-lightning
 P04 r2-local 2026-10-11T20:54:05Z job/P04-draw-and-guess
 P04 r2-local 2026-10-11T20:54:05Z job/P04-draw-and-guess
 P05 r5-local 2026-10-11T20:45:11Z job/P05-blob-arena
-P06 r6-local 2026-10-11T20:46:00Z job/P06-snake-royale
+P06 r6-local 2026-10-11T20:56:03Z job/P06-snake-royale
