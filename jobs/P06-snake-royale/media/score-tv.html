@@ -1,0 +1,1288 @@
+<!doctype html>
+<html lang="en" data-surface="tv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Snake Royale tv</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>; 
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+      ._stage_262f13 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+        min-height: 100%;
+        /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+        padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+          var(--pb-overscan-y, 54px);
+      }
+
+      ._center_262f13 {
+        /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+        justify-content: safe center;
+        align-items: safe center;
+        text-align: center;
+      }
+      ._arena_bc8d47 {
+        /* One SVG unit is derived from the spacing token; geometry stays in the server's 160 × 100 arena. */
+        --arena-unit: calc(var(--pb-space-1) / 4);
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      ._floor_bc8d47 {
+        fill: var(--pb-bg);
+      }
+
+      ._grid_bc8d47 {
+        fill: none;
+        stroke: var(--pb-surface-2);
+        stroke-width: calc(var(--arena-unit) * 0.15);
+      }
+
+      ._wall_bc8d47 {
+        fill: none;
+        stroke: var(--pb-text-muted);
+        stroke-width: calc(var(--arena-unit) * 0.6);
+      }
+
+      ._food_bc8d47 {
+        fill: var(--pb-accent-2);
+      }
+
+      ._corpseFood_bc8d47 {
+        fill: var(--pb-accent-3);
+        stroke: var(--pb-text);
+        stroke-width: calc(var(--arena-unit) * 0.15);
+      }
+
+      ._body_bc8d47 {
+        fill: none;
+        stroke: var(--snake-color);
+        stroke-width: calc(var(--arena-unit) * 3);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      ._marks_bc8d47 {
+        fill: none;
+        stroke: var(--pb-bg);
+        stroke-width: calc(var(--arena-unit) * 0.65);
+        stroke-linecap: round;
+      }
+
+      ._head_bc8d47 {
+        fill: var(--snake-color);
+        stroke: var(--pb-text);
+        stroke-width: calc(var(--arena-unit) * 0.3);
+      }
+
+      ._eye_bc8d47 {
+        fill: var(--pb-on-accent-2-fill);
+      }
+
+      ._number_bc8d47 {
+        fill: var(--pb-text);
+        stroke: var(--pb-bg);
+        stroke-width: calc(var(--arena-unit) * 0.65);
+        paint-order: stroke;
+        text-anchor: middle;
+        font-family: var(--pb-font-family);
+        font-size: calc(var(--arena-unit) * 4.5);
+        font-weight: 900;
+      }
+
+      ._shield_bc8d47 {
+        fill: none;
+        stroke: var(--pb-info);
+        stroke-width: calc(var(--arena-unit) * 0.4);
+        stroke-dasharray: var(--arena-unit) var(--arena-unit);
+      }
+
+      ._boost_bc8d47 {
+        fill: none;
+        stroke: var(--pb-text);
+        stroke-width: calc(var(--arena-unit) * 0.6);
+        stroke-linecap: round;
+      }
+
+      [data-me='true'] ._number_bc8d47 {
+        fill: var(--pb-accent-2);
+      }
+
+      ._stage_e24928 {
+        height: 100%;
+        min-height: 0;
+        gap: var(--pb-space-4);
+        padding: var(--pb-stage-top, var(--pb-overscan-y)) var(--pb-overscan-x) var(--pb-space-6);
+        color: var(--pb-text);
+        overflow: hidden;
+      }
+
+      ._header_e24928 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--pb-space-5);
+      }
+
+      ._header_e24928 > div:first-child {
+        min-width: 0;
+      }
+
+      ._title_e24928 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+        line-height: 1.1;
+      }
+
+      ._hint_e24928,
+      ._legend_e24928 {
+        margin: 0;
+        font-size: var(--pb-font-body);
+        color: var(--pb-text-muted);
+        line-height: 1.2;
+      }
+
+      ._hint_e24928 {
+        margin-top: var(--pb-space-2);
+      }
+
+      ._clock_e24928 {
+        display: grid;
+        flex: none;
+        justify-items: center;
+        min-width: calc(var(--pb-space-8) * 4);
+        font-size: var(--pb-font-body);
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._clock_e24928 b {
+        font-size: calc(var(--pb-font-display) * 0.75);
+        line-height: 1;
+      }
+
+      ._clock_e24928[data-low='true'] b {
+        color: var(--pb-accent-2);
+      }
+
+      ._board_e24928 {
+        display: grid;
+        flex: 1;
+        min-height: 0;
+        grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) * 6);
+        gap: var(--pb-space-5);
+      }
+
+      ._arena_e24928 {
+        min-width: 0;
+        min-height: 0;
+        background: var(--pb-bg);
+        border-radius: var(--pb-radius-lg);
+        overflow: hidden;
+      }
+
+      ._side_e24928 {
+        min-height: 0;
+        min-width: 0;
+      }
+
+      ._railTitle_e24928 {
+        margin: 0 0 var(--pb-space-2);
+        font-size: var(--pb-font-body);
+      }
+
+      ._legend_e24928 {
+        text-align: center;
+      }
+
+      ._screen_99408e {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-3);
+        padding-bottom: max(var(--pb-space-3), env(safe-area-inset-bottom));
+        overflow: hidden;
+        overscroll-behavior: none;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        color: var(--pb-text);
+      }
+
+      ._header_99408e {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex: none;
+        gap: var(--pb-space-2);
+        min-width: 0;
+      }
+
+      ._title_99408e {
+        margin: 0;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: var(--pb-font-h2);
+        font-weight: 900;
+        line-height: 1.2;
+      }
+
+      ._clock_99408e {
+        flex: none;
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.1;
+      }
+
+      ._stats_99408e {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex: none;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-2) var(--pb-space-3);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-caption);
+      }
+
+      ._stats_99408e > span {
+        display: grid;
+        justify-items: center;
+        gap: var(--pb-space-1);
+        line-height: 1;
+      }
+
+      ._stats_99408e b {
+        font-size: var(--pb-font-h2);
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._stats_99408e ._seat_99408e {
+        display: flex;
+        gap: var(--pb-space-2);
+      }
+
+      ._seat_99408e b,
+      ._snakeNumber_99408e {
+        display: grid;
+        place-items: center;
+        flex: none;
+        border-radius: 50%;
+        color: var(--pb-on-accent-2-fill);
+        background: var(--snake-color);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-text);
+        font-weight: 900;
+      }
+
+      ._seat_99408e b {
+        width: calc(var(--pb-touch) * 0.8);
+        height: calc(var(--pb-touch) * 0.8);
+      }
+
+      ._arena_99408e {
+        flex: 1;
+        min-height: calc(var(--pb-touch) * 2);
+        overflow: hidden;
+        border-radius: var(--pb-radius);
+        background: var(--pb-bg);
+      }
+
+      ._identity_99408e {
+        display: flex;
+        flex: 1;
+        min-height: 0;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: var(--pb-space-2);
+      }
+
+      ._snakeNumber_99408e {
+        width: calc(var(--pb-touch) * 2);
+        height: calc(var(--pb-touch) * 2);
+        font-size: var(--pb-font-display);
+      }
+
+      ._identity_99408e h2 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+      }
+
+      ._identity_99408e p,
+      ._hint_99408e,
+      ._spectating_99408e,
+      ._result_99408e p {
+        margin: 0;
+        font-size: var(--pb-font-caption);
+        line-height: 1.3;
+        color: var(--pb-text-muted);
+      }
+
+      ._hint_99408e,
+      ._spectating_99408e,
+      ._result_99408e {
+        text-align: center;
+        flex: none;
+      }
+
+      ._notice_99408e {
+        margin: 0;
+        padding: var(--pb-space-2);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface-2);
+        font-size: var(--pb-font-caption);
+        text-align: center;
+        font-weight: 800;
+      }
+
+      ._result_99408e {
+        display: grid;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-2);
+        font-size: var(--pb-font-body);
+      }
+
+      ._screen_99408e[data-stage]:not([data-phase='play']) ._arena_99408e {
+        max-height: calc(var(--pb-touch) * 5);
+        flex-basis: calc(var(--pb-touch) * 4);
+      }
+
+      ._controls_70eb3c {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+        gap: var(--pb-space-3);
+        height: calc(var(--pb-touch) * 4);
+        min-height: calc(var(--pb-touch) * 3);
+        color: var(--pb-text);
+      }
+
+      ._pad_70eb3c,
+      ._boost_70eb3c {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-1);
+        padding: var(--pb-space-2);
+        min-width: var(--pb-touch);
+        min-height: var(--pb-touch);
+        border: calc(var(--pb-space-1) / 2) solid var(--snake-color);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+        font-size: var(--pb-font-button);
+        touch-action: none;
+        user-select: none;
+        -webkit-tap-highlight-color: var(--pb-border);
+        transition: background var(--pb-motion-fast) var(--pb-ease);
+      }
+
+      ._pad_70eb3c:focus-visible,
+      ._boost_70eb3c:focus-visible {
+        outline: var(--pb-space-1) solid var(--pb-focus);
+        outline-offset: var(--pb-space-1);
+      }
+
+      ._pad_70eb3c:disabled,
+      ._boost_70eb3c:disabled {
+        opacity: 0.5;
+      }
+
+      ._direction_70eb3c {
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+        max-height: calc(var(--pb-touch) * 3);
+      }
+
+      ._padRing_70eb3c {
+        fill: var(--pb-surface);
+        stroke: var(--snake-color);
+        stroke-width: calc(var(--pb-space-1) / 2);
+      }
+
+      ._compass_70eb3c {
+        fill: var(--pb-text-muted);
+      }
+
+      ._heading_70eb3c {
+        fill: none;
+        stroke: var(--pb-text);
+        stroke-width: var(--pb-space-1);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      ._label_70eb3c,
+      ._cost_70eb3c {
+        font-size: var(--pb-font-caption);
+        line-height: 1.2;
+      }
+
+      ._label_70eb3c {
+        font-weight: 900;
+      }
+
+      ._boost_70eb3c[data-held='true'] {
+        background: var(--snake-color);
+        color: var(--pb-on-accent-2-fill);
+      }
+
+      ._bolt_70eb3c {
+        font-size: var(--pb-font-display);
+        line-height: 1;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        ._pad_70eb3c,
+        ._boost_70eb3c {
+          transition: none;
+        }
+      }
+
+      ._rows_61b6c5 {
+        display: grid;
+        align-content: start;
+        gap: var(--pb-space-2);
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        min-width: 0;
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+        line-height: 1.1;
+      }
+
+      ._rows_61b6c5 li {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        min-height: calc(var(--pb-touch) * 1.7);
+        min-width: 0;
+        padding: var(--pb-space-1) var(--pb-space-2);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+      }
+
+      ._number_61b6c5 {
+        display: grid;
+        place-items: center;
+        flex: none;
+        width: var(--pb-touch);
+        height: var(--pb-touch);
+        background: var(--snake-color);
+        color: var(--pb-on-accent-2-fill);
+        font-weight: 900;
+        border-radius: 50%;
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-text);
+      }
+
+      ._identity_61b6c5 {
+        display: grid;
+        min-width: 0;
+      }
+
+      ._name_61b6c5 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      ._status_61b6c5 {
+        font-size: inherit;
+        color: var(--pb-text-muted);
+        line-height: 1.1;
+      }
+
+      ._value_61b6c5 {
+        display: grid;
+        justify-items: end;
+        flex: none;
+        margin-left: auto;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.1;
+      }
+
+      ._gain_61b6c5 {
+        color: var(--pb-accent-2);
+      }
+
+      ._rows_61b6c5 li[data-me='true'] {
+        outline: calc(var(--pb-space-1) / 2) solid var(--snake-color);
+        outline-offset: calc(var(--pb-space-1) / -2);
+      }
+
+      ._rows_61b6c5 li[data-respawn='true'] ._number_61b6c5 {
+        border-style: dashed;
+      }
+
+      /* Eight names occupy four rows on a score stage, or two small rows under a live phone arena. */
+      ._rows_61b6c5[data-compact='true'] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-1);
+        font-size: var(--pb-font-caption);
+      }
+
+      ._rows_61b6c5[data-compact='true'] li {
+        min-height: var(--pb-touch);
+        gap: var(--pb-space-1);
+        padding: var(--pb-space-1);
+      }
+
+      ._rows_61b6c5[data-compact='true'] ._number_61b6c5 {
+        width: calc(var(--pb-touch) / 2);
+        height: calc(var(--pb-touch) / 2);
+      }
+
+      ._rows_61b6c5[data-compact='true'] ._status_61b6c5 {
+        font-size: var(--pb-font-caption);
+      }
+
+      ._rows_61b6c5[data-compact='true'][aria-label] ._value_61b6c5 {
+        font-size: var(--pb-font-body);
+      }
+
+      ._rows_61b6c5[data-compact='true'][data-phase='play'] {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      ._rows_61b6c5[data-compact='true'][data-phase='play'] li {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        column-gap: var(--pb-space-1);
+        row-gap: 0;
+      }
+
+      ._rows_61b6c5[data-compact='true'][data-phase='play'] ._number_61b6c5 {
+        grid-row: span 2;
+      }
+
+      ._rows_61b6c5[data-compact='true'][data-phase='play'] ._status_61b6c5 {
+        display: none;
+      }
+
+      ._rows_61b6c5[data-compact='true'][data-phase='play'] ._value_61b6c5 {
+        grid-column: 2;
+        justify-items: start;
+        margin-left: 0;
+        font-size: var(--pb-font-caption);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+      }
+      #root {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="_stage_262f13 _stage_e24928">
+        <header class="_header_e24928">
+          <div>
+            <h1 class="_title_e24928">Round 1 banked!</h1>
+            <p class="_hint_e24928">End size added to match points. Get ready to grow again.</p>
+          </div>
+          <div class="_clock_e24928" role="timer"><span>Next round</span><b>0:07</b></div>
+        </header>
+        <div class="_board_e24928">
+          <div class="_arena_e24928">
+            <svg
+              class="_arena_bc8d47"
+              viewBox="0 0 160 100"
+              role="img"
+              aria-label="Snake arena. Eat sparks; avoid walls and other snakes."
+            >
+              <rect class="_floor_bc8d47" x="0" y="0" width="160" height="100" rx="2"></rect>
+              <path
+                class="_grid_bc8d47"
+                d="M40 0V100M80 0V100M120 0V100M0 25H160M0 50H160M0 75H160"
+              ></path>
+              <circle class="_food_bc8d47" cx="8.428" cy="96.699" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="8.533" cy="93.55" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="10.641" cy="91.209" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="13.163" cy="89.241" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="15.685" cy="87.273" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="18.207" cy="85.305" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="20.729" cy="83.337" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="23.486" cy="81.786" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="26.596" cy="82.296" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="29.616" cy="83.356" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="32.636" cy="84.416" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="35.656" cy="85.476" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="38.676" cy="86.536" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="84.683" cy="85.217" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="87.703" cy="86.277" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="111.747" cy="74.643" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="27.048" cy="59.475" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="19.608" cy="65.541" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="17.128" cy="67.563" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="14.648" cy="69.585" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="9.688" cy="73.629" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="7.208" cy="75.651" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="5.947" cy="78.539" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="6.843" cy="81.56" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="9.475" cy="83.293" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="12.604" cy="82.924" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="15.166" cy="81.006" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="17.728" cy="79.088" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="18.647" cy="69.871" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="18.417" cy="66.679" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="18.187" cy="63.487" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="17.037" cy="47.527" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="16.807" cy="44.335" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="22.937" cy="34.408" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="25.499" cy="32.49" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="28.061" cy="30.572" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="30.623" cy="28.654" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="33.185" cy="26.736" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="35.747" cy="24.818" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="38.309" cy="22.9" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="40.871" cy="20.982" r="0.55"></circle>
+              <path class="_corpseFood_bc8d47" d="M146.874 96.9l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M145.241 95.816l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M143.131 93.41000000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path class="_corpseFood_bc8d47" d="M142.638 84.536l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M143.522 81.46000000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path class="_corpseFood_bc8d47" d="M144.406 78.384l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M146.609 72.432l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M139.22 78.986l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M139.225 69.723l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M119.519 60.232l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M107.199 63.696000000000005l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M104.119 64.56200000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M101.039 65.42800000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M97.959 66.29400000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M94.879 67.16000000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <circle class="_food_bc8d47" cx="50.97" cy="78.186" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="120.315" cy="67.24" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="123.405" cy="68.07" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="133.536" cy="53.379" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="124.89" cy="49.203" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="122.008" cy="47.811" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="119.126" cy="46.419" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="107.598" cy="40.851" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="55.027" cy="31.599" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="58.057" cy="30.569" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="61.087" cy="29.539" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="64.117" cy="28.509" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="67.147" cy="27.479" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="70.177" cy="26.449" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="73.207" cy="25.419" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="76.237" cy="24.389" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="79.267" cy="23.359" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="82.297" cy="22.329" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="85.327" cy="21.299" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="88.357" cy="20.269" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="53.404" cy="31.895" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="39.451" cy="47.504" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="40.409" cy="50.558" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="41.367" cy="53.612" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="42.325" cy="56.666" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="43.283" cy="59.72" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="44.241" cy="62.774" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="82.318" cy="12.198" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="75.966" cy="12.982" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="72.79" cy="13.374" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="69.614" cy="13.766" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="66.438" cy="14.158" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="63.262" cy="14.55" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="60.086" cy="14.942" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="56.91" cy="15.334" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="47.382" cy="16.51" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="44.206" cy="16.902" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="41.03" cy="17.294" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="37.854" cy="17.686" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="31.634" cy="62.035" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="44.516" cy="79.893" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="49.411" cy="86.408" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="62.179" cy="87.336" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="65.371" cy="87.568" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="68.563" cy="87.8" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="71.755" cy="88.032" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="74.947" cy="88.264" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="78.139" cy="88.496" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="97.291" cy="89.888" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="100.483" cy="90.12" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="31.637" cy="41.127" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="39.592" cy="40.597" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="46.222" cy="47.539" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="48.432" cy="49.853" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="50.642" cy="52.167" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="57.272" cy="59.109" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="59.482" cy="61.423" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="61.692" cy="63.737" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="63.902" cy="66.051" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="70.532" cy="72.993" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="33.713" cy="60.588" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="78.855" cy="14.731" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="79.098" cy="11.59" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="77.26" cy="9.031" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="74.205" cy="8.257" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="71.013" cy="8.023" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="67.821" cy="7.789" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="64.629" cy="7.555" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="61.437" cy="7.321" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="58.282" cy="7.565" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="55.981" cy="9.718" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="54.061" cy="12.278" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="52.141" cy="14.838" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="95.559" cy="13.105" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="98.297" cy="11.543" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="101.396" cy="12.113" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="103.83" cy="14.191" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="106.264" cy="16.269" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="108.698" cy="18.347" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="111.132" cy="20.425" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="113.566" cy="22.503" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="116" cy="24.581" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="118.434" cy="26.659" r="0.55"></circle>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M131.13 83.46100000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M133.804 81.79400000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path class="_corpseFood_bc8d47" d="M134.774 78.796l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M128.526 71.95800000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M127.193 69.10300000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path class="_corpseFood_bc8d47" d="M128.321 56.351l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M128.603 53.163l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M128.885 49.975l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M129.167 46.787l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M129.449 43.599l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M128.261 40.681l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M125.731 38.721l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M120.671 34.801l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M118.141 32.841l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M100.431 19.121l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M97.901 17.160999999999998l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M95.371 15.200999999999999l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <circle class="_food_bc8d47" cx="106.051" cy="30.301" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="104.994" cy="33.27" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="102.273" cy="34.861" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="99.073" cy="34.873" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="95.873" cy="34.885" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="92.673" cy="34.897" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="89.473" cy="34.909" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="86.273" cy="34.921" r="0.55"></circle>
+              <path class="_corpseFood_bc8d47" d="M111.514 24.915l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M108.356 24.392999999999997l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path class="_corpseFood_bc8d47" d="M105.198 23.871l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M102.04 23.349l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M98.882 22.826999999999998l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path class="_corpseFood_bc8d47" d="M95.724 22.305l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M92.566 21.782999999999998l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M89.409 21.261999999999997l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path class="_corpseFood_bc8d47" d="M86.252 20.74l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M83.095 20.218999999999998l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <circle class="_food_bc8d47" cx="43.927" cy="85.64" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="42.053" cy="88.174" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="42.253" cy="91.319" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="44.432" cy="93.596" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="47.565" cy="93.934" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="50.179" cy="92.174" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="52.481" cy="89.952" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="54.783" cy="87.73" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="57.085" cy="85.508" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="59.387" cy="83.286" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="61.689" cy="81.064" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="64.692" cy="80.109" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="67.864" cy="79.685" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="71.039" cy="79.286" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="73.932" cy="80.535" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="76.604" cy="82.295" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="79.276" cy="84.055" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="80.864" cy="86.776" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="82.248" cy="89.644" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="85.015" cy="91.153" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="88.102" cy="90.525" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="91.078" cy="89.351" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="94.054" cy="88.177" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="96.886" cy="86.722" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="99.574" cy="84.986" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="102.262" cy="83.25" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="104.95" cy="81.514" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="107.638" cy="79.778" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="110.523" cy="78.478" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="113.575" cy="79.262" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="116.489" cy="80.586" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="119.403" cy="81.91" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="122.317" cy="83.234" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="125.231" cy="84.558" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="128.145" cy="85.882" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="131.059" cy="87.206" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="133.973" cy="88.53" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="136.887" cy="89.854" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="140.029" cy="89.607" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="143.127" cy="88.805" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="146.225" cy="88.003" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="148.534" cy="85.859" r="0.55"></circle>
+              <circle class="_food_bc8d47" cx="150.464" cy="83.307" r="0.55"></circle>
+              <path class="_corpseFood_bc8d47" d="M144.465 46.555l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M146.481 44.134l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M146.464 40.983l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M144.42 38.583999999999996l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path class="_corpseFood_bc8d47" d="M141.404 37.516l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M138.388 36.448l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M135.372 35.379999999999995l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path class="_corpseFood_bc8d47" d="M132.356 34.312l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M129.34 33.244l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path class="_corpseFood_bc8d47" d="M126.324 32.176l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <path
+                class="_corpseFood_bc8d47"
+                d="M123.308 31.107999999999997l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              ></path>
+              <path class="_corpseFood_bc8d47" d="M120.292 30.04l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+              <g style="--snake-color: var(--pb-player-2)">
+                <title>Bailey, snake 2</title>
+                <polyline
+                  class="_body_bc8d47"
+                  points="35.674,64.538 36.354,65.986 37.034,67.434 37.714,68.882 38.394,70.33 39.074,71.778 40.152,72.96 41.57,73.701 43.156,73.91 44.742,74.119 46.328,74.328 47.914,74.537 49.5,74.746 51.086,74.955 52.672,75.164 54.258,75.373 55.844,75.582 57.43,75.791 59.016,76 60.602,76.209 62.188,76.418 63.774,76.627 65.36,76.836 66.946,77.045 68.532,77.254"
+                ></polyline>
+                <polyline
+                  class="_marks_bc8d47"
+                  points="35.674,64.538 36.354,65.986 37.034,67.434 37.714,68.882 38.394,70.33 39.074,71.778 40.152,72.96 41.57,73.701 43.156,73.91 44.742,74.119 46.328,74.328 47.914,74.537 49.5,74.746 51.086,74.955 52.672,75.164 54.258,75.373 55.844,75.582 57.43,75.791 59.016,76 60.602,76.209 62.188,76.418 63.774,76.627 65.36,76.836 66.946,77.045 68.532,77.254"
+                  stroke-dasharray="0.6 2.4"
+                ></polyline>
+                <g transform="translate(35.674 64.538) rotate(-115.16451682129545)">
+                  <circle class="_head_bc8d47" r="1.8"></circle>
+                  <circle class="_eye_bc8d47" cx="0.8" cy="-0.7" r="0.35"></circle>
+                  <circle class="_eye_bc8d47" cx="0.8" cy="0.7" r="0.35"></circle>
+                </g>
+                <text class="_number_bc8d47" x="35.674" y="60.538">2</text>
+              </g>
+              <g style="--snake-color: var(--pb-player-3)">
+                <title>Cameron, snake 3</title>
+                <polyline
+                  class="_body_bc8d47"
+                  points="130.107,75.285 131.703,75.395 133.299,75.505 134.895,75.615 136.491,75.725 138.087,75.835 139.683,75.945 141.279,76.055 142.875,76.165 144.471,76.275 146.067,76.385 147.663,76.495 149.22,76.128 150.557,75.249 151.511,73.965 151.967,72.431 151.87,70.834 151.231,69.367 150.128,68.208 148.694,67.498 147.104,67.322 145.514,67.146 143.924,66.97 142.334,66.794 140.744,66.618 139.154,66.442 137.564,66.266 135.974,66.09 134.384,65.914 132.794,65.738 131.204,65.562 129.614,65.386 128.024,65.21 126.434,65.034 124.844,64.858 123.254,64.682 121.664,64.506 120.074,64.33 118.484,64.154 116.894,63.978 115.304,63.802 113.714,63.626 112.247,62.988 111.087,61.886 110.376,60.453 109.665,59.02 108.954,57.587 108.243,56.154 107.14,54.995 105.706,54.285 104.116,54.109 102.526,53.933 100.936,53.757 99.346,53.581 97.756,53.405 96.166,53.229 94.576,53.053 92.986,52.877 91.396,52.701 89.806,52.525 88.216,52.349 86.626,52.173 85.072,52.553 83.518,52.933 81.964,53.313 80.41,53.693"
+                ></polyline>
+                <polyline
+                  class="_marks_bc8d47"
+                  points="130.107,75.285 131.703,75.395 133.299,75.505 134.895,75.615 136.491,75.725 138.087,75.835 139.683,75.945 141.279,76.055 142.875,76.165 144.471,76.275 146.067,76.385 147.663,76.495 149.22,76.128 150.557,75.249 151.511,73.965 151.967,72.431 151.87,70.834 151.231,69.367 150.128,68.208 148.694,67.498 147.104,67.322 145.514,67.146 143.924,66.97 142.334,66.794 140.744,66.618 139.154,66.442 137.564,66.266 135.974,66.09 134.384,65.914 132.794,65.738 131.204,65.562 129.614,65.386 128.024,65.21 126.434,65.034 124.844,64.858 123.254,64.682 121.664,64.506 120.074,64.33 118.484,64.154 116.894,63.978 115.304,63.802 113.714,63.626 112.247,62.988 111.087,61.886 110.376,60.453 109.665,59.02 108.954,57.587 108.243,56.154 107.14,54.995 105.706,54.285 104.116,54.109 102.526,53.933 100.936,53.757 99.346,53.581 97.756,53.405 96.166,53.229 94.576,53.053 92.986,52.877 91.396,52.701 89.806,52.525 88.216,52.349 86.626,52.173 85.072,52.553 83.518,52.933 81.964,53.313 80.41,53.693"
+                  stroke-dasharray="0.7 2.8"
+                ></polyline>
+                <g transform="translate(130.107 75.285) rotate(-176.06993044370196)">
+                  <circle class="_head_bc8d47" r="1.8"></circle>
+                  <circle class="_eye_bc8d47" cx="0.8" cy="-0.7" r="0.35"></circle>
+                  <circle class="_eye_bc8d47" cx="0.8" cy="0.7" r="0.35"></circle>
+                </g>
+                <text class="_number_bc8d47" x="130.107" y="71.285">3</text>
+              </g>
+              <g style="--snake-color: var(--pb-player-5)">
+                <title>Emerson, snake 5</title>
+                <polyline
+                  class="_body_bc8d47"
+                  points="22.176,48.719 21.113,49.915 20.05,51.111 18.987,52.307 17.924,53.503 16.861,54.699 15.798,55.895 14.735,57.091 13.672,58.287 12.609,59.483 11.546,60.679 10.483,61.875 9.821,63.331 9.698,64.926 10.13,66.467 10.562,68.008 10.994,69.549 11.426,71.09 12.294,72.434 13.57,73.399 15.1,73.868 16.63,74.337 18.16,74.806 19.69,75.275 21.22,75.744 22.75,76.213 24.28,76.682 25.81,77.151 27.34,77.62 28.87,78.089 30.4,78.558 31.93,79.027 33.46,79.496 34.99,79.965 36.52,80.434 38.05,80.903 39.58,81.372 41.11,81.841 42.64,82.31 44.17,82.779 45.7,83.248 47.23,83.717 48.83,83.713 50.332,83.16 51.553,82.126 52.774,81.092 53.995,80.058 55.216,79.024 56.437,77.99 57.658,76.956 58.879,75.922"
+                ></polyline>
+                <polyline
+                  class="_marks_bc8d47"
+                  points="22.176,48.719 21.113,49.915 20.05,51.111 18.987,52.307 17.924,53.503 16.861,54.699 15.798,55.895 14.735,57.091 13.672,58.287 12.609,59.483 11.546,60.679 10.483,61.875 9.821,63.331 9.698,64.926 10.13,66.467 10.562,68.008 10.994,69.549 11.426,71.09 12.294,72.434 13.57,73.399 15.1,73.868 16.63,74.337 18.16,74.806 19.69,75.275 21.22,75.744 22.75,76.213 24.28,76.682 25.81,77.151 27.34,77.62 28.87,78.089 30.4,78.558 31.93,79.027 33.46,79.496 34.99,79.965 36.52,80.434 38.05,80.903 39.58,81.372 41.11,81.841 42.64,82.31 44.17,82.779 45.7,83.248 47.23,83.717 48.83,83.713 50.332,83.16 51.553,82.126 52.774,81.092 53.995,80.058 55.216,79.024 56.437,77.99 57.658,76.956 58.879,75.922"
+                  stroke-dasharray="0.9 3.6"
+                ></polyline>
+                <g transform="translate(22.176 48.719) rotate(-48.357637909041486)">
+                  <circle class="_head_bc8d47" r="1.8"></circle>
+                  <circle class="_eye_bc8d47" cx="0.8" cy="-0.7" r="0.35"></circle>
+                  <circle class="_eye_bc8d47" cx="0.8" cy="0.7" r="0.35"></circle>
+                </g>
+                <text class="_number_bc8d47" x="22.176" y="44.719">5</text>
+              </g>
+              <g style="--snake-color: var(--pb-player-6)">
+                <title>Frankie, snake 6</title>
+                <polyline
+                  class="_body_bc8d47"
+                  points="92.811,14.201 91.281,14.668 89.751,15.135 88.221,15.602 86.691,16.069 85.161,16.536 83.631,17.003 82.101,17.47 80.571,17.937 79.041,18.404 77.511,18.871 75.981,19.338 74.451,19.805 72.921,20.272 71.391,20.739 69.861,21.206 68.331,21.673 66.801,22.14 65.271,22.607 63.741,23.074 62.211,23.541 60.681,24.008 59.151,24.475 57.621,24.942 56.091,25.409 54.561,25.876 53.03,26.342 51.5,26.809 49.969,27.276 48.439,27.742 46.908,28.209 45.378,28.675 43.847,29.142 42.317,29.609 40.787,30.075 39.256,30.542 37.726,31.009"
+                ></polyline>
+                <polyline
+                  class="_marks_bc8d47"
+                  points="92.811,14.201 91.281,14.668 89.751,15.135 88.221,15.602 86.691,16.069 85.161,16.536 83.631,17.003 82.101,17.47 80.571,17.937 79.041,18.404 77.511,18.871 75.981,19.338 74.451,19.805 72.921,20.272 71.391,20.739 69.861,21.206 68.331,21.673 66.801,22.14 65.271,22.607 63.741,23.074 62.211,23.541 60.681,24.008 59.151,24.475 57.621,24.942 56.091,25.409 54.561,25.876 53.03,26.342 51.5,26.809 49.969,27.276 48.439,27.742 46.908,28.209 45.378,28.675 43.847,29.142 42.317,29.609 40.787,30.075 39.256,30.542 37.726,31.009"
+                  stroke-dasharray="1 4"
+                ></polyline>
+                <g transform="translate(92.811 14.201) rotate(-16.956473704967756)">
+                  <circle class="_head_bc8d47" r="1.8"></circle>
+                  <circle class="_eye_bc8d47" cx="0.8" cy="-0.7" r="0.35"></circle>
+                  <circle class="_eye_bc8d47" cx="0.8" cy="0.7" r="0.35"></circle>
+                </g>
+                <text class="_number_bc8d47" x="92.811" y="10.201">6</text>
+              </g>
+              <g style="--snake-color: var(--pb-player-7)">
+                <title>Gray, snake 7</title>
+                <polyline
+                  class="_body_bc8d47"
+                  points="123.708,36.344 122.522,35.27 121.336,34.196 120.15,33.122 118.964,32.049 117.777,30.975 116.591,29.901 115.405,28.827 114.219,27.753 113.033,26.68 111.847,25.606 110.66,24.532 109.474,23.458 108.288,22.384"
+                ></polyline>
+                <polyline
+                  class="_marks_bc8d47"
+                  points="123.708,36.344 122.522,35.27 121.336,34.196 120.15,33.122 118.964,32.049 117.777,30.975 116.591,29.901 115.405,28.827 114.219,27.753 113.033,26.68 111.847,25.606 110.66,24.532 109.474,23.458 108.288,22.384"
+                  stroke-dasharray="1.1 4.4"
+                ></polyline>
+                <circle class="_shield_bc8d47" cx="123.708" cy="36.344" r="3.4"></circle>
+                <g transform="translate(123.708 36.344) rotate(42.15373701339915)">
+                  <circle class="_head_bc8d47" r="1.8"></circle>
+                  <circle class="_eye_bc8d47" cx="0.8" cy="-0.7" r="0.35"></circle>
+                  <circle class="_eye_bc8d47" cx="0.8" cy="0.7" r="0.35"></circle>
+                </g>
+                <text class="_number_bc8d47" x="123.708" y="32.344">7</text>
+              </g>
+              <g style="--snake-color: var(--pb-player-8)">
+                <title>Harper, snake 8</title>
+                <polyline
+                  class="_body_bc8d47"
+                  points="132.936,48.421 134.52,48.644 136.104,48.867 137.688,49.09 139.272,49.313 140.856,49.536 142.44,49.759 144.024,49.982 145.608,50.205 147.192,50.428 148.776,50.651 150.36,50.874 151.873,51.395 153.116,52.403 153.938,53.776 154.239,55.347 153.983,56.926 153.201,58.322 151.988,59.365 150.491,59.929 148.891,59.945 147.291,59.961 145.691,59.977 144.091,59.993 142.491,60.009 140.891,60.025 139.291,60.041 137.691,60.057 136.091,60.073 134.491,60.089 132.891,60.105 131.291,60.121 129.691,60.137 128.091,60.153 126.491,60.169 124.891,60.185 123.358,59.727 122.075,58.771 121.197,57.433 120.319,56.095 119.441,54.757 118.563,53.419 117.685,52.081 116.807,50.743 115.929,49.405 115.051,48.067 114.173,46.729 113.295,45.391"
+                ></polyline>
+                <polyline
+                  class="_marks_bc8d47"
+                  points="132.936,48.421 134.52,48.644 136.104,48.867 137.688,49.09 139.272,49.313 140.856,49.536 142.44,49.759 144.024,49.982 145.608,50.205 147.192,50.428 148.776,50.651 150.36,50.874 151.873,51.395 153.116,52.403 153.938,53.776 154.239,55.347 153.983,56.926 153.201,58.322 151.988,59.365 150.491,59.929 148.891,59.945 147.291,59.961 145.691,59.977 144.091,59.993 142.491,60.009 140.891,60.025 139.291,60.041 137.691,60.057 136.091,60.073 134.491,60.089 132.891,60.105 131.291,60.121 129.691,60.137 128.091,60.153 126.491,60.169 124.891,60.185 123.358,59.727 122.075,58.771 121.197,57.433 120.319,56.095 119.441,54.757 118.563,53.419 117.685,52.081 116.807,50.743 115.929,49.405 115.051,48.067 114.173,46.729 113.295,45.391"
+                  stroke-dasharray="1.2000000000000002 4.800000000000001"
+                ></polyline>
+                <g transform="translate(132.936 48.421) rotate(-172.00193009827314)">
+                  <circle class="_head_bc8d47" r="1.8"></circle>
+                  <circle class="_eye_bc8d47" cx="0.8" cy="-0.7" r="0.35"></circle>
+                  <circle class="_eye_bc8d47" cx="0.8" cy="0.7" r="0.35"></circle>
+                </g>
+                <text class="_number_bc8d47" x="132.936" y="44.421">8</text>
+              </g>
+              <rect class="_wall_bc8d47" x="0.3" y="0.3" width="159.4" height="99.4" rx="2"></rect>
+            </svg>
+          </div>
+          <aside class="_side_e24928">
+            <h2 class="_railTitle_e24928">Match points</h2>
+            <ol class="_rows_61b6c5" data-phase="score" aria-label="Match standings">
+              <li style="--snake-color: var(--pb-player-3)">
+                <span class="_number_61b6c5" aria-label="Snake 3">3</span>
+                <div class="_identity_61b6c5">
+                  <b class="_name_61b6c5" title="Cameron">Cameron</b>
+                </div>
+                <div class="_value_61b6c5"><b>66</b><span class="_gain_61b6c5">+66</span></div>
+              </li>
+              <li style="--snake-color: var(--pb-player-5)">
+                <span class="_number_61b6c5" aria-label="Snake 5">5</span>
+                <div class="_identity_61b6c5">
+                  <b class="_name_61b6c5" title="Emerson">Emerson</b>
+                </div>
+                <div class="_value_61b6c5"><b>53</b><span class="_gain_61b6c5">+53</span></div>
+              </li>
+              <li style="--snake-color: var(--pb-player-6)">
+                <span class="_number_61b6c5" aria-label="Snake 6">6</span>
+                <div class="_identity_61b6c5">
+                  <b class="_name_61b6c5" title="Frankie">Frankie</b>
+                </div>
+                <div class="_value_61b6c5"><b>52</b><span class="_gain_61b6c5">+52</span></div>
+              </li>
+              <li style="--snake-color: var(--pb-player-8)">
+                <span class="_number_61b6c5" aria-label="Snake 8">8</span>
+                <div class="_identity_61b6c5">
+                  <b class="_name_61b6c5" title="Harper">Harper</b>
+                </div>
+                <div class="_value_61b6c5"><b>47</b><span class="_gain_61b6c5">+47</span></div>
+              </li>
+              <li style="--snake-color: var(--pb-player-2)">
+                <span class="_number_61b6c5" aria-label="Snake 2">2</span>
+                <div class="_identity_61b6c5">
+                  <b class="_name_61b6c5" title="Bailey">Bailey</b>
+                </div>
+                <div class="_value_61b6c5"><b>33</b><span class="_gain_61b6c5">+33</span></div>
+              </li>
+              <li style="--snake-color: var(--pb-player-7)">
+                <span class="_number_61b6c5" aria-label="Snake 7">7</span>
+                <div class="_identity_61b6c5"><b class="_name_61b6c5" title="Gray">Gray</b></div>
+                <div class="_value_61b6c5"><b>16</b><span class="_gain_61b6c5">+16</span></div>
+              </li>
+              <li style="--snake-color: var(--pb-player-1)" data-respawn="true">
+                <span class="_number_61b6c5" aria-label="Snake 1">1</span>
+                <div class="_identity_61b6c5"><b class="_name_61b6c5" title="Alex">Alex</b></div>
+                <div class="_value_61b6c5"><b>8</b><span class="_gain_61b6c5">+8</span></div>
+              </li>
+              <li style="--snake-color: var(--pb-player-4)" data-respawn="true">
+                <span class="_number_61b6c5" aria-label="Snake 4">4</span>
+                <div class="_identity_61b6c5"><b class="_name_61b6c5" title="Devon">Devon</b></div>
+                <div class="_value_61b6c5"><b>8</b><span class="_gain_61b6c5">+8</span></div>
+              </li>
+            </ol>
+          </aside>
+        </div>
+        <p class="_legend_e24928">
+          ● Sparks grow you · ◆ Crash food is richer · Dashed ring = shield · Walls are lethal
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,142 @@
+[
+  {
+    "name": "ceil mass scores",
+    "file": "games/snake-royale/server/scoring.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > match controls, scoring and hostile senders > scores floor of current mass, including dead minimums | AssertionError: expected { a: 20, b: 8 } to deeply equal { a: 19, b: 8 }"
+  },
+  {
+    "name": "double round points",
+    "file": "games/snake-royale/server/phases/score.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > match controls, scoring and hostile senders > the round cap banks points exactly once even with a repeated timer | AssertionError: expected { p1: 46, p2: 42 } to deeply equal { p1: 23, p2: 21 } |  FAIL  games/snake-royale/server/rules.test.ts > match controls, scoring and hostile senders > VIP end banks the active round once and terminal scores remain fixed"
+  },
+  {
+    "name": "missing results",
+    "file": "games/snake-royale/server/scoring.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > match controls, scoring and hostile senders > disconnect releases boost, rejects inputs and never prevents the round ending | AssertionError: expected undefined to be 'done' // Object.is equality |  FAIL  games/snake-royale/server/rules.test.ts > match controls, scoring and hostile senders > ties share first place and complete results include every player"
+  },
+  {
+    "name": "early round exit",
+    "file": "games/snake-royale/server/phases/play.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > match controls, scoring and hostile senders > the round cap banks points exactly once even with a repeated timer | AssertionError: expected 'play' to be 'score' // Object.is equality"
+  },
+  {
+    "name": "accept early timer",
+    "file": "games/snake-royale/server/phases/play.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > match controls, scoring and hostile senders > ignores stale, early and wrong-phase timers plus regressive inputs | AssertionError: expected { phase: { id: 'play', …(2) }, …(10) } to be { phase: { id: 'play', …(2) }, …(10) } // Object.is equality"
+  },
+  {
+    "name": "accept disconnected input",
+    "file": "games/snake-royale/server/phases/play.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > match controls, scoring and hostile senders > disconnect releases boost, rejects inputs and never prevents the round ending | AssertionError: expected { phase: { id: 'play', …(2) }, …(10) } to be { phase: { id: 'play', …(2) }, …(10) } // Object.is equality"
+  },
+  {
+    "name": "accept regressive input",
+    "file": "games/snake-royale/server/phases/play.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > match controls, scoring and hostile senders > ignores stale, early and wrong-phase timers plus regressive inputs | AssertionError: expected { phase: { id: 'play', …(2) }, …(10) } to be { phase: { id: 'play', …(2) }, …(10) } // Object.is equality"
+  },
+  {
+    "name": "skip connected status update",
+    "file": "games/snake-royale/server/index.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > match controls, scoring and hostile senders > disconnect releases boost, rejects inputs and never prevents the round ending | AssertionError: expected { phase: { id: 'play', …(2) }, …(10) } to be { phase: { id: 'play', …(2) }, …(10) } // Object.is equality"
+  },
+  {
+    "name": "boost sticks on disconnect",
+    "file": "games/snake-royale/server/index.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > match controls, scoring and hostile senders > disconnect releases boost, rejects inputs and never prevents the round ending | AssertionError: expected true to be false // Object.is equality"
+  },
+  {
+    "name": "ignore phone-only arena",
+    "file": "games/snake-royale/server/index.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/__tests__/artifacts.test.tsx > every phase renders a real arena for TV, phone-only and spectators | AssertionError: expected '<section class=\"_screen_99408e\" style…' to contain '<svg'"
+  },
+  {
+    "name": "free boosting",
+    "file": "games/snake-royale/server/world.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > movement and the price of a lunge > boost moves faster and spends the documented mass each step | AssertionError: expected 14 to be close to 13.7, received difference is 0.3000000000000007, but expected 0.0005 |  FAIL  games/snake-royale/server/rules.test.ts > movement and the price of a lunge > never overspends when the last lunge reaches the minimum"
+  },
+  {
+    "name": "boost at minimum",
+    "file": "games/snake-royale/server/world.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > movement and the price of a lunge > cannot boost or spend mass at the minimum | AssertionError: expected 82.8 to be 81.6 // Object.is equality"
+  },
+  {
+    "name": "slow sprint",
+    "file": "games/snake-royale/server/world.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > movement and the price of a lunge > boost moves faster and spends the documented mass each step | AssertionError: expected 81.6 to be 82.8 // Object.is equality"
+  },
+  {
+    "name": "wrong turn sign",
+    "file": "games/snake-royale/server/world.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > movement and the price of a lunge > turns at a bounded rate and takes the short route across the angle seam | AssertionError: expected -0.35 to be close to 0.35, received difference is 0.7, but expected 0.005"
+  },
+  {
+    "name": "no right-wall deaths",
+    "file": "games/snake-royale/server/world.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > simultaneous crashes and return > a wall kills even during spawn protection | AssertionError: expected null to be 2100 // Object.is equality |  FAIL  games/snake-royale/server/rules.test.ts > simultaneous crashes and return > a corpse becomes food once, not again on subsequent dead steps"
+  },
+  {
+    "name": "self collision enabled",
+    "file": "games/snake-royale/server/world.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > movement and the price of a lunge > returns spent boost mass as food behind the snake | AssertionError: expected [ { x: 10, y: 10, value: 1 }, …(71) ] to deep equally contain { x: 70, y: 50, value: 0.3 } |  FAIL  games/snake-royale/server/rules.test.ts > simultaneous crashes and return > hitting another body kills the attacker and leaves its owner alive"
+  },
+  {
+    "name": "head collision immunity",
+    "file": "games/snake-royale/server/world.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > simultaneous crashes and return > head-on contact kills both heads regardless of size | AssertionError: expected [ true, false ] to deeply equal [ true, true ]"
+  },
+  {
+    "name": "lose growth",
+    "file": "games/snake-royale/server/world.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > food, growth and a deterministic bounded arena > eating adds food value to current mass and removes that food | AssertionError: expected 14 to be 18 // Object.is equality |  FAIL  games/snake-royale/server/rules.test.ts > food, growth and a deterministic bounded arena > caps growth at maximum mass"
+  },
+  {
+    "name": "no growth cap",
+    "file": "games/snake-royale/server/world.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > food, growth and a deterministic bounded arena > caps growth at maximum mass | AssertionError: expected 189 to be 90 // Object.is equality"
+  },
+  {
+    "name": "full value to tied eaters",
+    "file": "games/snake-royale/server/world.ts",
+    "killed": true,
+    "exit": 1,
+    "diagnostic": " FAIL  games/snake-royale/server/rules.test.ts > food, growth and a deterministic bounded arena > equal-distance eaters share food without a seat-order advantage | AssertionError: expected [ 18, 18 ] to deeply equal [ 16, 16 ]"
+  }
+]
