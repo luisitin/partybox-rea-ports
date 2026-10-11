@@ -29,7 +29,9 @@ function usePower(
   now: number,
 ): State {
   const runner = state.runners[id]!;
-  if (!state.cfg.powers || runner.energy < 1) return state;
+  // A delayed retry belongs to the earned charge it saw, never a later refill.
+  if (!state.cfg.powers || runner.energy < 1 || input.charge !== Math.floor(runner.correct / 3))
+    return state;
   if (input.power === 'double') {
     if (runner.double) return state;
     return {

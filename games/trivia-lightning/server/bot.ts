@@ -37,8 +37,13 @@ export function botInput(
       rival[1].score > r.score &&
       r.answered + 2 < state.deck.length
     )
-      return { type: 'power', power: 'freeze', target: rival[0] };
-    return { type: 'power', power: 'double' };
+      return {
+        type: 'power',
+        power: 'freeze',
+        target: rival[0],
+        charge: Math.floor(r.correct / 3),
+      };
+    return { type: 'power', power: 'double', charge: Math.floor(r.correct / 3) };
   }
   if (r.feedback) return { type: 'next', index: r.answered };
   const q = state.deck[r.answered];

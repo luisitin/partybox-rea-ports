@@ -37,7 +37,12 @@ function power(s: State, power: 'freeze' | 'double', target?: string): State {
   return kit.input(
     s,
     'p1',
-    { type: 'power', power, ...(target === undefined ? {} : { target }) },
+    {
+      type: 'power',
+      power,
+      charge: Math.max(1, Math.floor(s.runners.p1!.correct / 3)),
+      ...(target === undefined ? {} : { target }),
+    },
     s.clock + 10,
   );
 }
@@ -80,6 +85,47 @@ describe('knowledge scoring', () => {
     for (let i = 0; i < 3; i++) s = next(answer(s));
     expect(s.runners.p1!.energy).toBe(0);
     expect(power(s, 'double')).toBe(s);
+  });
+  it.each(['double', 'freeze'] as const)(
+    'a delayed %s retry cannot consume a later earned charge',
+    (kind) => {
+      let s = kit.start({ settings: { questions: 12 } });
+      for (let n = 0; n < 3; n++) s = next(answer(s));
+      const oldRequest = {
+        type: 'power' as const,
+        power: kind,
+        charge: 1,
+        ...(kind === 'freeze' ? { target: 'p2' } : {}),
+      };
+      s = kit.input(s, 'p1', oldRequest, s.clock + 10);
+      expect(s.runners.p1!.energy).toBe(0);
+      for (let n = 0; n < 3; n++) s = next(answer(s));
+      expect(s.runners.p1).toMatchObject({ correct: 6, energy: 1, double: false });
+      // Let the earlier freeze expire so its nonstacking guard cannot hide a replay bug.
+      s = kit.timer(s, s.clock + 3000);
+      expect(kit.input(s, 'p1', oldRequest, s.clock + 10)).toBe(s);
+      expect(kit.input(s, 'p1', { ...oldRequest, charge: 3 }, s.clock + 10)).toBe(s);
+      const fresh = kit.input(s, 'p1', { ...oldRequest, charge: 2 }, s.clock + 10);
+      expect(fresh.runners.p1!.energy).toBe(0);
+      if (kind === 'double') expect(fresh.runners.p1!.double).toBe(true);
+      else expect(fresh.runners.p2!.freezeUntil).toBe(fresh.clock + 3000);
+    },
+  );
+  it('requires a bounded integer earned charge on power inputs', () => {
+    for (const charge of [undefined, 0, 7, 1.5])
+      expect(game.inputSchema.safeParse({ type: 'power', power: 'double', charge }).success).toBe(
+        false,
+      );
+    expect(game.inputSchema.safeParse({ type: 'power', power: 'double', charge: 6 }).success).toBe(
+      true,
+    );
+  });
+  it('held capped energy adopts the latest earning milestone without stacking', () => {
+    let s = kit.start({ settings: { questions: 12 } });
+    for (let n = 0; n < 6; n++) s = next(answer(s));
+    expect(s.runners.p1).toMatchObject({ correct: 6, energy: 1 });
+    expect(kit.input(s, 'p1', { type: 'power', power: 'double', charge: 1 }, s.clock + 10)).toBe(s);
+    expect(power(s, 'double').runners.p1).toMatchObject({ energy: 0, double: true });
   });
   it('does not weight the same fact by speed', () => {
     const s = kit.start();
@@ -296,6 +342,7 @@ describe('packs and bot strengths', () => {
     expect(game.bot.sampleInput(s, 'p1', createRng(1), 'sharp')).toEqual({
       type: 'power',
       power: 'double',
+      charge: 1,
     });
   });
   it('has 60 original bounded questions and separately authored facts with no repeats in a race', () => {

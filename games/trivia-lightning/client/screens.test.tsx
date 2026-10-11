@@ -102,6 +102,56 @@ describe('Trivia Lightning screens', () => {
     expect(html).toContain('Tied 2/8');
   });
 
+  it('freeze choices show score and public place with the highest-scoring rival selected', () => {
+    const html = phone(rankingView, true);
+    const choices = [...html.matchAll(/<option value="([^"]+)"[^>]*>([^<]+)<\/option>/g)];
+    expect(choices.map((choice) => choice[1])).toEqual(['p7', 'p3', 'p4', 'p5', 'p6', 'p8']);
+    expect(choices.map((choice) => choice[2])).toEqual([
+      '1 · 840 pts · Racer 7',
+      '2 · 360 pts · Racer 3',
+      '4 · 0 pts · Racer 4',
+      '4 · 0 pts · Racer 5',
+      '4 · 0 pts · Racer 6',
+      '4 · 0 pts · Racer 8',
+    ]);
+    expect(html).toContain('<option value="p7" selected="">');
+    expect(html).toContain('aria-label="Rival to freeze"');
+    expect(html).toContain('Racer 7 · Place 1 · 840 points');
+    expect(html).toContain('×2 Next correct');
+  });
+
+  it('freeze choices exclude self, finished, disconnected and already frozen rivals', () => {
+    const html = phone(
+      {
+        ...rankingView,
+        lanes: rankingLanes.map((lane) =>
+          lane.id === 'p7'
+            ? { ...lane, connected: false }
+            : lane.id === 'p3'
+              ? { ...lane, frozen: true }
+              : lane,
+        ),
+      },
+      true,
+    );
+    const choices = [...html.matchAll(/<option value="([^"]+)"/g)].map((choice) => choice[1]);
+    expect(choices).toEqual(['p4', 'p5', 'p6', 'p8']);
+    expect(html).toContain('<option value="p4" selected="">');
+    expect(html).toContain('4 · 0 pts · Racer 4');
+  });
+
+  it('freeze has a clear disabled empty state when no eligible rival remains', () => {
+    const html = phone(
+      {
+        ...rankingView,
+        lanes: rankingLanes.map((lane) => (lane.id === 'p2' ? lane : { ...lane, finished: true })),
+      },
+      true,
+    );
+    expect(html).toContain('No rival available');
+    expect(html).toMatch(/<select[^>]+disabled=""/);
+  });
+
   it.each([false, true])(
     'spectators get the public track and no buttons (phone-only=%s)',
     (phoneOnly) => {

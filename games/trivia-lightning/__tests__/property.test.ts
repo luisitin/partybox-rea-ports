@@ -61,6 +61,7 @@ function nextEvent(state: State, rng: Rng, now: number): GameEvent<Input> {
   const id = ids[rng.int(0, ids.length - 1)]!;
   const runner = state.runners[id]!;
   const q = state.deck[Math.min(runner.answered, state.deck.length - 1)]!;
+  const charge = rng.float() < 0.2 ? rng.int(1, 6) : Math.max(1, Math.floor(runner.correct / 3));
   switch (rng.int(0, 11)) {
     case 0:
     case 1:
@@ -91,11 +92,17 @@ function nextEvent(state: State, rng: Rng, now: number): GameEvent<Input> {
         input: {
           type: 'power',
           power: 'freeze',
+          charge,
           target: [...ids, 'ghost'][rng.int(0, ids.length)]!,
         },
       };
     case 5:
-      return { type: 'input', now, playerId: id, input: { type: 'power', power: 'double' } };
+      return {
+        type: 'input',
+        now,
+        playerId: id,
+        input: { type: 'power', power: 'double', charge },
+      };
     case 6:
       return { type: 'timer', now, phaseId: state.phase.id, startedAt: state.phase.startedAt };
     case 7:

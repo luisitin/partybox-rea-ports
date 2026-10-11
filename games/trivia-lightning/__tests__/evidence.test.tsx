@@ -40,7 +40,12 @@ function fixtures(): Record<string, State> {
       race = kit.input(race, id, { type: 'next', index: n + 1 }, race.clock + 50);
     }
   }
-  race = kit.input(race, 'p8', { type: 'power', power: 'freeze', target: 'p1' }, race.clock + 50);
+  race = kit.input(
+    race,
+    'p8',
+    { type: 'power', power: 'freeze', target: 'p1', charge: 2 },
+    race.clock + 50,
+  );
   const podium = kit.vip(race, 'skip', race.clock + 100);
   const podium2 = kit.timer(podium);
   const podium3 = kit.timer(podium2);
@@ -217,14 +222,14 @@ it('renders every phase and input substate, spectators, phone-only and ties', ()
     const doubleAccepted = kit.input(
       ranking,
       'p2',
-      { type: 'power', power: 'double' },
-      ranking.clock + 50,
+      { type: 'power', power: 'double', charge: 1 },
+      ranking.clock + 4550,
     );
     const freezeAccepted = kit.input(
       ranking,
       'p2',
-      { type: 'power', power: 'freeze', target: 'p7' },
-      ranking.clock + 50,
+      { type: 'power', power: 'freeze', target: 'p7', charge: 1 },
+      ranking.clock + 4550,
     );
     const question = ranking.deck[3]!;
     const answerAccepted = kit.input(
@@ -232,6 +237,12 @@ it('renders every phase and input substate, spectators, phone-only and ties', ()
       'p2',
       { type: 'answer', index: 3, questionId: question.id, choice: question.correctIndex },
       ranking.clock + 50,
+    );
+    const nextAccepted = kit.input(
+      answerAccepted,
+      'p2',
+      { type: 'next', index: answerAccepted.runners['p2']!.answered },
+      ranking.clock + 4550,
     );
     writeFileSync(
       resolve(dir, 'interaction-views.json'),
@@ -244,6 +255,7 @@ it('renders every phase and input substate, spectators, phone-only and ties', ()
             doubleAccepted,
             freezeAccepted,
             answerAccepted,
+            nextAccepted,
           }).map(([name, state]) => [
             name,
             { ...game.controllerView({ ...state, phoneOnly: true }, 'p2'), vip: null },

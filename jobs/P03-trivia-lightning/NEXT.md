@@ -14,9 +14,12 @@
   and a partial-deck points leader. Round 2 fits full TV/spectator names: 24 clipped names become
   zero, all 65 captures have zero geometry findings. Native Chrome closure is independently proven;
   old retrying cleanup finished: 65 pages, zero issues, verifiedClosed=true; locked profile retained.
-- Round 3 implements occupied podium beats plus four real-answer scenarios. Current full local
-  typecheck/test command 54436 is still running under desktop load; game tests have not started.
-- Remaining: full verification/mutations for podium; informed freeze targeting, live leader cue,
-  power/Next acknowledgement and stale power retry protection; final captures/hashes; three
+- Round 3 implements occupied podium beats plus four real-answer scenarios; pushed as 8a90bf5.
+  CI run 38179541938 is green (119 tests, types and format). Local command 54436 passed
+  typecheck and all 119 tests in 646.33 seconds under desktop load; evidence regenerated.
+- Round 4 implements scored/place-labeled full-width freeze selection and earning-milestone
+  replay protection. All 47 rule/screen tests pass; real mounted selection checks await capture.
+- Remaining: final verification/mutations; live leader cue,
+  power/Next acknowledgement; final captures/hashes; three
   stable audit passes and final green CI. The real React interaction harness is ready to integrate.
 - Install completed using corepack enable and pnpm.cmd install (PowerShell blocks pnpm.ps1).

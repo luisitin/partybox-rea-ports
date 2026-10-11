@@ -34,7 +34,8 @@ freezes a leading rival when there is time to catch up, otherwise doubles its ne
 
 - `answer { questionId, index, choice }`: exactly once for the current cursor (0–3 choice).
 - `next { index }`: clears the previous verdict at the current answered count; advances no score.
-- `power { power: 'double' }` or `power { power: 'freeze', target }`: costs one earned energy.
+- `power { power: 'double', charge }` or `power { power: 'freeze', target, charge }`: costs one earned energy.
+  `charge` is the current earning milestone, floor(correct / 3), from 1 to 6; stale retries cannot spend a later refill.
 - Unknown seats, spectators, stale cursors, late/duplicate answers, paused or disconnected input are ignored.
 
 ## Scoring
@@ -57,7 +58,9 @@ does not end another connected player's race and gives no extra points.
 - No phone can read another player's question/verdict or any answer key. Feedback reveals only a question the viewer has already answered.
 - The final answer may close the race directly into podium; the final own verdict stays available in the view.
 - Podium skips empty competition ranks. Each occupied top-three place gets 4.5 s; the winner always gets a full beat.
-- Repeated power requests are idempotent without new energy. Finished, offline, self and already frozen targets are refused without spending energy.
+- Repeated power requests cannot spend twice or consume a later earned charge. Held energy stays capped at one and uses the latest earning milestone.
+  Finished, offline, self and already frozen targets are refused without spending energy.
+- The freeze picker lists eligible rivals by points, showing place, score and full name; a chosen rival stays selected while eligible.
 
 ## Settings
 

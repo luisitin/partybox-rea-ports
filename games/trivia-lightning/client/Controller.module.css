@@ -191,7 +191,7 @@
 .powerControls {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--pb-space-2);
+  gap: var(--pb-space-1);
 }
 
 .powerButton,
@@ -224,13 +224,8 @@
   line-height: 1.2;
 }
 
-.freezePower {
-  display: grid;
-  gap: var(--pb-space-1);
-  min-width: 0;
-}
-
 .target {
+  grid-column: 1 / -1;
   width: 100%;
   min-width: 0;
   padding: var(--pb-space-2);

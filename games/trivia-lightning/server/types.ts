@@ -18,6 +18,7 @@ export const inputSchema = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('power'),
     power: z.enum(['freeze', 'double']),
+    charge: z.number().int().min(1).max(6),
     target: z.string().max(80).optional(),
   }),
 ]);
