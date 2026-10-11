@@ -13,7 +13,7 @@ because this desktop blocks PowerShell shim scripts. No complete repository test
 | Mutations                          | `node jobs/P01-quiz-rush/mutate.mjs`                                                                     | PASS: 20/20 behavioral kills, zero invalid/load/syntax kills; 25 baseline tests green; original source hashes restored                                                                                |
 | Formatting                         | `pnpm.cmd format`                                                                                        | PASS; all matched files formatted                                                                                                                                                                     |
 | Screens                            | Opt-in `screens.test.tsx` renders; `node jobs/P01-quiz-rush/capture.mjs`                                 | 48 HTML/PNG frames and 57 SSR assertions pass; zero scrolling, clipping or missing CSS, including locked maximum text and eight tied long names; final pacing recapture and all 98 checksums complete |
-| CI                                 | `.github/workflows/P01.yml`: install, types, format, this game's tests, ubuntu-latest, 30 min, read-only | PASS; final source GitHub run 38180027626; PR #2 ready after success; integration includes updated main SDK; artifact-only follow-up is checked on the PR                                             |
+| CI                                 | `.github/workflows/P01.yml`: install, types, format, this game's tests, ubuntu-latest, 30 min, read-only | PASS; final source run 38180027626, final artifact run 38180772871 and round-six run 38180856440; PR #2 ready; final review-only follow-up is checked on the PR                                       |
 
 ## Seeded bots
 
@@ -57,6 +57,7 @@ or whole-suite browser run was started. SHA256SUMS covers all 98 media files (5,
 The final 57-assertion SSR run exited 0 in 254.50 s under shared-desktop load. Two file-navigation
 capture attempts timed out and closed their owned browsers; the final capture loaded each exact
 self-contained HTML fixture with CDP `Page.setDocumentContent` and completed all 48 frames.
+The final capture command exited 0.
 Its finally block terminated only its owned browser tree (PID 103932); a subsequent native process
 check confirmed `HasExited=True` and no owned children. The five-second in-tool exit verifier timed
 out under load, so the temporary profile was conservatively preserved. No game assertion or fit
