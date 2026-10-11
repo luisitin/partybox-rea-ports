@@ -124,13 +124,26 @@ function statusOf(state: State): (id: string) => PlayerStatus {
     return Object.hasOwn(state.solved, id) ? 'submitted' : 'active';
   };
 }
+function nextArtistName(state: State): string | undefined {
+  if (
+    state.phase.id !== 'reveal' ||
+    Object.values(state.players).filter((p) => p.connected && !state.left.includes(p.id)).length < 2
+  )
+    return undefined;
+  const id = state.order
+    .slice(state.turn + 1)
+    .find((candidate) => state.players[candidate]?.connected && !state.left.includes(candidate));
+  return id === undefined ? undefined : state.players[id]?.name;
+}
 function publicBoard(state: State): PublicBoard {
   const revealed = state.phase.id === 'reveal' || state.phase.id === 'done';
+  const nextName = nextArtistName(state);
   return {
     turn: state.turn + 1,
     turns: state.order.length,
     drawer: state.drawer,
     drawerName: state.players[state.drawer]?.name ?? 'The artist',
+    ...(nextName === undefined ? {} : { nextArtistName: nextName }),
     mask: state.phase.id === 'draw' ? maskedWord(state) : '',
     ...(revealed && state.word ? { answer: state.word } : {}),
     strokes: state.strokes,

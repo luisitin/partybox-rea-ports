@@ -220,6 +220,11 @@ export function Controller({
               })}
             </p>
           ) : null}
+          {phase === 'reveal' && view.nextArtistName ? (
+            <p className={styles.message}>
+              {L('Next artist: {name}', { name: view.nextArtistName })}
+            </p>
+          ) : null}
         </>
       )}
     </section>

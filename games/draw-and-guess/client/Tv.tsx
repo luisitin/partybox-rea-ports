@@ -86,6 +86,9 @@ export function Tv({ view }: GameTvProps<DrawTvView>): JSX.Element {
               {L('Type guesses on your phone. Quick guesses score more.')}
             </p>
           ) : null}
+          {phase === 'reveal' && view.nextArtistName ? (
+            <p className={styles.rule}>{L('Next artist: {name}', { name: view.nextArtistName })}</p>
+          ) : null}
         </aside>
       </div>
     </Stage>

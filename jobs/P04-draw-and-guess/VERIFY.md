@@ -79,3 +79,8 @@ R5: `pnpm.cmd vitest run games/draw-and-guess/__tests__/final.test.tsx --maxWork
 passes8checks in1.00seconds. Tests identify lone/joint winners, tied ranks,
 all-zero eight-way ties and all8scores across TV/phone/phone-only/spectator;
 previous-turn role/solve labels disappear only in final standings.
+
+R6: `pnpm.cmd vitest run games/draw-and-guess/__tests__/handoff.test.ts games/draw-and-guess/__tests__/final.test.tsx games/draw-and-guess/__tests__/evidence.test.tsx --maxWorkers=1`
+passes26checks in2.47seconds. The reveal-only next-artist label matches the
+actual next turn and skips unavailable seats. New fit artifacts cover the
+longest19-character word at390×500 and long-name eight-way tied standings.

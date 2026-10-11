@@ -56,6 +56,7 @@ export interface PublicBoard {
   turns: number;
   drawer: string;
   drawerName: string;
+  nextArtistName?: string;
   mask: string;
   answer?: string;
   strokes: Stroke[];

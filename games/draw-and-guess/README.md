@@ -38,6 +38,8 @@ packet boundaries. Other drawings use letter-constrained vocabulary guesses.
 
 VIP pause, resume, skip and end use the SDK contract. The drawing countdown
 shows the turn end while a two-second server beat advances hints and timeout.
+Reveal names the next connected artist so they can prepare during its reading
+window; the final reveal omits the handoff when the match will end.
 
 ### Phone only (no TV)
 

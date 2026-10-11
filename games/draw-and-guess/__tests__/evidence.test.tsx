@@ -111,10 +111,15 @@ function stylesFor(): string {
     .join('\n');
 }
 
-function document(markup: string, surface: Surface, title: string): string {
+function document(
+  markup: string,
+  surface: Surface,
+  title: string,
+  heightOverride?: number,
+): string {
   const tv = surface === 'tv';
   const width = tv ? 1920 : 390;
-  const height = tv ? 1080 : 844;
+  const height = heightOverride ?? (tv ? 1080 : 844);
   return `<!doctype html>\n<html lang="en" data-surface="${tv ? 'tv' : 'controller'}" data-motion="off"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>\n${tokens}\n${stylesFor()}\n*{box-sizing:border-box}html,body{margin:0;width:${width}px;height:${height}px;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family)}body{overflow:hidden}main{width:100%;height:100%;min-height:0}button,input{font:inherit}h1,h2,p{margin-top:0}\n</style></head><body><main>${markup}</main></body></html>\n`;
 }
 
@@ -189,6 +194,57 @@ describe('review evidence and every phone phase', () => {
       writeFileSync(
         join(mediaDir, 'draw-phone-solved.html'),
         document(phone, 'phone', 'Solver / earned points'),
+        'utf8',
+      );
+    }
+  });
+
+  it('shows the next artist only during reveal and prepares that seat on every stage', () => {
+    const reveal = fixtures.reveal!;
+    const name = game.tvView(reveal).nextArtistName;
+    expect(name).toBeTruthy();
+    for (const surface of ['tv', 'phone', 'phone-only', 'spectator', 'artist'] as const) {
+      const html = render(reveal, surface);
+      expect(html).toContain(`Next artist: ${name}`);
+      expect(render(fixtures.done!, surface)).not.toContain('Next artist:');
+    }
+  });
+
+  it('renders the longest word, long names and an eight-way tie for fit review', () => {
+    const long: State = {
+      ...fixtures.draw!,
+      word: 'pedestrian crossing',
+      hintCount: 0,
+      players: Object.fromEntries(
+        Object.entries(fixtures.draw!.players).map(([id, player], i) => [
+          id,
+          { ...player, name: `AlexandriaPlayer${i + 1}` },
+        ]),
+      ),
+    };
+    const tie: State = {
+      ...fixtures.done!,
+      players: long.players,
+      scores: Object.fromEntries(Object.keys(fixtures.done!.players).map((id) => [id, 500])),
+    };
+    expect(render(long, 'phone-only')).toContain('_ _ _ _');
+    expect(render(tie, 'phone-only').match(/Joint winner, place 1/g) ?? []).toHaveLength(8);
+    if (writing) {
+      for (const surface of ['tv', 'phone-only'] as const) {
+        writeFileSync(
+          join(mediaDir, `done-tie-${surface}.html`),
+          document(render(tie, surface), surface, `Eight tied winners / ${surface}`),
+          'utf8',
+        );
+        writeFileSync(
+          join(mediaDir, `draw-long-${surface}.html`),
+          document(render(long, surface), surface, `Longest word / ${surface}`),
+          'utf8',
+        );
+      }
+      writeFileSync(
+        join(mediaDir, 'draw-long-keyboard.html'),
+        document(render(long, 'phone-only'), 'phone-only', 'Longest word / keyboard', 500),
         'utf8',
       );
     }
