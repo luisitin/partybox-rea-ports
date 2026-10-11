@@ -15,3 +15,4 @@
 - A sparse temporary main worktree handles claim updates without switching the active game's checkout during captures. No other runner's branch or process is changed.
 - Capture agent owns at most one headless browser and closes it in finally; root started none.
 - KEEP GOING round 5 found no demonstrated player-visible repair; first consecutive no-gain round. Final artifact commit is pushed; CI follow-up is running. Two more review rounds remain.
+- Round 6 independently rechecked all sixty facts, choices, bot answers and source pairs; no direct answer cue or ambiguous correct option remains. Second consecutive no-gain round; one final end-to-end review remains.
