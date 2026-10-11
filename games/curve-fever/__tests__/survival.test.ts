@@ -58,13 +58,31 @@ describe('round survival', () => {
     }
   });
 
-  it('keeps an active bot responding and turns before a wall, rather than wandering into it', () => {
+  it('turns before a wall and sends only changes after time advances', () => {
     const world: World = {
       stepped: 0,
       worms: [{ id: 'a', segs: [[0, 145, 50, 0, 0]], gaps: [], died: null }],
     };
     expect(botInput(world, 'a', 0)?.dir).not.toBe(0);
     expect(botInput(world, 'unknown', 0)).toBeNull();
+    const open: World = {
+      ...world,
+      worms: [{ ...world.worms[0]!, segs: [[0, 80, 50, 0, 0]] }],
+    };
+    expect(botInput(open, 'a', 0)).toBeNull();
+    const turned: World = {
+      ...world,
+      worms: [
+        {
+          ...world.worms[0]!,
+          segs: [
+            [0, 145, 50, 0, 0],
+            [200, 147.4, 50, 0, 1],
+          ],
+        },
+      ],
+    };
+    expect(botInput(turned, 'a', 200)).toBeNull();
   });
 
   it('enables trail collisions when the grace expires and never protects from walls', () => {

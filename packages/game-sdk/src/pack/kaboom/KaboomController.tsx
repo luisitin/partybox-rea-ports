@@ -53,6 +53,7 @@ export function KaboomController<W>({
         cuts={view.cuts}
         grade={view.grade}
         unit={skin.unit}
+        unitOne={skin.unitOne}
         caption={skin.scoreCaption === true}
       />
       <div className={styles.controls}>
