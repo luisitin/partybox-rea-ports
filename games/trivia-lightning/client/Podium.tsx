@@ -23,7 +23,12 @@ export function Podium({ lanes, step, compact }: PodiumProps): JSX.Element {
       .join(' '),
   };
   return (
-    <div className={styles.podium} style={columns} data-compact={compact || undefined} aria-label={L('Podium')}>
+    <div
+      className={styles.podium}
+      style={columns}
+      data-compact={compact || undefined}
+      aria-label={L('Podium')}
+    >
       {groups.map(({ rank, racers }) => {
         const visible = step >= 4 - rank;
         if (visible && racers.length === 0) return null;

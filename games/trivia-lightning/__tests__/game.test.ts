@@ -1,7 +1,7 @@
 // Rule and abuse tests use explicit verdicts rather than a second copy of the reducer.
 import { describe, expect, it } from 'vitest';
 import { createRng } from '@partybox/game-sdk';
-import { testKit, testPlayers } from '@partybox/game-sdk/testing';
+import { finishGame, testKit, testPlayers } from '@partybox/game-sdk/testing';
 import { game } from '../server/index';
 import { answerPoints } from '../server/scoring';
 import { PACKS } from '../server/content';
@@ -226,6 +226,9 @@ describe('phase exits and results', () => {
     const advanced = answer(s, 'p1', true, s.phase.deadline! + 100);
     expect(kit.timer(advanced, s.phase.deadline!)).toBe(advanced);
     expect(kit.timer(advanced, advanced.clock).clock).toBe(advanced.clock);
+    expect((finishGame(game, advanced, 600) as State | null)?.phase.id).toBe('done');
+    const overduePause = kit.vip(s, 'pause', s.endsAt + 100);
+    expect(kit.vip(overduePause, 'resume', s.endsAt + 5100).phase.id).toBe('podium');
   });
   it('reveals three timed podium beats, then reports all players and honest ties', () => {
     let s = kit.vip(kit.start(), 'skip', 2000);

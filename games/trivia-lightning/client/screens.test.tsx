@@ -135,6 +135,25 @@ describe('Trivia Lightning screens', () => {
     expect(html).not.toContain('<button');
   });
 
+  it('an eight-way podium tie reveals every full-length name together', () => {
+    const lanes = view.lanes.map((lane, i) => ({
+      ...lane,
+      name: `Alexandria Robertson ${String(i + 1).padStart(3, '0')}`,
+    }));
+    for (const compact of [false, true]) {
+      const before = renderToStaticMarkup(<Podium lanes={lanes} step={2} compact={compact} />);
+      const after = renderToStaticMarkup(<Podium lanes={lanes} step={3} compact={compact} />);
+      for (const lane of lanes) {
+        expect(lane.name).toHaveLength(24);
+        expect(before).not.toContain(lane.name);
+        expect(after).toContain(lane.name);
+      }
+      expect(after).toContain('Tied');
+      expect(after).not.toContain('aria-label="Place 2"');
+      expect(after).not.toContain('aria-label="Place 3"');
+    }
+  });
+
   it('final standings include lower-ranked racers and hide gameplay controls', () => {
     const lanes = view.lanes.map((lane, i) => ({ ...lane, score: 800 - i * 100 }));
     const html = phone({ ...view, lanes, phaseId: 'done', podiumStep: 3, rank: 1 }, true);

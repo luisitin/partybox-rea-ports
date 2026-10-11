@@ -1,6 +1,7 @@
 // Optional static QA for P03 only. Usage: node jobs/P03-trivia-lightning/capture.mjs
 // Uses the installed Chrome, one browser and one page; no downloaded browser or dependency.
 import { auditLayout } from './capture-audit.mjs';
+import { closePrivateChrome } from './capture-processes.mjs';
 import { spawn } from 'node:child_process';
 import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -43,11 +44,7 @@ class Cdp {
       }
     });
     socket.addEventListener('close', () => {
-      for (const waiting of this.pending.values()) {
-        clearTimeout(waiting.timeout);
-        waiting.reject(new Error('Chrome debugging connection closed.'));
-      }
-      this.pending.clear();
+      this.cancelPending('Chrome debugging connection closed.');
     });
   }
 
@@ -90,7 +87,17 @@ class Cdp {
   }
 
   close() {
+    // Do not retain a Browser.close deadline while Chrome finishes its close handshake.
+    this.cancelPending('Chrome debugging connection is closing.');
     if (this.socket.readyState === WebSocket.OPEN) this.socket.close();
+  }
+
+  cancelPending(reason) {
+    for (const waiting of this.pending.values()) {
+      clearTimeout(waiting.timeout);
+      waiting.reject(new Error(reason));
+    }
+    this.pending.clear();
   }
 }
 
@@ -98,7 +105,6 @@ async function chromeEndpoint() {
   for (let attempt = 0; attempt < 300; attempt++) {
     if (stopping) throw new Error('Capture interrupted.');
     if (chromeError) throw chromeError;
-    if (exited) throw new Error('Chrome exited before opening its debugging port.');
     try {
       const [port] = (await readFile(join(profile, 'DevToolsActivePort'), 'utf8'))
         .trim()
@@ -143,7 +149,7 @@ async function captureFile(name, sessionId) {
   if (navigation.errorText) throw new Error(navigation.errorText);
   let loaded = false;
   for (let attempt = 0; attempt < 200; attempt++) {
-    if (stopping || exited) throw new Error('Capture interrupted.');
+    if (stopping) throw new Error('Capture interrupted.');
     try {
       const status = await cdp.send(
         'Runtime.evaluate',
@@ -193,27 +199,52 @@ async function captureFile(name, sessionId) {
   return { file: name, ...audit.result.value };
 }
 
-async function stopBrowser() {
-  if (cdp && !exited) {
+async function captureWithRetry(name, sessionId) {
+  const attempts = [];
+  for (let number = 1; number <= 2; number++) {
     try {
-      await Promise.race([cdp.send('Browser.close'), sleep(3000)]);
-    } catch {
-      // Browser.close often closes the debugging connection before returning its response.
+      const page = await captureFile(name, sessionId);
+      attempts.push({ number, result: 'captured' });
+      return { ...page, attempts };
+    } catch (error) {
+      attempts.push({ number, result: 'failed', error: String(error) });
+      const transient =
+        /timed out|timeout|context.*destroyed|Cannot find context|screenshot|did not finish loading/i.test(
+          String(error),
+        );
+      if (stopping || number === 2 || !transient) {
+        const failure = error instanceof Error ? error : new Error(String(error));
+        failure.attempts = attempts;
+        throw failure;
+      }
+      console.warn(`${name}: retrying transient capture failure: ${String(error)}`);
+      await sleep(500);
     }
   }
-  cdp?.close();
-  for (let attempt = 0; browser && !exited && attempt < 30; attempt++) await sleep(100);
-  if (browser?.pid && !exited) {
-    if (process.platform === 'win32') {
-      await new Promise((done) => {
-        const killer = spawn('taskkill.exe', ['/PID', String(browser.pid), '/T', '/F'], {
-          windowsHide: true,
-          stdio: 'ignore',
-        });
-        killer.once('error', done);
-        killer.once('exit', done);
-      });
-    } else browser.kill('SIGKILL');
+}
+
+async function stopBrowser() {
+  const gracefulClose = async () => {
+    try {
+      // CDP addresses the actual browser even after its initial launcher process exits.
+      if (cdp) await Promise.race([cdp.send('Browser.close'), sleep(3000)]);
+    } finally {
+      cdp?.close();
+    }
+  };
+  let browserCleanup;
+  if (process.platform === 'win32')
+    browserCleanup = await closePrivateChrome(profile, gracefulClose);
+  else {
+    try {
+      await gracefulClose();
+    } catch {
+      /* Chrome can close the socket before replying. */
+    }
+  }
+  if (process.platform !== 'win32') {
+    for (let attempt = 0; browser && !exited && attempt < 30; attempt++) await sleep(100);
+    if (browser?.pid && !exited) browser.kill('SIGKILL');
     for (let attempt = 0; !exited && attempt < 30; attempt++) await sleep(100);
   }
   if (profile) {
@@ -227,7 +258,15 @@ async function stopBrowser() {
       !basename(target).startsWith(profilePrefix)
     )
       throw new Error(`Refusing cleanup outside the private capture profile: ${target}`);
-    await rm(target, { recursive: true, force: true, maxRetries: 8, retryDelay: 250 });
+    try {
+      await rm(target, { recursive: true, force: true, maxRetries: 8, retryDelay: 250 });
+      return { browser: browserCleanup ?? { launcherExited: exited }, profileRemoved: true };
+    } catch (error) {
+      if (error.code !== 'EBUSY' || !browserCleanup?.verifiedClosed) throw error;
+      const warning = `Private Chrome is verified closed; temporary profile ${basename(target)} remains locked (EBUSY).`;
+      console.warn(warning);
+      return { browser: browserCleanup, profileRemoved: false, warning };
+    }
   }
 }
 
@@ -269,18 +308,26 @@ async function main() {
     for (const name of files) {
       if (stopping) throw new Error('Capture interrupted.');
       try {
-        const page = await captureFile(name, sessionId);
+        const page = await captureWithRetry(name, sessionId);
         report.pages.push(page);
-        console.log(`${name}: ${JSON.stringify({ ...page.summary, overflow: page.overflow })}`);
+        console.log(
+          `${name}: ${JSON.stringify({ ...page.summary, overflow: page.overflow, attempts: page.attempts.length })}`,
+        );
       } catch (error) {
-        report.pages.push({ file: name, error: String(error) });
+        report.pages.push({ file: name, error: String(error), attempts: error.attempts ?? [] });
         process.exitCode = 1;
         console.error(`${name}: ${String(error)}`);
       }
     }
-    await writeFile(join(media, 'layout.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8');
   } finally {
-    await stopBrowser();
+    try {
+      report.cleanup = await stopBrowser();
+    } catch (error) {
+      report.cleanup = { browser: { verifiedClosed: false }, error: String(error) };
+      throw error;
+    } finally {
+      await writeFile(join(media, 'layout.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+    }
   }
 }
 

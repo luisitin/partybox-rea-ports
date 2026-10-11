@@ -91,6 +91,7 @@ for (const [fault, file, before, after] of faults) {
         'run',
         'games/trivia-lightning/__tests__/game.test.ts',
         '--maxWorkers=1',
+        '--pool=threads',
         '--reporter=dot',
       ],
       { cwd: root, encoding: 'utf8', windowsHide: true, timeout: 60000 },

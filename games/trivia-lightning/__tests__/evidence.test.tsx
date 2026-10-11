@@ -7,6 +7,7 @@ import { expect, it } from 'vitest';
 import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
 import { testKit, testPlayers } from '@partybox/game-sdk/testing';
 import { game } from '../server/index';
+import { questionSchema } from '../content/schema';
 import type { State } from '../server/types';
 import { Controller } from '../client/Controller';
 import { Tv } from '../client/Tv';
@@ -80,7 +81,7 @@ function fixtures(): Record<string, State> {
   const stress: State = {
     ...long,
     deck: [
-      {
+      questionSchema.parse({
         ...longest,
         prompt:
           'Which carefully described scientific object matches the following detailed description most closely?',
@@ -92,7 +93,7 @@ function fixtures(): Record<string, State> {
         ],
         explanation:
           'This deliberately long explanation checks that readable answer feedback fits with the score, progress, next control and earned powers on a tiny phone.',
-      },
+      }),
       ...long.deck.slice(1),
     ],
   };

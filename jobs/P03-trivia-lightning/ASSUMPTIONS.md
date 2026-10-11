@@ -30,3 +30,6 @@
   network dependency on the researched products. Public bundles were read transiently only.
 - CPU care follows the owner's override: this game's tests only, no whole-suite browser run,
   and no more than one headless browser, closed in a finally block by the runner.
+- This public snapshot has no `docs/ADDING_A_GAME.md`, `gen-registry` script or `verify` script.
+  The available checks are `pnpm typecheck`, `pnpm format` and the owner's explicitly scoped
+  `pnpm vitest run games/trivia-lightning`; those replace the absent internal repository commands.

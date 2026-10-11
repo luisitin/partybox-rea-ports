@@ -586,9 +586,11 @@ ight is the :root default above) ────────
 
       ._lane_43f179 {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 2.6fr) minmax(0, 0.45fr);
+        grid-template-columns:
+          calc(var(--pb-chip-size) * 0.7) minmax(0, 0.9fr) minmax(0, 1.15fr)
+          minmax(0, 3fr) minmax(0, 0.6fr);
         align-items: center;
-        gap: var(--pb-space-5);
+        gap: var(--pb-space-3);
         padding: var(--pb-space-1) var(--pb-space-4);
         border-radius: var(--pb-radius);
         background: var(--pb-surface);
@@ -596,21 +598,16 @@ ight is the :root default above) ────────
       }
 
       ._identity_43f179 {
-        display: flex;
-        align-items: center;
-        gap: var(--pb-space-3);
-        min-width: 0;
+        display: contents;
       }
 
       ._avatar_43f179 {
-        width: calc(var(--pb-chip-size) * 0.8);
-        height: calc(var(--pb-chip-size) * 0.8);
+        width: calc(var(--pb-chip-size) * 0.7);
+        height: calc(var(--pb-chip-size) * 0.7);
       }
 
       ._nameBlock_43f179 {
-        min-width: 0;
-        display: grid;
-        gap: var(--pb-space-1);
+        display: contents;
       }
 
       ._name_43f179 {
@@ -618,20 +615,21 @@ ight is the :root default above) ────────
         text-overflow: ellipsis;
         white-space: nowrap;
         font-size: var(--pb-font-body);
-        line-height: 1;
+        line-height: 1.4;
       }
 
       ._state_43f179 {
         color: var(--pb-text-muted);
         font-size: calc(var(--pb-font-body) * 0.9);
-        line-height: 1;
+        line-height: 1.4;
         white-space: nowrap;
       }
 
       ._track_43f179 {
         position: relative;
-        height: calc(var(--pb-chip-size) * 0.8);
+        height: calc(var(--pb-chip-size) * 0.7);
         min-width: 0;
+        overflow: hidden;
       }
 
       ._rail_43f179 {
@@ -682,19 +680,28 @@ ight is the :root default above) ────────
         position: absolute;
         right: 0;
         top: 0;
+        width: calc(var(--pb-chip-size) * 0.6);
         height: 100%;
         display: grid;
         place-items: center;
-        font-size: var(--pb-font-h2);
         color: var(--pb-text-muted);
       }
 
+      ._finish_43f179 svg {
+        width: 100%;
+        height: 100%;
+        fill: currentColor;
+      }
+
       ._score_43f179 {
-        display: grid;
-        justify-items: end;
+        display: flex;
+        align-items: baseline;
+        justify-content: end;
+        gap: var(--pb-space-1);
         font-size: var(--pb-font-body);
-        line-height: 1;
+        line-height: 1.4;
         font-variant-numeric: tabular-nums;
+        white-space: nowrap;
       }
 
       ._score_43f179 span {
@@ -720,11 +727,20 @@ ight is the :root default above) ────────
       ._lanes_43f179[data-compact] ._lane_43f179 {
         grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 0.4fr);
         gap: var(--pb-space-2);
-        padding: var(--pb-space-1) var(--pb-space-2);
+        padding: 0 var(--pb-space-2);
       }
 
       ._lanes_43f179[data-compact] ._identity_43f179 {
+        display: flex;
+        align-items: center;
         gap: var(--pb-space-2);
+        min-width: 0;
+      }
+
+      ._lanes_43f179[data-compact] ._nameBlock_43f179 {
+        display: grid;
+        gap: calc(var(--pb-space-1) / 2);
+        min-width: 0;
       }
 
       ._lanes_43f179[data-compact] ._avatar_43f179 {
@@ -745,12 +761,14 @@ ight is the :root default above) ────────
         font-size: var(--pb-font-caption);
       }
 
-      ._lanes_43f179[data-compact] ._track_43f179 {
-        height: calc(var(--pb-chip-size) * 0.7);
+      ._lanes_43f179[data-compact] ._score_43f179 {
+        display: grid;
+        justify-items: end;
+        gap: 0;
       }
 
-      ._lanes_43f179[data-compact] ._finish_43f179 {
-        font-size: var(--pb-font-h2);
+      ._lanes_43f179[data-compact] ._track_43f179 {
+        height: calc(var(--pb-chip-size) * 0.7);
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -766,7 +784,7 @@ ight is the :root default above) ────────
       /* The winning column is the single focal point. Names stay withheld until its server beat. */
       ._podium_aeccd8 {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: var(--pb-podium-columns);
         gap: var(--pb-space-5);
         align-items: center;
         flex: 1;
@@ -777,7 +795,7 @@ ight is the :root default above) ────────
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: var(--pb-space-4);
+        gap: var(--pb-space-3);
         padding: var(--pb-space-5);
         min-width: 0;
         border-radius: var(--pb-radius-lg);
@@ -807,8 +825,8 @@ ight is the :root default above) ────────
       ._medal_aeccd8 {
         display: grid;
         place-items: center;
-        width: calc(var(--pb-chip-size) * 1.25);
-        height: calc(var(--pb-chip-size) * 1.25);
+        width: var(--pb-space-8);
+        height: var(--pb-space-8);
         border-radius: 50%;
         background: var(--pb-surface-2);
         color: var(--pb-text);
@@ -839,7 +857,11 @@ ight is the :root default above) ────────
         gap: var(--pb-space-3);
         min-width: 0;
         font-size: var(--pb-font-body);
-        line-height: 1.1;
+        line-height: 1.4;
+      }
+
+      ._place_aeccd8[data-many] ._names_aeccd8 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       ._names_aeccd8 b {
@@ -855,7 +877,7 @@ ight is the :root default above) ────────
       ._points_aeccd8,
       ._unrevealed_aeccd8 {
         font-size: var(--pb-font-body);
-        line-height: 1.1;
+        line-height: 1.4;
         text-align: center;
       }
 
@@ -865,8 +887,7 @@ ight is the :root default above) ────────
       }
 
       ._points_aeccd8 span {
-        display: block;
-        margin-top: var(--pb-space-2);
+        margin-left: var(--pb-space-2);
         color: var(--pb-text-muted);
       }
 
@@ -917,6 +938,21 @@ ight is the :root default above) ────────
 
       ._podium_aeccd8[data-compact] ._points_aeccd8 span {
         font-size: var(--pb-font-caption);
+      }
+
+      ._podium_aeccd8[data-compact] ._place_aeccd8[data-many] {
+        grid-template-columns: var(--pb-touch) minmax(0, 1fr);
+      }
+
+      ._podium_aeccd8[data-compact] ._place_aeccd8[data-many] ._names_aeccd8 {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+
+      ._podium_aeccd8[data-compact] ._place_aeccd8[data-many] ._points_aeccd8 {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
       }
 
       /* Public eight-player standings and optional terminal feedback fit the phone shell together. */
@@ -1072,7 +1108,7 @@ ight is the :root default above) ────────
                 ></path>
               </svg>
               <div class="_nameBlock_43f179">
-                <b class="_name_43f179">Hal</b
+                <b class="_name_43f179" title="Hal">Hal</b
                 ><span class="_state_43f179">Place 1 · 8 correct</span>
               </div>
             </div>
@@ -1091,7 +1127,10 @@ ight is the :root default above) ────────
                     <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
                 ></span>
               </div>
-              <span class="_finish_43f179" aria-hidden="true">⚑</span>
+              <span class="_finish_43f179" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
             </div>
             <div class="_score_43f179"><b>1160</b><span>pts</span></div>
           </li>
@@ -1123,7 +1162,7 @@ ight is the :root default above) ────────
                 <path d="M32 33 l-5 5 h10 z" fill="#1a0b12"></path>
               </svg>
               <div class="_nameBlock_43f179">
-                <b class="_name_43f179">Gus</b
+                <b class="_name_43f179" title="Gus">Gus</b
                 ><span class="_state_43f179">Place 2 · 7 correct</span>
               </div>
             </div>
@@ -1142,7 +1181,10 @@ ight is the :root default above) ────────
                     <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
                 ></span>
               </div>
-              <span class="_finish_43f179" aria-hidden="true">⚑</span>
+              <span class="_finish_43f179" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
             </div>
             <div class="_score_43f179"><b>1000</b><span>pts</span></div>
           </li>
@@ -1175,7 +1217,7 @@ ight is the :root default above) ────────
                 <ellipse cx="32" cy="41" rx="6" ry="4.5" fill="#1a0b12"></ellipse>
               </svg>
               <div class="_nameBlock_43f179">
-                <b class="_name_43f179">Fay</b
+                <b class="_name_43f179" title="Fay">Fay</b
                 ><span class="_state_43f179">Place 3 · 6 correct</span>
               </div>
             </div>
@@ -1194,7 +1236,10 @@ ight is the :root default above) ────────
                     <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
                 ></span>
               </div>
-              <span class="_finish_43f179" aria-hidden="true">⚑</span>
+              <span class="_finish_43f179" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
             </div>
             <div class="_score_43f179"><b>840</b><span>pts</span></div>
           </li>
@@ -1235,7 +1280,7 @@ ight is the :root default above) ────────
                 ></path>
               </svg>
               <div class="_nameBlock_43f179">
-                <b class="_name_43f179">Eli</b
+                <b class="_name_43f179" title="Eli">Eli</b
                 ><span class="_state_43f179">Place 4 · 5 correct</span>
               </div>
             </div>
@@ -1254,7 +1299,10 @@ ight is the :root default above) ────────
                     <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
                 ></span>
               </div>
-              <span class="_finish_43f179" aria-hidden="true">⚑</span>
+              <span class="_finish_43f179" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
             </div>
             <div class="_score_43f179"><b>680</b><span>pts</span></div>
           </li>
@@ -1302,7 +1350,7 @@ ight is the :root default above) ────────
                 ></path>
               </svg>
               <div class="_nameBlock_43f179">
-                <b class="_name_43f179">Dee</b
+                <b class="_name_43f179" title="Dee">Dee</b
                 ><span class="_state_43f179">Place 5 · 4 correct</span>
               </div>
             </div>
@@ -1321,7 +1369,10 @@ ight is the :root default above) ────────
                     <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
                 ></span>
               </div>
-              <span class="_finish_43f179" aria-hidden="true">⚑</span>
+              <span class="_finish_43f179" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
             </div>
             <div class="_score_43f179"><b>520</b><span>pts</span></div>
           </li>
@@ -1360,7 +1411,8 @@ ight is the :root default above) ────────
                 ></path>
               </svg>
               <div class="_nameBlock_43f179">
-                <b class="_name_43f179">Cy</b><span class="_state_43f179">Place 6 · 3 correct</span>
+                <b class="_name_43f179" title="Cy">Cy</b
+                ><span class="_state_43f179">Place 6 · 3 correct</span>
               </div>
             </div>
             <div
@@ -1378,7 +1430,10 @@ ight is the :root default above) ────────
                     <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
                 ></span>
               </div>
-              <span class="_finish_43f179" aria-hidden="true">⚑</span>
+              <span class="_finish_43f179" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
             </div>
             <div class="_score_43f179"><b>360</b><span>pts</span></div>
           </li>
@@ -1411,7 +1466,7 @@ ight is the :root default above) ────────
                 <path d="M32 36 l-4 6 h8 z" fill="#1a0b12"></path>
               </svg>
               <div class="_nameBlock_43f179">
-                <b class="_name_43f179">Ben</b
+                <b class="_name_43f179" title="Ben">Ben</b
                 ><span class="_state_43f179">Place 7 · 2 correct</span>
               </div>
             </div>
@@ -1430,7 +1485,10 @@ ight is the :root default above) ────────
                     <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
                 ></span>
               </div>
-              <span class="_finish_43f179" aria-hidden="true">⚑</span>
+              <span class="_finish_43f179" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
             </div>
             <div class="_score_43f179"><b>220</b><span>pts</span></div>
           </li>
@@ -1467,7 +1525,7 @@ ight is the :root default above) ────────
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse>
               </svg>
               <div class="_nameBlock_43f179">
-                <b class="_name_43f179">Ana</b
+                <b class="_name_43f179" title="Ana">Ana</b
                 ><span class="_state_43f179">Place 8 · 1 correct</span>
               </div>
             </div>
@@ -1486,7 +1544,10 @@ ight is the :root default above) ────────
                     <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
                 ></span>
               </div>
-              <span class="_finish_43f179" aria-hidden="true">⚑</span>
+              <span class="_finish_43f179" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
             </div>
             <div class="_score_43f179"><b>100</b><span>pts</span></div>
           </li>

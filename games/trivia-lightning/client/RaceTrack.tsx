@@ -42,7 +42,9 @@ export function RaceTrack({ lanes, total, compact, meId, ranked }: RaceTrackProp
             <div className={styles.identity}>
               <Avatar avatarId={lane.avatarId} className={styles.avatar} />
               <div className={styles.nameBlock}>
-                <b className={styles.name} title={lane.name}>{lane.name}</b>
+                <b className={styles.name} title={lane.name}>
+                  {lane.name}
+                </b>
                 <span className={styles.state}>
                   {ranked
                     ? tied
@@ -75,7 +77,9 @@ export function RaceTrack({ lanes, total, compact, meId, ranked }: RaceTrackProp
                 </span>
               </div>
               <span className={styles.finish} aria-hidden="true">
-                ⚑
+                <svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z" />
+                </svg>
               </span>
             </div>
             <div className={styles.score}>

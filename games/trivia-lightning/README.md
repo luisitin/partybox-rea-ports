@@ -19,7 +19,7 @@ freezes a leading rival when there is time to catch up, otherwise doubles its ne
 | Phase  | TV                                                                                     | Phone with TV                                                               | Exit                                         |
 | ------ | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | -------------------------------------------- |
 | race   | Eight numbered lanes, answered count, scores, frozen/disconnected labels, shared clock | Own question/options; immediate verdict, explanation, Next; energy controls | All connected seats finish, cap, or VIP skip |
-| podium | Third → second → winner, shared places for ties                                        | Own score/rank and the same revealed podium                                 | Three 4.5 s beats or VIP skips               |
+| podium | Third → second → winner, shared places for ties                                        | Same staged podium; own rank/score appear at step 3, the winner reveal      | Three 4.5 s beats or VIP skips               |
 | done   | Winner/tie and final standings                                                         | Final standings and own score/rank                                          | Terminal; shell results available            |
 
 ### Phone only
@@ -27,7 +27,7 @@ freezes a leading rival when there is time to catch up, otherwise doubles its ne
 | Phase  | Phone stage                                                                                                |
 | ------ | ---------------------------------------------------------------------------------------------------------- |
 | race   | Own question and controls plus compact race position; finished players and spectators see the public track |
-| podium | The same staged podium, own score/rank, no TV directions                                                   |
+| podium | The same staged podium; own rank/score appear at step 3, the winner reveal; no TV directions               |
 | done   | Winner/tie, standings and own score/rank                                                                   |
 
 ## Inputs
@@ -51,6 +51,7 @@ does not end another connected player's race and gives no extra points.
 - State survives reconnect with cursor, verdict, points and power intact; dropped seats are excluded from the completion gate.
 - Permanent leavers retain results and cannot return to input. All seats gone ends the race immediately.
 - Timer beats every 500 ms; the visible clock is the race cap. Early/stale timers do nothing.
+  An input overtaking a queued beat rearms the next deadline; resume closes an already expired cap.
 - At or after the cap an input closes the race without scoring. Unanswered questions score zero.
 - Pause shifts the cap, frozen-until times and race clock together; skips while paused use SDK resume ordering.
 - No phone can read another player's question/verdict or any answer key. Feedback reveals only a question the viewer has already answered.

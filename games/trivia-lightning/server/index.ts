@@ -25,7 +25,7 @@ import { botInput } from './bot';
 import { PACKS, chooseQuestions } from './content';
 import { enterDone } from './phases/done';
 import { advancePodium, enterPodium, reducePodium } from './phases/podium';
-import { beatRace, raceComplete, reduceRace } from './phases/race';
+import { beatRace, raceComplete, rearmRaceBeat, reduceRace } from './phases/race';
 import { results } from './scoring';
 import { BEAT_MS, PHASES, inputSchema } from './types';
 import type { Feedback, Input, Runner, State } from './types';
@@ -102,7 +102,9 @@ function init(ctx: InitContext): State {
   };
 }
 const closeIfDone = (state: State, now: number): State =>
-  state.phase.id === 'race' && raceComplete(state) ? enterPodium(state, now) : state;
+  state.phase.id === 'race' && (now >= state.endsAt || raceComplete(state))
+    ? enterPodium(state, now)
+    : state;
 function advance(state: State, now: number): State {
   if (state.phase.id === 'race') return beatRace(state, now, enterPodium);
   if (state.phase.id === 'podium') return advancePodium(state, now, enterDone);
@@ -132,7 +134,7 @@ const reduce = composeReduce<State, Input>({
       ),
     };
   },
-  afterVip: (_before, after, event) => recheckOnResume(after, event, closeIfDone),
+  afterVip: (_before, after, event) => rearmRaceBeat(recheckOnResume(after, event, closeIfDone)),
 });
 const statusOf =
   (state: State) =>

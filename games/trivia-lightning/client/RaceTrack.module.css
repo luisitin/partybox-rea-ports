@@ -105,11 +105,17 @@
   position: absolute;
   right: 0;
   top: 0;
+  width: calc(var(--pb-chip-size) * 0.6);
   height: 100%;
   display: grid;
   place-items: center;
-  font-size: var(--pb-font-h2);
   color: var(--pb-text-muted);
+}
+
+.finish svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
 }
 
 .score {
@@ -188,10 +194,6 @@
 
 .lanes[data-compact] .track {
   height: calc(var(--pb-chip-size) * 0.7);
-}
-
-.lanes[data-compact] .finish {
-  font-size: var(--pb-font-h2);
 }
 
 @media (prefers-reduced-motion: reduce) {

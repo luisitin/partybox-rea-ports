@@ -149,7 +149,14 @@ function checkSeed(seed: number): void {
   state = game.reduce(state, { type: 'vip', action: 'resume', now: now + 1 });
   const done = finishGame(game, state, 600) as State | null;
   if (done === null || game.results(done)?.ranking.length !== init.players.length)
-    throw new Error(`Seed did not finish after reconnect/pause fuzz: seed=${seed}`);
+    throw new Error(
+      `Seed did not finish after reconnect/pause fuzz: seed=${seed}; ${JSON.stringify({
+        phase: state.phase,
+        clock: state.clock,
+        began: state.began,
+        endsAt: state.endsAt,
+      })}`,
+    );
   assertState(done);
   if (fuzzOnce(game, done, seed).length > 0)
     throw new Error(`Terminal reducer not total: seed=${seed}`);

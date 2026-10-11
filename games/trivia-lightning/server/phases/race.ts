@@ -15,6 +15,13 @@ export function beatRace(state: State, now: number, next: Transition): State {
   return nextStep({ ...state, clock: now }, Math.min(state.endsAt, now + BEAT_MS));
 }
 
+// Inputs and resume may overtake a queued beat. Keep a future deadline for the host scheduler.
+export function rearmRaceBeat(state: State): State {
+  return state.phase.id === 'race' && (state.phase.deadline ?? Infinity) < state.clock
+    ? nextStep(state, Math.min(state.endsAt, state.clock + BEAT_MS))
+    : state;
+}
+
 function usePower(
   state: State,
   id: string,
@@ -71,14 +78,14 @@ export function reduceRace(state: State, event: GameEvent<Input>, next: Transiti
   const runner = state.runners[id]!;
   if (runner.answered >= state.deck.length || runner.freezeUntil > event.now) return state;
   const input = event.input;
-  if (input.type === 'power') return usePower(state, id, input, event.now);
+  if (input.type === 'power') return rearmRaceBeat(usePower(state, id, input, event.now));
   if (input.type === 'next') {
     if (!runner.feedback || input.index !== runner.answered) return state;
-    return {
+    return rearmRaceBeat({
       ...state,
       clock: event.now,
       runners: { ...state.runners, [id]: { ...runner, feedback: null } },
-    };
+    });
   }
   const question = state.deck[runner.answered];
   if (
@@ -107,5 +114,5 @@ export function reduceRace(state: State, event: GameEvent<Input>, next: Transiti
     },
   };
   const after = { ...state, clock: event.now, runners: { ...state.runners, [id]: updated } };
-  return raceComplete(after) ? next(after, event.now) : after;
+  return raceComplete(after) ? next(after, event.now) : rearmRaceBeat(after);
 }
