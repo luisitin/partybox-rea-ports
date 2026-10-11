@@ -9,5 +9,6 @@
 - 44 all-phase/adversarial frames fit without scrolling or clipping; independent visual review passes every frame.
 - Required visible-text floors now include question/reveal/standings/podium and animation settling; regenerated 7000 simulations pass, longest match 893.346 seconds under the 1200-second ceiling.
 - Final pacing capture and 20/20 mutation rerun are complete; all restored hashes match. Typecheck, format and all 106 game tests pass.
-- Remaining: draft PR, green CI and KEEP GOING. First milestone pushed at 21:13 UTC.
+- PR https://github.com/luisitin/partybox-rea-ports/pull/2 is ready; CI run38176682177 passed all checks. First milestone pushed at21:13UTC.
+- KEEP GOING in progress: departed-seat controls, phone-only waiting feedback and movie variety are the current measured opportunities. Final media will be refreshed against updated SDK before completion.
 - Capture agent owns at most one headless browser and closes it in finally; root started none.

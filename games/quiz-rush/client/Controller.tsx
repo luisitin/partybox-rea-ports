@@ -37,11 +37,14 @@ export function Controller({
   const pendingRef = useRef<Pending | null>(null);
   const mine = pending?.round === view.round ? pending : null;
   const spectator = view.me.role !== 'player';
+  const seat = view.players.find((player) => player.id === view.me.id);
   const stage = phoneOnly || view.stage || spectator;
   const phase = view.phaseId;
   const canAnswer =
     phase === 'question' &&
     !spectator &&
+    seat?.status === 'active' &&
+    seat.connected &&
     !view.submitted &&
     !view.paused &&
     (view.deadline === null || now < view.deadline);

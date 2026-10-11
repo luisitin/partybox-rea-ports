@@ -172,6 +172,53 @@ describe.each(fixtures)('screen fixture: $name', ({ name, state }) => {
   });
 });
 
+describe.each([
+  {
+    name: 'active seat',
+    left: false,
+    connected: true,
+    disabled: false,
+    status: 'Tap the matching shape',
+  },
+  {
+    name: 'permanently left seat',
+    left: true,
+    connected: false,
+    disabled: true,
+    status: 'Watching the quiz',
+  },
+  {
+    name: 'reconnected left seat',
+    left: true,
+    connected: true,
+    disabled: true,
+    status: 'Watching the quiz',
+  },
+  {
+    name: 'temporarily disconnected seat',
+    left: false,
+    connected: false,
+    disabled: true,
+    status: 'Disconnected. Waiting to reconnect.',
+  },
+])('$name', ({ left, connected, disabled, status }) => {
+  it('allows answers only for a connected active seat, on both phone layouts', () => {
+    const state: State = {
+      ...question,
+      left: left ? ['p1'] : [],
+      players: { ...question.players, p1: { ...question.players.p1!, connected } },
+    };
+    for (const surface of ['phone-tv', 'phone-only'] as const) {
+      const html = render(state, surface);
+      const pads = html.match(/<button\b[^>]*>/g) ?? [];
+      expect(pads).toHaveLength(4);
+      expect(pads.filter((pad) => /\bdisabled=""/.test(pad))).toHaveLength(disabled ? 4 : 0);
+      expect(html).toContain(status);
+      expect(html).not.toContain('Send again');
+    }
+  });
+});
+
 it('reconstructs every used CSS module instead of pretending the source class names are emitted', () => {
   const css = evidenceCss();
   expect(css).toContain('games/quiz-rush/client/Controller.module.css');

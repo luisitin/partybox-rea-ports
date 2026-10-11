@@ -31,20 +31,26 @@ export function AnswerScreen({
 }: AnswerScreenProps): JSX.Element {
   const L = useT(STRINGS);
   const spectator = view.me.role !== 'player';
+  const seat = view.players.find((player) => player.id === view.me.id);
+  const waiting = seat?.status === 'waiting';
+  const disconnected = seat?.connected === false;
   const question = view.question;
   const seconds =
     view.deadline === null ? null : Math.max(0, Math.ceil((view.deadline - now) / 1000));
-  const status = spectator
-    ? L('Watching the quiz')
-    : view.submitted
-      ? L('✓ Answer locked in')
-      : seconds === 0
-        ? L('Time is up')
-        : pending
-          ? retry
-            ? L('Not confirmed yet. Send your answer again.')
-            : L('Sending your answer…')
-          : L('Tap the matching shape');
+  const status =
+    spectator || waiting
+      ? L('Watching the quiz')
+      : disconnected
+        ? L('Disconnected. Waiting to reconnect.')
+        : view.submitted
+          ? L('✓ Answer locked in')
+          : seconds === 0
+            ? L('Time is up')
+            : pending
+              ? retry
+                ? L('Not confirmed yet. Send your answer again.')
+                : L('Sending your answer…')
+              : L('Tap the matching shape');
   return (
     <Screen key={`question:${view.round}`} className={styles.screen} ghost={false}>
       <div
