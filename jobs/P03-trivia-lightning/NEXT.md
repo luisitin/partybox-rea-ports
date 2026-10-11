@@ -11,8 +11,9 @@
 - PR: https://github.com/luisitin/partybox-rea-ports/pull/3 (draft); initial CI green on ad3add8,
   run 38177187835. KEEP GOING round 1 adds live phone place; 19 screen + 1 SSR tests pass.
 - New ranking fixture has maximum question text, eight long names, a finished zero-score player
-  and a partial-deck points leader. Phone surfaces fit; TV names clip and need the next fix.
-- Remaining: recover the current capture's closed-browser proof, refresh hashes, push round 1;
-  then full TV names, occupied podium beats, informed freeze targeting, live leader cue and
+  and a partial-deck points leader. Round 2 fits full TV/spectator names: 24 clipped names become
+  zero, all 65 captures have zero geometry findings. Native Chrome closure is independently proven;
+  profile deletion from the old retrying helper is settling before it writes final metadata.
+- Remaining: refresh final capture hashes and metadata; occupied podium beats, informed freeze targeting, live leader cue and
   pending power feedback, followed by three stable audit passes and final green CI.
 - Install completed using corepack enable and pnpm.cmd install (PowerShell blocks pnpm.ps1).

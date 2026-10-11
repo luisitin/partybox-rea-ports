@@ -12,8 +12,8 @@
 .lane {
   display: grid;
   grid-template-columns:
-    calc(var(--pb-chip-size) * 0.7) minmax(0, 0.9fr) minmax(0, 1.15fr)
-    minmax(0, 3fr) minmax(0, 0.6fr);
+    calc(var(--pb-chip-size) * 0.7) minmax(0, 1.75fr) minmax(0, 1.15fr)
+    minmax(0, 2.15fr) minmax(0, 0.6fr);
   align-items: center;
   gap: var(--pb-space-3);
   padding: var(--pb-space-1) var(--pb-space-4);
@@ -150,7 +150,7 @@
 }
 
 .lanes[data-compact] .lane {
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 0.4fr);
+  grid-template-columns: minmax(0, 1.8fr) minmax(0, 0.5fr) minmax(0, 0.4fr);
   gap: var(--pb-space-2);
   padding: 0 var(--pb-space-2);
 }
