@@ -44,7 +44,7 @@ export interface World {
   cursor: number;
 }
 export const speedAt = (ms: number): number =>
-  Math.min(MAX_SPEED, START_SPEED + ACCELERATION * Math.max(0, ms) / 1000);
+  Math.min(MAX_SPEED, START_SPEED + (ACCELERATION * Math.max(0, ms)) / 1000);
 
 /** Integrated speed, including the capped tail. All lanes use this same distance. */
 export function distanceAt(ms: number): number {
@@ -73,21 +73,30 @@ export function makeWorld(rng: RngState, ids: string[]): [World, RngState] {
       x: distanceAt(at) + RUNNER_X,
       width,
       bottom: bird ? 32 : 0,
-      height: bird ? 34 : 35 + course.length % 3 * 10,
+      height: bird ? 34 : 35 + (course.length % 3) * 10,
       kind: bird ? 'bird' : 'rock',
     });
     lastBird = bird;
     at += gap;
   }
-  return [{
-    runners: ids.map((id) => ({ id, jumpAt: null, duck: false, died: null, distance: 0, changes: 0 })),
-    course,
-    checked: 0,
-    cursor: 0,
-  }, r];
+  return [
+    {
+      runners: ids.map((id) => ({
+        id,
+        jumpAt: null,
+        duck: false,
+        died: null,
+        distance: 0,
+        changes: 0,
+      })),
+      course,
+      checked: 0,
+      cursor: 0,
+    },
+    r,
+  ];
 }
-export const allDead = (world: World): boolean =>
-  world.runners.every((r) => r.died !== null);
+export const allDead = (world: World): boolean => world.runners.every((r) => r.died !== null);
 
 /** Strict AABB contact; 20 ms sampling prevents tunnelling at the speed cap. */
 export function collides(runner: Runner, obstacle: Obstacle, ms: number): boolean {
@@ -105,8 +114,11 @@ export function tick(world: World, to: number): World {
   let checked = world.checked;
   for (let ms = world.checked + STEP_MS; ms <= end; ms += STEP_MS) {
     const distance = distanceAt(ms);
-    while (cursor < world.course.length &&
-      world.course[cursor]!.x + world.course[cursor]!.width < distance + RUNNER_X) cursor++;
+    while (
+      cursor < world.course.length &&
+      world.course[cursor]!.x + world.course[cursor]!.width < distance + RUNNER_X
+    )
+      cursor++;
     for (const runner of runners) {
       if (runner.died !== null) continue;
       runner.distance = distance;
@@ -124,17 +136,19 @@ export function apply(world: World, id: string, input: Input, at: number): World
   if (!runner || runner.died !== null || at < world.checked || at < 0) return world;
   let next: Runner;
   if (input.type === 'jump') {
-    if ((runner.jumpAt !== null && at - runner.jumpAt < JUMP_MS) || runner.changes >= 600) return world;
-    next = { ...runner, jumpAt: at, duck: false, changes: runner.changes + 1 };
+    if ((runner.jumpAt !== null && at - runner.jumpAt < JUMP_MS) || runner.changes >= 600)
+      return world;
+    next = { ...runner, jumpAt: at, changes: runner.changes + 1 };
   } else {
     if (runner.duck === input.down || (input.down && runner.changes >= 600)) return world;
     next = { ...runner, duck: input.down, changes: runner.changes + 1 };
   }
-  return { ...world, runners: world.runners.map((r) => r.id === id ? next : r) };
+  return { ...world, runners: world.runners.map((r) => (r.id === id ? next : r)) };
 }
 /** Only the next visible obstacles go over the wire; the future course stays on the server. */
 export function visibleCourse(world: World): Obstacle[] {
   const distance = distanceAt(world.checked);
-  return world.course.filter((o) => o.x + o.width >= distance + RUNNER_X - 60 &&
-    o.x <= distance + RUNNER_X + VISIBLE_AHEAD);
+  return world.course.filter(
+    (o) => o.x + o.width >= distance + RUNNER_X - 60 && o.x <= distance + RUNNER_X + VISIBLE_AHEAD,
+  );
 }

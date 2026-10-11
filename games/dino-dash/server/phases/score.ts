@@ -8,5 +8,7 @@ export function enterScore(state: State, now: number): State {
   return enterPhase(scored(state), 'score', now, SCORE_MS);
 }
 export function reduceScore(state: State, event: GameEvent<Input>, next: Transition): State {
-  return isTimerFor(state, event) && event.now >= (state.phase.deadline ?? Infinity) ? next(state, event.now) : state;
+  return isTimerFor(state, event) && event.now >= (state.phase.deadline ?? Infinity)
+    ? next(state, event.now)
+    : state;
 }

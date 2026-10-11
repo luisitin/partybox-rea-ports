@@ -1,0 +1,57 @@
+.stage {
+  flex: 1;
+  min-height: 0;
+  gap: var(--pb-space-4);
+  font-size: var(--pb-font-body);
+  color: var(--pb-text);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pb-space-6);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.header p {
+  margin: var(--pb-space-2) 0 0;
+  color: var(--pb-text-muted);
+}
+
+.clock {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-5);
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock b {
+  font-size: calc(var(--pb-font-display) * 0.75);
+  line-height: 1;
+}
+
+.clock[data-low='true'] b {
+  color: var(--pb-danger);
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.footer {
+  margin: 0;
+  color: var(--pb-text-muted);
+  text-align: center;
+  font-size: var(--pb-font-body);
+}

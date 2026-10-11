@@ -28,8 +28,14 @@
   SDK cues. No source code or assets are reused, and no new dependencies are needed.
 - Research used current public Chromium TypeScript modules rather than the older
   monolithic offline.js; equivalent mechanics were read without copying code.
-- Evidence of original live play and all verification belongs in VERIFY.md. No
-  external-source screenshot should be committed to the public job media folder.
+- The first numerical direct-play pass used the wayou historical fork at 390×844
+  with touch enabled and measured speed 4.723, rising to 4.837 after a one-second
+  wait. This is not the current Chromium base speed of 6. Mobile scaling plausibly
+  explains the difference; do not infer a different fork base speed without reading
+  it. Its final sample had `crashed: false`, so collision remained unobserved then.
+- Evidence of original live play and all verification belongs in VERIFY.md. The
+  media observation JSON records numerical state only; no external-source screenshot
+  or asset is committed to the public job media folder.
 - The Computer Use connector reports an empty browser inventory on r14. Automated
   capture can use the already installed Chromium headless engine, at most one
   browser owned by this runner and always closed in `finally`.

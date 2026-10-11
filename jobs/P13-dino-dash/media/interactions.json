@@ -1,0 +1,206 @@
+[
+  {
+    "name": "pointer duck press/release",
+    "pass": true,
+    "evidence": [
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": true
+        },
+        "phase": "play",
+        "accepted": true
+      },
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": false
+        },
+        "phase": "play",
+        "accepted": true
+      }
+    ]
+  },
+  {
+    "name": "pointer cancel releases duck",
+    "pass": true,
+    "evidence": [
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": true
+        },
+        "phase": "play",
+        "accepted": true
+      },
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": false
+        },
+        "phase": "play",
+        "accepted": true
+      }
+    ]
+  },
+  {
+    "name": "window blur and visibility release duck",
+    "pass": true,
+    "evidence": [
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": true
+        },
+        "phase": "play",
+        "accepted": true
+      },
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": false
+        },
+        "phase": "play",
+        "accepted": true
+      },
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": true
+        },
+        "phase": "play",
+        "accepted": true
+      },
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": false
+        },
+        "phase": "play",
+        "accepted": true
+      }
+    ]
+  },
+  {
+    "name": "Space jump ignores held-key repeat and pointer click does not double jump",
+    "pass": true,
+    "evidence": [
+      {
+        "now": 1000000,
+        "input": {
+          "type": "jump"
+        },
+        "phase": "play",
+        "accepted": false
+      }
+    ]
+  },
+  {
+    "name": "two-finger duck release keeps remaining finger held",
+    "pass": true,
+    "evidence": [
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": true
+        },
+        "phase": "play",
+        "accepted": true
+      },
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": false
+        },
+        "phase": "play",
+        "accepted": true
+      }
+    ]
+  },
+  {
+    "name": "jump and duck multi-touch remain distinct",
+    "pass": true,
+    "evidence": [
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": true
+        },
+        "phase": "play",
+        "accepted": true
+      },
+      {
+        "now": 1000000,
+        "input": {
+          "type": "jump"
+        },
+        "phase": "play",
+        "accepted": true
+      },
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": false
+        },
+        "phase": "play",
+        "accepted": true
+      }
+    ]
+  },
+  {
+    "name": "pause unmount releases duck and resume starts unheld",
+    "pass": true,
+    "evidence": [
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": true
+        },
+        "phase": "play",
+        "accepted": true
+      },
+      {
+        "now": 1000000,
+        "input": {
+          "type": "duck",
+          "down": false
+        },
+        "phase": "play",
+        "accepted": true
+      }
+    ]
+  },
+  {
+    "name": "drop/rejoin preserves authoritative run and full eight-player match terminates",
+    "pass": true,
+    "evidence": {
+      "droppedAt": 1001000,
+      "rejoined": true,
+      "phase": "done",
+      "scores": {
+        "p1": 318,
+        "p2": 318,
+        "p3": 318,
+        "p4": 318,
+        "p5": 318,
+        "p6": 318,
+        "p7": 318,
+        "p8": 318
+      },
+      "players": 8
+    }
+  }
+]

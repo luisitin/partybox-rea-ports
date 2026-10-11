@@ -1,8 +1,29 @@
 # P13 Dino Dash research
 
 Inspected 2026-10-11. Sources are linked in [SOURCES.md](SOURCES.md); no source code,
-sprites, audio or branding were copied. Original live-play evidence is recorded by
-the runner in VERIFY.md when the browser verification is complete.
+sprites, audio or branding were copied. Numerical direct-play observations are
+saved in [original-play-observation.json](media/original-play-observation.json).
+
+## Direct browser observation
+
+The first cached-browser pass played the public
+[wayou fork](https://wayou.github.io/t-rex-runner/) at a 390×844 viewport with touch
+enabled, recorded at 2026-10-11T22:08:38.174Z. Space started a jump: measured speed
+4.723, jumping true. After the next one-second wait, speed was 4.837, distance
+245.55, jumping false. Held ArrowDown changed ducking to true at speed 4.873;
+release changed it to false at 4.877. The final sample was still alive at speed
+5.137 and distance 1116.48. Its action label says collision/death, but `crashed`
+was false: that sample proves continued running, not a collision.
+
+Those are measured instance values from a historical fork, not the current
+Chromium base configuration. Small-screen scaling plausibly explains the lower
+initial speed: Chromium scales 6 by viewport width/600 × 1.2, yielding 4.68 at
+390px before update increments. That explanation is an inference, not a measured
+fork configuration. The one-second speed increase is likewise an observation,
+not evidence of a fixed 60 Hz rendering rate. The PartyBox conversion below uses
+the explicitly stated nominal 60 Hz basis. A later capture must wait for actual
+`crashed: true` before treating death as directly observed. No source-game media
+is saved; only numerical observations and actions are recorded.
 
 ## Original loop and timing
 

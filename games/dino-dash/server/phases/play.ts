@@ -5,8 +5,18 @@ import { ROUND_MS, TICK_MS, allDead, apply, makeWorld, tick } from '../world';
 import type { Input } from '../world';
 
 export function enterPlay(state: State, now: number, round: number): State {
-  const [world, rng] = makeWorld(state.rng, Object.keys(state.players).filter((id) => !state.left.includes(id)));
-  return enterPhase({ ...state, world, rng, round, began: now, endsAt: now + ROUND_MS }, 'play', now, TICK_MS);
+  const [fresh, rng] = makeWorld(state.rng, Object.keys(state.players));
+  // Preserve everyone's lane number and colour; departed seats stay OUT and earn no new metres.
+  const world = {
+    ...fresh,
+    runners: fresh.runners.map((r) => (state.left.includes(r.id) ? { ...r, died: 0 } : r)),
+  };
+  return enterPhase(
+    { ...state, world, rng, round, began: now, endsAt: now + ROUND_MS },
+    'play',
+    now,
+    TICK_MS,
+  );
 }
 export function settle(state: State, now: number): State {
   const world = tick(state.world, Math.min(ROUND_MS, now - state.began));
@@ -18,12 +28,19 @@ export function advancePlay(state: State, now: number, done: Transition): State 
   return over(s) ? done(s, now) : nextStep(s, Math.min(s.endsAt, now + TICK_MS));
 }
 export function reducePlay(state: State, event: GameEvent<Input>, next: Transition): State {
-  if (event.type === 'timer') return isTimerFor(state, event) && event.now >= (state.phase.deadline ?? Infinity)
-    ? advancePlay(state, event.now, next) : state;
-  if (event.type !== 'input' || !hasPlayer(state, event.playerId) || !state.players[event.playerId]?.connected)
+  if (event.type === 'timer')
+    return isTimerFor(state, event) && event.now >= (state.phase.deadline ?? Infinity)
+      ? advancePlay(state, event.now, next)
+      : state;
+  if (
+    event.type !== 'input' ||
+    !hasPlayer(state, event.playerId) ||
+    !state.players[event.playerId]?.connected
+  )
     return state;
   const runner = state.world.runners.find((r) => r.id === event.playerId);
-  if (!runner || runner.died !== null || event.now < state.began + state.world.checked) return state;
+  if (!runner || runner.died !== null || event.now < state.began + state.world.checked)
+    return state;
   const s = settle(state, event.now);
   if (over(s)) return next(s, event.now);
   const world = apply(s.world, event.playerId, event.input, event.now - s.began);

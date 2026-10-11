@@ -1,0 +1,175 @@
+.race {
+  display: grid;
+  grid-auto-rows: minmax(0, 1fr);
+  grid-template-rows: repeat(var(--pb-race-rows), minmax(0, 1fr));
+  gap: var(--pb-space-2);
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+  list-style: none;
+}
+
+.race li {
+  display: grid;
+  grid-template-columns: minmax(0, 24%) minmax(0, 1fr) minmax(0, 16%);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: center;
+  gap: var(--pb-space-3);
+  min-height: 0;
+  min-width: 0;
+  background: var(--pb-surface);
+  border-radius: var(--pb-radius);
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border-inline-start: var(--pb-space-1) solid var(--pb-runner);
+  overflow: hidden;
+}
+
+/* Two columns give eight runners four generous lanes instead of eight cramped strips. */
+.race[data-columns='2'] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-flow: column;
+  gap: var(--pb-space-3);
+}
+
+.race[data-tv='true'] li {
+  grid-template-columns: minmax(0, 24%) minmax(0, 1fr) minmax(0, 22%);
+}
+
+.race[data-tv='true']:not([data-results='true']) .distance {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--pb-space-2);
+  white-space: nowrap;
+}
+
+.race[data-tv='true']:not([data-results='true']) li:not([data-out='true']) .distance span {
+  display: none;
+}
+
+.race[data-results='true'] .distance span {
+  color: var(--pb-text);
+  font-weight: 900;
+}
+
+.race[data-results='true'] .distance b {
+  color: var(--pb-text-muted);
+  font-weight: 700;
+}
+
+.race li[data-me='true'] {
+  outline: var(--pb-space-1) solid var(--pb-focus);
+  outline-offset: calc(-1 * var(--pb-space-1));
+}
+
+.identity {
+  display: flex;
+  gap: var(--pb-space-2);
+  align-items: center;
+  min-width: 0;
+}
+
+.number {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: calc(var(--pb-font-body) * 1.5);
+  height: calc(var(--pb-font-body) * 1.5);
+  border: calc(var(--pb-space-1) / 2) solid var(--pb-runner);
+  border-radius: var(--pb-radius);
+  font-variant-numeric: tabular-nums;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+.distance {
+  display: grid;
+  justify-items: end;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.distance span {
+  font-size: inherit;
+  color: var(--pb-text-muted);
+}
+
+.lane {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.icon {
+  width: calc(var(--pb-touch) * 1.5);
+  height: var(--pb-touch);
+  flex: none;
+}
+
+.tail,
+.creature {
+  fill: var(--pb-runner);
+}
+
+.tail {
+  opacity: 0.65;
+}
+
+.eye {
+  fill: var(--pb-bg);
+}
+
+.faceLine {
+  fill: none;
+  stroke: var(--pb-bg);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.ground,
+.track {
+  fill: none;
+  stroke: var(--pb-text-muted);
+  stroke-width: 2;
+}
+
+.track {
+  opacity: 0.4;
+}
+
+.rock {
+  fill: var(--pb-text-muted);
+}
+
+.rockLine {
+  fill: none;
+  stroke: var(--pb-surface);
+  stroke-width: 3;
+}
+
+.bird {
+  fill: var(--pb-accent-2-fill);
+}
+
+.crash {
+  fill: none;
+  stroke: var(--pb-danger);
+  stroke-width: 4;
+}
+
+[data-out='true'] .creature {
+  fill: var(--pb-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    display: none;
+  }
+}

@@ -24,11 +24,11 @@ colour. Spectators receive the public stage without input controls.
 
 ## Phases
 
-| Phase | TV | Phone with a TV | Exit |
-| --- | --- | --- | --- |
-| `play` | All lanes, approaching obstacles, distance, surviving count and round clock | Your lane and distance; JUMP and HOLD DUCK; crashed players watch the race | All runners crash, 60s cap, or VIP skip → `score` |
-| `score` | Frozen race, round distances and cumulative standings | Your round metres and match total | 4.5s, or VIP skip → next `play` or `done` |
-| `done` | Winner or shared winners and final standings | Your rank and match distance | Terminal; `results()` is available |
+| Phase   | TV                                                                          | Phone with a TV                                                            | Exit                                              |
+| ------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------- |
+| `play`  | All lanes, approaching obstacles, distance, surviving count and round clock | Your lane and distance; JUMP and HOLD DUCK; crashed players watch the race | All runners crash, 60s cap, or VIP skip → `score` |
+| `score` | Frozen race, round distances and cumulative standings                       | Your round metres and match total                                          | 4.5s, or VIP skip → next `play` or `done`         |
+| `done`  | Winner or shared winners and final standings                                | Your rank and match distance                                               | Terminal; `results()` is available                |
 
 ### Phone only
 
@@ -36,11 +36,11 @@ A phone-only room (`ctx.presence.phoneOnly`) and a player unable to see a TV
 (`canSeeTv: false`) receive the public race on the phone. These screens never ask
 anyone to look at a TV. `usePhoneOnly` and the SDK provider mirror the reference port.
 
-| Phase | Phone-only stage |
-| --- | --- |
-| `play` | Your readable lane above the controls, survival status and other runners' progress; after a crash, the continuing public race |
-| `score` | Frozen race and compact round/cumulative standings |
-| `done` | Winner, your rank and compact final standings |
+| Phase   | Phone-only stage                                                                                                              |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `play`  | Your readable lane above the controls, survival status and other runners' progress; after a crash, the continuing public race |
+| `score` | Frozen race and compact round/cumulative standings                                                                            |
+| `done`  | Winner, your rank and compact final standings                                                                                 |
 
 Play fits a 390×844 phone without scrolling. A spectator sees the public stage and
 standings without JUMP or HOLD DUCK. A 1920×1080 TV uses the race as its focal point.
@@ -81,9 +81,9 @@ survivor continues to earn distance until crashing or reaching the cap.
 
 ## Settings
 
-| Key | Type | Default | Range |
-| --- | --- | --- | --- |
-| `rounds` | number | 3 | 1–5 |
+| Key      | Type   | Default | Range |
+| -------- | ------ | ------- | ----- |
+| `rounds` | number | 3       | 1–5   |
 
 ## Content
 
@@ -103,4 +103,7 @@ corroborate the simple action set and pacing; an
 [independent learning experiment](https://arxiv.org/pdf/2008.06799) corroborates the
 automatic run, distance score and death loop. Detailed constants, source differences
 and adaptations: [RESEARCH.md](../../jobs/P13-dino-dash/RESEARCH.md) and
-[SOURCES.md](../../jobs/P13-dino-dash/SOURCES.md). No source assets or sounds are reused.
+[SOURCES.md](../../jobs/P13-dino-dash/SOURCES.md). Direct play of the
+[historical wayou fork](https://wayou.github.io/t-rex-runner/) confirmed jump,
+auto-run and duck/release; its smaller-screen measured speed is distinguished from
+Chromium's base configuration in the research. No source assets or sounds are reused.
