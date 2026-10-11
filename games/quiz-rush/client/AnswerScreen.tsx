@@ -34,6 +34,10 @@ export function AnswerScreen({
   const seat = view.players.find((player) => player.id === view.me.id);
   const waiting = seat?.status === 'waiting';
   const disconnected = seat?.connected === false;
+  const eligible = view.players.filter(
+    (player) => player.connected && (player.status === 'active' || player.status === 'submitted'),
+  );
+  const answered = eligible.filter((player) => player.status === 'submitted').length;
   const question = view.question;
   const seconds =
     view.deadline === null ? null : Math.max(0, Math.ceil((view.deadline - now) / 1000));
@@ -43,7 +47,9 @@ export function AnswerScreen({
       : disconnected
         ? L('Disconnected. Waiting to reconnect.')
         : view.submitted
-          ? L('✓ Answer locked in')
+          ? stage
+            ? L('✓ Answer locked in · {n} of {m} answered', { n: answered, m: eligible.length })
+            : L('✓ Answer locked in')
           : seconds === 0
             ? L('Time is up')
             : pending

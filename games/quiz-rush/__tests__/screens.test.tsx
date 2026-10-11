@@ -85,13 +85,16 @@ fixtures.push({
 });
 const cases: EvidenceCase[] = [];
 
-function render(state: State, surface: Surface): string {
+function render(state: State, surface: Surface, remoteStage = false): string {
   const phoneOnly = surface === 'phone-only';
   const stable: State = {
     ...state,
     phoneOnly,
     players: Object.fromEntries(
-      Object.entries(state.players).map(([id, player]) => [id, { ...player, canSeeTv: true }]),
+      Object.entries(state.players).map(([id, player]) => [
+        id,
+        { ...player, canSeeTv: !(remoteStage && id === 'p1') },
+      ]),
     ),
   };
   const time = stable.phase.startedAt + 1000;
@@ -216,6 +219,44 @@ describe.each([
       expect(html).toContain(status);
       expect(html).not.toContain('Send again');
     }
+  });
+});
+
+describe.each([
+  { name: 'all eight connected seats', exclusions: false, progress: '1 of 8 answered' },
+  { name: 'left and disconnected answers excluded', exclusions: true, progress: '1 of 6 answered' },
+])('locked-answer progress: $name', ({ exclusions, progress }) => {
+  it('shows progress on phone-only and remote stages while TV-room phones keep a simple lock', () => {
+    const state: State = {
+      ...question,
+      answers: {
+        p1: { choice: 0, elapsed: 1000 },
+        ...(exclusions
+          ? { p2: { choice: 1, elapsed: 1100 }, p3: { choice: 2, elapsed: 1200 } }
+          : {}),
+      },
+      left: exclusions ? ['p3'] : [],
+      players: {
+        ...question.players,
+        p2: { ...question.players.p2!, connected: !exclusions },
+      },
+    };
+    for (const [surface, remote] of [
+      ['phone-only', false],
+      ['phone-tv', true],
+    ] as const) {
+      const html = render(state, surface, remote);
+      expect(html).toContain(`✓ Answer locked in · ${progress}`);
+      const pads = html.match(/<button\b[^>]*>/g) ?? [];
+      expect(pads).toHaveLength(4);
+      expect(pads.every((pad) => /\bdisabled=""/.test(pad))).toBe(true);
+      expect(html).not.toMatch(/Send again|Correct!|Not this time|Too slow/);
+      expect(html).not.toContain(state.deck[0]!.explanation);
+    }
+    const tvPhone = render(state, 'phone-tv');
+    expect(tvPhone).toContain('✓ Answer locked in');
+    expect(tvPhone).not.toContain(progress);
+    expect(tvPhone).not.toContain(state.deck[0]!.prompt);
   });
 });
 
