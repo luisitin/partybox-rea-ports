@@ -18,4 +18,6 @@ P09 r8-local 2026-10-11T21:41:02Z job/P09-2048-race
 
 P10 r9-local 2026-10-11T21:43:08Z job/P10-word-guess-race
 
+P11 r11-local 2026-10-11T21:44:02Z job/P11-tetris-clash
+
 <!-- prettier-ignore-end -->
