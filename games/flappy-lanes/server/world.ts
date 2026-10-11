@@ -125,10 +125,17 @@ export function applyFlap(world: World, id: string, t: number): World {
   )
     return world;
   // Inputs between grid samples must not rescue an already overlapping glider.
-  if (collides(world, bird, t))
-    return { ...world, birds: world.birds.map((b) => (b === bird ? { ...b, died: t } : b)) };
+  const hits = new Set(world.birds.filter((b) => b.died === null && collides(world, b, t)));
+  const judged =
+    hits.size === 0
+      ? world
+      : {
+          ...world,
+          birds: world.birds.map((b) => (hits.has(b) ? { ...b, died: t } : b)),
+        };
+  if (hits.has(bird)) return judged;
   const next = { ...bird, flight: { at: t, y: birdPosition(bird, t).y, v: FLAP_V }, lastFlap: t };
-  return { ...world, birds: world.birds.map((b) => (b === bird ? next : b)) };
+  return { ...judged, birds: judged.birds.map((b) => (b === bird ? next : b)) };
 }
 
 /** Future obstacles beyond the screen are hidden from humans and bot decisions alike. */

@@ -1,12 +1,12 @@
 // Timer beats advance every lane, including disconnected players. Inputs cannot revive a crash.
-import { enterPhase, hasPlayer, isTimerFor, nextStep } from '@partybox/game-sdk';
+import { compareCodeUnits, enterPhase, hasPlayer, isTimerFor, nextStep } from '@partybox/game-sdk';
 import type { GameEvent } from '@partybox/game-sdk';
 import type { State, Transition } from '../types';
 import { ROUND_MS, TICK_MS, applyFlap, finished, makeWorld, tick } from '../world';
 import type { Input } from '../world';
 
 export function enterPlay(state: State, now: number, round: number): State {
-  const [world, rng] = makeWorld(state.rng, Object.keys(state.players));
+  const [world, rng] = makeWorld(state.rng, Object.keys(state.players).sort(compareCodeUnits));
   return enterPhase(
     { ...state, world, rng, began: now, endsAt: now + ROUND_MS, round, lastPoints: {} },
     'play',
@@ -36,7 +36,11 @@ export function advancePlay(state: State, now: number, next: Transition): State 
 }
 export function reducePlay(state: State, event: GameEvent<Input>, next: Transition): State {
   if (event.type === 'timer')
-    return isTimerFor(state, event) ? advancePlay(state, event.now, next) : state;
+    return isTimerFor(state, event) &&
+      state.phase.deadline !== null &&
+      event.now >= state.phase.deadline
+      ? advancePlay(state, event.now, next)
+      : state;
   if (
     event.type !== 'input' ||
     !hasPlayer(state, event.playerId) ||
