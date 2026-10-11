@@ -1,0 +1,23 @@
+{
+  "seeds": 1003,
+  "requiredSeeds": [1, 2, 3],
+  "additionalSeeds": 1000,
+  "shuffleSeed": 365956382,
+  "events": 37111,
+  "fullViewAndRangeAudits": 7021,
+  "invariants": [
+    "deep-frozen state and events",
+    "same-seed replay after every event",
+    "JSON round-trip",
+    "state ≤256KiB",
+    "views ≤64KiB",
+    "finite geometry",
+    "wrapped x range",
+    "nonnegative integer scores",
+    "peak bound",
+    "private RNG/world excluded",
+    "future platforms excluded",
+    "result completeness"
+  ],
+  "passed": true
+}

@@ -7,7 +7,11 @@ import type { Input, State, Transition } from '../types';
 
 export function freshRound(state: State, round: number): State {
   const [world, rng] = makeWorld(state.rng, Object.keys(state.players));
-  return { ...state, world, rng, round, elapsed: 0, lastPoints: {} };
+  const seats = {
+    ...world,
+    climbers: world.climbers.map((c) => (state.left.includes(c.id) ? { ...c, died: 0 } : c)),
+  };
+  return { ...state, world: seats, rng, round, elapsed: 0, lastPoints: {} };
 }
 export function enterReady(state: State, now: number): State {
   return enterPhase(freshRound(state, state.round + 1), 'ready', now, READY_MS);

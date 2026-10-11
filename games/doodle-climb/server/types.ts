@@ -6,7 +6,7 @@ export const PHASES = ['play', 'score', 'ready', 'done'] as const;
 export const W = 240;
 export const H = 320;
 export const STEP_MS = 20;
-export const TICK_MS = 100;
+export const TICK_MS = 200;
 export const GRAVITY = 600;
 export const BOUNCE = 330;
 export const SPRING = 440;
@@ -52,5 +52,6 @@ export interface State extends GameStateBase {
   lastPoints: Record<string, number>;
   settings: { rounds: number; seconds: number };
   phoneOnly: boolean;
+  left: string[];
 }
 export type Transition = (state: State, now: number) => State;

@@ -67,6 +67,7 @@ function init(ctx: InitContext): State {
         seconds: numberSetting(manifest, ctx.settings, 'seconds'),
       },
       phoneOnly: ctx.presence?.phoneOnly ?? false,
+      left: [],
     },
     ctx.now,
   );
@@ -91,9 +92,19 @@ function prepare(state: State, event: GameEvent<Input>): State {
     const ms = pausedFor(state, event.now);
     return { ...state, began: state.began + ms, endsAt: state.endsAt + ms };
   }
-  return !state.phase.paused && ['pause', 'end', 'skip'].includes(event.action)
-    ? settle(state, event.now)
-    : state;
+  if (state.phase.paused || !['pause', 'end', 'skip'].includes(event.action)) return state;
+  const settled = settle(state, event.now);
+  // A phone releases held keys when the pause removes its controls; that input is paused too.
+  // Release on the authoritative pause so a resumed jumper never inherits a hidden hold.
+  return event.action === 'pause'
+    ? {
+        ...settled,
+        world: {
+          ...settled.world,
+          climbers: settled.world.climbers.map((c) => ({ ...c, dir: 0 })),
+        },
+      }
+    : settled;
 }
 
 const reduce = composeReduce<State, Input>({
@@ -103,11 +114,17 @@ const reduce = composeReduce<State, Input>({
   end: enterDone,
   prepare,
   onPlayer: (state, event) => {
-    const s = setConnected(state, event);
-    if (!hasPlayer(state, event.playerId) || event.connected) return s;
+    if (!hasPlayer(state, event.playerId)) return state;
+    const settled =
+      !event.connected && state.phase.id === 'play' && !state.phase.paused
+        ? settle(state, event.now)
+        : state;
+    const s = setConnected(settled, event);
+    if (event.connected) return s;
     // A lost hold ends immediately; the jumper still bounces and the clock carries on.
     return {
       ...s,
+      left: event.gone && !s.left.includes(event.playerId) ? [...s.left, event.playerId] : s.left,
       world: {
         ...s.world,
         climbers: s.world.climbers.map((c) =>

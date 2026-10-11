@@ -47,6 +47,7 @@ export function useSteering(
   useEffect(() => {
     sources.current.clear();
     sent.current = 0;
+    setLit({ key: roundKey, left: false, right: false });
     if (!enabled) return;
     const key =
       (down: boolean) =>
