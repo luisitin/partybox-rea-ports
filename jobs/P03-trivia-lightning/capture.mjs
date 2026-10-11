@@ -2,6 +2,7 @@
 // Uses the installed Chrome, one browser and one page; no downloaded browser or dependency.
 import { auditLayout } from './capture-audit.mjs';
 import { closePrivateChrome } from './capture-processes.mjs';
+import { runInteractionAudit } from './interaction.mjs';
 import { spawn } from 'node:child_process';
 import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -19,6 +20,7 @@ let cdp;
 let profile;
 let exited = false;
 let chromeError;
+let debuggingUrl;
 
 function interrupt() {
   stopping = true;
@@ -224,7 +226,18 @@ async function captureWithRetry(name, sessionId) {
 }
 
 async function stopBrowser() {
+  let processes = [];
+  console.log('P03 cleanup: reading CDP process membership');
+  try {
+    if (cdp) ({ processInfo: processes } = await cdp.send('SystemInfo.getProcessInfo'));
+    console.log(
+      `P03 cleanup: CDP members ${JSON.stringify(processes.map(({ type, id }) => ({ type, id })))}`,
+    );
+  } catch {
+    // The cleanup helper falls back to exact-profile checks if CDP is already unavailable.
+  }
   const gracefulClose = async () => {
+    console.log('P03 cleanup: closing the private browser');
     try {
       // CDP addresses the actual browser even after its initial launcher process exits.
       if (cdp) await Promise.race([cdp.send('Browser.close'), sleep(3000)]);
@@ -234,7 +247,11 @@ async function stopBrowser() {
   };
   let browserCleanup;
   if (process.platform === 'win32')
-    browserCleanup = await closePrivateChrome(profile, gracefulClose);
+    browserCleanup = await closePrivateChrome(profile, gracefulClose, {
+      processes,
+      launcherPid: browser?.pid,
+      endpointUrl: debuggingUrl,
+    });
   else {
     try {
       await gracefulClose();
@@ -248,6 +265,7 @@ async function stopBrowser() {
     for (let attempt = 0; !exited && attempt < 30; attempt++) await sleep(100);
   }
   if (profile) {
+    console.log('P03 cleanup: browser verified closed; removing its temporary profile');
     const tempRoot = resolve(tmpdir());
     const target = resolve(profile);
     const local = relative(tempRoot, target);
@@ -259,7 +277,9 @@ async function stopBrowser() {
     )
       throw new Error(`Refusing cleanup outside the private capture profile: ${target}`);
     try {
-      await rm(target, { recursive: true, force: true, maxRetries: 8, retryDelay: 250 });
+      // Windows can retain profile locks until this helper itself exits. Do not retry every
+      // locked file and delay the already-verified browser shutdown by several minutes.
+      await rm(target, { recursive: true, force: true, maxRetries: 0 });
       return { browser: browserCleanup ?? { launcherExited: exited }, profileRemoved: true };
     } catch (error) {
       if (error.code !== 'EBUSY' || !browserCleanup?.verifiedClosed) throw error;
@@ -271,8 +291,11 @@ async function stopBrowser() {
 }
 
 async function main() {
-  const files = (await readdir(media)).filter((name) => name.endsWith('.html')).sort();
-  if (files.length === 0)
+  const interactionOnly = process.env.P03_INTERACTION_ONLY === '1';
+  const files = interactionOnly
+    ? []
+    : (await readdir(media)).filter((name) => name.endsWith('.html')).sort();
+  if (!interactionOnly && files.length === 0)
     throw new Error(`No HTML snapshots in ${media}. Generate P03 SSR media first.`);
   const report = { capturedAt: new Date().toISOString(), browser: chromePath, pages: [] };
   profile = await mkdtemp(join(tmpdir(), profilePrefix));
@@ -297,7 +320,8 @@ async function main() {
     browser.once('exit', () => {
       exited = true;
     });
-    cdp = await Cdp.connect(await chromeEndpoint());
+    debuggingUrl = await chromeEndpoint();
+    cdp = await Cdp.connect(debuggingUrl);
     const { targetInfos } = await cdp.send('Target.getTargets');
     const pageTarget = targetInfos.find((target) => target.type === 'page');
     const { targetId } =
@@ -310,6 +334,15 @@ async function main() {
       try {
         const page = await captureWithRetry(name, sessionId);
         report.pages.push(page);
+        if (
+          page.overflow.horizontal ||
+          page.overflow.vertical ||
+          page.summary.controlIssues ||
+          page.summary.offscreen ||
+          page.summary.textClipped ||
+          page.summary.scrollContainers
+        )
+          process.exitCode = 1;
         console.log(
           `${name}: ${JSON.stringify({ ...page.summary, overflow: page.overflow, attempts: page.attempts.length })}`,
         );
@@ -319,6 +352,10 @@ async function main() {
         console.error(`${name}: ${String(error)}`);
       }
     }
+    if (stopping) throw new Error('Capture interrupted.');
+    // Reuse this browser and page for mounted React controls after the static phase audit.
+    report.interaction = await runInteractionAudit(cdp, sessionId, { writeHtml: false });
+    if (!report.interaction.passed) process.exitCode = 1;
   } finally {
     try {
       report.cleanup = await stopBrowser();
@@ -326,7 +363,11 @@ async function main() {
       report.cleanup = { browser: { verifiedClosed: false }, error: String(error) };
       throw error;
     } finally {
-      await writeFile(join(media, 'layout.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+      await writeFile(
+        join(media, interactionOnly ? 'interaction-capture.json' : 'layout.json'),
+        `${JSON.stringify(report, null, 2)}\n`,
+        'utf8',
+      );
     }
   }
 }

@@ -19,6 +19,7 @@ export function Controller({
   const now = useServerNow(250, view.paused, view.clockHeldAt);
   const play = useSound();
   const [pending, setPending] = useState<{ key: string; choice: number; at: number } | null>(null);
+  const [nextPending, setNextPending] = useState<{ key: string; at: number } | null>(null);
   const cued = useRef('');
   const question = view.question;
   const key = question ? `${view.phaseAt}:${question.index}:${question.id}` : '';
@@ -26,6 +27,9 @@ export function Controller({
   const freeze = Math.max(0, Math.ceil((view.freezeUntil - now) / 1000));
   const waiting = pending?.key === key && now - pending.at < 4000;
   const retry = pending?.key === key && !waiting;
+  const feedbackKey = view.feedback ? `${view.phaseAt}:${view.answered}` : '';
+  const nextWaiting = nextPending?.key === feedbackKey && now - nextPending.at < 4000;
+  const nextRetry = nextPending?.key === feedbackKey && !nextWaiting;
   const disabled = view.paused || freeze > 0 || seconds === 0;
   const livePlace = 1 + view.lanes.filter((lane) => lane.score > view.score).length;
   const liveTied = view.lanes.filter((lane) => lane.score === view.score).length > 1;
@@ -76,10 +80,13 @@ export function Controller({
             <button
               type="button"
               className={styles.next}
-              disabled={disabled}
-              onClick={() => send({ type: 'next', index: view.answered })}
+              disabled={disabled || nextWaiting}
+              onClick={() => {
+                setNextPending({ key: feedbackKey, at: now });
+                send({ type: 'next', index: view.answered });
+              }}
             >
-              {L('Next question →')}
+              {nextWaiting ? L('Sending…') : L('Next question →')}
             </button>
           </div>
         ) : question ? (
@@ -126,18 +133,22 @@ export function Controller({
       <p className={styles.status} role="status">
         {freeze > 0
           ? L('❄ Frozen · Back in {n}s', { n: freeze })
-          : waiting
-            ? L('✓ Sending your answer…')
-            : retry && !view.feedback
-              ? L('Answer not confirmed — tap again')
-              : view.streak > 1
-                ? L('🔥 {n} correct in a row', { n: view.streak })
-                : phoneOnly
-                  ? L('Your pace. Your questions. Highest score wins.')
-                  : L('Answer at your own pace. Highest score wins.')}
+          : nextWaiting
+            ? L('Sending Next…')
+            : nextRetry
+              ? L('Next not confirmed — tap again')
+              : waiting
+                ? L('✓ Sending your answer…')
+                : retry && !view.feedback
+                  ? L('Answer not confirmed — tap again')
+                  : view.streak > 1
+                    ? L('🔥 {n} correct in a row', { n: view.streak })
+                    : phoneOnly
+                      ? L('Your pace. Your questions. Highest score wins.')
+                      : L('Answer at your own pace. Highest score wins.')}
       </p>
       {view.powersEnabled ? (
-        <PowerBar view={view} send={send} disabled={disabled || waiting} />
+        <PowerBar view={view} send={send} disabled={disabled || waiting || nextWaiting} now={now} />
       ) : null}
     </div>
   );

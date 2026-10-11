@@ -34,6 +34,7 @@ freezes a leading rival when there is time to catch up, otherwise doubles its ne
 
 - `answer { questionId, index, choice }`: exactly once for the current cursor (0–3 choice).
 - `next { index }`: clears the previous verdict at the current answered count; advances no score.
+- Answer, Next and power controls wait for authoritative state; repeated taps are disabled while pending, with an explicit retry after 4 s.
 - `power { power: 'double', charge }` or `power { power: 'freeze', target, charge }`: costs one earned energy.
   `charge` is the current earning milestone, floor(correct / 3), from 1 to 6; stale retries cannot spend a later refill.
 - Unknown seats, spectators, stale cursors, late/duplicate answers, paused or disconnected input are ignored.

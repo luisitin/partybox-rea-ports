@@ -2,12 +2,15 @@
 // Every forced stop rechecks the unique profile, PID, creation time and full command line.
 import { spawn } from 'node:child_process';
 import { resolve } from 'node:path';
+import { closeKnownChrome } from './capture-native.mjs';
 
 const literal = (value) => `'${String(value).replaceAll("'", "''")}'`;
 const sleep = (ms) => new Promise((done) => setTimeout(done, ms));
 
-function powershell(script) {
+function powershell(script, label = 'process check') {
   return new Promise((done, reject) => {
+    const started = Date.now();
+    console.log(`Chrome cleanup: ${label} started.`);
     const command = `[Console]::OutputEncoding = [Text.UTF8Encoding]::new($false); ${script}`;
     const child = spawn('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', command], {
       windowsHide: true,
@@ -24,6 +27,9 @@ function powershell(script) {
       clearTimeout(flush);
       child.stdout.destroy();
       child.stderr.destroy();
+      console.log(
+        `Chrome cleanup: ${label} ${error || code !== 0 ? 'failed' : 'finished'} after ${Date.now() - started} ms.`,
+      );
       if (error) reject(error);
       else if (code !== 0) reject(new Error(`Chrome process check failed: ${errors.trim()}`));
       else {
@@ -67,7 +73,8 @@ const profileFilter = (profile) => `
 `;
 
 function scopedProcesses(profile) {
-  return powershell(`
+  return powershell(
+    `
     $ErrorActionPreference = 'Stop';
     ${profileFilter(profile)}
     $active = @(); $exited = @();
@@ -92,11 +99,14 @@ function scopedProcesses(profile) {
       } finally { if ($native) { $native.Dispose(); } }
     }
     ConvertTo-Json -InputObject @{ active=$active; exited=$exited } -Compress -Depth 4;
-  `);
+  `,
+    'scoped Chrome query',
+  );
 }
 
 function stopMatchingProcesses(profile, records) {
-  return powershell(`
+  return powershell(
+    `
     $ErrorActionPreference = 'Stop';
     ${profileFilter(profile)}
     $expected = ConvertFrom-Json -InputObject ${literal(JSON.stringify(records))};
@@ -111,11 +121,21 @@ function stopMatchingProcesses(profile, records) {
       }
     }
     ConvertTo-Json -InputObject $stopped -Compress;
-  `);
+  `,
+    'scoped Chrome stop',
+  );
 }
 
 /** Gracefully close the actual CDP browser, then prove its unique profile has no live Chrome. */
-export async function closePrivateChrome(profile, gracefulClose) {
+export async function closePrivateChrome(profile, gracefulClose, known) {
+  let nativeFallback;
+  if (known?.processes?.some((process) => String(process.type).toLowerCase() === 'browser')) {
+    const native = await closeKnownChrome(resolve(profile), gracefulClose, known, powershell);
+    if (native?.verifiedClosed) return native;
+    nativeFallback = native;
+    // Native snapshot failure still closes the browser before scoped CIM fallback.
+    if (native?.gracefulCloseAttempted) gracefulClose = async () => {};
+  }
   let before = { active: [], exited: [] };
   let snapshotWarning;
   try {
@@ -168,5 +188,6 @@ export async function closePrivateChrome(profile, gracefulClose) {
       : {}),
     ...(snapshotWarning ? { snapshotWarning } : {}),
     ...(gracefulWarning ? { gracefulWarning } : {}),
+    ...(nativeFallback ? { nativeFallback } : {}),
   };
 }

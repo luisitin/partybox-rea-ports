@@ -20,7 +20,9 @@
 - Round 4 implements scored/place-labeled full-width freeze selection and earning-milestone
   replay protection. All 47 rule/screen tests pass; real mounted selection checks await capture.
 - Round 5 adds score-derived leader/tied-leader cues; 29 screen tests pass.
-- Remaining: final verification/mutations; power/Next acknowledgement and permanent-leaver
-  watching mode on return; final captures/hashes; three
+- Round 6 mounted React audit passes all 49 checks and 11 capture layouts, including delayed
+  power/Next retries, duplicate suppression and target disconnect; Chrome closure proven in finally.
+- Remaining: final verification/mutations; permanent-leaver watching mode on return, named freeze
+  attribution and verdict cue deduplication across phases; final captures/hashes; three
   stable audit passes and final green CI. The real React interaction harness is ready to integrate.
 - Install completed using corepack enable and pnpm.cmd install (PowerShell blocks pnpm.ps1).
