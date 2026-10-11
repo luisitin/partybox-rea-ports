@@ -20,8 +20,9 @@ export function normalizePoint(clientX: number, clientY: number, rect: DOMRect):
 }
 
 export function useSlice(view: SliceControllerView, send: (input: Input) => void, now: number) {
-  const current = useRef({ view, send });
+  const current = useRef({ view, send, now });
   const stroke = useRef<Stroke | null>(null);
+  const pending = useRef<{ seq: number; at: number } | null>(null);
   const sequence = useRef(view.lastSeq);
   const [drawing, setDrawing] = useState<Stroke | null>(null);
   const [hint, setHint] = useState('');
@@ -29,8 +30,8 @@ export function useSlice(view: SliceControllerView, send: (input: Input) => void
     view.phaseId === 'play' && view.me.role === 'player' && !view.bombed && !view.paused;
 
   useEffect(() => {
-    current.current = { view, send };
-  }, [view, send]);
+    current.current = { view, send, now };
+  }, [view, send, now]);
 
   const submit = useCallback((wave: number, frame: number, points: Point[]): void => {
     const latest = current.current;
@@ -43,6 +44,7 @@ export function useSlice(view: SliceControllerView, send: (input: Input) => void
       return;
     if (wave !== latest.view.wave) return;
     sequence.current = Math.max(sequence.current + 1, latest.view.lastSeq + 1);
+    pending.current = { seq: sequence.current, at: latest.now };
     latest.send({ type: 'slice', wave, frame, seq: sequence.current, points });
   }, []);
 
@@ -72,6 +74,17 @@ export function useSlice(view: SliceControllerView, send: (input: Input) => void
     else if (stroke.current && (now >= stroke.current.until || view.wave !== stroke.current.wave))
       finish();
   }, [enabled, now, view.wave, cancel, finish]);
+  useEffect(() => {
+    const sent = pending.current;
+    if (!sent) return;
+    if (view.lastSeq >= sent.seq) {
+      pending.current = null;
+      setHint('');
+    } else if (now - sent.at >= 1000) {
+      pending.current = null;
+      setHint('That swipe arrived late — try again');
+    }
+  }, [now, view.lastSeq]);
 
   const append = (event: PointerEvent<HTMLDivElement>): void => {
     const active = stroke.current;
