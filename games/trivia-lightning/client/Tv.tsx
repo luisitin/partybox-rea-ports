@@ -52,9 +52,7 @@ export function Tv({ view }: GameTvProps<TriviaTvView>): JSX.Element {
       )}
       <p className={styles.footer}>
         {view.phaseId === 'race'
-          ? L('Answer on your phone · {total} questions · Highest score wins', {
-              total: view.total,
-            })
+          ? L('Answer on your phone · Track = answered questions · Highest score wins')
           : shown
             ? L('Same score? Same place. Every correct answer counted.')
             : L('The race is over. Who made the top three?')}

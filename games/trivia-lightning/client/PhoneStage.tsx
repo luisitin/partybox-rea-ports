@@ -1,6 +1,6 @@
 // The public stage on a phone, including spectators. It never contains gameplay buttons.
 import type { JSX } from 'react';
-import { usePhoneOnly, useT } from '@partybox/game-sdk/ui';
+import { useT } from '@partybox/game-sdk/ui';
 import type { TriviaControllerView } from '../server/index';
 import { Podium } from './Podium';
 import { RaceTrack } from './RaceTrack';
@@ -15,7 +15,6 @@ export function PhoneStage({
   seconds: number;
 }): JSX.Element {
   const L = useT(STRINGS);
-  const phoneOnly = usePhoneOnly();
   const player = view.me.role === 'player';
   const final = view.phaseId === 'done' || view.podiumStep >= 3;
   const top = Math.max(0, ...view.lanes.map((lane) => lane.score));
@@ -76,11 +75,7 @@ export function PhoneStage({
       ) : null}
       <p className={styles.stageHint}>
         {view.phaseId === 'race'
-          ? player
-            ? phoneOnly
-              ? L('Follow the race here. Highest score wins.')
-              : L('Follow the race here or on the TV. Highest score wins.')
-            : L('Watching the racers · Highest score wins')
+          ? L('Track = answered questions · Highest score wins')
           : final
             ? L('Same score? Same place.')
             : L('Third, second… then the winner.')}

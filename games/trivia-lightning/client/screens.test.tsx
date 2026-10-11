@@ -6,6 +6,7 @@ import { game } from '../server/index';
 import type { TriviaControllerView } from '../server/index';
 import { Controller } from './Controller';
 import { Podium } from './Podium';
+import { RaceTrack } from './RaceTrack';
 import { Tv } from './Tv';
 
 const players = Array.from({ length: 8 }, (_, i) => ({
@@ -170,6 +171,46 @@ describe('Trivia Lightning screens', () => {
     expect(html).not.toContain(view.question!.prompt);
     for (const answer of view.question!.options) expect(html).not.toContain(`>${answer}<`);
     expect(html.match(/role="progressbar"/g)).toHaveLength(8);
+    expect(html).toContain('Track = answered questions');
+  });
+
+  it.each([false, true])('zero-point finishing creates no leader cue (compact=%s)', (compact) => {
+    const lanes = view.lanes.map((lane) =>
+      lane.id === 'p1' ? { ...lane, answered: 12, finished: true } : lane,
+    );
+    const html = renderToStaticMarkup(<RaceTrack lanes={lanes} total={12} compact={compact} />);
+    expect(html).toContain('✓ Finished');
+    expect(html).not.toContain('★ Leader');
+    expect(html).not.toContain('★ Tied lead');
+    expect(html).toContain('aria-valuenow="12"');
+  });
+
+  it.each([
+    { label: 'Frozen', patch: { frozen: true } },
+    { label: 'Offline', patch: { connected: false } },
+    { label: 'Finished', patch: { finished: true, answered: 12 } },
+  ])('a positive-score leader keeps its $label state visible', ({ label, patch }) => {
+    const lanes = view.lanes.map((lane) =>
+      lane.id === 'p7' ? { ...lane, score: 840, answered: 6, ...patch } : lane,
+    );
+    for (const compact of [false, true]) {
+      const html = renderToStaticMarkup(<RaceTrack lanes={lanes} total={12} compact={compact} />);
+      expect(html.match(/★ Leader/g)).toHaveLength(1);
+      expect(html).toContain(`★ Leader · ${label}`);
+      expect(html).not.toContain('★ Tied lead');
+      expect(html.match(/role="progressbar"/g)).toHaveLength(8);
+    }
+  });
+
+  it.each([false, true])('positive tied leaders are marked distinctly (compact=%s)', (compact) => {
+    const lanes = view.lanes.map((lane) =>
+      lane.id === 'p2' || lane.id === 'p3' ? { ...lane, score: 360, answered: 3 } : lane,
+    );
+    const html = renderToStaticMarkup(<RaceTrack lanes={lanes} total={12} compact={compact} />);
+    expect(html.match(/★ Tied lead/g)).toHaveLength(2);
+    expect(html).toContain('★ Tied lead · 3/12');
+    expect(html).not.toContain('★ Leader');
+    expect(html).toContain('aria-valuenow="3"');
   });
 
   it('private feedback names the correct previous answer and a next action', () => {

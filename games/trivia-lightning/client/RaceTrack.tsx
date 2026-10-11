@@ -17,6 +17,7 @@ export interface RaceTrackProps {
 
 export function RaceTrack({ lanes, total, compact, meId, ranked }: RaceTrackProps): JSX.Element {
   const L = useT(STRINGS);
+  const top = Math.max(0, ...lanes.map((lane) => lane.score));
   return (
     <ol
       className={styles.lanes}
@@ -27,6 +28,29 @@ export function RaceTrack({ lanes, total, compact, meId, ranked }: RaceTrackProp
         const progress = Math.min(1, Math.max(0, lane.answered / Math.max(1, total)));
         const rank = 1 + lanes.filter((other) => other.score > lane.score).length;
         const tied = lanes.filter((other) => other.score === lane.score).length > 1;
+        const leading = !ranked && top > 0 && lane.score === top;
+        const status = ranked
+          ? tied
+            ? L('Tied {rank} · {n} correct', { rank, n: lane.correct })
+            : L('Place {rank} · {n} correct', { rank, n: lane.correct })
+          : leading
+            ? L('{lead} · {status}', {
+                lead: tied ? L('★ Tied lead') : L('★ Leader'),
+                status: lane.finished
+                  ? L('Finished')
+                  : lane.frozen
+                    ? L('Frozen')
+                    : !lane.connected
+                      ? L('Offline')
+                      : L('{n}/{total}', { n: lane.answered, total }),
+              })
+            : lane.finished
+              ? L('✓ Finished')
+              : lane.frozen
+                ? L('❄ Frozen')
+                : !lane.connected
+                  ? L('↻ Reconnecting')
+                  : L('{n} / {total} answered', { n: lane.answered, total });
         const css: CSSProperties = {
           ['--pb-lane-color' as string]: `var(--pb-player-${(slot % 8) + 1})`,
           ['--pb-runner-progress' as string]: progress,
@@ -45,19 +69,7 @@ export function RaceTrack({ lanes, total, compact, meId, ranked }: RaceTrackProp
                 <b className={styles.name} title={lane.name}>
                   {lane.name}
                 </b>
-                <span className={styles.state}>
-                  {ranked
-                    ? tied
-                      ? L('Tied {rank} · {n} correct', { rank, n: lane.correct })
-                      : L('Place {rank} · {n} correct', { rank, n: lane.correct })
-                    : lane.finished
-                      ? L('✓ Finished')
-                      : lane.frozen
-                        ? L('❄ Frozen')
-                        : !lane.connected
-                          ? L('↻ Reconnecting')
-                          : L('{n} / {total} answered', { n: lane.answered, total })}
-                </span>
+                <span className={styles.state}>{status}</span>
               </div>
             </div>
             <div

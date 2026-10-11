@@ -61,6 +61,7 @@ does not end another connected player's race and gives no extra points.
 - Repeated power requests cannot spend twice or consume a later earned charge. Held energy stays capped at one and uses the latest earning milestone.
   Finished, offline, self and already frozen targets are refused without spending energy.
 - The freeze picker lists eligible rivals by points, showing place, score and full name; a chosen rival stays selected while eligible.
+- The track measures answers, while positive-score leaders carry a Leader or Tied lead label; finishing with zero points never marks a leader.
 
 ## Settings
 
