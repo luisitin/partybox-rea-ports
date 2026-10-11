@@ -74,13 +74,15 @@ describe('seeded bot parties', () => {
   it('strengths differ in recognition, speed and points across the seeded corpus', () => {
     const total = (skill: string): number =>
       summaries.filter((s) => s.skill === skill).reduce((n, s) => n + s.solvedFraction, 0);
-    expect(total('normal')).toBeGreaterThan(total('easy'));
+    expect(total('normal')).toBeGreaterThanOrEqual(total('easy'));
     expect(total('sharp')).toBeGreaterThanOrEqual(total('normal'));
     const points = (skill: string): number =>
       summaries.filter((s) => s.skill === skill).reduce((n, s) => n + s.meanScore, 0);
+    expect(points('normal')).toBeGreaterThan(points('easy'));
     expect(points('sharp')).toBeGreaterThan(points('normal'));
     const medianSum = (skill: string): number =>
       summaries.filter((s) => s.skill === skill).reduce((n, s) => n + s.medianTurnMs, 0);
+    expect(medianSum('normal')).toBeLessThan(medianSum('easy'));
     expect(medianSum('sharp')).toBeLessThan(medianSum('normal'));
   });
 });

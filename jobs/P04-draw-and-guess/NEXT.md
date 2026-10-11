@@ -10,6 +10,8 @@ and green CI. R3 skips an empty reveal after a choosing artist departs.
 R4-R9 protect Clear, identify final winners, announce the next artist,
 cue public solves/final ticks, meet all-theme ink contrast, and show full names.
 32 HTML/PNG screens fit, all8long names visible; 13live checks pass. R10 restricts
-bot guesses to the public selected deck; rerun full scope and simulations,
-then review until three consecutive rounds find no player-visible gain.
+bot guesses to the public selected deck; all7,000matches terminate and easy
+bots solve faster. Finish R11 geometry-aware dense-ink simplification, repeat
+the scoped checks, then review until three consecutive rounds find no
+player-visible gain. No-gain count is zero after the latest substantive fix.
 Original interactive play was unavailable (CUA exposes no browser); see research.

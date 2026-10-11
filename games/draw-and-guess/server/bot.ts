@@ -1,7 +1,7 @@
 // Artists draw original pictograms. Guessers read only public ink, mask and their own history.
 import { hasPlayer } from '@partybox/game-sdk';
 import type { Rng, BotSkill } from '@partybox/game-sdk';
-import { WORDS } from './content';
+import { vocabulary } from './content';
 import { maskedWord } from './phases/draw';
 import { BOT_ART } from './pictures';
 import type { Input, State, Stroke } from './types';
@@ -166,7 +166,9 @@ export function botInput(
     .map((part) => part.split(' ').join(''))
     .join(' ');
   const match = new RegExp(`^${seen.replace(/_/g, '[a-z]')}$`);
-  const candidates = WORDS.filter((word) => match.test(word) && !tried.includes(word));
+  const candidates = vocabulary(state.settings.difficulty).filter(
+    (word) => match.test(word) && !tried.includes(word),
+  );
   const picture = skill === 'easy' ? null : recognizeDrawing(state.strokes, candidates);
   const text =
     picture && candidates.includes(picture) && (skill === 'sharp' || rng.float() < 0.65)

@@ -103,3 +103,16 @@ rows have zero truncation (before7/8truncated). Longest-word, keyboard-height,
 eight-way tie and reveal handoff screens were checked by hand. TV winner labels
 inherit32px roster type. A Windows Vitest worker emitted a cleanup timeout after
 10passing evidence assertions during desktop load; it exited0 and CI remainsgreen.
+
+R10: `pnpm.cmd vitest run games/draw-and-guess/__tests__/bot-deck.test.ts games/draw-and-guess/__tests__/recognition.test.ts --maxWorkers=1`
+passes14focused checks. Selected-deck filtering is measured across200seeds per
+strength and difficulty. The7,000-match easy-deck corpus now has100% eventual
+solves at all three strengths, with different latency and scores; this does not
+claim general human-doodle recognition or medium/hard balance. At2/4/8seats,
+median drawing seconds are easy24/32/32, normal4/8/12 and sharp4/4/4.
+Worst8-seat elapsed time is393seconds, below the1,440second doubled estimate.
+The initial full run passed146/147; its old strict solved-fraction comparison
+failed on the now-valid equal100% solve fractions and was replaced by
+monotonic completion plus strict speed/score comparisons.
+The corrected simulation command passes all9checks and all7,000games in30.51s
+with one worker. CI for R9 (workflow38178011652) passed in29seconds.
