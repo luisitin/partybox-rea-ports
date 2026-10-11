@@ -1,42 +1,119 @@
 {
-  "provenance": {
-    "command": "pnpm.cmd vitest run games/blob-arena --maxWorkers=1",
-    "sourceLog": "jobs/P05-blob-arena/full-tests.log",
-    "retainedVitestCache": "jobs/P05-blob-arena/full-first-cache.json",
-    "vitestVersion": "4.1.11",
-    "simulationSuite": "games/blob-arena/__tests__/sim.test.ts",
-    "simulationSuiteFailed": false,
-    "simulationSuiteDurationMs": 2379575.4897,
-    "fullRunSummary": { "passed": 104, "failed": 1, "total": 105, "durationSeconds": 2413.26 },
-    "fullRunFailure": "The newly added held-pad pause regression ran with the handler imported before the pause-clear patch.",
-    "sourceTiming": "This first full sweep loaded game modules before the pause-clear and pellet-distance-cache changes. It is not a green verification of the final tree.",
-    "rawPerCountConsoleReportsRetained": false,
-    "evidence": "The retained cache records the simulation file as passed. That file contains seven count-specific tests, each running 1,000 matches and asserting the median round length and match-time bound. Values below come from those passing assertions and their fixed test configuration; omitted score/event extrema were not retained."
+  "status": "passed",
+  "codeCommit": "9f69f5f",
+  "command": "pnpm.cmd vitest run games/blob-arena --maxWorkers=1 --reporter=verbose --reporter=json --outputFile=jobs/P05-blob-arena/full-tests.json --disableConsoleIntercept",
+  "fullSuite": {
+    "filesPassed": 7,
+    "testsPassed": 105,
+    "testsFailed": 0,
+    "exitCode": 0,
+    "durationSeconds": 1645.83
   },
-  "configuration": {
-    "counts": [2, 3, 4, 5, 6, 7, 8],
-    "seeds": { "first": 1, "last": 1000 },
-    "gamesPerCount": 1000,
-    "gamesTotal": 7000,
-    "gamesBySkillPerCount": { "easy": 334, "normal": 333, "sharp": 333 },
-    "roundsPerGame": 3,
-    "botDecisionMs": 1000,
-    "engineWakeMs": 200,
-    "physicsStepMs": 100
-  },
-  "assertionResults": [
-    { "players": 2, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 },
-    { "players": 3, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 },
-    { "players": 4, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 },
-    { "players": 5, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 },
-    { "players": 6, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 },
-    { "players": 7, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 },
-    { "players": 8, "gamesCompleted": 1000, "medianRoundMs": 90000, "maxGameMsUpperBound": 600000 }
+  "runsPerCount": 1000,
+  "seedRange": [1, 1000],
+  "counts": [2, 3, 4, 5, 6, 7, 8],
+  "games": 7000,
+  "totalEvents": 17959654,
+  "maxAllowedGameMs": 600000,
+  "reports": [
+    {
+      "players": 2,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 306,
+      "maxScore": 2760,
+      "totalEvents": 1860237
+    },
+    {
+      "players": 3,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 87,
+      "maxScore": 3987,
+      "totalEvents": 2105730
+    },
+    {
+      "players": 4,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 27,
+      "maxScore": 4974,
+      "totalEvents": 2346442
+    },
+    {
+      "players": 5,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 63,
+      "maxScore": 5469,
+      "totalEvents": 2579399
+    },
+    {
+      "players": 6,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 0,
+      "maxScore": 6468,
+      "totalEvents": 2805048
+    },
+    {
+      "players": 7,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 0,
+      "maxScore": 7248,
+      "totalEvents": 3024559
+    },
+    {
+      "players": 8,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 0,
+      "maxScore": 7662,
+      "totalEvents": 3238239
+    }
   ],
-  "derivedTiming": {
-    "gameMs": 289500,
-    "formula": "3 * 90000 + 3 * 6500",
-    "basis": "Fixed 90-second play phases and 6.5-second score phases driven at exact deadlines; this is derived from the reducer/test configuration, not a retained per-count maximum report."
-  },
-  "currentTreeFullVerification": "Pending the fresh full sweep after the pause-clear and behavior-equivalent pellet cache changes."
+  "provenance": "Exact console JSON from the fresh current-code full Vitest run, with PB_SIM_RUNS unset. Historical first-run evidence is separate in sim-first-report.json. The code remained unchanged for this complete run. Windows emitted nonfatal worker-termination warnings; final process exit was 0."
 }

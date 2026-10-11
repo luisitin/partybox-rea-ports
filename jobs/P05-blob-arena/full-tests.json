@@ -1,0 +1,1144 @@
+{
+  "numTotalTestSuites": 27,
+  "numPassedTestSuites": 27,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 105,
+  "numPassedTests": 105,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1791755847532,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena manifest is valid, matches manifest.json, phases are declared",
+          "status": "passed",
+          "title": "manifest is valid, matches manifest.json, phases are declared",
+          "duration": 1.66700000000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena server code is pure (no clocks, randomness, timers, I/O, await)",
+          "status": "passed",
+          "title": "server code is pure (no clocks, randomness, timers, I/O, await)",
+          "duration": 1.437400000000025,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena content packs validate against content/schema.ts packs",
+          "status": "passed",
+          "title": "content packs validate against content/schema.ts packs",
+          "duration": 0.1190000000000282,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena has a fixture for every phase that renders both views safely",
+          "status": "passed",
+          "title": "has a fixture for every phase that renders both views safely",
+          "duration": 52.134199999999964,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena the done fixture is the last scores fixture played out (one game, T-0207)",
+          "status": "passed",
+          "title": "the done fixture is the last scores fixture played out (one game, T-0207)",
+          "duration": 0.26739999999995234,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena init produces a declared phase for min, mid and max players",
+          "status": "passed",
+          "title": "init produces a declared phase for min, mid and max players",
+          "duration": 2.142300000000091,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena terminates with random bots within the estimate × 3, results complete",
+          "status": "passed",
+          "title": "terminates with random bots within the estimate × 3, results complete",
+          "duration": 473.77020000000005,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena terminates with fast bots within the estimate × 3, results complete",
+          "status": "passed",
+          "title": "terminates with fast bots within the estimate × 3, results complete",
+          "duration": 441.58100000000013,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena terminates with idle bots within the estimate × 3, results complete",
+          "status": "passed",
+          "title": "terminates with idle bots within the estimate × 3, results complete",
+          "duration": 242.8472999999999,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena terminates with skipper bots within the estimate × 3, results complete",
+          "status": "passed",
+          "title": "terminates with skipper bots within the estimate × 3, results complete",
+          "duration": 423.99400000000014,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena bot support flag: bots act in every input phase with varied inputs",
+          "status": "passed",
+          "title": "bot support flag: bots act in every input phase with varied inputs",
+          "duration": 53.34929999999986,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena is deterministic: same seed + same events ⇒ identical state after every event",
+          "status": "passed",
+          "title": "is deterministic: same seed + same events ⇒ identical state after every event",
+          "duration": 243.51339999999982,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena plays through in presence 'together', phone only false (ADR-047)",
+          "status": "passed",
+          "title": "plays through in presence 'together', phone only false (ADR-047)",
+          "duration": 137.79479999999967,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena plays through in presence 'together', phone only true (ADR-047)",
+          "status": "passed",
+          "title": "plays through in presence 'together', phone only true (ADR-047)",
+          "duration": 137.3393000000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena plays through in presence 'remote-voice', phone only false (ADR-047)",
+          "status": "passed",
+          "title": "plays through in presence 'remote-voice', phone only false (ADR-047)",
+          "duration": 136.73499999999967,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena plays through in presence 'remote-voice', phone only true (ADR-047)",
+          "status": "passed",
+          "title": "plays through in presence 'remote-voice', phone only true (ADR-047)",
+          "duration": 342.3634000000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena plays through in presence 'remote-text', phone only false (ADR-047)",
+          "status": "passed",
+          "title": "plays through in presence 'remote-text', phone only false (ADR-047)",
+          "duration": 1236.951,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena plays through in presence 'remote-text', phone only true (ADR-047)",
+          "status": "passed",
+          "title": "plays through in presence 'remote-text', phone only true (ADR-047)",
+          "duration": 1557.4916000000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract: games/blob-arena"],
+          "fullName": "contract: games/blob-arena ignores stale timers and survives fuzzed events mid-game",
+          "status": "passed",
+          "title": "ignores stale timers and survives fuzzed events mid-game",
+          "duration": 693.4170999999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["contract suite"],
+          "fullName": "contract suite found at least one game folder",
+          "status": "passed",
+          "title": "found at least one game folder",
+          "duration": 0.14860000000044238,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "startTime": 1791755848094,
+      "endTime": 1791755854275.1487,
+      "status": "passed",
+      "message": "",
+      "name": "C:/dev/rea-runs/r5/games/blob-arena/__tests__/contract.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["the three-round match"],
+          "fullName": "the three-round match starts playing immediately after the shell start, with a 90-second clock",
+          "status": "passed",
+          "title": "starts playing immediately after the shell start, with a 90-second clock",
+          "duration": 4.929200000000492,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["the three-round match"],
+          "fullName": "the three-round match re-arms its short wake timer while the public countdown still ends at the horn",
+          "status": "passed",
+          "title": "re-arms its short wake timer while the public countdown still ends at the horn",
+          "duration": 8.068100000000413,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["the three-round match"],
+          "fullName": "the three-round match settles the last physics step at the horn and scores current mass once",
+          "status": "passed",
+          "title": "settles the last physics step at the horn and scores current mass once",
+          "duration": 12.178399999998874,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["the three-round match"],
+          "fullName": "the three-round match adds end mass across exactly three rounds and returns every original seat",
+          "status": "passed",
+          "title": "adds end mass across exactly three rounds and returns every original seat",
+          "duration": 13.988999999999578,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["the three-round match"],
+          "fullName": "the three-round match accepts late input as the horn, never granting mass after 90 seconds",
+          "status": "passed",
+          "title": "accepts late input as the horn, never granting mass after 90 seconds",
+          "duration": 48.52769999999873,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["the three-round match"],
+          "fullName": "the three-round match VIP skip banks the settled mass, moves standings to the next round, and end is final",
+          "status": "passed",
+          "title": "VIP skip banks the settled mass, moves standings to the next round, and end is final",
+          "duration": 4.529599999999846,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["pause, stale events and reconnect"],
+          "fullName": "pause, stale events and reconnect releases every held pad at pause so an ignored phone stop cannot restart movement on resume",
+          "status": "passed",
+          "title": "releases every held pad at pause so an ignored phone stop cannot restart movement on resume",
+          "duration": 8.096999999999753,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["pause, stale events and reconnect"],
+          "fullName": "pause, stale events and reconnect settles at pause, freezes all physics, and shifts wall clocks without shifting relative ones",
+          "status": "passed",
+          "title": "settles at pause, freezes all physics, and shifts wall clocks without shifting relative ones",
+          "duration": 1.014100000000326,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["pause, stale events and reconnect"],
+          "fullName": "pause, stale events and reconnect skipping a paused round excludes held time from physics and points",
+          "status": "passed",
+          "title": "skipping a paused round excludes held time from physics and points",
+          "duration": 5.322599999999511,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["pause, stale events and reconnect"],
+          "fullName": "pause, stale events and reconnect an end during pause uses the frozen arena instead of adding a minute of grazing",
+          "status": "passed",
+          "title": "an end during pause uses the frozen arena instead of adding a minute of grazing",
+          "duration": 0.8349999999991269,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["pause, stale events and reconnect"],
+          "fullName": "pause, stale events and reconnect ignores stale or wrong-phase timers and unknown/spectator inputs",
+          "status": "passed",
+          "title": "ignores stale or wrong-phase timers and unknown/spectator inputs",
+          "duration": 0.7602000000006228,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["pause, stale events and reconnect"],
+          "fullName": "pause, stale events and reconnect stops a disconnected pad, preserves its blob, and reconnects to the same seat and score",
+          "status": "passed",
+          "title": "stops a disconnected pad, preserves its blob, and reconnects to the same seat and score",
+          "duration": 2.6216000000003987,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["pause, stale events and reconnect"],
+          "fullName": "pause, stale events and reconnect keeps departed seats in results, blocks their input, and never resurrects them next round",
+          "status": "passed",
+          "title": "keeps departed seats in results, blocks their input, and never resurrects them next round",
+          "duration": 1.2796999999991385,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["public views"],
+          "fullName": "public views sends each player their own mass, split reason and rank without exposing RNG or controls",
+          "status": "passed",
+          "title": "sends each player their own mass, split reason and rank without exposing RNG or controls",
+          "duration": 11.466500000000451,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["public views"],
+          "fullName": "public views phone-only and remote players receive the complete stage, including spectators",
+          "status": "passed",
+          "title": "phone-only and remote players receive the complete stage, including spectators",
+          "duration": 3.923899999999776,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["public views"],
+          "fullName": "public views split availability reflects shield, cooldown, neutral aim, cap and paused state",
+          "status": "passed",
+          "title": "split availability reflects shield, cooldown, neutral aim, cap and paused state",
+          "duration": 1.0514000000002852,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "startTime": 1791757492023,
+      "endTime": 1791757492153.0515,
+      "status": "passed",
+      "message": "",
+      "name": "C:/dev/rea-runs/r5/games/blob-arena/__tests__/game.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["growth and steering"],
+          "fullName": "growth and steering mass increases area and reduces speed, with a minimum speed and maximum radius",
+          "status": "passed",
+          "title": "mass increases area and reduces speed, with a minimum speed and maximum radius",
+          "duration": 1.1812999999999647,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["growth and steering"],
+          "fullName": "growth and steering normalizes diagonal steering and leaves its source untouched",
+          "status": "passed",
+          "title": "normalizes diagonal steering and leaves its source untouched",
+          "duration": 0.4190999999999576,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["growth and steering"],
+          "fullName": "growth and steering has slower large-cell travel, radius-aware walls, and no movement from a neutral pad",
+          "status": "passed",
+          "title": "has slower large-cell travel, radius-aware walls, and no movement from a neutral pad",
+          "duration": 1.0745000000000573,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["growth and steering"],
+          "fullName": "growth and steering ignores unknown owners, prototype names and events before the physics or input clock",
+          "status": "passed",
+          "title": "ignores unknown owners, prototype names and events before the physics or input clock",
+          "duration": 0.20689999999990505,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["splitting and rejoining"],
+          "fullName": "splitting and rejoining splits exactly 48 mass in half, conserves mass, and launches in the pad direction",
+          "status": "passed",
+          "title": "splits exactly 48 mass in half, conserves mass, and launches in the pad direction",
+          "duration": 1.1628999999999223,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["splitting and rejoining"],
+          "fullName": "splitting and rejoining requires enough mass, an aim, no shield, a free slot and the one-second cooldown",
+          "status": "passed",
+          "title": "requires enough mass, an aim, no shield, a free slot and the one-second cooldown",
+          "duration": 0.4030999999999949,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["splitting and rejoining"],
+          "fullName": "splitting and rejoining does not eat siblings during their eight-second merge lock, then merges mass and center",
+          "status": "passed",
+          "title": "does not eat siblings during their eight-second merge lock, then merges mass and center",
+          "duration": 0.2516000000000531,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["splitting and rejoining"],
+          "fullName": "splitting and rejoining brings separated siblings back together after the lock without another input",
+          "status": "passed",
+          "title": "brings separated siblings back together after the lock without another input",
+          "duration": 2.866300000000024,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["eating"],
+          "fullName": "eating requires at least a 1.25 mass ratio, including the equality boundary",
+          "status": "passed",
+          "title": "requires at least a 1.25 mass ratio, including the equality boundary",
+          "duration": 0.4700000000000273,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["eating"],
+          "fullName": "eating requires deep overlap, rather than grazing the larger edge",
+          "status": "passed",
+          "title": "requires deep overlap, rather than grazing the larger edge",
+          "duration": 0.20240000000001146,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["eating"],
+          "fullName": "eating protects both predator and prey until their shields expire",
+          "status": "passed",
+          "title": "protects both predator and prey until their shields expire",
+          "duration": 0.1735999999999649,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["eating"],
+          "fullName": "eating allows a later cell to eat an earlier one deterministically, conserving all mass",
+          "status": "passed",
+          "title": "allows a later cell to eat an earlier one deterministically, conserving all mass",
+          "duration": 0.25940000000002783,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["eating"],
+          "fullName": "eating a pellet adds exactly three mass and is replaced with the same id from state.rng",
+          "status": "passed",
+          "title": "a pellet adds exactly three mass and is replaced with the same id from state.rng",
+          "duration": 0.47450000000003456,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["eating"],
+          "fullName": "eating clamps newly grown cells at the walls on the same physics step",
+          "status": "passed",
+          "title": "clamps newly grown cells at the walls on the same physics step",
+          "duration": 0.1490999999999758,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["spawn and clocks"],
+          "fullName": "spawn and clocks creates 96 bounded seeded pellets and one independent safe blob per seat",
+          "status": "passed",
+          "title": "creates 96 bounded seeded pellets and one independent safe blob per seat",
+          "duration": 1.9121999999999844,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["spawn and clocks"],
+          "fullName": "spawn and clocks respawns a swallowed player exactly three seconds later with two seconds of protection",
+          "status": "passed",
+          "title": "respawns a swallowed player exactly three seconds later with two seconds of protection",
+          "duration": 0.9298000000000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["spawn and clocks"],
+          "fullName": "spawn and clocks never respawns a permanently departed seat",
+          "status": "passed",
+          "title": "never respawns a permanently departed seat",
+          "duration": 0.34730000000001837,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["spawn and clocks"],
+          "fullName": "spawn and clocks is identical when ticked in chunks, idempotent, and rounds down to the 100 ms grid",
+          "status": "passed",
+          "title": "is identical when ticked in chunks, idempotent, and rounds down to the 100 ms grid",
+          "duration": 2.2618999999999687,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["points and bot decisions"],
+          "fullName": "points and bot decisions scores floored total surviving mass, including all split parts and zero for swallowed seats",
+          "status": "passed",
+          "title": "scores floored total surviving mass, including all split parts and zero for swallowed seats",
+          "duration": 0.23649999999997817,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["points and bot decisions"],
+          "fullName": "points and bot decisions normal and sharp bots flee a nearby predator while easy bots keep grazing",
+          "status": "passed",
+          "title": "normal and sharp bots flee a nearby predator while easy bots keep grazing",
+          "duration": 1.3618999999999915,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["points and bot decisions"],
+          "fullName": "points and bot decisions sharp bots split only while aimed at prey small enough for each half",
+          "status": "passed",
+          "title": "sharp bots split only while aimed at prey small enough for each half",
+          "duration": 1.1369000000000824,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "startTime": 1791757492743,
+      "endTime": 1791757492761.137,
+      "status": "passed",
+      "message": "",
+      "name": "C:/dev/rea-runs/r5/games/blob-arena/__tests__/mechanics.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["seeded world properties"],
+          "fullName": "seeded world properties pins seed 1 for all party sizes and mixed controls",
+          "status": "passed",
+          "title": "pins seed 1 for all party sizes and mixed controls",
+          "duration": 35.506599999999935,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["seeded world properties"],
+          "fullName": "seeded world properties pins seed 2 for all party sizes and mixed controls",
+          "status": "passed",
+          "title": "pins seed 2 for all party sizes and mixed controls",
+          "duration": 21.950099999999907,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["seeded world properties"],
+          "fullName": "seeded world properties pins seed 3 for all party sizes and mixed controls",
+          "status": "passed",
+          "title": "pins seed 3 for all party sizes and mixed controls",
+          "duration": 20.021799999999985,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["seeded world properties"],
+          "fullName": "seeded world properties holds for 1,000 generated seeds and mixed controls, with a reproducible fast-check seed",
+          "status": "passed",
+          "title": "holds for 1,000 generated seeds and mixed controls, with a reproducible fast-check seed",
+          "duration": 16779.1449,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "startTime": 1791755855163,
+      "endTime": 1791755872019.145,
+      "status": "passed",
+      "message": "",
+      "name": "C:/dev/rea-runs/r5/games/blob-arena/__tests__/property.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["review regressions"],
+          "fullName": "review regressions accepts the final rapid pointer move and an immediate split after aiming",
+          "status": "passed",
+          "title": "accepts the final rapid pointer move and an immediate split after aiming",
+          "duration": 3.3256999999999834,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["review regressions"],
+          "fullName": "review regressions escapes tangentially when a grown bot reaches its radius-aware left wall",
+          "status": "passed",
+          "title": "escapes tangentially when a grown bot reaches its radius-aware left wall",
+          "duration": 1.787900000000036,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["review regressions"],
+          "fullName": "review regressions a split lunge eats edible prey it crosses between physics samples",
+          "status": "passed",
+          "title": "a split lunge eats edible prey it crosses between physics samples",
+          "duration": 1.0521999999999707,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["review regressions"],
+          "fullName": "review regressions a swept near miss stays a miss and spawn protection blocks a crossed prey",
+          "status": "passed",
+          "title": "a swept near miss stays a miss and spawn protection blocks a crossed prey",
+          "duration": 0.37600000000009004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "startTime": 1791757493355,
+      "endTime": 1791757493361.376,
+      "status": "passed",
+      "message": "",
+      "name": "C:/dev/rea-runs/r5/games/blob-arena/__tests__/regressions.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["screens: play"],
+          "fullName": "screens: play renders the entire public world and eight readable player rows on the TV",
+          "status": "passed",
+          "title": "renders the entire public world and eight readable player rows on the TV",
+          "duration": 63.61229999999978,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: play"],
+          "fullName": "screens: play renders every player in both room modes and sends the same arena to phone-only players",
+          "status": "passed",
+          "title": "renders every player in both room modes and sends the same arena to phone-only players",
+          "duration": 355.4887000000008,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: play"],
+          "fullName": "screens: play uses an arena-bearing remote view even when the phone-only provider is false",
+          "status": "passed",
+          "title": "uses an arena-bearing remote view even when the phone-only provider is false",
+          "duration": 46.9411999999993,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: play"],
+          "fullName": "screens: play lets spectators watch without steering or split buttons",
+          "status": "passed",
+          "title": "lets spectators watch without steering or split buttons",
+          "duration": 73.84159999999974,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score"],
+          "fullName": "screens: score renders the entire public world and eight readable player rows on the TV",
+          "status": "passed",
+          "title": "renders the entire public world and eight readable player rows on the TV",
+          "duration": 65.58560000000034,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score"],
+          "fullName": "screens: score renders every player in both room modes and sends the same arena to phone-only players",
+          "status": "passed",
+          "title": "renders every player in both room modes and sends the same arena to phone-only players",
+          "duration": 537.6623,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score"],
+          "fullName": "screens: score uses an arena-bearing remote view even when the phone-only provider is false",
+          "status": "passed",
+          "title": "uses an arena-bearing remote view even when the phone-only provider is false",
+          "duration": 53.03439999999955,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score"],
+          "fullName": "screens: score lets spectators watch without steering or split buttons",
+          "status": "passed",
+          "title": "lets spectators watch without steering or split buttons",
+          "duration": 47.13159999999971,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score-last"],
+          "fullName": "screens: score-last renders the entire public world and eight readable player rows on the TV",
+          "status": "passed",
+          "title": "renders the entire public world and eight readable player rows on the TV",
+          "duration": 57.880199999999604,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score-last"],
+          "fullName": "screens: score-last renders every player in both room modes and sends the same arena to phone-only players",
+          "status": "passed",
+          "title": "renders every player in both room modes and sends the same arena to phone-only players",
+          "duration": 473.7968000000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score-last"],
+          "fullName": "screens: score-last uses an arena-bearing remote view even when the phone-only provider is false",
+          "status": "passed",
+          "title": "uses an arena-bearing remote view even when the phone-only provider is false",
+          "duration": 55.289999999999964,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score-last"],
+          "fullName": "screens: score-last lets spectators watch without steering or split buttons",
+          "status": "passed",
+          "title": "lets spectators watch without steering or split buttons",
+          "duration": 52.55360000000019,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: done"],
+          "fullName": "screens: done renders the entire public world and eight readable player rows on the TV",
+          "status": "passed",
+          "title": "renders the entire public world and eight readable player rows on the TV",
+          "duration": 58.524100000000544,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: done"],
+          "fullName": "screens: done renders every player in both room modes and sends the same arena to phone-only players",
+          "status": "passed",
+          "title": "renders every player in both room modes and sends the same arena to phone-only players",
+          "duration": 378.77859999999964,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: done"],
+          "fullName": "screens: done uses an arena-bearing remote view even when the phone-only provider is false",
+          "status": "passed",
+          "title": "uses an arena-bearing remote view even when the phone-only provider is false",
+          "duration": 46.719600000000355,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: done"],
+          "fullName": "screens: done lets spectators watch without steering or split buttons",
+          "status": "passed",
+          "title": "lets spectators watch without steering or split buttons",
+          "duration": 43.499800000000505,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states puts the same arena before the steering controls with a labelled split action",
+          "status": "passed",
+          "title": "puts the same arena before the steering controls with a labelled split action",
+          "duration": 50.26180000000022,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states keeps a swallowed player watching the arena and explains their return",
+          "status": "passed",
+          "title": "keeps a swallowed player watching the arena and explains their return",
+          "duration": 40.55149999999958,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states holds the arena and disables both actions while paused",
+          "status": "passed",
+          "title": "holds the arena and disables both actions while paused",
+          "duration": 90.84529999999995,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Grow one blob to 48 mass",
+          "status": "passed",
+          "title": "explains unavailable split: Grow one blob to 48 mass",
+          "duration": 8.168000000000575,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Steer to aim",
+          "status": "passed",
+          "title": "explains unavailable split: Steer to aim",
+          "duration": 1.4140000000006694,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Spawn shield",
+          "status": "passed",
+          "title": "explains unavailable split: Spawn shield",
+          "duration": 6.30410000000029,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Split cooling down",
+          "status": "passed",
+          "title": "explains unavailable split: Split cooling down",
+          "duration": 1.2730000000001382,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Four blobs maximum",
+          "status": "passed",
+          "title": "explains unavailable split: Four blobs maximum",
+          "duration": 1.1328999999996086,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Returning soon",
+          "status": "passed",
+          "title": "explains unavailable split: Returning soon",
+          "duration": 7.488299999999981,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Round held",
+          "status": "passed",
+          "title": "explains unavailable split: Round held",
+          "duration": 9.421699999999873,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states enables split only when the public server view authorizes it",
+          "status": "passed",
+          "title": "enables split only when the public server view authorizes it",
+          "duration": 1.6646999999993568,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["stable identity and results"],
+          "fullName": "stable identity and results keeps seat numbers and tokens when envelope order differs from initial seat order",
+          "status": "passed",
+          "title": "keeps seat numbers and tokens when envelope order differs from initial seat order",
+          "duration": 39.04489999999987,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["stable identity and results"],
+          "fullName": "stable identity and results announces the server-scored winner on both surfaces",
+          "status": "passed",
+          "title": "announces the server-scored winner on both surfaces",
+          "duration": 124.77250000000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["stable identity and results"],
+          "fullName": "stable identity and results promises final results after round three instead of another round",
+          "status": "passed",
+          "title": "promises final results after round three instead of another round",
+          "duration": 173.3780999999999,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["stable identity and results"],
+          "fullName": "stable identity and results names every tied winner without applying an extra tie-break",
+          "status": "passed",
+          "title": "names every tied winner without applying an extra tie-break",
+          "duration": 98.95029999999952,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["stable identity and results"],
+          "fullName": "stable identity and results renders long names safely and labels all pieces while naming only one piece per player",
+          "status": "passed",
+          "title": "renders long names safely and labels all pieces while naming only one piece per player",
+          "duration": 21.651300000000447,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["theme and motion policy"],
+          "fullName": "theme and motion policy uses token colours and preserves the two reduced-motion controls",
+          "status": "passed",
+          "title": "uses token colours and preserves the two reduced-motion controls",
+          "duration": 2.980800000000272,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "startTime": 1791755876286,
+      "endTime": 1791755879378.9807,
+      "status": "passed",
+      "message": "",
+      "name": "C:/dev/rea-runs/r5/games/blob-arena/__tests__/screens.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["seeded full-match bots"],
+          "fullName": "seeded full-match bots 2 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "status": "passed",
+          "title": "2 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "duration": 68426.087,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["seeded full-match bots"],
+          "fullName": "seeded full-match bots 3 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "status": "passed",
+          "title": "3 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "duration": 146293.8279,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["seeded full-match bots"],
+          "fullName": "seeded full-match bots 4 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "status": "passed",
+          "title": "4 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "duration": 94752.83219999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["seeded full-match bots"],
+          "fullName": "seeded full-match bots 5 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "status": "passed",
+          "title": "5 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "duration": 116259.97849999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["seeded full-match bots"],
+          "fullName": "seeded full-match bots 6 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "status": "passed",
+          "title": "6 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "duration": 111767.86859999993,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["seeded full-match bots"],
+          "fullName": "seeded full-match bots 7 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "status": "passed",
+          "title": "7 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "duration": 771717.4913999999,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["seeded full-match bots"],
+          "fullName": "seeded full-match bots 8 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "status": "passed",
+          "title": "8 players: 1,000 games cycle all three strengths and end within estimate × 2",
+          "duration": 290009.20439999993,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "startTime": 1791755879767,
+      "endTime": 1791757478995.2043,
+      "status": "passed",
+      "message": "",
+      "name": "C:/dev/rea-runs/r5/games/blob-arena/__tests__/sim.test.ts"
+    }
+  ]
+}

@@ -15,14 +15,14 @@ The loopback mounted-controller preview remains available on port60366, PID20084
 The first full sweep passed 7,000 games but its pre-fix imported pause handler
 failed the new regression. Historical evidence is retained. Cached bot distances
 preserve every input/RNG state across 37,380 comparisons and halve bot-call CPU.
-Fresh full suite is running with one worker (exec28512), PB_SIM_RUNS unset,
-verbose + JSON reporters and console interception disabled. Do not duplicate it.
-Six current-code counts (2–7), 6,000 complete matches, have passed. Count8 remains
-running; sim-current-report.json retains exact per-count console measurements.
-Worker PID105748 is healthy (normal priority, about220MB). The loaded desktop
-stretches elapsed time; no second test worker or owned browser is active.
+Fresh full suite finished: 105/105 passed in seven files, exit0, 1645.83seconds.
+PB_SIM_RUNS was unset, one worker, verbose + JSON, console interception disabled.
+All 7,000 complete matches at every count2–8 passed: median round90000ms,
+maximum match289500ms (bound600000ms), 17,959,654 reducer events.
+full-tests.json and sim-report.json retain the exact current-code results.
+No heavy test worker or owned browser is active.
 
-Remaining: record fresh full result, final format/checks, draft PR + green CI,
+Remaining: final format/checks, draft PR + green CI,
 then KEEP GOING. KEEP cannot begin until that PR is green.
 Post-green audit: joystick reach; long winner/tie headings; crowded name tags;
 shield/merge guidance; final-five-second and between-round countdown guidance.

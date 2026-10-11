@@ -1,6 +1,6 @@
 # P05 verification
 
-The first 7,000-match simulation passed, but its process had imported the pre-fix pause handler and failed the newly added pause regression. The current tree passes all 105 tests with the short simulation setting. A fresh full run and CI are pending.
+The fresh current-code full run passed **105/105 tests and 7,000 complete matches**, exit 0. Typecheck, formatting, 20/20 mutations, property tests and nine measured screens also pass. PR CI and the post-green KEEP GOING loop remain pending. Historical failed-run evidence is retained separately.
 
 ## Setup and static checks
 
@@ -18,15 +18,23 @@ Current-tree command: set PowerShell `$env:PB_SIM_RUNS='1'`, then run `pnpm.cmd 
 
 The property tests cover fixed world seeds **1, 2 and 3 at every count from 2 through 8**, plus **1,000 generated world seeds** with mixed controls. Fast-check's generator seed is `20261011`, making failures reproducible. Assertions check deterministic replay, source immutability, finite positive mass, bounded positions, unique cell/pellet IDs, the four-cell cap, 96 pellets, JSON state/view shape, the 256 KB state limit and absence of RNG/control data in controller views.
 
-Fresh full command, with `PB_SIM_RUNS` unset: `pnpm.cmd vitest run games/blob-arena --maxWorkers=1 --reporter=verbose --reporter=json --outputFile=jobs/P05-blob-arena/full-tests.json --disableConsoleIntercept`. **Running; final result pending.** Only this game's tests run, using one worker. The first full process started before the pause handler was patched; [full-first-cache.json](full-first-cache.json) preserves its passed simulation file and failed lifecycle file. Its overall result was 104 passed / one failed, so it is not a green complete check.
+Fresh full command, with `PB_SIM_RUNS` unset: `pnpm.cmd vitest run games/blob-arena --maxWorkers=1 --reporter=verbose --reporter=json --outputFile=jobs/P05-blob-arena/full-tests.json --disableConsoleIntercept`. **105/105 passed in seven files, exit 0**, 1,645.83 seconds on the loaded desktop. [full-tests.json](full-tests.json) retains every result. Only this game's tests ran, using one worker, with game code unchanged throughout. Windows emitted nonfatal worker-termination warnings; all tests and the final process succeeded. The first full process started before the pause handler was patched; [full-first-cache.json](full-first-cache.json) preserves its passed simulation file and failed lifecycle file. Its overall result was 104 passed / one failed, so it is historical evidence rather than a green complete check.
 
 ## Full seeded simulation
 
 The current game test command runs **1,000 complete three-round bot games at each count 2, 3, 4, 5, 6, 7 and 8**: 7,000 matches total. Each count cycles 334 easy, 333 normal and 333 sharp bot games. Bot decisions occur every 1,000 ms; the actual reducer handles its 200 ms engine wake timers and 100 ms physics grid.
 
-The required bound is `manifest.estimatedMinutes × 2 = 600,000 ms`. The first full simulation file passed all seven count cases, requiring complete finite results, three 90,000 ms rounds per match, a 90,000 ms median round and a maximum match duration within that bound. Its console reports were not retained; [sim-report.json](sim-report.json) records those asserted facts and labels the fixed 289,500 ms match duration as derived from the phase clocks. Fresh per-count records are pending. The interim `PB_SIM_RUNS=1` run is not the required 1,000-game sweep.
+The required bound is `manifest.estimatedMinutes × 2 = 600,000 ms`. **All 7,000 fresh matches passed**, with complete finite results and exactly three 90,000 ms rounds. Every count measured a 90,000 ms median round and 289,500 ms maximum match. [sim-report.json](sim-report.json) retains exact console records: **17,959,654 reducer events** total. The historical assertion-only report is separate in [sim-first-report.json](sim-first-report.json). The interim `PB_SIM_RUNS=1` run is not the required 1,000-game sweep.
 
-Fresh progress: **6,000 complete matches at counts 2–7 have passed**. [sim-current-report.json](sim-current-report.json) retains exact fresh console records. Each reports a 90,000 ms median round and a 289,500 ms maximum match. Count 8 and the final full-suite status remain pending. The historical assertion-only report is also retained as [sim-first-report.json](sim-first-report.json).
+| Players | Games | Easy / normal / sharp | Median round ms | Max match ms | Min / max score | Reducer events |
+| ------- | ----- | --------------------- | --------------- | ------------ | --------------- | -------------- |
+| 2       | 1,000 | 334 / 333 / 333       | 90,000          | 289,500      | 306 / 2,760     | 1,860,237      |
+| 3       | 1,000 | 334 / 333 / 333       | 90,000          | 289,500      | 87 / 3,987      | 2,105,730      |
+| 4       | 1,000 | 334 / 333 / 333       | 90,000          | 289,500      | 27 / 4,974      | 2,346,442      |
+| 5       | 1,000 | 334 / 333 / 333       | 90,000          | 289,500      | 63 / 5,469      | 2,579,399      |
+| 6       | 1,000 | 334 / 333 / 333       | 90,000          | 289,500      | 0 / 6,468       | 2,805,048      |
+| 7       | 1,000 | 334 / 333 / 333       | 90,000          | 289,500      | 0 / 7,248       | 3,024,559      |
+| 8       | 1,000 | 334 / 333 / 333       | 90,000          | 289,500      | 0 / 7,662       | 3,238,239      |
 
 Equivalent standalone full-count command: `node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/sim.ts`.
 
@@ -71,7 +79,7 @@ The measurements inspect headings, buttons, list rows, timers and arenas, plus r
 
 ## CI and completion
 
-CI check command: `gh pr checks <PR-number>`. PR creation and the job workflow's green status are **pending**; this file does not claim CI success. The final full-test result, simulation reports and KEEP GOING outcomes still need to be recorded before the job is complete.
+CI check command: `gh pr checks <PR-number>`. PR creation and the job workflow's green status are **pending**; this file does not claim CI success. Local required checks and full simulation have passed. Green CI and KEEP GOING outcomes still need to be recorded before the job is complete.
 
 ## Additional measured checks
 
