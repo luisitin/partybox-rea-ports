@@ -1,11 +1,72 @@
 # P05 verification
 
-In progress. No final check is claimed until recorded below.
+The full simulation/test run, final formatting check and CI are still pending. Results below distinguish completed checks from the current run.
 
-- `corepack enable`: succeeded.
-- `pnpm.cmd install`: succeeded, pnpm12.4.2, Node24.19.0.
-- `node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/generate.mjs`: succeeded, seed17 fixtures.
-- Server typecheck succeeded before client scaffolding; final typecheck pending.
+## Setup and static checks
 
-Required remaining: complete game tests including SDK contract, sim, properties, mutation20,
-all-phase static screens with manual fit review, final typecheck/format, CI, KEEP GOING.
+| Check                   | Exact command                                                                       | Confirmed result                                                                              |
+| ----------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Corepack                | `corepack enable`                                                                   | Passed.                                                                                       |
+| Dependencies            | `pnpm.cmd install`                                                                  | Passed with pnpm 12.4.2 and Node 24.19.0; no new dependencies added.                          |
+| Fixtures                | `node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/generate.mjs` | Passed; seeded fixtures generated with seed 17, including the last-score → done continuation. |
+| Final current typecheck | `pnpm.cmd typecheck`                                                                | Passed after the server, client and tests were present.                                       |
+| Final formatting        | `pnpm.cmd format`                                                                   | Pending.                                                                                      |
+
+## Game, SDK contract and property tests
+
+Interim command: set PowerShell `$env:PB_SIM_RUNS='1'`, then run `pnpm.cmd vitest run games/blob-arena --maxWorkers=1`. Result: **104 tests passed**. That run included the real SDK contract suite restricted to Blob Arena, mechanics/lifecycle/view tests and property tests. It preceded the two latest Arena regression tests, so it does not establish that the current complete tree is green.
+
+The property tests cover fixed world seeds **1, 2 and 3 at every count from 2 through 8**, plus **1,000 generated world seeds** with mixed controls. Fast-check's generator seed is `20261011`, making failures reproducible. Assertions check deterministic replay, source immutability, finite positive mass, bounded positions, unique cell/pellet IDs, the four-cell cap, 96 pellets, JSON state/view shape, the 256 KB state limit and absence of RNG/control data in controller views.
+
+Current full command, with `PB_SIM_RUNS` unset: `pnpm.cmd vitest run games/blob-arena --maxWorkers=1`. **Running; final result pending.** Only this game's tests run, using one worker.
+
+## Full seeded simulation
+
+The current game test command runs **1,000 complete three-round bot games at each count 2, 3, 4, 5, 6, 7 and 8**: 7,000 matches total. Each count cycles 334 easy, 333 normal and 333 sharp bot games. Bot decisions occur every 1,000 ms; the actual reducer handles its 200 ms engine wake timers and 100 ms physics grid.
+
+The required bound is `manifest.estimatedMinutes × 2 = 600,000 ms`. Tests also require complete finite results and three 90,000 ms rounds per match. Measured per-count reports, maximum match times and median round lengths are **pending** until the run finishes. The interim `PB_SIM_RUNS=1` run is not the required 1,000-game sweep.
+
+Equivalent standalone full-count command: `node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/sim.ts`.
+
+## Mutation check
+
+Command: `node ./jobs/P05-blob-arena/mutations.mjs`.
+
+Result: **20/20 bugs caught**, exceeding the required 19/20. The unmodified baseline passed. Each mutation was planted alone, then the harness ran `pnpm.cmd vitest run games/blob-arena/__tests__/mechanics.test.ts games/blob-arena/__tests__/game.test.ts --maxWorkers=1 --reporter=json --outputFile=jobs/P05-blob-arena/mutation-current.json`. Every catch was an assertion failure; no transform/import error or timeout counted. Original server bytes were restored after every mutation and verified at completion. Exact replacements, failing test names and assertion messages are retained in [mutations.json](mutations.json).
+
+| ID  | Planted bug                                          | Result | Failed tests |
+| --- | ---------------------------------------------------- | ------ | ------------ |
+| M01 | Score rounds up instead of down                      | Caught | 2            |
+| M02 | Score counts only the largest split part             | Caught | 1            |
+| M03 | New round replaces previously banked points          | Caught | 2            |
+| M04 | Match exits after two rounds                         | Caught | 1            |
+| M05 | Timer waits beyond the horn before entering score    | Caught | 2            |
+| M06 | Horn drops the final physics step                    | Caught | 2            |
+| M07 | Predator needs only a 1.15 mass ratio                | Caught | 1            |
+| M08 | Grazing edges swallow prey without deep overlap      | Caught | 1            |
+| M09 | Spawn shields do not prevent eating                  | Caught | 1            |
+| M10 | Splitting loses a third of the mass                  | Caught | 3            |
+| M11 | Splitting has no cooldown                            | Caught | 1            |
+| M12 | Splitting is allowed at starting mass                | Caught | 2            |
+| M13 | The split cap allows eight cells                     | Caught | 2            |
+| M14 | Siblings unlock merging after one second             | Caught | 1            |
+| M15 | A swallowed seat respawns in half the specified time | Caught | 1            |
+| M16 | Respawns lose their two-second shield                | Caught | 2            |
+| M17 | A pellet awards double mass                          | Caught | 2            |
+| M18 | An eaten pellet stays available at the same spot     | Caught | 1            |
+| M19 | Resume fails to extend the round end clock           | Caught | 1            |
+| M20 | TV view exposes the future random sequence           | Caught | 1            |
+
+## Screens and fit
+
+SSR command: `node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/screens.mjs`.
+
+Capture command: `node ./jobs/P05-blob-arena/capture.mjs`. The capture tool uses one owned headless Chromium process and closes it in `finally`.
+
+Passed: **nine real-component HTML screens and nine PNGs**, covering `play`, `score` and `done` on TV at **1920 × 1080**, phone with a TV at **390 × 844**, and phone-only at **390 × 844**. [fit.json](fit.json) records **zero clipped measured elements and zero overlapping TV score labels** on all nine screens. Each document's scroll dimensions equal its viewport. The runner manually inspected all nine PNGs after the layout fixes; the eight-player roster, controls and standings fit.
+
+The measurements inspect headings, buttons, list rows, timers and arenas, plus round/total score text ranges. They do not establish every possible name/content combination. Exact final media byte count and SHA256SUMS verification are **pending**.
+
+## CI and completion
+
+CI check command: `gh pr checks <PR-number>`. PR creation and the job workflow's green status are **pending**; this file does not claim CI success. The final full-test result, formatting result, simulation reports, media size/hashes and KEEP GOING outcomes still need to be recorded before the job is complete.

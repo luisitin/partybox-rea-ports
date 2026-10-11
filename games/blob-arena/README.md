@@ -24,11 +24,13 @@ Bots use public arena information and the same inputs as humans. Easy bots graze
 
 The shell handles the match-start introduction. The game begins directly in `play`; each later round resets the arena and mass without resetting banked points.
 
-| Phase | TV | Phone with a TV | Exit |
-| --- | --- | --- | --- |
-| `play` | Whole arena, numbered/name-labelled blobs and snacks, round clock, live mass and banked points. | Your number, mass, joystick, SPLIT button, and a specific reason when split is unavailable; a three-second return countdown if swallowed. | 90 seconds, or VIP skip → `score`. |
-| `score` | Frozen arena, round-end mass, `+points` and match totals, best first. | Your round points and total; no controls. | 6.5 seconds, or VIP skip → next `play`, or `done` after round 3. |
-| `done` | Winner or tied winners and final standings. | Your result, place, and total. | Terminal; `results()` is non-null. |
+The third round's score screen announces that final results follow; it never promises a fourth round.
+
+| Phase   | TV                                                                                              | Phone with a TV                                                                                                                           | Exit                                                             |
+| ------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `play`  | Whole arena, numbered/name-labelled blobs and snacks, round clock, live mass and banked points. | Your number, mass, joystick, SPLIT button, and a specific reason when split is unavailable; a three-second return countdown if swallowed. | 90 seconds, or VIP skip → `score`.                               |
+| `score` | Frozen arena, round-end mass, `+points` and match totals, best first.                           | Your round points and total; no controls.                                                                                                 | 6.5 seconds, or VIP skip → next `play`, or `done` after round 3. |
+| `done`  | Winner or tied winners and final standings.                                                     | Your result, place, and total.                                                                                                            | Terminal; `results()` is non-null.                               |
 
 Every phase has a state fixture. The engine's play deadline re-arms every 200 ms, while the public deadline is the round's end. The game therefore advances and ends without input from any phone.
 
@@ -36,11 +38,11 @@ Every phase has a state fixture. The engine's play deadline re-arms every 200 ms
 
 With no TV (`ctx.presence.phoneOnly`), or for a player who cannot see it (`canSeeTv: false`), the phone carries the public arena and becomes the stage. It never asks the player to look at a TV. The client uses the SDK's `usePhoneOnly` / provider behavior.
 
-| Phase | Phone-only stage |
-| --- | --- |
-| `play` | Live full arena, round timer, your mass, joystick and split. A returning player keeps watching the arena with their return countdown. |
-| `score` | Frozen arena, your round gain and banked total, compact standings. |
-| `done` | Winner/tie line, your result, compact final standings and arena. |
+| Phase   | Phone-only stage                                                                                                                      |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `play`  | Live full arena, round timer, your mass, joystick and split. A returning player keeps watching the arena with their return countdown. |
+| `score` | Frozen arena, your round gain and banked total, compact standings.                                                                    |
+| `done`  | Winner/tie line, your result, compact final standings and arena.                                                                      |
 
 A spectator watches the stage without joystick or split controls. The 390 × 844 play layout reserves space for the arena and thumb controls without scrolling; eight-player score/done layouts use compact standings.
 
@@ -49,7 +51,7 @@ A spectator watches the stage without joystick or split controls. The 390 × 844
 - `{ type: 'steer', x, y }`: finite numbers from -1 to 1. The server normalizes a diagonal vector to length one; a zero vector stops ordinary movement. Releasing the joystick sends zero. Keyboard directions provide the same inputs.
 - `{ type: 'split' }`: uses the current nonzero steering direction. Ignored during protection, cooldown, at the four-cell cap, below the threshold, or outside play.
 
-Only connected playing members can send inputs. Unknown players, spectators, departed seats, malformed/non-finite controls, stale inputs, and inputs after the round deadline cannot steer or create mass. The phone explains disabled split states: grow to 48 mass, steer to aim, spawn shield, cooling down, or four blobs maximum.
+Only connected playing members can send inputs. Unknown players, spectators, departed seats, malformed/non-finite controls, stale inputs, and inputs after the round deadline cannot steer or create mass. The phone explains disabled split states: grow one blob to 48 mass, steer to aim, spawn shield, cooling down, or four blobs maximum. The growth threshold applies to one piece, not the player's combined mass.
 
 ## Scoring
 

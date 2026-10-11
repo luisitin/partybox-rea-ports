@@ -166,7 +166,7 @@ function controllerView(state: State, playerId: string): BlobArenaControllerView
       : mine.length >= MAX_CELLS
         ? 'Four blobs maximum'
         : !mine.some((c) => c.mass >= SPLIT_MIN)
-          ? 'Grow to 48 mass'
+          ? 'Grow one blob to 48 mass'
           : mine.every((c) => c.shieldUntil > state.world.time)
             ? 'Spawn shield'
             : control && state.world.time - control.splitAt < SPLIT_COOLDOWN_MS

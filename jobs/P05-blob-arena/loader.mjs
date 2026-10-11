@@ -4,6 +4,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 
+globalThis.blobCaptureCss = new Map();
+
 registerHooks({
   resolve(specifier, context, nextResolve) {
     if (specifier === '@partybox/game-sdk' || specifier.startsWith('@partybox/game-sdk/')) {
@@ -31,12 +33,21 @@ registerHooks({
   },
   load(url, context, nextLoad) {
     if (url.endsWith('.css')) {
-      const names = [
-        ...readFileSync(fileURLToPath(url), 'utf8').matchAll(/\.([a-zA-Z][\w-]*)/g),
-      ].map((m) => m[1]);
+      const prefix = fileURLToPath(url)
+        .split(/[\\/]/)
+        .at(-1)
+        .replace(/[^a-zA-Z]/g, '');
+      const css = readFileSync(fileURLToPath(url), 'utf8');
+      const names = [...css.matchAll(/\.([a-zA-Z][\w-]*)/g)].map((m) => m[1]);
+      globalThis.blobCaptureCss.set(
+        url,
+        css
+          .replace(/\.([a-zA-Z][\w-]*)/g, (_, name) => `.${prefix}_${name}`)
+          .replace(/:global\(([^)]+)\)/g, '$1'),
+      );
       return {
         format: 'module',
-        source: `export default ${JSON.stringify(Object.fromEntries(names.map((n) => [n, n])))};`,
+        source: `export default ${JSON.stringify(Object.fromEntries(names.map((n) => [n, `${prefix}_${n}`])))};`,
         shortCircuit: true,
       };
     }

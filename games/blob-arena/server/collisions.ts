@@ -1,10 +1,11 @@
 // Resolve collisions in cell-id order, so ties never depend on object iteration.
-import { clampCell, distance, radius } from './geometry';
-import { EAT_RATIO } from './types';
+import { bound, clampCell, distance, radius } from './geometry';
+import { EAT_RATIO, STEP_MS } from './types';
 import type { Cell } from './types';
 
-export function resolveCells(source: Cell[], time: number): Cell[] {
+export function resolveCells(source: Cell[], time: number, previous: readonly Cell[] = []): Cell[] {
   const cells = source.map((c) => ({ ...c })).sort((a, b) => a.id - b.id);
+  const old = new Map(previous.map((c) => [c.id, c]));
   const removed = new Set<number>();
   for (let i = 0; i < cells.length; i++) {
     const a = cells[i]!;
@@ -12,7 +13,7 @@ export function resolveCells(source: Cell[], time: number): Cell[] {
     for (let j = i + 1; j < cells.length; j++) {
       const b = cells[j]!;
       if (removed.has(b.id)) continue;
-      const d = distance(a, b);
+      let d = distance(a, b);
       const ra = radius(a.mass),
         rb = radius(b.mass);
       if (a.owner === b.owner) {
@@ -37,6 +38,17 @@ export function resolveCells(source: Cell[], time: number): Cell[] {
         continue;
       }
       if (time < a.shieldUntil || time < b.shieldUntil) continue;
+      const pa = old.get(a.id),
+        pb = old.get(b.id);
+      if (pa && pb && time - STEP_MS >= Math.max(a.shieldUntil, b.shieldUntil)) {
+        const x = pa.x - pb.x,
+          y = pa.y - pb.y;
+        const dx = a.x - b.x - x,
+          dy = a.y - b.y - y;
+        const square = dx * dx + dy * dy;
+        const along = square === 0 ? 0 : bound(-(x * dx + y * dy) / square, 0, 1);
+        d = Math.hypot(x + along * dx, y + along * dy);
+      }
       const big = a.mass >= b.mass ? a : b;
       const small = big === a ? b : a;
       if (big.mass >= small.mass * EAT_RATIO && d < radius(big.mass) - radius(small.mass) * 0.35) {

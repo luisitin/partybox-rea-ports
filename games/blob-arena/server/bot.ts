@@ -1,7 +1,7 @@
 // Three honest strategies: graze, avoid predators, and make safe split attacks.
 import type { BotSkill, Rng } from '@partybox/game-sdk';
 import { distance, radius, round } from './geometry';
-import { EAT_RATIO, SPLIT_MIN } from './types';
+import { EAT_RATIO, SPLIT_MIN, W, H } from './types';
 import type { Input, State } from './types';
 
 export function botInput(
@@ -11,6 +11,8 @@ export function botInput(
   skill: BotSkill = 'normal',
 ): Input | null {
   if (state.phase.id !== 'play' || state.phase.paused || state.left.includes(id)) return null;
+  const last = state.world.controls[id];
+  if (last && state.world.time > 0 && state.world.time - last.at < 800) return null;
   const own = state.world.cells.filter((c) => c.owner === id);
   const me = [...own].sort((a, b) => b.mass - a.mass)[0];
   if (!me) return null;
@@ -57,17 +59,21 @@ export function botInput(
   let dx = target.x - me.x,
     dy = target.y - me.y;
   // Avoid pinning a fleeing bot against the wall; take a tangent along it.
-  if ((me.x < 6 && dx < 0) || (me.x > 154 && dx > 0)) {
+  const edge = radius(me.mass) + 3;
+  if ((me.x < edge && dx < 0) || (me.x > W - edge && dx > 0)) {
     dx = 0;
     dy = me.y < 50 ? 1 : -1;
   }
-  if ((me.y < 6 && dy < 0) || (me.y > 94 && dy > 0)) {
+  if ((me.y < edge && dy < 0) || (me.y > H - edge && dy > 0)) {
     dy = 0;
     dx = me.x < 80 ? 1 : -1;
   }
   const length = Math.max(0.001, Math.hypot(dx, dy));
-  const x = dx / length, y = dy / length;
+  const x = dx / length,
+    y = dy / length;
   const control = state.world.controls[id];
-  const norm = Math.max(1, Math.hypot(x,y));
-  return control?.x === round(x/norm) && control?.y === round(y/norm) ? null : { type: 'steer', x, y };
+  const norm = Math.max(1, Math.hypot(x, y));
+  return control?.x === round(x / norm) && control?.y === round(y / norm)
+    ? null
+    : { type: 'steer', x, y };
 }

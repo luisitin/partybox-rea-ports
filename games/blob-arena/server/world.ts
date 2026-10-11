@@ -18,8 +18,6 @@ import type { Input, World } from './types';
 export function apply(world: World, id: string, input: Input, time: number): World {
   const control = Object.hasOwn(world.controls, id) ? world.controls[id] : undefined;
   if (!control || time < world.time || time < control.at) return world;
-  if (time < control.at + 50 && !(input.type === 'steer' && input.x === 0 && input.y === 0))
-    return world;
   if (input.type === 'steer') {
     const length = Math.max(1, Math.hypot(input.x, input.y));
     const x = round(input.x / length),
@@ -99,14 +97,16 @@ export function tick(
     });
     // A fixed pellet array bounds both state size and update cost.
     const pellets = world.pellets.map((p) => {
-      const eater = cells.find((c) => distance(c, p) <= radius(c.mass));
+      const eater = cells.find(
+        (c) => (c.x - p.x) ** 2 + (c.y - p.y) ** 2 <= Math.min(24 ** 2, c.mass * 0.55 ** 2),
+      );
       if (!eater) return p;
       eater.mass += PELLET_MASS;
       const [fresh, next] = makePellet(r, p.id);
       r = next;
       return fresh;
     });
-    cells = resolveCells(cells, time);
+    cells = resolveCells(cells, time, world.cells);
     const respawns = { ...world.respawns };
     const controls = { ...world.controls };
     world = { ...world, time, cells, pellets, respawns, controls };
