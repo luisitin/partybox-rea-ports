@@ -12,12 +12,12 @@ Research date: 2026-10-11. Mechanics are studied independently; all port code an
 
 ## Evidence pairs
 
-| Fact informing this port | Independent sources |
-| --- | --- |
-| Shared arena with a paddle defending each player's region | PPong + Warlords manual + PonGo |
-| Misses threaten survival; last survivor is a natural conclusion | PPong + Warlords manual |
-| One axis is enough to move a guard paddle | Warlords manual + PONG author README |
-| Pressure can rise through ball speed and additional balls | PPong/PONG for speed; PonGo for temporary extra balls |
+| Fact informing this port                                        | Independent sources                                   |
+| --------------------------------------------------------------- | ----------------------------------------------------- |
+| Shared arena with a paddle defending each player's region       | PPong + Warlords manual + PonGo                       |
+| Misses threaten survival; last survivor is a natural conclusion | PPong + Warlords manual                               |
+| One axis is enough to move a guard paddle                       | Warlords manual + PONG author README                  |
+| Pressure can rise through ball speed and additional balls       | PPong/PONG for speed; PonGo for temporary extra balls |
 
 The exact octagonal layout comes from the binding job and Octopong's designer proposal. Five lives, a 60-second cap, the spawn schedule, and the scoring weights are original tuning decisions, not claims about the originals.
 
@@ -32,4 +32,6 @@ The exact octagonal layout comes from the binding job and Octopong's designer pr
 
 ## Access log
 
-The developer pages and public GitHub sources were reachable. The connected computer browser inventory was empty, and the in-app browser was unavailable. Browser play/capture fallback and source inspection details will be recorded after verification; claims above are limited to text observed in the linked primary materials.
+The developer pages and public GitHub sources were reachable. The connected computer browser inventory was empty, and the in-app browser was unavailable. One cached Playwright/Chromium instance opened the embedded live client and observed the landing flow. The practice click executed, then timed out waiting for a scheduled navigation; no complete original match is claimed. The browser closed in `finally`. The access evidence is in `research-live.json`, and the reproducible inspection is `research.mjs` (tool-only, never imported by the game).
+
+The live page's public 1,567,406-byte bundle was read in memory, with no file saved: it exposes a practice action, offline mode, one-axis keyboard/mouse control, paddle/life state, and an AudioContext. The author's `pongo-client` tree was also inspected: input/controller, keyboard/joystick, arena orientation/segment, replay/results, and synthesized cue modules separate gameplay from presentation. No implementation was copied. Exact original timing and sound measurements were not recoverable from this limited run; port tuning is therefore stated explicitly rather than attributed to the original.

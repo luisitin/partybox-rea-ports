@@ -1,0 +1,39 @@
+.guide {
+  display: block;
+  width: calc(var(--pb-space-8) * 2.25);
+  aspect-ratio: 1;
+}
+
+.court {
+  fill: var(--pb-surface);
+  stroke: var(--pb-text-muted);
+  stroke-width: calc(var(--pb-space-1) * 0.3);
+}
+
+.edge {
+  stroke: var(--slot-color);
+  stroke-width: calc(var(--pb-space-1) * 0.3);
+}
+
+.paddle {
+  stroke: var(--slot-color);
+  stroke-width: var(--pb-space-1);
+  stroke-linecap: round;
+}
+
+.arrow {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: calc(var(--pb-space-1) * 0.6);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.number {
+  fill: var(--pb-text);
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-size: calc(var(--pb-font-display) * 0.3);
+  font-family: var(--pb-font-family);
+  font-weight: 900;
+}
