@@ -1,0 +1,33 @@
+{
+  "id": "flappy-lanes",
+  "name": "Flappy Lanes",
+  "icon": "🪁",
+  "tagline": "Tap to rise. Outlast the other lanes.",
+  "description": "Fly an original paper glider through archways. Everyone gets the same seeded course. Tap your phone to rise, avoid the arches and edges, and earn one point for every rival who crashes before you. Most points after three rounds wins.",
+  "howToPlay": [
+    "Find your numbered lane. Tap FLAP to rise; let go to fall.",
+    "Fly through the archway openings. An arch or edge ends your run.",
+    "Every rival who crashes before you earns you a point. Most points wins."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 3,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-10-11",
+  "settings": [
+    {
+      "key": "rounds",
+      "label": "Rounds",
+      "description": "Rounds in the match",
+      "type": "number",
+      "default": 3,
+      "min": 1,
+      "max": 6,
+      "step": 1
+    }
+  ],
+  "supportsBots": true
+}
