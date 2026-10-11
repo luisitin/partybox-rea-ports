@@ -64,3 +64,9 @@ cases,50rejected unrelated scribbles and60private-information independence
 comparisons. The exact-only baseline recognizes0/144transformed cases; the
 public geometry matcher recognizes144/144. No mutable cache or new dependency.
 R1 PR workflow38176082254 passed in40seconds.
+
+R3: `pnpm.cmd vitest run games/draw-and-guess/__tests__/game.test.ts games/draw-and-guess/__tests__/ink.test.ts --maxWorkers=1`
+passes35checks. Three new regressions prove a departed choosing artist cannot
+cause an empty reveal, pause/resume rotates at the resume time, and rejoined
+artists cannot apply queued choices to the next artist's turn. R2 PR workflow
+38176201266 passed in40seconds.

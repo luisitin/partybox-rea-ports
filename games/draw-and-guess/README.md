@@ -89,6 +89,8 @@ earned points with one sound/haptic cue, while the word stays hidden until revea
 - Choices and the answer are hidden from the TV and other phones until reveal.
   Refresh restores the role, strokes and private verdict from server state.
 - A dropped artist ends the turn; disconnected guessers never hold it open.
+  Departure during word choice skips that unstarted turn immediately, so no
+  empty answer reveal delays the next artist.
   Departed seats retain their earned points in the final results.
 - Stale timers, strangers, wrong-phase inputs and drawing by guessers do nothing.
 - Pause shifts the drawing clock and hint schedule; paused time cannot reduce

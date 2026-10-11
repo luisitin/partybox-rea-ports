@@ -38,6 +38,47 @@ describe('choice and drawing turns', () => {
     }
   });
 
+  it('skips an artist who drops during word choice without showing an empty reveal', () => {
+    const s = kit.start();
+    const next = kit.player(s, s.drawer, false, undefined, T0 + 1000);
+    expect(next.phase.id).toBe('choose');
+    expect(next.drawer).not.toBe(s.drawer);
+    expect(next.turn).toBe(s.turn + 1);
+    expect(next.phase.startedAt).toBe(T0 + 1000);
+    expect(next.phase.deadline).toBe(T0 + 1000 + CHOOSE_MS);
+    expect(next.word).toBe('');
+    expect(next.strokes).toEqual([]);
+    expect(next.scores).toEqual(s.scores);
+    const pair = kit.start({ players: testPlayers(2) });
+    expect(kit.player(pair, pair.drawer, false).phase.id).toBe('done');
+  });
+
+  it('holds a dropped word chooser while paused, then rotates immediately on resume', () => {
+    const s = kit.start();
+    const paused = kit.vip(s, 'pause', T0 + 500);
+    const dropped = kit.player(paused, s.drawer, false, undefined, T0 + 1000);
+    expect(dropped.phase.id).toBe('choose');
+    expect(dropped.drawer).toBe(s.drawer);
+    expect(dropped.phase.paused).toBeDefined();
+    const resumed = kit.vip(dropped, 'resume', T0 + 5000);
+    expect(resumed.phase.id).toBe('choose');
+    expect(resumed.drawer).not.toBe(s.drawer);
+    expect(resumed.turn).toBe(s.turn + 1);
+    expect(resumed.phase.paused).toBeUndefined();
+    expect(resumed.phase.startedAt).toBe(T0 + 5000);
+    expect(resumed.phase.deadline).toBe(T0 + 5000 + CHOOSE_MS);
+  });
+
+  it('ignores an old chooser packet after rotation, even if that artist has reconnected', () => {
+    const s = kit.start();
+    const rotated = kit.player(s, s.drawer, false, undefined, T0 + 1000);
+    const rejoined = kit.player(rotated, s.drawer, true, undefined, T0 + 1500);
+    expect(kit.input(rejoined, s.drawer, { type: 'choose', index: 0 }, T0 + 1600)).toEqual(
+      rejoined,
+    );
+    expect(kit.input(rejoined, s.drawer, { type: 'choose', index: 1 }, T0 + 900)).toEqual(rejoined);
+  });
+
   it('only the connected drawer may paint, clear or undo, and undo preserves earlier strokes', () => {
     const s = drawing();
     const painted = kit.input(s, s.drawer, { type: 'stroke', stroke });

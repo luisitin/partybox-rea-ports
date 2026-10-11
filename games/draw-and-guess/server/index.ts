@@ -92,8 +92,8 @@ export function advance(state: State, now: number): State {
 function closeIfDone(state: State, now: number): State {
   if (state.phase.paused) return state;
   const artistAway = !state.players[state.drawer]?.connected || state.left.includes(state.drawer);
-  if ((state.phase.id === 'choose' || state.phase.id === 'draw') && artistAway)
-    return enterReveal(state, now);
+  if (state.phase.id === 'choose' && artistAway) return nextTurn(state, now, state.turn + 1);
+  if (state.phase.id === 'draw' && artistAway) return enterReveal(state, now);
   return state.phase.id === 'draw' && allSolved(state) ? enterReveal(state, now) : state;
 }
 const reduce = composeReduce<State, Input>({
