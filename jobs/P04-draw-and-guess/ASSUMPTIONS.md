@@ -30,3 +30,5 @@
 - Research recommendation for reveal duration is SDK `readingMs`, with
   concise copy aiming at 8-10 seconds. Final implementation and checks record
   its exact value in the game README and VERIFY.md.
+
+The research proposal mentioned an eraser. The shipped small toolset uses complete-gesture Undo and two-tap Clear to correct drawings; no pixel eraser is needed by the job. This is a deliberate phone usability choice.

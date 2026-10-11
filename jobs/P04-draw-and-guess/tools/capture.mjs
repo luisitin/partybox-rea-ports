@@ -94,7 +94,7 @@ try {
     .sort()) {
     const tv = name.endsWith('-tv.html');
     const width = tv ? 1920 : 390;
-    const height = tv ? 1080 : 844;
+    const height = tv ? 1080 : name.includes('-keyboard') ? 500 : 844;
     await rpc(socket, 'Emulation.setDeviceMetricsOverride', {
       width,
       height,
@@ -119,7 +119,7 @@ try {
       awaitPromise: true,
     });
     const geometry = await rpc(socket, 'Runtime.evaluate', {
-      expression: `JSON.stringify({title:document.title,width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth,scrollHeight:document.documentElement.scrollHeight,buttons:[...document.querySelectorAll('button,input')].map(e=>({label:e.textContent||e.getAttribute('aria-label')||e.id,...Object.fromEntries(['x','y','width','height'].map(k=>[k,e.getBoundingClientRect()[k]]))})),overflow:[...document.querySelectorAll('h1,h2,p,li,button,input')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.bottom>innerHeight+1||r.left< -1||r.top< -1)}).map(e=>e.textContent||e.id)})`,
+      expression: `JSON.stringify({title:document.title,width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth,scrollHeight:document.documentElement.scrollHeight,truncatedNames:[...document.querySelectorAll('[title]')].filter(e=>e.scrollWidth>e.clientWidth+1).map(e=>e.title),buttons:[...document.querySelectorAll('button,input')].map(e=>({label:e.textContent||e.getAttribute('aria-label')||e.id,...Object.fromEntries(['x','y','width','height'].map(k=>[k,e.getBoundingClientRect()[k]]))})),overflow:[...document.querySelectorAll('h1,h2,p,li,button,input')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.bottom>innerHeight+1||r.left< -1||r.top< -1)}).map(e=>e.textContent||e.id)})`,
       returnByValue: true,
     });
     reports.push({ file: name, ...JSON.parse(geometry.result.value) });

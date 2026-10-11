@@ -581,11 +581,33 @@ ight is the :root default above) ────────
         color: var(--pb-accent-3);
       }
 
+      ._identity_4e881f {
+        display: grid;
+        min-width: 0;
+      }
+
       ._name_4e881f {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         font-weight: 800;
+      }
+
+      ._winnerLabel_4e881f {
+        color: var(--pb-accent-2);
+        font-size: inherit;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      ._rows_4e881f[data-final='true'] ._mark_4e881f {
+        width: 2ch;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._rows_4e881f li[data-winner='true'] ._mark_4e881f {
+        color: var(--pb-accent-2);
       }
 
       ._gain_4e881f {
@@ -613,6 +635,14 @@ ight is the :root default above) ────────
         padding: var(--pb-space-2);
         gap: var(--pb-space-1);
         border-width: 0;
+      }
+
+      ._rows_4e881f[data-phone='true'] ._name_4e881f,
+      ._rows_4e881f[data-phone='true'] ._winnerLabel_4e881f {
+        overflow: visible;
+        text-overflow: clip;
+        white-space: normal;
+        overflow-wrap: anywhere;
       }
 
       ._rows_4e881f li[data-me='true'] {
@@ -833,7 +863,7 @@ ight is the :root default above) ────────
             ><button type="button" aria-pressed="false">
               <i style="background: var(--pb-info)" aria-hidden="true"></i>Sky</button
             ><button type="button" aria-pressed="false">
-              <i style="background: var(--pb-player-5)" aria-hidden="true"></i>Violet
+              <i style="background: var(--pb-text-muted)" aria-hidden="true"></i>Gray
             </button>
           </div>
           <div class="_sizes_2a652a" role="group" aria-label="Line thickness">
@@ -842,7 +872,8 @@ ight is the :root default above) ────────
             ><button type="button" aria-pressed="false">Thick</button>
           </div>
           <div class="_edits_2a652a">
-            <button type="button">Undo</button><button type="button">Clear</button
+            <button type="button">Undo</button
+            ><button type="button" aria-pressed="false">Clear</button
             ><span role="status">Pictures, not letters!</span>
           </div>
         </div>

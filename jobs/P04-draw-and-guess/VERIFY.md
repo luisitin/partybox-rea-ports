@@ -96,3 +96,10 @@ no replay on repeated views, and silence while paused. Each countdown second
 has a per-turn deduplication bit. Browser closes in finally before Vite cleanup.
 The harness pins existing React/Zod prebundling and waits for the250ms SDK clock
 sample; development reloads and premature clock assertions are avoided.
+
+R9: Regenerated actual SSR evidence and `node jobs/P04-draw-and-guess/tools/capture.mjs`
+yield32HTML+32PNG screens. All32have zero viewport overflow; long-name final
+rows have zero truncation (before7/8truncated). Longest-word, keyboard-height,
+eight-way tie and reveal handoff screens were checked by hand. TV winner labels
+inherit32px roster type. A Windows Vitest worker emitted a cleanup timeout after
+10passing evidence assertions during desktop load; it exited0 and CI remainsgreen.

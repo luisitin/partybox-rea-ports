@@ -581,11 +581,33 @@ ight is the :root default above) ────────
         color: var(--pb-accent-3);
       }
 
+      ._identity_4e881f {
+        display: grid;
+        min-width: 0;
+      }
+
       ._name_4e881f {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         font-weight: 800;
+      }
+
+      ._winnerLabel_4e881f {
+        color: var(--pb-accent-2);
+        font-size: inherit;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      ._rows_4e881f[data-final='true'] ._mark_4e881f {
+        width: 2ch;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._rows_4e881f li[data-winner='true'] ._mark_4e881f {
+        color: var(--pb-accent-2);
       }
 
       ._gain_4e881f {
@@ -613,6 +635,14 @@ ight is the :root default above) ────────
         padding: var(--pb-space-2);
         gap: var(--pb-space-1);
         border-width: 0;
+      }
+
+      ._rows_4e881f[data-phone='true'] ._name_4e881f,
+      ._rows_4e881f[data-phone='true'] ._winnerLabel_4e881f {
+        overflow: visible;
+        text-overflow: clip;
+        white-space: normal;
+        overflow-wrap: anywhere;
       }
 
       ._rows_4e881f li[data-me='true'] {
@@ -837,49 +867,55 @@ ight is the :root default above) ────────
             ></polyline>
           </svg>
         </div>
-        <ul class="_rows_4e881f" aria-label="Players and points" data-phone="true">
-          <li data-me="false" data-solved="true">
+        <ul
+          class="_rows_4e881f"
+          aria-label="Players and points"
+          data-phone="true"
+          data-final="false"
+        >
+          <li data-me="false" data-solved="true" data-winner="false">
             <span class="_mark_4e881f" aria-label="Solved">✓</span
-            ><span class="_name_4e881f" title="Eli">Eli</span><span class="_gain_4e881f">+848</span
-            ><b class="_points_4e881f">848</b>
+            ><span class="_identity_4e881f"><span class="_name_4e881f" title="Eli">Eli</span></span
+            ><span class="_gain_4e881f">+848</span><b class="_points_4e881f">848</b>
           </li>
-          <li data-me="false" data-solved="true">
+          <li data-me="false" data-solved="true" data-winner="false">
             <span class="_mark_4e881f" aria-label="Solved">✓</span
-            ><span class="_name_4e881f" title="Ben">Ben</span><span class="_gain_4e881f">+813</span
-            ><b class="_points_4e881f">813</b>
+            ><span class="_identity_4e881f"><span class="_name_4e881f" title="Ben">Ben</span></span
+            ><span class="_gain_4e881f">+813</span><b class="_points_4e881f">813</b>
           </li>
-          <li data-me="false" data-solved="true">
+          <li data-me="false" data-solved="true" data-winner="false">
             <span class="_mark_4e881f" aria-label="Solved">✓</span
-            ><span class="_name_4e881f" title="Gus">Gus</span><span class="_gain_4e881f">+778</span
-            ><b class="_points_4e881f">778</b>
+            ><span class="_identity_4e881f"><span class="_name_4e881f" title="Gus">Gus</span></span
+            ><span class="_gain_4e881f">+778</span><b class="_points_4e881f">778</b>
           </li>
-          <li data-me="true" data-solved="false">
+          <li data-me="true" data-solved="false" data-winner="false">
             <span class="_mark_4e881f" aria-label="Artist">✎</span
-            ><span class="_name_4e881f" title="Cy">Cy</span><span class="_gain_4e881f">+750</span
-            ><b class="_points_4e881f">750</b>
+            ><span class="_identity_4e881f"><span class="_name_4e881f" title="Cy">Cy</span></span
+            ><span class="_gain_4e881f">+750</span><b class="_points_4e881f">750</b>
           </li>
-          <li data-me="false" data-solved="false">
+          <li data-me="false" data-solved="false" data-winner="false">
             <span class="_mark_4e881f" aria-label="Guessing">·</span
-            ><span class="_name_4e881f" title="Ana">Ana</span><span class="_gain_4e881f">+0</span
-            ><b class="_points_4e881f">0</b>
+            ><span class="_identity_4e881f"><span class="_name_4e881f" title="Ana">Ana</span></span
+            ><span class="_gain_4e881f">+0</span><b class="_points_4e881f">0</b>
           </li>
-          <li data-me="false" data-solved="false">
+          <li data-me="false" data-solved="false" data-winner="false">
             <span class="_mark_4e881f" aria-label="Guessing">·</span
-            ><span class="_name_4e881f" title="Dee">Dee</span><span class="_gain_4e881f">+0</span
-            ><b class="_points_4e881f">0</b>
+            ><span class="_identity_4e881f"><span class="_name_4e881f" title="Dee">Dee</span></span
+            ><span class="_gain_4e881f">+0</span><b class="_points_4e881f">0</b>
           </li>
-          <li data-me="false" data-solved="false">
+          <li data-me="false" data-solved="false" data-winner="false">
             <span class="_mark_4e881f" aria-label="Guessing">·</span
-            ><span class="_name_4e881f" title="Fay">Fay</span><span class="_gain_4e881f">+0</span
-            ><b class="_points_4e881f">0</b>
+            ><span class="_identity_4e881f"><span class="_name_4e881f" title="Fay">Fay</span></span
+            ><span class="_gain_4e881f">+0</span><b class="_points_4e881f">0</b>
           </li>
-          <li data-me="false" data-solved="false">
+          <li data-me="false" data-solved="false" data-winner="false">
             <span class="_mark_4e881f" aria-label="Guessing">·</span
-            ><span class="_name_4e881f" title="Hal">Hal</span><span class="_gain_4e881f">+0</span
-            ><b class="_points_4e881f">0</b>
+            ><span class="_identity_4e881f"><span class="_name_4e881f" title="Hal">Hal</span></span
+            ><span class="_gain_4e881f">+0</span><b class="_points_4e881f">0</b>
           </li>
         </ul>
         <p class="_message_49b69d">+750 this turn · 750 points total</p>
+        <p class="_message_49b69d">Next artist: Eli</p>
       </section>
     </main>
   </body>
