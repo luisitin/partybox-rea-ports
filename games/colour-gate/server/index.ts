@@ -22,6 +22,7 @@ import { inputSchema } from './world';
 
 const manifest = gameManifestSchema.parse(manifestJson);
 interface MatchView {
+  botIds: string[];
   world: World;
   began: number;
   endsAt: number;
@@ -62,7 +63,7 @@ const advance = (state: State, now: number): State => {
       : enterPlay(state, now, state.round + 1);
   return state;
 };
-const reduce = composeReduce<State, Input>({
+const composedReduce = composeReduce<State, Input>({
   phases: { play: reducePlay, score: reduceScore },
   advance,
   skip: (state, now) =>
@@ -88,6 +89,14 @@ const reduce = composeReduce<State, Input>({
     return ms > 0 ? { ...state, began: state.began + ms, endsAt: state.endsAt + ms } : state;
   },
 });
+function reduce(state: State, event: Parameters<typeof composedReduce>[1]): State {
+  const earliest = Math.max(
+    state.phase.startedAt,
+    state.phase.paused?.at ?? 0,
+    state.phase.id === 'play' ? state.began + state.world.checked : 0,
+  );
+  return event.type === 'vip' && event.now < earliest ? state : composedReduce(state, event);
+}
 const statusOf =
   (state: State) =>
   (id: string): 'active' | 'waiting' =>
@@ -96,6 +105,9 @@ const statusOf =
       ? 'active'
       : 'waiting';
 const matchView = (state: State): MatchView => ({
+  botIds: Object.values(state.players)
+    .filter((p) => p.bot)
+    .map((p) => p.id),
   world: state.world,
   began: state.began,
   endsAt: state.endsAt,

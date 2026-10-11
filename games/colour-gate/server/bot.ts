@@ -29,7 +29,7 @@ export function botInput(
   const crossing = reaches ? ((IMPULSE - Math.sqrt(discriminant)) / GRAVITY) * 1000 : 0;
   const matches = reaches && gateColour(gate, t + Math.ceil(crossing / 20) * 20) === runner.colour;
   const danger = runner.y - runner.floor < 18 && runner.velocity < 25;
-  const hover = !reaches && runner.velocity < 55;
+  const hover = !reaches && runner.velocity < (distance > 28 ? 65 : 0);
   if (!(danger || hover || matches)) return null;
   const error = skill === 'easy' ? 0.22 : skill === 'sharp' ? 0.01 : 0.06;
   return rng.float() < error ? null : { type: 'tap' };

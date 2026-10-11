@@ -1,0 +1,150 @@
+.stage {
+  flex: 1;
+  min-height: 0;
+  color: var(--pb-text);
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr auto;
+  align-items: center;
+  gap: var(--pb-space-6);
+}
+
+.round,
+.hint {
+  margin: 0;
+  color: var(--pb-text-muted);
+  font-size: var(--pb-font-body);
+}
+
+.round {
+  font-weight: 800;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--pb-font-h1);
+  line-height: 1.1;
+}
+
+.clock {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-5);
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+}
+
+.clock strong {
+  font-size: calc(var(--pb-font-display) * 0.75);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock[data-low='true'] strong {
+  color: var(--pb-accent-2);
+}
+
+.lanes {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+  gap: var(--pb-space-3);
+}
+
+.runner {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+  gap: var(--pb-space-2);
+  min-width: 0;
+  text-align: center;
+}
+
+.name {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--pb-font-body);
+  font-weight: 900;
+}
+
+.bot {
+  margin-left: var(--pb-space-2);
+  font-weight: 700;
+}
+
+.colour,
+.progress,
+.status {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.colour span {
+  display: inline-block;
+}
+
+.lane {
+  min-height: 0;
+  background: var(--pb-surface);
+  border-radius: var(--pb-radius);
+  overflow: hidden;
+}
+
+.status {
+  color: var(--pb-text-muted);
+  min-height: 1.2em;
+}
+
+.resultHeading {
+  text-align: center;
+  display: grid;
+  gap: var(--pb-space-3);
+}
+
+.standings {
+  margin: auto 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--pb-space-5) var(--pb-space-7);
+  font-size: var(--pb-font-body);
+}
+
+.standings li {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-5);
+  padding: var(--pb-space-5);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  min-width: 0;
+}
+
+.place {
+  font-size: var(--pb-font-h2);
+  color: var(--pb-text-muted);
+}
+
+.resultName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gained {
+  color: var(--pb-accent-3);
+  font-weight: 900;
+}
+
+.total {
+  font-size: var(--pb-font-h2);
+  font-variant-numeric: tabular-nums;
+}

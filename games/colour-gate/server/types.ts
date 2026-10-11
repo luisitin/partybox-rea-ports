@@ -8,7 +8,7 @@ export const STEP_MS = 20;
 export const TICK_MS = 100;
 export const TAP_MS = 140;
 export const GRAVITY = 420;
-export const IMPULSE = 190;
+export const IMPULSE = 105;
 export const RETRY_MS = 1200;
 export const GAP = 120;
 

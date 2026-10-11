@@ -30,7 +30,7 @@ The same stage appears for remote seats that cannot see the TV. Spectators get a
 
 ## Inputs
 
-`{ type: 'tap' }` sets upward velocity to 190 course units/s. Inputs at least 140 ms apart are accepted, while holding does not repeat. Gravity is 420 units/s². About two taps/s hovers; a faster cadence climbs. Unknown, spectator, disconnected, stale and paused inputs are ignored.
+`{ type: 'tap' }` sets upward velocity to 105 course units/s. Inputs at least 140 ms apart are accepted, while holding does not repeat. Gravity is 420 units/s². Two taps/s hovers; a faster cadence climbs. Unknown, spectator, disconnected, stale and paused inputs are ignored.
 
 ## Scoring
 
