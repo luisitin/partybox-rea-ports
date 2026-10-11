@@ -7,7 +7,11 @@ import { game } from '../server/index';
 import type { State } from '../server/types';
 
 const runs = Number(process.env['SNAKE_SIM_RUNS'] ?? 1000);
-const counts = process.env['SNAKE_SIM_ALL_COUNTS'] === '1' ? [2, 3, 4, 5, 6, 7, 8] : [2, 4, 8];
+const counts = process.env['SNAKE_SIM_COUNTS']
+  ? process.env['SNAKE_SIM_COUNTS'].split(',').map(Number)
+  : process.env['SNAKE_SIM_ALL_COUNTS'] === '1'
+    ? [2, 3, 4, 5, 6, 7, 8]
+    : [2, 4, 8];
 const skills: BotSkill[] = ['easy', 'normal', 'sharp'];
 
 export function simulate(

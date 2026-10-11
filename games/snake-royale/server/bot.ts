@@ -2,17 +2,22 @@
 import type { BotSkill } from '@partybox/game-sdk';
 import { angleDelta, distance2, pointSegment2, rounded } from './geometry';
 import { H, MIN_MASS, W } from './types';
-import type { Input, Point, World } from './types';
+import type { Food, Input, Point, World } from './types';
 
 export function botInput(world: World, id: string, skill: BotSkill = 'normal'): Input | null {
   const snake = world.snakes.find((s) => s.id === id);
   if (!snake || snake.respawnAt !== null) return null;
   const head = snake.body[0]!;
   const look = skill === 'easy' ? 8 : skill === 'sharp' ? 20 : 14;
-  const foods = [...world.food].sort(
-    (a, b) => distance2(head, [a.x, a.y]) - distance2(head, [b.x, b.y]),
-  );
-  const nearest = foods[0];
+  let nearest: Food | undefined;
+  let nearestDistance = Infinity;
+  for (const food of world.food) {
+    const distance = distance2(head, [food.x, food.y]);
+    if (distance < nearestDistance) {
+      nearest = food;
+      nearestDistance = distance;
+    }
+  }
   const foodAngle = nearest ? Math.atan2(nearest.y - head[1], nearest.x - head[0]) : snake.angle;
   const candidates = [
     snake.target,
