@@ -1,7 +1,7 @@
 // Fixed-step simultaneous arena, bounded bodies and edible wreckage. Self-crossing is safe.
 import type { RngState } from '@partybox/game-sdk';
 import { spark } from './content';
-import { angleDelta, distance2, rounded, segmentDistance2 } from './geometry';
+import { angleDelta, rounded, segmentDistance2 } from './geometry';
 import {
   BOOST_COST,
   BOOST_SPEED,
@@ -177,23 +177,34 @@ function step(world: World, rng: RngState, connected: Record<string, boolean>): 
   });
   const food: Food[] = [];
   for (const f of world.food) {
-    let nearest = Infinity;
-    let eaters: number[] = [];
-    snakes.forEach((s, i) => {
-      if (s.respawnAt !== null) return;
-      const d = distance2(s.body[0]!, [f.x, f.y]);
-      if (d > (RADIUS + 1.2) ** 2) return;
+    let nearest = Infinity,
+      first = -1,
+      tied: number[] | undefined;
+    for (let i = 0; i < snakes.length; i++) {
+      const s = snakes[i]!;
+      if (s.respawnAt !== null) continue;
+      const h = s.body[0]!;
+      const d = (h[0] - f.x) ** 2 + (h[1] - f.y) ** 2;
+      if (d > (RADIUS + 1.2) ** 2) continue;
       if (d < nearest - 0.000001) {
         nearest = d;
-        eaters = [i];
-      } else if (Math.abs(d - nearest) < 0.000001) eaters.push(i);
-    });
-    if (eaters.length === 0) food.push(f);
-    else
-      for (const i of eaters) {
-        const s = snakes[i]!;
-        snakes[i] = { ...s, mass: rounded(Math.min(MAX_MASS, s.mass + f.value / eaters.length)) };
+        first = i;
+        tied = undefined;
+      } else if (Math.abs(d - nearest) < 0.000001) {
+        if (tied) tied.push(i);
+        else tied = [first, i];
       }
+    }
+    if (first === -1) food.push(f);
+    else if (tied) {
+      for (const i of tied) {
+        const s = snakes[i]!;
+        snakes[i] = { ...s, mass: rounded(Math.min(MAX_MASS, s.mass + f.value / tied.length)) };
+      }
+    } else {
+      const s = snakes[first]!;
+      snakes[first] = { ...s, mass: rounded(Math.min(MAX_MASS, s.mass + f.value)) };
+    }
   }
   food.push(...extra);
   let r = rng;

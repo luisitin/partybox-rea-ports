@@ -50,14 +50,9 @@ const mutations = [
   ['no right-wall deaths', 'world.ts', 'h[0] > W - RADIUS', 'false'],
   ['self collision enabled', 'world.ts', 'seg.owner !== i', 'true'],
   ['head collision immunity', 'world.ts', 'dead.add(j);', 'void j;'],
-  ['lose growth', 'world.ts', 's.mass + f.value / eaters.length', 's.mass'],
-  [
-    'no growth cap',
-    'world.ts',
-    'Math.min(MAX_MASS, s.mass + f.value / eaters.length)',
-    '(s.mass + f.value / eaters.length)',
-  ],
-  ['full value to tied eaters', 'world.ts', 'f.value / eaters.length', 'f.value'],
+  ['lose growth', 'world.ts', 's.mass + f.value)', 's.mass)'],
+  ['no growth cap', 'world.ts', 'Math.min(MAX_MASS, s.mass + f.value)', '(s.mass + f.value)'],
+  ['full value to tied eaters', 'world.ts', 'f.value / tied.length', 'f.value'],
 ];
 const results = [];
 for (const [name, path, from, to] of mutations) {

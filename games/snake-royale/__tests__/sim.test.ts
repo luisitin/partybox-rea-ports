@@ -7,6 +7,7 @@ import { game } from '../server/index';
 import type { State } from '../server/types';
 
 const runs = Number(process.env['SNAKE_SIM_RUNS'] ?? 1000);
+const wallTimeout = Number(process.env['SNAKE_SIM_TIMEOUT_MS'] ?? 1_200_000);
 const counts = process.env['SNAKE_SIM_COUNTS']
   ? process.env['SNAKE_SIM_COUNTS'].split(',').map(Number)
   : process.env['SNAKE_SIM_ALL_COUNTS'] === '1'
@@ -91,6 +92,6 @@ describe('seeded bot completion', () => {
         writeFileSync(`${dir}/sim-${count}.json`, JSON.stringify(summary, null, 2) + '\n');
       }
     },
-    1_200_000,
+    wallTimeout,
   );
 });
