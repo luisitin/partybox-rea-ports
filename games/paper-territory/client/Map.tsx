@@ -29,6 +29,29 @@ export interface MapProps {
   compact?: boolean;
 }
 
+// Short trails stay attached to their numbered head; long trails get sparse owner pins.
+export function trailMarkerCells(trail: readonly number[], head: number, width: number): number[] {
+  if (width < 1 || trail.length < 4) return [];
+  const [headX, headY] = cellCenter(head, width);
+  const spacing = Math.max(8, Math.ceil(trail.length / 8));
+  const selected: number[] = [];
+  for (let index = 0; index < trail.length; index += spacing) {
+    const cell = trail[index];
+    if (cell === undefined) continue;
+    const [x, y] = cellCenter(cell, width);
+    if (Math.hypot(x - headX, y - headY) < 2.5) continue;
+    if (
+      selected.some((other) => {
+        const [otherX, otherY] = cellCenter(other, width);
+        return Math.hypot(x - otherX, y - otherY) < 2.5;
+      })
+    )
+      continue;
+    selected.push(cell);
+  }
+  return selected;
+}
+
 export function Map({
   width,
   height,
@@ -98,15 +121,50 @@ export function Map({
         );
       })}
       {runners
+        .filter((runner) => runner.alive && runner.trail.length > 0)
+        .map((runner) => {
+          const path = trailPath([...runner.trail, runner.cell], width);
+          const mine = runner.id === meId;
+          return (
+            <g key={runner.id}>
+              {mine ? (
+                <path d={path} className={styles.trailUnder} data-trail-outline={runner.slot + 1} />
+              ) : null}
+              <path
+                d={path}
+                stroke={playerInk(runner.slot)}
+                className={styles.trail}
+                data-mine={mine || undefined}
+                data-trail={runner.slot + 1}
+              />
+            </g>
+          );
+        })}
+      {runners
         .filter((runner) => runner.alive)
-        .map((runner) => (
-          <path
-            key={runner.id}
-            d={trailPath([...runner.trail, runner.cell], width)}
-            stroke={playerInk(runner.slot)}
-            className={styles.trail}
-          />
-        ))}
+        .flatMap((runner) =>
+          trailMarkerCells(runner.trail, runner.cell, width).map((cell) => {
+            const [x, y] = cellCenter(cell, width);
+            return (
+              <g
+                key={`${runner.id}-${cell}`}
+                transform={`translate(${x} ${y})`}
+                data-trail-owner={runner.slot + 1}
+                data-trail-cell={cell}
+              >
+                <circle r="0.72" className={styles.trailBadge} />
+                <text
+                  className={styles.trailNumber}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  data-marker="trail"
+                >
+                  {runner.slot + 1}
+                </text>
+              </g>
+            );
+          }),
+        )}
       {runners
         .filter((runner) => runner.alive)
         .sort((a, b) => Number(a.id === meId) - Number(b.id === meId))
