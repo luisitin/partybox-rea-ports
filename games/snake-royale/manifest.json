@@ -1,0 +1,33 @@
+{
+  "id": "snake-royale",
+  "name": "Snake Royale",
+  "icon": "🐍",
+  "tagline": "Grow your snake. Cut off the crowd.",
+  "description": "Steer through a shared arena, eat sparks and spend your size to boost past rivals. Hit another snake and your body becomes food. Return in two seconds and grow again. Your size when each round ends becomes match points.",
+  "howToPlay": [
+    "Drag the direction pad to steer. Eat sparks to grow longer.",
+    "BOOST spends size. Hit a rival or wall and return in two seconds.",
+    "Your size at the end of each round scores. Most points after three rounds wins."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 5,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-10-11",
+  "settings": [
+    {
+      "key": "rounds",
+      "label": "Rounds",
+      "description": "Rounds in the match",
+      "type": "number",
+      "default": 3,
+      "min": 1,
+      "max": 3,
+      "step": 1
+    }
+  ],
+  "supportsBots": true
+}

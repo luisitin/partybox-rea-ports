@@ -1,0 +1,23 @@
+name: P06 Snake Royale
+on:
+  pull_request:
+    paths:
+      - 'games/snake-royale/**'
+      - 'jobs/P06-snake-royale/**'
+      - '.github/workflows/P06.yml'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm format
+      - run: pnpm vitest run games/snake-royale --maxWorkers=1
