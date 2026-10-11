@@ -43,6 +43,7 @@ export function reducePlay(state: State, event: GameEvent<Input>, next: Transiti
       : state;
   if (
     event.type !== 'input' ||
+    event.now < state.began + state.checked ||
     !hasPlayer(state, event.playerId) ||
     !state.players[event.playerId]?.connected ||
     state.left.includes(event.playerId)

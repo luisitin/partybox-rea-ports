@@ -1,9 +1,9 @@
 # P07 resume point
 
-Owner: r4-local. Branch: job/P07-paper-territory. Claim committed on main05be386 after re-reading the post-pull claims.
+Owner r4-local, branch job/P07-paper-territory. Research, original pure game, TV/phone/stage clients, all four fixtures, scoped CI and28 styled screen renders are complete. Screens fit1920x1080 and390x844 with80px reserved phone shell top/bottom; min touch58.65px. Includes paused/out/spectator/remote screens. Media about3MB; hashes recorded.
 
-Research is complete. Deterministic world, phase reducer, scoring, manifest and public projections are implemented. Client and verification agents are writing their respective files. First typecheck confirmed server compiles; client entry modules were awaiting the views.
+Fast geometry/lifecycle checks30/30 andclient14/14 passed. Initial1003propertytracespassed.3000 seeded bot games are running; final run will measure600msbotbeats plusarea/capture/death bystrength. Audit fixed pause/end scoring, unknown-player catchup, spawn-before-control, blockedhomecountdown, and trail-wide sharp-bot threats. Final test sources include regressions.
 
-Next: fast geometry/lifecycle checks and fix concrete findings; finish clients; generate deterministic four-phase fixtures and SSR screens; run1003 property seeds,3000 bot games and20 serial source mutations; review fit at1920x1080 and390x844, hash media under10MB; final typecheck/format/scopedtests; draft PR with job README body, wait green CI then KEEP GOING until3consecutive player-unnoticeable rounds.
+Next:20serialsource mutants (verification agent gets lock after this milestone push), restore, finaltypecheck/format/full own-game tests includingcontract, finalmetricJSON,VERIFYrecords. Then draft PR titleP07 Paper Territory/bodyjobREADME, awaitgreenCI, readyPRandKEEP GOING until3roundswithoutnoticeablegain. RefreshCLAIMSaftereverypush withpull--rebasebeforeclaimcommit.
 
-P04 claim collision is preserved separately on r4-local/P04-draw-and-guess-salvage. Do not change r2's P04 branch or claim.
+P04collision ispreserved separately onr4-local/P04-draw-and-guess-salvage; do notchange r2'sP04branchorclaim.

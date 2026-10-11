@@ -139,48 +139,31 @@ export function captureCells(world: World, slot: number, trail: readonly number[
 export function stepWorld(world: World, activeIds: readonly string[]): World {
   const active = new Set(activeIds);
   const stepped = world.stepped + 1;
-  let source = world;
-  const respawned = world.runners.filter(
-    (r) => !r.alive && r.respawnTick !== null && r.respawnTick <= stepped && active.has(r.id),
-  );
-  if (respawned.length)
-    source = {
-      ...world,
-      runners: world.runners.map((r) =>
-        respawned.includes(r) &&
-        !world.runners.some((other) => other.alive && other.cell === r.home)
-          ? {
-              ...r,
-              cell: r.home,
-              alive: true,
-              trail: [],
-              respawnTick: null,
-              cause: null,
-              dir: (r.home % world.width < world.width / 2 ? 1 : 3) as Direction,
-              queued: (r.home % world.width < world.width / 2 ? 1 : 3) as Direction,
-            }
-          : r,
-      ),
-    };
+  const source = world;
   const moving = source.runners.filter((r) => r.alive && active.has(r.id));
   const positions = new Map(
     moving.map((r) => [r.slot, neighbour(r.cell, r.queued, world.width, world.height)]),
   );
   const deaths = new Map<number, Runner['cause']>();
+  const markDeath = (slot: number, cause: Exclude<Runner['cause'], null>): void => {
+    const priority = { connection: 0, cut: 1, trail: 2, wall: 3, head: 4 };
+    const previous = deaths.get(slot);
+    if (!previous || priority[cause] > priority[previous]) deaths.set(slot, cause);
+  };
   for (const r of moving) {
     const at = positions.get(r.slot)!;
     if (at < 0) {
-      deaths.set(r.slot, 'wall');
+      markDeath(r.slot, 'wall');
       continue;
     }
-    if (r.trail.includes(at)) deaths.set(r.slot, 'trail');
+    if (r.trail.includes(at)) markDeath(r.slot, 'trail');
     for (const other of source.runners) {
       if (!other.alive || other.slot === r.slot) continue;
-      if (other.trail.includes(at)) deaths.set(other.slot, 'cut');
+      if (other.trail.includes(at)) markDeath(other.slot, 'cut');
       const there = positions.get(other.slot) ?? other.cell;
       if (at === there || (at === other.cell && there === r.cell)) {
-        deaths.set(r.slot, 'head');
-        deaths.set(other.slot, 'head');
+        markDeath(r.slot, 'head');
+        markDeath(other.slot, 'head');
       }
     }
   }
@@ -230,6 +213,25 @@ export function stepWorld(world: World, activeIds: readonly string[]): World {
   return {
     ...next,
     runners: next.runners.map((r) => {
+      // Returning happens after existing heads move. A revived player gets a visible
+      // home frame and a steering opportunity, never an unseen same-tick collision.
+      if (
+        !r.alive &&
+        r.respawnTick !== null &&
+        r.respawnTick <= stepped &&
+        active.has(r.id) &&
+        !next.runners.some((other) => other.alive && other.cell === r.home)
+      )
+        return {
+          ...r,
+          cell: r.home,
+          alive: true,
+          trail: [],
+          respawnTick: null,
+          cause: null,
+          dir: (r.home % world.width < world.width / 2 ? 1 : 3) as Direction,
+          queued: (r.home % world.width < world.width / 2 ? 1 : 3) as Direction,
+        };
       if (!positions.has(r.slot) || !r.alive || next.owners[r.cell] === r.slot) return r;
       return { ...r, trail: [...r.trail, r.cell] };
     }),

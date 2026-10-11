@@ -76,7 +76,16 @@ export function botInput(
     const runs = segments(world, me.trail);
     const turning = runs.at(-1)! >= span;
     const turns = options.filter((dir) => dir !== me.dir);
-    if (me.trail.length >= span * 4 + 3 || !options.includes(me.dir))
+    const threatDistance = skill === 'sharp' ? 4 : skill === 'normal' ? 2 : 0;
+    const threatened =
+      threatDistance > 0 &&
+      world.runners.some(
+        (other) =>
+          other.slot !== me.slot &&
+          other.alive &&
+          me.trail.some((cell) => distance(world, other.cell, cell) <= threatDistance),
+      );
+    if (threatened || me.trail.length >= span * 4 + 3 || !options.includes(me.dir))
       choice = homeRoute(world, me, options) ?? choice;
     else if (turning && turns.length) {
       const homeward = [...turns].sort(

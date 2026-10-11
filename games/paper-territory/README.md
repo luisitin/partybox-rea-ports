@@ -37,7 +37,7 @@ Each move is exactly one orthogonal cell. A tick first proposes every live head 
 - A head entering any rival's previously exposed trail cuts that rival, even if the rival would close its loop on the same tick. Entering your own exposed trail crashes you (the classic browser variant).
 - Leaving the map crashes you. Two heads entering the same cell, or swapping cells, both crash. New trail segments have no seat-order advantage.
 - Multiple closures use one post-crash snapshot. Cells claimed by more than one player on the same tick become neutral, including previously owned land; protected homes retain their owner. Every unambiguous claim wins independently of roster iteration order.
-- A crash removes all your land outside your protected home and clears your trail. You return after 15 physics ticks (three seconds), unless someone occupies the home centre; then return waits for a free tick. You never spawn on another head.
+- A crash removes all your land outside your protected home and clears your trail. You return after 15 physics ticks (three seconds), unless someone occupies the home centre; then return waits for a free tick. Returns happen after existing heads move, and the player gets a stationary home frame before moving. You never spawn on another head.
 
 ## Scoring and bots
 

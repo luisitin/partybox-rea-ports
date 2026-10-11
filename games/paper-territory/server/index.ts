@@ -93,15 +93,20 @@ const reduce = composeReduce<State, Input>({
     state.phase.id === 'play' ? skipPlay(state, now, enterScore) : advance(state, now),
   end: (state, now) =>
     enterDone(state.phase.id === 'play' && !state.phase.paused ? settle(state, now) : state, now),
-  prepare: (state, event) =>
-    event.type === 'vip' && event.action === 'resume' && state.phase.id === 'play'
-      ? {
-          ...state,
-          began: state.began + pausedFor(state, event.now),
-          endsAt: state.endsAt + pausedFor(state, event.now),
-        }
-      : state,
+  prepare: (state, event) => {
+    if (event.type !== 'vip' || state.phase.id !== 'play') return state;
+    if (event.action === 'pause' && !state.phase.paused)
+      return advancePlay(state, event.now, enterScore);
+    if (event.action === 'resume')
+      return {
+        ...state,
+        began: state.began + pausedFor(state, event.now),
+        endsAt: state.endsAt + pausedFor(state, event.now),
+      };
+    return state;
+  },
   onPlayer: (state, event) => {
+    if (!hasPlayer(state, event.playerId)) return state;
     const base =
       state.phase.id === 'play' && !state.phase.paused
         ? advancePlay(state, event.now, enterScore)
