@@ -1,0 +1,47 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 2 failed) 39ms
+     × timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer 4ms
+     × every player draws once per lap and the final reveal continues into stable complete results 17ms
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 19 passed (21)
+   Start at  16:05:04
+   Duration  609ms (transform 260ms, setup 0ms, import 405ms, tests 39ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer
+AssertionError: expected 'draw' to be 'reveal' // Object.is equality
+
+Expected: "reveal"
+Received: "draw"
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:123:24
+    121|     const secret = s.word;
+    122|     s = kit.finish(s, 40);
+    123|     expect(s.phase.id).toBe('reveal');
+       |                        ^
+    124|     expect(game.tvView(s).answer).toBe(secret);
+    125|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > every player draws once per lap and the final reveal continues into stable complete results
+AssertionError: expected 'draw' to be 'done' // Object.is equality
+
+Expected: "done"
+Received: "draw"
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:137:26
+    135|         else s = kit.timer(s);
+    136|       }
+    137|       expect(s.phase.id).toBe('done');
+       |                          ^
+    138|       expect(artists).toHaveLength(8 * laps);
+    139|       for (const id of Object.keys(s.players))
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

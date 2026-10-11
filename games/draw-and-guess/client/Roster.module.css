@@ -1,0 +1,70 @@
+.rows {
+  display: grid;
+  gap: var(--pb-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  line-height: 1.2;
+}
+
+.rows li {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+  min-width: 0;
+  padding: var(--pb-space-1) var(--pb-space-2);
+  background: var(--pb-surface);
+  border: calc(var(--pb-space-1) / 4) solid var(--pb-border);
+  border-radius: var(--pb-radius);
+}
+
+.mark {
+  flex: none;
+  width: 1ch;
+  color: var(--pb-text-muted);
+  font-weight: 900;
+}
+
+.rows li[data-solved='true'] .mark {
+  color: var(--pb-accent-3);
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+.gain {
+  margin-left: auto;
+  color: var(--pb-accent-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.points {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.gain + .points {
+  margin-left: var(--pb-space-2);
+}
+
+.rows[data-phone='true'] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  font-size: var(--pb-font-caption);
+  gap: var(--pb-space-1);
+}
+
+.rows[data-phone='true'] li {
+  padding: var(--pb-space-2);
+  gap: var(--pb-space-1);
+  border-width: 0;
+}
+
+.rows li[data-me='true'] {
+  outline: var(--pb-space-1) solid var(--pb-accent);
+  outline-offset: calc(var(--pb-space-1) * -1);
+}

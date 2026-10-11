@@ -1,0 +1,208 @@
+{
+  "command": "pnpm.cmd vitest run games/draw-and-guess/__tests__/game.test.ts --maxWorkers=1",
+  "total": 20,
+  "caught": 20,
+  "restored": true,
+  "results": [
+    {
+      "id": "M01",
+      "description": "Zero guess base points",
+      "file": "games/draw-and-guess/server/scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "e96883837f0655dd022baa59f2e94cc7fdd9f6926cd3c1a11ed77d3abd78209e",
+      "mutantSha256": "a21a58d2259e10d34e07381b09bdb85c789dd4d37973dc7b875b4b8d4f99bd16",
+      "testLog": "tools/mutation-logs/M01.txt"
+    },
+    {
+      "id": "M02",
+      "description": "Remove speed points",
+      "file": "games/draw-and-guess/server/scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "e96883837f0655dd022baa59f2e94cc7fdd9f6926cd3c1a11ed77d3abd78209e",
+      "mutantSha256": "e4d13c09e46e8635f9ba80c7a4153f153c523eda2d7c1d0bbf49095e7488ef8c",
+      "testLog": "tools/mutation-logs/M02.txt"
+    },
+    {
+      "id": "M03",
+      "description": "Reward slow guesses instead of fast ones",
+      "file": "games/draw-and-guess/server/scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "e96883837f0655dd022baa59f2e94cc7fdd9f6926cd3c1a11ed77d3abd78209e",
+      "mutantSha256": "00861336be66c2a2de9311e2403af3c80d97f7d53d890b88db2180907fbf8de1",
+      "testLog": "tools/mutation-logs/M03.txt"
+    },
+    {
+      "id": "M04",
+      "description": "Artist receives zero points",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "009930262f2f92a2aa6fb54667e085d13865dc4b35d0a0311655270de3a2e906",
+      "mutantSha256": "b836f7d9304193732a9b83585c0acc8c434bfe02a701a8de5b790f95abc96433",
+      "testLog": "tools/mutation-logs/M04.txt"
+    },
+    {
+      "id": "M05",
+      "description": "Replace accumulated solver score",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "009930262f2f92a2aa6fb54667e085d13865dc4b35d0a0311655270de3a2e906",
+      "mutantSha256": "73ef7603d7a95443f09d510e61d48887208a0a527a04151876aaa1c93d1007c3",
+      "testLog": "tools/mutation-logs/M05.txt"
+    },
+    {
+      "id": "M06",
+      "description": "Award correct guesses repeatedly",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "009930262f2f92a2aa6fb54667e085d13865dc4b35d0a0311655270de3a2e906",
+      "mutantSha256": "d1596f233ef1e9a45088cf8101fd06f160fe4e8076ee5dea42d224ae167871e8",
+      "testLog": "tools/mutation-logs/M06.txt"
+    },
+    {
+      "id": "M07",
+      "description": "Every wrong guess scores",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "009930262f2f92a2aa6fb54667e085d13865dc4b35d0a0311655270de3a2e906",
+      "mutantSha256": "6dd66060bfb17f89071000b23b622cb1486a4c4a38810d35847aa369114809e4",
+      "testLog": "tools/mutation-logs/M07.txt"
+    },
+    {
+      "id": "M08",
+      "description": "TV and public board leak the answer",
+      "file": "games/draw-and-guess/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "b00ecbb1bc70d2554458c8fb4bf83498e55c48c95fa24801effd14448b3e4766",
+      "mutantSha256": "a6afc230a674bdc5a2ef65dafb15137eb02f30be0b6e98cc4a774b917db80f66",
+      "testLog": "tools/mutation-logs/M08.txt"
+    },
+    {
+      "id": "M09",
+      "description": "Word choices leak to other phones",
+      "file": "games/draw-and-guess/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "b00ecbb1bc70d2554458c8fb4bf83498e55c48c95fa24801effd14448b3e4766",
+      "mutantSha256": "88487ad2038745616cf2315959e9c56a90a4b166bae62710155e886e4938fc22",
+      "testLog": "tools/mutation-logs/M09.txt"
+    },
+    {
+      "id": "M10",
+      "description": "Drawing secret leaks to all phones",
+      "file": "games/draw-and-guess/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "b00ecbb1bc70d2554458c8fb4bf83498e55c48c95fa24801effd14448b3e4766",
+      "mutantSha256": "db13b707d26ef9a32f157e6484bf20fda26943e7973fb1d14c585c23469539dc",
+      "testLog": "tools/mutation-logs/M10.txt"
+    },
+    {
+      "id": "M11",
+      "description": "Other players choose the artist word",
+      "file": "games/draw-and-guess/server/phases/choose.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "d0df9874a55f100f8e1fcb50cd1ccef312c595bb60517de1eb524035bf9a651f",
+      "mutantSha256": "a4fd1a0c0d1c21ef0f479bbcd0dda399c3a7aa14198df4855e4529e0a3dfc010",
+      "testLog": "tools/mutation-logs/M11.txt"
+    },
+    {
+      "id": "M12",
+      "description": "Other players can erase or paint",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "009930262f2f92a2aa6fb54667e085d13865dc4b35d0a0311655270de3a2e906",
+      "mutantSha256": "e9900613ac8ff637ed3eb5b712c2482684a882da12ddc3075245c1fe3d584a87",
+      "testLog": "tools/mutation-logs/M12.txt"
+    },
+    {
+      "id": "M13",
+      "description": "Undo deletes the oldest stroke",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "009930262f2f92a2aa6fb54667e085d13865dc4b35d0a0311655270de3a2e906",
+      "mutantSha256": "c7541b9cb2300de7143fd92b1af83dd800f15de7e48c36f76d81d2e7270da696",
+      "testLog": "tools/mutation-logs/M13.txt"
+    },
+    {
+      "id": "M14",
+      "description": "Clear keeps all strokes",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "009930262f2f92a2aa6fb54667e085d13865dc4b35d0a0311655270de3a2e906",
+      "mutantSha256": "30d760960e7dbad71c6762222d9beffc07459451f11a108cbbbf7d945e97ea92",
+      "testLog": "tools/mutation-logs/M14.txt"
+    },
+    {
+      "id": "M15",
+      "description": "Stroke limit permits an extra stroke",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "009930262f2f92a2aa6fb54667e085d13865dc4b35d0a0311655270de3a2e906",
+      "mutantSha256": "5415fb29973fbb54ea14a9f50a727303af0c7a11b50bda10771b39d4793fb7de",
+      "testLog": "tools/mutation-logs/M15.txt"
+    },
+    {
+      "id": "M16",
+      "description": "Hints appear twice as early",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "009930262f2f92a2aa6fb54667e085d13865dc4b35d0a0311655270de3a2e906",
+      "mutantSha256": "fd9ce7491b300c1e82a1af63612b2582a820f7dc5bae0ba625fac3d6cbdf7d34",
+      "testLog": "tools/mutation-logs/M16.txt"
+    },
+    {
+      "id": "M17",
+      "description": "Idle drawing never exits at its cap",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "009930262f2f92a2aa6fb54667e085d13865dc4b35d0a0311655270de3a2e906",
+      "mutantSha256": "4e57af289de0e64e276895e8a2fb380a8cbe0ba6207166fd7e7a430d928fb972",
+      "testLog": "tools/mutation-logs/M17.txt"
+    },
+    {
+      "id": "M18",
+      "description": "Draw duration accidentally doubles",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "009930262f2f92a2aa6fb54667e085d13865dc4b35d0a0311655270de3a2e906",
+      "mutantSha256": "2bdb9e497ce41c75d30f8b86d3457822f7244fd49af682cf0c526d389c68cc80",
+      "testLog": "tools/mutation-logs/M18.txt"
+    },
+    {
+      "id": "M19",
+      "description": "Rotation skips every second artist",
+      "file": "games/draw-and-guess/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "b00ecbb1bc70d2554458c8fb4bf83498e55c48c95fa24801effd14448b3e4766",
+      "mutantSha256": "d52c3500d8e245249d46b1c28ae79f9e9b77fe9d758c0c67e398277ef86b2a0a",
+      "testLog": "tools/mutation-logs/M19.txt"
+    },
+    {
+      "id": "M20",
+      "description": "Pause consumes drawing time",
+      "file": "games/draw-and-guess/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "b00ecbb1bc70d2554458c8fb4bf83498e55c48c95fa24801effd14448b3e4766",
+      "mutantSha256": "6e7315abacf6ded694bfbf1254db900bc2c0e0cb5b8de85de3923e9bf730b89e",
+      "testLog": "tools/mutation-logs/M20.txt"
+    }
+  ]
+}

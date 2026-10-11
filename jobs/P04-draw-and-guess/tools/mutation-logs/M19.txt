@@ -1,0 +1,33 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 25ms
+     × every player draws once per lap and the final reveal continues into stable complete results 5ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 20 passed (21)
+   Start at  16:05:39
+   Duration  689ms (transform 318ms, setup 0ms, import 492ms, tests 25ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > every player draws once per lap and the final reveal continues into stable complete results
+AssertionError: expected [ 'p3', 'p1', 'p4', 'p7' ] to have a length of 8 but got 4
+
+- Expected
++ Received
+
+- 8
++ 4
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:138:23
+    136|       }
+    137|       expect(s.phase.id).toBe('done');
+    138|       expect(artists).toHaveLength(8 * laps);
+       |                       ^
+    139|       for (const id of Object.keys(s.players))
+    140|         expect(artists.filter((x) => x === id)).toHaveLength(laps);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

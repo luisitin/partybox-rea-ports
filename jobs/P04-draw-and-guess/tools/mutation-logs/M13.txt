@@ -1,0 +1,49 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 25ms
+     × only the connected drawer may paint, clear or undo, and undo preserves earlier strokes 5ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 20 passed (21)
+   Start at  16:05:00
+   Duration  666ms (transform 327ms, setup 0ms, import 481ms, tests 25ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > only the connected drawer may paint, clear or undo, and undo preserves earlier strokes
+AssertionError: expected [ { points: [ [ 400, 200 ] ], …(2) } ] to deeply equal [ { …(3) } ]
+
+- Expected
++ Received
+
+@@ -1,15 +1,11 @@
+  [
+    {
+-     "color": 2,
++     "color": 3,
+      "points": [
+        [
+-         100,
+-         100,
+-       ],
+-       [
+-         300,
++         400,
+          200,
+        ],
+      ],
+      "width": 9,
+    },
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:47:80
+     45|     const second = { ...stroke, color: 3, points: [[400, 200]] } as ty…
+     46|     const two = kit.input(painted, s.drawer, { type: 'stroke', stroke:…
+     47|     expect(kit.input(two, s.drawer, { type: 'undo' }, s.began + 1600).…
+       |                                                                                ^
+     48|     expect(kit.input(two, s.drawer, { type: 'clear' }, s.began + 1700)…
+     49|     for (const id of [guesser(s), 'spectator', '__proto__', 'construct…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

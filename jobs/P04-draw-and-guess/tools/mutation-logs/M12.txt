@@ -1,0 +1,77 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 2 failed) 30ms
+     × only the connected drawer may paint, clear or undo, and undo preserves earlier strokes 6ms
+     × a faster guess scores more, and the drawer, disconnected seats and unknown ids cannot guess 1ms
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 19 passed (21)
+   Start at  16:04:58
+   Duration  637ms (transform 285ms, setup 0ms, import 443ms, tests 30ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > only the connected drawer may paint, clear or undo, and undo preserves earlier strokes
+AssertionError: expected [ { points: [ …(2) ], …(2) }, …(1) ] to deeply equal [ { …(3) } ]
+
+- Expected
++ Received
+
+@@ -11,6 +11,20 @@
+          200,
+        ],
+      ],
+      "width": 9,
+    },
++   {
++     "color": 2,
++     "points": [
++       [
++         100,
++         100,
++       ],
++       [
++         300,
++         200,
++       ],
++     ],
++     "width": 9,
++   },
+  ]
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:55:55
+     53|         { type: 'clear' },
+     54|       ] as const) {
+     55|         expect(kit.input(painted, id, input).strokes).toEqual([stroke]…
+       |                                                       ^
+     56|       }
+     57|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > a faster guess scores more, and the drawer, disconnected seats and unknown ids cannot guess
+AssertionError: expected { p1: +0, p2: +0, p3: +0, p4: 250 } to deeply equal { p1: +0, p2: +0, p3: +0, p4: +0 }
+
+- Expected
++ Received
+
+  {
+    "p1": 0,
+    "p2": 0,
+    "p3": 0,
+-   "p4": 0,
++   "p4": 250,
+  }
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:192:78
+    190|     expect(early.scores[id]).toBeGreaterThan(late.scores[id]!);
+    191|     for (const playerId of [s.drawer, 'spectator', '__proto__', 'const…
+    192|       expect(kit.input(s, playerId, { type: 'guess', text: s.word }).s…
+       |                                                                              ^
+    193|     }
+    194|     const dropped = kit.player(s, id, false, undefined, s.began + 500);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

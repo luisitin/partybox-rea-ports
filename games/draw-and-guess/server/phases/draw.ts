@@ -3,6 +3,7 @@ import { enterPhase, hasPlayer, isTimerFor, shuffle } from '@partybox/game-sdk';
 import type { GameEvent } from '@partybox/game-sdk';
 import { normalize as normalizeAnswer } from '@partybox/game-sdk/match';
 import { guessPoints } from '../scoring';
+import { compactInk } from '../ink';
 import { BEAT_MS, MAX_STROKES } from '../types';
 import type { State, Input, Transition } from '../types';
 export function normalize(text: string): string {
@@ -78,22 +79,23 @@ export function reduceDraw(state: State, event: GameEvent<Input>, next: Transiti
       return {
         ...state,
         clock: now,
-        strokes: [
+        strokes: compactInk([
           ...state.strokes,
           {
             ...input.stroke,
             points: input.stroke.points.map(([x, y]) => [Math.round(x), Math.round(y)]),
           },
-        ],
+        ]),
       };
     return state;
   }
   if (input.type !== 'guess' || Object.hasOwn(state.solved, playerId)) return state;
   const text = normalize(input.text);
-  if (!text || now - (state.lastGuessAt[playerId] ?? -Infinity) < 750) return state;
+  if (now - (state.lastGuessAt[playerId] ?? -Infinity) < 750)
+    return { ...state, feedback: { ...state.feedback, [playerId]: 'Wait a moment' } };
   const guesses = {
     ...state.guesses,
-    [playerId]: [...(state.guesses[playerId] ?? []).slice(-23), text],
+    [playerId]: [...(state.guesses[playerId] ?? []).slice(-23), input.text.trim()],
   };
   const fresh: State = {
     ...state,

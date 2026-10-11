@@ -1,0 +1,66 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 3 failed) 26ms
+     × awards 300 base plus 700 times remaining time, only once; the artist also earns points 4ms
+     × a faster guess scores more, and the drawer, disconnected seats and unknown ids cannot guess 0ms
+     × adds points to earlier turns instead of replacing either player total 0ms
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 18 passed (21)
+   Start at  16:04:41
+   Duration  614ms (transform 262ms, setup 0ms, import 412ms, tests 26ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > awards 300 base plus 700 times remaining time, only once; the artist also earns points
+AssertionError: expected 440 to be 860 // Object.is equality
+
+- Expected
++ Received
+
+- 860
++ 440
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:156:29
+    154|     const now = s.began + 6000;
+    155|     const next = kit.input(s, id, { type: 'guess', text: s.word }, now…
+    156|     expect(next.scores[id]).toBe(300 + Math.floor((700 * 24_000) / 30_…
+       |                             ^
+    157|     expect(next.gains[id]).toBe(next.scores[id]);
+    158|     expect(next.scores[s.drawer]).toBeGreaterThan(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > a faster guess scores more, and the drawer, disconnected seats and unknown ids cannot guess
+AssertionError: expected 323 to be greater than 976
+ ❯ games/draw-and-guess/__tests__/game.test.ts:190:30
+    188|     const early = kit.input(s, id, { type: 'guess', text: s.word }, s.…
+    189|     const late = kit.input(s, id, { type: 'guess', text: s.word }, s.b…
+    190|     expect(early.scores[id]).toBeGreaterThan(late.scores[id]!);
+       |                              ^
+    191|     for (const playerId of [s.drawer, 'spectator', '__proto__', 'const…
+    192|       expect(kit.input(s, playerId, { type: 'guess', text: s.word }).s…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > adds points to earlier turns instead of replacing either player total
+AssertionError: expected 1640 to be 2060 // Object.is equality
+
+- Expected
++ Received
+
+- 2060
++ 1640
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:203:29
+    201|     const prior = { ...s, scores: { ...s.scores, [id]: 1200, [s.drawer…
+    202|     const next = kit.input(prior, id, { type: 'guess', text: s.word },…
+    203|     expect(next.scores[id]).toBe(1200 + 860);
+       |                             ^
+    204|     expect(next.scores[s.drawer]).toBe(2300 + 250);
+    205|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

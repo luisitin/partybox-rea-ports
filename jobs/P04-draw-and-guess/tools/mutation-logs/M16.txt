@@ -1,0 +1,33 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 24ms
+     × timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer 4ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 20 passed (21)
+   Start at  16:05:03
+   Duration  578ms (transform 255ms, setup 0ms, import 397ms, tests 24ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:115:25
+    113|     };
+    114|     advanceTo(8000);
+    115|     expect(s.hintCount).toBe(0);
+       |                         ^
+    116|     advanceTo(10_000);
+    117|     expect(s.hintCount).toBe(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

@@ -1,0 +1,33 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 38ms
+     × pause ignores play and timers; resume shifts all timing by precisely the held interval 6ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 20 passed (21)
+   Start at  16:05:48
+   Duration  656ms (transform 277ms, setup 0ms, import 433ms, tests 38ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > secrets, lifecycle and determinism > pause ignores play and timers; resume shifts all timing by precisely the held interval
+AssertionError: expected 1031000 to be 1036000 // Object.is equality
+
+- Expected
++ Received
+
+- 1036000
++ 1031000
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:310:28
+    308|     expect(resumed.phase.paused).toBeUndefined();
+    309|     expect(resumed.began).toBe(s.began + 5000);
+    310|     expect(resumed.endsAt).toBe(s.endsAt + 5000);
+       |                            ^
+    311|     expect(resumed.phase.deadline).toBe(s.phase.deadline! + 5000);
+    312|     const id = guesser(s);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

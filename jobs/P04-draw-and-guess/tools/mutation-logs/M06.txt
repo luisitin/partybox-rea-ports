@@ -1,0 +1,39 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 26ms
+     × awards 300 base plus 700 times remaining time, only once; the artist also earns points 5ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 20 passed (21)
+   Start at  16:04:44
+   Duration  600ms (transform 268ms, setup 0ms, import 414ms, tests 26ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > awards 300 base plus 700 times remaining time, only once; the artist also earns points
+AssertionError: expected { p1: +0, p2: 1696, p3: +0, p4: 500 } to deeply equal { p1: +0, p2: 860, p3: +0, p4: 250 }
+
+- Expected
++ Received
+
+  {
+    "p1": 0,
+-   "p2": 860,
++   "p2": 1696,
+    "p3": 0,
+-   "p4": 250,
++   "p4": 500,
+  }
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:161:26
+    159|     expect(Object.keys(next.solved)).toContain(id);
+    160|     const again = kit.input(next, id, { type: 'guess', text: s.word },…
+    161|     expect(again.scores).toEqual(next.scores);
+       |                          ^
+    162|     expect(again.solved).toEqual(next.solved);
+    163|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

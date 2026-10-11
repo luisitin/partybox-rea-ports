@@ -1,0 +1,97 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 4 failed) 25ms
+     × the drawer picks the selected word; the choice timeout picks a valid fallback 4ms
+     × timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer 1ms
+     × awards 300 base plus 700 times remaining time, only once; the artist also earns points 1ms
+     × adds points to earlier turns instead of replacing either player total 0ms
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 17 passed (21)
+   Start at  16:05:05
+   Duration  581ms (transform 252ms, setup 0ms, import 395ms, tests 25ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > the drawer picks the selected word; the choice timeout picks a valid fallback
+AssertionError: expected 60000 to be 30000 // Object.is equality
+
+- Expected
++ Received
+
+- 30000
++ 60000
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:27:42
+     25|     expect(chosen.phase.id).toBe('draw');
+     26|     expect(chosen.word).toBe(s.choices[2]);
+     27|     expect(chosen.endsAt - chosen.began).toBe(30_000);
+       |                                          ^
+     28|     expect(chosen.phase.deadline).toBe(chosen.began + BEAT_MS);
+     29|     const fallback = kit.timer(s);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:117:25
+    115|     expect(s.hintCount).toBe(0);
+    116|     advanceTo(10_000);
+    117|     expect(s.hintCount).toBe(1);
+       |                         ^
+    118|     advanceTo(20_000);
+    119|     expect(s.hintCount).toBe(2);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > awards 300 base plus 700 times remaining time, only once; the artist also earns points
+AssertionError: expected 930 to be 860 // Object.is equality
+
+- Expected
++ Received
+
+- 860
++ 930
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:156:29
+    154|     const now = s.began + 6000;
+    155|     const next = kit.input(s, id, { type: 'guess', text: s.word }, now…
+    156|     expect(next.scores[id]).toBe(300 + Math.floor((700 * 24_000) / 30_…
+       |                             ^
+    157|     expect(next.gains[id]).toBe(next.scores[id]);
+    158|     expect(next.scores[s.drawer]).toBeGreaterThan(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > adds points to earlier turns instead of replacing either player total
+AssertionError: expected 2130 to be 2060 // Object.is equality
+
+- Expected
++ Received
+
+- 2060
++ 2130
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:203:29
+    201|     const prior = { ...s, scores: { ...s.scores, [id]: 1200, [s.drawer…
+    202|     const next = kit.input(prior, id, { type: 'guess', text: s.word },…
+    203|     expect(next.scores[id]).toBe(1200 + 860);
+       |                             ^
+    204|     expect(next.scores[s.drawer]).toBe(2300 + 250);
+    205|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+[vitest-pool]: Timeout terminating forks worker for test files C:/dev/rea-runs/r2/games/draw-and-guess/__tests__/game.test.ts.
+close timed out after 10000ms
+Tests closed successfully but something prevents Vite server from exiting
+You can try to identify the cause by enabling "hanging-process" reporter. See https://vitest.dev/guide/reporters.html#hanging-process-reporter

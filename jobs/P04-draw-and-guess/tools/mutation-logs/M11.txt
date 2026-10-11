@@ -1,0 +1,103 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 27ms
+     × ignores choices from guessers and spectators, including prototype names 6ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 20 passed (21)
+   Start at  16:04:50
+   Duration  710ms (transform 279ms, setup 0ms, import 435ms, tests 27ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > ignores choices from guessers and spectators, including prototype names
+AssertionError: expected { phase: { id: 'draw', …(2) }, …(23) } to deeply equal { Object (phase, players, ...) }
+
+- Expected
++ Received
+
+@@ -1,32 +1,33 @@
+  {
+-   "began": 1000000,
+-   "choices": [
+-     "leaf",
+-     "horse",
+-     "bear",
+-   ],
+-   "clock": 1000000,
++   "began": 1001000,
++   "choices": [],
++   "clock": 1001000,
+    "drawer": "p4",
+-   "endsAt": 1008000,
++   "endsAt": 1031000,
+    "feedback": {},
+    "gains": {},
+    "guesses": {},
+    "hintCount": 0,
+-   "hintOrder": [],
++   "hintOrder": [
++     2,
++     1,
++     3,
++     0,
++   ],
+    "lastGuessAt": {},
+    "left": [],
+    "order": [
+      "p4",
+      "p2",
+      "p3",
+      "p1",
+    ],
+    "phase": {
+-     "deadline": 1008000,
+-     "id": "choose",
+-     "startedAt": 1000000,
++     "deadline": 1003000,
++     "id": "draw",
++     "startedAt": 1001000,
+    },
+    "phoneOnly": false,
+    "players": {
+      "p1": {
+        "avatarId": "fox",
+@@ -53,11 +54,11 @@
+        "name": "Dee",
+      },
+    },
+    "rng": {
+      "seed": 1,
+-     "step": 102,
++     "step": 105,
+    },
+    "scores": {
+      "p1": 0,
+      "p2": 0,
+      "p3": 0,
+@@ -69,8 +70,10 @@
+      "laps": 1,
+    },
+    "solved": {},
+    "strokes": [],
+    "turn": 0,
+-   "used": [],
+-   "word": "",
++   "used": [
++     "leaf",
++   ],
++   "word": "leaf",
+  }
+
+ ❯ games/draw-and-guess/__tests__/game.test.ts:37:62
+     35|     const s = kit.start();
+     36|     for (const id of [guesser(s), 'spectator', '__proto__', 'construct…
+     37|       expect(kit.input(s, id, { type: 'choose', index: 0 })).toEqual(s…
+       |                                                              ^
+     38|     }
+     39|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
