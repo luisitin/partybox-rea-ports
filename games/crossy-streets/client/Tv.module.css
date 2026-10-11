@@ -1,0 +1,112 @@
+.stage {
+  flex: 1;
+  padding: var(--pb-space-5) var(--pb-space-6);
+  gap: var(--pb-space-5);
+  min-height: 0;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--pb-space-6);
+}
+.header h1 {
+  margin: 0;
+  font-size: var(--pb-font-h1);
+  line-height: 1.1;
+}
+.header p {
+  margin: var(--pb-space-2) 0 0;
+  font-size: var(--pb-font-body);
+  color: var(--pb-text-muted);
+}
+.clock {
+  display: flex;
+  align-items: baseline;
+  gap: var(--pb-space-4);
+  color: var(--pb-accent-2);
+}
+.clock b {
+  font-size: var(--pb-font-display);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.clock span {
+  font-size: var(--pb-font-body);
+}
+.body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) * 7);
+  grid-template-rows: minmax(0, 1fr);
+  gap: var(--pb-space-6);
+}
+.map {
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.rail {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  gap: var(--pb-space-4);
+}
+.rail h2 {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  line-height: 1.1;
+}
+.standings {
+  list-style: none;
+  display: grid;
+  gap: var(--pb-space-2);
+  margin: 0;
+  padding: 0;
+}
+.standings li {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-3);
+  padding: var(--pb-space-2);
+  border-left: var(--pb-space-1) solid var(--racer);
+}
+.standings li[data-leader] {
+  background: var(--pb-surface);
+}
+.badge {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--pb-space-7);
+  height: var(--pb-space-7);
+  background: var(--racer);
+  color: var(--pb-on-accent-2-fill);
+  border-radius: var(--pb-radius);
+  font-size: var(--pb-font-body);
+}
+.identity {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.15;
+}
+.identity b {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.identity span {
+  display: none;
+}
+.standings strong {
+  margin-left: auto;
+  font-size: var(--pb-font-h2);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}

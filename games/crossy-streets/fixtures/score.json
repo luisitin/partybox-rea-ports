@@ -1,0 +1,6144 @@
+{
+  "phase": {
+    "id": "score",
+    "startedAt": 1060000,
+    "deadline": 1068000
+  },
+  "rng": {
+    "seed": 14,
+    "step": 2415
+  },
+  "players": {
+    "p1": {
+      "id": "p1",
+      "name": "Player 1",
+      "avatarId": "fox",
+      "connected": true
+    },
+    "p2": {
+      "id": "p2",
+      "name": "Player 2",
+      "avatarId": "owl",
+      "connected": true
+    },
+    "p3": {
+      "id": "p3",
+      "name": "Player 3",
+      "avatarId": "frog",
+      "connected": true
+    },
+    "p4": {
+      "id": "p4",
+      "name": "Player 4",
+      "avatarId": "cat",
+      "connected": true
+    },
+    "p5": {
+      "id": "p5",
+      "name": "Player 5",
+      "avatarId": "panda",
+      "connected": true
+    },
+    "p6": {
+      "id": "p6",
+      "name": "Player 6",
+      "avatarId": "koala",
+      "connected": true
+    },
+    "p7": {
+      "id": "p7",
+      "name": "Player 7",
+      "avatarId": "penguin",
+      "connected": true
+    },
+    "p8": {
+      "id": "p8",
+      "name": "Player 8",
+      "avatarId": "octopus",
+      "connected": true
+    }
+  },
+  "scores": {
+    "p1": 60,
+    "p2": 99,
+    "p3": 73,
+    "p4": 60,
+    "p5": 91,
+    "p6": 73,
+    "p7": 68,
+    "p8": 70
+  },
+  "world": {
+    "lanes": [
+      {
+        "row": 0,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 14.37881482206285,
+        "objects": [],
+        "blocked": []
+      },
+      {
+        "row": 1,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 14.483447833918035,
+        "objects": [],
+        "blocked": []
+      },
+      {
+        "row": 2,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 16.9112753062509,
+        "objects": [],
+        "blocked": []
+      },
+      {
+        "row": 3,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.780937265614048,
+        "period": 22,
+        "offset": 4.722258708905429,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5426537063904107,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9594484166009352,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6906957528786735,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 4,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.3322588138049467,
+        "period": 22,
+        "offset": 18.548887607641518,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8656631373800336,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.585840338864364,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 3.9073957772692665,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 4.059214532608166,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 5,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.3113426208030432,
+        "period": 22,
+        "offset": 21.941110397223383,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.128764468198642,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.9600627918262035,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 4.19605056992732,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.5411967273801563,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 6,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 7.723157296422869,
+        "objects": [],
+        "blocked": [11]
+      },
+      {
+        "row": 7,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.0323207364417613,
+        "period": 22,
+        "offset": 11.366898007690907,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.117509249714203,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 4.1841315504862,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.711605161637999,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.592159193265252,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 8,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.3769037320061273,
+        "period": 22,
+        "offset": 12.6929900678806,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7314821531064808,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9256708018947393,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.9609043214237318,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 9,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.124998516384512,
+        "period": 22,
+        "offset": 10.26653861766681,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7688114217715338,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.6042263336479663,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5043844053754583,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 10,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 9.85196382412687,
+        "objects": [],
+        "blocked": [1, 4, 5]
+      },
+      {
+        "row": 11,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.3355649566153684,
+        "period": 22,
+        "offset": 8.833513429388404,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.663415883295238,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.8096748010721058,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6664277190575376,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 12,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.246827079113573,
+        "period": 22,
+        "offset": 19.37828144012019,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7246447050943972,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3643503015395255,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5004352109739556,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 13,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.737013967235883,
+        "period": 22,
+        "offset": 19.27869079494849,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7860228433273733,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9997173176379874,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.454699004930444,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 14,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 1.624666624236852,
+        "objects": [],
+        "blocked": [0, 8, 9, 12]
+      },
+      {
+        "row": 15,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.9736887751845642,
+        "period": 22,
+        "offset": 19.060015624854714,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.897544431616552,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.600758936069906,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.5620315589010714,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 3.500731689739041,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 16,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.310287733611961,
+        "period": 22,
+        "offset": 0.03194062691181898,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7783718996448443,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9868255590554327,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.741506336024031,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 17,
+        "kind": "river",
+        "direction": -1,
+        "speed": 0.8706476507708429,
+        "period": 22,
+        "offset": 19.84248632704839,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.529439992806874,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.7808634911431,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 3.7975156188709662,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.8872111884411424,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 18,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 10.339423892088234,
+        "objects": [],
+        "blocked": [0, 11, 14]
+      },
+      {
+        "row": 19,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.8276346600614488,
+        "period": 22,
+        "offset": 15.911829895805568,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.9413487513782455,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.9838552211644127,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 3.91979662545491,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 3.512999760033563,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 20,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.0884860567282884,
+        "period": 22,
+        "offset": 5.001620944123715,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8289066199213266,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.7878857997246085,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 3.8005729478085413,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 3.726264666579664,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 21,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.14992019880563,
+        "period": 22,
+        "offset": 9.678412979934365,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.803102964744903,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9241437887540087,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7729624098632484,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 22,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 0.34558685775846243,
+        "objects": [],
+        "blocked": [2, 6, 12]
+      },
+      {
+        "row": 23,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.280818999210993,
+        "period": 22,
+        "offset": 6.250347819644958,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.6802482494385913,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5760304059600458,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.760452232416719,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 24,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.124658971121535,
+        "period": 22,
+        "offset": 18.869086384773254,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5735987163614482,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7753832566319034,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.694669899903238,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 25,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.7909236315016948,
+        "period": 22,
+        "offset": 21.29958522040397,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.8393830122891814,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.4006018159212545,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8193669118918478,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 26,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 14.143932376988232,
+        "objects": [],
+        "blocked": [4, 13]
+      },
+      {
+        "row": 27,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.260051663722843,
+        "period": 22,
+        "offset": 0.9042486571706831,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5020617692731322,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3910964073613286,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6315803192090244,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 28,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.042251210892573,
+        "period": 22,
+        "offset": 4.892278641462326,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.687783835688606,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 4.03658947746735,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.767466035671532,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 3.880535682709888,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 29,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.461469198294605,
+        "period": 22,
+        "offset": 10.217530619353056,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9667328948620706,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9862627814989537,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.9152322552632541,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 30,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 17.420951291918755,
+        "objects": [],
+        "blocked": [6, 11]
+      },
+      {
+        "row": 31,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.248673542685186,
+        "period": 22,
+        "offset": 2.5551182595081627,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.6840004002442583,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5568586322711782,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6740676588844507,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 32,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.7820769418496638,
+        "period": 22,
+        "offset": 7.161886364221573,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.563643647544086,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 3.5065973778022452,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 4.029158436344005,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 3.9730992626165973,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 33,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.330703627327457,
+        "period": 22,
+        "offset": 16.845026650000364,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.453871126146987,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5760666699847206,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.350646728440188,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 34,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 19.908929978031665,
+        "objects": [],
+        "blocked": [14]
+      },
+      {
+        "row": 35,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.664637632357578,
+        "period": 22,
+        "offset": 5.744519466068596,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.437958093220368,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7813463842961936,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7853678233223036,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 36,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.9880866522621363,
+        "period": 22,
+        "offset": 18.590112402569503,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.40257305521518,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9634128051111475,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8499508217908442,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 37,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.7371947069419548,
+        "period": 22,
+        "offset": 12.57023114617914,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.879613784328103,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 3.605998288537376,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.852550896513276,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.857465831306763,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 38,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 8.417904807254672,
+        "objects": [],
+        "blocked": [1, 3, 14]
+      },
+      {
+        "row": 39,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.6993678120709954,
+        "period": 22,
+        "offset": 6.497635977342725,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.8809885393595323,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9331130567938088,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.4161970311077312,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 40,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.1754930912827453,
+        "period": 22,
+        "offset": 8.435472112614661,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7633087750524283,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.8431467554764822,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8714745115255937,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 41,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.4014167261185744,
+        "period": 22,
+        "offset": 18.08271420514211,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5677033309591935,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.899119124468416,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5699969139881431,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 42,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 6.726391957141459,
+        "objects": [],
+        "blocked": [2, 9]
+      },
+      {
+        "row": 43,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.247263452433981,
+        "period": 22,
+        "offset": 1.2541717453859746,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.5075416383799167,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 4.161196691566147,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 4.067962297284976,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.990941326064058,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 44,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.3718857156547406,
+        "period": 22,
+        "offset": 7.893103145528585,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7025611887453125,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.658208892098628,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8113410230260343,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 45,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.7557044182904065,
+        "period": 22,
+        "offset": 0.7594166011549532,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.3161775917513296,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.465966555243358,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5195170544320717,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 46,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 14.629724038299173,
+        "objects": [],
+        "blocked": [10, 12]
+      },
+      {
+        "row": 47,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.059226079378277,
+        "period": 22,
+        "offset": 12.597293713595718,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.9345761615084482,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.60137726275716,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.6925334953935818,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 4.038917096727528,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 48,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.6379523239564153,
+        "period": 22,
+        "offset": 21.150481315795332,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.6865704376250505,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.6838943742914125,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6967206076486037,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 49,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.9142942355014383,
+        "period": 22,
+        "offset": 5.249314283952117,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9014737125951797,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9764658561674877,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.3264480942394585,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 50,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 2.0972805693745613,
+        "objects": [],
+        "blocked": [0, 14]
+      },
+      {
+        "row": 51,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.1829896969255058,
+        "period": 22,
+        "offset": 13.778364157769829,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.556264757714234,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 4.187240697583183,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 3.5079888723557815,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.891490300488658,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 52,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.8702239294769242,
+        "period": 22,
+        "offset": 15.710638425312936,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.955416235816665,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 3.884184318454936,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.810050570964813,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.943887558579445,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 53,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.6598289739340544,
+        "period": 22,
+        "offset": 16.871611780487,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9796702831983566,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.728917619935237,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.876562683377415,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 54,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 21.35873288847506,
+        "objects": [],
+        "blocked": [0, 6, 8, 13]
+      },
+      {
+        "row": 55,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.1952490182127802,
+        "period": 22,
+        "offset": 12.81237697089091,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.106136809918098,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.55635754680261,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.61857392846141,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 3.5204952171305193,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 56,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.1134348354302346,
+        "period": 22,
+        "offset": 13.707945371046662,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5880635657114908,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7610364873427897,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.748661730531603,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 57,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.473922626581043,
+        "period": 22,
+        "offset": 12.146135576535016,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.6456262084422633,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3349543533287942,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.3284475127002224,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 58,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 12.452251280657947,
+        "objects": [],
+        "blocked": [1, 6, 9]
+      },
+      {
+        "row": 59,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.2333024997264146,
+        "period": 22,
+        "offset": 6.260669939685613,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.659509403235279,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7436707996064797,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6704909281106666,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 60,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.3379048862028866,
+        "period": 22,
+        "offset": 20.401110026985407,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.3260871613863856,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5902971094707028,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8196707308292388,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 61,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.735016696760431,
+        "period": 22,
+        "offset": 20.52642899984494,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9190030245808885,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.590805390267633,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8907344257459044,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 62,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 0.5785347581841052,
+        "objects": [],
+        "blocked": [5, 11]
+      },
+      {
+        "row": 63,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.7658122080378233,
+        "period": 22,
+        "offset": 3.4259454761631787,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.3300605305004864,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.8017968230880799,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.330558362719603,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 64,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.8304230578709393,
+        "period": 22,
+        "offset": 19.675691998098046,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.5242148762801664,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 4.1157664504367855,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.8612983968341723,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.6717142848297954,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 65,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.4105747046414763,
+        "period": 22,
+        "offset": 5.86014763917774,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.4028421064605936,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9592648100107908,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7999765098327771,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 66,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 17.234467714559287,
+        "objects": [],
+        "blocked": [0, 3]
+      },
+      {
+        "row": 67,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.1631699729245155,
+        "period": 22,
+        "offset": 16.368728473316878,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.3286152597283944,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.659869472286664,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.516331630386412,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 68,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.9970166539773344,
+        "period": 22,
+        "offset": 8.517591602634639,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9491596919717267,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.89227499878034,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8661889600101857,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 69,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.4270875823218376,
+        "period": 22,
+        "offset": 16.34659534180537,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.4726119910599664,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.8249221871141343,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7559917432023213,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 70,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 4.041367154568434,
+        "objects": [],
+        "blocked": [1]
+      },
+      {
+        "row": 71,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.7936469028703868,
+        "period": 22,
+        "offset": 1.5852206465788186,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7984292411943898,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3299074860289692,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8220681708538904,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 72,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.6703771272674204,
+        "period": 22,
+        "offset": 6.072627121582627,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.8253423311281949,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.8760700525483116,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6208126848330722,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 73,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.625054661324248,
+        "period": 22,
+        "offset": 1.195042333099991,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9096785348840057,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.4772260423749686,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.914868202456273,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 74,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 3.5332386079244316,
+        "objects": [],
+        "blocked": [3, 8]
+      },
+      {
+        "row": 75,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.0895828397478908,
+        "period": 22,
+        "offset": 5.549037174787372,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.084876903542318,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 4.156086298008449,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 4.168750322447158,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.7063391183502974,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 76,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.727322370139882,
+        "period": 22,
+        "offset": 3.061441578436643,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7190599440829828,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.344151359749958,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.3104201279347762,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 77,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.6351215966045856,
+        "period": 22,
+        "offset": 13.525034052319825,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.76902893926017,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.66474831989035,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.9935373314190656,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 78,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 21.994431673083454,
+        "objects": [],
+        "blocked": [4, 5, 9]
+      },
+      {
+        "row": 79,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.9974598768167198,
+        "period": 22,
+        "offset": 19.345876750536263,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9292528867721557,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.4360183520475402,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8088454911485314,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 80,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.7273541704751554,
+        "period": 22,
+        "offset": 5.228396924212575,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.964186741434969,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3022073780652137,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6981595791876316,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 81,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.3322890471899882,
+        "period": 22,
+        "offset": 19.758288028649986,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.6614969464018943,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.6558630049228666,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 4.0160131327342246,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.789544716035016,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 82,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 7.5257467506453395,
+        "objects": [],
+        "blocked": [5, 10, 12]
+      },
+      {
+        "row": 83,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.0455643613822758,
+        "period": 22,
+        "offset": 10.653257290832698,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.053548693866469,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.5259326903382315,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 4.08827397513669,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.7338457829784604,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 84,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.8080314076505601,
+        "period": 22,
+        "offset": 9.360474226996303,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.7507900463184343,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.750795497884974,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.888119628466666,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.556749378168024,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 85,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.7914159305393695,
+        "period": 22,
+        "offset": 3.527975927107036,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.9850247455760837,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 3.8527081936597822,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.871074648783542,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.7418925588950516,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 86,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 11.950260376092046,
+        "objects": [],
+        "blocked": [1, 4, 12]
+      },
+      {
+        "row": 87,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.7103423262946307,
+        "period": 22,
+        "offset": 18.469286534935236,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.9360145076876507,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.7742127522360533,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.572813363536261,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 4.106084554968402,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 88,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.7570841456530615,
+        "period": 22,
+        "offset": 7.696728323586285,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8465021936455743,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.914091684529558,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 4.15026038181968,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.551304885186255,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 89,
+        "kind": "river",
+        "direction": -1,
+        "speed": 0.9876638180110603,
+        "period": 22,
+        "offset": 20.980261414777488,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8094620623858644,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.5109521745238452,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.9029372633900494,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.8858967454871163,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 90,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 20.52690827054903,
+        "objects": [],
+        "blocked": [4, 11, 14]
+      },
+      {
+        "row": 91,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.550801964150742,
+        "period": 22,
+        "offset": 12.610827274154872,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5669730795314536,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7338600143324583,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.3561026172479616,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 92,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.382598873786628,
+        "period": 22,
+        "offset": 8.915491068270057,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.930705944634974,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.491165428608656,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.581233717687428,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 93,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.5268724708352237,
+        "period": 22,
+        "offset": 5.548455899115652,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9900085964007304,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7827142846770585,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.521769491978921,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 94,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 20.168003182392567,
+        "objects": [],
+        "blocked": [4, 10]
+      },
+      {
+        "row": 95,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.5182203811127692,
+        "period": 22,
+        "offset": 21.639856919646263,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7387151844799518,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.659032561071217,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.3814449270023033,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 96,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.654479231731966,
+        "period": 22,
+        "offset": 1.338949034921825,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.8927550916094333,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9593559244647623,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6479229433694855,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 97,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.9932648259913548,
+        "period": 22,
+        "offset": 19.316561494022608,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.7625309094320984,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.819470487115905,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 3.669871831848286,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 4.195796015718952,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 98,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 9.22708687838167,
+        "objects": [],
+        "blocked": [11, 14]
+      },
+      {
+        "row": 99,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.270784379937686,
+        "period": 22,
+        "offset": 17.76793392840773,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.142055836925283,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 4.011755166389048,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.9509563020430507,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.8440489274216816,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 100,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.566999184526503,
+        "period": 22,
+        "offset": 7.737148178741336,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.6690513802692295,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7975603616563602,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.9236540811602025,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 101,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.8404765889048575,
+        "period": 22,
+        "offset": 20.073647040408105,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.8001387441763654,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.6571437445934862,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.3914193846052514,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 102,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 10.404729307163507,
+        "objects": [],
+        "blocked": [3, 5]
+      },
+      {
+        "row": 103,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.0953502825926988,
+        "period": 22,
+        "offset": 19.46442605415359,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.578489894187078,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 4.058034561900422,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.587215869873762,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.890801669470966,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 104,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.5437293022405356,
+        "period": 22,
+        "offset": 1.903724960051477,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.406216794345528,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.756372857070528,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.9662427643314004,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 105,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.3593360130675136,
+        "period": 22,
+        "offset": 12.332705372013152,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.3285801457008348,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5260111015057192,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6393361010355876,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 106,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 1.7945069032721221,
+        "objects": [],
+        "blocked": [0, 1, 2, 6]
+      },
+      {
+        "row": 107,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.08621559641324,
+        "period": 22,
+        "offset": 21.214769057929516,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5716763838892802,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.898278244654648,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.71339313283097,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 108,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.2463425357360394,
+        "period": 22,
+        "offset": 17.174919105600566,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.3465297001414,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3393266521394254,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5486437144223602,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 109,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.2455155733972787,
+        "period": 22,
+        "offset": 14.424021365586668,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.722919292189181,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.63784604833927,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.622785228304565,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 110,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 15.342365455813706,
+        "objects": [],
+        "blocked": [1, 8]
+      },
+      {
+        "row": 111,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.9670100383926186,
+        "period": 22,
+        "offset": 19.862673091702163,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.6498096733586862,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5103610953781754,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5668907574377955,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 112,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.842511418182403,
+        "period": 22,
+        "offset": 13.989769683685154,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7527623012894764,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.842536569875665,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8976311285980045,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 113,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.595347481779754,
+        "period": 22,
+        "offset": 3.503051996231079,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.4845010336488484,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.303747451887466,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.4519224768970163,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 114,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 18.173223201651126,
+        "objects": [],
+        "blocked": [1, 2, 9]
+      },
+      {
+        "row": 115,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.8593331562587991,
+        "period": 22,
+        "offset": 19.28824659716338,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.6344970380421726,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.658456391841173,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.872069316590205,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.7459783651633187,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 116,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.119544539647177,
+        "period": 22,
+        "offset": 3.970877234824002,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7115898609161377,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3413217457244173,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5807010243879631,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 117,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.788532805675641,
+        "period": 22,
+        "offset": 2.2346202391199768,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.762856036867015,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5632676859851926,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.9883451747940852,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 118,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 10.555712015833706,
+        "objects": [],
+        "blocked": [1, 13]
+      },
+      {
+        "row": 119,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.266698926850222,
+        "period": 22,
+        "offset": 9.777369907591492,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8121085199760274,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 4.149113237042911,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.75212549562566,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.8221381534822285,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 120,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.9856396653223782,
+        "period": 22,
+        "offset": 6.896658204495907,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.506327179656364,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 4.066520009399392,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.8383837412577124,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 4.161671918421052,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 121,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.8044570366851985,
+        "period": 22,
+        "offset": 19.19327203789726,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.136466542747803,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.989703816873953,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.8458537113154305,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.8247338141547518,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 122,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 18.03782973997295,
+        "objects": [],
+        "blocked": [4, 6, 12]
+      },
+      {
+        "row": 123,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.735562216490507,
+        "period": 22,
+        "offset": 19.59117709705606,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.6527037454070523,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.6350868693552911,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.700103869335726,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 124,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.133408835227601,
+        "period": 22,
+        "offset": 4.889450818300247,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8259254566160963,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.583430747757666,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.532362926751375,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.6319995456608014,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 125,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.8608386692125349,
+        "period": 22,
+        "offset": 12.49328495329246,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8756002316484226,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.935553948348388,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 4.15121441509109,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.6124951149336995,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 126,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 14.216481409966946,
+        "objects": [],
+        "blocked": [1, 13]
+      },
+      {
+        "row": 127,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.5381970442831516,
+        "period": 22,
+        "offset": 1.719769470859319,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.6839804431656376,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7385950676398352,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7849437027238308,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 128,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.7060117593035105,
+        "period": 22,
+        "offset": 5.174254660494626,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5407155976397917,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.367181605519727,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5665849867975339,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 129,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.2159777318593115,
+        "period": 22,
+        "offset": 16.257442784961313,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8852440673625095,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 4.053669906919822,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 4.141380896512419,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.9018244751030577,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 130,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 11.300745368469507,
+        "objects": [],
+        "blocked": [1]
+      },
+      {
+        "row": 131,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.4002277750521896,
+        "period": 22,
+        "offset": 2.9961596592329443,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.3429324053460732,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.6304654214531182,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.4558831301983446,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 132,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.3546303063631058,
+        "period": 22,
+        "offset": 7.047162841074169,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.6900792533764615,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.4834829304134474,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7865172534249723,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 133,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.8498064499814064,
+        "period": 22,
+        "offset": 13.046089007053524,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.643356165639125,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9379220629343763,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.861274265125394,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 134,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 11.281942806206644,
+        "objects": [],
+        "blocked": [4, 6, 8]
+      },
+      {
+        "row": 135,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.636127621727064,
+        "period": 22,
+        "offset": 15.638613774906844,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9990195319522173,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7028258183039724,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.3001702665584163,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 136,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.9852371589979156,
+        "period": 22,
+        "offset": 5.342534787021577,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.528318012529053,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.8845693313283847,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 4.158758267248049,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.597080070362426,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 137,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.2085085808299483,
+        "period": 22,
+        "offset": 11.437625160440803,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7565978382946923,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9976809819228947,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.4469312956323848,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 138,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 21.050871805287898,
+        "objects": [],
+        "blocked": [9, 11, 13]
+      },
+      {
+        "row": 139,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.5088551381137223,
+        "period": 22,
+        "offset": 7.011650052852929,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5309954003896564,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.8987159081967548,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6751258503412827,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 140,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.4652381071355194,
+        "period": 22,
+        "offset": 1.7723462600260973,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.52409652157221,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5118354430189356,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.848981117689982,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 141,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.6763259407598525,
+        "period": 22,
+        "offset": 2.1847137990407646,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.413485858310014,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7248873011907562,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.9989132090471684,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 142,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 1.582855446729809,
+        "objects": [],
+        "blocked": [3, 9, 12]
+      },
+      {
+        "row": 143,
+        "kind": "river",
+        "direction": -1,
+        "speed": 0.7332953822566196,
+        "period": 22,
+        "offset": 15.381611014250666,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.7691733423154803,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 3.886651021847501,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.7464486540062354,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.991207765531726,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 144,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.1643132527125999,
+        "period": 22,
+        "offset": 9.86447776015848,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.7399024113081394,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.6853700375417247,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.6476446827175097,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 3.6394238895503803,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 145,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.8439976460300387,
+        "period": 22,
+        "offset": 11.102238364052027,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5919834423577413,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3685160753084347,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5898019525920972,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 146,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 18.21631628461182,
+        "objects": [],
+        "blocked": [1, 5, 8, 12]
+      },
+      {
+        "row": 147,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.3747396568767725,
+        "period": 22,
+        "offset": 6.13094773190096,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8188290687277915,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.9408484843792393,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.6427681574365125,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.8495888124685735,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 148,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.0335497243097052,
+        "period": 22,
+        "offset": 14.437816643621773,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.848579758126289,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.6950787188485266,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.734332473948598,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.6178848782554267,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 149,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.376103614247404,
+        "period": 22,
+        "offset": 1.25736596994102,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.071889137965627,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.8249038025038318,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 4.193430845532566,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 3.9925824138335884,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 150,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 13.131538246758282,
+        "objects": [],
+        "blocked": [3, 4, 5, 9]
+      },
+      {
+        "row": 151,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.7257137545850127,
+        "period": 22,
+        "offset": 16.534199816174805,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.587364773149602,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 4.036779278819449,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 4.095800356660038,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.951906355144456,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 152,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.2543204881250858,
+        "period": 22,
+        "offset": 6.935534754302353,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8454195517115295,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 3.628819070546888,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 4.162926865159534,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.9834752929862587,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 153,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.522997647151351,
+        "period": 22,
+        "offset": 4.124160848557949,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.782459710747935,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.705600921390578,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.4146943784784527,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 154,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 16.737921034451574,
+        "objects": [],
+        "blocked": [5, 10]
+      },
+      {
+        "row": 155,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.3656523236539218,
+        "period": 22,
+        "offset": 2.884985810611397,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.8787863594247027,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5078530362574383,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.823642488871701,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 156,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.3127740152180194,
+        "period": 22,
+        "offset": 17.982226024847478,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.993075259285979,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.6927493286086246,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8348602798068896,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 157,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.9956623690202832,
+        "period": 22,
+        "offset": 20.139387039467692,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.7197928522946313,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.6358227857155727,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.9470968771725894,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 3.694427927560173,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 158,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 1.4943104684352875,
+        "objects": [],
+        "blocked": [1, 4, 6, 12]
+      },
+      {
+        "row": 159,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.6838813865557314,
+        "period": 22,
+        "offset": 11.687308293767273,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.3147583755198866,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.4541302834404632,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6279035691637547,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 160,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.6995956169907003,
+        "period": 22,
+        "offset": 3.1432529278099537,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5629880041116848,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9425957300933079,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.382763808593154,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 161,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.0512968352995813,
+        "period": 22,
+        "offset": 15.703136890660971,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7395276916678994,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.4726842783857137,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7474871872691438,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 162,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 5.764216075185686,
+        "objects": [],
+        "blocked": [2, 11, 13, 14]
+      },
+      {
+        "row": 163,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.1697220558533443,
+        "period": 22,
+        "offset": 10.767192880157381,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.526256197760813,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.8862807195167988,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.9742351854685696,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 4.000386307458394,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 164,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.8097458897624166,
+        "period": 22,
+        "offset": 18.50292698852718,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.614753156574443,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.6121690185274928,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.4867742865346372,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 165,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.767590207932517,
+        "period": 22,
+        "offset": 8.564776476006955,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.6229691569460556,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.344015309191309,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7437378299655393,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 166,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 15.184988438151777,
+        "objects": [],
+        "blocked": [3, 5, 13, 14]
+      },
+      {
+        "row": 167,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.7131673620082437,
+        "period": 22,
+        "offset": 17.905186242889613,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.846655004564673,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.61570179827977,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 3.86237948408816,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.916095176222734,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 168,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.1736106099560857,
+        "period": 22,
+        "offset": 4.718013619072735,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9595714112045244,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7500125773483888,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7826444130623713,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 169,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.767880662670359,
+        "period": 22,
+        "offset": 2.8530045999214053,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.376879758387804,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3428358971839771,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.3188521615229547,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 170,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 6.515300436876714,
+        "objects": [],
+        "blocked": [2, 11]
+      },
+      {
+        "row": 171,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.1705489597283303,
+        "period": 22,
+        "offset": 3.2807205468416214,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9231093461392448,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.8617642611963674,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.722511138394475,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 172,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.814951055846177,
+        "period": 22,
+        "offset": 3.1736762756481767,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.701233370578848,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.565242895693518,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 4.170131106348708,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 4.145408881525509,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 173,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.96318286722526,
+        "period": 22,
+        "offset": 9.08895157603547,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.3083264305721969,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.369349795510061,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.9126275887247175,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 174,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 5.016874554101378,
+        "objects": [],
+        "blocked": [8, 10, 14]
+      },
+      {
+        "row": 175,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.2790485283359887,
+        "period": 22,
+        "offset": 20.982651037629694,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9910725984722375,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.416681562247686,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5513153008185327,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 176,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.099347635079175,
+        "period": 22,
+        "offset": 8.0919837532565,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8497268463484944,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.9234615251189098,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.9103434234391896,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 4.193881264002994,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 177,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.313435964705423,
+        "period": 22,
+        "offset": 18.90132199320942,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.8372417601989581,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.6074728871462867,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8125563396839426,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 178,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 18.76578648062423,
+        "objects": [],
+        "blocked": [8, 9]
+      },
+      {
+        "row": 179,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.494298387877643,
+        "period": 22,
+        "offset": 10.814323216676712,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.421349275368266,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3798215686809272,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7968838619999588,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 180,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.0112503501586616,
+        "period": 22,
+        "offset": 11.381309618242085,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9249371840851381,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7251955519197508,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.833256442914717,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 181,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.6648389220237734,
+        "period": 22,
+        "offset": 8.27512484183535,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.465020208992064,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.6990140904439612,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5945146929239855,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 182,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 7.09647348895669,
+        "objects": [],
+        "blocked": [2, 10, 11]
+      },
+      {
+        "row": 183,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.2126051796833053,
+        "period": 22,
+        "offset": 3.6789028849452734,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.15206824443303,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.5945234171813354,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 4.1646648866357285,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.6103981996653602,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 184,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.093230662215501,
+        "period": 22,
+        "offset": 17.436091925017536,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.972191608813591,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.788745856424794,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 4.168346361513249,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.730533698061481,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 185,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.597038978571072,
+        "period": 22,
+        "offset": 9.159436189103872,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9048303776653484,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.676020412822254,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8827352309599519,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 186,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 16.332011305261403,
+        "objects": [],
+        "blocked": [0, 6]
+      },
+      {
+        "row": 187,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.1640501771820708,
+        "period": 22,
+        "offset": 7.297103891149163,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.6419243969256057,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.893841743073426,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 4.116861095954664,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 4.018768262118101,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 188,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.2369398481445386,
+        "period": 22,
+        "offset": 5.556492588482797,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8701139961834996,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.906196227762848,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.769175962242298,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.6553793299244717,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 189,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.1960240100510418,
+        "period": 22,
+        "offset": 5.440752657596022,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5180605609202757,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5667666317429394,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.620143640274182,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 190,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 17.585827119182795,
+        "objects": [],
+        "blocked": [1, 2, 5, 13]
+      },
+      {
+        "row": 191,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.7679459645645692,
+        "period": 22,
+        "offset": 9.593473575543612,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.6658758024452256,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.919780408963561,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.602291753143072,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.6837329736212268,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 192,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.38070326060988,
+        "period": 22,
+        "offset": 15.282750718295574,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.5816061094636096,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.9647201526910067,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 3.7734560102922843,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.684043731656857,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 193,
+        "kind": "river",
+        "direction": -1,
+        "speed": 0.9989675013115629,
+        "period": 22,
+        "offset": 10.902652639430016,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.17790657649748,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 4.108698039292358,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 3.958898044889793,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.7023749413900076,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 194,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 6.7935237805359066,
+        "objects": [],
+        "blocked": [1, 12, 13]
+      },
+      {
+        "row": 195,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.593426613043994,
+        "period": 22,
+        "offset": 6.786338853649795,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.8326470479369164,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7513983727665619,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8685144181363285,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 196,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.3318928111344577,
+        "period": 22,
+        "offset": 3.2720270487479866,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.893041801569052,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3946458263555541,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7089224072406068,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 197,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.681082093436271,
+        "period": 22,
+        "offset": 10.194654112681746,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.8484440758824348,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5617191496770828,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7849280452588574,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 198,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 15.366524723358452,
+        "objects": [],
+        "blocked": [1, 4, 10, 12]
+      },
+      {
+        "row": 199,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.62515781885013,
+        "period": 22,
+        "offset": 18.961273955646902,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.8238149876240641,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9152879846515134,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.615099485963583,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 200,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.3156045534648,
+        "period": 22,
+        "offset": 10.790302424691617,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.9609012326225637,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.7738423152826726,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.6809702088823544,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 3.7812350552761926,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 201,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.740993316471577,
+        "period": 22,
+        "offset": 4.8455439186654985,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.4474876104854046,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3167977790348233,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.3400886340998113,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 202,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 10.388966266531497,
+        "objects": [],
+        "blocked": [0, 9]
+      },
+      {
+        "row": 203,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.8862167241051795,
+        "period": 22,
+        "offset": 2.9173384783789515,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.862297242321074,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.6723664514953271,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.56701590095181,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 204,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.9302344481926412,
+        "period": 22,
+        "offset": 9.770187511108816,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5290599927306174,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9874285128433258,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5478353006765246,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 205,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.7956467756303027,
+        "period": 22,
+        "offset": 1.7324362299405038,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.748013949370943,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.5717518066754566,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.8628158271545545,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.7468028945149854,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 206,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 8.174643530510366,
+        "objects": [],
+        "blocked": [9, 12, 13]
+      },
+      {
+        "row": 207,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.321876170672476,
+        "period": 22,
+        "offset": 3.4818074204958975,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9717076513450593,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3182709074113519,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.3229196284664795,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 208,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.2577081333613023,
+        "period": 22,
+        "offset": 11.047769954893738,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.9212999052368103,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 3.9422282251995058,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.668182086292654,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 4.076839963719249,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 209,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.313408431271091,
+        "period": 22,
+        "offset": 20.180045305751264,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7359966804506257,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.8561821007169783,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.712229432561435,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 210,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 16.728553511667997,
+        "objects": [],
+        "blocked": [5, 8, 12]
+      },
+      {
+        "row": 211,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.5658803928177805,
+        "period": 22,
+        "offset": 5.141899569891393,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.4390656460542233,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9297300253994762,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6253540847217665,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 212,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.583833835227415,
+        "period": 22,
+        "offset": 13.520983019843698,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.786191825265996,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.8701802482828498,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.4111976315034553,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 213,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.424691788200289,
+        "period": 22,
+        "offset": 1.8650221833959222,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.4795044143451377,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.721505457442254,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8506810851162299,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 214,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 19.33341710548848,
+        "objects": [],
+        "blocked": [14]
+      },
+      {
+        "row": 215,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.5414703702088444,
+        "period": 22,
+        "offset": 20.95021829335019,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.3671034088125453,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3364200955489651,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.381994740688242,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 216,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.0214138880372046,
+        "period": 22,
+        "offset": 21.142028610687703,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.8610137997660785,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 3.7660181619226933,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.6606073587667196,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.59759535707999,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 217,
+        "kind": "river",
+        "direction": -1,
+        "speed": 0.959203127771616,
+        "period": 22,
+        "offset": 7.243615782819688,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.061092479526996,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.8572515724692495,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 4.107092729699798,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 4.06335438368842,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 218,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 12.711870934348553,
+        "objects": [],
+        "blocked": [8]
+      },
+      {
+        "row": 219,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.389927627099678,
+        "period": 22,
+        "offset": 15.839934080839157,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.500657151453197,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.7663056784542277,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7295922092860565,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 220,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.445260795066133,
+        "period": 22,
+        "offset": 19.846655417699367,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7457345375558362,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3897004666738213,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.9345597045961767,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 221,
+        "kind": "river",
+        "direction": -1,
+        "speed": 0.8738973043393343,
+        "period": 22,
+        "offset": 0.22639013966545463,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.5883051167940723,
+            "variant": 1
+          },
+          {
+            "x": 5.5,
+            "length": 3.650229744706303,
+            "variant": 0
+          },
+          {
+            "x": 11,
+            "length": 4.167712578643114,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 4.020129308151081,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 222,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 1.6062900968827307,
+        "objects": [],
+        "blocked": [4, 11]
+      },
+      {
+        "row": 223,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.687271816376597,
+        "period": 22,
+        "offset": 11.878889215178788,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.743026140006259,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5846865982050076,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7803218436194583,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 224,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.6409020511899146,
+        "period": 22,
+        "offset": 14.331387357786298,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.3545244313543663,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9217626582831144,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.493539456021972,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 225,
+        "kind": "river",
+        "direction": -1,
+        "speed": 0.8812915235524996,
+        "period": 22,
+        "offset": 12.893997787032276,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.149608587217517,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.8162411578232422,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.5865636304952204,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.8881423736689613,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 226,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 19.63089144602418,
+        "objects": [],
+        "blocked": [0, 4, 11]
+      },
+      {
+        "row": 227,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.449889158876613,
+        "period": 22,
+        "offset": 20.35153388651088,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.676661379262805,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5976384146371856,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6810021511046216,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 228,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.555226974049583,
+        "period": 22,
+        "offset": 16.226731222122908,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7238261142978444,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.4852757066488267,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6393129392527044,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 229,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.365969492075965,
+        "period": 22,
+        "offset": 17.990468583535403,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7220750701148062,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.8573124828515575,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.6548961436841636,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 230,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 18.58239077916369,
+        "objects": [],
+        "blocked": [4, 14]
+      },
+      {
+        "row": 231,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.1499678278574719,
+        "period": 22,
+        "offset": 17.555143242236227,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.186056475178338,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 3.552290217252448,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.9186477387323975,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.882809091731906,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 232,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.466711852932349,
+        "period": 22,
+        "offset": 20.457354579586536,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.5442553484113888,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.775376404891722,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5734072791645304,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 233,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.3221860104240477,
+        "period": 22,
+        "offset": 0.33780062198638916,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.996325515094213,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 4.155840294784866,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.9936640296364203,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.869385970104486,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 234,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 10.000814032740891,
+        "objects": [],
+        "blocked": [0, 10]
+      },
+      {
+        "row": 235,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.7395969223231077,
+        "period": 22,
+        "offset": 5.716478344518691,
+        "objects": [
+          {
+            "x": 0,
+            "length": 4.108527944516391,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 3.674818410957232,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.555750879808329,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 4.18939611276146,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 236,
+        "kind": "river",
+        "direction": 1,
+        "speed": 0.9177833104040474,
+        "period": 22,
+        "offset": 0.24605115922167897,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.956265249871649,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 3.6773806279990824,
+            "variant": 3
+          },
+          {
+            "x": 11,
+            "length": 3.7595391935668885,
+            "variant": 3
+          },
+          {
+            "x": 16.5,
+            "length": 3.766440889518708,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 237,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.8266327919438483,
+        "period": 22,
+        "offset": 16.858189987950027,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7466121333418414,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.5389462100574747,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.5308746722061186,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 238,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 3.7424570661969483,
+        "objects": [],
+        "blocked": [4, 9]
+      },
+      {
+        "row": 239,
+        "kind": "road",
+        "direction": 1,
+        "speed": 3.341166226845235,
+        "period": 22,
+        "offset": 8.931441768538207,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.4769874473102391,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.4715846563922241,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.4520353100961074,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 240,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.3749915601918472,
+        "period": 22,
+        "offset": 6.37490025954321,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.909209117363207,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.769504496338777,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.8087982728378846,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 3.999741497915238,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 241,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.6271530439145865,
+        "period": 22,
+        "offset": 5.809254618361592,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.8069925516145304,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.3508324722060934,
+            "variant": 3
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8215370004530995,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 242,
+        "kind": "grass",
+        "direction": -1,
+        "speed": 0,
+        "period": 22,
+        "offset": 5.593602250795811,
+        "objects": [],
+        "blocked": [8]
+      },
+      {
+        "row": 243,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.3449716811766848,
+        "period": 22,
+        "offset": 19.04212357243523,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.859034798806533,
+            "variant": 3
+          },
+          {
+            "x": 5.5,
+            "length": 3.552878665854223,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.556229113508016,
+            "variant": 0
+          },
+          {
+            "x": 16.5,
+            "length": 3.7619381162337957,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 244,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.6334191223606465,
+        "period": 22,
+        "offset": 11.645012395456433,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7408351934049278,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9225342991761862,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.3659852489829063,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 245,
+        "kind": "river",
+        "direction": -1,
+        "speed": 0.8944284337805584,
+        "period": 22,
+        "offset": 18.15913839219138,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.9344637932954356,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.794470765837468,
+            "variant": 1
+          },
+          {
+            "x": 11,
+            "length": 3.644176535727456,
+            "variant": 2
+          },
+          {
+            "x": 16.5,
+            "length": 4.058741706470028,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 246,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 11.924508122261614,
+        "objects": [],
+        "blocked": [3, 4]
+      },
+      {
+        "row": 247,
+        "kind": "river",
+        "direction": 1,
+        "speed": 1.3117857919773086,
+        "period": 22,
+        "offset": 12.930788393132389,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.5323928483529015,
+            "variant": 0
+          },
+          {
+            "x": 5.5,
+            "length": 4.094546002848074,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.7163055220618846,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 4.077953755646012,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 248,
+        "kind": "river",
+        "direction": -1,
+        "speed": 1.3088141011539847,
+        "period": 22,
+        "offset": 7.254536553286016,
+        "objects": [
+          {
+            "x": 0,
+            "length": 3.9387413335498422,
+            "variant": 2
+          },
+          {
+            "x": 5.5,
+            "length": 3.668909830087796,
+            "variant": 2
+          },
+          {
+            "x": 11,
+            "length": 3.946654179133475,
+            "variant": 1
+          },
+          {
+            "x": 16.5,
+            "length": 4.07269070893526,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 249,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.845894530741498,
+        "period": 22,
+        "offset": 11.415957279969007,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.7850856845034286,
+            "variant": 0
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.4306239440804347,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.8726555538363754,
+            "variant": 0
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 250,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 8.54131164541468,
+        "objects": [],
+        "blocked": [3, 4, 10]
+      },
+      {
+        "row": 251,
+        "kind": "road",
+        "direction": 1,
+        "speed": 2.821312241628766,
+        "period": 22,
+        "offset": 14.761577772907913,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.502813868690282,
+            "variant": 3
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.8410721142310649,
+            "variant": 2
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7709510090062395,
+            "variant": 2
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 252,
+        "kind": "road",
+        "direction": -1,
+        "speed": 3.137958344630897,
+        "period": 22,
+        "offset": 20.303094470873475,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.9770179349696264,
+            "variant": 1
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.9955921071814373,
+            "variant": 1
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.830148991313763,
+            "variant": 1
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 253,
+        "kind": "road",
+        "direction": -1,
+        "speed": 2.718655853997916,
+        "period": 22,
+        "offset": 7.962075786199421,
+        "objects": [
+          {
+            "x": 0,
+            "length": 1.3456636392045767,
+            "variant": 2
+          },
+          {
+            "x": 7.333333333333333,
+            "length": 1.8211881089955568,
+            "variant": 0
+          },
+          {
+            "x": 14.666666666666666,
+            "length": 1.7801550503587351,
+            "variant": 3
+          }
+        ],
+        "blocked": []
+      },
+      {
+        "row": 254,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 21.168844975996763,
+        "objects": [],
+        "blocked": [1, 11]
+      },
+      {
+        "row": 255,
+        "kind": "grass",
+        "direction": 1,
+        "speed": 0,
+        "period": 22,
+        "offset": 9.178998097777367,
+        "objects": [],
+        "blocked": []
+      }
+    ],
+    "runners": [
+      {
+        "id": "p1",
+        "slot": 0,
+        "x": 3.038348816912631,
+        "row": 60,
+        "alive": true,
+        "reviveAt": null,
+        "lastProgressAt": 58800,
+        "maxRow": 60,
+        "deaths": 4,
+        "lastHopAt": 59600,
+        "checkpointRow": 58,
+        "checkpointX": 4.038348816912631,
+        "lastDeath": "edge",
+        "protectedUntil": 57700
+      },
+      {
+        "id": "p2",
+        "slot": 1,
+        "x": 10.262385032535489,
+        "row": 99,
+        "alive": true,
+        "reviveAt": null,
+        "lastProgressAt": 59000,
+        "maxRow": 99,
+        "deaths": 0,
+        "lastHopAt": 59800,
+        "checkpointRow": 98,
+        "checkpointX": 8.53316941247319,
+        "lastDeath": null,
+        "protectedUntil": 0
+      },
+      {
+        "id": "p3",
+        "slot": 2,
+        "x": 8.97730639738031,
+        "row": 73,
+        "alive": true,
+        "reviveAt": null,
+        "lastProgressAt": 59600,
+        "maxRow": 73,
+        "deaths": 5,
+        "lastHopAt": 59600,
+        "checkpointRow": 70,
+        "checkpointX": 7.97730639738031,
+        "lastDeath": "car",
+        "protectedUntil": 58800
+      },
+      {
+        "id": "p4",
+        "slot": 3,
+        "x": 1.7950024769082678,
+        "row": 60,
+        "alive": true,
+        "reviveAt": null,
+        "lastProgressAt": 59000,
+        "maxRow": 60,
+        "deaths": 5,
+        "lastHopAt": 59800,
+        "checkpointRow": 58,
+        "checkpointX": 3.7950024769082678,
+        "lastDeath": "car",
+        "protectedUntil": 60600
+      },
+      {
+        "id": "p5",
+        "slot": 4,
+        "x": 2.7285821440536697,
+        "row": 91,
+        "alive": true,
+        "reviveAt": null,
+        "lastProgressAt": 59800,
+        "maxRow": 91,
+        "deaths": 1,
+        "lastHopAt": 59800,
+        "checkpointRow": 90,
+        "checkpointX": 2.7285821440536697,
+        "lastDeath": "car",
+        "protectedUntil": 53800
+      },
+      {
+        "id": "p6",
+        "slot": 5,
+        "x": 8.589223380256445,
+        "row": 73,
+        "alive": true,
+        "reviveAt": null,
+        "lastProgressAt": 59600,
+        "maxRow": 73,
+        "deaths": 5,
+        "lastHopAt": 59600,
+        "checkpointRow": 70,
+        "checkpointX": 7.5892233802564455,
+        "lastDeath": "car",
+        "protectedUntil": 58800
+      },
+      {
+        "id": "p7",
+        "slot": 6,
+        "x": 7.861032829498866,
+        "row": 68,
+        "alive": true,
+        "reviveAt": null,
+        "lastProgressAt": 50400,
+        "maxRow": 68,
+        "deaths": 5,
+        "lastHopAt": 59800,
+        "checkpointRow": 66,
+        "checkpointX": 7.861032829498866,
+        "lastDeath": "eagle",
+        "protectedUntil": 61600
+      },
+      {
+        "id": "p8",
+        "slot": 7,
+        "x": 4.854280703756967,
+        "row": 70,
+        "alive": true,
+        "reviveAt": null,
+        "lastProgressAt": 59600,
+        "maxRow": 70,
+        "deaths": 5,
+        "lastHopAt": 59600,
+        "checkpointRow": 70,
+        "checkpointX": 4.854280703756967,
+        "lastDeath": "car",
+        "protectedUntil": 60000
+      }
+    ],
+    "stepped": 60000
+  },
+  "began": 1000000,
+  "endsAt": 1060000,
+  "checked": 60000,
+  "seconds": 60
+}

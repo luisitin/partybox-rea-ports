@@ -1,0 +1,87 @@
+/* Map geometry uses SVG units; presentation follows the room's tokens. */
+.map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+}
+.grass {
+  fill: var(--pb-surface-2);
+}
+.road {
+  fill: var(--pb-bg);
+}
+.river {
+  fill: var(--pb-info);
+  fill-opacity: 0.25;
+}
+.dash {
+  stroke: var(--pb-text-muted);
+  stroke-width: 2;
+  stroke-dasharray: 16 20;
+  stroke-opacity: 0.5;
+}
+.wave {
+  stroke: var(--pb-info);
+  stroke-width: 2;
+  stroke-dasharray: 20 40;
+  stroke-opacity: 0.5;
+}
+.tree {
+  fill: var(--pb-accent-3);
+}
+.trunk {
+  stroke: var(--pb-text-muted);
+  stroke-width: 8;
+}
+.log {
+  fill: var(--pb-accent-2);
+}
+.grain {
+  stroke: var(--pb-on-accent-2-fill);
+  stroke-opacity: 0.35;
+  stroke-width: 2;
+}
+.car {
+  fill: var(--pb-accent);
+}
+.window {
+  fill: var(--pb-on-accent-2-fill);
+}
+.wheels {
+  stroke: var(--pb-text);
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+.row {
+  fill: var(--pb-text-muted);
+  font: 700 28px var(--pb-font-family);
+}
+.racer {
+  fill: var(--racer);
+  stroke: var(--pb-text);
+  stroke-width: 3;
+}
+.beak {
+  fill: none;
+  stroke: var(--pb-on-accent-2-fill);
+  stroke-width: 3;
+}
+.number {
+  text-anchor: middle;
+  fill: var(--pb-on-accent-2-fill);
+  font: 900 30px var(--pb-font-family);
+}
+.cross {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: 5;
+}
+.runner[data-out] .racer {
+  fill: var(--pb-surface);
+}
+.runner[data-out] .number {
+  fill: var(--pb-text);
+}

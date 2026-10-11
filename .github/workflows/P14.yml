@@ -1,0 +1,23 @@
+name: P14 Crossy Streets
+on:
+  pull_request:
+    paths:
+      - 'games/crossy-streets/**'
+      - 'jobs/P14-crossy-streets/**'
+      - '.github/workflows/P14.yml'
+permissions:
+  contents: read
+jobs:
+  crossy-streets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm format
+      - run: pnpm vitest run games/crossy-streets --maxWorkers=1

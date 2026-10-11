@@ -1,0 +1,64 @@
+{
+  "command": "node --import tsx jobs/P14-crossy-streets/simulate.ts --runs 1 --players 2 --matrix full --out jobs/P14-crossy-streets/sim-cli-smoke.json",
+  "seedRange": [1, 1],
+  "engine": "real reduce + schema-checked sampleInput at every timer beat",
+  "matrix": "full",
+  "completed": true,
+  "rows": [
+    {
+      "players": 2,
+      "strength": "easy",
+      "runs": 1,
+      "byStrength": {
+        "easy": 1,
+        "normal": 0,
+        "sharp": 0
+      },
+      "terminated": 1,
+      "medianRoundMs": 60000,
+      "maxRoundMs": 60000,
+      "maxTotalMs": 68000,
+      "budgetMs": 240000,
+      "events": 421,
+      "meanRowsPerPlayer": 14,
+      "deaths": 18
+    },
+    {
+      "players": 2,
+      "strength": "normal",
+      "runs": 1,
+      "byStrength": {
+        "easy": 0,
+        "normal": 1,
+        "sharp": 0
+      },
+      "terminated": 1,
+      "medianRoundMs": 60000,
+      "maxRoundMs": 60000,
+      "maxTotalMs": 68000,
+      "budgetMs": 240000,
+      "events": 488,
+      "meanRowsPerPlayer": 41.5,
+      "deaths": 8
+    },
+    {
+      "players": 2,
+      "strength": "sharp",
+      "runs": 1,
+      "byStrength": {
+        "easy": 0,
+        "normal": 0,
+        "sharp": 1
+      },
+      "terminated": 1,
+      "medianRoundMs": 60000,
+      "maxRoundMs": 60000,
+      "maxTotalMs": 68000,
+      "budgetMs": 240000,
+      "events": 540,
+      "meanRowsPerPlayer": 64,
+      "deaths": 10
+    }
+  ],
+  "wallMs": 20
+}
