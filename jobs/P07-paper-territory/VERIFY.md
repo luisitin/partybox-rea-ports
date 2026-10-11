@@ -7,7 +7,7 @@ Install once: `corepack enable`; `pnpm.cmd install`, completed. Windows script p
 - `PB_RECORD_VERIFY=1 pnpm.cmd vitest run games/paper-territory --maxWorkers=1`: 76/77 tests passed in 174.38 s. One real SDK fast-scheduler starvation failure: bots repeated an already queued heading just before a tick. Fixed by returning null when the heading is already queued.
 - Post-fix contract/world/lifecycle/presence/bot run: **56/56 passed**, 7.75 s, including all 20 real SDK contracts (fast/random/idle/skipper, views, purity, reconnect, VIP). Exact commands and aggregate evidence: tools/verification-results.json.
 - `PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/paper-territory/client games/paper-territory/__tests__/artifacts.test.tsx --maxWorkers=1`: **24/24 passed**, 1.87 s after ownership textures and enlarged markers. Fixtures and static HTML come from a real seeded eight-bot match.
-- Final `pnpm.cmd typecheck` and `pnpm.cmd format`: final output pending before review milestone. Earlier checks prompted corrections to client tuple/optional-class typing. Generated contact sheets are formatted last.
+- Final `pnpm.cmd typecheck`: passed, exit 0. `pnpm.cmd format`: all matched files use Prettier code style. Earlier checks prompted corrections to client tuple/optional-class typing. Generated contact sheets were formatted last.
 
 ## Simulation and properties
 
@@ -58,7 +58,7 @@ This game has no secret information. View assertions check public stage versus l
 
 Fit report: zero horizontal/vertical overflow, outside elements or internal scrolling. Smallest active touch: **58.65625 px**. Manually inspected three contact sheets: shared map is focal, eight original monochrome ownership textures, persistent homes, readable numbered direction markers, eight-seat standings. TV body 36 px, timer 96 px from tokens. Reduced-motion disables control transitions.
 
-Media is below 10 MB; SHA256SUMS.txt hashes every media file after formatting. Capture accepts PB_CHROME for an existing executable; installs no browser/dependency.
+Media totals 4,160,887 bytes, below 10 MB; all 63 SHA256SUMS.txt entries verified after formatting. Capture accepts PB_CHROME for an existing executable; installs no browser/dependency.
 
 ## CI and iteration
 
