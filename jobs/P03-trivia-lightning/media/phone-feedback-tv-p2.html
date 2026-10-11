@@ -261,6 +261,12 @@ ight is the :root default above) ────────
         color: var(--pb-text-muted);
       }
 
+      ._stats_d8f881 ._scoreUnit_d8f881 {
+        font-size: var(--pb-font-caption);
+        font-weight: 400;
+        color: var(--pb-text-muted);
+      }
+
       ._stats_d8f881 ._time_d8f881 b {
         color: var(--pb-accent-2);
       }
@@ -1071,7 +1077,10 @@ ight is the :root default above) ────────
       <div class="_screen_d8f881">
         <header class="_stats_d8f881">
           <div><b>3 / 12</b><span>answered</span></div>
-          <div><b>360</b><span>points</span></div>
+          <div>
+            <b>360<small class="_scoreUnit_d8f881"> pts</small></b
+            ><span>Tied 6/8</span>
+          </div>
           <div class="_time_d8f881" role="timer" aria-label="Race time left">
             <b>87s</b><span>left</span>
           </div>

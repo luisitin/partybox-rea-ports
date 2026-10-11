@@ -8,5 +8,11 @@
   still catches 20/20 after the timer scheduling fix. All 21,000 bot games terminate.
 - Visual QA: 60 cases have zero geometry issues; by-hand review covers race, private feedback,
   frozen/finished phones, staged podium, final standings, long text, spectators and eight-way ties.
-- Remaining: refresh all media hashes and VERIFY.md, push/open draft PR, wait for job CI, then KEEP GOING until three stable passes.
+- PR: https://github.com/luisitin/partybox-rea-ports/pull/3 (draft); initial CI green on ad3add8,
+  run 38177187835. KEEP GOING round 1 adds live phone place; 19 screen + 1 SSR tests pass.
+- New ranking fixture has maximum question text, eight long names, a finished zero-score player
+  and a partial-deck points leader. Phone surfaces fit; TV names clip and need the next fix.
+- Remaining: recover the current capture's closed-browser proof, refresh hashes, push round 1;
+  then full TV names, occupied podium beats, informed freeze targeting, live leader cue and
+  pending power feedback, followed by three stable audit passes and final green CI.
 - Install completed using corepack enable and pnpm.cmd install (PowerShell blocks pnpm.ps1).

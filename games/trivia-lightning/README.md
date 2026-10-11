@@ -16,19 +16,19 @@ freezes a leading rival when there is time to catch up, otherwise doubles its ne
 
 ## Phases
 
-| Phase  | TV                                                                                     | Phone with TV                                                               | Exit                                         |
-| ------ | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | -------------------------------------------- |
-| race   | Eight numbered lanes, answered count, scores, frozen/disconnected labels, shared clock | Own question/options; immediate verdict, explanation, Next; energy controls | All connected seats finish, cap, or VIP skip |
-| podium | Third → second → winner, shared places for ties                                        | Same staged podium; own rank/score appear at step 3, the winner reveal      | Three 4.5 s beats or VIP skips               |
-| done   | Winner/tie and final standings                                                         | Final standings and own score/rank                                          | Terminal; shell results available            |
+| Phase  | TV                                                                                     | Phone with TV                                                                   | Exit                                         |
+| ------ | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------- |
+| race   | Eight numbered lanes, answered count, scores, frozen/disconnected labels, shared clock | Own question/options; live place and points; verdict, explanation, Next; powers | All connected seats finish, cap, or VIP skip |
+| podium | Third → second → winner, shared places for ties                                        | Same staged podium; own rank/score appear at step 3, the winner reveal          | Three 4.5 s beats or VIP skips               |
+| done   | Winner/tie and final standings                                                         | Final standings and own score/rank                                              | Terminal; shell results available            |
 
 ### Phone only
 
-| Phase  | Phone stage                                                                                                |
-| ------ | ---------------------------------------------------------------------------------------------------------- |
-| race   | Own question and controls plus compact race position; finished players and spectators see the public track |
-| podium | The same staged podium; own rank/score appear at step 3, the winner reveal; no TV directions               |
-| done   | Winner/tie, standings and own score/rank                                                                   |
+| Phase  | Phone stage                                                                                                         |
+| ------ | ------------------------------------------------------------------------------------------------------------------- |
+| race   | Own question/controls, points and live place (including ties); finished players and spectators see the public track |
+| podium | The same staged podium; own rank/score appear at step 3, the winner reveal; no TV directions                        |
+| done   | Winner/tie, standings and own score/rank                                                                            |
 
 ## Inputs
 

@@ -27,6 +27,8 @@ export function Controller({
   const waiting = pending?.key === key && now - pending.at < 4000;
   const retry = pending?.key === key && !waiting;
   const disabled = view.paused || freeze > 0 || seconds === 0;
+  const livePlace = 1 + view.lanes.filter((lane) => lane.score > view.score).length;
+  const liveTied = view.lanes.filter((lane) => lane.score === view.score).length > 1;
   useEffect(() => {
     if (!view.feedback || view.me.role !== 'player') return;
     const feedbackKey = `${view.phaseAt}:${view.answered}`;
@@ -47,8 +49,15 @@ export function Controller({
           <span>{L('answered')}</span>
         </div>
         <div>
-          <b>{view.score}</b>
-          <span>{L('points')}</span>
+          <b>
+            {view.score}
+            <small className={styles.scoreUnit}> {L('pts')}</small>
+          </b>
+          <span>
+            {liveTied
+              ? L('Tied {rank}/{total}', { rank: livePlace, total: view.lanes.length })
+              : L('Place {rank}/{total}', { rank: livePlace, total: view.lanes.length })}
+          </span>
         </div>
         <div className={styles.time} role="timer" aria-label={L('Race time left')}>
           <b>{view.paused ? 'Ⅱ' : `${seconds}s`}</b>

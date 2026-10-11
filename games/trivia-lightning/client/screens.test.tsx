@@ -40,6 +40,68 @@ describe('Trivia Lightning screens', () => {
     expect(html).not.toContain('on the TV');
   });
 
+  const rankingLanes = view.lanes.map((lane) => {
+    if (lane.id === 'p1') return { ...lane, answered: 12, correct: 0, score: 0, finished: true };
+    if (lane.id === 'p2' || lane.id === 'p3')
+      return { ...lane, answered: 3, correct: 3, score: 360 };
+    if (lane.id === 'p7') return { ...lane, answered: 6, correct: 6, score: 840 };
+    return lane;
+  });
+  const rankingView: TriviaControllerView = {
+    ...view,
+    me: { ...view.me, id: 'p2' },
+    lanes: rankingLanes,
+    answered: 3,
+    correct: 3,
+    score: 360,
+    streak: 3,
+    energy: 1,
+  };
+
+  it.each([
+    { name: 'normal', patch: {} },
+    { name: 'high streak', patch: { streak: 12 } },
+    { name: 'powers disabled', patch: { powersEnabled: false } },
+    { name: 'frozen', patch: { paused: true, clockHeldAt: 1000, freezeUntil: 4000 } },
+  ])('live place follows scores, including shared places ($name)', ({ name, patch }) => {
+    const html = phone({ ...rankingView, ...patch }, true);
+    expect(html).toContain('Tied 2/8');
+    expect(html).toContain('> pts</small>');
+    expect(html).toContain('>360<small');
+    expect(html).not.toContain('Place 1/8');
+    if (name === 'powers disabled') expect(html).not.toContain('Power-ups');
+    if (name === 'frozen') expect(html).toContain('Frozen · Back in 3s');
+    if (name === 'high streak') expect(html).toContain('12 correct in a row');
+  });
+
+  it('a points leader outranks a racer who has answered more questions', () => {
+    const html = phone(
+      {
+        ...rankingView,
+        me: { ...view.me, id: 'p7' },
+        answered: 6,
+        correct: 6,
+        score: 840,
+      },
+      true,
+    );
+    expect(html).toContain('Place 1/8');
+    expect(html).toContain('>840<small');
+  });
+
+  it('live place still includes scores held by disconnected racers', () => {
+    const html = phone(
+      {
+        ...rankingView,
+        lanes: rankingLanes.map((lane) =>
+          lane.id === 'p7' ? { ...lane, connected: false } : lane,
+        ),
+      },
+      true,
+    );
+    expect(html).toContain('Tied 2/8');
+  });
+
   it.each([false, true])(
     'spectators get the public track and no buttons (phone-only=%s)',
     (phoneOnly) => {

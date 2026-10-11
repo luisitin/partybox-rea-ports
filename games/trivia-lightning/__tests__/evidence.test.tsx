@@ -108,6 +108,30 @@ function fixtures(): Record<string, State> {
     },
     stress.clock + 100,
   );
+  const ranking: State = {
+    ...stress,
+    players: Object.fromEntries(
+      Object.entries(stress.players).map(([id, player]) => [
+        id,
+        { ...player, name: `Alexandria Challenger ${id}` },
+      ]),
+    ),
+    deck: stress.deck.map((q, i) =>
+      i === 0 ? long.deck[0]! : i === 3 ? { ...stress.deck[0]!, id: q.id } : q,
+    ),
+    runners: Object.fromEntries(
+      Object.entries(stress.runners).map(([id, runner]) => [
+        id,
+        id === 'p1'
+          ? { ...runner, answered: 12 }
+          : id === 'p2' || id === 'p3'
+            ? { ...runner, answered: 3, correct: 3, streak: 3, score: 360, energy: 1 }
+            : id === 'p7'
+              ? { ...runner, answered: 6, correct: 6, streak: 6, score: 840, energy: 1 }
+              : runner,
+      ]),
+    ),
+  };
   return {
     race,
     podium,
@@ -121,6 +145,7 @@ function fixtures(): Record<string, State> {
     long,
     stress,
     'stress-feedback': stressFeedback,
+    ranking,
   };
 }
 // Static content is imported once, so fixture generation has no filesystem dependency on questions.
@@ -174,6 +199,56 @@ it('renders every phase and input substate, spectators, phone-only and ties', ()
   const write = process.env['PB_WRITE_EVIDENCE'] === '1';
   const dir = resolve('jobs/P03-trivia-lightning/media');
   if (write) mkdirSync(dir, { recursive: true });
+  if (write) {
+    const ranking = states['ranking']!;
+    const updated: State = {
+      ...ranking,
+      runners: {
+        ...ranking.runners,
+        p3: { ...ranking.runners['p3']!, answered: 7, correct: 7, streak: 7, score: 1000 },
+      },
+    };
+    const unavailable = kit.player(ranking, 'p7', false, undefined, ranking.clock + 50);
+    const doubleAccepted = kit.input(
+      ranking,
+      'p2',
+      { type: 'power', power: 'double' },
+      ranking.clock + 50,
+    );
+    const freezeAccepted = kit.input(
+      ranking,
+      'p2',
+      { type: 'power', power: 'freeze', target: 'p7' },
+      ranking.clock + 50,
+    );
+    const question = ranking.deck[3]!;
+    const answerAccepted = kit.input(
+      ranking,
+      'p2',
+      { type: 'answer', index: 3, questionId: question.id, choice: question.correctIndex },
+      ranking.clock + 50,
+    );
+    writeFileSync(
+      resolve(dir, 'interaction-views.json'),
+      JSON.stringify(
+        Object.fromEntries(
+          Object.entries({
+            ranking,
+            rankingUpdated: updated,
+            freezeUnavailable: unavailable,
+            doubleAccepted,
+            freezeAccepted,
+            answerAccepted,
+          }).map(([name, state]) => [
+            name,
+            { ...game.controllerView({ ...state, phoneOnly: true }, 'p2'), vip: null },
+          ]),
+        ),
+        null,
+        2,
+      ) + '\n',
+    );
+  }
   for (const [name, s] of Object.entries(states)) {
     if (write && game.phases.includes(name)) {
       mkdirSync(resolve('games/trivia-lightning/fixtures'), { recursive: true });
@@ -187,7 +262,7 @@ it('renders every phase and input substate, spectators, phone-only and ties', ()
     if (write)
       writeFileSync(resolve(dir, `tv-${name}.html`), html(tv, 'tv', `TV ${name}`, 'Public stage'));
     for (const phoneOnly of [false, true]) {
-      for (const id of [name === 'feedback' ? 'p2' : 'p1', 'spectator']) {
+      for (const id of [name === 'feedback' || name === 'ranking' ? 'p2' : 'p1', 'spectator']) {
         const state = { ...s, phoneOnly };
         const view = { ...game.controllerView(state, id), vip: null };
         const phone = render(
