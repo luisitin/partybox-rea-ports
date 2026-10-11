@@ -30,6 +30,7 @@ describe('public trail threat strategy', () => {
     const at = (x: number, y: number): number => y * 40 + x;
     const me = {
       ...play.world.runners[0]!,
+      home: at(3, 5),
       cell: at(5, 5),
       dir: 1 as const,
       queued: 1 as const,
@@ -44,6 +45,7 @@ describe('public trail threat strategy', () => {
       trail: [],
     };
     const owners = Array<number>(40 * 28).fill(-1);
+    for (let y = 4; y <= 6; y++) for (let x = 2; x <= 4; x++) owners[at(x, y)] = 0;
     for (let y = 2; y <= 4; y++) for (let x = 7; x <= 9; x++) owners[at(x, y)] = 1;
     const world = { ...play.world, owners, homes: [...owners], runners: [me, rival] };
     const crash = tickWorld(world, 3, ['p1', 'p2']);

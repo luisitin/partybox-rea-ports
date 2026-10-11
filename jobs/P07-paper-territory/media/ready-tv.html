@@ -250,6 +250,40 @@ ight is the :root default above) ────────
       stroke-dasharray: 0.45 0.18;
     }
 
+    ._trail_f40580[data-mine] {
+      stroke: var(--pb-text);
+      stroke-width: 0.5;
+    }
+
+    ._trailUnder_f40580 {
+      fill: none;
+      stroke: var(--pb-bg);
+      stroke-width: 0.9;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
+    ._trailBadge_f40580 {
+      fill: var(--pb-bg);
+      stroke: var(--pb-text);
+      stroke-width: 0.08;
+      stroke-linejoin: round;
+    }
+
+    ._trailNumber_f40580 {
+      font-size: calc(var(--pb-font-body) * 0.0375);
+      font-family: var(--pb-font-family);
+      font-weight: 900;
+      fill: var(--pb-text);
+      paint-order: stroke;
+      stroke: var(--pb-bg);
+      stroke-width: 0.08;
+    }
+
+    ._map_f40580[data-compact] ._trailNumber_f40580 {
+      font-size: calc(var(--pb-font-body) * 0.085);
+    }
+
     ._number_f40580 {
       font-size: calc(var(--pb-font-body) * 0.04);
       font-family: var(--pb-font-family);
@@ -803,6 +837,12 @@ ight is the :root default above) ────────
     ._person_6b7a07 span,
     ._area_6b7a07 span {
       color: var(--pb-text-muted);
+    }
+
+    ._person_6b7a07 span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     ._area_6b7a07 {
@@ -1449,14 +1489,6 @@ ight is the :root default above) ────────
                     8
                   </text>
                 </g>
-                <path d="M5.5 5.5" stroke="var(--pb-player-1)" class="_trail_f40580"></path>
-                <path d="M34.5 22.5" stroke="var(--pb-player-2)" class="_trail_f40580"></path>
-                <path d="M34.5 5.5" stroke="var(--pb-player-3)" class="_trail_f40580"></path>
-                <path d="M5.5 22.5" stroke="var(--pb-player-4)" class="_trail_f40580"></path>
-                <path d="M19.5 5.5" stroke="var(--pb-player-5)" class="_trail_f40580"></path>
-                <path d="M19.5 22.5" stroke="var(--pb-player-6)" class="_trail_f40580"></path>
-                <path d="M5.5 13.5" stroke="var(--pb-player-7)" class="_trail_f40580"></path>
-                <path d="M34.5 13.5" stroke="var(--pb-player-8)" class="_trail_f40580"></path>
                 <g transform="translate(5.5 5.5)">
                   <circle
                     r="0.8"
@@ -1499,7 +1531,7 @@ ight is the :root default above) ────────
                     2
                   </text>
                 </g>
-                <g transform="translate(34.5 5.5)">
+                <g transform="translate(33.5 5.5)">
                   <circle
                     r="0.8"
                     fill="var(--pb-bg)"
@@ -1507,9 +1539,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="-0.98,-0.32 -1.52,0.00 -0.98,0.32"
+                    points="-0.32,0.98 0.00,1.52 0.32,0.98"
                     class="_heading_f40580"
-                    data-heading="3"
+                    data-heading="2"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1520,7 +1552,7 @@ ight is the :root default above) ────────
                     3
                   </text>
                 </g>
-                <g transform="translate(5.5 22.5)">
+                <g transform="translate(6.5 22.5)">
                   <circle
                     r="0.8"
                     fill="var(--pb-bg)"
@@ -1528,9 +1560,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="0.98,0.32 1.52,0.00 0.98,-0.32"
+                    points="0.32,-0.98 0.00,-1.52 -0.32,-0.98"
                     class="_heading_f40580"
-                    data-heading="1"
+                    data-heading="0"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1570,9 +1602,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="0.98,0.32 1.52,0.00 0.98,-0.32"
+                    points="-0.98,-0.32 -1.52,0.00 -0.98,0.32"
                     class="_heading_f40580"
-                    data-heading="1"
+                    data-heading="3"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1591,9 +1623,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="0.98,0.32 1.52,0.00 0.98,-0.32"
+                    points="0.32,-0.98 0.00,-1.52 -0.32,-0.98"
                     class="_heading_f40580"
-                    data-heading="1"
+                    data-heading="0"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1612,9 +1644,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="-0.98,-0.32 -1.52,0.00 -0.98,0.32"
+                    points="-0.32,0.98 0.00,1.52 0.32,0.98"
                     class="_heading_f40580"
-                    data-heading="3"
+                    data-heading="2"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1628,8 +1660,7 @@ ight is the :root default above) ────────
               ><span class="_count_6b7a07" aria-live="polite">4</span>
             </div>
             <p class="_legend_6b7a07">
-              Outlined squares are protected homes. Loop back to your land. Cut a rival’s dashed
-              trail.
+              Avoid walls, your own trail and head crashes. A crash clears all extra land.
             </p>
           </div>
           <aside class="_rail_6b7a07">
@@ -1652,7 +1683,7 @@ ight is the :root default above) ────────
                     <rect width="4" height="4" fill="url(#_R_13a_)"></rect></svg
                   ><b class="_number_cafdc5">1</b></span
                 >
-                <div class="_person_6b7a07"><b>Ana</b><span>Home</span></div>
+                <div class="_person_6b7a07"><b>Ana</b><span>Tied lead</span></div>
                 <div class="_area_6b7a07"><b>0.8%</b><span>9 cells</span></div>
               </li>
               <li style="--seat-ink: var(--pb-player-2)">
@@ -1672,7 +1703,7 @@ ight is the :root default above) ────────
                     <rect width="4" height="4" fill="url(#_R_15a_)"></rect></svg
                   ><b class="_number_cafdc5">2</b></span
                 >
-                <div class="_person_6b7a07"><b>Ben</b><span>Home</span></div>
+                <div class="_person_6b7a07"><b>Ben</b><span>Tied lead</span></div>
                 <div class="_area_6b7a07"><b>0.8%</b><span>9 cells</span></div>
               </li>
               <li style="--seat-ink: var(--pb-player-3)">
@@ -1695,7 +1726,7 @@ ight is the :root default above) ────────
                     <rect width="4" height="4" fill="url(#_R_17a_)"></rect></svg
                   ><b class="_number_cafdc5">3</b></span
                 >
-                <div class="_person_6b7a07"><b>Cy</b><span>Home</span></div>
+                <div class="_person_6b7a07"><b>Cy</b><span>Tied lead</span></div>
                 <div class="_area_6b7a07"><b>0.8%</b><span>9 cells</span></div>
               </li>
               <li style="--seat-ink: var(--pb-player-4)">
@@ -1718,7 +1749,7 @@ ight is the :root default above) ────────
                     <rect width="4" height="4" fill="url(#_R_19a_)"></rect></svg
                   ><b class="_number_cafdc5">4</b></span
                 >
-                <div class="_person_6b7a07"><b>Dee</b><span>Home</span></div>
+                <div class="_person_6b7a07"><b>Dee</b><span>Tied lead</span></div>
                 <div class="_area_6b7a07"><b>0.8%</b><span>9 cells</span></div>
               </li>
               <li style="--seat-ink: var(--pb-player-5)">
@@ -1738,7 +1769,7 @@ ight is the :root default above) ────────
                     <rect width="4" height="4" fill="url(#_R_1ba_)"></rect></svg
                   ><b class="_number_cafdc5">5</b></span
                 >
-                <div class="_person_6b7a07"><b>Eli</b><span>Home</span></div>
+                <div class="_person_6b7a07"><b>Eli</b><span>Tied lead</span></div>
                 <div class="_area_6b7a07"><b>0.8%</b><span>9 cells</span></div>
               </li>
               <li style="--seat-ink: var(--pb-player-6)">
@@ -1758,7 +1789,7 @@ ight is the :root default above) ────────
                     <rect width="4" height="4" fill="url(#_R_1da_)"></rect></svg
                   ><b class="_number_cafdc5">6</b></span
                 >
-                <div class="_person_6b7a07"><b>Fay</b><span>Home</span></div>
+                <div class="_person_6b7a07"><b>Fay</b><span>Tied lead</span></div>
                 <div class="_area_6b7a07"><b>0.8%</b><span>9 cells</span></div>
               </li>
               <li style="--seat-ink: var(--pb-player-7)">
@@ -1778,7 +1809,7 @@ ight is the :root default above) ────────
                     <rect width="4" height="4" fill="url(#_R_1fa_)"></rect></svg
                   ><b class="_number_cafdc5">7</b></span
                 >
-                <div class="_person_6b7a07"><b>Gus</b><span>Home</span></div>
+                <div class="_person_6b7a07"><b>Gus</b><span>Tied lead</span></div>
                 <div class="_area_6b7a07"><b>0.8%</b><span>9 cells</span></div>
               </li>
               <li style="--seat-ink: var(--pb-player-8)">
@@ -1798,7 +1829,7 @@ ight is the :root default above) ────────
                     <rect width="4" height="4" fill="url(#_R_1ha_)"></rect></svg
                   ><b class="_number_cafdc5">8</b></span
                 >
-                <div class="_person_6b7a07"><b>Hal</b><span>Home</span></div>
+                <div class="_person_6b7a07"><b>Hal</b><span>Tied lead</span></div>
                 <div class="_area_6b7a07"><b>0.8%</b><span>9 cells</span></div>
               </li>
             </ul>

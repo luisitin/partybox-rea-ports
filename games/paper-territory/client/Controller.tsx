@@ -47,6 +47,23 @@ export function Controller({
     view.respawnAt === null ? null : Math.max(0, Math.ceil((view.respawnAt - now) / 1000));
   const rows = standings(view, true);
   const leaders = rows.filter((row) => row.rank === 1);
+  const myRow = rows.find((row) => row.id === view.me.id);
+  const leadArea = leaders[0]?.area ?? 0;
+  const nextArea = rows.find((row) => row.rank > 1)?.area ?? leadArea;
+  const standing =
+    myRow?.rank === 1
+      ? leaders.length > 1
+        ? L('Tied for lead · {n}', { n: leaders.length })
+        : L('Leading · {n} ahead', { n: leadArea - nextArea })
+      : leaders.length > 1
+        ? L('{n} tied leaders · {m} off', {
+            n: leaders.length,
+            m: Math.max(0, leadArea - (myRow?.area ?? 0)),
+          })
+        : L('#{n} leads · {m} off', {
+            n: (leaders[0]?.slot ?? 0) + 1,
+            m: Math.max(0, leadArea - (myRow?.area ?? 0)),
+          });
   const title = over
     ? leaders.length === 1
       ? L('{name} takes the map!', { name: leaders[0]?.name ?? '' })
@@ -84,7 +101,9 @@ export function Controller({
           : `${cause} · ${L('home in {n}s', { n: returning })}`
       : exposed
         ? L('{n} trail cells — return to your land', { n: mine?.trail.length ?? 0 })
-        : L('Inside your land · safe trail');
+        : view.lastCapture > 0
+          ? L('Loop closed · +{n} cells', { n: view.lastCapture })
+          : L('Inside your land · safe trail');
   const ink = { ['--seat-ink' as string]: playerInk(view.slot) } as CSSProperties;
   return (
     <Screen className={styles.screen} ghost={false}>
@@ -97,7 +116,7 @@ export function Controller({
         <header className={styles.header}>
           {player ? <SeatBadge className={styles.seat} slot={view.slot} /> : null}
           <div className={styles.heading}>
-            <p>{L('Paper Territory')}</p>
+            <p>{view.phaseId === 'play' && player ? standing : L('Paper Territory')}</p>
             <h2>{title}</h2>
           </div>
           {!over ? (
@@ -117,8 +136,8 @@ export function Controller({
               <dd>{view.area}</dd>
             </div>
             <div>
-              <dt>{L('Crashes')}</dt>
-              <dd>{view.deaths}</dd>
+              <dt>{view.phaseId === 'play' ? L('Place') : L('Crashes')}</dt>
+              <dd>{view.phaseId === 'play' ? (myRow?.rank ?? 1) : view.deaths}</dd>
             </div>
           </dl>
         ) : null}
@@ -188,6 +207,10 @@ export function Controller({
               <li>
                 <b>3</b>
                 {L('Protect your trail. Rivals can cut it.')}
+              </li>
+              <li>
+                <b>4</b>
+                {L('Walls, your own trail and head crashes cost all extra land.')}
               </li>
             </ul>
             {!stage ? (

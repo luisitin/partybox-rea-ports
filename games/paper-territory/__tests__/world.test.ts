@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { testPlayers } from '@partybox/game-sdk/testing';
+import { testKit, testPlayers } from '@partybox/game-sdk/testing';
+import { game } from '../server/index';
 import {
   applyDirection,
   captureCells,
@@ -108,6 +109,16 @@ describe('grid, inputs and seed homes', () => {
       [6, 'wall'],
     ]);
   });
+
+  it.each([2, 4, 8])(
+    'preserves the safe opening through ready and two seconds of actual play for %i players',
+    (count) => {
+      const kit = testKit(game, { players: testPlayers(count) });
+      const play = kit.timer(kit.start());
+      const moved = kit.timer(play, play.began + 2000);
+      expect(moved.world.runners.every((r) => r.alive && r.deaths === 0)).toBe(true);
+    },
+  );
 
   it('respawns each seat with its same safe opening heading', () => {
     const initial = createWorld(testPlayers(8));

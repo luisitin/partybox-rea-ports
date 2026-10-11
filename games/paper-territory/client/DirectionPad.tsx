@@ -22,7 +22,7 @@ export function DirectionPad({
       const request = directionRequest(view, dir);
       if (!request) return;
       send(request);
-      buzz(8);
+      if (dir !== view.dir) buzz(8);
     },
     [view.phaseId, view.paused, view.alive, view.me.role, view.dir, view.movingDir, send],
   );

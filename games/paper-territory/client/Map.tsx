@@ -152,7 +152,11 @@ export function Map({
                 data-trail-owner={runner.slot + 1}
                 data-trail-cell={cell}
               >
-                <circle r="0.72" className={styles.trailBadge} />
+                <polygon
+                  points="0,-0.72 0.72,0 0,0.72 -0.72,0"
+                  className={styles.trailBadge}
+                  data-trail-shape="diamond"
+                />
                 <text
                   className={styles.trailNumber}
                   textAnchor="middle"

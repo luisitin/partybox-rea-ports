@@ -250,6 +250,40 @@ ight is the :root default above) ────────
       stroke-dasharray: 0.45 0.18;
     }
 
+    ._trail_f40580[data-mine] {
+      stroke: var(--pb-text);
+      stroke-width: 0.5;
+    }
+
+    ._trailUnder_f40580 {
+      fill: none;
+      stroke: var(--pb-bg);
+      stroke-width: 0.9;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
+    ._trailBadge_f40580 {
+      fill: var(--pb-bg);
+      stroke: var(--pb-text);
+      stroke-width: 0.08;
+      stroke-linejoin: round;
+    }
+
+    ._trailNumber_f40580 {
+      font-size: calc(var(--pb-font-body) * 0.0375);
+      font-family: var(--pb-font-family);
+      font-weight: 900;
+      fill: var(--pb-text);
+      paint-order: stroke;
+      stroke: var(--pb-bg);
+      stroke-width: 0.08;
+    }
+
+    ._map_f40580[data-compact] ._trailNumber_f40580 {
+      font-size: calc(var(--pb-font-body) * 0.085);
+    }
+
     ._number_f40580 {
       font-size: calc(var(--pb-font-body) * 0.04);
       font-family: var(--pb-font-family);
@@ -805,6 +839,12 @@ ight is the :root default above) ────────
       color: var(--pb-text-muted);
     }
 
+    ._person_6b7a07 span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     ._area_6b7a07 {
       flex: none;
       text-align: right;
@@ -1118,26 +1158,28 @@ ight is the :root default above) ────────
                 ><b class="_number_cafdc5">1</b></span
               >
               <div class="_heading_9f25ac">
-                <p>Paper Territory</p>
-                <h2>Make some territory</h2>
+                <p>#4 leads · 25 off</p>
+                <h2>Close your loop</h2>
               </div>
               <b class="_clock_9f25ac" role="timer">Paused</b>
             </header>
             <dl class="_stats_9f25ac">
               <div>
                 <dt>Area</dt>
-                <dd>3.2%</dd>
+                <dd>3.7%</dd>
               </div>
               <div>
                 <dt>Cells</dt>
-                <dd>36</dd>
+                <dd>41</dd>
               </div>
               <div>
-                <dt>Crashes</dt>
-                <dd>1</dd>
+                <dt>Place</dt>
+                <dd>4</dd>
               </div>
             </dl>
-            <p class="_status_9f25ac" role="status">Paused — your trail is safe for now</p>
+            <p class="_status_9f25ac" data-exposed="true" role="status">
+              Paused — your trail is safe for now
+            </p>
             <div class="_pad_9f25ac" role="group" aria-label="Direction controls">
               <button
                 type="button"
@@ -1152,7 +1194,7 @@ ight is the :root default above) ────────
                 class="_direction_9f25ac _right_9f25ac"
                 disabled=""
                 aria-label="Go right"
-                aria-pressed="true"
+                aria-pressed="false"
               >
                 <span aria-hidden="true">→</span>Right</button
               ><button
@@ -1160,7 +1202,7 @@ ight is the :root default above) ────────
                 class="_direction_9f25ac _down_9f25ac"
                 disabled=""
                 aria-label="Go down"
-                aria-pressed="false"
+                aria-pressed="true"
               >
                 <span aria-hidden="true">↓</span>Down</button
               ><button

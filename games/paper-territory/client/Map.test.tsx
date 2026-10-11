@@ -152,6 +152,10 @@ describe('identifiable vulnerable trails', () => {
       expect(markers).toHaveLength(3);
       for (const marker of markers) {
         expect(marker[0]).not.toMatch(/--pb-player-/);
+        expect(marker[0]).toContain('data-trail-shape="diamond"');
+        expect(marker[0]).toContain('points="0,-0.72 0.72,0 0,0.72 -0.72,0"');
+        expect(marker[0]).not.toContain('<circle');
+        expect(marker[0]).not.toContain('data-heading=');
         expect(marker[0]).toMatch(
           new RegExp(`data-marker="trail"[^>]*>${runner.slot + 1}<\\/text>`),
         );
@@ -159,6 +163,7 @@ describe('identifiable vulnerable trails', () => {
       expect(html).toContain(`data-trail="${runner.slot + 1}"`);
     }
     expect(html.match(/data-trail-outline=/g)).toHaveLength(1);
+    expect(html.match(/data-heading=/g)).toHaveLength(8);
     expect(html).toContain('data-trail-outline="1"');
     expect(html).toMatch(/data-mine="true" data-trail="1"/);
     // Heads remain above all owner pins, avoiding hidden opponents at trail intersections.

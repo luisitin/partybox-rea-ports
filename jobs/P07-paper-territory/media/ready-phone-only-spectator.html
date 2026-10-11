@@ -250,6 +250,40 @@ ight is the :root default above) ────────
       stroke-dasharray: 0.45 0.18;
     }
 
+    ._trail_f40580[data-mine] {
+      stroke: var(--pb-text);
+      stroke-width: 0.5;
+    }
+
+    ._trailUnder_f40580 {
+      fill: none;
+      stroke: var(--pb-bg);
+      stroke-width: 0.9;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
+    ._trailBadge_f40580 {
+      fill: var(--pb-bg);
+      stroke: var(--pb-text);
+      stroke-width: 0.08;
+      stroke-linejoin: round;
+    }
+
+    ._trailNumber_f40580 {
+      font-size: calc(var(--pb-font-body) * 0.0375);
+      font-family: var(--pb-font-family);
+      font-weight: 900;
+      fill: var(--pb-text);
+      paint-order: stroke;
+      stroke: var(--pb-bg);
+      stroke-width: 0.08;
+    }
+
+    ._map_f40580[data-compact] ._trailNumber_f40580 {
+      font-size: calc(var(--pb-font-body) * 0.085);
+    }
+
     ._number_f40580 {
       font-size: calc(var(--pb-font-body) * 0.04);
       font-family: var(--pb-font-family);
@@ -803,6 +837,12 @@ ight is the :root default above) ────────
     ._person_6b7a07 span,
     ._area_6b7a07 span {
       color: var(--pb-text-muted);
+    }
+
+    ._person_6b7a07 span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     ._area_6b7a07 {
@@ -1449,14 +1489,6 @@ ight is the :root default above) ────────
                     8
                   </text>
                 </g>
-                <path d="M5.5 5.5" stroke="var(--pb-player-1)" class="_trail_f40580"></path>
-                <path d="M34.5 22.5" stroke="var(--pb-player-2)" class="_trail_f40580"></path>
-                <path d="M34.5 5.5" stroke="var(--pb-player-3)" class="_trail_f40580"></path>
-                <path d="M5.5 22.5" stroke="var(--pb-player-4)" class="_trail_f40580"></path>
-                <path d="M19.5 5.5" stroke="var(--pb-player-5)" class="_trail_f40580"></path>
-                <path d="M19.5 22.5" stroke="var(--pb-player-6)" class="_trail_f40580"></path>
-                <path d="M5.5 13.5" stroke="var(--pb-player-7)" class="_trail_f40580"></path>
-                <path d="M34.5 13.5" stroke="var(--pb-player-8)" class="_trail_f40580"></path>
                 <g transform="translate(5.5 5.5)">
                   <circle
                     r="0.95"
@@ -1499,7 +1531,7 @@ ight is the :root default above) ────────
                     2
                   </text>
                 </g>
-                <g transform="translate(34.5 5.5)">
+                <g transform="translate(33.5 5.5)">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
@@ -1507,9 +1539,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="-1.13,-0.32 -1.67,0.00 -1.13,0.32"
+                    points="-0.32,1.13 0.00,1.67 0.32,1.13"
                     class="_heading_f40580"
-                    data-heading="3"
+                    data-heading="2"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1520,7 +1552,7 @@ ight is the :root default above) ────────
                     3
                   </text>
                 </g>
-                <g transform="translate(5.5 22.5)">
+                <g transform="translate(6.5 22.5)">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
@@ -1528,9 +1560,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="1.13,0.32 1.67,0.00 1.13,-0.32"
+                    points="0.32,-1.13 0.00,-1.67 -0.32,-1.13"
                     class="_heading_f40580"
-                    data-heading="1"
+                    data-heading="0"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1570,9 +1602,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="1.13,0.32 1.67,0.00 1.13,-0.32"
+                    points="-1.13,-0.32 -1.67,0.00 -1.13,0.32"
                     class="_heading_f40580"
-                    data-heading="1"
+                    data-heading="3"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1591,9 +1623,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="1.13,0.32 1.67,0.00 1.13,-0.32"
+                    points="0.32,-1.13 0.00,-1.67 -0.32,-1.13"
                     class="_heading_f40580"
-                    data-heading="1"
+                    data-heading="0"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1612,9 +1644,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="-1.13,-0.32 -1.67,0.00 -1.13,0.32"
+                    points="-0.32,1.13 0.00,1.67 0.32,1.13"
                     class="_heading_f40580"
-                    data-heading="3"
+                    data-heading="2"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1631,6 +1663,7 @@ ight is the :root default above) ────────
               <li><b>1</b>Tap an arrow. You keep moving.</li>
               <li><b>2</b>Loop back to your land to claim it.</li>
               <li><b>3</b>Protect your trail. Rivals can cut it.</li>
+              <li><b>4</b>Walls, your own trail and head crashes cost all extra land.</li>
             </ul>
           </div>
         </div>

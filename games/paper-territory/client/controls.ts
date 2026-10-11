@@ -27,7 +27,9 @@ export function canSteer(view: ControlState): boolean {
 }
 
 export function directionRequest(view: ControlState, dir: Direction): Input | null {
-  if (!canSteer(view) || isReverse(view, dir) || dir === view.dir) return null;
+  // A second tap can cancel an in-flight turn before the next view arrives.
+  // The server safely deduplicates headings against its current queue.
+  if (!canSteer(view) || isReverse(view, dir)) return null;
   return { type: 'direction', dir };
 }
 

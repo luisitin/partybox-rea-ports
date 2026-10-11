@@ -250,6 +250,40 @@ ight is the :root default above) ────────
       stroke-dasharray: 0.45 0.18;
     }
 
+    ._trail_f40580[data-mine] {
+      stroke: var(--pb-text);
+      stroke-width: 0.5;
+    }
+
+    ._trailUnder_f40580 {
+      fill: none;
+      stroke: var(--pb-bg);
+      stroke-width: 0.9;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
+    ._trailBadge_f40580 {
+      fill: var(--pb-bg);
+      stroke: var(--pb-text);
+      stroke-width: 0.08;
+      stroke-linejoin: round;
+    }
+
+    ._trailNumber_f40580 {
+      font-size: calc(var(--pb-font-body) * 0.0375);
+      font-family: var(--pb-font-family);
+      font-weight: 900;
+      fill: var(--pb-text);
+      paint-order: stroke;
+      stroke: var(--pb-bg);
+      stroke-width: 0.08;
+    }
+
+    ._map_f40580[data-compact] ._trailNumber_f40580 {
+      font-size: calc(var(--pb-font-body) * 0.085);
+    }
+
     ._number_f40580 {
       font-size: calc(var(--pb-font-body) * 0.04);
       font-family: var(--pb-font-family);
@@ -805,6 +839,12 @@ ight is the :root default above) ────────
       color: var(--pb-text-muted);
     }
 
+    ._person_6b7a07 span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     ._area_6b7a07 {
       flex: none;
       text-align: right;
@@ -1118,26 +1158,28 @@ ight is the :root default above) ────────
                 ><b class="_number_cafdc5">1</b></span
               >
               <div class="_heading_9f25ac">
-                <p>Paper Territory</p>
-                <h2>Make some territory</h2>
+                <p>#4 leads · 25 off</p>
+                <h2>Close your loop</h2>
               </div>
               <b class="_clock_9f25ac" role="timer">Paused</b>
             </header>
             <dl class="_stats_9f25ac">
               <div>
                 <dt>Area</dt>
-                <dd>3.2%</dd>
+                <dd>3.7%</dd>
               </div>
               <div>
                 <dt>Cells</dt>
-                <dd>36</dd>
+                <dd>41</dd>
               </div>
               <div>
-                <dt>Crashes</dt>
-                <dd>1</dd>
+                <dt>Place</dt>
+                <dd>4</dd>
               </div>
             </dl>
-            <p class="_status_9f25ac" role="status">Paused — your trail is safe for now</p>
+            <p class="_status_9f25ac" data-exposed="true" role="status">
+              Paused — your trail is safe for now
+            </p>
             <div class="_arena_9f25ac">
               <svg
                 class="_map_f40580"
@@ -1231,89 +1273,89 @@ ight is the :root default above) ────────
                 </defs>
                 <rect width="40" height="28" class="_ground_f40580"></rect>
                 <path
-                  d="M6 2h4v1h-4zM6 3h4v1h-4zM4 4h6v1h-6zM4 5h6v1h-6zM3 6h4v1h-4zM3 7h4v1h-4zM3 8h4v1h-4zM3 9h4v1h-4z"
+                  d="M4 4h3v1h-3zM4 5h9v1h-9zM4 6h9v1h-9zM5 7h8v1h-8zM5 8h8v1h-8zM5 9h4v1h-4z"
                   fill="var(--pb-player-1)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M17 2h7v1h-7zM17 3h7v1h-7zM14 4h10v1h-10zM14 5h10v1h-10zM14 6h12v1h-12zM14 7h7v1h-7zM23 7h3v1h-3zM14 8h7v1h-7zM23 8h3v1h-3zM17 9h4v1h-4z"
+                  d="M18 4h3v1h-3zM18 5h3v1h-3zM18 6h3v1h-3z"
                   fill="var(--pb-player-5)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M24 2h4v1h-4zM24 3h4v1h-4zM24 4h12v1h-12zM24 5h13v1h-13zM26 6h11v1h-11zM26 7h11v1h-11zM26 8h11v1h-11zM27 9h4v1h-4zM27 10h4v1h-4zM27 11h4v1h-4z"
+                  d="M33 4h3v1h-3zM30 5h6v1h-6zM30 6h6v1h-6zM28 7h7v1h-7zM28 8h7v1h-7zM28 9h7v1h-7zM28 10h7v1h-7zM31 11h4v1h-4zM31 12h2v1h-2z"
                   fill="var(--pb-player-3)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M31 9h7v1h-7zM31 10h7v1h-7zM31 11h7v1h-7zM30 12h8v1h-8zM29 13h7v1h-7zM29 14h7v1h-7zM33 15h3v1h-3zM28 16h1v1h-1zM33 16h3v1h-3zM28 17h1v1h-1zM33 17h3v1h-3z"
-                  fill="var(--pb-player-8)"
-                  class="_territory_f40580"
-                ></path>
-                <path
-                  d="M4 12h3v1h-3zM4 13h3v1h-3zM4 14h3v1h-3z"
+                  d="M7 10h3v1h-3zM5 11h9v1h-9zM4 12h10v1h-10zM4 13h10v1h-10zM4 14h10v1h-10zM5 15h6v1h-6zM5 16h6v1h-6zM5 17h6v1h-6z"
                   fill="var(--pb-player-7)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M17 13h4v1h-4zM17 14h4v1h-4zM17 15h4v1h-4zM17 16h7v1h-7zM17 17h7v1h-7zM17 18h7v1h-7zM17 19h8v1h-8zM15 20h10v1h-10zM15 21h10v1h-10zM15 22h12v1h-12zM15 23h12v1h-12zM23 24h4v1h-4zM23 25h4v1h-4z"
-                  fill="var(--pb-player-6)"
+                  d="M33 12h3v1h-3zM33 13h3v1h-3zM31 14h5v1h-5zM31 15h4v1h-4zM31 16h4v1h-4zM31 17h4v1h-4zM31 18h4v1h-4zM31 19h4v1h-4zM31 20h4v1h-4z"
+                  fill="var(--pb-player-8)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M5 15h4v1h-4zM5 16h4v1h-4zM5 17h4v1h-4zM3 18h6v1h-6zM3 19h5v1h-5zM3 20h5v1h-5zM3 21h7v1h-7zM3 22h10v1h-10zM3 23h10v1h-10zM3 24h10v1h-10zM3 25h10v1h-10z"
+                  d="M11 15h2v1h-2zM11 16h2v1h-2zM11 17h2v1h-2zM5 18h11v1h-11zM5 19h11v1h-11zM5 20h11v1h-11zM4 21h12v1h-12zM4 22h12v1h-12zM4 23h3v1h-3z"
                   fill="var(--pb-player-4)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M29 15h4v1h-4zM29 16h4v1h-4zM29 17h4v1h-4zM28 18h8v1h-8zM28 19h8v1h-8zM27 20h9v1h-9zM27 21h9v1h-9zM27 22h9v1h-9zM27 23h9v1h-9zM30 24h4v1h-4zM30 25h4v1h-4z"
+                  d="M18 21h3v1h-3zM18 22h3v1h-3zM18 23h3v1h-3z"
+                  fill="var(--pb-player-6)"
+                  class="_territory_f40580"
+                ></path>
+                <path
+                  d="M33 21h3v1h-3zM33 22h3v1h-3zM33 23h3v1h-3z"
                   fill="var(--pb-player-2)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M6 2h4v1h-4zM6 3h4v1h-4zM4 4h6v1h-6zM4 5h6v1h-6zM3 6h4v1h-4zM3 7h4v1h-4zM3 8h4v1h-4zM3 9h4v1h-4z"
+                  d="M4 4h3v1h-3zM4 5h9v1h-9zM4 6h9v1h-9zM5 7h8v1h-8zM5 8h8v1h-8zM5 9h4v1h-4z"
                   fill="url(#_R_i_-owner-0)"
                   data-owner="1"
                   data-texture="Horizontal lines"
                 ></path>
                 <path
-                  d="M17 2h7v1h-7zM17 3h7v1h-7zM14 4h10v1h-10zM14 5h10v1h-10zM14 6h12v1h-12zM14 7h7v1h-7zM23 7h3v1h-3zM14 8h7v1h-7zM23 8h3v1h-3zM17 9h4v1h-4z"
+                  d="M18 4h3v1h-3zM18 5h3v1h-3zM18 6h3v1h-3z"
                   fill="url(#_R_i_-owner-4)"
                   data-owner="5"
                   data-texture="Dots"
                 ></path>
                 <path
-                  d="M24 2h4v1h-4zM24 3h4v1h-4zM24 4h12v1h-12zM24 5h13v1h-13zM26 6h11v1h-11zM26 7h11v1h-11zM26 8h11v1h-11zM27 9h4v1h-4zM27 10h4v1h-4zM27 11h4v1h-4z"
+                  d="M33 4h3v1h-3zM30 5h6v1h-6zM30 6h6v1h-6zM28 7h7v1h-7zM28 8h7v1h-7zM28 9h7v1h-7zM28 10h7v1h-7zM31 11h4v1h-4zM31 12h2v1h-2z"
                   fill="url(#_R_i_-owner-2)"
                   data-owner="3"
                   data-texture="Rising stripes"
                 ></path>
                 <path
-                  d="M31 9h7v1h-7zM31 10h7v1h-7zM31 11h7v1h-7zM30 12h8v1h-8zM29 13h7v1h-7zM29 14h7v1h-7zM33 15h3v1h-3zM28 16h1v1h-1zM33 16h3v1h-3zM28 17h1v1h-1zM33 17h3v1h-3z"
-                  fill="url(#_R_i_-owner-7)"
-                  data-owner="8"
-                  data-texture="Diamonds"
-                ></path>
-                <path
-                  d="M4 12h3v1h-3zM4 13h3v1h-3zM4 14h3v1h-3z"
+                  d="M7 10h3v1h-3zM5 11h9v1h-9zM4 12h10v1h-10zM4 13h10v1h-10zM4 14h10v1h-10zM5 15h6v1h-6zM5 16h6v1h-6zM5 17h6v1h-6z"
                   fill="url(#_R_i_-owner-6)"
                   data-owner="7"
                   data-texture="Grid"
                 ></path>
                 <path
-                  d="M17 13h4v1h-4zM17 14h4v1h-4zM17 15h4v1h-4zM17 16h7v1h-7zM17 17h7v1h-7zM17 18h7v1h-7zM17 19h8v1h-8zM15 20h10v1h-10zM15 21h10v1h-10zM15 22h12v1h-12zM15 23h12v1h-12zM23 24h4v1h-4zM23 25h4v1h-4z"
-                  fill="url(#_R_i_-owner-5)"
-                  data-owner="6"
-                  data-texture="Crosses"
+                  d="M33 12h3v1h-3zM33 13h3v1h-3zM31 14h5v1h-5zM31 15h4v1h-4zM31 16h4v1h-4zM31 17h4v1h-4zM31 18h4v1h-4zM31 19h4v1h-4zM31 20h4v1h-4z"
+                  fill="url(#_R_i_-owner-7)"
+                  data-owner="8"
+                  data-texture="Diamonds"
                 ></path>
                 <path
-                  d="M5 15h4v1h-4zM5 16h4v1h-4zM5 17h4v1h-4zM3 18h6v1h-6zM3 19h5v1h-5zM3 20h5v1h-5zM3 21h7v1h-7zM3 22h10v1h-10zM3 23h10v1h-10zM3 24h10v1h-10zM3 25h10v1h-10z"
+                  d="M11 15h2v1h-2zM11 16h2v1h-2zM11 17h2v1h-2zM5 18h11v1h-11zM5 19h11v1h-11zM5 20h11v1h-11zM4 21h12v1h-12zM4 22h12v1h-12zM4 23h3v1h-3z"
                   fill="url(#_R_i_-owner-3)"
                   data-owner="4"
                   data-texture="Falling stripes"
                 ></path>
                 <path
-                  d="M29 15h4v1h-4zM29 16h4v1h-4zM29 17h4v1h-4zM28 18h8v1h-8zM28 19h8v1h-8zM27 20h9v1h-9zM27 21h9v1h-9zM27 22h9v1h-9zM27 23h9v1h-9zM30 24h4v1h-4zM30 25h4v1h-4z"
+                  d="M18 21h3v1h-3zM18 22h3v1h-3zM18 23h3v1h-3z"
+                  fill="url(#_R_i_-owner-5)"
+                  data-owner="6"
+                  data-texture="Crosses"
+                ></path>
+                <path
+                  d="M33 21h3v1h-3zM33 22h3v1h-3zM33 23h3v1h-3z"
                   fill="url(#_R_i_-owner-1)"
                   data-owner="2"
                   data-texture="Vertical lines"
@@ -1480,60 +1522,75 @@ ight is the :root default above) ────────
                     8
                   </text>
                 </g>
-                <path d="M6.5 6.5" stroke="var(--pb-player-1)" class="_trail_f40580"></path>
-                <path
-                  d="M33.5 17.5L33.5 16.5L33.5 15.5L34.5 15.5L35.5 15.5L35.5 15.5"
-                  stroke="var(--pb-player-2)"
-                  class="_trail_f40580"
-                ></path>
-                <path d="M30.5 7.5" stroke="var(--pb-player-3)" class="_trail_f40580"></path>
-                <path
-                  d="M9.5 17.5L10.5 17.5L11.5 17.5L11.5 18.5L11.5 19.5L11.5 20.5L10.5 20.5L9.5 20.5L9.5 20.5"
-                  stroke="var(--pb-player-4)"
-                  class="_trail_f40580"
-                ></path>
-                <path
-                  d="M13.5 7.5L12.5 7.5L11.5 7.5L11.5 6.5L11.5 5.5L11.5 4.5L12.5 4.5L12.5 4.5"
-                  stroke="var(--pb-player-5)"
-                  class="_trail_f40580"
-                ></path>
-                <path
-                  d="M16.5 16.5L15.5 16.5L14.5 16.5L14.5 17.5L14.5 17.5"
-                  stroke="var(--pb-player-6)"
-                  class="_trail_f40580"
-                ></path>
-                <path
-                  d="M7.5 13.5L8.5 13.5L8.5 13.5"
-                  stroke="var(--pb-player-7)"
-                  class="_trail_f40580"
-                ></path>
-                <path
-                  d="M35.5 8.5L35.5 8.5"
-                  stroke="var(--pb-player-8)"
-                  class="_trail_f40580"
-                ></path>
-                <g transform="translate(35.5 15.5)">
-                  <circle
-                    r="0.95"
-                    fill="var(--pb-bg)"
-                    stroke="var(--pb-player-2)"
-                    stroke-width="0.18"
-                  ></circle>
+                <g>
+                  <path
+                    d="M9.5 9.5L9.5 9.5"
+                    class="_trailUnder_f40580"
+                    data-trail-outline="1"
+                  ></path>
+                  <path
+                    d="M9.5 9.5L9.5 9.5"
+                    stroke="var(--pb-player-1)"
+                    class="_trail_f40580"
+                    data-mine="true"
+                    data-trail="1"
+                  ></path>
+                </g>
+                <g>
+                  <path
+                    d="M29.5 6.5L29.5 6.5"
+                    stroke="var(--pb-player-3)"
+                    class="_trail_f40580"
+                    data-trail="3"
+                  ></path>
+                </g>
+                <g>
+                  <path
+                    d="M16.5 19.5L17.5 19.5L18.5 19.5L18.5 20.5L18.5 21.5L18.5 22.5L17.5 22.5L16.5 22.5L16.5 22.5"
+                    stroke="var(--pb-player-4)"
+                    class="_trail_f40580"
+                    data-trail="4"
+                  ></path>
+                </g>
+                <g>
+                  <path
+                    d="M30.5 17.5L29.5 17.5L28.5 17.5L28.5 16.5L28.5 15.5L28.5 15.5"
+                    stroke="var(--pb-player-8)"
+                    class="_trail_f40580"
+                    data-trail="8"
+                  ></path>
+                </g>
+                <g transform="translate(16.5 19.5)" data-trail-owner="4" data-trail-cell="776">
                   <polygon
-                    points="1.13,0.32 1.67,0.00 1.13,-0.32"
-                    class="_heading_f40580"
-                    data-heading="1"
+                    points="0,-0.72 0.72,0 0,0.72 -0.72,0"
+                    class="_trailBadge_f40580"
+                    data-trail-shape="diamond"
                   ></polygon>
                   <text
-                    class="_number_f40580"
+                    class="_trailNumber_f40580"
                     text-anchor="middle"
                     dominant-baseline="central"
-                    data-marker="runner"
+                    data-marker="trail"
                   >
-                    2
+                    4
                   </text>
                 </g>
-                <g transform="translate(30.5 7.5)">
+                <g transform="translate(30.5 17.5)" data-trail-owner="8" data-trail-cell="710">
+                  <polygon
+                    points="0,-0.72 0.72,0 0,0.72 -0.72,0"
+                    class="_trailBadge_f40580"
+                    data-trail-shape="diamond"
+                  ></polygon>
+                  <text
+                    class="_trailNumber_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="trail"
+                  >
+                    8
+                  </text>
+                </g>
+                <g transform="translate(29.5 6.5)">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
@@ -1541,9 +1598,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="0.32,-1.13 0.00,-1.67 -0.32,-1.13"
+                    points="-1.13,-0.32 -1.67,0.00 -1.13,0.32"
                     class="_heading_f40580"
-                    data-heading="0"
+                    data-heading="3"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1554,7 +1611,7 @@ ight is the :root default above) ────────
                     3
                   </text>
                 </g>
-                <g transform="translate(9.5 20.5)">
+                <g transform="translate(16.5 22.5)">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
@@ -1575,49 +1632,7 @@ ight is the :root default above) ────────
                     4
                   </text>
                 </g>
-                <g transform="translate(12.5 4.5)">
-                  <circle
-                    r="0.95"
-                    fill="var(--pb-bg)"
-                    stroke="var(--pb-player-5)"
-                    stroke-width="0.18"
-                  ></circle>
-                  <polygon
-                    points="1.13,0.32 1.67,0.00 1.13,-0.32"
-                    class="_heading_f40580"
-                    data-heading="1"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    5
-                  </text>
-                </g>
-                <g transform="translate(14.5 17.5)">
-                  <circle
-                    r="0.95"
-                    fill="var(--pb-bg)"
-                    stroke="var(--pb-player-6)"
-                    stroke-width="0.18"
-                  ></circle>
-                  <polygon
-                    points="-0.32,1.13 0.00,1.67 0.32,1.13"
-                    class="_heading_f40580"
-                    data-heading="2"
-                  ></polygon>
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                  >
-                    6
-                  </text>
-                </g>
-                <g transform="translate(8.5 13.5)">
+                <g transform="translate(5.5 11.5)">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
@@ -1625,9 +1640,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="1.13,0.32 1.67,0.00 1.13,-0.32"
+                    points="0.32,-1.13 0.00,-1.67 -0.32,-1.13"
                     class="_heading_f40580"
-                    data-heading="1"
+                    data-heading="0"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1638,7 +1653,7 @@ ight is the :root default above) ────────
                     7
                   </text>
                 </g>
-                <g transform="translate(35.5 8.5)">
+                <g transform="translate(28.5 15.5)">
                   <circle
                     r="0.95"
                     fill="var(--pb-bg)"
@@ -1659,7 +1674,7 @@ ight is the :root default above) ────────
                     8
                   </text>
                 </g>
-                <g transform="translate(6.5 6.5)">
+                <g transform="translate(9.5 9.5)">
                   <circle r="1.2" class="_mine_f40580"></circle>
                   <circle
                     r="0.95"
@@ -1668,9 +1683,9 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                   <polygon
-                    points="1.13,0.32 1.67,0.00 1.13,-0.32"
+                    points="-0.32,1.13 0.00,1.67 0.32,1.13"
                     class="_heading_f40580"
-                    data-heading="1"
+                    data-heading="2"
                   ></polygon>
                   <text
                     class="_number_f40580"
@@ -1697,7 +1712,7 @@ ight is the :root default above) ────────
                 class="_direction_9f25ac _right_9f25ac"
                 disabled=""
                 aria-label="Go right"
-                aria-pressed="true"
+                aria-pressed="false"
               >
                 <span aria-hidden="true">→</span>Right</button
               ><button
@@ -1705,7 +1720,7 @@ ight is the :root default above) ────────
                 class="_direction_9f25ac _down_9f25ac"
                 disabled=""
                 aria-label="Go down"
-                aria-pressed="false"
+                aria-pressed="true"
               >
                 <span aria-hidden="true">↓</span>Down</button
               ><button

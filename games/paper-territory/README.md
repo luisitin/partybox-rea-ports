@@ -23,11 +23,15 @@ An original PartyBox map race inspired by the classic browser territory loop. Tw
 
 The map uses stable player numbers as well as colour, and protected home squares remain visibly distinct. Stage phones do not point at a TV. A local player's reconnect restores the current direction, land and live return timer from server state.
 
+The ready screens teach movement, closure, trail cuts, and crashes: walls, your own exposed trail and head collisions cost every tile outside your protected home. During play the phone's existing header identifies the leading seat and gap, or reports the number of tied leaders. Its third stat shows the player's current place, with competition ranks shared across ties. The TV names the leader's margin, or the number of tied leaders. These gaps count owned cells and update from the public scores when ownership changes.
+
 ## Inputs and movement
 
 `{ type: 'direction', dir: 0 | 1 | 2 | 3 }`: up, right, down, left in screen coordinates. One tap changes the queued direction; holding is unnecessary. The next 200 ms tick applies it. Opposite directions are rejected against the last judged movement, so two taps before a tick cannot sneak in a U-turn. Spectators, disconnected/permanently departed players, unknown IDs and other-phase inputs do nothing.
 
 Each move is exactly one orthogonal cell. A tick first proposes every live head from the same previous board, then judges deaths, then captures, then lays new exposed trail. Steering received at a tick's exact time first settles that tick and affects the next one. Inputs just before a deadline apply to that deadline. Timers must match the current phase instance and not arrive before its deadline.
+
+The eight stable slots open clockwise with headings east, west, south, north, east, west, north and south. Slots 2 and 3 begin one horizontal tile inward, within their unchanged protected home squares. These authored opening offsets prevent forced first-two-second head crashes when nobody has steered yet; respawns still use the home centre.
 
 ## Land, cuts and simultaneous outcomes
 
@@ -43,7 +47,9 @@ Each move is exactly one orthogonal cell. A tick first proposes every live head 
 
 One owned tile = one point. The final score is the area at the buzzer, including protected home tiles. Capture totals and crashes are feedback, not bonuses or tiebreakers. Equal area shares rank and first place. VIP skip/end scores the judged map at that event; it does not award future area.
 
-Bots read the same public ownership, exposed trails and head positions. Easy bots attempt short two-cell turns; normal bots use three; sharp bots attempt five-cell turns, watch farther for nearby danger and target reachable enemy trails. They trace rectangular loops, avoid visible walls/self-trails and route home when exposed too long. Seeded bot randomness breaks equally safe turn choices; no hidden knowledge or external planner.
+After a closure gaining new cells, a living player on owned land sees `Loop closed · +N cells` in the existing status space; N is the number of newly claimed cells in that closure, not a score bonus. The TV reports the same gain as `+N cells` in that seat's existing rail status, held to one line. Exposure, a crash or pause replaces this feedback immediately. A zero-gain closure or a respawn with its gain reset shows ordinary safe-land feedback; later ownership loss still changes the live area, rank and gap.
+
+Bots read the same public ownership, exposed trails and head positions. Easy bots attempt short two-cell turns; normal and sharp bots use three-cell turns. Sharp bots watch nearby danger from two cells away and route home when an enemy approaches within four cells of their exposed trail, compared with two for normal. A small 0.35 look-ahead incentive favours reachable enemy trails without letting it dominate safe area growth. Wall/self-trail safety looks six cells ahead, and public opponent headings predict three ticks of head danger. They trace rectangular loops and route home when exposed too long. Seeded bot randomness breaks equally safe turn choices; no hidden knowledge or external planner.
 
 ## Edge cases and clock ownership
 

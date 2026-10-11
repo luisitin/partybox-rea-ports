@@ -68,6 +68,7 @@
   fill: var(--pb-bg);
   stroke: var(--pb-text);
   stroke-width: 0.08;
+  stroke-linejoin: round;
 }
 
 .trailNumber {
@@ -75,6 +76,9 @@
   font-family: var(--pb-font-family);
   font-weight: 900;
   fill: var(--pb-text);
+  paint-order: stroke;
+  stroke: var(--pb-bg);
+  stroke-width: 0.08;
 }
 
 .map[data-compact] .trailNumber {

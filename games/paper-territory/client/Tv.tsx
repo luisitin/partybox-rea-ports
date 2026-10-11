@@ -19,13 +19,20 @@ export function Tv({ view }: GameTvProps<PaperTerritoryTvView>): JSX.Element {
   const over = view.phaseId === 'score' || view.phaseId === 'done';
   const rows = standings(view, over);
   const leaders = rows.filter((row) => row.rank === 1);
+  const leadArea = leaders[0]?.area ?? 0;
+  const nextArea = Math.max(...rows.filter((row) => row.rank > 1).map((row) => row.area), 0);
   const title = over
     ? leaders.length === 1
       ? L('{name} takes the map!', { name: leaders[0]?.name ?? '' })
       : L('A tie for the most territory!')
     : view.phaseId === 'ready'
       ? L('Loop out. Come home. Claim land.')
-      : L('Protect your trail');
+      : leaders.length > 1
+        ? L('{n} share the lead · {m} cells', { n: leaders.length, m: leadArea })
+        : L('{name} leads · {n} cells ahead', {
+            name: leaders[0]?.name ?? '',
+            n: leadArea - nextArea,
+          });
   return (
     <Stage className={styles.stage}>
       <header className={styles.header}>
@@ -61,40 +68,52 @@ export function Tv({ view }: GameTvProps<PaperTerritoryTvView>): JSX.Element {
           <p className={styles.legend}>
             {over
               ? L('Final territory counts. Your home always stays yours.')
-              : L(
-                  'Outlined squares are protected homes. Loop back to your land. Cut a rival’s dashed trail.',
-                )}
+              : view.phaseId === 'ready'
+                ? L('Avoid walls, your own trail and head crashes. A crash clears all extra land.')
+                : L(
+                    'Outlined squares are protected homes. Loop back to your land. Cut a rival’s dashed trail.',
+                  )}
           </p>
         </div>
         <aside className={styles.rail}>
           <h3>{over ? L('Final area') : L('Territory')}</h3>
           <ul className={styles.rows} aria-label={L('Players and territory')}>
-            {rows.map((row) => (
-              <li
-                key={row.id}
-                style={{ ['--seat-ink' as string]: playerInk(row.slot) } as CSSProperties}
-              >
-                <SeatBadge className={styles.seat} slot={row.slot} />
-                <div className={styles.person}>
-                  <b>{row.name}</b>
-                  <span>
-                    {over
-                      ? L('Place {rank}', { rank: row.rank })
-                      : !row.alive
-                        ? L('Returning')
-                        : row.exposed
-                          ? L('Trail out')
-                          : L('Home')}
-                  </span>
-                </div>
-                <div className={styles.area}>
-                  <b>{areaPercent(row.area, view.width * view.height)}%</b>
-                  <span>
-                    {row.area} {L('cells')}
-                  </span>
-                </div>
-              </li>
-            ))}
+            {rows.map((row) => {
+              const runner = view.runners.find((candidate) => candidate.id === row.id);
+              const status = over
+                ? L('Place {rank}', { rank: row.rank })
+                : view.paused
+                  ? L('Paused')
+                  : !row.alive
+                    ? L('Returning')
+                    : row.exposed
+                      ? L('Trail out')
+                      : view.phaseId === 'play' && (runner?.lastCapture ?? 0) > 0
+                        ? L('+{n} cells', { n: runner?.lastCapture ?? 0 })
+                        : row.rank === 1
+                          ? leaders.length > 1
+                            ? L('Tied lead')
+                            : L('Leading')
+                          : L('On your land');
+              return (
+                <li
+                  key={row.id}
+                  style={{ ['--seat-ink' as string]: playerInk(row.slot) } as CSSProperties}
+                >
+                  <SeatBadge className={styles.seat} slot={row.slot} />
+                  <div className={styles.person}>
+                    <b>{row.name}</b>
+                    <span>{status}</span>
+                  </div>
+                  <div className={styles.area}>
+                    <b>{areaPercent(row.area, view.width * view.height)}%</b>
+                    <span>
+                      {row.area} {L('cells')}
+                    </span>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </aside>
       </div>

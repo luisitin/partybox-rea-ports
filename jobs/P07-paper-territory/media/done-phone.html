@@ -250,6 +250,40 @@ ight is the :root default above) ────────
       stroke-dasharray: 0.45 0.18;
     }
 
+    ._trail_f40580[data-mine] {
+      stroke: var(--pb-text);
+      stroke-width: 0.5;
+    }
+
+    ._trailUnder_f40580 {
+      fill: none;
+      stroke: var(--pb-bg);
+      stroke-width: 0.9;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
+    ._trailBadge_f40580 {
+      fill: var(--pb-bg);
+      stroke: var(--pb-text);
+      stroke-width: 0.08;
+      stroke-linejoin: round;
+    }
+
+    ._trailNumber_f40580 {
+      font-size: calc(var(--pb-font-body) * 0.0375);
+      font-family: var(--pb-font-family);
+      font-weight: 900;
+      fill: var(--pb-text);
+      paint-order: stroke;
+      stroke: var(--pb-bg);
+      stroke-width: 0.08;
+    }
+
+    ._map_f40580[data-compact] ._trailNumber_f40580 {
+      font-size: calc(var(--pb-font-body) * 0.085);
+    }
+
     ._number_f40580 {
       font-size: calc(var(--pb-font-body) * 0.04);
       font-family: var(--pb-font-family);
@@ -805,6 +839,12 @@ ight is the :root default above) ────────
       color: var(--pb-text-muted);
     }
 
+    ._person_6b7a07 span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     ._area_6b7a07 {
       flex: none;
       text-align: right;
@@ -1099,7 +1139,7 @@ ight is the :root default above) ────────
     <main>
       <section class="_screen_72dfcc _screen_9f25ac">
         <div class="_body_72dfcc">
-          <div class="_content_9f25ac" data-results="true" style="--seat-ink: var(--pb-player-1)">
+          <div class="_content_9f25ac" data-results="true" style="--seat-ink: var(--pb-player-3)">
             <header class="_header_9f25ac">
               <span class="_seat_9f25ac _badge_cafdc5"
                 ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
@@ -1109,20 +1149,23 @@ ight is the :root default above) ────────
                       width="2"
                       height="2"
                       patternUnits="userSpaceOnUse"
-                      data-texture="Horizontal lines"
+                      data-texture="Rising stripes"
                     >
-                      <path d="M0 1H2" class="_line_73a606"></path>
+                      <path
+                        d="M-0.5 0.5L0.5 -0.5M0 2L2 0M1.5 2.5L2.5 1.5"
+                        class="_line_73a606"
+                      ></path>
                     </pattern>
                   </defs>
                   <rect width="4" height="4" fill="url(#_R_16_)"></rect></svg
-                ><b class="_number_cafdc5">1</b></span
+                ><b class="_number_cafdc5">3</b></span
               >
               <div class="_heading_9f25ac">
                 <p>Paper Territory</p>
                 <h2>Fay takes the map!</h2>
               </div>
             </header>
-            <p class="_summary_9f25ac">Place 6 · 52 cells · 4.6%</p>
+            <p class="_summary_9f25ac">Place 3 · 82 cells · 7.3%</p>
             <ul class="_rows_9f25ac" aria-label="Final standings">
               <li style="--seat-ink: var(--pb-player-6)">
                 <span class="_rank_9f25ac">1</span
@@ -1141,9 +1184,9 @@ ight is the :root default above) ────────
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_46m_)"></rect></svg
                   ><b class="_number_cafdc5">6</b></span
-                ><b class="_name_9f25ac">Fay</b><b>184</b>
+                ><b class="_name_9f25ac">Fay</b><b>128</b>
               </li>
-              <li style="--seat-ink: var(--pb-player-5)">
+              <li style="--seat-ink: var(--pb-player-4)">
                 <span class="_rank_9f25ac">2</span
                 ><span class="_rowSeat_9f25ac _badge_cafdc5"
                   ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
@@ -1153,16 +1196,19 @@ ight is the :root default above) ────────
                         width="2"
                         height="2"
                         patternUnits="userSpaceOnUse"
-                        data-texture="Dots"
+                        data-texture="Falling stripes"
                       >
-                        <circle cx="1" cy="1" r="0.14" class="_dot_73a606"></circle>
+                        <path
+                          d="M-0.5 1.5L0.5 2.5M0 0L2 2M1.5 -0.5L2.5 0.5"
+                          class="_line_73a606"
+                        ></path>
                       </pattern>
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_4am_)"></rect></svg
-                  ><b class="_number_cafdc5">5</b></span
-                ><b class="_name_9f25ac">Eli</b><b>139</b>
+                  ><b class="_number_cafdc5">4</b></span
+                ><b class="_name_9f25ac">Dee</b><b>106</b>
               </li>
-              <li style="--seat-ink: var(--pb-player-3)">
+              <li data-me="true" style="--seat-ink: var(--pb-player-3)">
                 <span class="_rank_9f25ac">3</span
                 ><span class="_rowSeat_9f25ac _badge_cafdc5"
                   ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
@@ -1182,7 +1228,7 @@ ight is the :root default above) ────────
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_4em_)"></rect></svg
                   ><b class="_number_cafdc5">3</b></span
-                ><b class="_name_9f25ac">Cy</b><b>97</b>
+                ><b class="_name_9f25ac">Cy</b><b>82</b>
               </li>
               <li style="--seat-ink: var(--pb-player-8)">
                 <span class="_rank_9f25ac">4</span
@@ -1201,9 +1247,9 @@ ight is the :root default above) ────────
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_4im_)"></rect></svg
                   ><b class="_number_cafdc5">8</b></span
-                ><b class="_name_9f25ac">Hal</b><b>84</b>
+                ><b class="_name_9f25ac">Hal</b><b>69</b>
               </li>
-              <li style="--seat-ink: var(--pb-player-2)">
+              <li style="--seat-ink: var(--pb-player-7)">
                 <span class="_rank_9f25ac">5</span
                 ><span class="_rowSeat_9f25ac _badge_cafdc5"
                   ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
@@ -1213,16 +1259,16 @@ ight is the :root default above) ────────
                         width="2"
                         height="2"
                         patternUnits="userSpaceOnUse"
-                        data-texture="Vertical lines"
+                        data-texture="Grid"
                       >
-                        <path d="M1 0V2" class="_line_73a606"></path>
+                        <path d="M0 1H2M1 0V2" class="_line_73a606"></path>
                       </pattern>
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_4mm_)"></rect></svg
-                  ><b class="_number_cafdc5">2</b></span
-                ><b class="_name_9f25ac">Ben</b><b>60</b>
+                  ><b class="_number_cafdc5">7</b></span
+                ><b class="_name_9f25ac">Gus</b><b>51</b>
               </li>
-              <li data-me="true" style="--seat-ink: var(--pb-player-1)">
+              <li style="--seat-ink: var(--pb-player-1)">
                 <span class="_rank_9f25ac">6</span
                 ><span class="_rowSeat_9f25ac _badge_cafdc5"
                   ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
@@ -1239,10 +1285,10 @@ ight is the :root default above) ────────
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_4qm_)"></rect></svg
                   ><b class="_number_cafdc5">1</b></span
-                ><b class="_name_9f25ac">Ana</b><b>52</b>
+                ><b class="_name_9f25ac">Ana</b><b>9</b>
               </li>
-              <li style="--seat-ink: var(--pb-player-4)">
-                <span class="_rank_9f25ac">7</span
+              <li style="--seat-ink: var(--pb-player-2)">
+                <span class="_rank_9f25ac">6</span
                 ><span class="_rowSeat_9f25ac _badge_cafdc5"
                   ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
                     <defs>
@@ -1251,20 +1297,17 @@ ight is the :root default above) ────────
                         width="2"
                         height="2"
                         patternUnits="userSpaceOnUse"
-                        data-texture="Falling stripes"
+                        data-texture="Vertical lines"
                       >
-                        <path
-                          d="M-0.5 1.5L0.5 2.5M0 0L2 2M1.5 -0.5L2.5 0.5"
-                          class="_line_73a606"
-                        ></path>
+                        <path d="M1 0V2" class="_line_73a606"></path>
                       </pattern>
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_4um_)"></rect></svg
-                  ><b class="_number_cafdc5">4</b></span
-                ><b class="_name_9f25ac">Dee</b><b>40</b>
+                  ><b class="_number_cafdc5">2</b></span
+                ><b class="_name_9f25ac">Ben</b><b>9</b>
               </li>
-              <li style="--seat-ink: var(--pb-player-7)">
-                <span class="_rank_9f25ac">8</span
+              <li style="--seat-ink: var(--pb-player-5)">
+                <span class="_rank_9f25ac">6</span
                 ><span class="_rowSeat_9f25ac _badge_cafdc5"
                   ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
                     <defs>
@@ -1273,14 +1316,14 @@ ight is the :root default above) ────────
                         width="2"
                         height="2"
                         patternUnits="userSpaceOnUse"
-                        data-texture="Grid"
+                        data-texture="Dots"
                       >
-                        <path d="M0 1H2M1 0V2" class="_line_73a606"></path>
+                        <circle cx="1" cy="1" r="0.14" class="_dot_73a606"></circle>
                       </pattern>
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_52m_)"></rect></svg
-                  ><b class="_number_cafdc5">7</b></span
-                ><b class="_name_9f25ac">Gus</b><b>9</b>
+                  ><b class="_number_cafdc5">5</b></span
+                ><b class="_name_9f25ac">Eli</b><b>9</b>
               </li>
             </ul>
           </div>

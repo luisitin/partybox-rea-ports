@@ -9,10 +9,14 @@ import { game } from '../server/index';
 type State = ReturnType<typeof game.init>;
 type Input = NonNullable<ReturnType<typeof game.bot.sampleInput>>;
 
-function numericLeaves(value: unknown): number[] {
-  if (typeof value === 'number') return [value];
-  if (Array.isArray(value)) return value.flatMap(numericLeaves);
-  return value && typeof value === 'object' ? Object.values(value).flatMap(numericLeaves) : [];
+function hasNonFiniteNumber(value: unknown): boolean {
+  if (typeof value === 'number') return !Number.isFinite(value);
+  if (Array.isArray(value)) {
+    for (const child of value) if (hasNonFiniteNumber(child)) return true;
+  } else if (value && typeof value === 'object') {
+    for (const child of Object.values(value)) if (hasNonFiniteNumber(child)) return true;
+  }
+  return false;
 }
 
 function invariant(state: State, seed: number, step: number): void {
@@ -23,7 +27,7 @@ function invariant(state: State, seed: number, step: number): void {
   const json = JSON.stringify(state);
   if (JSON.stringify(JSON.parse(json)) !== json) fail('not JSON serializable');
   if (Buffer.byteLength(json) > 256 * 1024) fail('state exceeds 256 KiB');
-  if (numericLeaves(state).some((value) => !Number.isFinite(value))) fail('nonfinite state number');
+  if (hasNonFiniteNumber(state)) fail('nonfinite state number');
   const world = state.world;
   if (
     world.owners.length !== world.width * world.height ||
