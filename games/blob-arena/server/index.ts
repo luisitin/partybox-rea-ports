@@ -93,8 +93,18 @@ const reduce = composeReduce<State, Input>({
       event.action === 'pause' &&
       state.phase.id === 'play' &&
       !state.phase.paused
-    )
-      return settle(state, event.now);
+    ) {
+      const settled = settle(state, event.now);
+      // The phone releases its pad when pause disables it; paused inputs cannot deliver that stop.
+      // Neutralize held steering now so an idle phone never resumes an old direction.
+      const controls = Object.fromEntries(
+        Object.entries(settled.world.controls).map(([id, control]) => [
+          id,
+          { ...control, x: 0, y: 0 },
+        ]),
+      );
+      return { ...settled, world: { ...settled.world, controls } };
+    }
     if (event.type !== 'vip' || event.action !== 'resume' || state.phase.id !== 'play')
       return state;
     const ms = pausedFor(state, event.now);

@@ -1,6 +1,6 @@
 # P05 verification
 
-The full simulation/test run, final formatting check and CI are still pending. Results below distinguish completed checks from the current run.
+The full simulation/test run and CI are still pending. Results below distinguish completed checks from the current run.
 
 ## Setup and static checks
 
@@ -10,7 +10,7 @@ The full simulation/test run, final formatting check and CI are still pending. R
 | Dependencies            | `pnpm.cmd install`                                                                  | Passed with pnpm 12.4.2 and Node 24.19.0; no new dependencies added.                          |
 | Fixtures                | `node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/generate.mjs` | Passed; seeded fixtures generated with seed 17, including the last-score → done continuation. |
 | Final current typecheck | `pnpm.cmd typecheck`                                                                | Passed after the server, client and tests were present.                                       |
-| Final formatting        | `pnpm.cmd format`                                                                   | Pending.                                                                                      |
+| Final formatting        | `pnpm.cmd format`                                                                   | Passed after the pause fix and interactive preview.                                           |
 
 ## Game, SDK contract and property tests
 
@@ -65,8 +65,14 @@ Capture command: `node ./jobs/P05-blob-arena/capture.mjs`. The capture tool uses
 
 Passed: **nine real-component HTML screens and nine PNGs**, covering `play`, `score` and `done` on TV at **1920 × 1080**, phone with a TV at **390 × 844**, and phone-only at **390 × 844**. [fit.json](fit.json) records **zero clipped measured elements and zero overlapping TV score labels** on all nine screens. Each document's scroll dimensions equal its viewport. The runner manually inspected all nine PNGs after the layout fixes; the eight-player roster, controls and standings fit.
 
-The measurements inspect headings, buttons, list rows, timers and arenas, plus round/total score text ranges. They do not establish every possible name/content combination. Exact final media byte count and SHA256SUMS verification are **pending**.
+The measurements inspect headings, buttons, list rows, timers and arenas, plus round/total score text ranges. They do not establish every possible name/content combination. Media totals **2,052,432 bytes**. PowerShell `Get-FileHash -Algorithm SHA256` verified all 18 entries in SHA256SUMS.txt with zero mismatches.
 
 ## CI and completion
 
-CI check command: `gh pr checks <PR-number>`. PR creation and the job workflow's green status are **pending**; this file does not claim CI success. The final full-test result, formatting result, simulation reports, media size/hashes and KEEP GOING outcomes still need to be recorded before the job is complete.
+CI check command: `gh pr checks <PR-number>`. PR creation and the job workflow's green status are **pending**; this file does not claim CI success. The final full-test result, simulation reports and KEEP GOING outcomes still need to be recorded before the job is complete.
+
+## Additional measured checks
+
+- Final `pnpm.cmd typecheck` and `pnpm.cmd format`: exit 0 after the pause steering fix and preview additions.
+- Interactive preview + `capture.mjs`: four real drag/release checks passed. A 22 px drag sends 0.17 with a TV and 0.21 in phone-only; 44 px sends 0.34 / 0.43. Both release to zero. This is the pre-KEEP-GOING baseline in interactive-baseline.json.
+- Latest interactive capture closed its only headless browser in `finally` and exited 0.

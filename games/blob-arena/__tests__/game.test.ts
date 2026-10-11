@@ -111,6 +111,37 @@ describe('the three-round match', () => {
 });
 
 describe('pause, stale events and reconnect', () => {
+  it('releases every held pad at pause so an ignored phone stop cannot restart movement on resume', () => {
+    const initial = {
+      ...kit.start(),
+      world: world([cell('p1'), cell('p2', { id: 2, x: 120, y: 80 })]),
+    };
+    const right = kit.input(initial, 'p1', { type: 'steer', x: 1, y: 0 }, T0 + 100);
+    const held = deepFreeze(kit.input(right, 'p2', { type: 'steer', x: 0, y: -1 }, T0 + 100));
+    const paused = deepFreeze(kit.vip(held, 'pause', T0 + 200));
+    expect(paused.world.time).toBe(200);
+    expect(paused.world.cells[0]!.x).toBe(62);
+    expect(paused.world.cells[1]!.y).toBe(78);
+    for (const id of ['p1', 'p2']) {
+      expect(paused.world.controls[id]).toEqual({ ...held.world.controls[id]!, x: 0, y: 0 });
+    }
+    expect(held.world.controls.p1?.x).toBe(1);
+    expect(held.world.controls.p2?.y).toBe(-1);
+    // The disabled phone sends STOP once, then caches it and sends nothing after resume.
+    const released = kit.input(paused, 'p1', { type: 'steer', x: 0, y: 0 }, T0 + 2000);
+    expect(released).toBe(paused);
+    expect(kit.timer(released, T0 + 3000)).toBe(paused);
+    expect(released.world.time).toBe(200);
+    const resumed = kit.vip(released, 'resume', T0 + 5000);
+    expect(resumed.world).toEqual(paused.world);
+    const stepped = kit.timer(resumed, resumed.began + 600);
+    expect(stepped.world.time).toBe(600);
+    expect(stepped.world.cells).toEqual(paused.world.cells);
+    for (const id of ['p1', 'p2']) {
+      expect(stepped.world.controls[id]).toEqual(paused.world.controls[id]);
+    }
+  });
+
   it('settles at pause, freezes all physics, and shifts wall clocks without shifting relative ones', () => {
     let s = {
       ...kit.start(),

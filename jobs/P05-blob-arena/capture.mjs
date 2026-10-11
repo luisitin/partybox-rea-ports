@@ -99,7 +99,77 @@ try {
       join(directory, 'original-access.json'),
       JSON.stringify(original, null, 2) + '\n',
     );
-  const pages = JSON.parse(readFileSync(join(directory, 'screens.json'), 'utf8'));
+  if (process.env.PB_INTERACTIVE_BASE) {
+    const interactions = [];
+    await ask('Emulation.setDeviceMetricsOverride', {
+      width: 390,
+      height: 844,
+      deviceScaleFactor: 1,
+      mobile: false,
+    });
+    for (const phoneOnly of [false, true]) {
+      await ask('Page.navigate', {
+        url: `${process.env.PB_INTERACTIVE_BASE}/jobs/P05-blob-arena/interactive.html?phoneonly=${Number(phoneOnly)}`,
+      });
+      let ready = false;
+      for (let attempt = 0; attempt < 100; attempt++) {
+        if (await evaluate('Boolean(window.__blobReady)')) {
+          ready = true;
+          break;
+        }
+        await sleep(100);
+      }
+      if (!ready) throw new Error('Interactive Controller did not mount');
+      for (const delta of [22, 44]) {
+        const pad = await evaluate(
+          `(()=>{window.__blobClearInputs();const r=document.querySelector('[data-pad-primary="true"]').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,width:r.width,height:r.height};})()`,
+        );
+        await ask('Input.dispatchMouseEvent', {
+          type: 'mousePressed',
+          x: pad.x,
+          y: pad.y,
+          button: 'left',
+          buttons: 1,
+          clickCount: 1,
+        });
+        await ask('Input.dispatchMouseEvent', {
+          type: 'mouseMoved',
+          x: pad.x + delta,
+          y: pad.y,
+          button: 'left',
+          buttons: 1,
+        });
+        await ask('Input.dispatchMouseEvent', {
+          type: 'mouseReleased',
+          x: pad.x + delta,
+          y: pad.y,
+          button: 'left',
+          buttons: 0,
+          clickCount: 1,
+        });
+        await sleep(50);
+        const inputs = await evaluate('window.__blobInputs');
+        const moving = inputs.find((input) => input.type === 'steer' && input.x > 0);
+        const last = inputs.at(-1);
+        if (!moving || last?.x !== 0 || last?.y !== 0)
+          throw new Error('Drag/release did not move and stop');
+        if (process.env.PB_FIXED_REACH && moving.x !== delta / 44)
+          throw new Error(`Expected ${delta / 44}, received ${moving.x}`);
+        interactions.push({ phoneOnly, delta, pad, inputs });
+      }
+    }
+    writeFileSync(
+      join(
+        directory,
+        process.env.PB_FIXED_REACH ? 'interactive-fixed.json' : 'interactive-baseline.json',
+      ),
+      JSON.stringify(interactions, null, 2) + '\n',
+    );
+    console.log(`Interactive Controller: ${interactions.length} real drag/release checks passed`);
+  }
+  const pages = process.env.PB_INTERACTIVE_ONLY
+    ? []
+    : JSON.parse(readFileSync(join(directory, 'screens.json'), 'utf8'));
   const results = [];
   for (const page of pages) {
     await ask('Emulation.setDeviceMetricsOverride', {
@@ -129,7 +199,8 @@ try {
     if (scoreOverlaps.length)
       throw new Error(`${page.name}: ${scoreOverlaps.length} overlapping score labels`);
   }
-  writeFileSync(join(directory, 'fit.json'), JSON.stringify(results, null, 2) + '\n');
+  if (pages.length)
+    writeFileSync(join(directory, 'fit.json'), JSON.stringify(results, null, 2) + '\n');
 } finally {
   for (const request of pending.values()) {
     clearTimeout(request.timeout);
