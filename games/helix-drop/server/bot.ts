@@ -25,7 +25,8 @@ export function botInput(
   const ring = state.tower[runner.floor];
   if (!ring) return null;
   const error = angleDifference(-ring.gap, runner.angle);
-  const tolerance = skill === 'sharp' ? 10 : skill === 'easy' ? 32 : 20;
+  // One host beat can rotate 30 degrees; a smaller dead zone oscillates across a gap.
+  const tolerance = skill === 'sharp' ? 18 : skill === 'easy' ? 32 : 20;
   if (rng.chance(skill === 'easy' ? 0.14 : skill === 'normal' ? 0.04 : 0))
     return { type: 'rotate', dir: rng.pick([-1, 0, 1] as const) };
   return { type: 'rotate', dir: Math.abs(error) <= tolerance ? 0 : error > 0 ? 1 : -1 };

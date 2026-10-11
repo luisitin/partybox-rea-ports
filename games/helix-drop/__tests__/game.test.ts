@@ -140,4 +140,9 @@ describe('race lifecycle and views', () => {
     expect(botInput(s, 'ghost', createRng(12))).toBeNull();
     expect(botInput(kit.vip(s, 'pause', 1000), 'a', createRng(12))).toBeNull();
   });
+  it('sharp bots hold a centred opening instead of oscillating by one host beat', () => {
+    const s = kit.start();
+    const centred = { ...s, tower: s.tower.map((ring, i) => (i ? ring : { ...ring, gap: -15 })) };
+    expect(botInput(centred, 'a', createRng(12), 'sharp')).toEqual({ type: 'rotate', dir: 0 });
+  });
 });

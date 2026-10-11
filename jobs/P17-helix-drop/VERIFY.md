@@ -16,7 +16,7 @@ All results below are completed local commands, not expected outcomes.
 
 ## Simulation results
 
-Full rows are in SIMULATION.json. Median play duration in milliseconds (2 / 4 / 8 players): easy 23,280 / 28,580 / 33,580; normal 23,880 / 29,600 / 34,180; sharp 22,980 / 29,180 / 31,980. The longest complete match is 66,500 ms, below the two-minute estimate × 2 limit of 240,000 ms.
+Full rows are in SIMULATION.json. Median play duration in milliseconds (2 / 4 / 8 players): easy 23,280 / 28,580 / 33,580; normal 23,880 / 29,600 / 34,180; sharp 23,780 / 29,580 / 31,780. The longest complete match is 66,500 ms, below the two-minute estimate × 2 limit of 240,000 ms.
 
 ## Mutation evidence
 
@@ -56,3 +56,5 @@ Limit: CUA exposes no interactive browser, so original live play was unavailable
 ## CI and improvement loop
 
 Draft PR and CI status are recorded in NEXT.md. LOOP.md records the post-green review rounds. PR stays draft until the per-job workflow is green.
+
+Post-green bot refinement: `pnpm vitest run games/helix-drop/__tests__/game.test.ts games/helix-drop/__tests__/simulation.test.ts --maxWorkers=1 --pool=threads` passed 12 tests, including the steering regression and all 9,000 bot races. LOOP.md and SIMULATION_BASELINE.json record the comparison.
