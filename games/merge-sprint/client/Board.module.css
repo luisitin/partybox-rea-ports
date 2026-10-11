@@ -1,0 +1,107 @@
+.board {
+  display: grid;
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: var(--pb-space-2);
+  width: 100%;
+  aspect-ratio: 1;
+  padding: var(--pb-space-2);
+  border-radius: var(--pb-radius-lg);
+  background: var(--pb-surface-2);
+  color: var(--pb-text);
+  container-type: inline-size;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--pb-space-2);
+  min-height: 0;
+}
+
+.tile {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  font-size: min(var(--pb-font-h1), 13cqw);
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.tile[data-value='2'] {
+  background: var(--pb-surface);
+}
+
+.tile[data-value='4'] {
+  color: var(--pb-info);
+}
+
+.tile[data-value='8'],
+.tile[data-value='16'] {
+  color: var(--pb-accent-3);
+}
+
+.tile[data-value='32'],
+.tile[data-value='64'] {
+  color: var(--pb-accent);
+}
+
+.tile[data-value='128'],
+.tile[data-value='256'],
+.tile[data-value='512'],
+.tile[data-value='1024'] {
+  color: var(--pb-accent-2);
+}
+
+.tile[data-value='2048'] {
+  background: var(--pb-accent-2-fill);
+  color: var(--pb-on-accent-2-fill);
+}
+
+.tile[data-digits='3'] {
+  font-size: min(var(--pb-font-h1), 10cqw);
+}
+
+.tile[data-digits='4'] {
+  font-size: min(var(--pb-font-h2), 8cqw);
+}
+
+.tile[data-pop='true'] {
+  animation: global(pb-pop) var(--pb-motion-fast) var(--pb-ease);
+}
+
+/* Small stage boards are a map; the card repeats their largest tile at display size. */
+.board[data-mini='true'] {
+  gap: var(--pb-space-1);
+  padding: var(--pb-space-1);
+  border-radius: var(--pb-radius);
+}
+
+.board[data-mini='true'] .row {
+  gap: var(--pb-space-1);
+}
+
+.board[data-mini='true'] .tile {
+  border-radius: calc(var(--pb-radius) / 2);
+  font-size: min(var(--pb-font-body), 13cqw);
+}
+
+.board[data-mini='true'] .tile[data-digits='4'] {
+  font-size: min(calc(var(--pb-font-body) * 0.75), 8cqw);
+}
+
+.board[data-mini='true'] .tile[data-digits='3'] {
+  font-size: min(var(--pb-font-body), 10cqw);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile[data-pop='true'] {
+    animation: none;
+  }
+}
+
+:global(:root[data-motion='off']) .tile[data-pop='true'] {
+  animation: none;
+}

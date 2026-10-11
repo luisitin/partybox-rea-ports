@@ -1,0 +1,34 @@
+{
+  "id": "merge-sprint",
+  "name": "Merge Sprint",
+  "icon": "🔢",
+  "tagline": "Same tiles. Your moves. One fast race.",
+  "description": "Slide matching numbers together on your phone. Everyone starts with the same board and tile luck. Reach 2048 first, or earn the highest merge score before the clock runs out. Watch everyone's biggest tile grow on the shared stage.",
+  "howToPlay": [
+    "Swipe or tap an arrow. All tiles slide that way; matching pairs become one bigger tile.",
+    "Each merge earns its new number in points. Keep empty squares so you can keep moving.",
+    "First to 2048 wins! If time runs out, the highest merge score wins."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 4,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-10-11",
+  "noCards": true,
+  "settings": [
+    {
+      "key": "seconds",
+      "label": "Race seconds",
+      "description": "Time before the highest merge score wins",
+      "type": "number",
+      "default": 180,
+      "min": 60,
+      "max": 180,
+      "step": 60
+    }
+  ],
+  "supportsBots": true
+}
