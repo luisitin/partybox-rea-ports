@@ -1,0 +1,16 @@
+# P05 assumptions and explicit deviations
+
+- The owner's public-repo queue instructions authorize this clone, job branches, direct CLAIMS.md commits on main, GitHub pushes, and PR creation. They override the older team manual's private PartyBox worktree/board/merge-queue flow for this job. Identity is `codex`, runner `r5-local`.
+- P05 requires 2–8 players, a phone joystick, eating pellets and smaller blobs, a split lunge, three 90-second rounds, and mass-end scoring. Those are binding house requirements, not claims that the original has the same match format.
+- Interactive original play was attempted through the installed browser tool, but no browser surface was available (`apps: []`, `browsers: []`). Direct HTTP HTML and public start/core bundles were reachable and read in memory. Research does not claim a successful play or listening session.
+- Published historical speed, eating, and merge values conflict. The official current server constants were not exposed by the accessible client wrapper. Only qualitative mass/slowness, split risk, and delayed reunion are treated as corroborated original facts.
+- Windows PowerShell uses `pnpm.cmd` for package commands where execution policy rejects the `.ps1` shim; this is the same installed pnpm, with no extra dependency.
+- A 160 × 100 fixed shared arena, 24 starting mass, 3-mass snacks, 96 replenishing pellets, four-cell cap, 48-mass split threshold, one-second split cooldown, and eight-second merge lock are original living-room tuning.
+- The radius cap, speed floor, deep overlap and 1.25 mass ratio are our deterministic collision/movement rules. They are not advertised as exact original measurements.
+- After all of a player's surviving pieces finish their eight-second merge locks, sibling cohesion adds up to 8 units/s towards the other pieces' center, and overlapping eligible pieces reunite. This prevents equal-size pieces moving in parallel forever under the same joystick.
+- Full elimination respawns automatically after three seconds; a two-second shield blocks both eating and being eaten by rival cells. Pellet collection remains available. This prevents repeated spawn kills and dead air.
+- Original viruses, mass ejection, teaming, monetization, cosmetics, remote matchmaking, and persistent progression are omitted. The short shared-stage round keeps the two-control core interaction.
+- Remaining mass is scored at the deadline, including all surviving split pieces once. A player waiting to respawn then scores zero for that round. Ties share rank; no undocumented survival or historical-peak bonus is added.
+- English only, no card packs, no gameplay settings; fixed three-round pacing follows P05. Bots use the same public arena information and controls as players.
+- Exact original audio and current music were not independently verified. The port uses existing PartyBox synthesized cues; no original recording or asset is added.
+- The full-suite command mentioned in games/AGENTS.md is superseded by the owner's CPU-care instruction: only this game's tests and required non-browser repo checks. At most one root-owned headless browser is permitted and it must close in `finally`.

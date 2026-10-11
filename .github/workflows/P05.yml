@@ -1,0 +1,23 @@
+name: P05 Blob Arena
+on:
+  pull_request:
+    paths:
+      - 'games/blob-arena/**'
+      - 'jobs/P05-blob-arena/**'
+      - '.github/workflows/P05.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm format
+      - run: pnpm vitest run games/blob-arena --maxWorkers=1
