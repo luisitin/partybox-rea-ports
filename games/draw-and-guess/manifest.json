@@ -1,0 +1,55 @@
+{
+  "id": "draw-and-guess",
+  "name": "Draw and Guess",
+  "icon": "✏️",
+  "tagline": "A secret word. A wild sketch. A room full of guesses.",
+  "description": "Take turns sketching a secret word on your phone while everyone races to guess. Letter hints arrive as the clock runs down. Fast guesses score more; the artist scores when the room gets it.",
+  "howToPlay": [
+    "The artist picks one of three secret words and draws it. No letters or numbers!",
+    "Everyone else types guesses. Letter hints appear as time runs out.",
+    "Fast guesses earn more points. The artist earns points for helping everyone solve."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 14,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-10-11",
+  "settings": [
+    {
+      "key": "rounds",
+      "label": "Drawing rotations",
+      "description": "Turns drawing per player",
+      "type": "number",
+      "default": 1,
+      "min": 1,
+      "max": 2,
+      "step": 1
+    },
+    {
+      "key": "seconds",
+      "label": "Drawing time",
+      "description": "Seconds per drawing",
+      "type": "number",
+      "default": 60,
+      "min": 45,
+      "max": 75,
+      "step": 15
+    },
+    {
+      "key": "difficulty",
+      "label": "Words",
+      "type": "select",
+      "default": "mixed",
+      "options": [
+        { "value": "mixed", "label": "All difficulties" },
+        { "value": "easy", "label": "Easy" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "hard", "label": "Hard" }
+      ]
+    }
+  ],
+  "supportsBots": true
+}

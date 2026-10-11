@@ -34,3 +34,5 @@
 - Equal drawing opportunities and fixed rotations suit an 8-person living-room
   match better than Gartic's open-ended point goal. Disconnected players cannot
   delay prompt selection, guessing, reveal or completion.
+
+- Claim race: this runner failed to re-check P04 after pulling; r2-local owns P04. All our work is preserved only on r4-local/P04-draw-and-guess-salvage and the runner moved to P07.

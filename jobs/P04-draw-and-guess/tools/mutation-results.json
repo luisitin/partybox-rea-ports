@@ -1,0 +1,636 @@
+{
+  "command": "pnpm vitest run games/draw-and-guess/__tests__/game.test.ts games/draw-and-guess/__tests__/scoring.test.ts games/draw-and-guess/__tests__/strokes.test.ts games/draw-and-guess/__tests__/presence.test.ts --maxWorkers=1 --reporter=json --outputFile=<temporary JSON report>",
+  "baseline": {
+    "exitCode": 0,
+    "total": 35,
+    "passed": 35,
+    "failed": 0
+  },
+  "mutations": [
+    {
+      "id": "M01",
+      "description": "remove guess base points",
+      "file": "games/draw-and-guess/server/scoring.ts",
+      "before": "return 100 + Math.round(400",
+      "after": "return 0 + Math.round(400",
+      "originalSha256": "f8a7d55801bd7d033a404ceb52dd717bb2480e3c299cb84cf8dfe0de31172252",
+      "mutatedSha256": "487bc3ea5e5a0cce98be6ddc6ea1503d26c60a975f116d90a1bd5ad1d66c1dda",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 4,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "scoring and phase exits scores speed and the drawer share once, as the reveal begins",
+          "reason": [
+            "AssertionError: expected 300 to be 400 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:206:39\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, departure and reconnect holds drawing/guesses while paused and moves every drawing clock on resume",
+          "reason": [
+            "AssertionError: expected 300 to be 400 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/presence.test.ts:37:54\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "speed points awards 100 to 500 points with a linear speed bonus",
+          "reason": [
+            "AssertionError: expected 400 to be 500 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/scoring.test.ts:6:36\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "speed points is bounded and monotone across every millisecond in a 45-second turn",
+          "reason": [
+            "AssertionError: expected 99 to be greater than or equal to 100\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/scoring.test.ts:32:22\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M02",
+      "description": "halve speed bonus",
+      "file": "games/draw-and-guess/server/scoring.ts",
+      "before": "Math.round(400 *",
+      "after": "Math.round(200 *",
+      "originalSha256": "f8a7d55801bd7d033a404ceb52dd717bb2480e3c299cb84cf8dfe0de31172252",
+      "mutatedSha256": "755b53842e1c2e88c9e7c6d9489fc34d2ff3bed27059ada2a39da112cff5107a",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 3,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "scoring and phase exits scores speed and the drawer share once, as the reveal begins",
+          "reason": [
+            "AssertionError: expected 250 to be 400 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:206:39\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, departure and reconnect holds drawing/guesses while paused and moves every drawing clock on resume",
+          "reason": [
+            "AssertionError: expected 250 to be 400 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/presence.test.ts:37:54\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "speed points awards 100 to 500 points with a linear speed bonus",
+          "reason": [
+            "AssertionError: expected 300 to be 500 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/scoring.test.ts:6:36\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M03",
+      "description": "allow elapsed time to exceed scoring clamp",
+      "file": "games/draw-and-guess/server/scoring.ts",
+      "before": "Math.min(1, Math.max(0, elapsed / duration))",
+      "after": "Math.min(2, Math.max(0, elapsed / duration))",
+      "originalSha256": "f8a7d55801bd7d033a404ceb52dd717bb2480e3c299cb84cf8dfe0de31172252",
+      "mutatedSha256": "c2f19ed3b01e2c853904f3c504e23efbc97ac1bad277ec42192eac48a56fe130",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "speed points awards 100 to 500 points with a linear speed bonus",
+          "reason": [
+            "AssertionError: expected -100 to be 100 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/scoring.test.ts:12:41\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M04",
+      "description": "double drawer reward",
+      "file": "games/draw-and-guess/server/scoring.ts",
+      "before": "Math.round(300 *",
+      "after": "Math.round(600 *",
+      "originalSha256": "f8a7d55801bd7d033a404ceb52dd717bb2480e3c299cb84cf8dfe0de31172252",
+      "mutatedSha256": "4aa60231c0c433ace9327422efd73d9aefec9542105ed13656e159eb6be602d6",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 3,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "scoring and phase exits scores speed and the drawer share once, as the reveal begins",
+          "reason": [
+            "AssertionError: expected 600 to be 300 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:208:46\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "scoring and phase exits keeps the original eligible denominator when a guesser disconnects",
+          "reason": [
+            "AssertionError: expected 300 to be 150 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:234:46\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "speed points pays the drawer for the share of eligible guessers who solve, capped at 300",
+          "reason": [
+            "AssertionError: expected 600 to be 300 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/scoring.test.ts:19:32\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M05",
+      "description": "include artist in eligible denominator",
+      "file": "games/draw-and-guess/server/scoring.ts",
+      "before": "solved / eligible",
+      "after": "solved / (eligible + 1)",
+      "originalSha256": "f8a7d55801bd7d033a404ceb52dd717bb2480e3c299cb84cf8dfe0de31172252",
+      "mutatedSha256": "d3e6543ea081a42e2e440c4d50d78c801c131e26e8a02ccfe3362f2e3fb05ac5",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 3,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "scoring and phase exits scores speed and the drawer share once, as the reveal begins",
+          "reason": [
+            "AssertionError: expected 200 to be 300 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:208:46\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "scoring and phase exits keeps the original eligible denominator when a guesser disconnects",
+          "reason": [
+            "AssertionError: expected 100 to be 150 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:234:46\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "speed points pays the drawer for the share of eligible guessers who solve, capped at 300",
+          "reason": [
+            "AssertionError: expected 150 to be 300 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/scoring.test.ts:19:32\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M06",
+      "description": "choice timer never exits",
+      "file": "games/draw-and-guess/server/phases/choose.ts",
+      "before": "return next(state, event.now);",
+      "after": "return state;",
+      "originalSha256": "8103cf13af7805bb8b05092477c9b64bf9a34ec0473fded3b9cda3bfea9182f5",
+      "mutatedSha256": "a2820a262436ea931e420cc6ace7e204c14f2b16d3f116babf2214b2de0ddb69",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 3,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "artist choice and turn order automatically takes the first seeded choice at the choice deadline",
+          "reason": [
+            "AssertionError: expected null to deeply equal { id: 'sailboat', …(4) }\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:41:24\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "artist choice and turn order reads each difficulty and clamps stale settings to supported values",
+          "reason": [
+            "AssertionError: expected +0 to be 45000 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:84:64\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, departure and reconnect a permanent leaver is skipped on future turns and still has finite results",
+          "reason": [
+            "AssertionError: expected 'choose' to be 'done' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/presence.test.ts:81:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M07",
+      "description": "let guessers choose the secret",
+      "file": "games/draw-and-guess/server/phases/choose.ts",
+      "before": "event.playerId !== state.drawerId ||",
+      "after": "false ||",
+      "originalSha256": "8103cf13af7805bb8b05092477c9b64bf9a34ec0473fded3b9cda3bfea9182f5",
+      "mutatedSha256": "861ae62763fe69d526507af6cfc1bbd1000d2de7c20e4b9de09662a9703f6fee",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "artist choice and turn order lets only the connected artist choose and honours each of the three choices",
+          "reason": [
+            "AssertionError: expected { phase: { id: 'draw', …(2) }, …(25) } to be { Object (phase, rng, ...) } // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:28:66\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M08",
+      "description": "drawing cap no longer exits",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "before": "if (now >= state.endsAt || allSolved(state))",
+      "after": "if (allSolved(state))",
+      "originalSha256": "c46fbe306c4498a815804b689d3e91dbc80175aeaa9ced26ac05b44785f8e5d7",
+      "mutatedSha256": "f528d9acbce800a0110c81788c3f2c168f06b012a92d4dbd2e078522a5ded026",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 6,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "artist choice and turn order gives everybody exactly one turn per configured round and resets their canvas",
+          "reason": [
+            "AssertionError: expected 'draw' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:64:30\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "hints and private views has two progressive public hints, then reveals at exactly the drawing cap",
+          "reason": [
+            "AssertionError: expected 'draw' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:112:31\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "hints and private views keeps every choice and the answer away from guessers and spectators until reveal",
+          "reason": [
+            "AssertionError: expected null to be 'sailboat' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:140:40\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "scoring and phase exits does not award the drawer for guessing or unsuccessful rounds",
+          "reason": [
+            "AssertionError: expected [] to deeply equal [ +0, +0, +0 ]\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:219:46\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "scoring and phase exits ignores unknown/prototype players, disconnected input, stale timers and backwards timestamps",
+          "reason": [
+            "AssertionError: expected 'draw' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:280:30\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, departure and reconnect a permanent leaver is skipped on future turns and still has finite results",
+          "reason": [
+            "AssertionError: expected 'draw' to be 'done' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/presence.test.ts:81:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M09",
+      "description": "delay the first hint to half time",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "before": "return nextStep(opened, now + (endsAt - now) / 3);",
+      "after": "return nextStep(opened, now + (endsAt - now) / 2);",
+      "originalSha256": "c46fbe306c4498a815804b689d3e91dbc80175aeaa9ced26ac05b44785f8e5d7",
+      "mutatedSha256": "6e05073932653dc7f13ddabed53d364f2f0dfb1c1aad7a1a575b3db043975f35",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "hints and private views has two progressive public hints, then reveals at exactly the drawing cap",
+          "reason": [
+            "AssertionError: expected 1031000 to be 1021000 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:100:34\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M10",
+      "description": "reveal timer never rotates artists",
+      "file": "games/draw-and-guess/server/phases/reveal.ts",
+      "before": "return isTimerFor(state, event) ? next(state, event.now) : state;",
+      "after": "return state;",
+      "originalSha256": "e42ee24d08cf5293b3f434c1beb021e5a1db4539bc48ef82f85e45ef3745f237",
+      "mutatedSha256": "be0c5f947be9c0ea86ade60c070ad8a0ce56ed99ee96203536ebadcb2bff4ff3",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 2,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "artist choice and turn order gives everybody exactly one turn per configured round and resets their canvas",
+          "reason": [
+            "AssertionError: expected 'reveal' to be 'choose' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:58:30\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, departure and reconnect a permanent leaver is skipped on future turns and still has finite results",
+          "reason": [
+            "AssertionError: expected 'reveal' to be 'done' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/presence.test.ts:81:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M11",
+      "description": "reveal answer publicly during play",
+      "file": "games/draw-and-guess/server/index.ts",
+      "before": "const revealed = state.phase.id === 'reveal' || state.phase.id === 'done';",
+      "after": "const revealed = true;",
+      "originalSha256": "528c6196a5cb73bcee1f9c23be78d0928d328d068ebee44ee72d67cb897232a1",
+      "mutatedSha256": "2fa441704a930e386be62bcbf0cad95599c6846f74a11dcf3758ff4fe98552e2",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 3,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "hints and private views keeps every choice and the answer away from guessers and spectators until reveal",
+          "reason": [
+            "AssertionError: expected [ 'draw-and-guess', 'draw', …(8) ] to not include 'sailboat'\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        },
+        {
+          "test": "hints and private views two states with different secrets and the same public pattern have identical guesser views",
+          "reason": [
+            "AssertionError: expected { gameId: 'draw-and-guess', …(26) } to deeply equal { gameId: 'draw-and-guess', …(26) }\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:152:46\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "hints and private views marks a private correct guess without displaying typed guesses publicly",
+          "reason": [
+            "AssertionError: expected [ 'draw-and-guess', 'draw', …(7) ] to not include 'sailboat'\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M12",
+      "description": "leak artist secret to every phone",
+      "file": "games/draw-and-guess/server/index.ts",
+      "before": "secret: isDrawer && state.phase.id === 'draw'",
+      "after": "secret: state.phase.id === 'draw'",
+      "originalSha256": "528c6196a5cb73bcee1f9c23be78d0928d328d068ebee44ee72d67cb897232a1",
+      "mutatedSha256": "841cff9b3ed830568ab259675be6d168ab51ed3140d2b9a47082b2712adb6b6e",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 3,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "hints and private views keeps every choice and the answer away from guessers and spectators until reveal",
+          "reason": [
+            "AssertionError: expected 'sailboat' to be null\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:135:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "hints and private views two states with different secrets and the same public pattern have identical guesser views",
+          "reason": [
+            "AssertionError: expected { gameId: 'draw-and-guess', …(26) } to deeply equal { gameId: 'draw-and-guess', …(26) }\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:152:46\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "hints and private views marks a private correct guess without displaying typed guesses publicly",
+          "reason": [
+            "AssertionError: expected 'sailboat' to be null\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:178:52\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M13",
+      "description": "leak all choices to every phone",
+      "file": "games/draw-and-guess/server/index.ts",
+      "before": "choices: isDrawer && state.phase.id === 'choose'",
+      "after": "choices: state.phase.id === 'choose'",
+      "originalSha256": "528c6196a5cb73bcee1f9c23be78d0928d328d068ebee44ee72d67cb897232a1",
+      "mutatedSha256": "1351d1e405cdb7ee0747deed8277c83d152933204effb6058a36c46f4ce36c87",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "hints and private views keeps every choice and the answer away from guessers and spectators until reveal",
+          "reason": [
+            "AssertionError: expected [ 'sailboat', 'sushi', 'parachute' ] to deeply equal []\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:124:29\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M14",
+      "description": "let guessers use artist controls",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "before": "if (playerId === state.drawerId)",
+      "after": "if (true)",
+      "originalSha256": "c46fbe306c4498a815804b689d3e91dbc80175aeaa9ced26ac05b44785f8e5d7",
+      "mutatedSha256": "5c79329fb3c2e6937bbf03d0a5d6d2b497ef0c2cca9fa94189a552c1d83098a6",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 8,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "hints and private views marks a private correct guess without displaying typed guesses publicly",
+          "reason": [
+            "AssertionError: expected 'none' to be 'wrong' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:165:53\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "scoring and phase exits scores speed and the drawer share once, as the reveal begins",
+          "reason": [
+            "AssertionError: expected 'draw' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:205:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "scoring and phase exits keeps the original eligible denominator when a guesser disconnects",
+          "reason": [
+            "AssertionError: expected 'draw' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:233:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, departure and reconnect holds drawing/guesses while paused and moves every drawing clock on resume",
+          "reason": [
+            "AssertionError: expected undefined to be 400 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/presence.test.ts:37:54\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, departure and reconnect returns a disconnected player to exactly the current drawing and their solved state",
+          "reason": [
+            "AssertionError: expected false to be true // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/presence.test.ts:50:37\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, departure and reconnect rechecks all solved after a drop during pause and progresses on resume",
+          "reason": [
+            "AssertionError: expected 'draw' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/presence.test.ts:99:67\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "drawing replication and replay protection only the artist can draw and broadcasts accepted chunks identically",
+          "reason": [
+            "AssertionError: expected { phase: { id: 'draw', …(2) }, …(25) } to be { phase: { id: 'draw', …(2) }, …(25) } // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/strokes.test.ts:65:65\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "drawing replication and replay protection bounds private guess history and discards empty and repeated guesses",
+          "reason": [
+            "AssertionError: Target cannot be null or undefined.\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1389:20)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M15",
+      "description": "accept duplicate sequence numbers",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "before": "input.stroke.seq <= state.lastSeq ||",
+      "after": "input.stroke.seq < state.lastSeq ||",
+      "originalSha256": "c46fbe306c4498a815804b689d3e91dbc80175aeaa9ced26ac05b44785f8e5d7",
+      "mutatedSha256": "4e77d93930bdf5642f60e3e31a3eb43b0209891511b571937b52afb09b02c606",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 2,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "drawing replication and replay protection ignores duplicate/out-of-order packets and packets from an older gesture",
+          "reason": [
+            "AssertionError: expected { phase: { id: 'draw', …(2) }, …(25) } to be { phase: { id: 'draw', …(2) }, …(25) } // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/strokes.test.ts:78:75\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "drawing replication and replay protection undo removes every chunk of the latest gesture and clear never resets replay protection",
+          "reason": [
+            "AssertionError: expected { phase: { id: 'draw', …(2) }, …(25) } to be { phase: { id: 'draw', …(2) }, …(25) } // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/strokes.test.ts:101:85\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M16",
+      "description": "allow points past the canvas cap",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "before": "points + input.stroke.points.length > MAX_POINTS",
+      "after": "points + input.stroke.points.length > MAX_POINTS + 32",
+      "originalSha256": "c46fbe306c4498a815804b689d3e91dbc80175aeaa9ced26ac05b44785f8e5d7",
+      "mutatedSha256": "d30728e830aa373be04c536afa1de09196f42b5ecb4d1de9b5c1582cc5767f43",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "drawing replication and replay protection caps a canvas at 2048 points without losing its accepted drawing",
+          "reason": [
+            "AssertionError: expected { phase: { id: 'draw', …(2) }, …(25) } to be { phase: { id: 'draw', …(2) }, …(25) } // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/strokes.test.ts:123:7\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M17",
+      "description": "allow an extra stroke chunk",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "before": "state.strokes.length >= MAX_STROKES ||",
+      "after": "state.strokes.length > MAX_STROKES ||",
+      "originalSha256": "c46fbe306c4498a815804b689d3e91dbc80175aeaa9ced26ac05b44785f8e5d7",
+      "mutatedSha256": "3fc63ca531d994765ed2088a164ed3463585582ab33a56c118c6f5c31528906e",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "drawing replication and replay protection independently caps at 256 chunks, even if their combined points stay below the point cap",
+          "reason": [
+            "AssertionError: expected { phase: { id: 'draw', …(2) }, …(25) } to be { phase: { id: 'draw', …(2) }, …(25) } // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/strokes.test.ts:134:86\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M18",
+      "description": "undo only the last packet instead of the gesture",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "before": "state.strokes.filter((stroke) => stroke.id !== id)",
+      "after": "state.strokes.slice(0, -1)",
+      "originalSha256": "c46fbe306c4498a815804b689d3e91dbc80175aeaa9ced26ac05b44785f8e5d7",
+      "mutatedSha256": "65ebef494b3841ef330711730ae14a0cdaeb02ecb34551d2f4c91f6ff2417559",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "drawing replication and replay protection undo removes every chunk of the latest gesture and clear never resets replay protection",
+          "reason": [
+            "AssertionError: expected [ +0, +0, 1 ] to deeply equal [ +0, +0 ]\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/strokes.test.ts:92:54\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M19",
+      "description": "do not shift the drawing cap after pause",
+      "file": "games/draw-and-guess/server/index.ts",
+      "before": "endsAt: state.endsAt + ms,",
+      "after": "endsAt: state.endsAt,",
+      "originalSha256": "528c6196a5cb73bcee1f9c23be78d0928d328d068ebee44ee72d67cb897232a1",
+      "mutatedSha256": "841b7809fb53b9fe5056e17801c0fcd94f42f718d65f243e5fdff31146716172",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "pause, departure and reconnect holds drawing/guesses while paused and moves every drawing clock on resume",
+          "reason": [
+            "AssertionError: expected 1061000 to be 1066000 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/presence.test.ts:23:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M20",
+      "description": "end on the first solver instead of all solvers",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "before": "eligibleIds(state).every((id)",
+      "after": "eligibleIds(state).some((id)",
+      "originalSha256": "c46fbe306c4498a815804b689d3e91dbc80175aeaa9ced26ac05b44785f8e5d7",
+      "mutatedSha256": "8deab973b62beea3b26e7f4c77b799abc9b7815a095c898e5d35293976203af8",
+      "exitCode": 1,
+      "totalTests": 35,
+      "failedTests": 5,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "hints and private views marks a private correct guess without displaying typed guesses publicly",
+          "reason": [
+            "AssertionError: expected [ 'draw-and-guess', 'reveal', …(7) ] to not include 'sailboat'\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        },
+        {
+          "test": "scoring and phase exits scores speed and the drawer share once, as the reveal begins",
+          "reason": [
+            "AssertionError: expected 'reveal' to be 'draw' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/game.test.ts:193:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, departure and reconnect holds drawing/guesses while paused and moves every drawing clock on resume",
+          "reason": [
+            "AssertionError: expected +0 to be 300 // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/presence.test.ts:38:54\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, departure and reconnect returns a disconnected player to exactly the current drawing and their solved state",
+          "reason": [
+            "AssertionError: expected 'reveal' to be 'draw' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/presence.test.ts:48:27\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, departure and reconnect rechecks all solved after a drop during pause and progresses on resume",
+          "reason": [
+            "AssertionError: expected 'reveal' to be 'draw' // Object.is equality\n    at C:/dev/rea-runs/r4/games/draw-and-guess/__tests__/presence.test.ts:98:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    }
+  ],
+  "restored": true,
+  "finalBaseline": {
+    "exitCode": 0,
+    "total": 35,
+    "passed": 35,
+    "failed": 0
+  }
+}
