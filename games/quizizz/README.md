@@ -1,4 +1,4 @@
-# Trivia Lightning
+# Quizizz
 
 ## Overview
 

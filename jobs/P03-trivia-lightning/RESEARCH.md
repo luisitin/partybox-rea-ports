@@ -1,4 +1,4 @@
-# P03 — Trivia Lightning research
+# P03 — Quizizz research
 
 Inspected 2026-10-11. This records source observations separately from the PartyBox rules.
 Source IDs and URLs are in [SOURCES.md](SOURCES.md).
@@ -43,7 +43,7 @@ Q2's recorded Quizizz use emphasizes personal feedback and selectable abilities.
 These are design inferences from the observed loops, not measured engagement claims.
 
 Q2 deliberately recorded a quiz without sound. W3 offers a music setting, but no original audio
-file, exact cue length or music transition was measured or copied. Trivia Lightning uses the
+file, exact cue length or music transition was measured or copied. Quizizz uses the
 SDK's sound hooks and original CSS/inline artwork; silence must also be playable.
 
 ## Public live/client inspection
@@ -81,5 +81,5 @@ SDK's sound hooks and original CSS/inline artwork; silence must also be playable
   stage with no answer or power-up controls. Bots use separate factual knowledge and seeded
   uncertainty, not the private content answer key.
 
-The implementation spec lives in `games/trivia-lightning/README.md`; VERIFY.md records actual
+The implementation spec lives in `games/quizizz/README.md`; VERIFY.md records actual
 durations, fit checks and tests rather than presenting proposed tuning as verified results.

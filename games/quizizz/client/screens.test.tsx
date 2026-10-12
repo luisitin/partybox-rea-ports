@@ -56,7 +56,7 @@ function threeCorrect(): ReturnType<typeof game.init> {
   return current;
 }
 
-describe('Trivia Lightning screens', () => {
+describe('Quizizz screens', () => {
   it.each([false, true])('questions are on active phones (phone-only=%s)', (phoneOnly) => {
     const html = phone(view, phoneOnly);
     expect(html).toContain(renderToStaticMarkup(<h2>{view.question!.prompt}</h2>));

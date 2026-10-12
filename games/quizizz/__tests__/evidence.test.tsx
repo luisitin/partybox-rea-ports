@@ -193,11 +193,11 @@ import { PACKS } from '../server/content';
 const mapping: [string, Record<string, string>][] = [
   ['packages/game-sdk/src/tv/Stage.module.css', stageCss],
   ['packages/game-sdk/src/ui/Avatar.module.css', avatarCss],
-  ['games/trivia-lightning/client/Controller.module.css', controllerCss],
-  ['games/trivia-lightning/client/Tv.module.css', tvCss],
-  ['games/trivia-lightning/client/RaceTrack.module.css', trackCss],
-  ['games/trivia-lightning/client/Podium.module.css', podiumCss],
-  ['games/trivia-lightning/client/PhoneStage.module.css', phoneStageCss],
+  ['games/quizizz/client/Controller.module.css', controllerCss],
+  ['games/quizizz/client/Tv.module.css', tvCss],
+  ['games/quizizz/client/RaceTrack.module.css', trackCss],
+  ['games/quizizz/client/Podium.module.css', podiumCss],
+  ['games/quizizz/client/PhoneStage.module.css', phoneStageCss],
 ];
 function css(): string {
   const modules = mapping
@@ -231,7 +231,7 @@ function render(node: ReactNode, s: State, phoneOnly = false): string {
   );
 }
 function html(body: string, surface: 'tv' | 'controller', title: string, name: string): string {
-  return `<!doctype html><html lang="en" data-surface="${surface}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>${css().replace(/[ \t]+$/gm, '')}</style></head><body><div class="chrome"><span>PB · R3</span><span>${name}</span></div><div class="mount">${body}</div><div class="bottom">${surface === 'tv' ? 'Trivia Lightning · PartyBox stage' : 'Trivia Lightning · Phone controller'}</div></body></html>`;
+  return `<!doctype html><html lang="en" data-surface="${surface}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>${css().replace(/[ \t]+$/gm, '')}</style></head><body><div class="chrome"><span>PB · R3</span><span>${name}</span></div><div class="mount">${body}</div><div class="bottom">${surface === 'tv' ? 'Quizizz · PartyBox stage' : 'Quizizz · Phone controller'}</div></body></html>`;
 }
 it('renders every phase and input substate, spectators, phone-only and ties', () => {
   const states = fixtures();
@@ -303,9 +303,9 @@ it('renders every phase and input substate, spectators, phone-only and ties', ()
   }
   for (const [name, s] of Object.entries(states)) {
     if (write && game.phases.includes(name)) {
-      mkdirSync(resolve('games/trivia-lightning/fixtures'), { recursive: true });
+      mkdirSync(resolve('games/quizizz/fixtures'), { recursive: true });
       writeFileSync(
-        resolve(`games/trivia-lightning/fixtures/${name}.json`),
+        resolve(`games/quizizz/fixtures/${name}.json`),
         JSON.stringify(s, null, 2) + '\n',
       );
     }

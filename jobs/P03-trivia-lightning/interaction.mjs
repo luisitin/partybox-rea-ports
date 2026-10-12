@@ -68,7 +68,7 @@ function documentHtml(css) {
     *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family)}
     body{display:flex;flex-direction:column}.chrome,.bottom{flex:none;height:70px;display:flex;align-items:center;justify-content:center;font-size:var(--pb-font-caption)}
     .chrome{border-bottom:1px solid var(--pb-surface-2);font-weight:800}.mount{flex:1;min-height:0}.bottom{color:var(--pb-text-muted)}
-  </style></head><body><div class="chrome">PB · R3 · Public-view interaction QA</div><div class="mount" id="root"></div><div class="bottom">Trivia Lightning · Phone controller</div></body></html>`;
+  </style></head><body><div class="chrome">PB · R3 · Public-view interaction QA</div><div class="mount" id="root"></div><div class="bottom">Quizizz · Phone controller</div></body></html>`;
 }
 
 /** Real DOM events, React state and server-view pushes in the capture runner's one existing page. */

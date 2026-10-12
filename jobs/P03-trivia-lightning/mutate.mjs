@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const root = resolve(import.meta.dirname, '../..');
-const game = resolve(root, 'games/trivia-lightning');
+const game = resolve(root, 'games/quizizz');
 const faults = [
   ['base score +10', 'server/scoring.ts', '100 + Math.min', '110 + Math.min'],
   ['uncapped streak', 'server/scoring.ts', 'Math.min(60,', 'Math.min(80,'],
@@ -89,7 +89,7 @@ for (const [fault, file, before, after] of faults) {
       [
         resolve(root, 'node_modules/vitest/vitest.mjs'),
         'run',
-        'games/trivia-lightning/__tests__/game.test.ts',
+        'games/quizizz/__tests__/game.test.ts',
         '--maxWorkers=1',
         '--pool=threads',
         '--reporter=dot',

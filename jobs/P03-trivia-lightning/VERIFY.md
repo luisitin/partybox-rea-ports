@@ -1,40 +1,42 @@
 # P03 — Verification record
 
 Runner `r3-local`, branch `job/P03-trivia-lightning`, PR [#3](https://github.com/luisitin/partybox-rea-ports/pull/3).
-This record describes the final resumed implementation and evidence inspected on 2026-10-12 UTC.
-Command results attributed to the primary runner are reported results; JSON counts and coverage
-below were independently inspected. Earlier 110/119-test and 60/65-page baselines are superseded.
+This record describes the resumed implementation, renamed to **Quizizz** (`games/quizizz`,
+manifest/shared ID `quizizz`) under the owner's official-name amendment, on 2026-10-12 UTC.
+The branch and job-evidence slug remain unchanged for claim/PR continuity. Command results
+attributed to the primary runner are reported results; JSON coverage was independently inspected.
+Historical commands retain the paths actually used; old naming is not relabeled as a new run.
 
-The final local game run passed **153 tests in seven files**, typecheck and format passed,
-all **20 planted faults were caught**, and all **21,000 seeded games / 105,000 seats finished**.
-The final combined capture has **82 static pages with zero geometry issues** and **61 passing
-mounted interaction checks / 14 additional PNGs**. All **183 media hashes match**. CI on the
-evidence push and three consecutive stable KEEP GOING audits remain completion gates below;
-this record does not claim those unfinished gates have passed.
+The renamed-game rerun passed **153 tests in seven files** in **243.93 s**, and typecheck passed.
+It regenerated **82 SSR pages**, phase fixtures, public interaction views and the simulation.
+The **21,000 seeded games / 105,000 seats** finished. Prior **20/20 caught mutations** remain
+rule evidence because the rename changes no rules. The renamed capture passed all **82 layouts**
+and **61 mounted checks / 14 additional PNGs**. Browser closure is independently verified.
+All **183 media hashes match**, at **9,839,146 bytes**. Renamed-head CI and final stable-audit
+logging remain the completion gates.
 
 ## Commands and results
 
 PowerShell blocks `pnpm.ps1`, so local commands use `pnpm.cmd`; CI uses `pnpm`.
 All Vitest commands are restricted to this game. No whole-suite browser run was performed.
 
-| Check                               | Exact command                                                                                                                                                                                       | Recorded result                                                                                                                                                                                                                             |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Installation                        | `corepack enable`, then `pnpm.cmd install`                                                                                                                                                          | Completed once; recorded in NEXT.md. No new dependencies.                                                                                                                                                                                   |
-| Types                               | `pnpm.cmd typecheck`                                                                                                                                                                                | PASS, exit 0, final primary-runner check.                                                                                                                                                                                                   |
-| Complete game and SDK contract      | `pnpm.cmd vitest run games/trivia-lightning --maxWorkers=1 --pool=threads`                                                                                                                          | PASS, exit 0: 153 tests, seven files, 59.94 s; primary-runner result recorded at `2026-10-12T01:44:53Z`.                                                                                                                                    |
-| Focused rules, screens and SSR      | `pnpm.cmd vitest run games/trivia-lightning/__tests__/game.test.ts games/trivia-lightning/client/screens.test.tsx games/trivia-lightning/__tests__/evidence.test.tsx --maxWorkers=1 --pool=threads` | PASS: 75 tests in 1.66 s, before the final complete run.                                                                                                                                                                                    |
-| Simulation and properties           | `pnpm.cmd vitest run games/trivia-lightning/__tests__/simulation.test.ts games/trivia-lightning/__tests__/property.test.ts --maxWorkers=1 --pool=threads`                                           | Included in the final successful complete run; simulation JSON contains all 21 completed groups.                                                                                                                                            |
-| Mutation check                      | `node jobs/P03-trivia-lightning/mutate.mjs`                                                                                                                                                         | PASS, exit 0: final rerun caught 20/20 by rule assertions, primary-runner session 27138. Originals restored in `finally` after each fault.                                                                                                  |
-| SSR evidence generation             | `$env:PB_WRITE_EVIDENCE='1'; try { pnpm.cmd vitest run games/trivia-lightning/__tests__/evidence.test.tsx --maxWorkers=1 --pool=threads } finally { Remove-Item Env:PB_WRITE_EVIDENCE }`            | PASS; final evidence contains 82 HTML pages, reducer-derived public interaction views and phase fixtures. SSR also passed in the complete run.                                                                                              |
-| Combined static and mounted capture | `$env:P03_CPU_CAPTURE='1'; try { node jobs/P03-trivia-lightning/capture.mjs } finally { Remove-Item Env:P03_CPU_CAPTURE }`                                                                          | PASS: layout captured at `2026-10-12T01:43:18.280Z`; 82 static pages, zero fit findings. Mounted report at `2026-10-12T01:43:38.403Z`: 61/61 checks and 14 captures. Browser closure independently proven; profile deletion returned EBUSY. |
-| Formatting                          | `pnpm.cmd format`                                                                                                                                                                                   | PASS, exit 0, final whole-repository check, primary-runner session 56509. The three regenerated fixtures that failed latest CI were corrected locally.                                                                                      |
-| Media budget                        | `Get-ChildItem -LiteralPath jobs/P03-trivia-lightning/media -File \| Measure-Object Length -Sum`                                                                                                    | Inspected after lossless PNG optimization: 183 files / 9,919,608 bytes, below 10,000,000 bytes.                                                                                                                                             |
-| Media integrity                     | `Get-ChildItem -LiteralPath jobs/P03-trivia-lightning/media -File \| Sort-Object Name \| Get-FileHash -Algorithm SHA256`                                                                            | PASS: primary runner regenerated all 183 SHA256SUMS.txt records and independently recomputed all hashes; zero mismatches.                                                                                                                   |
-| PR CI                               | `gh pr checks 3`                                                                                                                                                                                    | Green final-head run pending evidence push. Head `b94ee1e` failed only formatting of three regenerated fixtures; that failure is not a green result.                                                                                        |
+| Check                                                 | Exact command                                                                                                                                                                                       | Recorded result                                                                                                                                                                                                                                                                   |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Installation                                          | `corepack enable`, then `pnpm.cmd install`                                                                                                                                                          | Completed once; recorded in NEXT.md. No new dependencies.                                                                                                                                                                                                                         |
+| Renamed-game types                                    | `pnpm.cmd typecheck`                                                                                                                                                                                | PASS, exit 0, immediately before the renamed-game rerun in primary-runner session 25677.                                                                                                                                                                                          |
+| Renamed game, SDK contract, simulation and properties | `pnpm.cmd vitest run games/quizizz --maxWorkers=1 --pool=threads` with `PB_WRITE_EVIDENCE=1`                                                                                                        | PASS, exit 0: 153 tests, seven files, 243.93 s; began `2026-10-12T02:14:01Z`, primary-runner session 25677.                                                                                                                                                                       |
+| Prior focused rules, screens and SSR                  | `pnpm.cmd vitest run games/trivia-lightning/__tests__/game.test.ts games/trivia-lightning/client/screens.test.tsx games/trivia-lightning/__tests__/evidence.test.tsx --maxWorkers=1 --pool=threads` | Historical pre-rename PASS: 75 tests in 1.66 s. The complete renamed-game run above supersedes this validation.                                                                                                                                                                   |
+| Mutation check                                        | `node jobs/P03-trivia-lightning/mutate.mjs`                                                                                                                                                         | Prior pre-rename PASS, exit 0: 20/20 caught by rule assertions, session 27138. That invocation targeted `games/trivia-lightning/__tests__/game.test.ts`; the harness now targets `games/quizizz`, and the rule implementation is unchanged. Originals were restored in `finally`. |
+| Renamed SSR evidence generation                       | `$env:PB_WRITE_EVIDENCE='1'; try { pnpm.cmd vitest run games/quizizz --maxWorkers=1 --pool=threads } finally { Remove-Item Env:PB_WRITE_EVIDENCE }`                                                 | PASS as part of session 25677: regenerated 82 HTML pages, reducer-derived public interaction views, phase JSON fixtures and simulation evidence.                                                                                                                                  |
+| Renamed static and mounted capture                    | `$env:P03_CPU_CAPTURE='1'; try { node jobs/P03-trivia-lightning/capture.mjs } finally { Remove-Item Env:P03_CPU_CAPTURE }`                                                                          | PASS, exit 0, session 21046: 82 pages / zero fit findings at `2026-10-12T02:20:28.239Z`; 61/61 mounted checks / 14 captures at `2026-10-12T02:20:51.455Z`. Native browser and exact endpoint closure verified; profile retained with EBUSY.                                       |
+| Final formatting                                      | `pnpm.cmd format`                                                                                                                                                                                   | PASS, exit 0, after renamed capture/evidence and scoped formatting writes.                                                                                                                                                                                                        |
+| Final media budget                                    | `Get-ChildItem -LiteralPath jobs/P03-trivia-lightning/media -File \| Measure-Object Length -Sum`                                                                                                    | PASS: 183 files / 9,839,146 bytes, below 10,000,000 bytes; lossless PNG optimization verified identical pixels.                                                                                                                                                                   |
+| Final media integrity                                 | `Get-ChildItem -LiteralPath jobs/P03-trivia-lightning/media -File \| Sort-Object Name \| Get-FileHash -Algorithm SHA256`                                                                            | PASS: regenerated all 183 SHA256SUMS.txt records and independently recomputed each hash; zero mismatches.                                                                                                                                                                         |
+| PR CI                                                 | `gh pr checks 3`                                                                                                                                                                                    | Prior heads `b67e5ec` and stable-audit-9 head `43c69d1` passed CI. Renamed-head CI pending final evidence push.                                                                                                                                                                   |
 
 ## SDK contract, rules and regressions
 
-The local wrapper selects only `trivia-lightning` with `PB_CONTRACT_SHARD` and imports the real
+The local wrapper selects only `quizizz` with `PB_CONTRACT_SHARD` and imports the real
 SDK contract suite. Settings variants cover a short power-free race, a maximum-length Movies
 race and Science. Contract hooks forbid private answer keys, deck and runner internals in views.
 
@@ -151,29 +153,28 @@ failure and exit code 1 for each of these **20/20 caught faults**, exceeding the
 19. Skip the winner podium beat.
 20. Leak the answer key on phones.
 
-The final rerun passed against the final implementation and restored unmutated sources.
-This verifies these planted faults, not every possible fault.
+The pre-rename final mutation rerun passed and restored unmutated sources. The current harness
+uses `games/quizizz`; naming changes did not alter the tested rule implementation. This record
+retains that prior rule evidence and does not claim a fresh post-rename mutation invocation.
+It verifies these planted faults, not every possible fault.
 
 ## Screens, mounted interactions and cleanup
 
 SSR uses actual components, mapped CSS modules, design tokens and representative shell
-header/footer space. Sixteen fixtures cover race, podium steps 1/2/3, done, feedback, finished,
-ties, tie podium, longest authored question, maximum-text question/feedback, adversarial ranking,
-departed return, freeze and terminal feedback. Each has TV 1920×1080 plus player/spectator phones
-390×844 in TV-room and phone-only modes: 80 pages. Two extra active-phone pages exercise an
-unbroken 64-character freeze-source name: **82 HTML and 82 matching static PNGs**. Phase JSON
-fixtures retain race, podium and done states.
+header/footer space. Sixteen regular fixtures cover race, podium steps 1/2/3, done, feedback,
+finished, ties, tie podium, longest authored question, maximum-text question/feedback, adversarial
+ranking, departed return, freeze and terminal feedback. Each has TV 1920×1080 plus player /
+spectator phones 390×844 in TV-room and phone-only modes: 80 pages. Two extra active-phone pages
+exercise an unbroken 64-character freeze-source name. The renamed run regenerated all **82 HTML
+pages**, with official Quizizz strings and `games/quizizz` CSS paths. Race/podium/done phase JSON
+fixtures and reducer-derived interaction public views were also regenerated.
 
-The final [media/layout.json](media/layout.json) records zero capture errors, undersized controls,
-offscreen elements, horizontal/vertical document overflow, clipped text and scroll containers
-across all 82 pages. The 15 reported podium placeholders are intentional staged reveal markup,
-not clipping or fit findings. Maximum question/option/explanation text and eight distinguishable
-long names are included. Earlier label overlap and 24 clipped names were fixed before this run.
-
-The same Chrome process and page then mounted real React controls with reducer-derived public
-views. [media/interaction.json](media/interaction.json) stores the full report once; layout.json
-contains only its report path, passed status and counts. **All 61 checks and 14 capture layouts
-pass**, including:
+The renamed [media/layout.json](media/layout.json), captured at `2026-10-12T02:20:28.239Z`,
+records **82 pages with zero findings** for capture errors, undersized controls, offscreen elements,
+horizontal/vertical overflow, clipped text or scroll containers. Fifteen podium placeholders are
+intentional reveal markup. The same Chrome/page then mounted real React controls:
+[media/interaction.json](media/interaction.json), at `2026-10-12T02:20:51.455Z`, records
+**61/61 passing checks and 14 passing capture layouts**, including:
 
 - Eligible scored targets, explicit choice surviving reorder, disconnect fallback and invalidated
   choices remaining cleared after a rival returns.
@@ -186,42 +187,50 @@ pass**, including:
   mode, maximum-length freeze attribution, terminal explanation retention and answer-identity
   deduplication across race/podium/done plus direct podium mounting.
 
-The primary runner's visual review covers race, full named final standings, staged medals,
-eight-way ties, frozen and departed phones, maximum question/feedback text, terminal explanations,
-pending/retry states and both spectator modes. Geometry supports fit; it does not measure how
-quickly a human understands the screen. Mounted cue checks observe semantic sound/haptic calls,
-not speaker audio quality or physical-device vibration.
+The primary runner's hand review covers race, full named final standings, staged medals,
+eight-way ties, frozen/departed phones, maximum question/feedback text, terminal explanations,
+pending/retry states and both spectator modes. The new official-name TV race and maximum terminal
+phone captures were inspected again and fit. Geometry supports fit; it does not measure human
+understanding. Mounted cue checks observe semantic sound/haptic calls, not speaker acoustics or
+physical-device vibration.
 
-The initial GPU-enabled final capture hung and was recovered by exact private-profile cleanup
-before opening the fallback browser; it is not counted as a pass. The completed run sets
-`P03_CPU_CAPTURE=1`, disables GPU rendering and limits renderer processes. Its `finally` cleanup
-uses CDP membership plus native PID/creation/exit checks: all **eight observed Chrome members**
-and the launcher are exited, `verifiedClosed: true`, and the exact debugging endpoint is checked
-and closed. Four owned processes needed forced closure. No active owned Chrome remains.
-Windows retained the exited process records and locked the temporary profile; `profileRemoved`
-is **false**, with the recorded EBUSY warning. Profile deletion is not claimed.
+The pre-rename GPU-enabled attempt hung and was recovered through exact private-profile cleanup;
+it is not counted as a pass. The final renamed run uses `P03_CPU_CAPTURE=1` and one Chrome/page,
+closed in `finally`. Its cleanup proves all seven observed CDP members, earlier utility records
+and the launcher exited through native PID/creation/exit checks, with `verifiedClosed: true` and
+the exact endpoint checked/closed. Five owned processes needed forced closure. Windows retains
+exited process records and a locked profile: `profileRemoved: false`, EBUSY. No active owned
+Chrome remains; profile deletion is not claimed.
 
-PNG files were optimized losslessly using the existing Pillow installation; no new dependency
-was installed. Duplicate interaction-capture.json was removed. Inspected inventory is **82 HTML,
-96 PNG and five JSON files**, **183 files / 9,919,608 bytes**. The primary runner refreshed
-SHA256SUMS.txt for every media file and independently recomputed all 183 hashes: zero mismatches.
+The final inventory contains **82 HTML / 96 PNG / five JSON**, **183 files / 9,839,146 bytes**.
+Lossless PNG optimization used the existing Pillow installation and verified identical pixels;
+no dependency was installed. Duplicate interaction-capture.json was removed. All 183 final
+SHA256SUMS.txt records were regenerated and independently recomputed: zero mismatches.
 
-## CI and KEEP GOING completion gates
+## CI, naming and KEEP GOING completion gates
 
-Inspected `.github/workflows/P03.yml` has the required pull-request filters for the game/job/
-workflow, Ubuntu latest, a 30-minute timeout, read-only contents permission, only `actions/*`,
-Node 24, Corepack, frozen-lockfile installation, typecheck, format and game-only single-worker
-tests. Earlier implementation heads passed CI, but the latest `b94ee1e` run failed format only
-on three regenerated fixtures. The corrected fixtures passed local `pnpm.cmd format`. The final
-evidence push must receive a green PR check before the PR leaves draft.
+The official-name amendment in fresh JOBS.md/RULES.md requires manifest `name: Quizizz`,
+`id: quizizz`, `games/quizizz` and updated strings/paths. The inspected PartyBox monorepo inventory
+contains 111 games at `475a8f7` (origin/main `1c813f9`); no Quizizz or self-paced quiz race overlaps.
+Lightning Round has synchronized TV question/reveal/wager phases rather than per-player cursors.
+[ASSUMPTIONS.md](ASSUMPTIONS.md) records the inventory and continued separate-port decision.
+
+`.github/workflows/P03.yml` uses the renamed game filter/test command and retains the required
+job/workflow filters, Ubuntu latest, 30-minute timeout, read-only contents permission, only
+`actions/*`, Node 24, Corepack, frozen-lockfile install, typecheck, format and game-only tests.
+Prior implementation head `b67e5ec` passed [run 38193988918](https://github.com/luisitin/partybox-rea-ports/actions/runs/38193988918).
+Stable-audit-9 head `43c69d1` passed [run 38194604291](https://github.com/luisitin/partybox-rea-ports/actions/runs/38194604291).
+These are actual pre-rename green results. The final renamed evidence head must receive green CI
+before the PR leaves draft; no prior green run is relabeled as validation of that head.
 
 [LOOP.md](LOOP.md) records eight player-visible improvement passes: phone standings, readable
 named lanes, occupied podium beats, informed rival choice, score-derived lead cues, request
-acknowledgement, return/verdict identity and readable completion/stable identity. Their measured
-gains are regression behavior, removed waits, fit or explicit information; no human comprehension
-or network latency gain is asserted. Three consecutive audits with no player-visible gain are
-still pending the primary runner's final KEEP GOING passes. Completion requires their actual
-records plus green CI; no earlier baseline substitutes for them.
+acknowledgement, return/verdict identity and readable completion/stable identity. Measured gains
+are regression behavior, removed waits, fit or explicit information; no human comprehension or
+network latency gain is asserted. Stable audit 9 is logged and its head is green. Read-only
+stable reviews 10 and 11 were completed by the primary runner; their final records will be logged
+after renamed-head CI is green. Capture/cleanup, media budget/hashes and local checks have passed. Renamed-head CI and
+stable-audit logging remain the completion gates.
 
 ## Research and practical limits
 

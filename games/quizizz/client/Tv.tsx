@@ -17,7 +17,7 @@ export function Tv({ view }: GameTvProps<TriviaTvView>): JSX.Element {
   const shown = view.phaseId === 'done' || view.podiumStep >= 3;
   const heading =
     view.phaseId === 'race'
-      ? L('Trivia Lightning')
+      ? L('Quizizz')
       : !shown
         ? L('The podium')
         : winners.length > 1

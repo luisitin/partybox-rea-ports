@@ -32,4 +32,10 @@
   and no more than one headless browser, closed in a finally block by the runner.
 - This public snapshot has no `docs/ADDING_A_GAME.md`, `gen-registry` script or `verify` script.
   The available checks are `pnpm typecheck`, `pnpm format` and the owner's explicitly scoped
-  `pnpm vitest run games/trivia-lightning`; those replace the absent internal repository commands.
+  `pnpm vitest run games/quizizz`; those replace the absent internal repository commands.
+- Main's owner 10-11 naming amendment was discovered before completion: P03 is Quizizz,
+  `games/quizizz`, manifest/shared ID `quizizz`. The existing branch and job-evidence slug stay
+  `P03-trivia-lightning` so the claim and PR history remain resumable.
+- The PartyBox monorepo game list at `475a8f7` contains no Quizizz or self-paced quiz race.
+  Lightning Round uses synchronized TV question/reveal/wager phases rather than private
+  per-player cursors; it is a different game. P03 therefore remains a separate port.

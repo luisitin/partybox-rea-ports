@@ -31,4 +31,4 @@ timing constants and music were not established and are not asserted.
 The port's question wording, styles and inline art are authored for PartyBox. SDK primitives,
 tokens and synthesized sound cues use the repository's existing licence. There are no third-party
 asset downloads, external fonts, audio files, tracking or runtime product requests.
-Reference product names occur only in research/source documentation.
+The official Quizizz name follows the owner's 10-11 JOBS.md instruction; no logo or vendor art is used.

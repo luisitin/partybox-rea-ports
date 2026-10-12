@@ -4,9 +4,9 @@ import { flushSync } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import { PhoneOnlyProvider, ServerClockProvider, SoundProvider } from '@partybox/game-sdk/ui';
 import type { SoundCue } from '@partybox/game-sdk/ui';
-import type { TriviaControllerView } from '../../games/trivia-lightning/server/index';
-import type { Input } from '../../games/trivia-lightning/server/types';
-import { Controller } from '../../games/trivia-lightning/client/Controller';
+import type { TriviaControllerView } from '../../games/quizizz/server/index';
+import type { Input } from '../../games/quizizz/server/types';
+import { Controller } from '../../games/quizizz/client/Controller';
 import '../../design/tokens.css';
 
 type Kind = string | number;
