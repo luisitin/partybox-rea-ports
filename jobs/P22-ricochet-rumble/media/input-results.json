@@ -1,0 +1,775 @@
+{
+  "artifact": "input-harness.html",
+  "harnessSha256": "376975b233afd33f201ecbff12b4c910d2bc74995e3713cf66c1891a52053b05",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "geometry": {
+    "topRight": {
+      "x": 213.859375,
+      "y": 528.8203125,
+      "width": 74.34375,
+      "height": 104.671875
+    },
+    "bottomLeft": {
+      "x": 49.171875,
+      "y": 754.1640625,
+      "width": 74.34375,
+      "height": 104.671875
+    },
+    "fire": {
+      "x": 318.5078125,
+      "y": 641.4921875,
+      "width": 118.953125,
+      "height": 330.015625
+    },
+    "center": {
+      "x": 133.515625,
+      "y": 641.4921875
+    },
+    "buttons": [
+      {
+        "label": "Drive forward",
+        "disabled": false
+      },
+      {
+        "label": "Turn left",
+        "disabled": false
+      },
+      {
+        "label": "Turn right",
+        "disabled": false
+      },
+      {
+        "label": "Drive backward",
+        "disabled": false
+      },
+      {
+        "label": "Hold to fire",
+        "disabled": false
+      }
+    ]
+  },
+  "pass": true,
+  "cases": [
+    {
+      "name": "Five enabled keyboard buttons retained",
+      "method": "Rendered production Controller DOM",
+      "expected": ["Drive forward", "Drive backward", "Turn left", "Turn right", "Hold to fire"],
+      "observed": [
+        {
+          "label": "Drive forward",
+          "disabled": false
+        },
+        {
+          "label": "Turn left",
+          "disabled": false
+        },
+        {
+          "label": "Turn right",
+          "disabled": false
+        },
+        {
+          "label": "Drive backward",
+          "disabled": false
+        },
+        {
+          "label": "Hold to fire",
+          "disabled": false
+        }
+      ],
+      "commands": [],
+      "pass": true
+    },
+    {
+      "name": "Two touches: forward-right plus Fire",
+      "method": "CDP touchStart, two contacts",
+      "expected": {
+        "type": "control",
+        "drive": 1,
+        "turn": 1,
+        "fire": true
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": false
+        },
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": true
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 1,
+        "turn": 1,
+        "fire": true
+      },
+      "pass": true
+    },
+    {
+      "name": "Center steering goes neutral while Fire stays held",
+      "method": "CDP touchMove into steering dead zone",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": true
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": true
+      },
+      "pass": true
+    },
+    {
+      "name": "Drag steering to reverse-left while Fire stays held",
+      "method": "CDP touchMove, same two contact ids",
+      "expected": {
+        "type": "control",
+        "drive": -1,
+        "turn": -1,
+        "fire": true
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": -1,
+          "turn": -1,
+          "fire": true
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": -1,
+        "turn": -1,
+        "fire": true
+      },
+      "pass": true
+    },
+    {
+      "name": "Touch release returns neutral",
+      "method": "CDP touchEnd",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Touch cancellation returns neutral",
+      "method": "CDP touchCancel",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Window blur clears both held contacts",
+      "method": "Controller cleanup after browser/API event",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Window blur: stale contacts cannot restart controls",
+      "method": "CDP touchMove without a new touchStart",
+      "expected": "No command may restart drive, turn or fire.",
+      "commands": [],
+      "observed": null,
+      "pass": true
+    },
+    {
+      "name": "Pagehide clears both held contacts",
+      "method": "Controller cleanup after browser/API event",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Pagehide: stale contacts cannot restart controls",
+      "method": "CDP touchMove without a new touchStart",
+      "expected": "No command may restart drive, turn or fire.",
+      "commands": [],
+      "observed": null,
+      "pass": true
+    },
+    {
+      "name": "Phase change clears both held contacts",
+      "method": "Controller cleanup after browser/API event",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Phase change: stale contacts cannot restart controls",
+      "method": "CDP touchMove without a new touchStart",
+      "expected": "No command may restart drive, turn or fire.",
+      "commands": [],
+      "observed": null,
+      "pass": true
+    },
+    {
+      "name": "Inactive hand clears both held contacts",
+      "method": "Controller cleanup after browser/API event",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Inactive hand: stale contacts cannot restart controls",
+      "method": "CDP touchMove without a new touchStart",
+      "expected": "No command may restart drive, turn or fire.",
+      "commands": [],
+      "observed": null,
+      "pass": true
+    },
+    {
+      "name": "Disconnected hand clears both held contacts",
+      "method": "Controller cleanup after browser/API event",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Disconnected hand: stale contacts cannot restart controls",
+      "method": "CDP touchMove without a new touchStart",
+      "expected": "No command may restart drive, turn or fire.",
+      "commands": [],
+      "observed": null,
+      "pass": true
+    },
+    {
+      "name": "Mouse press steers forward-right",
+      "method": "CDP mousePressed",
+      "expected": {
+        "type": "control",
+        "drive": 1,
+        "turn": 1,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 1,
+        "turn": 1,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Captured mouse drag steers reverse-left",
+      "method": "CDP mouseMoved, left button held",
+      "expected": {
+        "type": "control",
+        "drive": -1,
+        "turn": -1,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": -1,
+          "turn": -1,
+          "fire": false
+        },
+        {
+          "type": "control",
+          "drive": -1,
+          "turn": -1,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": -1,
+        "turn": -1,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Mouse release returns neutral",
+      "method": "CDP mouseReleased",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Mouse hover cannot restart released steering",
+      "method": "CDP mouseMoved without mousePressed",
+      "expected": "No command may restart drive, turn or fire.",
+      "commands": [],
+      "observed": null,
+      "pass": true
+    },
+    {
+      "name": "Keyboard button: Drive forward",
+      "method": "CDP Enter keyDown on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 1,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 0,
+          "fire": false
+        },
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 1,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button releases: Drive forward",
+      "method": "CDP Enter keyUp on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button: Drive backward",
+      "method": "CDP Enter keyDown on focused button",
+      "expected": {
+        "type": "control",
+        "drive": -1,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": -1,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": -1,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button releases: Drive backward",
+      "method": "CDP Enter keyUp on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button: Turn left",
+      "method": "CDP Enter keyDown on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": -1,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": -1,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": -1,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button releases: Turn left",
+      "method": "CDP Enter keyUp on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button: Turn right",
+      "method": "CDP Enter keyDown on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 1,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 1,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 1,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button releases: Turn right",
+      "method": "CDP Enter keyUp on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button: Hold to fire",
+      "method": "CDP Enter keyDown on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": true
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": true
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button releases: Hold to fire",
+      "method": "CDP Enter keyUp on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    }
+  ]
+}

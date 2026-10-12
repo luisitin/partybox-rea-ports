@@ -1,7 +1,7 @@
 # P22 Tank Trouble
 
-Tank Trouble is a five-round maze-tank game for 2-8 players. Hold phone controls to
-drive, reverse and turn; hold Fire for bouncing shells. Your own ricochets can hit you.
+Tank Trouble is a five-round maze-tank game for 2-8 players. Drag a steering thumb to
+drive and turn together; hold Fire with the other thumb. Your own ricochets can hit you.
 The TV shows the shared maze. Phone-only and remote phones carry that same public stage.
 
 The last tank standing earns a round win. Each new round uses a fresh seeded connected

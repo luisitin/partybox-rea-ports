@@ -105,6 +105,25 @@
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
+.diagonal {
+  display: grid;
+  place-items: center;
+  font-size: calc(var(--pb-font-body) * 1.7);
+  color: var(--pb-text-muted);
+  pointer-events: none;
+}
+.diagonal[data-corner='0'] {
+  grid-area: 1 / 1;
+}
+.diagonal[data-corner='1'] {
+  grid-area: 1 / 3;
+}
+.diagonal[data-corner='2'] {
+  grid-area: 3 / 1;
+}
+.diagonal[data-corner='3'] {
+  grid-area: 3 / 3;
+}
 .pad:focus-visible {
   outline: var(--pb-space-1) solid var(--pb-focus);
   outline-offset: calc(var(--pb-space-1) / 2);

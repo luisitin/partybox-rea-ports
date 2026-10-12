@@ -39,8 +39,10 @@ Nothing directs them to a TV. A temporarily eliminated player keeps watching the
 ## Inputs
 
 `{ type: 'control', drive: -1 | 0 | 1, turn: number, fire: boolean }` in play.
-Drive is reverse, stop or forward; turn ranges from -1 to 1. Touch/keyboard controls can
-combine driving, turning and firing. Releasing/cancelling, hiding the phone, pausing or
+Drive is reverse, stop or forward; turn ranges from -1 to 1. Drag one thumb on the
+steering pad: corners combine drive and turn, the center stops, and a second thumb holds
+Fire. Five real buttons also support keyboard focus, arrows/WASD and Space/Enter.
+Releasing/cancelling, hiding the phone, pausing or
 losing eligibility releases controls. A short server lease also expires a lost held message.
 Only connected living roster seats act. Refresh restores the current seat, not a new tank.
 

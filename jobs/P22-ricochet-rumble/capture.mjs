@@ -14,6 +14,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { resolve } from 'node:path';
+import { runInputChecks } from './input-check.mjs';
 
 const job = import.meta.dirname;
 const media = resolve(job, 'media');
@@ -594,6 +595,14 @@ try {
       'utf8',
     );
     console.log(`Recorded ${probes.length} motion diagnostics in media/motion-results.json.`);
+  }
+  if (process.env.PB_INPUT_CHECKS === '1') {
+    const input = await runInputChecks(dev, frameTree.frame.id, media);
+    console.log(
+      `Input checks: ${input.cases.filter((test) => test.pass).length}/${input.cases.length} passed.`,
+    );
+    if (!input.pass)
+      throw new Error('Controller input checks failed; see media/input-results.json.');
   }
 } catch (error) {
   console.error('Capture failed:', error);

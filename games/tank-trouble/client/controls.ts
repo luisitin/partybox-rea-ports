@@ -2,18 +2,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { buzz, useServerNow } from '@partybox/game-sdk/ui';
 import type { Input } from '../server/world';
-
-export type ControlAction = 'forward' | 'reverse' | 'left' | 'right' | 'fire';
-export type HeldControls = Record<ControlAction, boolean>;
-
-const EMPTY: HeldControls = {
-  forward: false,
-  reverse: false,
-  left: false,
-  right: false,
-  fire: false,
-};
-const NEUTRAL: Input = { type: 'control', drive: 0, turn: 0, fire: false };
+import { createControlsModel, EMPTY_CONTROLS, NEUTRAL_CONTROL } from './controls-model';
+import type { ControlAction, ControlAxis, ControlUpdate, HeldControls } from './controls-model';
+export type { ControlAction, ControlAxis, HeldControls } from './controls-model';
 const KEYS: Record<string, ControlAction> = {
   arrowup: 'forward',
   w: 'forward',
@@ -30,21 +21,9 @@ const KEYS: Record<string, ControlAction> = {
 interface Controls {
   held: HeldControls;
   press: (action: ControlAction, source: string, down: boolean) => void;
-}
-
-function readHeld(sources: Map<string, ControlAction>): HeldControls {
-  const held = { ...EMPTY };
-  for (const action of sources.values()) held[action] = true;
-  return held;
-}
-
-function command(held: HeldControls): Input {
-  return {
-    type: 'control',
-    drive: held.forward === held.reverse ? 0 : held.forward ? 1 : -1,
-    turn: held.left === held.right ? 0 : held.right ? 1 : -1,
-    fire: held.fire,
-  };
+  steerStart: (source: string, drive: ControlAxis, turn: ControlAxis) => void;
+  steerMove: (source: string, drive: ControlAxis, turn: ControlAxis) => void;
+  steerEnd: (source: string) => void;
 }
 
 /** Every control source has its own key: lifting one finger never releases another finger or a held keyboard key. */
@@ -53,31 +32,25 @@ export function useControls(
   phaseKey: string,
   send: (input: Input) => void,
 ): Controls {
-  const sources = useRef(new Map<string, ControlAction>());
-  const sent = useRef<Input>({ ...NEUTRAL });
+  const model = useRef(createControlsModel());
+  const sent = useRef<Input>({ ...NEUTRAL_CONTROL });
   const latest = useRef({ active, send, phaseKey });
   latest.current = { active, send, phaseKey };
-  const [lit, setLit] = useState({ key: phaseKey, held: { ...EMPTY } });
+  const [lit, setLit] = useState({ key: phaseKey, held: { ...EMPTY_CONTROLS } });
   const now = useServerNow(300, !active);
 
   const clear = useCallback((force: boolean, paint = true): void => {
-    sources.current.clear();
-    if (paint) setLit({ key: latest.current.phaseKey, held: { ...EMPTY } });
+    const neutral = model.current.clear();
+    if (paint) setLit({ key: latest.current.phaseKey, held: neutral.held });
     const wasHeld = sent.current.drive !== 0 || sent.current.turn !== 0 || sent.current.fire;
-    sent.current = { ...NEUTRAL };
-    if (force || wasHeld) latest.current.send({ ...NEUTRAL });
+    sent.current = neutral.input;
+    if (force || wasHeld) latest.current.send(neutral.input);
   }, []);
 
-  const press = useCallback((action: ControlAction, source: string, down: boolean): void => {
-    if (!latest.current.active) return;
-    if (down) {
-      if (sources.current.get(source) === action) return;
-      sources.current.set(source, action);
-      buzz(8);
-    } else if (!sources.current.delete(source)) return;
-    const held = readHeld(sources.current);
-    const next = command(held);
-    setLit({ key: latest.current.phaseKey, held });
+  const publish = useCallback((update: ControlUpdate | null): void => {
+    if (!update) return;
+    const next = update.input;
+    setLit({ key: latest.current.phaseKey, held: update.held });
     if (
       next.drive === sent.current.drive &&
       next.turn === sent.current.turn &&
@@ -87,6 +60,37 @@ export function useControls(
     sent.current = next;
     latest.current.send(next);
   }, []);
+
+  const press = useCallback(
+    (action: ControlAction, source: string, down: boolean): void => {
+      if (!latest.current.active) return;
+      const update = model.current.press(action, source, down);
+      if (update && down) buzz(8);
+      publish(update);
+    },
+    [publish],
+  );
+  const steerStart = useCallback(
+    (source: string, drive: ControlAxis, turn: ControlAxis): void => {
+      if (!latest.current.active) return;
+      const update = model.current.steerStart(source, drive, turn);
+      if (update) buzz(8);
+      publish(update);
+    },
+    [publish],
+  );
+  const steerMove = useCallback(
+    (source: string, drive: ControlAxis, turn: ControlAxis): void => {
+      if (latest.current.active) publish(model.current.steerMove(source, drive, turn));
+    },
+    [publish],
+  );
+  const steerEnd = useCallback(
+    (source: string): void => {
+      if (latest.current.active) publish(model.current.steerEnd(source));
+    },
+    [publish],
+  );
 
   useEffect(() => {
     clear(active);
@@ -139,5 +143,11 @@ export function useControls(
     }
   }, [active, now]);
 
-  return { held: active && lit.key === phaseKey ? lit.held : EMPTY, press };
+  return {
+    held: active && lit.key === phaseKey ? lit.held : EMPTY_CONTROLS,
+    press,
+    steerStart,
+    steerMove,
+    steerEnd,
+  };
 }

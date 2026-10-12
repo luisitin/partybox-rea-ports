@@ -27,3 +27,4 @@
   express design intent; no original recording or unmeasured loudness claim is shipped.
 
 - Owner-required overlap check inspected C:/dev/partybox game manifests and docs/games. No Tank Trouble/tank-trouble counterpart exists, so P22 remains a new game. Existing Lightning Round and Big-Top Quiz are separate quiz games; P01 follow-up needs the owner naming/overlap instruction applied on its next push.
+- Two-thumb diagonal drag steering is an authored phone adaptation. It preserves the server's discrete drive/turn commands and five focusable buttons; no original touch-control behavior is claimed as observed.

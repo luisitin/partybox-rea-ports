@@ -42,7 +42,11 @@ export function Controller({
   const participating = player && view.participating;
   const connected = view.players.find((seat) => seat.id === view.me.id)?.connected !== false;
   const active = phase === 'play' && participating && view.alive && connected && !view.paused;
-  const { held, press } = useControls(active, `${phase}:${view.round}`, send);
+  const { held, press, steerStart, steerMove, steerEnd } = useControls(
+    active,
+    `${phase}:${view.round}`,
+    send,
+  );
   const stage = phoneOnly || !participating;
   const playing = phase === 'play' && participating && view.alive;
   const mine = view.scores[view.me.id] ?? 0;
@@ -76,8 +80,45 @@ export function Controller({
     };
   }, [view.round, view.ammo, view.weapon, view.alive, phase, player, sound]);
 
+  const steering = (event: PointerEvent<HTMLDivElement>): [-1 | 0 | 1, -1 | 0 | 1] => {
+    const box = event.currentTarget.getBoundingClientRect();
+    const fire = event.currentTarget.querySelector('[data-pad-primary]')!.getBoundingClientRect();
+    const gap = parseFloat(getComputedStyle(event.currentTarget).columnGap) || 0;
+    const x = (2 * (event.clientX - box.left)) / Math.max(1, fire.left - box.left - gap / 2) - 1;
+    const y = (2 * (event.clientY - box.top)) / Math.max(1, box.height) - 1;
+    return [y < -1 / 3 ? 1 : y > 1 / 3 ? -1 : 0, x < -1 / 3 ? -1 : x > 1 / 3 ? 1 : 0];
+  };
   const controls = (
-    <div className={styles.controls} role="group" aria-label={L('Tank controls')}>
+    <div
+      className={styles.controls}
+      role="group"
+      aria-label={L('Tank controls')}
+      data-steering-pad
+      onPointerDown={(event) => {
+        if (
+          !active ||
+          event.button !== 0 ||
+          (event.target instanceof Element && event.target.closest('[data-pad-primary]'))
+        )
+          return;
+        event.preventDefault();
+        event.currentTarget.setPointerCapture(event.pointerId);
+        const [drive, turn] = steering(event);
+        steerStart(`steer:${event.pointerId}`, drive, turn);
+      }}
+      onPointerMove={(event) => {
+        const [drive, turn] = steering(event);
+        steerMove(`steer:${event.pointerId}`, drive, turn);
+      }}
+      onPointerUp={(event) => steerEnd(`steer:${event.pointerId}`)}
+      onPointerCancel={(event) => steerEnd(`steer:${event.pointerId}`)}
+      onLostPointerCapture={(event) => steerEnd(`steer:${event.pointerId}`)}
+    >
+      {(['↖', '↗', '↙', '↘'] as const).map((mark, index) => (
+        <span key={mark} className={styles.diagonal} data-corner={index} aria-hidden="true">
+          {mark}
+        </span>
+      ))}
       {ACTIONS.map(({ action, mark, label }) => (
         <button
           key={action}
@@ -99,7 +140,7 @@ export function Controller({
           data-held={held[action] || undefined}
           data-pad-primary={action === 'fire' || undefined}
           onPointerDown={(event: PointerEvent<HTMLButtonElement>) => {
-            if (event.button !== 0 || !active) return;
+            if (action !== 'fire' || event.button !== 0 || !active) return;
             event.preventDefault();
             event.currentTarget.setPointerCapture(event.pointerId);
             press(action, `pointer:${event.pointerId}`, true);
@@ -168,11 +209,7 @@ export function Controller({
         </p>
         {stage ? <Standings view={view} me={view.me.id} compact /> : null}
         {controls}
-        <p className={styles.help}>
-          {stage
-            ? L('Hold to move, turn and fire.')
-            : L('Hold to drive, turn and fire. Shots can hit you.')}
-        </p>
+        <p className={styles.help}>{L('Drag the pad to steer · hold Fire. Shots can hit you.')}</p>
       </div>
     );
   }
