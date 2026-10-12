@@ -80,6 +80,59 @@
   flex: none;
 }
 
+:global([data-compact='true']) .colors {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--pb-space-1);
+}
+
+:global([data-compact='true']) .colors button {
+  position: relative;
+  flex-direction: column;
+  line-height: 1;
+}
+
+:global([data-compact='true']) .colorName {
+  min-width: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:global([data-compact='true']) .colorCheck {
+  position: absolute;
+  top: var(--pb-space-1);
+  right: var(--pb-space-1);
+}
+
+/* Static previews and compact layout viewports do not need the visual-viewport effect. */
+@media (max-height: 600px) {
+  .colors {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--pb-space-1);
+  }
+
+  .colors button {
+    position: relative;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .colorName {
+    min-width: 0;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .colorCheck {
+    position: absolute;
+    top: var(--pb-space-1);
+    right: var(--pb-space-1);
+  }
+}
+
 .edits {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }

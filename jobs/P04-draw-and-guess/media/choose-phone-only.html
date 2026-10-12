@@ -533,6 +533,59 @@ ight is the :root default above) ────────
         flex: none;
       }
 
+      [data-compact='true'] ._colors_595ad5 {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: var(--pb-space-1);
+      }
+
+      [data-compact='true'] ._colors_595ad5 button {
+        position: relative;
+        flex-direction: column;
+        line-height: 1;
+      }
+
+      [data-compact='true'] ._colorName_595ad5 {
+        min-width: 0;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      [data-compact='true'] ._colorCheck_595ad5 {
+        position: absolute;
+        top: var(--pb-space-1);
+        right: var(--pb-space-1);
+      }
+
+      /* Static previews and compact layout viewports do not need the visual-viewport effect. */
+      @media (max-height: 600px) {
+        ._colors_595ad5 {
+          grid-template-columns: repeat(6, minmax(0, 1fr));
+          gap: var(--pb-space-1);
+        }
+
+        ._colors_595ad5 button {
+          position: relative;
+          flex-direction: column;
+          line-height: 1;
+        }
+
+        ._colorName_595ad5 {
+          min-width: 0;
+          max-width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        ._colorCheck_595ad5 {
+          position: absolute;
+          top: var(--pb-space-1);
+          right: var(--pb-space-1);
+        }
+      }
+
       ._edits_595ad5 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }

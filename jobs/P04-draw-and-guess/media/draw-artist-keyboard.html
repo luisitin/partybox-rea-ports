@@ -533,6 +533,59 @@ ight is the :root default above) ────────
         flex: none;
       }
 
+      [data-compact='true'] ._colors_595ad5 {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: var(--pb-space-1);
+      }
+
+      [data-compact='true'] ._colors_595ad5 button {
+        position: relative;
+        flex-direction: column;
+        line-height: 1;
+      }
+
+      [data-compact='true'] ._colorName_595ad5 {
+        min-width: 0;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      [data-compact='true'] ._colorCheck_595ad5 {
+        position: absolute;
+        top: var(--pb-space-1);
+        right: var(--pb-space-1);
+      }
+
+      /* Static previews and compact layout viewports do not need the visual-viewport effect. */
+      @media (max-height: 600px) {
+        ._colors_595ad5 {
+          grid-template-columns: repeat(6, minmax(0, 1fr));
+          gap: var(--pb-space-1);
+        }
+
+        ._colors_595ad5 button {
+          position: relative;
+          flex-direction: column;
+          line-height: 1;
+        }
+
+        ._colorName_595ad5 {
+          min-width: 0;
+          max-width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        ._colorCheck_595ad5 {
+          position: absolute;
+          top: var(--pb-space-1);
+          right: var(--pb-space-1);
+        }
+      }
+
       ._edits_595ad5 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -878,18 +931,26 @@ ight is the :root default above) ────────
             >
           </div>
           <div class="_colors_595ad5" role="group" aria-label="Ink color">
-            <button type="button" aria-pressed="true">
-              <i style="background: var(--pb-text)" aria-hidden="true"></i>Ink ✓</button
-            ><button type="button" aria-pressed="false">
-              <i style="background: var(--pb-accent)" aria-hidden="true"></i>Rose</button
-            ><button type="button" aria-pressed="false">
-              <i style="background: var(--pb-accent-2)" aria-hidden="true"></i>Gold</button
-            ><button type="button" aria-pressed="false">
-              <i style="background: var(--pb-accent-3)" aria-hidden="true"></i>Mint</button
-            ><button type="button" aria-pressed="false">
-              <i style="background: var(--pb-info)" aria-hidden="true"></i>Sky</button
-            ><button type="button" aria-pressed="false">
-              <i style="background: var(--pb-text-muted)" aria-hidden="true"></i>Gray
+            <button type="button" aria-pressed="true" aria-label="Ink" title="Ink">
+              <i style="background: var(--pb-text)" aria-hidden="true"></i
+              ><span class="_colorName_595ad5"
+                >Ink <span class="_colorCheck_595ad5" aria-hidden="true">✓</span></span
+              ></button
+            ><button type="button" aria-pressed="false" aria-label="Rose" title="Rose">
+              <i style="background: var(--pb-accent)" aria-hidden="true"></i
+              ><span class="_colorName_595ad5">Rose</span></button
+            ><button type="button" aria-pressed="false" aria-label="Gold" title="Gold">
+              <i style="background: var(--pb-accent-2)" aria-hidden="true"></i
+              ><span class="_colorName_595ad5">Gold</span></button
+            ><button type="button" aria-pressed="false" aria-label="Mint" title="Mint">
+              <i style="background: var(--pb-accent-3)" aria-hidden="true"></i
+              ><span class="_colorName_595ad5">Mint</span></button
+            ><button type="button" aria-pressed="false" aria-label="Sky" title="Sky">
+              <i style="background: var(--pb-info)" aria-hidden="true"></i
+              ><span class="_colorName_595ad5">Sky</span></button
+            ><button type="button" aria-pressed="false" aria-label="Gray" title="Gray">
+              <i style="background: var(--pb-text-muted)" aria-hidden="true"></i
+              ><span class="_colorName_595ad5">Gray</span>
             </button>
           </div>
           <div class="_sizes_595ad5" role="group" aria-label="Line thickness">

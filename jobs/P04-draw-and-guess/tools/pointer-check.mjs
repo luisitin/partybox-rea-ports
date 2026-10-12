@@ -22,6 +22,34 @@ export async function canvasProjection(harness, height) {
     box.width > 0 && box.height > 0 && Math.abs(box.width / box.height - 5 / 3) < 0.005,
     `${height}px artist bitmap must remain 5:3 (got ${box.width}×${box.height})`,
   );
+  let compactPalette;
+  if (height === 500) {
+    await button('Gray');
+    compactPalette = await evaluate(`(() => {
+      const group=document.querySelector('[aria-label="Ink color"]');
+      const buttons=[...group.querySelectorAll('button')];
+      const pressed=buttons.find(b=>b.getAttribute('aria-pressed')==='true');
+      return {tops:buttons.map(b=>b.getBoundingClientRect().top),
+        heights:buttons.map(b=>b.getBoundingClientRect().height),
+        touch:parseFloat(getComputedStyle(group).getPropertyValue('--pb-touch')),
+        labels:buttons.map(b=>b.textContent.replace('✓','').trim()),
+        labelsFit:buttons.every(b=>{const label=b.querySelector('span'); return label.scrollWidth<=label.clientWidth+1}),
+        selected:pressed?.textContent.trim(),
+        overflow:buttons.some(b=>b.scrollWidth>b.clientWidth+1||b.getBoundingClientRect().right>innerWidth+1)};
+    })()`);
+    check(
+      compactPalette.tops.every((top) => Math.abs(top - compactPalette.tops[0]) < 1) &&
+        compactPalette.heights.every((h) => h >= compactPalette.touch) &&
+        !compactPalette.overflow &&
+        compactPalette.labelsFit &&
+        compactPalette.selected.includes('Gray') &&
+        compactPalette.selected.includes('✓') &&
+        JSON.stringify(compactPalette.labels) ===
+          JSON.stringify(['Ink', 'Rose', 'Gold', 'Mint', 'Sky', 'Gray']),
+      `Compact palette must retain six full labels, selected mark and touch targets in one row: ${JSON.stringify(compactPalette)}`,
+    );
+    await button('Ink');
+  }
   const start = { x: box.left + box.width * 0.05, y: box.top + box.height * 0.05 };
   const middle = { x: box.left + box.width * 0.5, y: box.top + box.height * 0.5 };
   const end = { x: box.left + box.width * 0.95, y: box.top + box.height * 0.95 };
@@ -78,5 +106,5 @@ export async function canvasProjection(harness, height) {
   );
   await button('Clear');
   await button('Tap again to clear');
-  return { ...box, first, last, projectionErrorPx };
+  return { ...box, first, last, projectionErrorPx, ...(compactPalette ? { compactPalette } : {}) };
 }

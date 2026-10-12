@@ -22,8 +22,14 @@ two paused dot packets195.3ms apart, complete resumed-tail Undo, zero cancelled
 Undo sends, zero automatic guess retries and zero normal/Safari/keyboard overflow.
 
 The PR remains draft until three consecutive no-gain KEEP GOING rounds pass.
-R27 is the first after final green verification; streak1/3. Perform two more
-fresh reviews, rank/log five residuals each, push and refresh CLAIMS per round.
+R27 gained nothing, but R28 independent review found a bounded compact-canvas
+gain: the500px artist bitmap is only98.0×58.8px while colors use two rows.
+A labeled one-row compact palette is complete; streak resets0/3.45native checks
+pass: compact bitmap181.3×108.8px (3.42×area), normal unchanged, six full labels,
+selected Gray and46px targets against44px minimum.10evidence checks pass;
+33SSR captures are refreshed with zero overflow, manually inspected, and all
+68media files are hashed (2,157,072bytes). Both browsers closed in finally,
+sequentially. Push/recheck CI, then restart three fresh no-gain reviews.
 Refresh the PR body from the job README, mark ready only after latest CI green,
 then mark the P04 claim DONE before taking the next lowest eligible job.
 

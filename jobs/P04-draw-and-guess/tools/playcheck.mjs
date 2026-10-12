@@ -300,6 +300,7 @@ try {
     checks: [
       'normal artist 5:3 bitmap',
       'compact artist 5:3 bitmap',
+      'compact six-color palette full labels and touch targets',
       'normal pointer border projection',
       'compact pointer border projection',
       'normal release-only endpoint',

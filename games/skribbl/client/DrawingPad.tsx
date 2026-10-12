@@ -268,12 +268,23 @@ export function DrawingPad({
             key={item.name}
             type="button"
             aria-pressed={color === index}
+            aria-label={L(item.name)}
+            title={L(item.name)}
             disabled={disabled}
             onClick={() => setColor(index)}
           >
             <i style={{ background: `var(${item.token})` }} aria-hidden="true" />
-            {L(item.name)}
-            {color === index ? ' ✓' : ''}
+            <span className={styles.colorName}>
+              {L(item.name)}
+              {color === index ? (
+                <>
+                  {' '}
+                  <span className={styles.colorCheck} aria-hidden="true">
+                    ✓
+                  </span>
+                </>
+              ) : null}
+            </span>
           </button>
         ))}
       </div>

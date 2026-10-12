@@ -16,6 +16,13 @@ Final R25/R26 verification:
 - CI38200206897 passes31s for270eb72: install, typecheck, format and complete scoped suite (318checks,31files,14.35s), including7,000terminating simulations, SDK contracts and seeded properties. Server sources are unchanged from the fresh20/20mutation campaign.
 - Manual review of the two new native pause screenshots confirms preserved dots, disabled tools and a readable retry field at390×500. Browser closes in finally; no active harness browser remains. Existing33SSR HTML/PNG captures remain unchanged; the two live PNGs bring media to68files/2,110,941bytes. Prettier runs after report generation and `node jobs/P04-draw-and-guess/tools/hash-media.mjs` updates all hashes.
 
+R28 compact palette:
+
+- `node jobs/P04-draw-and-guess/tools/playcheck.mjs`:45checks pass, exit0. Compact bitmap98.016×58.797→181.344×108.797px (3.42×area); normal358×214.797px remains unchanged, both5:3 and0px projection error. All six full labels fit one row, selected Gray retains its check/aria-pressed, and every button is46px high versus the44px token minimum. FIFO, pause, Undo, draft/remount, sounds and keyboard probes still pass; paused dot spacing is245.5ms. The identical duplicate fallback media rule introduced during parallel editing was removed; computed styling is unchanged.
+- `$env:WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/skribbl/__tests__/evidence.test.tsx --maxWorkers=1 --pool=threads`:10checks pass, exit0,1.48s; all33HTML files regenerated.
+- `node jobs/P04-draw-and-guess/tools/capture.mjs`:33captures pass, exit0, zero viewport overflows; its one browser closes in finally after the live browser had completed. Manual normal/compact artist review verifies readable full color names, selection mark, larger canvas and all tools fitting.
+- Scoped Prettier follows all generated results and fixtures. `node jobs/P04-draw-and-guess/tools/hash-media.mjs`:68files,2,157,072bytes, hashes updated. No server sources changed.
+
 Windows11, Node24.19.0, pnpm12.4.2. `pnpm.cmd` is the Windows launcher for the
 documented pnpm commands; PowerShell blocks pnpm.ps1. Only this game was tested.
 

@@ -2,6 +2,7 @@
   "checks": [
     "normal artist 5:3 bitmap",
     "compact artist 5:3 bitmap",
+    "compact six-color palette full labels and touch targets",
     "normal pointer border projection",
     "compact pointer border projection",
     "normal release-only endpoint",
@@ -46,7 +47,7 @@
     "paused sound silence"
   ],
   "firstGestureChunks": 18,
-  "finalRevision": 60,
+  "finalRevision": 63,
   "normal": {
     "height": 844,
     "layoutHeight": 844,
@@ -81,20 +82,29 @@
     "projectionErrorPx": 0
   },
   "compactArtist": {
-    "left": 145.98437594325742,
-    "top": 94.18749850292454,
-    "width": 98.01562311348519,
-    "height": 58.79687799415093,
+    "left": 104.3281197186074,
+    "top": 94.18749571906812,
+    "width": 181.3437605627852,
+    "height": 108.79688356186375,
     "first": [50, 30],
     "last": [950, 570],
-    "projectionErrorPx": 0
+    "projectionErrorPx": 0,
+    "compactPalette": {
+      "tops": [215, 215, 215, 215, 215, 215],
+      "heights": [46, 46, 46, 46, 46, 46],
+      "touch": 44,
+      "labels": ["Ink", "Rose", "Gold", "Mint", "Sky", "Gray"],
+      "labelsFit": true,
+      "selected": "Gray ✓",
+      "overflow": false
+    }
   },
   "pausedInk": {
     "pausedDots": {
       "pausedDotPreview": true,
       "sentBeforeResume": 1,
       "sentAfterResume": 2,
-      "dotSpacingMs": 195.30000001192093,
+      "dotSpacingMs": 245.5,
       "gestures": [6, 7]
     },
     "activeTail": {
