@@ -4,7 +4,7 @@
 <!-- prettier-ignore-start -->
 
 P01 r1-local 2026-10-12T06:43:34Z job/P01-quiz-rush
-P02 r2-local 2026-10-12T06:17:19Z job/P02-quiz-rush-teams
+P02 r2-local 2026-10-12T06:49:29Z job/P02-quiz-rush-teams
 P03 r3-local 2026-10-12T02:31:08Z job/P03-trivia-lightning DONE
 P04 r2-local 2026-10-12T05:06:32Z job/P04-draw-and-guess DONE
 P05 r4-local 2026-10-12T06:25:09Z job/P05-blob-arena
