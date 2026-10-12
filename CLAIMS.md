@@ -43,4 +43,6 @@ P22 r1-local 2026-10-12T02:30:01Z job/P22-ricochet-rumble
 
 P23 r4-local 2026-10-12T02:27:28Z job/P23-bonk-io
 
+P24 r3-local 2026-10-12T02:31:26Z job/P24-haxball
+
 <!-- prettier-ignore-end -->
