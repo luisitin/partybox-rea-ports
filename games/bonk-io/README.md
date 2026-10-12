@@ -44,6 +44,8 @@ A temporary disconnect releases movement, Heavy and queued jump but keeps the ba
 
 Alive balls above the arena keep a numbered upward edge marker, including Heavy and own-ball cues. The marker identifies an offstage position without predicting movement or changing the verdict; dead balls never gain one.
 
+Connection/identity changes release local control feedback; browser offline and online signals also clear retained presses. Disconnected alive seats see disabled controls. Eliminated phones show live standings with their own Out row, then regain the control preview for the next round.
+
 ## Settings
 
 None. Every match uses the same five-round format and timing rules.

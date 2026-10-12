@@ -23,8 +23,15 @@ export function Controller({
   const sound = useSound();
   const now = useServerNow(100, view.paused, view.clockHeldAt);
   const player = view.me.role === 'player';
-  const active = player && view.phaseId === 'play' && view.alive && !view.departed && !view.paused;
-  const key = `${view.phaseId}:${view.round}:${view.paused}:${view.alive}:${view.departed}`;
+  const ownConnected = view.players.some((item) => item.id === view.me.id && item.connected);
+  const active =
+    player &&
+    ownConnected &&
+    view.phaseId === 'play' &&
+    view.alive &&
+    !view.departed &&
+    !view.paused;
+  const key = `${view.phaseId}:${view.round}:${view.me.id}:${view.paused}:${view.alive}:${view.departed}:${ownConnected}`;
   const latest = useRef({ key, active, send, sound, grounded: view.grounded });
   latest.current = { key, active, send, sound, grounded: view.grounded };
   const sessionRef = useRef<ControlSession | null>(null);
@@ -101,12 +108,16 @@ export function Controller({
     window.addEventListener('keyup', up);
     window.addEventListener('blur', reset);
     window.addEventListener('pagehide', reset);
+    window.addEventListener('offline', reset);
+    window.addEventListener('online', reset);
     document.addEventListener('visibilitychange', hidden);
     return () => {
       window.removeEventListener('keydown', down);
       window.removeEventListener('keyup', up);
       window.removeEventListener('blur', reset);
       window.removeEventListener('pagehide', reset);
+      window.removeEventListener('offline', reset);
+      window.removeEventListener('online', reset);
       document.removeEventListener('visibilitychange', hidden);
       session.reset();
     };
@@ -115,10 +126,21 @@ export function Controller({
   const phase = view.phaseId;
   const finalRound = view.round >= view.rounds;
   const ranked = phase === 'score' || phase === 'done';
+  const controlsVisible = player && !view.departed && !ranked && (phase !== 'play' || view.alive);
   const stage = phoneOnly || view.balls !== undefined || !player || view.departed;
   const seconds = secondsLeft(view.deadline, now);
   const style = playerStyle(Math.max(0, view.slot)) as CSSProperties;
-  const rows = standingsRows(view, view.me.id, ranked);
+  const rows = standingsRows(view, view.me.id, ranked).map((row) => {
+    if (phase !== 'play') return row;
+    if (row.me && player)
+      return { ...row, alive: view.alive, heavy: view.heavy, departed: view.departed };
+    if (!view.balls)
+      return {
+        ...row,
+        alive: view.players.find((item) => item.id === row.id)?.status === 'active',
+      };
+    return row;
+  });
   const leaders = rows.filter((row) => row.rank === 1);
   const winners = rows.filter((row) => view.lastWinners.includes(row.id));
   const myPoints = view.scores[view.me.id] ?? 0;
@@ -142,7 +164,9 @@ export function Controller({
         ? finalRound
           ? L('Keep watching. Final results are next.')
           : L('Keep watching. You return next round.')
-        : L('{n} of {m} still in', { n: view.aliveCount, m: view.total });
+        : player && !ownConnected
+          ? L('Disconnected — controls released')
+          : L('{n} of {m} still in', { n: view.aliveCount, m: view.total });
   } else if (phase === 'score') {
     title =
       view.roundOutcome === 'draw'
@@ -205,7 +229,7 @@ export function Controller({
       style={style}
       data-stage={stage ? 'true' : undefined}
       data-phase={phase}
-      data-controls={player && !view.departed && !ranked ? 'true' : undefined}
+      data-controls={controlsVisible ? 'true' : undefined}
     >
       <header className={styles.header}>
         <h2 className={styles.title} title={title}>
@@ -258,7 +282,7 @@ export function Controller({
           </b>
         </div>
       ) : null}
-      {player && !view.departed && !ranked ? (
+      {controlsVisible ? (
         <>
           <div className={styles.controls} role="group" aria-label={L('Ball controls')}>
             {CONTROLS.map((control) => (
@@ -318,12 +342,16 @@ export function Controller({
         </>
       ) : (
         <>
-          {ranked ? (
-            <div className={styles.columns}>
-              <span>{rows.some((row) => row.tied) ? L('Place · = tied') : L('Place')}</span>
-              <span>{L('Wins')}</span>
-            </div>
-          ) : null}
+          <div className={styles.columns}>
+            <span>
+              {ranked
+                ? rows.some((row) => row.tied)
+                  ? L('Place · = tied')
+                  : L('Place')
+                : L('Players')}
+            </span>
+            <span>{L('Wins')}</span>
+          </div>
           <ul className={styles.rows} aria-label={ranked ? L('Standings') : L('Players')}>
             {rows.map((row) => (
               <li
@@ -352,10 +380,10 @@ export function Controller({
                   <span className={styles.rowStatus}>
                     {row.departed
                       ? L('Left')
-                      : !row.connected
-                        ? L('Offline')
-                        : !row.alive
-                          ? L('Out')
+                      : !row.alive
+                        ? L('Out')
+                        : !row.connected
+                          ? L('Offline')
                           : row.heavy
                             ? L('Heavy')
                             : L('In')}

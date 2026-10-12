@@ -88,7 +88,7 @@ describe('hold controls', () => {
     expect(sameCommand(input, command(emptyHeld(), true))).toBe(false);
   });
 
-  it.each(['blur', 'pagehide', 'unmount', 'visibilitychange'])(
+  it.each(['blur', 'pagehide', 'offline', 'unmount', 'visibilitychange'])(
     '%s releases every hold once',
     () => {
       const sent: Input[] = [];
@@ -123,6 +123,27 @@ describe('hold controls', () => {
       }
     },
   );
+
+  it('a same-round disconnect releases holds and jump once, and reconnect never restarts them automatically', () => {
+    const sent: Input[] = [];
+    const session = new ControlSession((input) => sent.push(input));
+    session.context('same-round:connected', true);
+    session.press('left', 'pointer:1', true);
+    session.press('heavy', 'key:x', true);
+    session.pressJump('key:w', true);
+    session.context('same-round:disconnected', false);
+    session.press('heavy', 'pointer:2', true);
+    session.pressJump('key:w', true);
+    session.context('same-round:connected', true);
+    expect(session.held).toEqual(emptyHeld());
+    expect(session.jumpSources).toEqual([]);
+    expect(sent).toHaveLength(4);
+    expect(sent.filter((input) => input.move === 0 && !input.heavy && !input.jump)).toHaveLength(1);
+    session.press('left', 'pointer:1', false);
+    expect(sent).toHaveLength(4);
+    session.press('right', 'pointer:3', true);
+    expect(sent.at(-1)).toMatchObject({ move: 1, heavy: false, jump: false });
+  });
 
   it('jump press feedback lasts until release, with one pulse per press and reset on context changes', () => {
     const sent: Input[] = [];

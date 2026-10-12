@@ -441,6 +441,9 @@ ight is the :root default above) ────────
     ._screen_c9689e:not([data-controls='true']) {
       grid-template-rows: auto auto auto auto;
     }
+    ._screen_c9689e:not([data-controls='true']):not([data-phase='score']):not([data-phase='done']) {
+      gap: var(--pb-space-1);
+    }
     ._screen_c9689e[data-phase='done'] {
       grid-template-rows: auto auto auto;
     }
@@ -513,6 +516,7 @@ ight is the :root default above) ────────
       justify-content: space-between;
       padding: 0 var(--pb-space-1) 0 calc(var(--pb-space-6) + var(--pb-space-2));
       font-size: var(--pb-font-caption);
+      line-height: 1;
       font-weight: 800;
       color: var(--pb-text-muted);
     }
@@ -1012,12 +1016,7 @@ ight is the :root default above) ────────
   <body>
     <div class="shell">PB · BONK · Connected</div>
     <main>
-      <div
-        class="_screen_c9689e"
-        style="--ball-color: var(--pb-player-2)"
-        data-phase="play"
-        data-controls="true"
-      >
+      <div class="_screen_c9689e" style="--ball-color: var(--pb-player-2)" data-phase="play">
         <header class="_header_c9689e">
           <h2 class="_title_c9689e" title="Out of the final round">Out of the final round</h2>
           <p class="_hint_c9689e">Keep watching. Final results are next.</p>
@@ -1026,40 +1025,49 @@ ight is the :root default above) ────────
           <span>Round 5 of 5 · Platforms shrinking!</span><b role="timer">0:02</b>
         </div>
         <div class="_identity_c9689e"><span class="_myBall_c9689e">2</span><b>Out</b></div>
-        <div class="_controls_c9689e" role="group" aria-label="Ball controls">
-          <button
-            type="button"
-            class="_control_c9689e"
-            disabled=""
-            aria-label="Hold Left"
-            aria-pressed="false"
-          >
-            <span class="_glyph_c9689e" aria-hidden="true">←</span><b>Left</b
-            ><span class="_actionHint_c9689e">Hold</span></button
-          ><button
-            type="button"
-            class="_control_c9689e"
-            disabled=""
-            aria-label="Hold Right"
-            aria-pressed="false"
-          >
-            <span class="_glyph_c9689e" aria-hidden="true">→</span><b>Right</b
-            ><span class="_actionHint_c9689e">Hold</span></button
-          ><button type="button" class="_control_c9689e" disabled="" aria-label="Tap Jump">
-            <span class="_glyph_c9689e" aria-hidden="true">↑</span><b>Jump</b
-            ><span class="_actionHint_c9689e">Tap</span></button
-          ><button
-            type="button"
-            class="_control_c9689e"
-            disabled=""
-            aria-label="Hold Heavy"
-            aria-pressed="false"
-          >
-            <span class="_glyph_c9689e" aria-hidden="true">▰</span><b>Heavy</b
-            ><span class="_actionHint_c9689e">Hold</span>
-          </button>
-        </div>
-        <p class="_footer_c9689e">Heavy = stronger bumps, slower moves</p>
+        <div class="_columns_c9689e"><span>Players</span><span>Wins</span></div>
+        <ul class="_rows_c9689e" aria-label="Players">
+          <li style="--ball-color: var(--pb-player-1)">
+            <span class="_rowBadge_c9689e">1</span><b class="_name_c9689e" title="Ana">Ana</b
+            ><span class="_rowStatus_c9689e">In</span
+            ><b class="_points_c9689e">0<span class="_srOnly_c9689e"> wins</span></b>
+          </li>
+          <li style="--ball-color: var(--pb-player-2)" data-me="true" data-out="true">
+            <span class="_rowBadge_c9689e">2</span><b class="_name_c9689e" title="Ben">Ben</b
+            ><span class="_rowStatus_c9689e">Out</span
+            ><b class="_points_c9689e">0<span class="_srOnly_c9689e"> wins</span></b>
+          </li>
+          <li style="--ball-color: var(--pb-player-3)" data-out="true">
+            <span class="_rowBadge_c9689e">3</span><b class="_name_c9689e" title="Cy">Cy</b
+            ><span class="_rowStatus_c9689e">Out</span
+            ><b class="_points_c9689e">1<span class="_srOnly_c9689e"> wins</span></b>
+          </li>
+          <li style="--ball-color: var(--pb-player-4)" data-out="true">
+            <span class="_rowBadge_c9689e">4</span><b class="_name_c9689e" title="Dee">Dee</b
+            ><span class="_rowStatus_c9689e">Out</span
+            ><b class="_points_c9689e">0<span class="_srOnly_c9689e"> wins</span></b>
+          </li>
+          <li style="--ball-color: var(--pb-player-5)" data-out="true">
+            <span class="_rowBadge_c9689e">5</span><b class="_name_c9689e" title="Eli">Eli</b
+            ><span class="_rowStatus_c9689e">Out</span
+            ><b class="_points_c9689e">0<span class="_srOnly_c9689e"> wins</span></b>
+          </li>
+          <li style="--ball-color: var(--pb-player-6)">
+            <span class="_rowBadge_c9689e">6</span><b class="_name_c9689e" title="Fay">Fay</b
+            ><span class="_rowStatus_c9689e">In</span
+            ><b class="_points_c9689e">0<span class="_srOnly_c9689e"> wins</span></b>
+          </li>
+          <li style="--ball-color: var(--pb-player-7)" data-out="true">
+            <span class="_rowBadge_c9689e">7</span><b class="_name_c9689e" title="Gus">Gus</b
+            ><span class="_rowStatus_c9689e">Out</span
+            ><b class="_points_c9689e">1<span class="_srOnly_c9689e"> wins</span></b>
+          </li>
+          <li style="--ball-color: var(--pb-player-8)" data-out="true">
+            <span class="_rowBadge_c9689e">8</span><b class="_name_c9689e" title="Hal">Hal</b
+            ><span class="_rowStatus_c9689e">Out</span
+            ><b class="_points_c9689e">2<span class="_srOnly_c9689e"> wins</span></b>
+          </li>
+        </ul>
       </div>
     </main>
     <div class="shell">Bonk.io · phone shell reserved space</div>

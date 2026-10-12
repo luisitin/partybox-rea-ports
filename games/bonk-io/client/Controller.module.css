@@ -136,6 +136,9 @@
 .screen:not([data-controls='true']) {
   grid-template-rows: auto auto auto auto;
 }
+.screen:not([data-controls='true']):not([data-phase='score']):not([data-phase='done']) {
+  gap: var(--pb-space-1);
+}
 .screen[data-phase='done'] {
   grid-template-rows: auto auto auto;
 }
@@ -208,6 +211,7 @@
   justify-content: space-between;
   padding: 0 var(--pb-space-1) 0 calc(var(--pb-space-6) + var(--pb-space-2));
   font-size: var(--pb-font-caption);
+  line-height: 1;
   font-weight: 800;
   color: var(--pb-text-muted);
 }

@@ -115,6 +115,7 @@ it('renders all phases and room roles with the real public views', async () => {
     const now =
       fixture.phase.id === 'play' ? fixture.began + fixture.checked : fixture.phase.startedAt;
     if (mode.includes('paused')) staged = kit.vip(staged, 'pause', now);
+    if (mode.endsWith('disconnected')) staged = kit.player(staged, id, false, undefined, now);
     if (mode.endsWith('left')) staged = kit.player(staged, id, false, 'left', now);
     const body = renderToStaticMarkup(
       <ServerClockProvider offsetMs={now - Date.now()}>
@@ -170,6 +171,8 @@ it('renders all phases and room roles with the real public views', async () => {
   };
   render(out, 'phone-out', 'play');
   render(out, 'phone-only-out', 'play');
+  render(opening, 'phone-disconnected', 'play');
+  render(opening, 'phone-only-disconnected', 'play');
   if (!finalOut) throw new Error('No final-round eliminated player in artifact match');
   render(finalOut, 'tv', 'play-final-out');
   render(finalOut, 'phone-out', 'play-final-out');

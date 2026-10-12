@@ -143,12 +143,66 @@ describe('phone stage', () => {
     expect(html.match(/disabled=""/g)).toHaveLength(4);
   });
 
-  it('an eliminated player is clearly out until next round', () => {
-    const html = phone({ ...cv(), alive: false, cause: 'fall' });
-    expect(html).toContain('Out until next round');
-    expect(html).toContain('You return next round');
-    expect(html.match(/disabled=""/g)).toHaveLength(4);
+  it('an alive disconnected phone disables its controls until the same pose reconnects', () => {
+    const connected = {
+      ...cv(),
+      heavy: false,
+      balls: balls.map((ball) => (ball.id === 'p1' ? { ...ball, heavy: false } : ball)),
+    };
+    const disconnected = {
+      ...connected,
+      players: connected.players.map((item) =>
+        item.id === 'p1' ? { ...item, connected: false } : item,
+      ),
+    };
+    const offlineHtml = phone(disconnected);
+    const restoredHtml = phone({ ...disconnected, players: connected.players });
+    expect(offlineHtml).toContain('Disconnected — controls released');
+    expect(offlineHtml.match(/disabled=""/g)).toHaveLength(4);
+    expect(restoredHtml).not.toContain('Disconnected — controls released');
+    expect(restoredHtml).not.toContain('disabled=""');
+    expect(restoredHtml.match(/<button /g)).toHaveLength(4);
+    expect(offlineHtml.match(/<svg\b[\s\S]*?<\/svg>/)?.[0]).toBe(
+      restoredHtml.match(/<svg\b[\s\S]*?<\/svg>/)?.[0],
+    );
   });
+
+  it('a disconnected final-round eliminated seat retains its truthful results-watching copy', () => {
+    const html = phone({
+      ...cv(),
+      round: 5,
+      alive: false,
+      cause: 'fall',
+      players: players.map((item) => (item.id === 'p1' ? { ...item, connected: false } : item)),
+    });
+    expect(html).toContain('Out of the final round');
+    expect(html).toContain('Final results are next');
+    expect(html).not.toContain('You return next round');
+    expect(html).not.toContain('<button');
+  });
+
+  it.each([true, false])(
+    'an eliminated player watches the public roster until next round (phone-only %s)',
+    (phoneOnly) => {
+      const html = phone({ ...cv('play', phoneOnly), alive: false, cause: 'fall' }, phoneOnly);
+      expect(html).toContain('Out until next round');
+      expect(html).toContain('You return next round');
+      expect(html).not.toContain('<button');
+      for (const player of players) expect(html).toContain(player.name);
+      expect(html).toContain('Wins');
+      const ownRow = html.match(/<li\b[^>]*data-me="true"[^>]*>[\s\S]*?<\/li>/)?.[0];
+      expect(ownRow).toContain('data-out="true"');
+      expect(ownRow).toContain('Player 1');
+      expect(ownRow).toContain('>Out</span>');
+      expect(html.includes('role="img"')).toBe(phoneOnly);
+      const nextReady = phone({ ...cv('ready', phoneOnly), round: 2 }, phoneOnly);
+      expect(nextReady.match(/<button /g)).toHaveLength(4);
+      expect(nextReady.match(/disabled=""/g)).toHaveLength(4);
+      const nextPlay = phone({ ...cv('play', phoneOnly), round: 2 }, phoneOnly);
+      expect(nextPlay.match(/<button /g)).toHaveLength(4);
+      expect(nextPlay).not.toContain('disabled=""');
+    },
+  );
 
   it.each([4, 5])(
     'round %i eliminated phone and TV copy only promise a return when a round remains',
@@ -177,7 +231,7 @@ describe('phone stage', () => {
         expect(phoneHtml).toContain('You return next round');
         expect(tvHtml).toContain('Out · next round');
       }
-      expect(phoneHtml.match(/disabled=""/g)).toHaveLength(4);
+      expect(phoneHtml).not.toContain('<button');
     },
   );
 

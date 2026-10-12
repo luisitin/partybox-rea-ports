@@ -441,6 +441,9 @@ ight is the :root default above) ────────
     ._screen_c9689e:not([data-controls='true']) {
       grid-template-rows: auto auto auto auto;
     }
+    ._screen_c9689e:not([data-controls='true']):not([data-phase='score']):not([data-phase='done']) {
+      gap: var(--pb-space-1);
+    }
     ._screen_c9689e[data-phase='done'] {
       grid-template-rows: auto auto auto;
     }
@@ -513,6 +516,7 @@ ight is the :root default above) ────────
       justify-content: space-between;
       padding: 0 var(--pb-space-1) 0 calc(var(--pb-space-6) + var(--pb-space-2));
       font-size: var(--pb-font-caption);
+      line-height: 1;
       font-weight: 800;
       color: var(--pb-text-muted);
     }
@@ -1277,6 +1281,7 @@ ight is the :root default above) ────────
             </g>
           </svg>
         </div>
+        <div class="_columns_c9689e"><span>Players</span><span>Wins</span></div>
         <ul class="_rows_c9689e" aria-label="Players">
           <li style="--ball-color: var(--pb-player-1)" data-me="true" data-out="true">
             <span class="_rowBadge_c9689e">1</span><b class="_name_c9689e" title="Ana">Ana</b
