@@ -1,0 +1,4449 @@
+<!doctype html>
+<html lang="en" data-surface="phone" data-theme="night" data-motion="off">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>play-phone-with-tv-player</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>; 
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+
+      /* packages/game-sdk/src/ui/Avatar.module.css */
+      /* The face's `size` as CSS, at no specificity: a caller's class or `.pb_Avatar_819ca2b6_x svg` rule still sizes it,
+   as it did over the old width/height attributes, which can't hold a CSS var (WebKit logged an
+   error for every face, T-0174). */
+      :where(.pb_Avatar_819ca2b6_avatar) {
+        width: var(--pb-avatar-size);
+        height: var(--pb-avatar-size);
+      }
+
+      /* packages/game-sdk/src/ui/LeadMark.module.css */
+      /* I-268: "1st" in a thin ring of its own colour — size and colour come from the caller. */
+      .pb_LeadMark_d5d3656b_lead {
+        flex-shrink: 0;
+        display: inline-block;
+        padding: 0 0.45em;
+        border: 0.12em solid currentColor;
+        border-radius: 999px;
+        font-weight: 900;
+        line-height: 1.3;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+
+      /* packages/game-sdk/src/ui/PlayerChip.module.css */
+      .pb_PlayerChip_a6e30f51_chip {
+        border: 1px solid var(--pb-border);
+        display: inline-flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-1) var(--pb-space-3) var(--pb-space-1) var(--pb-space-1);
+        border-radius: 999px;
+        background: var(--pb-surface);
+        max-width: 100%;
+        transition:
+          opacity var(--pb-motion-fast) var(--pb-ease),
+          transform var(--pb-motion-fast) var(--pb-ease);
+      }
+
+      .pb_PlayerChip_a6e30f51_sm {
+        --pb-chip-size: max(28px, calc(var(--pb-font-caption) * 1.45));
+        font-size: var(--pb-font-caption);
+      }
+
+      .pb_PlayerChip_a6e30f51_md {
+        font-size: var(--pb-font-body);
+      }
+
+      .pb_PlayerChip_a6e30f51_lg {
+        --pb-chip-size: calc(var(--pb-font-h2) * 1.6);
+        font-size: var(--pb-font-h2);
+        padding-right: var(--pb-space-4);
+      }
+
+      .pb_PlayerChip_a6e30f51_avatar {
+        position: relative;
+        display: inline-flex;
+      }
+
+      .pb_PlayerChip_a6e30f51_you {
+        flex-shrink: 0;
+        padding: 0 0.45em;
+        border-radius: 999px;
+        background: var(--pb-surface-2);
+        color: var(--pb-text-muted);
+        font-size: 0.7em;
+        font-weight: 800;
+        line-height: 1.6;
+      }
+
+      .pb_PlayerChip_a6e30f51_bot {
+        flex-shrink: 0;
+        padding: 0 0.35em;
+        border-radius: 999px;
+        background: var(--pb-surface-2);
+        font-size: 0.75em;
+        line-height: 1.5;
+      }
+
+      /* ✕ to remove (bots you own): a full 44 px target that does not enlarge the chip visually. */
+      .pb_PlayerChip_a6e30f51_remove {
+        flex-shrink: 0;
+        width: var(--pb-touch);
+        height: var(--pb-touch);
+        margin: calc(-1 * var(--pb-space-2)) calc(-1 * var(--pb-space-2))
+          calc(-1 * var(--pb-space-2)) 0;
+        border-radius: 50%;
+        color: var(--pb-text-muted);
+        font-size: 1em;
+        font-weight: 900;
+      }
+
+      .pb_PlayerChip_a6e30f51_remove:hover,
+      .pb_PlayerChip_a6e30f51_remove:focus-visible {
+        color: var(--pb-danger);
+      }
+
+      /* Readable from the couch (the old 0.7em star over the avatar was 12–20 px on the TV strip). */
+      /* A badge that just moved here pops (a handover), a badge that was always here does not. */
+      .pb_PlayerChip_a6e30f51_vipPop {
+        animation: pb-pop var(--pb-motion-slow) var(--pb-ease) both;
+      }
+
+      .pb_PlayerChip_a6e30f51_vip {
+        flex-shrink: 0;
+        padding: 0 0.45em;
+        border-radius: 999px;
+        background: var(--pb-accent-2-fill);
+        color: var(--pb-on-accent-2-fill);
+        font-size: 0.7em;
+        font-weight: 900;
+        line-height: 1.6;
+        letter-spacing: 0.02em;
+      }
+
+      .pb_PlayerChip_a6e30f51_name {
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+        /* A name of sixteen wide glyphs made a 640 px chip and wrapped a four-player strip under the
+     timer (pass 882): past 9 em the name ellipsizes — "Bartholomew XVII" still fits whole. */
+        max-width: 9em;
+      }
+
+      /* faces only (the TV strip past two rows, a claim): no empty name slot, so the chips close up */
+      /* A bot's owner part ellipsizes; its "bot 2" tail stays (reviewer 90838c). The person cap (9 em)
+   plus room for the tail, so "Maximiliano's bot 2" is whole where the row has room and only the
+   owner part gives way where it hasn't (reviewer 277967). */
+      .pb_PlayerChip_a6e30f51_split {
+        display: inline-flex;
+        min-width: 0;
+        max-width: 13em;
+      }
+      .pb_PlayerChip_a6e30f51_nameHead {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      /* The lobby's removable chip (T-0025): the owner's first name, or, in a cell too narrow for it (a
+   320 px phone's two columns, `pb-chip-cell` in Lobby.pb_PlayerChip_a6e30f51_module.pb_PlayerChip_a6e30f51_css), the owner's initial alone. The
+   tail never gives way. */
+      .pb_PlayerChip_a6e30f51_nameInitial {
+        display: none;
+        flex-shrink: 0;
+      }
+      @container pb-chip-cell (max-width: 150px) {
+        .pb_PlayerChip_a6e30f51_nameFirst {
+          display: none;
+        }
+        .pb_PlayerChip_a6e30f51_nameInitial {
+          display: inline;
+        }
+      }
+      .pb_PlayerChip_a6e30f51_nameTail {
+        flex-shrink: 0;
+        margin-left: 0.25em;
+        white-space: nowrap;
+      }
+
+      .pb_PlayerChip_a6e30f51_name:empty {
+        display: none;
+      }
+
+      /* A fixed slot: empty and invisible until there is a glyph, then it scales in (no layout shift). */
+      .pb_PlayerChip_a6e30f51_glyph {
+        display: inline-grid;
+        place-items: center;
+        width: 1.3em;
+        min-width: 1.3em;
+        height: 1.3em;
+        line-height: 1;
+        font-weight: 800;
+        color: var(--pb-text-muted);
+        opacity: 0;
+        transform: scale(0.6);
+        transform-origin: 50% 50%;
+        transition:
+          opacity var(--pb-motion-fast) var(--pb-ease),
+          transform var(--pb-motion-fast) var(--pb-ease);
+      }
+
+      .pb_PlayerChip_a6e30f51_glyph.pb_PlayerChip_a6e30f51_shown {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* Locked in: a solid success disc that pops, plus an inner ring on the whole pill (box-shadow,
+   not outline, so it coexists with .pb_PlayerChip_a6e30f51_active's outline when a game passes activeIds). */
+      .pb_PlayerChip_a6e30f51_ok {
+        border-radius: 50%;
+        background: var(--pb-accent-3);
+        color: var(--pb-on-accent);
+        font-size: 1em;
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      .pb_PlayerChip_a6e30f51_locked {
+        box-shadow: inset 0 0 0 2px var(--pb-accent-3);
+      }
+
+      /* Reconnecting: the ⟳ actually turns (pb-spin is defined only under no-preference). */
+      .pb_PlayerChip_a6e30f51_spin {
+        animation: pb-spin 2s linear infinite;
+      }
+
+      /* Running total (R-068): keyed on the value, so a change pops in place ("value changed"). */
+      .pb_PlayerChip_a6e30f51_score {
+        margin-left: var(--pb-space-2);
+        font-variant-numeric: tabular-nums;
+        font-weight: 800;
+        color: var(--pb-accent-2);
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      .pb_PlayerChip_a6e30f51_leader {
+        margin-left: var(--pb-space-2);
+        font-size: 0.62em;
+        color: var(--pb-accent-2);
+      }
+
+      /* Held-over number while the game withholds the strip: quiet, and it must not pop again. */
+      .pb_PlayerChip_a6e30f51_scoreMuted {
+        color: var(--pb-text-muted);
+        animation: none;
+      }
+
+      .pb_PlayerChip_a6e30f51_leader + .pb_PlayerChip_a6e30f51_score {
+        margin-left: var(--pb-space-1);
+      }
+
+      /* the ghost's gold total at 0.75 read 4.1:1 on daylight (T-0224): an away total is plain text */
+      .pb_PlayerChip_a6e30f51_off .pb_PlayerChip_a6e30f51_score {
+        color: var(--pb-text);
+      }
+
+      .pb_PlayerChip_a6e30f51_active {
+        outline: 3px solid var(--pb-accent-2);
+        transform: scale(1.04);
+      }
+
+      /* ── I-009 A: the link drops — the chip flickers out (opacity steps over --pb-motion-slow) and
+   sits as a ghost at 0.75 (its name in full text colour: muted under 0.6 read 2.8:1, T-0224); the
+   link returns — the chip pops back with a green ring that fades over
+   a second. Opacity + transform + outline-colour only; both collapse under reduced motion. The
+   ring skips an .pb_PlayerChip_a6e30f51_active chip (its gold outline is the judge's mark and must survive the fade). */
+      .pb_PlayerChip_a6e30f51_off {
+        opacity: 0.75;
+      }
+      .pb_PlayerChip_a6e30f51_flicker {
+        animation: pb-signal-lost var(--pb-motion-slow) steps(1, end) both;
+      }
+      @keyframes pb-signal-lost {
+        0% {
+          opacity: 1;
+        }
+        15% {
+          opacity: 0.2;
+        }
+        30% {
+          opacity: 0.9;
+        }
+        45% {
+          opacity: 0.15;
+        }
+        60% {
+          opacity: 0.7;
+        }
+        75% {
+          opacity: 0.25;
+        }
+        100% {
+          opacity: 0.75;
+        }
+      }
+      .pb_PlayerChip_a6e30f51_snap {
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+      .pb_PlayerChip_a6e30f51_snap:not(.pb_PlayerChip_a6e30f51_active) {
+        outline: 3px solid transparent;
+        animation:
+          pb-pop var(--pb-motion-base) var(--pb-ease) both,
+          pb-back-ring var(--pb-motion-pulse) ease-out both;
+      }
+      @keyframes pb-back-ring {
+        from {
+          outline-color: var(--pb-accent-3);
+        }
+        to {
+          outline-color: transparent;
+        }
+      }
+
+      .pb_PlayerChip_a6e30f51_spectator {
+        opacity: 0.6;
+      }
+
+      /* ── I-045 B + the owner's note: the thinking dots OVER the avatar — the portrait dims to 0.35
+   under three gold dots pulsing in turn (opacity only, 1.2 s); the twins hold them steady. */
+      .pb_PlayerChip_a6e30f51_portrait {
+        display: inline-flex;
+      }
+      .pb_PlayerChip_a6e30f51_avatarThinking > .pb_PlayerChip_a6e30f51_portrait {
+        opacity: 0.35;
+      }
+      .pb_PlayerChip_a6e30f51_dots {
+        position: absolute;
+        inset: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+      }
+      .pb_PlayerChip_a6e30f51_dots > i {
+        width: 22%;
+        height: 22%;
+        border-radius: 50%;
+        background: var(--pb-accent-2);
+        animation: pb-think 1200ms ease-in-out infinite;
+      }
+      .pb_PlayerChip_a6e30f51_dots > i:nth-child(2) {
+        animation-delay: 200ms;
+      }
+      .pb_PlayerChip_a6e30f51_dots > i:nth-child(3) {
+        animation-delay: 400ms;
+      }
+      @keyframes pb-think {
+        0%,
+        100% {
+          opacity: 0.25;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pb_PlayerChip_a6e30f51_dots > i {
+          animation: none;
+          opacity: 0.8;
+        }
+      }
+      :root[data-motion='off'] .pb_PlayerChip_a6e30f51_dots > i {
+        animation: none;
+        opacity: 0.8;
+      }
+
+      /* ── I-070 C: a wave — ±12° twice over 500 ms (transform only), on the nudger's chip. */
+      .pb_PlayerChip_a6e30f51_wave {
+        animation: pb-wave-chip 500ms var(--pb-ease) 2;
+        transform-origin: 50% 90%;
+      }
+      @keyframes pb-wave-chip {
+        0%,
+        100% {
+          transform: rotate(0);
+        }
+        25% {
+          transform: rotate(-12deg);
+        }
+        75% {
+          transform: rotate(12deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pb_PlayerChip_a6e30f51_wave {
+          animation: none;
+        }
+      }
+      :root[data-motion='off'] .pb_PlayerChip_a6e30f51_wave {
+        animation: none;
+      }
+
+      /* ── I-089 A: the grace left, small, after the name of a dropped player. */
+      .pb_PlayerChip_a6e30f51_away {
+        flex-shrink: 0;
+        font-size: 0.7em;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        color: var(--pb-text-muted);
+      }
+
+      /* ── I-089 B: a thin ring drains around the dimmed face (one CSS var, repainted per second). */
+      .pb_PlayerChip_a6e30f51_draining {
+        position: relative;
+        border-radius: 50%;
+      }
+      .pb_PlayerChip_a6e30f51_draining::after {
+        content: '';
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        background: conic-gradient(var(--pb-text-muted) var(--pb-away, 360deg), transparent 0);
+        -webkit-mask: radial-gradient(
+          farthest-side,
+          transparent calc(100% - 3px),
+          currentColor calc(100% - 2px)
+        );
+        mask: radial-gradient(
+          farthest-side,
+          transparent calc(100% - 3px),
+          currentColor calc(100% - 2px)
+        );
+        pointer-events: none;
+      }
+
+      /* ── I-268 C: "+N" rises over a score that just went up, and fades (2 s, the component's timer). */
+      .pb_PlayerChip_a6e30f51_scoreBox {
+        position: relative;
+        display: inline-flex;
+      }
+      .pb_PlayerChip_a6e30f51_leader
+        + .pb_PlayerChip_a6e30f51_scoreBox
+        > .pb_PlayerChip_a6e30f51_score {
+        margin-left: var(--pb-space-1);
+      }
+      .pb_PlayerChip_a6e30f51_rise {
+        position: absolute;
+        left: 50%;
+        bottom: 78%;
+        font-size: 0.7em;
+        font-weight: 900;
+        line-height: 1;
+        color: var(--pb-accent-2);
+        white-space: nowrap;
+        pointer-events: none;
+        text-shadow: 0 1px 2px var(--pb-scrim);
+        animation: rise 2s var(--pb-ease) both;
+      }
+      @keyframes rise {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, 0.4em);
+        }
+        15% {
+          opacity: 1;
+          transform: translate(-50%, 0);
+        }
+        80% {
+          opacity: 1;
+          transform: translate(-50%, 0);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -0.3em);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pb_PlayerChip_a6e30f51_rise {
+          animation: none;
+          transform: translateX(-50%);
+        }
+      }
+
+      /* Materials R2: source adaptations and new relief paint are recorded in SOURCES.pb_PlayerChip_a6e30f51_md. */
+      .pb_PlayerChip_a6e30f51_chip {
+        background:
+          linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--pb-text) 12%, transparent),
+            transparent 7px
+          ),
+          linear-gradient(
+              90deg,
+              color-mix(in srgb, var(--pb-text) 2%, transparent) 50%,
+              transparent 50%
+            )
+            0 0 / 3px 3px,
+          linear-gradient(0deg, color-mix(in srgb, var(--pb-bg) 35%, transparent), transparent 55%),
+          var(--pb-surface);
+        border-color: color-mix(in srgb, var(--pb-border) 70%, var(--pb-surface-2));
+      }
+      :root[data-theme='contrast'] .pb_PlayerChip_a6e30f51_chip {
+        background: var(--pb-surface);
+        border-color: var(--pb-border);
+      }
+
+      /* packages/game-sdk/src/tv/Scoreboard.module.css */
+      .pb_Scoreboard_ef8b5c8c_board {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--pb-space-2);
+        width: 100%;
+        max-width: 28em;
+      }
+
+      /* 5-6 rows under a heading: body-size rows (~60 px) so six fit in ≈ 400 px. */
+      .pb_Scoreboard_ef8b5c8c_tight .pb_Scoreboard_ef8b5c8c_row,
+      .pb_Scoreboard_ef8b5c8c_tight3 .pb_Scoreboard_ef8b5c8c_row,
+      .pb_Scoreboard_ef8b5c8c_tight4 .pb_Scoreboard_ef8b5c8c_row {
+        font-size: var(--pb-font-body);
+        --pb-row-py: var(--pb-space-1);
+        padding: var(--pb-row-py) var(--pb-space-3);
+        --pb-chip-size: 1.3em;
+      }
+
+      .pb_Scoreboard_ef8b5c8c_dense {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-2) var(--pb-space-4);
+        max-width: none;
+      }
+
+      .pb_Scoreboard_ef8b5c8c_dense .pb_Scoreboard_ef8b5c8c_row {
+        /* h2 digits still read from the couch (7-12 rows); 12 rows in two columns ≈ 470 px */
+        --pb-row-py: var(--pb-space-1);
+        padding: var(--pb-row-py) var(--pb-space-3);
+        --pb-chip-size: 1.3em;
+      }
+
+      /* 13+ rows: three body-size columns (16 players = 6 rows ≈ 400 px). */
+      .pb_Scoreboard_ef8b5c8c_tight3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--pb-space-2) var(--pb-space-4);
+        max-width: none;
+      }
+
+      /* Four columns on request (`columns={4}`): 16 rows in four ≈ 270 px, for a board under a four-row
+   roster. ~420 px cells, so the gaps tighten like the three-column rows. */
+      .pb_Scoreboard_ef8b5c8c_tight4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--pb-space-2) var(--pb-space-3);
+        max-width: none;
+      }
+
+      /* Small: body-size rows for a dense board that shares the stage with a tall header. */
+      .pb_Scoreboard_ef8b5c8c_sm .pb_Scoreboard_ef8b5c8c_row {
+        font-size: var(--pb-font-body);
+        --pb-row-py: var(--pb-space-1);
+        padding: var(--pb-row-py) var(--pb-space-3);
+        --pb-chip-size: 1.3em;
+      }
+
+      /* Large: the board owns the stage (results, 7–8 players in two columns of ≤ 4). 1.1× h2 with
+   roomier padding — h1 rows spilled their scores out of a 3/5-width column (review-loop #32). */
+      .pb_Scoreboard_ef8b5c8c_lg .pb_Scoreboard_ef8b5c8c_row {
+        font-size: calc(var(--pb-font-h2) * 1.1);
+        --pb-row-py: var(--pb-space-3);
+        padding: var(--pb-row-py) var(--pb-space-4);
+        --pb-chip-size: 1.4em;
+      }
+
+      .pb_Scoreboard_ef8b5c8c_lg .pb_Scoreboard_ef8b5c8c_name {
+        min-width: 4ch;
+      }
+
+      .pb_Scoreboard_ef8b5c8c_lg {
+        gap: var(--pb-space-3) var(--pb-space-5);
+      }
+
+      /* Column-major: ranks read down the left column, then the next (--pb-board-rows is set inline). */
+      .pb_Scoreboard_ef8b5c8c_dense,
+      .pb_Scoreboard_ef8b5c8c_tight3,
+      .pb_Scoreboard_ef8b5c8c_tight4 {
+        grid-auto-flow: column;
+        grid-template-rows: repeat(var(--pb-board-rows, 1), auto);
+      }
+
+      .pb_Scoreboard_ef8b5c8c_row {
+        display: grid;
+        grid-template-columns: 1.6em auto 1fr auto auto;
+        align-items: center;
+        gap: var(--pb-space-3);
+        --pb-row-py: var(--pb-space-2);
+        padding: var(--pb-row-py) var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        border: 1px solid var(--pb-border);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-h2);
+        font-weight: 700;
+      }
+
+      .pb_Scoreboard_ef8b5c8c_compact .pb_Scoreboard_ef8b5c8c_row {
+        font-size: var(--pb-font-body);
+        --pb-row-py: var(--pb-space-2);
+        padding: var(--pb-row-py) var(--pb-space-3);
+        gap: var(--pb-space-2);
+      }
+
+      /* The phone board is measured in its rows' own text size, so 200 % text (≈ 10 em across a phone)
+   is told apart from an SE at 100 % (≈ 16 em): there the rank column, gaps and padding give their
+   room to the name, so "Maximiliano" fits whole (session-c ec3ea7). */
+      .pb_Scoreboard_ef8b5c8c_compact {
+        container-type: inline-size;
+        width: 100%;
+        font-size: var(--pb-font-body);
+      }
+
+      @container (max-width: 12em) {
+        .pb_Scoreboard_ef8b5c8c_compact .pb_Scoreboard_ef8b5c8c_row {
+          grid-template-columns: 1.05em auto 1fr auto auto;
+          gap: var(--pb-space-1);
+          padding-inline: var(--pb-space-1) var(--pb-space-2);
+        }
+
+        /* a row with no delta or wager mark drops that empty track and its gap: "Maximiliano" beside a
+     4-digit score needed 203 px against 197 (session-c 42aaee) */
+        .pb_Scoreboard_ef8b5c8c_compact
+          .pb_Scoreboard_ef8b5c8c_row:not(
+            :has(> .pb_Scoreboard_ef8b5c8c_delta, > .pb_Scoreboard_ef8b5c8c_mark)
+          ) {
+          grid-template-columns: 1.05em auto 1fr auto;
+        }
+
+        .pb_Scoreboard_ef8b5c8c_compact .pb_Scoreboard_ef8b5c8c_score {
+          font-size: 0.88em;
+        }
+      }
+
+      /* On a phone the delta and the score take the row's end: a name wraps to a second line instead of
+   losing its end to an ellipsis ("Tess's bo…", fake-out's SE play-test), at its spaces only; a word
+   wider than the row ends in its own ellipsis ("Maximili…" over "Guadalupe" at 200 %, session-c
+   ec3ea7: never broken mid-word). */
+      .pb_Scoreboard_ef8b5c8c_compact .pb_Scoreboard_ef8b5c8c_name {
+        white-space: normal;
+        line-height: 1.15;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      .pb_Scoreboard_ef8b5c8c_compact .pb_Scoreboard_ef8b5c8c_word {
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: top;
+      }
+
+      .pb_Scoreboard_ef8b5c8c_top {
+        background: var(--pb-surface-2);
+        outline: 3px solid var(--pb-accent-2);
+      }
+
+      .pb_Scoreboard_ef8b5c8c_me {
+        /* --pb-me: a team's card sets its own colour, so "you" never reads as the other team (Sun is the
+     accent pink: tune-in 243619) */
+        box-shadow: inset 4px 0 0 var(--pb-me, var(--pb-accent));
+      }
+
+      /* Phone (compact) only: my row pops in and, when not the winner's outlined row, gets its own
+   accent ring so "that one is me" reads at a glance. The ring is an inset shadow with the left bar
+   folded in: an outline drew outside the row (clipped by the scroller, doubled beside the bar and
+   the neighbours' edges: T-0282). */
+      .pb_Scoreboard_ef8b5c8c_compact .pb_Scoreboard_ef8b5c8c_me:not(.pb_Scoreboard_ef8b5c8c_top) {
+        box-shadow:
+          inset 0 0 0 2px var(--pb-me, var(--pb-accent)),
+          inset 4px 0 0 var(--pb-me, var(--pb-accent));
+      }
+
+      .pb_Scoreboard_ef8b5c8c_compact .pb_Scoreboard_ef8b5c8c_me {
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      .pb_Scoreboard_ef8b5c8c_rank {
+        text-align: center;
+        color: var(--pb-text-muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* T-0257: a row's tags on their own line under the name (a hidden role, a power used). */
+      .pb_Scoreboard_ef8b5c8c_tags {
+        display: block;
+        font-size: 0.72em;
+        color: var(--pb-text-muted);
+        white-space: normal;
+      }
+
+      .pb_Scoreboard_ef8b5c8c_name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        /* a centred Stage must not centre the names */
+        text-align: left;
+      }
+
+      /* Names keep a floor so they do not vanish, but never so much that the score column is pushed out
+   of the cell (9ch clipped a 4-digit winner's score in the results' 3/5-width board). */
+      .pb_Scoreboard_ef8b5c8c_dense .pb_Scoreboard_ef8b5c8c_name {
+        min-width: 5ch;
+      }
+
+      /* Three columns in a narrow results board leave ~100 px for the name: tighter rank + gaps. */
+      .pb_Scoreboard_ef8b5c8c_tight3 .pb_Scoreboard_ef8b5c8c_row,
+      .pb_Scoreboard_ef8b5c8c_tight4 .pb_Scoreboard_ef8b5c8c_row {
+        grid-template-columns: 1.2em auto 1fr auto auto;
+        gap: var(--pb-space-2);
+      }
+
+      .pb_Scoreboard_ef8b5c8c_delta {
+        color: var(--pb-accent-3);
+        font-size: 0.8em;
+      }
+      .pb_Scoreboard_ef8b5c8c_loss {
+        /* a touch toward the text colour: the night danger red was 4.4:1 on the row (T-0236) */
+        color: color-mix(in srgb, var(--pb-danger) 88%, var(--pb-text));
+      }
+
+      /* A ✓ in the delta slot (markIds): this row has acted, e.pb_Scoreboard_ef8b5c8c_g. its wager is placed. */
+      .pb_Scoreboard_ef8b5c8c_mark {
+        color: var(--pb-accent-3);
+        font-weight: 900;
+      }
+
+      .pb_Scoreboard_ef8b5c8c_score {
+        font-variant-numeric: tabular-nums;
+        color: var(--pb-accent-2);
+        font-weight: 900;
+        /* T-0175: always the last column, so a row with no delta or ✓ ends where the others do (it
+     sat one gap short of the edge) */
+        grid-column: -2;
+      }
+
+      /* Entrance (R-056): rows rise one per --pb-stagger-step in --pb-i order; each delta lands a beat
+   after its row; the leader's trophy pops as its row settles (on `down`, the results screen, that
+   is first: T-0230). Tokens only, so reduced motion = instant. */
+      .pb_Scoreboard_ef8b5c8c_staggered {
+        --pb-stagger-step: var(--pb-motion-fast);
+      }
+
+      .pb_Scoreboard_ef8b5c8c_staggered.pb_Scoreboard_ef8b5c8c_dense,
+      .pb_Scoreboard_ef8b5c8c_staggered.pb_Scoreboard_ef8b5c8c_tight3,
+      .pb_Scoreboard_ef8b5c8c_staggered.pb_Scoreboard_ef8b5c8c_tight4,
+      .pb_Scoreboard_ef8b5c8c_staggered.pb_Scoreboard_ef8b5c8c_down {
+        --pb-stagger-step: calc(var(--pb-motion-fast) / 2);
+      }
+
+      .pb_Scoreboard_ef8b5c8c_staggered .pb_Scoreboard_ef8b5c8c_row {
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+        animation-delay: calc(var(--pb-i, 0) * var(--pb-stagger-step));
+      }
+
+      .pb_Scoreboard_ef8b5c8c_staggered .pb_Scoreboard_ef8b5c8c_delta {
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+        animation-delay: calc(var(--pb-i, 0) * var(--pb-stagger-step) + var(--pb-motion-base));
+      }
+
+      .pb_Scoreboard_ef8b5c8c_staggered .pb_Scoreboard_ef8b5c8c_top .pb_Scoreboard_ef8b5c8c_rank {
+        display: inline-block;
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+        animation-delay: calc(
+          var(--pb-i, 0) * var(--pb-stagger-step) + var(--pb-motion-base) + var(--pb-motion-slow)
+        );
+      }
+
+      /* On `down` the winner lands first (T-0230), so its trophy pops as that row settles, not a slow
+   beat later (the review: 0.6 s of a winner row without its trophy). */
+      .pb_Scoreboard_ef8b5c8c_staggered.pb_Scoreboard_ef8b5c8c_down
+        .pb_Scoreboard_ef8b5c8c_top
+        .pb_Scoreboard_ef8b5c8c_rank {
+        animation-delay: calc(var(--pb-i, 0) * var(--pb-stagger-step) + var(--pb-motion-base));
+      }
+
+      /* ── I-027 A, T-0280: the climb (stagger="climb"). Rows fade in where they stood last round —
+   --pb-from rows away (a row's own height plus the board gap per row) — the deltas land a beat
+   later, the totals count from --pb-motion-base, and each mover slides to its new place over
+   --pb-motion-slow, starting at its own --pb-start (Scoreboard.pb_Scoreboard_ef8b5c8c_tsx climbPlan: a fixed stagger, top
+   place first). One move per row: translateY only, no scale, no fade, no lift shadow; the z-order
+   is fixed for the whole climb (climbers over, holders mid, fallers under, set inline), so a row
+   never flips in front of another mid-slide; a climber also shrinks toward its right edge while
+   it passes, so the row it crosses keeps its rank, face and name in view (review of T-0280: with
+   the climbers under, or unshrunk, whole rows vanished mid-slide). A mover's delta and glow land with its own row
+   (--pb-land); a holder's delta lands at --pb-motion-base. Reduced motion drops every wait. */
+      .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_row {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          pb-climb var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both;
+      }
+      .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_delta {
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease)
+          var(--pb-delta-at, var(--pb-motion-base)) both; /* prettier-ignore */
+      }
+      /* A lane cannot fix a full overlap (two neighbours swapping cross exactly), so the climber shrinks
+   toward its right edge instead: it covers only the passed row's score end, baring its rank, face
+   and name. It stays over; the right edge never moves. */
+      .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_rose {
+        --pb-lift: 0.55;
+        transform-origin: right center;
+      }
+      .pb_Scoreboard_ef8b5c8c_columns.pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_rose {
+        --pb-lift: 0.5;
+      }
+      /* T-0301 (F18): a climber shrunk toward its right edge still covers the passed row's score end,
+   and mid-slide it cuts that number through the glyphs. While the climbers are in their lane the
+   fallers' totals sit back (a dim number, not half of one) and come home once the board settles. */
+      .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_fell .pb_Scoreboard_ef8b5c8c_score {
+        animation: pb-score-dim var(--pb-lane-run, 0ms) ease-in-out 1100ms both;
+      }
+      @keyframes pb-score-dim {
+        from,
+        to {
+          opacity: 1;
+        }
+        12%,
+        84% {
+          opacity: 0.12;
+        }
+      }
+      @keyframes pb-lane {
+        from,
+        to {
+          scale: 1;
+        }
+        /* the run is the whole climb / 0.8 (Scoreboard.pb_Scoreboard_ef8b5c8c_tsx), so the last row lands at 80 % and the
+     shrink is held until 84 %: it only ramps out on a settled board */
+        12%,
+        84% {
+          scale: var(--pb-lift, 1);
+        }
+      }
+      @keyframes pb-climb {
+        from {
+          transform: translateY(calc(var(--pb-from, 0) * (100% + var(--pb-space-2))));
+        }
+        to {
+          transform: none;
+        }
+      }
+
+      /* ── I-027 B: movers glow once their row lands: a climbed row's outline is green and fades over
+   1 s, a fallen row's a dim red; a row that held its place gets nothing. The glow fills forwards
+   only (T-0280: with `both` it painted its first colour from 0 s, before the row had moved). The
+   rank digit and the slide itself carry the story — the colour is never alone. */
+      .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_rose,
+      .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_fell {
+        outline: 3px solid transparent;
+        outline-offset: -1px;
+      }
+      .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_rose {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          pb-climb var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+          pb-glow-up var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards,
+          pb-lane var(--pb-lane-run, var(--pb-motion-slow)) ease-in-out 1100ms both;
+      }
+      .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_fell {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          pb-climb var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+          pb-glow-down var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards;
+      }
+      /* The old rank gives way to the new one as its row lands. */
+      .pb_Scoreboard_ef8b5c8c_swap {
+        display: inline-block;
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+      /* T-0191: a row that changes column does not fly across the board. T-0262: it stays at its old
+   place (--pb-col-from columns, --pb-from rows away; a column is its own width plus the column gap)
+   until the slide, fades out there as the others move, and fades in at its new place: the board
+   never shows a hole. `filter: opacity` keeps the mount fade (`opacity`) its own. */
+      .pb_Scoreboard_ef8b5c8c_board {
+        --pb-col-gap: var(--pb-space-2);
+      }
+      .pb_Scoreboard_ef8b5c8c_dense,
+      .pb_Scoreboard_ef8b5c8c_tight3 {
+        --pb-col-gap: var(--pb-space-4);
+      }
+      .pb_Scoreboard_ef8b5c8c_tight4 {
+        --pb-col-gap: var(--pb-space-3);
+      }
+      .pb_Scoreboard_ef8b5c8c_lg {
+        --pb-col-gap: var(--pb-space-5);
+      }
+      .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_row.pb_Scoreboard_ef8b5c8c_hop {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          pb-hop var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both;
+      }
+      .pb_Scoreboard_ef8b5c8c_climb
+        .pb_Scoreboard_ef8b5c8c_row.pb_Scoreboard_ef8b5c8c_hop.pb_Scoreboard_ef8b5c8c_rose {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          pb-hop var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+          pb-glow-up var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards;
+      }
+      .pb_Scoreboard_ef8b5c8c_climb
+        .pb_Scoreboard_ef8b5c8c_row.pb_Scoreboard_ef8b5c8c_hop.pb_Scoreboard_ef8b5c8c_fell {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          pb-hop var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+          pb-glow-down var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards;
+      }
+      @keyframes pb-hop {
+        from,
+        45% {
+          transform: translate(
+            calc(var(--pb-col-from, 0) * (100% + var(--pb-col-gap))),
+            calc(var(--pb-from, 0) * (100% + var(--pb-space-2)))
+          );
+        }
+        from,
+        25% {
+          filter: opacity(1);
+        }
+        45%,
+        46% {
+          filter: opacity(0);
+        }
+        46%,
+        to {
+          transform: none;
+        }
+        66%,
+        to {
+          filter: opacity(1);
+        }
+      }
+      @keyframes pb-glow-up {
+        from {
+          outline-color: var(--pb-accent-3);
+        }
+        to {
+          outline-color: transparent;
+        }
+      }
+      @keyframes pb-glow-down {
+        from {
+          outline-color: color-mix(in srgb, var(--pb-danger) 60%, transparent);
+        }
+        to {
+          outline-color: transparent;
+        }
+      }
+
+      /* The waits are literal (1200 / 1800 ms), so they collapse here — after the .pb_Scoreboard_ef8b5c8c_rose / .pb_Scoreboard_ef8b5c8c_fell rules,
+   which restate the animation list (pass 865: movers still sat 1.2 s in the old order). */
+      @media (prefers-reduced-motion: reduce) {
+        .pb_Scoreboard_ef8b5c8c_climb {
+          --pb-lane-run: 0ms !important; /* no lift held while the rows are already in place */
+        }
+        .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_row,
+        .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_rose,
+        .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_fell,
+        .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_row.pb_Scoreboard_ef8b5c8c_hop,
+        .pb_Scoreboard_ef8b5c8c_climb
+          .pb_Scoreboard_ef8b5c8c_row.pb_Scoreboard_ef8b5c8c_hop.pb_Scoreboard_ef8b5c8c_rose,
+        .pb_Scoreboard_ef8b5c8c_climb
+          .pb_Scoreboard_ef8b5c8c_row.pb_Scoreboard_ef8b5c8c_hop.pb_Scoreboard_ef8b5c8c_fell,
+        .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_delta {
+          animation-delay: 0ms;
+        }
+      }
+      :root[data-motion='off'] .pb_Scoreboard_ef8b5c8c_climb {
+        --pb-lane-run: 0ms !important;
+      }
+      :root[data-motion='off'] .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_row,
+      :root[data-motion='off'] .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_rose,
+      :root[data-motion='off'] .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_fell,
+      :root[data-motion='off']
+        .pb_Scoreboard_ef8b5c8c_climb
+        .pb_Scoreboard_ef8b5c8c_row.pb_Scoreboard_ef8b5c8c_hop,
+      :root[data-motion='off']
+        .pb_Scoreboard_ef8b5c8c_climb
+        .pb_Scoreboard_ef8b5c8c_row.pb_Scoreboard_ef8b5c8c_hop.pb_Scoreboard_ef8b5c8c_rose,
+      :root[data-motion='off']
+        .pb_Scoreboard_ef8b5c8c_climb
+        .pb_Scoreboard_ef8b5c8c_row.pb_Scoreboard_ef8b5c8c_hop.pb_Scoreboard_ef8b5c8c_fell,
+      :root[data-motion='off'] .pb_Scoreboard_ef8b5c8c_climb .pb_Scoreboard_ef8b5c8c_delta {
+        animation-delay: 0ms;
+      }
+
+      /* ── I-146 B: the band a split column covers, over its first row. */
+      .pb_Scoreboard_ef8b5c8c_band {
+        position: absolute;
+        top: -1.35em;
+        left: var(--pb-space-3);
+        font-size: 0.62em;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: var(--pb-muted, rgba(255, 255, 255, 0.55));
+      }
+      .pb_Scoreboard_ef8b5c8c_board .pb_Scoreboard_ef8b5c8c_row {
+        position: relative;
+      }
+
+      /* ── I-146 C, T-0181, T-0280: a tie is a tinted chip inside each tied row's own rank cell — two
+   rows sharing a number. It replaced a pill that ran down through the row gaps (and a copy of the
+   winner's ring above it): that slab painted past the rows and, mid-climb, sat where the rows no
+   longer were. Now nothing is drawn outside a row. The winners' own tie is the trophies: no chip on
+   a 🏆 row. */
+      .pb_Scoreboard_ef8b5c8c_tied .pb_Scoreboard_ef8b5c8c_rank {
+        display: grid;
+        place-items: center;
+        align-self: stretch;
+        border-radius: 0.4em;
+        color: var(--pb-text);
+        background: color-mix(in srgb, var(--pb-accent) 34%, var(--pb-surface));
+      }
+
+      /* No ranks (a team's card, ADR-052): the rows drop the rank column along with its cell, so the
+   name takes that room (~110 px at 200 % text; reviewer 69417f). After the tiers so it wins. */
+      .pb_Scoreboard_ef8b5c8c_noRanks .pb_Scoreboard_ef8b5c8c_row,
+      .pb_Scoreboard_ef8b5c8c_noRanks.pb_Scoreboard_ef8b5c8c_tight3 .pb_Scoreboard_ef8b5c8c_row,
+      .pb_Scoreboard_ef8b5c8c_noRanks.pb_Scoreboard_ef8b5c8c_tight4 .pb_Scoreboard_ef8b5c8c_row {
+        grid-template-columns: auto 1fr auto auto;
+      }
+
+      @container (max-width: 12em) {
+        .pb_Scoreboard_ef8b5c8c_compact.pb_Scoreboard_ef8b5c8c_noRanks .pb_Scoreboard_ef8b5c8c_row {
+          grid-template-columns: auto 1fr auto auto;
+        }
+
+        .pb_Scoreboard_ef8b5c8c_compact.pb_Scoreboard_ef8b5c8c_noRanks
+          .pb_Scoreboard_ef8b5c8c_row:not(
+            :has(> .pb_Scoreboard_ef8b5c8c_delta, > .pb_Scoreboard_ef8b5c8c_mark)
+          ) {
+          grid-template-columns: auto 1fr auto;
+        }
+      }
+
+      /* A narrow phone (SE at 200 %) stacks the delta over its total: side by side with a 1-space gap
+   "−25 75" read as "−2575" (T-0043 F2), and the stack gives the name the row's width back. */
+      @container (max-width: 12em) {
+        .pb_Scoreboard_ef8b5c8c_compact
+          .pb_Scoreboard_ef8b5c8c_row:has(> .pb_Scoreboard_ef8b5c8c_delta) {
+          grid-template-columns: 1.05em auto 1fr auto;
+          row-gap: 0;
+        }
+
+        .pb_Scoreboard_ef8b5c8c_compact.pb_Scoreboard_ef8b5c8c_noRanks
+          .pb_Scoreboard_ef8b5c8c_row:has(> .pb_Scoreboard_ef8b5c8c_delta) {
+          grid-template-columns: auto 1fr auto;
+        }
+
+        .pb_Scoreboard_ef8b5c8c_compact
+          .pb_Scoreboard_ef8b5c8c_row:has(> .pb_Scoreboard_ef8b5c8c_delta)
+          > :not(
+            .pb_Scoreboard_ef8b5c8c_delta,
+            .pb_Scoreboard_ef8b5c8c_score,
+            .pb_Scoreboard_ef8b5c8c_band
+          ) {
+          grid-row: 1 / span 2;
+        }
+
+        .pb_Scoreboard_ef8b5c8c_compact
+          .pb_Scoreboard_ef8b5c8c_row
+          > .pb_Scoreboard_ef8b5c8c_delta {
+          grid-column: -2;
+          grid-row: 1;
+          justify-self: end;
+          align-self: end;
+          line-height: 1.1;
+        }
+
+        .pb_Scoreboard_ef8b5c8c_compact
+          .pb_Scoreboard_ef8b5c8c_row:has(> .pb_Scoreboard_ef8b5c8c_delta)
+          > .pb_Scoreboard_ef8b5c8c_score {
+          grid-column: -2;
+          grid-row: 2;
+          justify-self: end;
+          align-self: start;
+          line-height: 1.1;
+        }
+      }
+
+      /* packages/game-sdk/src/ui/DeadlineBar.module.css */
+      .pb_DeadlineBar_d0dc76b1_track {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: var(--pb-surface-2);
+        overflow: hidden;
+      }
+
+      .pb_DeadlineBar_d0dc76b1_fill {
+        height: 100%;
+        background: var(--pb-accent-2);
+        transform-origin: left center;
+        /* Literal 300 ms (>= the 250 ms clock tick) so each retarget starts before the last one ends and
+     the drain is continuous; it stays literal under reduced motion because the drain is
+     information, not decoration. */
+        transition:
+          transform 300ms linear,
+          background-color var(--pb-motion-fast) var(--pb-ease);
+      }
+
+      .pb_DeadlineBar_d0dc76b1_urgent .pb_DeadlineBar_d0dc76b1_fill {
+        background: var(--pb-danger);
+      }
+
+      .pb_DeadlineBar_d0dc76b1_paused .pb_DeadlineBar_d0dc76b1_fill {
+        background: var(--pb-text-muted);
+      }
+
+      /* packages/game-sdk/src/ui/Tally.module.css */
+      /* Fixed to the viewport: TallyFlights measures its own box against the boxes it flies between, so it
+   holds on the zoomed 1920×1080 TV surface at any size. Transform + opacity only. */
+      .pb_Tally_1c4582da_overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 40;
+      }
+
+      .pb_Tally_1c4582da_token {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        will-change: transform, opacity;
+      }
+
+      .pb_Tally_1c4582da_face {
+        border-radius: 50%;
+        filter: drop-shadow(0 6px 10px rgb(0 0 0 / 35%));
+      }
+
+      .pb_Tally_1c4582da_face > svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .pb_Tally_1c4582da_points {
+        padding: 0.05em 0.5em;
+        border-radius: 999px;
+        background: var(--pb-fill, #ffd166);
+        color: var(--pb-on-fill, #1a0b12);
+        font-size: var(--pb-font-h2, 32px);
+        font-weight: 900;
+        line-height: 1.3;
+        white-space: nowrap;
+        box-shadow: 0 8px 18px rgb(0 0 0 / 30%);
+      }
+
+      /* A landing slot: empty until its face arrives, then it pops once under the landed token. */
+      .pb_Tally_1c4582da_wait {
+        visibility: hidden;
+      }
+
+      .pb_Tally_1c4582da_land {
+        animation: tally-land calc(var(--pb-motion-base, 300ms) * 0.9) var(--pb-ease, ease-out);
+      }
+
+      @keyframes tally-land {
+        0% {
+          transform: scale(1.35);
+        }
+
+        60% {
+          transform: scale(0.94);
+        }
+
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .pb_Tally_1c4582da_tick {
+        display: inline-block;
+        animation: tally-tick var(--pb-motion-base, 300ms) var(--pb-ease, ease-out);
+      }
+
+      @keyframes tally-tick {
+        0% {
+          transform: scale(1.4);
+        }
+
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* packages/game-sdk/src/tv/Stage.module.css */
+      .pb_Stage_f6a41928_stage {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+        min-height: 100%;
+        /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+        padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+          var(--pb-overscan-y, 54px);
+      }
+
+      .pb_Stage_f6a41928_center {
+        /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+        justify-content: safe center;
+        align-items: safe center;
+        text-align: center;
+      }
+
+      /* packages/game-sdk/src/tv/BigText.module.css */
+      .pb_BigText_3ccba86c_big {
+        font-weight: 800;
+        line-height: 1.15;
+        text-wrap: balance;
+        overflow-wrap: anywhere;
+      }
+
+      .pb_BigText_3ccba86c_display {
+        font-size: var(--pb-font-display);
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .pb_BigText_3ccba86c_h1 {
+        font-size: var(--pb-font-h1);
+      }
+
+      .pb_BigText_3ccba86c_h2 {
+        font-size: var(--pb-font-h2);
+      }
+
+      .pb_BigText_3ccba86c_accent {
+        color: var(--pb-accent-2);
+      }
+
+      .pb_BigText_3ccba86c_muted {
+        color: var(--pb-text-muted);
+      }
+
+      .pb_BigText_3ccba86c_default {
+        color: var(--pb-text);
+      }
+
+      /* packages/game-sdk/src/tv/Timer.module.css */
+      .pb_Timer_72e99110_timer {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-3);
+        min-width: 2.2em;
+        padding: 0 var(--pb-space-4);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface);
+        color: var(--pb-accent-2);
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.1;
+        /* Leaving urgency at a phase boundary eases over the base token: the fast one read as a snap
+     next to the 300 ms phase rise (review-loop #17). */
+        transition:
+          transform var(--pb-motion-base) var(--pb-ease),
+          color var(--pb-motion-base) var(--pb-ease);
+      }
+
+      .pb_Timer_72e99110_lg {
+        font-size: var(--pb-font-display);
+      }
+
+      .pb_Timer_72e99110_md {
+        font-size: var(--pb-font-h1);
+      }
+
+      .pb_Timer_72e99110_urgent {
+        color: var(--pb-danger);
+        transform: scale(1.15);
+        animation: pb-timer-pulse var(--pb-motion-pulse) ease-in-out infinite;
+      }
+
+      /* One beat per second (≤ 3 flashes/s); reduced motion sets --pb-motion-pulse to 0 → no pulse. */
+      @keyframes pb-timer-pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .pb_Timer_72e99110_urgent {
+          transform: none;
+        }
+      }
+
+      .pb_Timer_72e99110_paused {
+        color: var(--pb-text-muted);
+      }
+
+      .pb_Timer_72e99110_pauseGlyph {
+        font-size: 0.5em;
+      }
+
+      .pb_Timer_72e99110_digits {
+        display: inline-block;
+      }
+
+      /* The last five seconds say it in words as well as colour (T-0779 F15). Beside the digits, inside the
+   chip: a word hung under the chip ran into the deadline bar and the row below (T-0779 F2). The TV
+   body token is 36 px, above the 32 px floor. */
+      .pb_Timer_72e99110_hurry {
+        color: var(--pb-danger);
+        font-size: var(--pb-font-body);
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      /* packages/game-sdk/src/tv/PlayerChips.module.css */
+      .pb_PlayerChips_c405e581_list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: var(--pb-space-3);
+        max-width: 100%;
+      }
+
+      .pb_PlayerChips_c405e581_row {
+        /* Wraps so 16 players stay visible (two rows of sm chips at 1080p) instead of being clipped. */
+        flex-wrap: wrap;
+        gap: var(--pb-space-2) var(--pb-space-3);
+      }
+
+      .pb_PlayerChips_c405e581_grid {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .pb_PlayerChips_c405e581_start {
+        justify-content: flex-start;
+      }
+
+      .pb_PlayerChips_c405e581_item {
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      /* A new chip pops into place (opt-in via `enter`; keys are player ids, so only a fresh mount pops). */
+      /* I-029 A: a joiner walks in from the left (the QR's side on the lobby) as it pops. */
+      .pb_PlayerChips_c405e581_enter {
+        animation: pb-chip-walk var(--pb-motion-base) var(--pb-ease) both;
+        transform-origin: center;
+      }
+      @keyframes pb-chip-walk {
+        0% {
+          opacity: 0;
+          transform: translateX(-40px) scale(0.8);
+        }
+        60% {
+          opacity: 1;
+          transform: translateX(4px) scale(1.05);
+        }
+        100% {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      /* I-029 C: the newest chip is welcomed — a gold ring that fades over a second, once the walk has
+   landed (the one easing; the chip's own rings — active, back — are its own rules). */
+      .pb_PlayerChips_c405e581_enter > *:not([class*='_active_']) {
+        outline: 3px solid transparent;
+        outline-offset: 2px;
+        border-radius: 999px;
+        animation: pb-chip-welcome var(--pb-motion-pulse) var(--pb-ease) var(--pb-motion-base) both;
+      }
+      @keyframes pb-chip-welcome {
+        from {
+          outline-color: var(--pb-accent-2);
+        }
+        to {
+          outline-color: transparent;
+        }
+      }
+
+      /* Empty seats: the outline of a `lg` chip (the size in force whenever seats are shown). */
+      .pb_PlayerChips_c405e581_seat {
+        --pb-chip-size: calc(var(--pb-font-h2) * 1.6);
+        display: inline-flex;
+        align-items: center;
+        width: 7em;
+        font-size: var(--pb-font-h2);
+        padding: var(--pb-space-1) var(--pb-space-4) var(--pb-space-1) var(--pb-space-1);
+        border-radius: 999px;
+        border: 2px dashed var(--pb-text-muted);
+        opacity: 0.45;
+      }
+
+      .pb_PlayerChips_c405e581_seatDisc {
+        width: var(--pb-chip-size);
+        height: var(--pb-chip-size);
+        border-radius: 50%;
+        background: var(--pb-surface-2);
+        flex-shrink: 0;
+      }
+
+      /* Materials R2: source adaptations and new relief paint are recorded in SOURCES.pb_PlayerChips_c405e581_md. */
+      .pb_PlayerChips_c405e581_seat {
+        background: linear-gradient(
+          180deg,
+          transparent,
+          color-mix(in srgb, var(--pb-surface-2) 40%, transparent)
+        );
+      }
+      .pb_PlayerChips_c405e581_seatDisc {
+        background: radial-gradient(
+          circle at 50% 55%,
+          var(--pb-bg) 0 63%,
+          var(--pb-surface-2) 67% 74%,
+          color-mix(in srgb, var(--pb-text) 18%, var(--pb-surface-2)) 78%,
+          var(--pb-surface-2) 82%
+        );
+      }
+      :root[data-theme='contrast'] .pb_PlayerChips_c405e581_seat {
+        background: transparent;
+      }
+      :root[data-theme='contrast'] .pb_PlayerChips_c405e581_seatDisc {
+        background: var(--pb-surface-2);
+      }
+
+      /* packages/game-sdk/src/tv/Reveal.module.css */
+      .pb_Reveal_2216aa60_list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-3);
+        width: 100%;
+      }
+
+      .pb_Reveal_2216aa60_item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--pb-space-5);
+        padding: var(--pb-space-3) var(--pb-space-5);
+        border-radius: var(--pb-radius);
+        border: 1px solid var(--pb-border);
+        background: var(--pb-surface);
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      .pb_Reveal_2216aa60_emphasis {
+        background: var(--pb-surface-2);
+        outline: 3px solid var(--pb-accent-2);
+      }
+
+      .pb_Reveal_2216aa60_main {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+
+      .pb_Reveal_2216aa60_text {
+        font-size: var(--pb-font-h2);
+        font-weight: 800;
+        overflow-wrap: anywhere;
+      }
+
+      .pb_Reveal_2216aa60_detail {
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-caption);
+      }
+
+      .pb_Reveal_2216aa60_aside {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        flex-shrink: 0;
+      }
+
+      /* packages/game-sdk/src/ui/Juice.module.css */
+      /* A burst is positioned by its origin (`--j-x`, `--j-y`, any length) inside the nearest positioned ancestor.
+   Every particle moves by transform + opacity only (compositor, 60 fps on a phone). */
+      .pb_Juice_830a3a18_burst {
+        position: absolute;
+        left: var(--j-x, 50%);
+        top: var(--j-y, 50%);
+        width: 0;
+        height: 0;
+        pointer-events: none;
+        z-index: 5;
+      }
+
+      .pb_Juice_830a3a18_p {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        animation: fly var(--j-ms, 900ms) cubic-bezier(0.2, 0.7, 0.3, 1) var(--j-delay, 0ms) 1 both;
+        will-change: transform, opacity;
+      }
+
+      .pb_Juice_830a3a18_sparks {
+        width: 6px;
+        height: 18px;
+        margin: -9px -3px;
+        border-radius: 3px;
+      }
+
+      /* A coin, not a dot: gold face, darker rim, an inner ring and a glint. Fixed colours, so it reads as money
+   on every theme (the accent tones are green on some). */
+      .pb_Juice_830a3a18_coins {
+        width: 36px;
+        height: 36px;
+        margin: -18px;
+        border-radius: 50%;
+        border: 4px solid #b27a12;
+        background: radial-gradient(circle at 35% 30%, #fff3b0 0 14%, #f6c744 15% 100%);
+        box-shadow:
+          inset 0 0 0 3px #e0a623,
+          0 2px 6px rgb(0 0 0 / 45%);
+      }
+
+      .pb_Juice_830a3a18_confetti {
+        width: 12px;
+        height: 20px;
+        margin: -10px -6px;
+        border-radius: 3px;
+      }
+
+      .pb_Juice_830a3a18_dust {
+        width: 28px;
+        height: 28px;
+        margin: -14px;
+        border-radius: 50%;
+      }
+
+      .pb_Juice_830a3a18_t0 {
+        background-color: var(--pb-accent);
+      }
+      .pb_Juice_830a3a18_t1 {
+        background-color: var(--pb-accent-2);
+      }
+      .pb_Juice_830a3a18_t2 {
+        background-color: var(--pb-accent-3);
+      }
+      .pb_Juice_830a3a18_t3 {
+        background-color: var(--pb-info);
+      }
+
+      /* Dust is always grey: the tone only varies sparks and confetti. */
+      .pb_Juice_830a3a18_dust.pb_Juice_830a3a18_t0,
+      .pb_Juice_830a3a18_dust.pb_Juice_830a3a18_t1,
+      .pb_Juice_830a3a18_dust.pb_Juice_830a3a18_t2,
+      .pb_Juice_830a3a18_dust.pb_Juice_830a3a18_t3 {
+        background-color: var(--pb-text-muted);
+      }
+
+      @keyframes fly {
+        0% {
+          opacity: 1;
+          transform: translate3d(0, 0, 0) rotate(0deg) scale(var(--j-scale, 1));
+        }
+        55% {
+          opacity: 1;
+          transform: translate3d(var(--j-dx), var(--j-dy), 0) rotate(calc(var(--j-rot) * 0.6))
+            scale(var(--j-scale, 1));
+        }
+        100% {
+          opacity: 0;
+          transform: translate3d(calc(var(--j-dx) * 1.1), calc(var(--j-dy) + var(--j-fall)), 0)
+            rotate(var(--j-rot)) scale(calc(var(--j-scale, 1) * 0.8));
+        }
+      }
+
+      /* The number: a pop on every change (the keyed re-mount restarts it). */
+      .pb_Juice_830a3a18_num {
+        display: inline-block;
+        font-variant-numeric: tabular-nums;
+        animation: pop 420ms cubic-bezier(0.2, 1.6, 0.4, 1) 1;
+      }
+      .pb_Juice_830a3a18_num[data-first] {
+        animation: none;
+      }
+
+      @keyframes pop {
+        0% {
+          transform: scale(1);
+        }
+        35% {
+          transform: scale(1.25);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .pb_Juice_830a3a18_num {
+          animation: none;
+        }
+      }
+
+      /* packages/game-sdk/src/tv/Confetti.module.css */
+      /* Full-screen, behind every word: z -1 inside the TV frame's own stacking context (TvFrame
+   isolation) paints above the frame background and under all content, so a piece shows only in the
+   gaps and never over text. Fixed to the viewport (the TV surface is a zoomed 1920×1080 design, so
+   px, never vh). The fall is transform + opacity only. */
+      .pb_Confetti_4ce906a6_confetti {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      .pb_Confetti_4ce906a6_piece {
+        position: absolute;
+        top: -32px;
+        width: 16px;
+        height: 26px;
+        border-radius: 3px;
+        opacity: 0.95;
+        animation: pb-confetti var(--pb-motion-confetti, 3000ms) linear infinite;
+        will-change: transform;
+      }
+
+      /* One faster fall: each piece waits above the screen for its stagger, then goes back up there
+   when it lands. Never held at the last frame: a 16:10 or 4:3 stage (1200, 1440 px) is deeper
+   than the 1180 px fall, so the pieces would rest on the results (T-0171 review). */
+      .pb_Confetti_4ce906a6_confetti[data-once] .pb_Confetti_4ce906a6_piece {
+        animation-duration: calc(var(--pb-motion-confetti, 3000ms) * 2 / 3);
+        animation-iteration-count: 1;
+        animation-fill-mode: backwards;
+      }
+
+      .pb_Confetti_4ce906a6_c0 {
+        background: var(--pb-accent);
+      }
+
+      .pb_Confetti_4ce906a6_c1 {
+        background: var(--pb-accent-2);
+      }
+
+      .pb_Confetti_4ce906a6_c2 {
+        background: var(--pb-accent-3);
+      }
+
+      .pb_Confetti_4ce906a6_c3 {
+        background: var(--pb-info);
+      }
+
+      /* packages/game-sdk/src/controller/Screen.module.css */
+      /* Every screen rises on mount (the phone was the only surface that hard-cut). Fill `backwards`,
+   not `both`: a retained transform would make this frame the containing block for any future
+   position: fixed game element. Taps are never blocked (opacity does not gate pointer events). */
+      .pb_Screen_b8a50bef_screen {
+        position: relative; /* the predecessor's snapshot overlays this frame (review-loop #18) */
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        overscroll-behavior: none;
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) backwards;
+        animation-delay: var(
+          --pb-screen-delay,
+          0ms
+        ); /* I-039 A: the shell can hold the rise a beat */
+      }
+
+      /* A leaving screen's snapshot, parked in the parent: on top, inert, fading over the base token. */
+      .pb_Screen_b8a50bef_ghost {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        pointer-events: none;
+        animation: pb-fade-out var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      /* Cloned nodes would replay their entrance keyframes; freeze them where they were. */
+      .pb_Screen_b8a50bef_ghost * {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .pb_Screen_b8a50bef_title {
+        padding: var(--pb-space-4) var(--pb-space-4) 0;
+        text-wrap: balance;
+      }
+
+      .pb_Screen_b8a50bef_body {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: var(--pb-space-4);
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-4);
+      }
+
+      .pb_Screen_b8a50bef_footer {
+        position: sticky;
+        bottom: 0;
+        padding: var(--pb-space-3) var(--pb-space-4)
+          calc(var(--pb-space-3) + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
+        background: linear-gradient(to top, var(--pb-bg) 70%, transparent);
+      }
+
+      /* A sideways phone in Safari (≈ 330 px tall): tighter body padding, the height goes to the game. */
+      @media (orientation: landscape) and (max-height: 420px) {
+        .pb_Screen_b8a50bef_body {
+          padding: var(--pb-space-2) var(--pb-space-4);
+        }
+        .pb_Screen_b8a50bef_footer {
+          padding: 4px var(--pb-space-4)
+            calc(4px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
+        }
+      }
+
+      /* A long body (six-row results, a wager list on an SE) folds under the footer and the last line is
+   cut mid-glyph (review-loop, six-player results on an iPhone). Browsers with scroll-driven animations fade the body's bottom 28 px
+   while there is more below and lift the fade at the end; a body that does not scroll has no
+   timeline, so no fade. Only meaningful overflow (the same threshold as the cue) folds: a few
+   pixels of card-arrival overshoot must not fade a whole row. Others keep the plain fold. */
+      @property --pb-fold {
+        syntax: '<length>';
+        inherits: false;
+        initial-value: 0px;
+      }
+
+      @supports (animation-timeline: scroll()) {
+        .pb_Screen_b8a50bef_body {
+          mask-image: linear-gradient(to bottom, #000 calc(100% - var(--pb-fold)), transparent);
+        }
+        .pb_Screen_b8a50bef_body[data-fold] {
+          animation: pb-fold linear both;
+          animation-timeline: scroll(self);
+        }
+        /* fill1: a title drawn down to its bottom edge (the results' award chips) sat flush on the body's
+     clip line, so a row scrolled half out read as hidden under the chips — at 200 % text most of a
+     name. Scrolled away from the top, the body keeps the clear strip it has at rest (its own top
+     padding) and then fades in over twice the caption size, so nothing touches the title at any
+     text size. Paint only: every box stays where it was, and at the top there is no mask at all. */
+        .pb_Screen_b8a50bef_body.pb_Screen_b8a50bef_fadeTop {
+          mask-image: linear-gradient(
+            to bottom,
+            transparent var(--pb-fold-clear),
+            #000 calc(var(--pb-fold-clear) + var(--pb-fold-top)),
+            #000 calc(100% - var(--pb-fold)),
+            transparent
+          );
+          animation: pb-fold-top linear both;
+          animation-timeline: scroll(self);
+        }
+        .pb_Screen_b8a50bef_body.pb_Screen_b8a50bef_fadeTop[data-fold] {
+          animation:
+            pb-fold linear both,
+            pb-fold-top linear both;
+          animation-timeline: scroll(self), scroll(self);
+        }
+      }
+
+      @property --pb-fold-top {
+        syntax: '<length>';
+        inherits: false;
+        initial-value: 0px;
+      }
+      @property --pb-fold-clear {
+        syntax: '<length>';
+        inherits: false;
+        initial-value: 0px;
+      }
+
+      @keyframes pb-fold-top {
+        0% {
+          --pb-fold-clear: 0px;
+          --pb-fold-top: 0px;
+        }
+        8%,
+        100% {
+          --pb-fold-clear: var(--pb-space-4);
+          --pb-fold-top: calc(var(--pb-font-caption) * 2);
+        }
+      }
+
+      @keyframes pb-fold {
+        0%,
+        92% {
+          --pb-fold: 72px; /* I-066 A: one cut row deep */
+        }
+        100% {
+          --pb-fold: 0px;
+        }
+      }
+
+      /* ── I-788 A (design review A, refines I-066 B / I-187): "more below" is a slim row of its own at the
+   top of the footer — a grab bar and the words — never a pill floating over the body's last line or
+   the button's own words. The row is laid out whenever the body overflows (the body gives up its
+   height), and only fades out at the end, so nothing shifts under a finger. With no footer the same
+   row sits in the bottom safe area. The whole row is the button: 28 px drawn, 40 px to the thumb. */
+      .pb_Screen_b8a50bef_cue {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+        min-height: 28px;
+        margin: 0 0 2px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--pb-text-muted);
+        font: inherit;
+        font-size: calc(var(--pb-font-caption) * 0.86);
+        font-weight: 700;
+        line-height: 1.1;
+        cursor: pointer;
+        transition: opacity var(--pb-motion-base) var(--pb-ease);
+      }
+      .pb_Screen_b8a50bef_cue::before {
+        content: '';
+        width: 28px;
+        height: 3px;
+        border-radius: 3px;
+        background: currentColor;
+        opacity: 0.6;
+        flex: none;
+      }
+      /* The thumb target reaches up to the footer's top edge (44 px), never down over the button. */
+      .pb_Screen_b8a50bef_cue::after {
+        content: '';
+        position: absolute;
+        inset: calc(-1 * var(--pb-space-4)) 0 0;
+      }
+      .pb_Screen_b8a50bef_cue[data-on='false'] {
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity var(--pb-motion-base) var(--pb-ease),
+          visibility 0s linear var(--pb-motion-base);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pb_Screen_b8a50bef_cue,
+        .pb_Screen_b8a50bef_cue[data-on='false'] {
+          transition: none;
+        }
+      }
+      :root[data-motion='off'] .pb_Screen_b8a50bef_cue,
+      :root[data-motion='off'] .pb_Screen_b8a50bef_cue[data-on='false'] {
+        transition: none;
+      }
+
+      /* No footer: the row alone, in the bottom safe area. */
+      .pb_Screen_b8a50bef_cueOnly {
+        flex-shrink: 0;
+        padding: var(--pb-space-3) var(--pb-space-4)
+          calc(4px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
+      }
+
+      @media (orientation: landscape) and (max-height: 420px) {
+        .pb_Screen_b8a50bef_cue {
+          min-height: 22px;
+          margin: 0;
+        }
+        .pb_Screen_b8a50bef_cue::after {
+          inset: -4px 0 0;
+        }
+        .pb_Screen_b8a50bef_cueOnly {
+          padding: 4px var(--pb-space-4)
+            calc(2px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
+        }
+      }
+
+      /* packages/game-sdk/src/controller/PrimaryButton.module.css */
+      .pb_PrimaryButton_f1ce2096_button {
+        width: 100%;
+        min-height: 56px;
+        padding: var(--pb-space-3) var(--pb-space-5);
+        border-radius: var(--pb-radius);
+        font-size: var(--pb-font-button);
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        transition:
+          transform var(--pb-motion-fast) var(--pb-ease),
+          opacity var(--pb-motion-fast) var(--pb-ease);
+      }
+
+      .pb_PrimaryButton_f1ce2096_button:active:not([aria-disabled='true']) {
+        transform: scale(0.97);
+        /* brightens accent, danger, success and the neutral surface-2 fill in every theme (R-049) */
+        filter: brightness(1.12);
+      }
+
+      /* Disabled reads as "not yet", not as a dimmer version of the action (label contrast 6.9:1): an
+   empty dashed outline, never a filled neutral button (T-0392: that read like an enabled one). */
+      .pb_PrimaryButton_f1ce2096_button[aria-disabled='true'] {
+        background: transparent;
+        color: var(--pb-text-muted);
+        border: 2px dashed var(--pb-text-muted);
+        cursor: default;
+      }
+
+      .pb_PrimaryButton_f1ce2096_wrap {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-1);
+        width: 100%;
+      }
+
+      .pb_PrimaryButton_f1ce2096_reason {
+        text-align: center;
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+
+      /* A tap on a disabled button: three sideways jolts (global keyframe; 0 ms under reduced motion). */
+      .pb_PrimaryButton_f1ce2096_shake {
+        animation: pb-shake var(--pb-motion-base) var(--pb-ease);
+      }
+
+      .pb_PrimaryButton_f1ce2096_accent {
+        background: var(--pb-accent);
+        color: var(--pb-on-accent);
+      }
+
+      .pb_PrimaryButton_f1ce2096_neutral {
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        box-shadow: inset 0 0 0 1px var(--pb-border);
+      }
+
+      .pb_PrimaryButton_f1ce2096_danger {
+        background: var(--pb-danger);
+        color: var(--pb-on-accent);
+      }
+
+      .pb_PrimaryButton_f1ce2096_success {
+        background: var(--pb-accent-3);
+        color: var(--pb-on-accent);
+      }
+
+      .pb_PrimaryButton_f1ce2096_done,
+      .pb_PrimaryButton_f1ce2096_done[aria-disabled='true'] {
+        background: var(--pb-accent-3);
+        color: var(--pb-on-accent);
+        border-color: transparent; /* dashed is for the waiting state only */
+      }
+
+      /* The last 5 s for an unanswered phone (`data-urgent` on the controller shell): a danger outline
+   and one nudge when the attribute lands — no JS timer. A button disabled by an empty answer gets
+   nothing (there is nothing to press yet); the header cue and haptic still cover that player. */
+      [data-urgent]
+        .pb_PrimaryButton_f1ce2096_button.pb_PrimaryButton_f1ce2096_accent:not(
+          [aria-disabled='true']
+        ) {
+        outline: 3px solid var(--pb-danger);
+        outline-offset: 2px;
+        animation: pb-nudge var(--pb-motion-slow) var(--pb-ease) 1;
+      }
+
+      @keyframes pb-nudge {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+      }
+
+      /* The ✓ pops once each time a done button mounts (R-063); 0 ms under reduced motion. */
+      /* The gap is a margin: a trailing space inside an inline-block collapses, so every done button
+   read "✓Submitted" / "✓You're ready". */
+      .pb_PrimaryButton_f1ce2096_check {
+        display: inline-block;
+        margin-right: 0.35em;
+        animation: pb-pop var(--pb-motion-fast) var(--pb-ease) both;
+      }
+
+      /* T-0225: sent, not yet taken. Neutral and quiet: no ✓, not the success green (that reads as
+   delivered and the phone goes down while the send may still be lost). */
+      .pb_PrimaryButton_f1ce2096_busy,
+      .pb_PrimaryButton_f1ce2096_busy[aria-disabled='true'] {
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        border-color: transparent;
+        box-shadow: inset 0 0 0 1px var(--pb-border);
+      }
+
+      /* packages/game-sdk/src/controller/WaitingScreen.module.css */
+      .pb_WaitingScreen_bc89301e_center {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-3);
+        text-align: center;
+        padding: var(--pb-space-6) 0;
+      }
+
+      .pb_WaitingScreen_bc89301e_glyph {
+        display: grid;
+        place-items: center;
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        font-size: 48px;
+        font-weight: 900;
+        background: var(--pb-surface);
+        color: var(--pb-text-muted);
+      }
+
+      .pb_WaitingScreen_bc89301e_done {
+        background: var(--pb-accent-3);
+        color: var(--pb-on-accent);
+      }
+
+      .pb_WaitingScreen_bc89301e_watch {
+        color: var(--pb-info);
+      }
+
+      .pb_WaitingScreen_bc89301e_oops {
+        color: var(--pb-accent-2);
+      }
+
+      .pb_WaitingScreen_bc89301e_title {
+        text-wrap: balance;
+      }
+
+      .pb_WaitingScreen_bc89301e_hint {
+        color: var(--pb-text-muted);
+      }
+
+      /* Waiting for others / watching the TV: the glyph breathes on a 2 s loop so a glance confirms the
+   phone is alive (review-loop #22). Reduced motion zeroes the pulse token → no loop. */
+      .pb_WaitingScreen_bc89301e_wait,
+      .pb_WaitingScreen_bc89301e_watch {
+        animation: pb-breathe calc(var(--pb-motion-pulse) * 2) ease-in-out infinite;
+      }
+
+      @keyframes pb-breathe {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.06);
+          opacity: 0.8;
+        }
+      }
+
+      /* packages/game-sdk/src/gamepad/PadGlyph.module.css */
+      .pb_PadGlyph_37cd3d03_glyph {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.6em;
+        height: 1.6em;
+        padding: 0 0.4em;
+        margin-inline-end: var(--pb-space-2);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface-2);
+        border: 2px solid currentColor;
+        color: inherit;
+        font-size: 0.8em;
+        font-weight: 800;
+        line-height: 1;
+        vertical-align: middle;
+      }
+
+      /* packages/game-sdk/src/controller/TextAnswer.module.css */
+      .pb_TextAnswer_3db3f632_kicker {
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        color: var(--pb-accent-2);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .pb_TextAnswer_3db3f632_prompt {
+        font-size: var(--pb-font-h2);
+        font-weight: 800;
+        text-wrap: balance;
+      }
+
+      .pb_TextAnswer_3db3f632_input {
+        width: 100%;
+        min-height: 120px;
+        padding: var(--pb-space-3) var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        border: 2px solid var(--pb-surface-2);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-h2);
+        font-weight: 600;
+        line-height: 1.3;
+        resize: none;
+      }
+
+      /* I-795 I: a lead (the drawing to guess) takes the height left over; the field is one line that
+   grows with its text (field-sizing where supported), so the box and Send are always on screen. */
+      .pb_TextAnswer_3db3f632_lead {
+        flex: 1 1 0;
+        min-height: 64px;
+        display: grid;
+        grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+      }
+
+      /* The keyboard is up (visual viewport short): the lead may shrink to nothing and the prompt
+   drops to body size, so the field and Send stay above the keys even on a 320 × 568 phone. */
+      .pb_TextAnswer_3db3f632_squeezed .pb_TextAnswer_3db3f632_lead {
+        min-height: 0;
+        margin-top: calc(-1 * var(--pb-space-4)); /* the body's top padding goes to the field too */
+      }
+
+      .pb_TextAnswer_3db3f632_squeezed .pb_TextAnswer_3db3f632_prompt {
+        font-size: var(--pb-font-body);
+      }
+
+      .pb_TextAnswer_3db3f632_inputOne {
+        flex: none;
+        min-height: 0;
+        padding: var(--pb-space-2) var(--pb-space-3);
+        font-size: var(--pb-font-body);
+        field-sizing: content;
+        max-height: calc(3lh + 2 * var(--pb-space-2));
+      }
+
+      .pb_TextAnswer_3db3f632_input:focus {
+        border-color: var(--pb-accent);
+        outline: none;
+      }
+
+      .pb_TextAnswer_3db3f632_input:disabled {
+        opacity: 0.7;
+      }
+
+      /* Submitted: the answer as a card in place of the input. */
+      .pb_TextAnswer_3db3f632_sent {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-1);
+        padding: var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        border: 2px solid var(--pb-accent-3);
+      }
+
+      .pb_TextAnswer_3db3f632_sentLabel,
+      .pb_TextAnswer_3db3f632_sentHint {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+
+      .pb_TextAnswer_3db3f632_sentText {
+        font-size: var(--pb-font-h2);
+        font-weight: 800;
+        overflow-wrap: anywhere;
+      }
+
+      .pb_TextAnswer_3db3f632_sentHint {
+        margin-top: var(--pb-space-2);
+      }
+
+      .pb_TextAnswer_3db3f632_late {
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        color: var(--pb-accent-2);
+      }
+
+      .pb_TextAnswer_3db3f632_counter {
+        text-align: right;
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* ── I-001 A: the field joins the last 5 s (`data-urgent` on the controller shell, as the primary
+   button does): a danger border and the shell's once-a-second beat, so the whole card escalates,
+   not one label. --pb-motion-pulse is 0 under reduced motion → no beat, the border alone. */
+      [data-urgent] .pb_TextAnswer_3db3f632_input:not(:disabled) {
+        border-color: var(--pb-danger);
+        animation: pb-urge var(--pb-motion-pulse) ease-in-out infinite;
+      }
+      @keyframes pb-urge {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      /* ── I-001 B: the counter bumps on each keystroke (transform only; remounted per change). */
+      .pb_TextAnswer_3db3f632_typed {
+        transform-origin: right center;
+        animation: pb-bump var(--pb-motion-fast) var(--pb-ease) both;
+      }
+
+      /* ── I-001 C: an empty field breathes after 3 s (pb-breathe, the lobby's idle cue — defined only
+   without reduced motion, so it is simply absent there). The urgent rule above outranks it. */
+      .pb_TextAnswer_3db3f632_stalled {
+        animation: pb-breathe calc(var(--pb-motion-pulse) * 2) ease-in-out infinite;
+      }
+      /* The in-app motion switch: no beat, no breath (the tokens already collapse to 0; be explicit). */
+      :root[data-motion='off'] .pb_TextAnswer_3db3f632_stalled,
+      :root[data-motion='off'] [data-urgent] .pb_TextAnswer_3db3f632_input:not(:disabled) {
+        animation: none;
+      }
+
+      /* packages/game-sdk/src/controller/ChoiceGrid.module.css */
+      .pb_ChoiceGrid_6ffe5d90_kicker {
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        color: var(--pb-accent-2);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      /* tone="final": the kicker matches the TV's accent "final question" kicker (R-064). */
+      .pb_ChoiceGrid_6ffe5d90_kickerFinal {
+        color: var(--pb-accent);
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_prompt {
+        font-size: var(--pb-font-h2);
+        font-weight: 800;
+        text-wrap: balance;
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_grid {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-3);
+      }
+
+      /* fill (I-789 B, the design review): the answers share the height left under the question —
+   each 66 px when there is room, down to its own content (one line: 50 px; the flex item's auto
+   minimum, never a fixed one — a two-line label must not spill onto the next tile) on a short
+   phone, so four fit an SE with no scroll. The tiles never stretch past 66 px, so nothing drifts
+   when the status line lands. */
+      .pb_ChoiceGrid_6ffe5d90_layout {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-4);
+        flex: 1 1 auto;
+        /* min-height stays auto: the block never shrinks below its tiles' content, so a long label
+     scrolls the body instead of sliding under the status line */
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_head {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-2);
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_plain {
+        display: contents;
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_fill {
+        flex: 1 1 auto;
+        gap: var(--pb-space-2);
+      }
+
+      /* Basis 0 + grow: a tile's floor is its content (one line: 50 px — the block never shrinks below
+   it, so nothing slides under the status line), its ceiling 66 px or two lines of its own text,
+   whichever is taller (a two-line answer is never clipped). */
+      .pb_ChoiceGrid_6ffe5d90_fill .pb_ChoiceGrid_6ffe5d90_choice {
+        flex: 1 1 0;
+        min-height: auto;
+        max-height: max(66px, calc(2lh + 2 * var(--pb-space-2) + 6px));
+        padding: var(--pb-space-2) var(--pb-space-4);
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_fill .pb_ChoiceGrid_6ffe5d90_letter {
+        width: max(
+          28px,
+          1.5em
+        ); /* grows with 200 % text, so the letter never spills out of its disc */
+        height: max(28px, 1.5em);
+      }
+
+      /* Four short answers: two by two, each tile at least 66 px; the ✓/✗ goes to the corner so the
+   label keeps the width… */
+      .pb_ChoiceGrid_6ffe5d90_fill.pb_ChoiceGrid_6ffe5d90_two {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-content: start;
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_fill.pb_ChoiceGrid_6ffe5d90_two .pb_ChoiceGrid_6ffe5d90_choice {
+        min-height: 66px;
+        max-height: none;
+      }
+
+      /* …unless half the width holds under 7 em of the tiles' own text (200 % text): then one column of
+   content-high tiles. The query measures the layout, whose font is the tiles' body size. */
+      .pb_ChoiceGrid_6ffe5d90_layout {
+        container-type: inline-size;
+        font-size: var(--pb-font-body);
+      }
+
+      @container (max-width: 14em) {
+        .pb_ChoiceGrid_6ffe5d90_fill.pb_ChoiceGrid_6ffe5d90_two {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .pb_ChoiceGrid_6ffe5d90_fill.pb_ChoiceGrid_6ffe5d90_two .pb_ChoiceGrid_6ffe5d90_choice {
+          min-height: 44px;
+        }
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_two .pb_ChoiceGrid_6ffe5d90_choice {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--pb-space-1) var(--pb-space-2);
+        padding-inline: var(--pb-space-3);
+      }
+
+      /* a word is never split: the label is at least its longest word, and drops under the letter when
+   the two do not fit side by side */
+      .pb_ChoiceGrid_6ffe5d90_two .pb_ChoiceGrid_6ffe5d90_label {
+        flex: 1 1 0;
+        min-width: min-content;
+        overflow-wrap: break-word;
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_two .pb_ChoiceGrid_6ffe5d90_mark {
+        position: absolute;
+        top: 2px;
+        right: var(--pb-space-2);
+        font-size: var(--pb-font-caption);
+      }
+
+      /* The reserved status line: the space of "✓ Locked in", held from the first frame. */
+      .pb_ChoiceGrid_6ffe5d90_reserved {
+        visibility: hidden;
+        animation: none;
+      }
+
+      /* A phone wraps "✓ Locked in with 12 s to spare — look at the TV" to two lines (an iPhone 15
+   too): the line holds two from the start, so the tiles above never give up height on the tap. */
+      @media (max-width: 440px) {
+        .pb_ChoiceGrid_6ffe5d90_layout ~ .pb_ChoiceGrid_6ffe5d90_locked {
+          min-height: 2lh;
+        }
+      }
+
+      /* A short phone (an SE, 568 px): the question steps down to body size and the gaps tighten. */
+      @media (max-height: 600px) and (orientation: portrait) {
+        .pb_ChoiceGrid_6ffe5d90_layout {
+          gap: var(--pb-space-2);
+        }
+        .pb_ChoiceGrid_6ffe5d90_layout .pb_ChoiceGrid_6ffe5d90_prompt {
+          font-size: var(--pb-font-body);
+        }
+        .pb_ChoiceGrid_6ffe5d90_layout .pb_ChoiceGrid_6ffe5d90_kicker {
+          letter-spacing: 0;
+        }
+        .pb_ChoiceGrid_6ffe5d90_fill .pb_ChoiceGrid_6ffe5d90_choice {
+          padding-block: 7px; /* with the 24 px disc a one-line answer is 44 px: the touch floor */
+        }
+        .pb_ChoiceGrid_6ffe5d90_fill .pb_ChoiceGrid_6ffe5d90_letter {
+          width: max(24px, 1.3em);
+          height: max(24px, 1.3em);
+        }
+      }
+
+      /* Sideways: the question holds the left, the answers the right, filling the height — a 2×2 for
+   short answers (the review's drawing), a column of four when an answer is long (half a sideways
+   phone would break its words). */
+      @media (orientation: landscape) and (max-height: 500px) {
+        .pb_ChoiceGrid_6ffe5d90_layout {
+          flex-direction: row;
+          align-items: stretch;
+          gap: var(--pb-space-4);
+        }
+        .pb_ChoiceGrid_6ffe5d90_layout > .pb_ChoiceGrid_6ffe5d90_head {
+          flex: 1 1 0;
+          min-width: 0;
+          justify-content: center;
+        }
+        .pb_ChoiceGrid_6ffe5d90_layout .pb_ChoiceGrid_6ffe5d90_prompt {
+          font-size: var(--pb-font-body);
+        }
+        .pb_ChoiceGrid_6ffe5d90_layout > .pb_ChoiceGrid_6ffe5d90_fill {
+          flex: 1.3 1 0;
+          min-width: 0;
+        }
+        .pb_ChoiceGrid_6ffe5d90_layout
+          > .pb_ChoiceGrid_6ffe5d90_fill
+          .pb_ChoiceGrid_6ffe5d90_choice {
+          max-height: none;
+        }
+        .pb_ChoiceGrid_6ffe5d90_layout > .pb_ChoiceGrid_6ffe5d90_fill.pb_ChoiceGrid_6ffe5d90_two {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          grid-auto-rows: minmax(0, 1fr);
+          align-content: stretch;
+        }
+        .pb_ChoiceGrid_6ffe5d90_layout
+          > .pb_ChoiceGrid_6ffe5d90_fill.pb_ChoiceGrid_6ffe5d90_two
+          .pb_ChoiceGrid_6ffe5d90_choice {
+          min-height: 0;
+        }
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_choice {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: var(--pb-space-3);
+        min-height: 64px;
+        padding: var(--pb-space-3) var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        border: 3px solid var(--pb-border);
+        text-align: left;
+        font-size: var(--pb-font-body);
+        font-weight: 700;
+        transition:
+          transform var(--pb-motion-fast) var(--pb-ease),
+          border-color var(--pb-motion-base) var(--pb-ease),
+          background-color var(--pb-motion-base) var(--pb-ease),
+          color var(--pb-motion-base) var(--pb-ease);
+      }
+
+      /* Press: the accent edge + darker fill land the instant the finger is down (R-049); the scale
+   comes from the controller-surface rule in global.pb_ChoiceGrid_6ffe5d90_css. */
+      .pb_ChoiceGrid_6ffe5d90_choice:active:not(:disabled) {
+        border-color: var(--pb-accent);
+        background: var(--pb-surface-2);
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_choice:active:not(:disabled) .pb_ChoiceGrid_6ffe5d90_letter {
+        transform: scale(1.12);
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_choice:disabled {
+        cursor: default;
+      }
+
+      /* letters={false}: label + mark only. */
+      .pb_ChoiceGrid_6ffe5d90_noLetters {
+        grid-template-columns: 1fr auto;
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_letter {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--pb-surface-2);
+        font-weight: 900;
+        transition:
+          transform var(--pb-motion-fast) var(--pb-ease),
+          background-color var(--pb-motion-base) var(--pb-ease),
+          color var(--pb-motion-base) var(--pb-ease);
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_label {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_mark {
+        font-weight: 900;
+        min-width: 1em;
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      /* I-790 C: the reveal's words on the tiles ("✓ the answer", "you"); a two-by-two tile keeps the
+   glyph only (its mark is a corner badge), where a wrong pick shows ✗ instead of the word. */
+      .pb_ChoiceGrid_6ffe5d90_tag {
+        margin-left: 0.35em;
+        font-size: var(--pb-font-caption);
+        font-weight: 800;
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_glyphTight {
+        display: none;
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_two .pb_ChoiceGrid_6ffe5d90_tag {
+        display: none;
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_two .pb_ChoiceGrid_6ffe5d90_glyphTight {
+        display: inline;
+      }
+
+      /* Lock-in: the chosen card settles with a small pop and its ✓ pops in (both 0 ms under reduced
+   motion via the tokens; the border/fill/✓ state changes remain). The global pb-pop starts from
+   opacity 0, so the card itself uses a local settle that never hides an already-visible button. */
+      @keyframes pb-choice-settle {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_selected {
+        border-color: var(--pb-accent);
+        background: var(--pb-surface-2);
+        animation: pb-choice-settle var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_selected .pb_ChoiceGrid_6ffe5d90_mark {
+        animation: pb-pop var(--pb-motion-fast) var(--pb-ease) both;
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_correct {
+        border-color: var(--pb-accent-3);
+        background: var(--pb-surface-2);
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_correct .pb_ChoiceGrid_6ffe5d90_mark {
+        color: var(--pb-accent-3);
+      }
+
+      /* Reveal: the glyph is what newly appears, so it pops (not the card — pb-pop starts at opacity 0). */
+      .pb_ChoiceGrid_6ffe5d90_correct .pb_ChoiceGrid_6ffe5d90_mark,
+      .pb_ChoiceGrid_6ffe5d90_wrong .pb_ChoiceGrid_6ffe5d90_mark {
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_wrong {
+        border-color: var(--pb-danger);
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_wrong .pb_ChoiceGrid_6ffe5d90_mark {
+        color: var(--pb-danger);
+      }
+
+      /* Dimmed by token, not opacity: muted text on the page bg keeps >= 6.4:1 in every theme (R-070);
+   opacity fell to ~3.5:1 in Daylight. Never co-occurs with .pb_ChoiceGrid_6ffe5d90_selected/.pb_ChoiceGrid_6ffe5d90_correct/.pb_ChoiceGrid_6ffe5d90_wrong. */
+      .pb_ChoiceGrid_6ffe5d90_dim {
+        color: var(--pb-text-muted);
+        background: var(--pb-bg);
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_dim .pb_ChoiceGrid_6ffe5d90_letter {
+        background: var(--pb-surface);
+        color: var(--pb-text-muted);
+      }
+
+      .pb_ChoiceGrid_6ffe5d90_locked {
+        text-align: center;
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        color: var(--pb-accent-3);
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      /* The tap never reached the server: the grid is live again and the line says so (not colour-only). */
+      .pb_ChoiceGrid_6ffe5d90_failed {
+        color: var(--pb-danger);
+      }
+
+      /* The last 5 s for an unanswered phone (`data-urgent` on the controller shell): the letters turn
+   danger so the thumb zone, not only the header, says "now". */
+      [data-urgent] .pb_ChoiceGrid_6ffe5d90_choice:not(:disabled) .pb_ChoiceGrid_6ffe5d90_letter {
+        background: var(--pb-danger);
+        color: var(--pb-on-accent);
+      }
+
+      /* The revealed answer's disc is filled (shape + ✓, never colour alone), mirroring the TV card. */
+      .pb_ChoiceGrid_6ffe5d90_correct .pb_ChoiceGrid_6ffe5d90_letter {
+        background: var(--pb-accent-3);
+        color: var(--pb-on-accent);
+      }
+
+      /* packages/game-sdk/src/controller/VoteList.module.css */
+      .pb_VoteList_a4c1703c_kicker {
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        color: var(--pb-accent-2);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .pb_VoteList_a4c1703c_prompt {
+        font-size: var(--pb-font-h2);
+        font-weight: 800;
+        text-wrap: balance;
+      }
+
+      .pb_VoteList_a4c1703c_list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-3);
+      }
+
+      /* The thing being voted on, above the prompt: it stays put while the options scroll under it. */
+      .pb_VoteList_a4c1703c_header {
+        position: sticky;
+        top: calc(-1 * var(--pb-space-4));
+        z-index: 1;
+        margin: calc(-1 * var(--pb-space-4)) calc(-1 * var(--pb-space-4)) 0;
+        padding: var(--pb-space-4) var(--pb-space-4) var(--pb-space-2);
+        background: var(--pb-bg);
+      }
+
+      .pb_VoteList_a4c1703c_option {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-3);
+        min-height: 64px;
+        padding: var(--pb-space-3) var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        border: 3px solid var(--pb-border);
+        text-align: left;
+        font-size: var(--pb-font-body);
+        font-weight: 700;
+      }
+
+      /* size="large": two or three tall cards that fill the thumb zone. */
+      .pb_VoteList_a4c1703c_large {
+        flex: 1;
+      }
+
+      .pb_VoteList_a4c1703c_large .pb_VoteList_a4c1703c_option {
+        flex: 1;
+        min-height: max(112px, 22dvh);
+        gap: var(--pb-space-4);
+        font-size: var(--pb-font-h2);
+        font-weight: 800;
+        line-height: 1.25;
+      }
+
+      /* A sideways phone has width for the large pair, not height for a vertical stack. */
+      @media (orientation: landscape) and (max-height: 520px) {
+        .pb_VoteList_a4c1703c_large {
+          display: grid;
+          grid-auto-flow: column;
+          grid-auto-columns: minmax(0, 1fr);
+        }
+      }
+
+      .pb_VoteList_a4c1703c_letter {
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        width: var(--pb-touch);
+        height: var(--pb-touch);
+        border-radius: 50%;
+        /* gold, like the TV's vote-card discs (the phone's A is the TV's A) */
+        background: var(--pb-accent-2-fill);
+        color: var(--pb-on-accent-2-fill);
+        font-size: var(--pb-font-body);
+        font-weight: 900;
+        transition:
+          transform var(--pb-motion-fast) var(--pb-ease),
+          background-color var(--pb-motion-base) var(--pb-ease),
+          color var(--pb-motion-base) var(--pb-ease);
+      }
+
+      .pb_VoteList_a4c1703c_voted .pb_VoteList_a4c1703c_letter {
+        background: var(--pb-accent);
+        color: var(--pb-on-accent);
+      }
+
+      /* Placeholder answers ("(no answer)") look like what they are; still votable per the game's rules. */
+      .pb_VoteList_a4c1703c_muted .pb_VoteList_a4c1703c_text {
+        color: var(--pb-text-muted);
+        font-style: italic;
+        font-weight: 600;
+      }
+
+      .pb_VoteList_a4c1703c_option:disabled {
+        cursor: default;
+      }
+
+      .pb_VoteList_a4c1703c_text {
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .pb_VoteList_a4c1703c_tag {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      /* A row's text keeps its width: the tag takes a line of its own under the text instead of
+   squeezing a wrapped sentence into a narrow column (a Blanks card on an iPhone SE, review-loop
+   #138) — and the letter stays beside the text, where a short card used to leave it stranded on
+   a line by itself (Blanks review-loop #386). */
+      .pb_VoteList_a4c1703c_option:has(.pb_VoteList_a4c1703c_tag) {
+        flex-wrap: wrap;
+      }
+
+      .pb_VoteList_a4c1703c_option:has(.pb_VoteList_a4c1703c_tag) .pb_VoteList_a4c1703c_tag {
+        flex-basis: 100%;
+        text-align: right;
+        margin-top: calc(-1 * var(--pb-space-2));
+      }
+
+      .pb_VoteList_a4c1703c_mark {
+        color: var(--pb-accent-3);
+        font-weight: 900;
+        animation: pb-pop var(--pb-motion-fast) var(--pb-ease) both;
+      }
+
+      /* Lock-in: the chosen card settles with a small pop (0 ms under reduced motion via the token).
+   The global pb-pop starts from opacity 0, so the card uses a local settle that never hides an
+   already-visible button. */
+      @keyframes pb-vote-settle {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .pb_VoteList_a4c1703c_voted {
+        border-color: var(--pb-accent);
+        background: var(--pb-surface-2);
+        animation: pb-vote-settle var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      /* Dimmed by token, not opacity: muted text on the page bg keeps >= 6.4:1 in every theme (R-070);
+   opacity fell to ~2.2:1 in Daylight. .pb_VoteList_a4c1703c_mine is disabled and can never be .pb_VoteList_a4c1703c_voted. */
+      .pb_VoteList_a4c1703c_mine,
+      .pb_VoteList_a4c1703c_dim {
+        color: var(--pb-text-muted);
+        background: var(--pb-bg);
+      }
+
+      .pb_VoteList_a4c1703c_mine .pb_VoteList_a4c1703c_letter,
+      .pb_VoteList_a4c1703c_dim .pb_VoteList_a4c1703c_letter {
+        background: var(--pb-surface);
+        color: var(--pb-text-muted);
+      }
+
+      .pb_VoteList_a4c1703c_locked {
+        text-align: center;
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        color: var(--pb-accent-3);
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      /* The tap never reached the server: the list is live again and the line says so (not colour-only). */
+      .pb_VoteList_a4c1703c_failed {
+        color: var(--pb-danger);
+      }
+
+      /* The last 5 s for an unanswered phone (`data-urgent` on the controller shell): the letters turn
+   danger so the thumb zone, not only the header, says "now". */
+      [data-urgent] .pb_VoteList_a4c1703c_option:not(:disabled) .pb_VoteList_a4c1703c_letter {
+        background: var(--pb-danger);
+        color: var(--pb-on-accent);
+      }
+
+      /* packages/game-sdk/src/pack/secret-card/SecretCard.module.css */
+      /* SecretCard: two faces on one turning plate. Transform-only (pb-flip's rule): the plate rotates,
+   the faces never fade, backface-visibility hides whichever side points away. */
+      .pb_SecretCard_99cd0dcd_card {
+        position: relative;
+        perspective: 900px;
+        width: 100%;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
+        outline: none;
+        border-radius: var(--pb-radius-lg);
+      }
+      .pb_SecretCard_99cd0dcd_card:focus-visible {
+        box-shadow: 0 0 0 3px var(--pb-accent-2);
+      }
+      .pb_SecretCard_99cd0dcd_full {
+        /* A floor, not a height: at 200 % text on a small phone the back's label and hint are taller than
+     the card, so it grows to fit them (T-0038: Imposter's deal card clipped its text top and bottom
+     on an SE, and the flex body shrank it further). Both faces share one grid cell (below). */
+        min-height: clamp(11rem, 42dvh, 20rem);
+        display: grid;
+      }
+      .pb_SecretCard_99cd0dcd_mini {
+        height: 3.5rem;
+        border-radius: var(--pb-radius);
+      }
+      .pb_SecretCard_99cd0dcd_turn {
+        position: absolute;
+        inset: 0;
+        transform-style: preserve-3d;
+        transition: transform var(--pb-motion-base) cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .pb_SecretCard_99cd0dcd_full.pb_SecretCard_99cd0dcd_shown .pb_SecretCard_99cd0dcd_turn {
+        transform: rotateY(180deg);
+      }
+      .pb_SecretCard_99cd0dcd_mini.pb_SecretCard_99cd0dcd_shown .pb_SecretCard_99cd0dcd_turn {
+        transform: rotateX(180deg);
+      }
+      .pb_SecretCard_99cd0dcd_back,
+      .pb_SecretCard_99cd0dcd_face {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-4);
+        border-radius: inherit;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        text-align: center;
+        overflow: hidden;
+      }
+      .pb_SecretCard_99cd0dcd_full .pb_SecretCard_99cd0dcd_back,
+      .pb_SecretCard_99cd0dcd_full .pb_SecretCard_99cd0dcd_face {
+        border-radius: var(--pb-radius-lg);
+      }
+      /* full: the plate and both faces are in flow, stacked in one cell, so the taller face sizes the
+   card; min-height is passed down so a short face still fills the floor. */
+      .pb_SecretCard_99cd0dcd_full .pb_SecretCard_99cd0dcd_turn {
+        position: relative;
+        inset: auto;
+        display: grid;
+        min-height: inherit;
+      }
+      .pb_SecretCard_99cd0dcd_full .pb_SecretCard_99cd0dcd_back,
+      .pb_SecretCard_99cd0dcd_full .pb_SecretCard_99cd0dcd_face {
+        position: relative;
+        inset: auto;
+        grid-area: 1 / 1;
+        min-height: inherit;
+      }
+      .pb_SecretCard_99cd0dcd_mini .pb_SecretCard_99cd0dcd_back,
+      .pb_SecretCard_99cd0dcd_mini .pb_SecretCard_99cd0dcd_face {
+        border-radius: var(--pb-radius);
+        flex-direction: row;
+        padding: 0 var(--pb-space-4);
+        gap: var(--pb-space-3);
+      }
+      .pb_SecretCard_99cd0dcd_back {
+        background:
+          repeating-linear-gradient(
+            45deg,
+            transparent 0 14px,
+            color-mix(in srgb, var(--pb-accent) 14%, transparent) 14px 28px
+          ),
+          var(--pb-surface-2);
+        border: 2px solid color-mix(in srgb, var(--pb-accent) 55%, var(--pb-surface-2));
+        color: var(--pb-text);
+      }
+      .pb_SecretCard_99cd0dcd_face {
+        background: var(--pb-surface);
+        border: 2px solid var(--pb-accent-2);
+        color: var(--pb-text);
+      }
+      .pb_SecretCard_99cd0dcd_full .pb_SecretCard_99cd0dcd_face {
+        transform: rotateY(180deg);
+      }
+      .pb_SecretCard_99cd0dcd_mini .pb_SecretCard_99cd0dcd_face {
+        transform: rotateX(180deg);
+      }
+      /* WebKit can paint the inactive face through its backface. Match the control's visible side
+   explicitly there; Chromium keeps the existing two-sided transform throughout the flip. */
+      @supports (-webkit-backdrop-filter: none) {
+        .pb_SecretCard_99cd0dcd_card:not(.pb_SecretCard_99cd0dcd_shown)
+          .pb_SecretCard_99cd0dcd_face,
+        .pb_SecretCard_99cd0dcd_card.pb_SecretCard_99cd0dcd_shown .pb_SecretCard_99cd0dcd_back {
+          visibility: hidden;
+        }
+      }
+      .pb_SecretCard_99cd0dcd_glyph {
+        font-size: 2.25rem;
+        line-height: 1;
+      }
+      .pb_SecretCard_99cd0dcd_mini .pb_SecretCard_99cd0dcd_glyph {
+        font-size: 1.375rem;
+      }
+      .pb_SecretCard_99cd0dcd_backLabel {
+        font-size: var(--pb-font-h2);
+        font-weight: 800;
+        line-height: 1.2;
+      }
+      .pb_SecretCard_99cd0dcd_mini .pb_SecretCard_99cd0dcd_backLabel {
+        font-size: var(--pb-font-body);
+      }
+      .pb_SecretCard_99cd0dcd_backHint {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text);
+      }
+      .pb_SecretCard_99cd0dcd_mini .pb_SecretCard_99cd0dcd_backHint {
+        display: none;
+      }
+      /* The back's hand breathes until the player has learned the gesture (motion-gated). */
+      @media (prefers-reduced-motion: no-preference) {
+        .pb_SecretCard_99cd0dcd_full:not(.pb_SecretCard_99cd0dcd_shown)
+          .pb_SecretCard_99cd0dcd_glyph {
+          animation: pb-breathe 2.4s ease-in-out infinite;
+        }
+      }
+      :root[data-motion='off'] .pb_SecretCard_99cd0dcd_full .pb_SecretCard_99cd0dcd_glyph {
+        animation: none;
+      }
+
+      /* Materials R2: source adaptations and new relief paint are recorded in SOURCES.pb_SecretCard_99cd0dcd_md. */
+      .pb_SecretCard_99cd0dcd_back {
+        background:
+          linear-gradient(
+              90deg,
+              color-mix(in srgb, var(--pb-accent) 5%, transparent) 50%,
+              transparent 50%
+            )
+            0 0 / 4px 4px,
+          linear-gradient(color-mix(in srgb, var(--pb-text) 3%, transparent) 50%, transparent 50%) 0
+            0 / 4px 4px,
+          repeating-linear-gradient(
+            45deg,
+            transparent 0 13px,
+            color-mix(in srgb, var(--pb-accent) 12%, transparent) 13px 14px
+          ),
+          linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--pb-text) 8%, transparent),
+            transparent 35%,
+            color-mix(in srgb, var(--pb-bg) 32%, transparent)
+          ),
+          var(--pb-surface-2);
+      }
+      .pb_SecretCard_99cd0dcd_face {
+        background:
+          linear-gradient(
+              90deg,
+              color-mix(in srgb, var(--pb-text-muted) 3%, transparent) 50%,
+              transparent 50%
+            )
+            0 0 / 3px 3px,
+          linear-gradient(
+              color-mix(in srgb, var(--pb-text-muted) 3%, transparent) 50%,
+              transparent 50%
+            )
+            0 0 / 3px 3px,
+          linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--pb-accent-2-fill) 8%, var(--pb-surface)),
+            var(--pb-surface) 18%,
+            var(--pb-surface) 82%,
+            color-mix(in srgb, var(--pb-surface-2) 65%, var(--pb-surface))
+          );
+      }
+      :root[data-theme='contrast'] .pb_SecretCard_99cd0dcd_back,
+      :root[data-theme='contrast'] .pb_SecretCard_99cd0dcd_face {
+        background: var(--pb-surface);
+      }
+      :root[data-theme='contrast'] .pb_SecretCard_99cd0dcd_card {
+        box-shadow: none;
+      }
+
+      /* games/2048/client/Board.module.css */
+      .pb_Board_558e3b53_board {
+        /* 280px mobile board: 10px inset/gaps and 6px/3px corners. Smaller
+     public maps scale this geometry instead of stretching the puzzle. */
+        --board-gap: calc(var(--pb-space-2) * 1.25);
+        --board-travel: calc(var(--pb-motion-fast) * 2 / 3);
+        --board-appear: calc(var(--pb-motion-fast) * 4 / 3);
+        --board-well: color-mix(in srgb, var(--pb-surface) 65%, var(--pb-bg));
+        position: relative;
+        box-sizing: border-box;
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: calc(var(--pb-radius) / 2);
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        container-type: inline-size;
+        font-family: var(--merge-font-family, Arial, Helvetica, sans-serif);
+      }
+
+      .pb_Board_558e3b53_cells {
+        position: absolute;
+        inset: var(--board-gap);
+        display: grid;
+        grid-template-rows: repeat(4, minmax(0, 1fr));
+        gap: var(--board-gap);
+      }
+
+      .pb_Board_558e3b53_row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--board-gap);
+        min-height: 0;
+      }
+
+      .pb_Board_558e3b53_tile {
+        display: grid;
+        place-items: center;
+        min-width: 0;
+        border-radius: calc(var(--pb-radius) / 4);
+        background: var(--board-well);
+        font-size: 12.5cqw;
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .pb_Board_558e3b53_tile[data-value='2'] {
+        background: color-mix(in srgb, var(--pb-surface) 92%, var(--pb-text));
+      }
+
+      .pb_Board_558e3b53_tile[data-value='4'] {
+        background: color-mix(in srgb, var(--pb-surface) 84%, var(--pb-text));
+      }
+
+      .pb_Board_558e3b53_tile[data-value='8'] {
+        background: var(--pb-accent-3);
+        color: var(--pb-on-accent);
+      }
+
+      .pb_Board_558e3b53_tile[data-value='16'] {
+        background: var(--pb-info);
+        color: var(--pb-on-accent);
+      }
+
+      .pb_Board_558e3b53_tile[data-value='32'] {
+        background: var(--pb-accent);
+        color: var(--pb-on-accent);
+      }
+
+      .pb_Board_558e3b53_tile[data-value='64'] {
+        background: var(--pb-danger);
+        color: var(--pb-on-accent);
+      }
+
+      .pb_Board_558e3b53_tile[data-value='128'],
+      .pb_Board_558e3b53_tile[data-value='256'],
+      .pb_Board_558e3b53_tile[data-value='512'],
+      .pb_Board_558e3b53_tile[data-value='1024'],
+      .pb_Board_558e3b53_tile[data-value='2048'] {
+        --tile-glow: 24%;
+        background: color-mix(in srgb, var(--pb-accent-2-fill) 80%, var(--pb-surface));
+        color: var(--pb-on-accent-2-fill);
+        box-shadow: 0 0 calc(var(--pb-space-6) * 15 / 16) calc(var(--pb-space-2) * 1.25)
+          color-mix(in srgb, var(--pb-accent-2-fill) var(--tile-glow), transparent);
+      }
+
+      .pb_Board_558e3b53_tile[data-value='256'] {
+        --tile-glow: 32%;
+        background: color-mix(in srgb, var(--pb-accent-2-fill) 85%, var(--pb-surface));
+      }
+
+      .pb_Board_558e3b53_tile[data-value='512'] {
+        --tile-glow: 40%;
+        background: color-mix(in srgb, var(--pb-accent-2-fill) 90%, var(--pb-surface));
+      }
+
+      .pb_Board_558e3b53_tile[data-value='1024'] {
+        --tile-glow: 48%;
+        background: color-mix(in srgb, var(--pb-accent-2-fill) 95%, var(--pb-surface));
+      }
+
+      .pb_Board_558e3b53_tile[data-value='2048'] {
+        --tile-glow: 56%;
+        background: var(--pb-accent-2-fill);
+      }
+
+      .pb_Board_558e3b53_tile[data-digits='3'] {
+        font-size: 8.928571429cqw;
+      }
+
+      .pb_Board_558e3b53_tile[data-digits='4'] {
+        font-size: 5.357142857cqw;
+      }
+
+      .pb_Board_558e3b53_board[data-mini='true'],
+      .pb_Board_558e3b53_board[data-tv-map='true'] {
+        --board-gap: 3.571428571cqw;
+        border-radius: 2.142857143%;
+      }
+
+      .pb_Board_558e3b53_board[data-mini='true'] .pb_Board_558e3b53_tile,
+      .pb_Board_558e3b53_board[data-tv-map='true'] .pb_Board_558e3b53_tile {
+        border-radius: 5.217391304%;
+      }
+
+      /* The phone is the essential original puzzle. Square TV maps are supplementary
+   party plumbing; the card repeats score and best tile at sofa-readable size. */
+      .pb_Board_558e3b53_board[data-tv-map='true'] {
+        width: calc(var(--pb-font-body) * 32 / 9 + var(--pb-space-1) * 5);
+        max-width: 100%;
+        justify-self: center;
+      }
+
+      /* The semantic snapshot also remains visible when motion is disabled before
+   React hydrates or while its preference subscription is catching up. */
+      @media (prefers-reduced-motion: no-preference) {
+        :global(:root:not([data-motion='off']))
+          .pb_Board_558e3b53_board[data-moving='true']
+          .pb_Board_558e3b53_cells
+          .pb_Board_558e3b53_tile {
+          background: var(--board-well);
+          color: transparent;
+          box-shadow: none;
+        }
+      }
+
+      .pb_Board_558e3b53_motion {
+        position: absolute;
+        inset: var(--board-gap);
+        pointer-events: none;
+      }
+
+      .pb_Board_558e3b53_movingTile {
+        position: absolute;
+        left: calc(var(--tile-col) * (100% + var(--board-gap)) / 4);
+        top: calc(var(--tile-row) * (100% + var(--board-gap)) / 4);
+        width: calc((100% - var(--board-gap) * 3) / 4);
+        height: calc((100% - var(--board-gap) * 3) / 4);
+        z-index: 2;
+      }
+
+      .pb_Board_558e3b53_movingTile[data-motion='travel'] {
+        animation: travel var(--board-travel) ease-in-out both;
+      }
+
+      .pb_Board_558e3b53_movingTile[data-merged='true'] {
+        animation:
+          travel var(--board-travel) ease-in-out both,
+          consumed var(--board-travel) steps(1, end) both;
+      }
+
+      .pb_Board_558e3b53_movingTile[data-motion='spawn'] {
+        animation: appear var(--board-appear) ease var(--board-travel) both;
+      }
+
+      .pb_Board_558e3b53_movingTile[data-motion='merge'] {
+        z-index: 3;
+        animation: merge var(--board-appear) ease var(--board-travel) both;
+      }
+
+      @keyframes travel {
+        from {
+          transform: translate(
+            calc(var(--from-x) * (100% + var(--board-gap))),
+            calc(var(--from-y) * (100% + var(--board-gap)))
+          );
+        }
+        to {
+          transform: translate(0, 0);
+        }
+      }
+
+      @keyframes consumed {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+
+      @keyframes appear {
+        from {
+          opacity: 0;
+          transform: scale(0);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes merge {
+        0% {
+          transform: scale(0);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .pb_Board_558e3b53_motion {
+          display: none;
+        }
+      }
+
+      :root[data-motion='off'] .pb_Board_558e3b53_motion {
+        display: none;
+      }
+
+      /* games/2048/client/RaceStage.module.css */
+      .pb_RaceStage_612ac0c5_stage {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: var(--pb-space-3);
+        min-height: 0;
+        height: 100%;
+        padding: var(--pb-space-3);
+        padding-bottom: max(var(--pb-space-3), env(safe-area-inset-bottom));
+        color: var(--pb-text);
+      }
+
+      .pb_RaceStage_612ac0c5_header {
+        text-align: center;
+      }
+
+      .pb_RaceStage_612ac0c5_header h2 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+      }
+
+      .pb_RaceStage_612ac0c5_header p {
+        margin: var(--pb-space-1) 0 0;
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-caption);
+      }
+
+      .pb_RaceStage_612ac0c5_personal {
+        display: block;
+        margin-top: var(--pb-space-2);
+        color: var(--pb-accent-2);
+        font-size: var(--pb-font-body);
+      }
+
+      .pb_RaceStage_612ac0c5_boards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: minmax(0, 1fr);
+        gap: var(--pb-space-2);
+        min-height: 0;
+      }
+
+      .pb_RaceStage_612ac0c5_racer {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        justify-items: center;
+        gap: var(--pb-space-1);
+        min-height: 0;
+        min-width: 0;
+        container-type: size;
+      }
+
+      .pb_RaceStage_612ac0c5_racer h3 {
+        width: 100%;
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: var(--pb-font-caption);
+      }
+
+      .pb_RaceStage_612ac0c5_racer h3 span {
+        color: var(--pb-text-muted);
+      }
+
+      .pb_RaceStage_612ac0c5_boardSlot {
+        display: grid;
+        place-items: center;
+        width: 100%;
+        min-height: 0;
+        container-type: size;
+      }
+
+      .pb_RaceStage_612ac0c5_boardSlot > [role='grid'] {
+        width: min(100%, 100cqh);
+      }
+
+      .pb_RaceStage_612ac0c5_racer p {
+        margin: 0;
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+        width: 100%;
+        text-align: center;
+      }
+
+      .pb_RaceStage_612ac0c5_racer p strong {
+        color: var(--pb-accent-2);
+      }
+
+      .pb_RaceStage_612ac0c5_rows {
+        display: grid;
+        align-content: center;
+        gap: var(--pb-space-2);
+        min-height: 0;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .pb_RaceStage_612ac0c5_rows li {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        min-width: 0;
+        min-height: calc(var(--pb-touch) + var(--pb-space-2));
+        padding: var(--pb-space-2) var(--pb-space-3);
+        border-radius: var(--pb-radius);
+        border-left: var(--pb-space-1) solid var(--racer-color);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-body);
+      }
+
+      .pb_RaceStage_612ac0c5_rows li[data-me='true'] {
+        outline: calc(var(--pb-space-1) / 2) solid var(--pb-focus);
+      }
+
+      .pb_RaceStage_612ac0c5_rank {
+        flex: none;
+        min-width: 2ch;
+        color: var(--pb-text-muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .pb_RaceStage_612ac0c5_player {
+        display: grid;
+        min-width: 0;
+      }
+
+      .pb_RaceStage_612ac0c5_player strong {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .pb_RaceStage_612ac0c5_player span {
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-caption);
+      }
+
+      .pb_RaceStage_612ac0c5_score {
+        margin-left: auto;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .pb_RaceStage_612ac0c5_star {
+        color: var(--pb-accent-2);
+      }
+
+      .pb_RaceStage_612ac0c5_footer {
+        margin: 0;
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+        text-align: center;
+      }
+
+      /* games/2048/client/StandingsStrip.module.css */
+      .pb_StandingsStrip_cd4f575c_rows {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-flow: row;
+        gap: var(--pb-space-1) var(--pb-space-3);
+        margin: 0;
+        padding: var(--pb-space-2);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        list-style: none;
+        font-size: var(--pb-font-caption);
+        line-height: 1.2;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .pb_StandingsStrip_cd4f575c_rows li {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-1);
+        min-width: 0;
+      }
+
+      .pb_StandingsStrip_cd4f575c_rank {
+        flex: none;
+        color: var(--pb-text-muted);
+      }
+
+      .pb_StandingsStrip_cd4f575c_status {
+        flex: none;
+        color: var(--pb-text-muted);
+      }
+
+      .pb_StandingsStrip_cd4f575c_name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .pb_StandingsStrip_cd4f575c_rows b {
+        margin-left: auto;
+      }
+
+      .pb_StandingsStrip_cd4f575c_rows li[data-me='true'] {
+        color: var(--pb-accent-2);
+        font-weight: 900;
+      }
+
+      /* games/2048/client/Controller.module.css */
+      .pb_Controller_d61e2ba9_screen {
+        --merge-font-family: Arial, Helvetica, sans-serif;
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
+        gap: var(--pb-space-3);
+        min-height: 0;
+        height: 100%;
+        padding: var(--pb-space-3);
+        padding-bottom: max(var(--pb-space-3), env(safe-area-inset-bottom));
+        overscroll-behavior: none;
+        color: var(--pb-text);
+        font-family: var(--merge-font-family);
+      }
+
+      .pb_Controller_d61e2ba9_screen[data-phone-only='true'] {
+        grid-template-rows: auto auto minmax(0, 1fr) auto auto auto auto;
+      }
+
+      .pb_Controller_d61e2ba9_header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--pb-space-3);
+        width: min(100%, calc(var(--pb-touch) * 70 / 11));
+        justify-self: center;
+      }
+
+      .pb_Controller_d61e2ba9_header h2 {
+        margin: calc(var(--pb-space-3) * 1.25) 0 0;
+        font-size: calc(var(--pb-font-h1) * 27 / 28);
+        font-weight: 700;
+        line-height: 1.15;
+      }
+
+      .pb_Controller_d61e2ba9_intro {
+        display: grid;
+        grid-template-columns: 55% 42%;
+        justify-content: space-between;
+        width: min(100%, calc(var(--pb-touch) * 70 / 11));
+        justify-self: center;
+        font-size: calc(var(--pb-font-body) * 5 / 6);
+      }
+
+      .pb_Controller_d61e2ba9_intro > p {
+        line-height: 1.65;
+      }
+
+      .pb_Controller_d61e2ba9_raceInfo {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: space-between;
+        gap: var(--pb-space-2);
+        margin-top: var(--pb-space-2);
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+
+      .pb_Controller_d61e2ba9_clock {
+        display: grid;
+        justify-items: center;
+        align-content: center;
+        min-height: calc(var(--pb-touch) * 10 / 11);
+        align-self: start;
+        margin-top: calc(var(--pb-space-1) / 2);
+        border-radius: calc(var(--pb-radius) / 4);
+        background: var(--pb-surface-2);
+        flex: none;
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+
+      .pb_Controller_d61e2ba9_clock strong {
+        font-size: var(--pb-font-button);
+        color: var(--pb-accent-2);
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .pb_Controller_d61e2ba9_clock[data-urgent='true'] strong {
+        color: var(--pb-danger);
+      }
+
+      .pb_Controller_d61e2ba9_stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: calc(var(--pb-space-1) * 1.25);
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+
+      .pb_Controller_d61e2ba9_stats dt {
+        font-size: calc(var(--pb-font-caption) * 13 / 14);
+        text-transform: uppercase;
+        line-height: 1;
+        color: var(--pb-text-muted);
+      }
+
+      .pb_Controller_d61e2ba9_stats dd {
+        position: relative;
+        margin: 0;
+        font-size: calc(var(--pb-font-h1) * 25 / 28);
+        line-height: 1.2;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .pb_Controller_d61e2ba9_stats > div {
+        min-width: calc(var(--pb-touch) * 15 / 11);
+        min-height: calc(var(--pb-touch) * 1.25);
+        padding: calc(var(--pb-space-2) * 1.25) calc(var(--pb-space-2) * 1.25)
+          calc(var(--pb-space-1) / 2);
+        background: var(--pb-surface-2);
+        border-radius: calc(var(--pb-radius) / 4);
+      }
+
+      .pb_Controller_d61e2ba9_stats dd {
+        margin-top: calc(var(--pb-space-1) / 2);
+      }
+
+      .pb_Controller_d61e2ba9_gain {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 5;
+        font-size: inherit;
+        font-weight: 900;
+        color: var(--pb-accent-3);
+        animation: scoreRise var(--pb-motion-slow) ease-in both;
+        pointer-events: none;
+      }
+
+      @keyframes scoreRise {
+        from {
+          opacity: 1;
+          transform: translateY(calc(var(--pb-space-5) * 25 / 24));
+        }
+        to {
+          opacity: 0;
+          transform: translateY(calc(var(--pb-space-5) * -50 / 24));
+        }
+      }
+
+      .pb_Controller_d61e2ba9_boardSpace {
+        display: grid;
+        place-items: start center;
+        min-height: 0;
+        container-type: size;
+      }
+
+      .pb_Controller_d61e2ba9_swipe {
+        position: relative;
+        width: min(100%, 100cqh, calc(var(--pb-touch) * 70 / 11));
+        aspect-ratio: 1;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        border-radius: calc(var(--pb-radius) / 2);
+      }
+
+      .pb_Controller_d61e2ba9_swipe:focus-visible,
+      .pb_Controller_d61e2ba9_direction:focus-visible {
+        outline: var(--pb-space-1) solid var(--pb-focus);
+        outline-offset: var(--pb-space-1);
+      }
+
+      .pb_Controller_d61e2ba9_overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-3);
+        background: var(--pb-scrim);
+        border-radius: calc(var(--pb-radius) / 2);
+        animation: blockedFade calc(var(--pb-motion-base) * 8 / 3) ease
+          calc(var(--pb-motion-slow) * 2) backwards;
+      }
+
+      .pb_Controller_d61e2ba9_overlay strong {
+        font-size: calc(var(--pb-font-h1) * 15 / 14);
+      }
+
+      .pb_Controller_d61e2ba9_overlay span {
+        font-size: var(--pb-font-caption);
+      }
+
+      @keyframes blockedFade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .pb_Controller_d61e2ba9_hint,
+      .pb_Controller_d61e2ba9_rule {
+        margin: 0;
+        text-align: center;
+        font-size: var(--pb-font-caption);
+        line-height: 1.3;
+        color: var(--pb-text-muted);
+      }
+
+      .pb_Controller_d61e2ba9_hint {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .pb_Controller_d61e2ba9_controls {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--pb-space-2);
+      }
+
+      .pb_Controller_d61e2ba9_direction {
+        min-height: calc(var(--pb-touch) + var(--pb-space-5));
+        min-width: var(--pb-touch);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        border-radius: var(--pb-radius);
+        background: var(--pb-accent);
+        color: var(--pb-on-accent);
+        font-family: inherit;
+        font-size: var(--pb-font-display);
+        line-height: 1;
+        font-weight: 900;
+        touch-action: manipulation;
+        transition: transform var(--pb-motion-fast) var(--pb-ease);
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .pb_Controller_d61e2ba9_direction:active:not([aria-disabled='true']) {
+        transform: scale(0.94);
+      }
+
+      .pb_Controller_d61e2ba9_direction[aria-disabled='true'] {
+        background: var(--pb-surface-2);
+        color: var(--pb-text-muted);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .pb_Controller_d61e2ba9_direction {
+          transition: none;
+        }
+        .pb_Controller_d61e2ba9_gain {
+          display: none;
+        }
+        .pb_Controller_d61e2ba9_overlay {
+          animation: none;
+        }
+      }
+
+      :root[data-motion='off'] .pb_Controller_d61e2ba9_direction {
+        transition: none;
+      }
+
+      :root[data-motion='off'] .pb_Controller_d61e2ba9_gain {
+        display: none;
+      }
+
+      :root[data-motion='off'] .pb_Controller_d61e2ba9_overlay {
+        animation: none;
+      }
+
+      /* games/2048/client/Tv.module.css */
+      .pb_Tv_6d37bbeb_stage {
+        flex: 1;
+        min-height: 0;
+        gap: var(--pb-space-5);
+      }
+
+      .pb_Tv_6d37bbeb_header {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-6);
+      }
+
+      .pb_Tv_6d37bbeb_heading {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .pb_Tv_6d37bbeb_heading h1 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+        line-height: 1.1;
+      }
+
+      .pb_Tv_6d37bbeb_heading p {
+        margin: var(--pb-space-2) 0 0;
+        font-size: var(--pb-font-body);
+        color: var(--pb-text-muted);
+        line-height: 1.25;
+      }
+
+      .pb_Tv_6d37bbeb_clock {
+        display: grid;
+        justify-items: end;
+        flex: none;
+        font-size: var(--pb-font-body);
+        color: var(--pb-text-muted);
+      }
+
+      .pb_Tv_6d37bbeb_clock strong {
+        font-size: calc(var(--pb-font-display) * 0.75);
+        line-height: 1;
+        color: var(--pb-accent-2);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .pb_Tv_6d37bbeb_clock[data-urgent='true'] strong {
+        color: var(--pb-danger);
+      }
+
+      .pb_Tv_6d37bbeb_finish {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-4);
+        font-size: var(--pb-font-body);
+        color: var(--pb-accent-2);
+      }
+
+      .pb_Tv_6d37bbeb_finish span {
+        font-size: var(--pb-font-h1);
+      }
+
+      .pb_Tv_6d37bbeb_racers {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--pb-space-5);
+        flex: 1;
+        min-height: 0;
+        align-content: center;
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-count='2'] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-count='3'] {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .pb_Tv_6d37bbeb_racer {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--pb-space-2);
+        min-width: 0;
+        padding: var(--pb-space-3);
+        background: var(--pb-surface);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        border-top: var(--pb-space-1) solid var(--racer-color);
+        border-radius: var(--pb-radius-lg);
+      }
+
+      .pb_Tv_6d37bbeb_racer[data-winner='true'] {
+        border-color: var(--pb-accent-2);
+      }
+
+      .pb_Tv_6d37bbeb_racerHeader {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-3);
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+        line-height: 1.2;
+        min-width: 0;
+      }
+
+      .pb_Tv_6d37bbeb_racerHeader h2 {
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: inherit;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .pb_Tv_6d37bbeb_rank {
+        flex: none;
+        color: var(--pb-text-muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .pb_Tv_6d37bbeb_racerHeader > span {
+        margin-left: auto;
+        color: var(--pb-accent-2);
+        flex: none;
+      }
+
+      .pb_Tv_6d37bbeb_summary {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: end;
+        gap: var(--pb-space-3);
+      }
+
+      .pb_Tv_6d37bbeb_best {
+        display: grid;
+        justify-items: start;
+        gap: var(--pb-space-2);
+        min-width: 0;
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+      }
+
+      .pb_Tv_6d37bbeb_best strong {
+        font-size: calc(var(--pb-font-display) * 0.5);
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+        color: var(--pb-accent-2);
+      }
+
+      .pb_Tv_6d37bbeb_status {
+        color: var(--pb-text-muted);
+      }
+
+      .pb_Tv_6d37bbeb_racerHeader > .pb_Tv_6d37bbeb_status {
+        color: var(--pb-text-muted);
+      }
+
+      .pb_Tv_6d37bbeb_score {
+        display: grid;
+        justify-items: end;
+        gap: var(--pb-space-2);
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+        color: var(--pb-text-muted);
+      }
+
+      .pb_Tv_6d37bbeb_score strong {
+        font-size: var(--pb-font-h2);
+        line-height: 1;
+        color: var(--pb-text);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Eight full numeric boards fit the actual collapsed-strip host Stage. */
+      div.pb_Tv_6d37bbeb_stage {
+        gap: var(--pb-space-3);
+      }
+      .pb_Tv_6d37bbeb_racers {
+        align-content: start;
+      }
+      .pb_Tv_6d37bbeb_racer {
+        gap: var(--pb-space-1);
+      }
+      .pb_Tv_6d37bbeb_summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--pb-space-2);
+      }
+      .pb_Tv_6d37bbeb_best,
+      .pb_Tv_6d37bbeb_score {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+      }
+      .pb_Tv_6d37bbeb_best strong {
+        font-size: var(--pb-font-h2);
+        line-height: 1.4;
+      }
+      .pb_Tv_6d37bbeb_score strong {
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+        line-height: 1.4;
+      }
+
+      /* Ranked results emphasize the outcome instead of repeating every board cell. */
+      .pb_Tv_6d37bbeb_racers[data-final='true'] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: minmax(0, 1fr);
+        gap: var(--pb-space-3);
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-final='true'] .pb_Tv_6d37bbeb_racer {
+        padding: var(--pb-space-3) var(--pb-space-4);
+        align-content: center;
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-final='true'] .pb_Tv_6d37bbeb_best strong,
+      .pb_Tv_6d37bbeb_racers[data-final='true'] .pb_Tv_6d37bbeb_score strong {
+        font-size: var(--pb-font-h2);
+        line-height: 1.1;
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-final='true'][data-count='2'],
+      .pb_Tv_6d37bbeb_racers[data-final='true'][data-count='3'],
+      .pb_Tv_6d37bbeb_racers[data-final='true'][data-count='4'] {
+        flex: none;
+        grid-auto-rows: minmax(calc(var(--pb-space-8) * 3), auto);
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-final='true'][data-count='2'] {
+        grid-auto-rows: minmax(calc(var(--pb-space-8) * 4), auto);
+      }
+    </style>
+    <style>
+      @font-face {
+        font-family: 'Nunito Variable';
+        font-style: normal;
+        font-weight: 200 1000;
+        font-display: swap;
+        src: url('./nunito-latin-wght-normal.woff2') format('woff2');
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+        font-size: var(--pb-font-body);
+        line-height: 1.4;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1 {
+        font-size: var(--pb-font-h1);
+        line-height: 1.15;
+        font-weight: 800;
+      }
+      h2 {
+        font-size: var(--pb-font-h2);
+        line-height: 1.2;
+        font-weight: 700;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+        color: inherit;
+      }
+      button {
+        cursor: pointer;
+        border: 0;
+        background: none;
+        padding: 0;
+        touch-action: manipulation;
+      }
+      #capture-root {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template-rows: 60px calc(var(--pb-font-caption) * 1.4 + var(--pb-space-2)) minmax(
+            0,
+            1fr
+          );
+      }
+      [data-surface='tv'] #capture-root {
+        grid-template-rows:
+          calc(var(--pb-overscan-y) + var(--pb-font-h2) * 1.4 + var(--pb-space-3))
+          var(--pb-space-3) minmax(0, 1fr) calc(
+            var(--pb-touch) + var(--pb-space-4) + var(--pb-space-2) + var(--pb-space-3)
+          );
+      }
+      #shell-header,
+      #shell-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--pb-space-4);
+        background: var(--pb-surface);
+        gap: var(--pb-space-3);
+      }
+      [data-surface='tv'] #shell-header {
+        padding: var(--pb-overscan-y) var(--pb-overscan-x) var(--pb-space-3);
+        font-size: var(--pb-font-h2);
+      }
+      #shell-footer {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+      [data-surface='phone'] #shell-footer {
+        display: none;
+      }
+      #shell-chrome {
+        min-height: 0;
+        padding: 0 var(--pb-overscan-x) var(--pb-space-3);
+      }
+      [data-surface='phone'] #shell-chrome {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-1) var(--pb-space-4);
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+      #shell-chrome i {
+        height: 6px;
+        flex: 1;
+        border-radius: 999px;
+        background: var(--pb-accent-2);
+      }
+      [data-surface='tv'] #shell-chrome > * {
+        display: none;
+      }
+      #game-frame {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        min-width: 0;
+        overflow: hidden;
+        --pb-stage-top: var(--pb-space-3);
+      }
+      #game-frame > * {
+        width: 100%;
+      }
+      .pb-muted {
+        color: var(--pb-text-muted);
+      }
+      .pb-caption {
+        font-size: var(--pb-font-caption);
+      }
+      :root[data-motion='off'] *,
+      :root[data-motion='off'] *::before,
+      :root[data-motion='off'] *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    </style>
+  </head>
+  <body data-capture="play-phone-with-tv-player">
+    <div id="capture-root">
+      <header id="shell-header"><b>PartyBox</b><span>8 players</span></header>
+      <div id="shell-chrome"><i></i><span>Race</span></div>
+      <main id="game-frame" aria-label="Game stage">
+        <div class="pb_Controller_d61e2ba9_screen">
+          <header class="pb_Controller_d61e2ba9_header">
+            <h2>2048</h2>
+            <dl class="pb_Controller_d61e2ba9_stats">
+              <div>
+                <dt>Score</dt>
+                <dd>816<span class="pb_Controller_d61e2ba9_gain" role="status"></span></dd>
+              </div>
+              <div>
+                <dt>Best</dt>
+                <dd>816</dd>
+              </div>
+            </dl>
+          </header>
+          <div class="pb_Controller_d61e2ba9_intro">
+            <p>Join the numbers and get to the 2048 tile!</p>
+            <span class="pb_Controller_d61e2ba9_clock" role="timer" data-urgent="false"
+              >Time left <strong>2:20</strong></span
+            >
+            <div class="pb_Controller_d61e2ba9_raceInfo"><span>Best tile 64 · Place #7</span></div>
+          </div>
+          <div class="pb_Controller_d61e2ba9_boardSpace">
+            <div
+              class="pb_Controller_d61e2ba9_swipe"
+              role="group"
+              aria-label="Your board. Swipe or use arrow keys to move tiles."
+              tabindex="0"
+              aria-busy="false"
+            >
+              <div
+                class="pb_Board_558e3b53_board"
+                role="grid"
+                aria-label="Your board"
+                aria-readonly="true"
+              >
+                <div class="pb_Board_558e3b53_cells">
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 1, column 1: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 1, column 2: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 1, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 1, column 4: 4"
+                      >4</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 1: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 2, column 2: 2"
+                      >2</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 2, column 3: 16"
+                      >16</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="64"
+                      data-digits="2"
+                      aria-label="Row 2, column 4: 64"
+                      >64</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 3, column 1: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 3, column 2: 8"
+                      >8</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="32"
+                      data-digits="2"
+                      aria-label="Row 3, column 3: 32"
+                      >32</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 3, column 4: 4"
+                      >4</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 4, column 1: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 4, column 2: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 4, column 3: 8"
+                      >8</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="64"
+                      data-digits="2"
+                      aria-label="Row 4, column 4: 64"
+                      >64</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="pb_Controller_d61e2ba9_hint">Swipe the board or tap a direction.</p>
+          <div class="pb_Controller_d61e2ba9_controls" role="group" aria-label="Move tiles">
+            <button
+              type="button"
+              class="pb_Controller_d61e2ba9_direction"
+              aria-disabled="false"
+              aria-label="Move left"
+            >
+              <span aria-hidden="true">←</span></button
+            ><button
+              type="button"
+              class="pb_Controller_d61e2ba9_direction"
+              aria-disabled="false"
+              aria-label="Move up"
+            >
+              <span aria-hidden="true">↑</span></button
+            ><button
+              type="button"
+              class="pb_Controller_d61e2ba9_direction"
+              aria-disabled="false"
+              aria-label="Move down"
+            >
+              <span aria-hidden="true">↓</span></button
+            ><button
+              type="button"
+              class="pb_Controller_d61e2ba9_direction"
+              aria-disabled="false"
+              aria-label="Move right"
+            >
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+          <p class="pb_Controller_d61e2ba9_rule">Equal tiles merge once per move.</p>
+        </div>
+      </main>
+      <footer id="shell-footer"><span>2048</span><span>phone</span></footer>
+    </div>
+  </body>
+</html>

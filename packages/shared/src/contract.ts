@@ -11,7 +11,7 @@ import type { GameOutcome } from './game-outcome';
 
 // ─── Manifest + settings ────────────────────────────────────────────────────────────────────────
 
-export const GAME_ID_PATTERN = /^[a-z][a-z0-9-]{1,31}$/;
+export const GAME_ID_PATTERN = /^[a-z0-9][a-z0-9-]{1,31}$/;
 const SEMVER = /^\d+\.\d+\.\d+$/;
 /** A sibling setting's `key` and `value`, with a `note` for the player (`disabledBy`, `impliedBy`). */
 const settingRef = z.object({
