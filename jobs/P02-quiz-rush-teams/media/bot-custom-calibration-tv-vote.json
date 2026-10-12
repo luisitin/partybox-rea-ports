@@ -1,0 +1,226 @@
+{
+  "mode": "tv-vote",
+  "pack": "custom",
+  "questionCount": 5,
+  "knownQuestions": 5,
+  "unknownQuestions": 0,
+  "seedsPerQuestionAndStrength": 1000,
+  "requiredSeedsPerQuestionAndStrength": 1000,
+  "completeRequiredCampaign": true,
+  "totalAnswerSamples": 15000,
+  "seeds": "1..5000; five disjoint ranges of 1,000, reused across strengths",
+  "measurement": "Real custom lookup and bot answer sampling; seed = questionIndex * 1000 + 1..1000. Correctness assessed externally from the authored pack.",
+  "expectedBehavior": "All five exact public facts follow the configured skill. Equivalent numeric count words/digits match a unique visible choice; no answer-key metadata is consulted by the bot.",
+  "strengths": [
+    {
+      "skill": "easy",
+      "samples": 5000,
+      "correctAnswers": 1468,
+      "measuredCorrectProbability": 0.2936,
+      "expectedCorrectProbability": 0.3,
+      "absoluteTolerance": 0.055,
+      "perQuestion": [
+        {
+          "questionId": "custom-general-01",
+          "publicFact": "Paris",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "1..1000",
+          "choiceCounts": [241, 298, 233, 228],
+          "correctAnswers": 298,
+          "measuredCorrectProbability": 0.298,
+          "expectedCorrectProbability": 0.3,
+          "absoluteTolerance": 0.07
+        },
+        {
+          "questionId": "custom-general-02",
+          "publicFact": "Tokyo",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "1001..2000",
+          "choiceCounts": [254, 245, 212, 289],
+          "correctAnswers": 289,
+          "measuredCorrectProbability": 0.289,
+          "expectedCorrectProbability": 0.3,
+          "absoluteTolerance": 0.07
+        },
+        {
+          "questionId": "custom-general-03",
+          "publicFact": "Four",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "2001..3000",
+          "choiceCounts": [295, 236, 220, 249],
+          "correctAnswers": 295,
+          "measuredCorrectProbability": 0.295,
+          "expectedCorrectProbability": 0.3,
+          "absoluteTolerance": 0.07
+        },
+        {
+          "questionId": "custom-general-04",
+          "publicFact": "Leonardo da Vinci",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "3001..4000",
+          "choiceCounts": [237, 253, 292, 218],
+          "correctAnswers": 292,
+          "measuredCorrectProbability": 0.292,
+          "expectedCorrectProbability": 0.3,
+          "absoluteTolerance": 0.07
+        },
+        {
+          "questionId": "custom-general-05",
+          "publicFact": "India",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "4001..5000",
+          "choiceCounts": [222, 294, 223, 261],
+          "correctAnswers": 294,
+          "measuredCorrectProbability": 0.294,
+          "expectedCorrectProbability": 0.3,
+          "absoluteTolerance": 0.07
+        }
+      ]
+    },
+    {
+      "skill": "normal",
+      "samples": 5000,
+      "correctAnswers": 2475,
+      "measuredCorrectProbability": 0.495,
+      "expectedCorrectProbability": 0.5,
+      "absoluteTolerance": 0.055,
+      "perQuestion": [
+        {
+          "questionId": "custom-general-01",
+          "publicFact": "Paris",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "1..1000",
+          "choiceCounts": [176, 490, 164, 170],
+          "correctAnswers": 490,
+          "measuredCorrectProbability": 0.49,
+          "expectedCorrectProbability": 0.5,
+          "absoluteTolerance": 0.07
+        },
+        {
+          "questionId": "custom-general-02",
+          "publicFact": "Tokyo",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "1001..2000",
+          "choiceCounts": [186, 170, 158, 486],
+          "correctAnswers": 486,
+          "measuredCorrectProbability": 0.486,
+          "expectedCorrectProbability": 0.5,
+          "absoluteTolerance": 0.07
+        },
+        {
+          "questionId": "custom-general-03",
+          "publicFact": "Four",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "2001..3000",
+          "choiceCounts": [499, 165, 160, 176],
+          "correctAnswers": 499,
+          "measuredCorrectProbability": 0.499,
+          "expectedCorrectProbability": 0.5,
+          "absoluteTolerance": 0.07
+        },
+        {
+          "questionId": "custom-general-04",
+          "publicFact": "Leonardo da Vinci",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "3001..4000",
+          "choiceCounts": [170, 178, 488, 164],
+          "correctAnswers": 488,
+          "measuredCorrectProbability": 0.488,
+          "expectedCorrectProbability": 0.5,
+          "absoluteTolerance": 0.07
+        },
+        {
+          "questionId": "custom-general-05",
+          "publicFact": "India",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "4001..5000",
+          "choiceCounts": [149, 512, 152, 187],
+          "correctAnswers": 512,
+          "measuredCorrectProbability": 0.512,
+          "expectedCorrectProbability": 0.5,
+          "absoluteTolerance": 0.07
+        }
+      ]
+    },
+    {
+      "skill": "sharp",
+      "samples": 5000,
+      "correctAnswers": 3970,
+      "measuredCorrectProbability": 0.794,
+      "expectedCorrectProbability": 0.8,
+      "absoluteTolerance": 0.055,
+      "perQuestion": [
+        {
+          "questionId": "custom-general-01",
+          "publicFact": "Paris",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "1..1000",
+          "choiceCounts": [66, 796, 68, 70],
+          "correctAnswers": 796,
+          "measuredCorrectProbability": 0.796,
+          "expectedCorrectProbability": 0.8,
+          "absoluteTolerance": 0.07
+        },
+        {
+          "questionId": "custom-general-02",
+          "publicFact": "Tokyo",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "1001..2000",
+          "choiceCounts": [72, 81, 61, 786],
+          "correctAnswers": 786,
+          "measuredCorrectProbability": 0.786,
+          "expectedCorrectProbability": 0.8,
+          "absoluteTolerance": 0.07
+        },
+        {
+          "questionId": "custom-general-03",
+          "publicFact": "Four",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "2001..3000",
+          "choiceCounts": [806, 58, 63, 73],
+          "correctAnswers": 806,
+          "measuredCorrectProbability": 0.806,
+          "expectedCorrectProbability": 0.8,
+          "absoluteTolerance": 0.07
+        },
+        {
+          "questionId": "custom-general-04",
+          "publicFact": "Leonardo da Vinci",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "3001..4000",
+          "choiceCounts": [70, 72, 797, 61],
+          "correctAnswers": 797,
+          "measuredCorrectProbability": 0.797,
+          "expectedCorrectProbability": 0.8,
+          "absoluteTolerance": 0.07
+        },
+        {
+          "questionId": "custom-general-05",
+          "publicFact": "India",
+          "independentFactKnown": true,
+          "samples": 1000,
+          "seeds": "4001..5000",
+          "choiceCounts": [63, 785, 76, 76],
+          "correctAnswers": 785,
+          "measuredCorrectProbability": 0.785,
+          "expectedCorrectProbability": 0.8,
+          "absoluteTolerance": 0.07
+        }
+      ]
+    }
+  ]
+}

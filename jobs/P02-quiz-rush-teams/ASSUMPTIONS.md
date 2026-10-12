@@ -28,3 +28,5 @@ HISTORICAL_VERIFY.md. Current production source uses the canonical engine
 directly; no old adapter, metadata wrapper or duplicate picker card is shipped.
 
 - KEEP GOING round 3 restores the group TV countdown via the exported SDK Timer and public quiet countdown sound option. Timer phase keys persist through pause/resume and reset for each discussion/answer/question. The host's private rising-semitone option is outside the SDK contract; no private pitch or original audio identity is claimed. The adapter is hidden from layout/accessibility, leaving the single custom circular timer visible.
+
+- KEEP GOING round 4 lets custom-prefixed exact public prompts reuse only independently authored standard-pack answer-text facts. Count prompts starting How many/What number narrowly equate English zero..twelve with plain base-ten integer strings; ambiguous visible matches or conflicting independent facts fall back to guesses. Custom owner packs never teach the bot their hidden key, and unknown owner facts remain guesses. Standard known-ID matching and RNG decisions are unchanged.
