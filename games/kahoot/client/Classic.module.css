@@ -201,6 +201,9 @@
   font-size: var(--pb-font-caption);
   color: var(--pb-accent-3);
 }
+:global([data-surface='tv']) .gain {
+  font-size: var(--pb-font-body);
+}
 :global([data-surface='tv'])
   .standings:is([data-count='9'], [data-count='10'], [data-count='11'], [data-count='12']) {
   grid-template-columns: repeat(3, minmax(0, 1fr));

@@ -1,0 +1,128 @@
+/* Team names and members carry identity; colour is reserved for the existing answer shapes. */
+.roster {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--pb-space-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.roster li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-1);
+  min-width: 0;
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border-left: var(--pb-space-1) solid var(--pb-accent-2);
+  background: var(--pb-surface);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.roster[data-mine],
+.roster[data-count='1'] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.members > span:not(:last-child)::after {
+  content: ' · ';
+}
+/* Eight long names must fit beside the question at the unchanged 36 px TV body size.
+   Separate member rows prevent the joining dot from stranding the next name on a new line. */
+:global([data-surface='tv']) .roster li {
+  display: grid;
+  grid-template-columns: calc(var(--pb-font-body) * 3.5) minmax(0, 1fr);
+  align-items: start;
+  column-gap: var(--pb-space-3);
+  padding-block: var(--pb-space-1);
+}
+:global([data-surface='tv']) .roster {
+  gap: var(--pb-space-2);
+}
+:global([data-surface='tv']) .members {
+  display: grid;
+  gap: 0;
+}
+:global([data-surface='tv']) .roster[data-count='1'] .members {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--pb-space-3);
+}
+:global([data-surface='tv']) .members > span {
+  display: block;
+}
+:global([data-surface='tv']) .members > span::after {
+  content: none;
+}
+.tvTalk {
+  gap: var(--pb-space-2);
+}
+.identity,
+.rule {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.identity {
+  color: var(--pb-accent-2);
+  font-weight: 900;
+}
+.rule {
+  color: var(--pb-text-muted);
+}
+.talk {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: var(--pb-space-3);
+  justify-content: center;
+}
+.decision {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pb-space-2);
+  margin: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.decisionMark {
+  display: inline-flex;
+  flex: none;
+  padding: var(--pb-space-1);
+  border-radius: calc(var(--pb-radius) / 2);
+}
+.mark {
+  width: var(--pb-font-body);
+  height: var(--pb-font-body);
+}
+.receipt,
+.verdict {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--pb-space-1);
+  text-align: center;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.verdict h3,
+.verdict p,
+.receipt p {
+  margin: 0;
+}
+.verdict h3 {
+  font-size: var(--pb-font-h2);
+}
+.receipt b {
+  color: var(--pb-accent-2);
+}
+.phone .roster li {
+  padding: var(--pb-space-2);
+}
+.phone .roster span,
+.receipt > p:last-child {
+  font-size: var(--pb-font-caption);
+}
+:global([data-surface='tv']) .receipt > p:last-child {
+  font-size: var(--pb-font-body);
+}

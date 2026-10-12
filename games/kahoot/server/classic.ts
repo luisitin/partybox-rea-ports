@@ -2,7 +2,11 @@
 import general from '../content/classic-general.json' with { type: 'json' };
 import movies from '../content/classic-movies.json' with { type: 'json' };
 import science from '../content/classic-science.json' with { type: 'json' };
+import sports from '../content/classic-sports.json' with { type: 'json' };
+import music from '../content/classic-music.json' with { type: 'json' };
+import custom from '../content/classic-custom.json' with { type: 'json' };
 import knowledge from '../content/classic-knowledge.json' with { type: 'json' };
+import teamKnowledge from '../content/team-knowledge.json' with { type: 'json' };
 import { classicKnowledgeSchema, classicPackSchema } from '../content/classic-schema';
 import type { ClassicPack, ClassicPackId } from '../content/classic-schema';
 import type { Question } from '../content/schema';
@@ -11,8 +15,15 @@ export const CLASSIC_PACKS: Readonly<Record<ClassicPackId, ClassicPack>> = {
   general: classicPackSchema.parse(general),
   movies: classicPackSchema.parse(movies),
   science: classicPackSchema.parse(science),
+  sports: classicPackSchema.parse(sports),
+  music: classicPackSchema.parse(music),
+  custom: classicPackSchema.parse(custom),
 };
-export const CLASSIC_KNOWLEDGE = classicKnowledgeSchema.parse(knowledge);
+// Public answer-text facts are authored independently; custom packs are guessed when unknown.
+export const CLASSIC_KNOWLEDGE = {
+  ...classicKnowledgeSchema.parse(knowledge),
+  ...classicKnowledgeSchema.parse(teamKnowledge),
+};
 export type ClassicQuestion = Omit<Question, 'category'> & {
   category: string;
   explanation: string;

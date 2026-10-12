@@ -1,5 +1,5 @@
 import type { ControllerView, TvView } from '@partybox/game-sdk';
-import type { QuizMode } from './types';
+import type { GroupMode, QuizMode } from './types';
 import type { WagerOption } from './scoring';
 import type { StandingRow } from './standings';
 export type { StandingRow } from './standings';
@@ -58,7 +58,23 @@ export interface Outcome {
   base?: number;
   bonus?: number;
 }
+export interface GroupView {
+  mode: GroupMode;
+  teams: {
+    id: string;
+    name: string;
+    members: string[];
+    score: number;
+    gained: number;
+    rank: number;
+  }[];
+  myTeamId?: string;
+  /** Only present after reveal and when at least one room vote was cast. */
+  decision?: number;
+  roomStreak?: number;
+}
 export interface LightningTvView extends TvView {
+  group?: GroupView;
   contentLang?: 'en' | 'es';
   questionLang: 'en' | 'es';
   quizMode: QuizMode;
@@ -82,6 +98,7 @@ export interface LightningTvView extends TvView {
   podium?: PodiumView;
 }
 export interface LightningControllerView extends ControllerView {
+  group?: GroupView;
   contentLang?: 'en' | 'es';
   questionLang: 'en' | 'es';
   quizMode: QuizMode;

@@ -1,5 +1,7 @@
 # P02 continuation
 
+Milestone 2026-10-12 14:10 UTC: canonical teams/room vote, sports/music/custom packs and stamped answers are implemented. Focused group/server/screens/render checks pass (44); 2,006 mixed lifecycle traces pass with 1,078,010 checked views. Quick simulation smoke (42 matches) passes; required 14,000 full group simulations and full canonical SDK suite remain pending. All 115 captures fit and were visually reviewed; fix the pending-personal-result copy and raise TV score gains to 36px before final recapture. No browser remains open. All 20 semantic mutations were killed and exact source hashes restored; post-baseline had 89 passing assertions but the child cleanup exceeded its 30-second process bound. An explicit restored-baseline retry is running, with a larger harness bound. The campaign must have a successful restored-baseline proof before release. Current source is frozen except those client fixes; agents now audit read-only. PR stays draft until full checks, current-head CI and the three zero-gain KEEP GOING rounds pass.
+
 Runner r2-local; branch job/P02-quiz-rush-teams; draft PR https://github.com/luisitin/partybox-rea-ports/pull/18 (base job/P01-quiz-rush).
 
 Resumed 2026-10-12 after P06 completed. The previous prerequisite blocker is resolved: P01 public head 4043226 has the canonical classic engine/schema, stamped answers, partial podium and green CI. P01 remains unmerged. P02's expired claim was refreshed on main after pull --rebase.

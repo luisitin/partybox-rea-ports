@@ -29,6 +29,9 @@ import { REVEAL_BEAT_MS } from './timing';
 import { STRINGS } from './strings';
 import styles from './Classic.module.css';
 import { PhoneNext } from './NextStep';
+import { GroupIdentity, GroupRoster, GroupVerdict, GroupDecision, groupTitle } from './GroupParts';
+import { GroupTalk } from './GroupTalk';
+import groups from './Group.module.css';
 
 interface Pending {
   key: string;
@@ -48,6 +51,8 @@ export function ClassicController({
   const [pending, setPending] = useState<Pending | null>(null);
   const pendingRef = useRef<Pending | null>(null);
   const stage = view.stage;
+  const group = view.group;
+  const vote = group?.mode === 'tv-vote';
   const showStage = view.showStage || phoneOnly || !view.participating;
   const stamp = view.answerStamp;
   const key = stamp ? `${stamp.questionId}:${stamp.questionStartedAt}` : '';
@@ -120,6 +125,9 @@ export function ClassicController({
     </div>
   );
 
+  if (view.phaseId === 'talk')
+    return <GroupTalk view={view} showStage={showStage} seconds={seconds} />;
+
   if (view.phaseId === 'question') {
     const status = view.paused
       ? L('Paused')
@@ -128,20 +136,24 @@ export function ClassicController({
         : !connected
           ? L('Disconnected. Waiting to reconnect.')
           : view.myPickIndex !== null
-            ? L('✓ Answer locked in')
+            ? L(vote ? '✓ Your vote is locked in' : '✓ Answer locked in')
             : seconds === 0
               ? L('Time is up')
               : mine
                 ? retry
-                  ? L('Not confirmed yet. Send your answer again.')
-                  : L('Sending your answer…')
+                  ? L(
+                      vote
+                        ? 'Not confirmed yet. Send your vote again.'
+                        : 'Not confirmed yet. Send your answer again.',
+                    )
+                  : L(vote ? 'Sending your vote…' : 'Sending your answer…')
                 : showStage
-                  ? L('Tap your answer')
-                  : L('Tap the matching shape');
+                  ? L(vote ? 'Tap your vote' : 'Tap your answer')
+                  : L(vote ? 'Vote for the matching shape' : 'Tap the matching shape');
     return (
       <Screen
         key={key || `question:${view.round?.number}`}
-        className={styles.phoneScreen}
+        className={`${styles.phoneScreen} ${groups.phone}`}
         ghost={false}
       >
         <div className={styles.phoneQuestion} data-stage={showStage || undefined}>
@@ -157,6 +169,7 @@ export function ClassicController({
               </span>
             ) : null}
           </header>
+          {group ? <GroupIdentity group={group} /> : null}
           {question ? (
             <>
               <h3 className={styles.phonePrompt}>{question.text}</h3>
@@ -164,7 +177,11 @@ export function ClassicController({
             </>
           ) : null}
           {view.participating ? (
-            <div className={styles.pads} role="group" aria-label={L('Answer choices')}>
+            <div
+              className={styles.pads}
+              role="group"
+              aria-label={L(vote ? 'Vote choices' : 'Answer choices')}
+            >
               {SHAPES.map((shape, index) => (
                 <button
                   key={shape}
@@ -210,7 +227,7 @@ export function ClassicController({
     return (
       <Screen
         key={`reveal:${view.round?.number}`}
-        className={styles.phoneScreen}
+        className={`${styles.phoneScreen} ${groups.phone}`}
         title={round}
         footer={
           view.participating && view.next && skip ? (
@@ -228,43 +245,54 @@ export function ClassicController({
         }
       >
         {view.participating && shown && view.outcome ? (
-          <div className={styles.verdict} role="status">
-            <h3>
-              {view.outcome.correct
-                ? L('Correct!')
-                : view.outcome.answered
-                  ? L('Wrong')
-                  : L('Too slow')}
-            </h3>
-            <b>{L('+{n} points', { n: view.outcome.delta })}</b>
-            <p>
-              {L('{n} total', { n: view.myScore })}
-              {view.myRank !== undefined ? ` · ${L('Place {rank}', { rank: view.myRank })}` : ''}
-            </p>
-            {view.outcome.correct && view.outcome.base !== undefined ? (
+          group ? (
+            <GroupVerdict view={view} />
+          ) : (
+            <div className={styles.verdict} role="status">
+              <h3>
+                {view.outcome.correct
+                  ? L('Correct!')
+                  : view.outcome.answered
+                    ? L('Wrong')
+                    : L('Too slow')}
+              </h3>
+              <b>{L('+{n} points', { n: view.outcome.delta })}</b>
               <p>
-                {L('{n} speed points', { n: view.outcome.base })}
-                {view.outcome.bonus
-                  ? ` · ${L('+{n} streak bonus', { n: view.outcome.bonus })}`
-                  : ''}
+                {L('{n} total', { n: view.myScore })}
+                {view.myRank !== undefined ? ` · ${L('Place {rank}', { rank: view.myRank })}` : ''}
               </p>
-            ) : null}
-            {view.myStreak >= 2 ? <p>{L('{n} correct in a row', { n: view.myStreak })}</p> : null}
-            {view.round?.last ? <p>{L('The podium is next')}</p> : null}
-          </div>
+              {view.outcome.correct && view.outcome.base !== undefined ? (
+                <p>
+                  {L('{n} speed points', { n: view.outcome.base })}
+                  {view.outcome.bonus
+                    ? ` · ${L('+{n} streak bonus', { n: view.outcome.bonus })}`
+                    : ''}
+                </p>
+              ) : null}
+              {view.myStreak >= 2 ? <p>{L('{n} correct in a row', { n: view.myStreak })}</p> : null}
+              {view.round?.last ? <p>{L('The podium is next')}</p> : null}
+            </div>
+          )
         ) : view.participating ? (
-          <p className={styles.status}>{L('The answer is coming…')}</p>
+          <p className={styles.status}>{L('Your result is coming…')}</p>
         ) : null}
         {view.paused ? <p className={styles.status}>{L('Paused')}</p> : null}
         {showStage && stage ? (
           leaderboard ? (
             <>
-              <h2 className={styles.headline}>{L('Scoreboard')}</h2>
-              <PublicStandings rows={stage.standings ?? []} me={view.me.id} />
+              <h2 className={styles.headline}>
+                {L(group ? (vote ? 'Room score' : 'Team scoreboard') : 'Scoreboard')}
+              </h2>
+              <PublicStandings
+                rows={stage.standings ?? []}
+                me={group?.myTeamId ?? view.me.id}
+                gains={group !== undefined}
+              />
             </>
           ) : (
             <>
               <p className={styles.asked}>{stage.question?.text}</p>
+              <GroupDecision view={stage} />
               <ClassicChart view={stage} />
             </>
           )
@@ -280,8 +308,8 @@ export function ClassicController({
       >
         <h2 className={styles.headline}>{L(podiumLabel(view.podium?.rank ?? 1))}</h2>
         {view.paused ? <p className={styles.status}>{L('Paused')}</p> : null}
-        {showStage && stage ? (
-          <Podium view={stage} />
+        {(showStage && stage) || group ? (
+          <Podium view={stage ?? view} />
         ) : (
           <p className={styles.status}>{L('The final places are being revealed')}</p>
         )}
@@ -291,18 +319,27 @@ export function ClassicController({
   return (
     <Screen
       key={view.phaseId}
-      className={styles.phoneScreen}
+      className={`${styles.phoneScreen} ${groups.phone}`}
       title={view.phaseId === 'done' ? L('Final standings') : 'Kahoot!'}
     >
       {view.phaseId === 'done' ? (
         <>
           {view.me.role === 'player' ? personal : null}
-          {showStage && stage ? (
-            <PublicStandings rows={stage.standings ?? []} me={view.me.id} />
+          {(showStage && stage) || group ? (
+            <PublicStandings
+              rows={stage?.standings ?? view.standings ?? []}
+              me={group?.myTeamId ?? view.me.id}
+            />
           ) : null}
         </>
       ) : (
         <div className={styles.stageSummary}>
+          {group ? (
+            <>
+              <h3>{L(groupTitle(group))}</h3>
+              <GroupRoster group={group} players={view.players} mine={view.participating} />
+            </>
+          ) : null}
           <p>{L('First question coming up…')}</p>
           {view.paused ? <p>{L('Paused')}</p> : null}
         </div>

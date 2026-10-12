@@ -1,7 +1,7 @@
 // Convert a UTF-8 authoring file or validate JSON with the same schema the game consumes.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { packSchema } from '../../games/kahoot/content/schema';
+import { classicPackSchema } from '../../games/kahoot/content/classic-schema';
 import { parsePackText } from '../../games/kahoot/content/text-pack';
 
 try {
@@ -12,8 +12,12 @@ try {
     );
   const text = readFileSync(resolve(input), 'utf8').replace(/^\uFEFF/, '');
   const pack = text.trimStart().startsWith('{')
-    ? packSchema.parse(JSON.parse(text))
+    ? classicPackSchema.parse(JSON.parse(text))
     : parsePackText(text);
+  if (pack.id !== 'custom')
+    throw new Error(
+      'Owner packs must use Pack: custom (JSON id: custom) for the Custom local pack setting',
+    );
   if (output) {
     if (resolve(input) === resolve(output))
       throw new Error('Input and output must be different files');

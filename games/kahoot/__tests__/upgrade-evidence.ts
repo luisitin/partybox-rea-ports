@@ -69,7 +69,7 @@ function escapeRegex(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function scoped(path: string, mapping: Record<string, string>): string {
+export function scoped(path: string, mapping: Record<string, string>): string {
   let css = readFileSync(resolve(ROOT, path), 'utf8');
   const locals = new Set([...css.matchAll(/\.([a-zA-Z_][a-zA-Z0-9_-]*)/g)].map((m) => m[1]!));
   css = css.replace(/:global\(([^)]+)\)/g, '$1').replace(/global\(([a-zA-Z0-9_-]+)\)/g, '$1');

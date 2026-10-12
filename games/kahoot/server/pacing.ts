@@ -1,7 +1,7 @@
 // Classic reading budgets mirror the separate chart, standings and podium layouts.
 import { categoryLabel, drawLabel, questionById } from './content';
 import { classicPackLabel } from './classic';
-import { readMs, wordCount, isFinalIndex, isLastIndex, quizModeOf } from './types';
+import { readMs, wordCount, isFinalIndex, isLastIndex, quizModeOf, groupModeOf } from './types';
 import type { State } from './types';
 import { revealedPodiumEntries } from './standings';
 import { labelOf } from '../content/schema';
@@ -16,6 +16,35 @@ function questionWords(state: State): number {
 }
 function rosterWords(state: State, numbers: number): number {
   return Object.values(state.players).reduce((n, p) => n + wordCount(p.name) + numbers, 0);
+}
+function groupRosterWords(state: State, numbers: number): number {
+  return (state.teams ?? []).reduce(
+    (total, team) =>
+      total +
+      wordCount(team.name) +
+      numbers +
+      team.members.reduce((n, id) => n + wordCount(state.players[id]?.name ?? ''), 0),
+    0,
+  );
+}
+
+/** The discussion stage carries the prompt/options, team membership and its explicit lock cue. */
+export function groupTalkMs(state: State): number {
+  const instruction =
+    groupModeOf(state) === 'tv-vote'
+      ? 'Discuss the room answer Discuss now. Each vote helps choose one room answer.'
+      : 'Talk with your team Discuss now. Everyone answers when the clock ends.';
+  return Math.max(
+    questionReadingMs(state),
+    readMs(
+      questionWords(state) +
+        groupRosterWords(state, 2) +
+        wordCount(instruction) +
+        wordCount('Question 1 of 20 Answers open after discussion') +
+        4 +
+        1,
+    ),
+  );
 }
 function uiWords(en: string, es = en): number {
   return Math.max(wordCount(en), wordCount(es));
@@ -50,6 +79,11 @@ export function classicIntroMs(state: State): number {
     Math.max(
       wordCount(`Kahoot! ${pack} faster is worth more`),
       wordCount('Kahoot! First question coming up'),
+      groupModeOf(state)
+        ? wordCount(
+            `Kahoot! ${pack} faster is worth more ${groupModeOf(state) === 'teams' ? 'Teams' : 'Room vote'}`,
+          ) + groupRosterWords(state, 0)
+        : 0,
     ),
   );
 }
@@ -211,11 +245,24 @@ export function classicRevealBeats(state: State): ClassicRevealBeats {
     0,
   );
   // A staged phone can show the chart with its own receipt; a TV-visible phone shows just the receipt.
-  const chartMs = readMs(chart + own);
+  const group = groupModeOf(state);
+  const roomAnswer = q ? wordCount(q.choices[state.roomDecision ?? q.answerIndex] ?? '') : 0;
+  const groupReceipt =
+    group === 'tv-vote'
+      ? wordCount(
+          'The room got it right Your vote Triangle The room +1300 points 99999 total Room answer Triangle Correct',
+        ) + roomAnswer
+      : group === 'teams'
+        ? wordCount(
+            'Correct +1300 personal points Team 4 +1300 points 99999 total Team points average every member’s contribution',
+          )
+        : 0;
+  const chartMs = readMs(chart + own + groupReceipt);
   if (isLastIndex(state, state.index)) return { chartMs, standingsMs: 0 };
   // Question n of m + Scoreboard; each full row is rank/name/score/delta.
-  const tvBoard = 4 + 1 + rosterWords(state, 3);
-  const phoneBoard = 4 + 1 + rosterWords(state, 2) + own;
+  const tvBoard = 4 + 1 + (group ? groupRosterWords(state, 3) : rosterWords(state, 3));
+  const phoneBoard =
+    4 + 1 + (group ? groupRosterWords(state, 3) : rosterWords(state, 2)) + own + groupReceipt;
   return { chartMs, standingsMs: readMs(Math.max(tvBoard, phoneBoard)) };
 }
 export function podiumMs(state: State): number {

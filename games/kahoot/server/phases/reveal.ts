@@ -28,10 +28,6 @@ export function enterReveal(state: State, now: number): State {
   return enterPhase(scored, 'reveal', now, revealMs(scored)); // I-589 note
 }
 
-export function enterDone(state: State, now: number): State {
-  return enterPhase(state, 'done', now, null);
-}
-
 export function reduceReveal(state: State, event: GameEvent<Input>, next: Advance): State {
   if (
     isTimerFor(state, event) &&

@@ -52,9 +52,13 @@ export function ClassicChart({ view }: { view: LightningTvView }): JSX.Element |
   const { question, answerDistribution: distribution, correctIndex } = view;
   if (!question || !distribution || correctIndex === undefined) return null;
   const max = Math.max(1, ...distribution.counts);
+  const vote = view.group?.mode === 'tv-vote';
   return (
     <div className={styles.chartSummary}>
-      <ol className={styles.chart} aria-label={L('Answer distribution')}>
+      <ol
+        className={styles.chart}
+        aria-label={L(vote ? 'Vote distribution' : 'Answer distribution')}
+      >
         {question.choices.map((text, index) => {
           const correct = index === correctIndex;
           const count = distribution.counts[index] ?? 0;
@@ -63,7 +67,7 @@ export function ClassicChart({ view }: { view: LightningTvView }): JSX.Element |
               key={index}
               className={styles.chartRow}
               data-correct={correct || undefined}
-              aria-label={`${L(SHAPES[index] ?? '')}: ${text} · ${L('{n} answers', { n: count })}${correct ? ` · ${L('correct answer')}` : ''}`}
+              aria-label={`${L(SHAPES[index] ?? '')}: ${text} · ${L(vote ? '{n} votes' : '{n} answers', { n: count })}${correct ? ` · ${L('correct answer')}` : ''}`}
             >
               <span className={`${styles.chartMark} ${choiceClass(index)}`}>
                 <Shape index={index} className={styles.shape} />
@@ -77,7 +81,7 @@ export function ClassicChart({ view }: { view: LightningTvView }): JSX.Element |
                   />
                 </span>
               </span>
-              <b aria-label={L('{n} answers', { n: count })}>{count}</b>
+              <b aria-label={L(vote ? '{n} votes' : '{n} answers', { n: count })}>{count}</b>
               <span className={styles.correct}>{correct ? L('✓ Correct') : ''}</span>
             </li>
           );
@@ -85,7 +89,9 @@ export function ClassicChart({ view }: { view: LightningTvView }): JSX.Element |
       </ol>
       {view.explanation ? <p className={styles.explanation}>{view.explanation}</p> : null}
       {distribution.missed > 0 ? (
-        <p className={styles.missed}>{L('{n} did not answer', { n: distribution.missed })}</p>
+        <p className={styles.missed}>
+          {L(vote ? '{n} did not vote' : '{n} did not answer', { n: distribution.missed })}
+        </p>
       ) : null}
     </div>
   );
@@ -123,7 +129,7 @@ export function PublicStandings({
   );
 }
 
-export function Podium({ view }: { view: LightningTvView }): JSX.Element | null {
+export function Podium({ view }: { view: Pick<LightningTvView, 'podium'> }): JSX.Element | null {
   const L = useT(STRINGS);
   const podium = view.podium;
   if (!podium) return null;

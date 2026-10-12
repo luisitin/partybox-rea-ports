@@ -18,8 +18,14 @@ const job = dirname(fileURLToPath(import.meta.url));
 const root = resolve(job, '../..');
 const prefix = 'games/kahoot/server/';
 // Full 1,000-seed property traces run separately; rule mutations need the focused behavioral checks.
-const tests = ['game.test.ts', 'teams.test.ts'].map((name) => `games/kahoot/__tests__/${name}`);
-const timeoutMs = 30_000;
+const tests = [
+  'group-server.test.ts',
+  'classic-server.test.ts',
+  'scoring.test.ts',
+  'answer-window.test.ts',
+  'vip.test.ts',
+].map((name) => `games/kahoot/__tests__/${name}`);
+const timeoutMs = 120_000;
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const slash = (path) => path.replaceAll('\\', '/');
 const lock = join(job, 'mutation.lock');
@@ -174,7 +180,7 @@ async function runRules(label) {
   const invalidReason =
     output.spawnError ||
     output.killError ||
-    (output.timedout ? 'Child exceeded 30 seconds' : '') ||
+    (output.timedout ? 'Child exceeded 120 seconds' : '') ||
     (!report ? 'No readable Vitest JSON report' : '') ||
     (!assertions.length ? 'No executed test assertions' : '') ||
     (toolFailure ? 'Compiler/module/unhandled tool failure in stderr' : '') ||
@@ -235,9 +241,6 @@ const evidence = {
   error: '',
 };
 try {
-  evidence.baseline = await runRules('baseline');
-  if (evidence.baseline.invalidReason || evidence.baseline.exitCode !== 0)
-    throw new Error('Unmutated baseline is not green');
   // Preflight every anchor before the first edit; dirty working-tree bytes are the intentional baseline.
   for (const mutant of mutants)
     mutationSource(
@@ -246,6 +249,9 @@ try {
       mutant.replacement,
       mutant.id,
     );
+  evidence.baseline = await runRules('baseline');
+  if (evidence.baseline.invalidReason || evidence.baseline.exitCode !== 0)
+    throw new Error('Unmutated baseline is not green');
   console.log(`Baseline: ${evidence.baseline.tests} checks passed`);
   for (const mutant of mutants) {
     if (abortReason) throw new Error(abortReason);

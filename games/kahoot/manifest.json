@@ -3,13 +3,13 @@
   "name": "Kahoot!",
   "icon": "⚡",
   "tagline": "Fast fingers, sharp minds. Bet big on the last one.",
-  "description": "Four-choice speed trivia with streak bonuses. Classic plays an original question pack and reveals the podium; Wager adds a final bet using the full English or Spanish library. Highest score wins.",
+  "description": "Four-choice speed trivia with streak bonuses. Classic plays an original pack; Teams discuss and average personal points; Room vote shares a collective answer. Wager preserves the English or Spanish library and final bet.",
   "howToPlay": [
     "A question and four choices go up. Tap your answer on your phone.",
     "Answer fast for more points; a streak of right answers earns a bonus.",
     "Classic reveals the podium; Wager adds a final bet. Highest score wins."
   ],
-  "version": "1.2.0",
+  "version": "1.3.0",
   "minPlayers": 1,
   "maxPlayers": 16,
   "estimatedMinutes": 26,
@@ -29,7 +29,7 @@
     {
       "key": "quizMode",
       "label": "Quiz mode",
-      "description": "Wager preserves the library quiz with a final bet; Classic plays an original English pack",
+      "description": "Wager preserves the library quiz; Classic, Teams and Room vote use an original English pack",
       "type": "select",
       "default": "wager",
       "options": [
@@ -40,13 +40,21 @@
         {
           "value": "classic",
           "label": "Classic"
+        },
+        {
+          "value": "teams",
+          "label": "Teams"
+        },
+        {
+          "value": "tv-vote",
+          "label": "Room vote"
         }
       ]
     },
     {
       "key": "classicPack",
       "label": "Classic pack",
-      "description": "Used in Classic mode; each English pack contains twenty original questions",
+      "description": "Used in Classic, Teams and Room vote; bundled packs have twenty questions and Custom has five to twenty",
       "type": "select",
       "default": "general",
       "options": [
@@ -61,6 +69,18 @@
         {
           "value": "science",
           "label": "Science"
+        },
+        {
+          "value": "sports",
+          "label": "Sports"
+        },
+        {
+          "value": "music",
+          "label": "Music"
+        },
+        {
+          "value": "custom",
+          "label": "Custom local pack"
         }
       ]
     },
@@ -477,9 +497,37 @@
           "group": "ig-nobel-science"
         }
       ]
+    },
+    {
+      "key": "teamCount",
+      "label": "Teams",
+      "description": "Balanced fixed teams; limited to the number of players in Teams mode",
+      "type": "number",
+      "default": 2,
+      "min": 2,
+      "max": 4,
+      "step": 1
+    },
+    {
+      "key": "talkSeconds",
+      "label": "Discussion seconds",
+      "description": "Teams and Room vote discuss before answering; longer questions reserve reading time",
+      "type": "number",
+      "default": 5,
+      "min": 5,
+      "max": 20,
+      "step": 5
     }
   ],
   "supportsBots": true,
+  "playerCounts": {
+    "setting": "quizMode",
+    "default": [1, 16],
+    "overrides": {
+      "teams": [2, 8],
+      "tv-vote": [2, 8]
+    }
+  },
   "minigame": {
     "modes": ["ffa", "duel"],
     "seconds": 100,

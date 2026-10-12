@@ -169,4 +169,5 @@ export const SCREENS_ES: Readonly<Record<string, string>> = {
   '{n}/{total} in': '{n}/{total} listos',
   // I-565 B
   'waiting for {names}': 'esperando a {names}',
+  'Your result is coming…': 'Tu resultado está por llegar…',
 };

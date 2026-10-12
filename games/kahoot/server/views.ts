@@ -15,11 +15,13 @@ import {
   isPlayer,
   questionLangOf,
   quizModeOf,
+  groupModeOf,
 } from './types';
 import type { State } from './types';
 import { revealMs } from './phases/reveal';
 import { classicRevealBeats, podiumMs, wagerRevealBeats } from './pacing';
 import { occupiedPodiumRanks, revealedPodiumEntries, standingsOf } from './standings';
+import { groupStandings, teamOf } from './teams';
 import type {
   AnswerDistribution,
   LightningControllerView,
@@ -30,6 +32,7 @@ import type {
   RevealRow,
   RoundView,
   Topic,
+  GroupView,
 } from './view-types';
 export type {
   AnswerStamp,
@@ -43,6 +46,7 @@ export type {
   RoundView,
   StandingRow,
   Topic,
+  GroupView,
 } from './view-types';
 export { standingsOf } from './standings';
 
@@ -52,6 +56,35 @@ function hidesFinalScores(state: State): boolean {
     (state.phase.id === 'podium' ||
       (state.phase.id === 'reveal' && isLastIndex(state, state.index)))
   );
+}
+function groupOf(state: State, playerId?: string): GroupView | undefined {
+  const mode = groupModeOf(state);
+  if (!mode) return undefined;
+  let teams = groupStandings(state);
+  if (state.phase.id === 'reveal' && isLastIndex(state, state.index)) teams = [];
+  if (state.phase.id === 'podium')
+    teams = teams.filter((team) => team.rank >= (state.podiumRank ?? 1) && team.rank <= 3);
+  const own = playerId === undefined ? undefined : teamOf(state, playerId);
+  return {
+    mode,
+    teams,
+    ...(own ? { myTeamId: own.id } : {}),
+    ...(mode === 'tv-vote' ? { roomStreak: state.roomStreak ?? 0 } : {}),
+    ...(['reveal', 'podium', 'done'].includes(state.phase.id) && state.roomDecision !== undefined
+      ? { decision: state.roomDecision }
+      : {}),
+  };
+}
+
+/** An unrevealed team receipt must not reveal the final score through a personal field. */
+function ownScore(state: State, id: string): number {
+  const score = state.scores[id] ?? 0;
+  if (!groupModeOf(state) || !hidesFinalScores(state)) return score;
+  const own = teamOf(state, id);
+  if (!own) return 0;
+  if (state.phase.id === 'podium' && groupOf(state)?.teams.some((team) => team.id === own.id))
+    return score;
+  return score - (state.teamGains?.[own.id] ?? 0);
 }
 function nextOf(state: State): { next: RevealNext; vipSkipHidden: true } | Record<string, never> {
   if (state.phase.id !== 'reveal' || state.index < 0 || isFinalIndex(state, state.index)) return {};
@@ -153,6 +186,7 @@ export function tvView(state: State, gameId: string): LightningTvView {
   const phase = state.phase.id;
   const classic = quizModeOf(state) === 'classic';
   const hidden = hidesFinalScores(state);
+  const group = groupOf(state);
   const view: LightningTvView = {
     ...envelope(state, gameId, {
       statusOf: statusOf(state),
@@ -163,7 +197,8 @@ export function tvView(state: State, gameId: string): LightningTvView {
     quizMode: quizModeOf(state),
     categoryLabel: drawLabel(state.drawnFrom, state.drawnSubs ?? []),
     round: roundOf(state),
-    question: phase === 'question' || phase === 'reveal' ? questionOf(state) : null,
+    question:
+      phase === 'talk' || phase === 'question' || phase === 'reveal' ? questionOf(state) : null,
     answeredCount:
       phase === 'question'
         ? connectedParticipants(state).filter((id) => Object.hasOwn(state.picks, id)).length
@@ -173,6 +208,7 @@ export function tvView(state: State, gameId: string): LightningTvView {
     totalCount: connectedParticipants(state).length,
     timerMode: ['intro', 'reveal', 'podium'].includes(phase) ? 'quiet' : 'normal',
     ...nextOf(state),
+    ...(group ? { group } : {}),
   };
   if (phase === 'question' && classic)
     view.answerStamp = {
@@ -184,7 +220,8 @@ export function tvView(state: State, gameId: string): LightningTvView {
     const q = questionById(state.questionIds[state.index] ?? '', state.contentLang);
     if (q) {
       view.correctIndex = q.answerIndex;
-      if (!hidden) view.rows = revealRows(state, q.answerIndex, isFinalIndex(state, state.index));
+      if (!hidden && !group)
+        view.rows = revealRows(state, q.answerIndex, isFinalIndex(state, state.index));
       if (!isFinalIndex(state, state.index)) view.answerDistribution = distributionOf(state);
       if (classic && 'explanation' in q) view.explanation = q.explanation;
     }
@@ -211,11 +248,12 @@ export function controllerView(
   const phase = state.phase.id;
   const classic = quizModeOf(state) === 'classic';
   const hidden = hidesFinalScores(state);
+  const group = groupOf(state, playerId);
   const me = isPlayer(state, playerId);
   const participating = isParticipating(state, playerId);
   const phoneOnly = state.phoneOnly === true || (me && state.players[playerId]?.canSeeTv === false);
   const showStage = phoneOnly || !participating;
-  const score = me ? (state.scores[playerId] ?? 0) : 0;
+  const score = me ? ownScore(state, playerId) : 0;
   const myPick = me && Object.hasOwn(state.picks, playerId) ? state.picks[playerId] : undefined;
   const view: LightningControllerView = {
     ...controllerEnvelope(state, gameId, playerId, {
@@ -232,13 +270,14 @@ export function controllerView(
     timerMode: ['intro', 'reveal', 'podium'].includes(phase) ? 'quiet' : 'normal',
     round: roundOf(state),
     question:
-      phase === 'reveal' || (phase === 'question' && (!classic || showStage))
+      phase === 'reveal' || phase === 'talk' || (phase === 'question' && (!classic || showStage))
         ? questionOf(state)
         : null,
     myPickIndex: myPick?.index ?? null,
     myScore: score,
     myStreak: me ? (state.streaks[playerId] ?? 0) : 0,
     ...nextOf(state),
+    ...(group ? { group } : {}),
   };
   if (phase === 'question' && classic)
     view.answerStamp = {
@@ -263,25 +302,32 @@ export function controllerView(
     const q = questionById(state.questionIds[state.index] ?? '', state.contentLang);
     if (q) {
       view.correctIndex = q.answerIndex;
-      const correct = myPick?.index === q.answerIndex;
+      const room = group?.mode === 'tv-vote';
+      const correct = room ? state.roomDecision === q.answerIndex : myPick?.index === q.answerIndex;
       view.outcome = { correct, delta: me ? (state.lastDelta[playerId] ?? 0) : 0 };
       if (classic) {
         const base =
-          correct && myPick ? questionPoints(myPick.elapsedMs, answerWindowOf(state) / 1000, 1) : 0;
+          correct && (myPick || room)
+            ? questionPoints(
+                room ? (state.roomElapsedMs ?? 0) : myPick!.elapsedMs,
+                answerWindowOf(state) / 1000,
+                1,
+              )
+            : 0;
         view.outcome = {
           ...view.outcome,
-          answered: myPick !== undefined,
+          answered: room ? state.roomDecision !== undefined : myPick !== undefined,
           base,
           bonus: correct ? view.outcome.delta - base : 0,
         };
         view.answerDistribution = distributionOf(state);
         if ('explanation' in q) view.explanation = q.explanation;
       }
-      if (!hidden) view.rows = revealRows(state, q.answerIndex, final);
+      if (!hidden && !group) view.rows = revealRows(state, q.answerIndex, final);
     }
     if (classic && !hidden) {
       view.standings = standingsOf(state);
-      const own = view.standings.find((r) => r.playerId === playerId);
+      const own = view.standings.find((r) => r.playerId === (group?.myTeamId ?? playerId));
       if (own) view.myRank = own.rank;
       view.leaderboardAt = view.revealAt + classicRevealBeats(state).chartMs;
     }
@@ -299,11 +345,12 @@ export function controllerView(
     view.myWagerAmount = state.wagers[playerId];
   if (phase === 'podium' && classic) {
     view.podium = podiumOf(state);
-    const own = view.podium.entries.find((r) => r.playerId === playerId);
+    const own = view.podium.entries.find((r) => r.playerId === (group?.myTeamId ?? playerId));
     if (own) view.myRank = own.rank;
   }
   if (phase === 'done') {
-    const own = standingsOf(state).find((r) => r.playerId === playerId);
+    if (group) view.standings = standingsOf(state);
+    const own = standingsOf(state).find((r) => r.playerId === (group?.myTeamId ?? playerId));
     if (own) view.myRank = own.rank;
   }
   return view;
