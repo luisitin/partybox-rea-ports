@@ -37,10 +37,12 @@ Kahoot imports authored spreadsheets. P02 instead provides a strict UTF-8
 plain-text format, JSON conversion and the existing bounded pack validator;
 it does not claim native import-format compatibility.
 
-Read-only monorepo comparison verifies Lightning Round already received
+Resume rechecked the current official team guide and a firsthand teacher account before rebuilding against the published canonical P01 engine. The official guide confirms personal-device averaging and five-to-twenty-second discussion. Current core inspection found T-1146 now ships wager teams, mean scoring and a team podium, while explicitly excluding discussion, room vote and donor packs. Preserve that newer core behavior during future adaptation; the public frozen baseline predates it.
+
+Historical read-only monorepo comparison verified Lightning Round already received
 P01's chart/tally/verdict cues in T-1117. It retains1–16players, EN/ES, a
 300-point streak cap and wager finale. Its current inputs are individual
-picks/wagers; no teams or collective voting exist. P02 is an opt-in upgrade
+picks/wagers at that inspection; the newer T-1146 team addition is described above. P02 is an opt-in upgrade
 under that card, with exact injected classic defaults and separate metadata.
 
 No original team match was played: no live room PIN/captain account was

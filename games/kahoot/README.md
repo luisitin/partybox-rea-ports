@@ -2,104 +2,119 @@
 
 ## Overview
 
-P01's original quiz engine now supports individual play, fixed teams and one cooperative room
-answer elected by phone votes. The TV is a read-only stage; phones supply every response.
-The workshop name/id follows the owner's table. Core integration upgrades the existing
-Lightning Round card with opt-in teams/vote and preserves its injected classic default.
+A speed quiz upgrading PartyBox's existing Lightning Round engine. `quizMode: wager` remains the
+default (including old states without a mode); `classic` adds shape-pad play and a staged top three.
+Joining, room codes, names, lobby and the start countdown belong to the PartyBox shell.
 
 ## Players
 
-2–8; teams use 2–4 balanced seeded groups, limited to the roster. Groups remain fixed after a drop.
-Room vote uses one group. Spectators watch without controls. Three bot strengths use authored
-answer-text facts, public options and seeded confidence; they never inspect the shuffled key.
+1–16 players; the P01 living-room target is 2–8. Late joiners spectate. Temporary disconnections
+do not hold answer collection; reconnect restores the accepted choice and the current beat.
+Permanent departures retain their scores but cannot submit again. Spectators receive a read-only stage.
+Bots have easy/normal/sharp strengths: 30/50/80% known-answer rates, seeded wrong choices and preset bets.
+Classic bots use a separate learned-answer-text map; no question library is downloaded by phones.
+
+## Modes
+
+| Mode      | Questions                                                          | Ending                                     | Phone beside a visible TV                                         |
+| --------- | ------------------------------------------------------------------ | ------------------------------------------ | ----------------------------------------------------------------- |
+| `wager`   | Requested regular count plus one hardest-available final           | Bet, final reveal, results                 | Prompt and four labelled choices                                  |
+| `classic` | Exactly the requested count from one authored pack; no extra final | Last chart, occupied podium tiers, results | Triangle, diamond, circle and square pads; no prompt/options text |
 
 ## Phases
 
-| Phase    | TV                                                              | Phone with TV                                           | Exit                                                                 |
-| -------- | --------------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- |
-| talk     | Question/options, teams and discussion clock                    | Own group/members, question/options; no answer buttons  | Reading-aware discussion deadline or VIP skip                        |
-| question | Question/options, answer/vote count, clock                      | Four shape pads; group identity; immutable confirmation | All eligible seats answered, no eligible seats, deadline or VIP skip |
-| reveal   | Correct shape, answer chart and explanation; elected room shape | Personal/team receipt, or collective verdict            | At least4.5s and SDK reading floor, or VIP skip                      |
-| score    | Individual/team standings and gains                             | Points, rank and next-question cue                      | At least3.5s and reading floor, or VIP skip                          |
-| podium   | Third/second/first occupied rank tiers, including ties          | Revealed stage tiers; unrevealed rank withheld          | At least2.5s per tier and reading floor, or VIP skip                 |
-| done     | Complete standings                                              | Final individual/team result                            | Terminal                                                             |
+| Phase      | TV                                                                                                                                                                        | Phone                                                                                                      | Exit                                                                                                     |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `intro`    | Title and selected pack/topics                                                                                                                                            | First-question notice                                                                                      | Reading budget; wager also has a 2 s minimum                                                             |
+| `question` | Prompt, four choices, clock and connected lock count                                                                                                                      | Mode's answer pad; one accepted choice locks                                                               | All connected participants answered after the reading hold, answer deadline, or VIP skip                 |
+| `reveal`   | Classic: answer-count chart, explanation, then standings except on last question. Wager: chart and fastest-correct race, then standings; final shows bets/verdicts/totals | Verdict/delta/total; wager beside TV switches to a compact receipt at standings; classic speed/streak/rank | Reading budgets, or VIP Next/skip; classic last → podium; wager last regular → wager; wager final → done |
+| `wager`    | Final topic/difficulty, placed count and standings; no wager amounts                                                                                                      | Preset shares or custom percent/points; personal bet receipt                                               | All connected bets after the reading hold, max(15 s, reading budget), or VIP skip                        |
+| `podium`   | Classic only: occupied ranks descending 3 → 2 → 1                                                                                                                         | Public tiers on staged phones; otherwise reveal notice and personal rank once unveiled                     | Each tier's reading budget or VIP skip; empty tiers skipped, then done                                   |
+| `done`     | Complete final standings and shell results                                                                                                                                | Personal rank/score; staged phones also show standings                                                     | Terminal; `results()` is non-null                                                                        |
 
-Solo starts at question. New modes start each round at talk; discussion is excluded from speed
-elapsed time. All phases advance automatically. Final reveal goes to podium; empty tiers skip.
-VIP end preserves credited points and never scores an unfinished question.
+Reveals own rosters/ranked boards; shell names/scores hide in intro/reveal/podium at fixed height.
+Wager chart/race → all-seat ranked totals; final bet/verdict rows include every total. TV-side phones
+show a compact receipt at standings. Classic's last chart withholds public final rows/roster scores.
+Podiums expose unveiled tiers; 3+ ties at a rank use a board, pairs use wrapping plinths. Equal scores
+share competition ranks; phones retain own totals and complete standings return at done.
 
-### Phone only
+## Phone-only and remote play
 
-`usePhoneOnly`, the server presence flag, remote seats and spectators enable stage information.
-Nothing directs these rooms to a TV. Solo omits discussion.
+`ctx.presence.phoneOnly` is captured at init; `canSeeTv: false` also gives that player the stage.
+Clients honour the SDK `usePhoneOnly` context. Staged players never receive “look at the TV” instructions.
 
-| Phase    | Player phone only                                                 | Spectator                          |
-| -------- | ----------------------------------------------------------------- | ---------------------------------- |
-| talk     | Own group, members, prompt/options and discussion clock; no input | Read-only prompt/options and clock |
-| question | Prompt and four shape/text pads; immutable lock and manual retry  | Prompt and four read-only options  |
-| reveal   | Personal/group receipt, answer chart and explanation              | Answer chart and explanation       |
-| score    | Own points/rank and compact standings                             | Compact standings                  |
-| podium   | Only revealed group/individual tiers                              | Same revealed tiers                |
-| done     | Final standings and own result                                    | Complete standings                 |
+| Beat           | Phone-only/remote player                                               | Spectator or permanently departed player                |
+| -------------- | ---------------------------------------------------------------------- | ------------------------------------------------------- |
+| Intro/question | Title notice; complete prompt/options and controls                     | Public title/question/options, without controls         |
+| Reveal         | Personal receipt; chart → standings; wager final: compact bets/results | Same public beats without receipt; classic explanations |
+| Wager          | Stakes controls and topic; missing bet defaults to zero                | Topic, rules and standings; no stakes controls          |
+| Podium/done    | Unveiled tiers, then full board; personal rank/score                   | Same public stage, without personal controls            |
 
 ## Inputs
 
-`{type:'answer',round:1..20,choice:0..3}`. The first valid answer/vote is immutable; retries can
-resend that choice. Stranger, spectator, departed, disconnected, stale, duplicate, early,
-paused and out-of-phase inputs are ignored. A tap at/after the deadline is too late.
+- Wager answer: `{ type: 'pick', index: 0..3 }`.
+- Classic answer: `{ type: 'answer', questionId, questionStartedAt, index: 0..3 }`; both stamp fields
+  must match the current question. Old-question/old-entry taps and unstamped picks are rejected.
+- Bet: `{ type: 'wager', percent: 0|25|50|75|100 }` or `{ type: 'wager', amount }` (integer points,
+  0–1,000,000 before clamping); `amount` wins if both are supplied. Custom percentages become points
+  on the phone. Stakes below the whole score round down to tens; an all-in stake keeps the exact score.
+
+Only the first connected participant input in its phase is accepted, at/after opening and strictly
+before the original answer/bet deadline. Unknown ids, spectators, departed seats and duplicates are
+ignored. Late first inputs advance without acceptance. Classic shows sending/confirmed states and
+allows a same-choice retry when confirmation is missing; server acceptance remains one choice.
 
 ## Scoring
 
-Solo/personal correct answers earn `round(1000*(1-clamp(elapsed/answerMs,0,1)/2))` (500–1000).
-Consecutive correct answers add `min(500,100*(streak-1))`; wrong/missing resets the streak.
-This inherited bonus is a PartyBox adaptation; current Kahoot has no streak points.
+Every regular question (and every classic question): correct = 500 + a rounded 500→0 linear speed
+bonus over the actual answer window + `min(300, 100 × (streak − 1))`. Thus base/speed is 1,000→500;
+the streak includes this correct answer. Wrong/missing = zero and resets the streak.
+Wager final: correct = +bet; wrong/missing = −bet; no base/speed/streak points. This is the only score
+decrease, never below zero. Missing bet = zero. Scores are applied once, on reveal entry.
+Highest score wins; ties share rank 1. Qualified awards: Lightning fingers (lowest average correct
+time), Hot streak (longest streak ≥2), High roller (largest final bet won ≥1). Award ties use lowest id.
 
-Teams earn the rounded mean of members' personal question points. Unanswered connected members
-contribute zero; unanswered offline/departed members are excluded, while accepted departures
-still contribute. Larger teams gain no raw-sum advantage. All members share the accumulated
-team score/rank; personal verdict/streak remain visible. Team membership never reshuffles.
+## Pacing, sound and edge cases
 
-Room vote chooses the plurality among accepted votes; seeded randomness breaks tied pluralities.
-No votes gives zero. A correct collective choice uses the mean submitted response time and the
-shared streak bonus; everybody shares the outcome. This is an original scored adaptation,
-separate from native unscored polls. All credits happen once at reveal. Equal totals share rank;
-results include every starter and all tied winning team members.
-
-## Edge cases
-
-- Refresh restores accepted choices, groups, points and phase; unconfirmed choices retain manual
-  same-choice retry through SDK draft storage. Personal cues do not replay.
-- Disconnects never make the room wait; answered departures keep earned contributions.
-- Pause holds input/timers; resume shifts discussion and answer clocks. Stale timers do nothing.
-- Before reveal, no key, explanation, other person's choice, vote chart or decision is public.
-- Unrevealed final placements remain withheld; done ignores all inputs and timers.
-- Phone play fits390×844; original shape marks distinguish choices without colour alone.
-  Motion uses SDK tokens and respects reduced motion. No runtime network/file calls or new deps.
+Reading budget = `round(1.3 × (1500 + 333 × visibleWords))` ms, counting the larger relevant TV/phone
+screen, names and UI labels. Both modes use `max(answerSeconds × 1000, question reading budget)`.
+All-answered/all-bet locks shorten the phase only to its reading hold; the original end remains the
+speed-scoring window and can be restored for an eligible reconnect. Classic chart/standings and each
+podium tier have separate reading budgets. Wager reveals budget race/standings or final animations,
+with an 8 s minimum. VIP Next appears during the reveal beat; timers advance without a host click.
+Pause ignores inputs/timers, freezes client clocks and shifts deadline/scoring clocks on resume.
+VIP skip advances the current phase; missing picks score zero (or lose a final bet). VIP end enters
+done with already revealed scores. Idle games terminate with tied zero scores; absent seats do not block.
+Seeded draws do not repeat questions; option order stays as authored. Wager topic/category shortages
+fall back to the broader category then all, and the displayed draw label records the fallback.
+SDK pulse/reveal/wager/result cues and synthesized beds respect device settings. Verdicts wait for
+the shared reveal beat. Token-based shapes, marks and words accompany colour; reduced motion is honoured.
 
 ## Settings
 
-| Key         | Default | Options                                         |
-| ----------- | ------- | ----------------------------------------------- |
-| mode        | solo    | solo, teams, tv-vote                            |
-| pack        | general | general, movies, science, sports, music, custom |
-| rounds      | 10      | 5–20, capped by pack length                     |
-| seconds     | 20      | Minimum answer window10–30                      |
-| teamCount   | 2       | 2–4, capped by roster; teams only               |
-| talkSeconds | 5       | Minimum discussion5–20; new modes only          |
-
-Timed screens reserve SDK reading/settling time. The15-minute estimate includes discussion.
+`quizMode` wager/classic (default wager); `classicPack` general/movies/science (default general);
+`questions` 5–20 (default 10; regular count in wager, exact count in classic);
+`answerSeconds` 5–30 step 5 (default 15; requested minimum); wager `category` all or 14 categories,
+plus comma-joined `subcategories` (empty = all topics; out-of-category topics discarded).
+Classic always uses English questions (`questionLang: en`), independently of host `contentLang`.
+Wager retains EN/ES content selection. The inherited 100 s minigame sets wager, four regular questions
+and a 5 s requested minimum; reading floors apply. Estimate: 26 minutes, growing with question/player counts; small classic matches are faster.
 
 ## Content
 
-Five original20-question packs; sports/music add40paired-source facts and separate bot knowledge.
-The custom sample contains five P01 general questions. A strict UTF-8 text format and CLI validate
-before writing content/custom.json. Rebuild/restart and select Custom; no code edits are needed.
-Unknown custom facts use seeded guesses. See [PACK_FORMAT.md](../../jobs/P02-quiz-rush-teams/PACK_FORMAT.md).
+Classic: three original English JSON packs of 20 questions, validated by `content/classic-schema.ts`
+and exported through `content/schema.ts`; unique ids, four distinct options, explanation, difficulty.
+Wager: `questions.json` has 6,153 items across 14 categories/63 topics; `questions.es.json` has 5,561
+items and 704 explicit dropped English ids. Library ids, translations, source notes and attribution
+are preserved. Content loads only on the server. Recap retains question choices, picks/times/deltas,
+final bets, standings and awards. Per-phase fixture states live under `fixtures/`.
 
 ## Sources
 
-[P02 research](../../jobs/P02-quiz-rush-teams/RESEARCH.md), [paired mechanics](../../jobs/P02-quiz-rush-teams/SOURCES.md),
-[new fact pairs](../../jobs/P02-quiz-rush-teams/CONTENT_SOURCES.md), and P01's retained source ledger.
-Original interactive team play was unavailable; published guides/screenshots corroborate the flow.
-Artwork is original public-workshop SVG/CSS; no third-party assets/questions/audio are copied.
-[UPGRADE.md](../../jobs/P02-quiz-rush-teams/UPGRADE.md) records the unperformed core installation handoff.
+[P01 research](../../jobs/P01-quiz-rush/RESEARCH.md) pairs official guides with independent screenshots
+and studies; original live timing was unavailable. [Current scoring help](https://support.kahoot.com/hc/en-us/articles/115002303908-How-points-work)
+has no streak points: this port's 300-point bonus is intentional; it also omits the original sub-0.5 s exception.
+[Source matrix](../../jobs/P01-quiz-rush/SOURCES.md), [classic fact references](../../jobs/P01-quiz-rush/CONTENT_SOURCES.md),
+[library licences](content/SOURCES.md) and [pinned core provenance](../../jobs/P01-quiz-rush/core-base/SOURCE.json)
+record origin and limits. Art is authored inline SVG/CSS; inherited file art/licensed music are excluded.
+[Core host migration](../../jobs/P01-quiz-rush/core-base/HOST_MIGRATION.md) is a handoff, not an applied core change.

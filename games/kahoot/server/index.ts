@@ -1,261 +1,197 @@
-// Kahoot! plugs into the real PartyBox contract. The SDK owns event order and pause behavior.
+// Lightning Round — speed trivia. `game` is what the registry imports. One file per phase under
+// ./phases; this file wires init / reduce / views / results / bot together and owns the phase
+// order (`advance`), which is also what a VIP skip does.
 import {
   composeReduce,
-  controllerEnvelope,
-  envelope,
   gameManifestSchema,
-  hasPlayer,
+  multiselectPicks,
   numberSetting,
   onPlayerEvent,
-  pausedFor,
   recheckOnResume,
   seedRng,
   selectSetting,
+  pausedFor,
+  shiftClocks,
 } from '@partybox/game-sdk';
-import type { GameDefinition, InitContext, PlayerStatus } from '@partybox/game-sdk';
+import type { GameDefinition, InitContext } from '@partybox/game-sdk';
 import manifestJson from '../manifest.json' with { type: 'json' };
-import { botInput } from './bot';
-import { currentQuestion, makeDeck, publicQuestion } from './content';
-import { enterDone } from './phases/done';
-import { enterPodium, reducePodium, stepPodium } from './phases/podium';
-import { eligibleIds, enterQuestion, everyoneAnswered, reduceQuestion } from './phases/question';
-import { enterReveal, reduceReveal } from './phases/reveal';
-import { enterScore, reduceScore } from './phases/score';
-import { enterTalk, reduceTalk } from './phases/talk';
-import { results, standings } from './scoring';
-import { makeTeams, modeOf, teamOf, teamRank } from './teams';
-import { inputSchema, PHASES } from './types';
-import type { Input, QuizMode, State } from './types';
-import type { PublicTeam, QuizControllerView, QuizTvView, RevealData, Standing } from './views';
+import { recap } from './recap';
+import { sampleInput } from './bot';
+import { subcategoriesOf } from './content';
+import { drawClassicQuestions, drawQuestions } from './draw';
+import { enterIntro, reduceIntro } from './phases/intro';
+import { enterQuestion, finishQuestionIfDone, reduceQuestion } from './phases/question';
+import { enterDone, enterReveal, reduceReveal } from './phases/reveal';
+import { enterWager, finishWagerIfDone, reduceWager } from './phases/wager';
+import { enterPodium, reducePodium } from './phases/podium';
+import { occupiedPodiumRanks } from './standings';
+import { EMPTY_STATS, results } from './scoring';
+import {
+  PHASES,
+  inputSchema,
+  allParticipantsDone,
+  isFinalIndex,
+  isLastIndex,
+  isPlayer,
+  quizModeOf,
+} from './types';
+import type { Input, Settings, State } from './types';
+import { controllerView, tvView } from './views';
 
+// Parsed once: a typo in manifest.json fails at import time instead of deep inside the engine.
 const manifest = gameManifestSchema.parse(manifestJson);
 
-function init(ctx: InitContext): State {
-  const settings = {
-    mode: selectSetting(manifest, ctx.settings, 'mode') as QuizMode,
-    pack: selectSetting(manifest, ctx.settings, 'pack'),
-    rounds: numberSetting(manifest, ctx.settings, 'rounds'),
-    seconds: numberSetting(manifest, ctx.settings, 'seconds'),
-    teamCount: Math.min(ctx.players.length, numberSetting(manifest, ctx.settings, 'teamCount')),
-    talkSeconds: numberSetting(manifest, ctx.settings, 'talkSeconds'),
+export type { LightningControllerView, LightningTvView } from './views';
+export type {
+  LightningControllerView as KahootControllerView,
+  LightningTvView as KahootTvView,
+} from './views';
+
+/** Settings as the manifest declares them; out-of-range values (tests, old rooms) are clamped. */
+export function settingsFrom(raw: InitContext['settings']): Settings {
+  const category = selectSetting(manifest, raw, 'category');
+  // Topics: the manifest's comma-joined multiselect, kept to the category's own topics (ADR-034).
+  const topics = subcategoriesOf(category);
+  return {
+    quizMode: selectSetting(manifest, raw, 'quizMode') as 'wager' | 'classic',
+    classicPack: selectSetting(manifest, raw, 'classicPack') as 'general' | 'movies' | 'science',
+    questions: numberSetting(manifest, raw, 'questions'),
+    answerSeconds: numberSetting(manifest, raw, 'answerSeconds'),
+    category,
+    // Ticked order kept (the draw follows it); the category's own topics only.
+    subcategories: multiselectPicks(raw['subcategories']).filter((t) => topics.includes(t)),
   };
-  const players = Object.fromEntries(ctx.players.map((p) => [p.id, { ...p }]));
-  const scores = Object.fromEntries(ctx.players.map((p) => [p.id, 0]));
-  const [deck, afterDeck] = makeDeck(settings.pack, settings.rounds, seedRng(ctx.seed));
-  const [teams, rng] = makeTeams(
-    settings.mode,
-    ctx.players.map((p) => p.id),
-    settings.teamCount,
-    afterDeck,
-  );
+}
+
+function init(ctx: InitContext): State {
+  const players: State['players'] = {};
+  const zero: Record<string, number> = {};
+  const stats: State['stats'] = {};
+  for (const p of ctx.players) {
+    players[p.id] = p;
+    zero[p.id] = 0;
+    stats[p.id] = EMPTY_STATS;
+  }
+  const settings = settingsFrom(ctx.settings);
+  const [draw, rng] =
+    settings.quizMode === 'classic'
+      ? drawClassicQuestions(
+          seedRng(ctx.seed),
+          settings.classicPack ?? 'general',
+          settings.questions,
+        )
+      : drawQuestions(
+          seedRng(ctx.seed),
+          settings.category,
+          settings.questions,
+          settings.subcategories,
+          ctx.contentLang === 'es' ? 'es' : undefined,
+        );
   const base: State = {
-    phase: { id: 'question', startedAt: ctx.now, deadline: null },
+    phase: { id: 'intro', startedAt: ctx.now, deadline: null },
     rng,
     players,
-    settings,
-    deck,
-    round: 1,
-    answers: {},
-    verdicts: {},
-    scores,
-    streaks: { ...scores },
-    previousScores: { ...scores },
-    teams,
-    teamScores: Object.fromEntries(teams.map((team) => [team.id, 0])),
-    teamGains: {},
-    decision: null,
-    roomStreak: 0,
     left: [],
-    openedAt: ctx.now,
-    answerMs: 0,
-    podiumStep: 0,
-    phoneOnly: ctx.presence?.phoneOnly === true,
+    settings,
+    drawnFrom: draw.drawnFrom,
+    drawnSubs: draw.drawnSubs,
+    questionIds: draw.ids,
+    index: -1,
+    picks: {},
+    scores: { ...zero },
+    streaks: { ...zero },
+    wagers: {},
+    lastDelta: {},
+    stats,
+    ...(ctx.presence?.phoneOnly ? { phoneOnly: true as const } : {}),
+    // ADR-054: the deck's language, fixed for the game (absent = English).
+    ...(ctx.contentLang === 'es' ? { contentLang: 'es' as const } : {}),
   };
-  return closeIfDone(enterRound(base, ctx.now, 1), ctx.now);
+  return enterIntro(base, ctx.now);
 }
 
-function enterRound(state: State, now: number, round: number): State {
-  return modeOf(state) === 'solo' ? enterQuestion(state, now, round) : enterTalk(state, now, round);
-}
-
-function advance(state: State, now: number): State {
+/** What the deadline of the current phase does — also the VIP "skip" (README "Edge cases"). */
+export function advance(state: State, now: number): State {
   switch (state.phase.id) {
-    case 'talk':
-      return closeIfDone(enterQuestion(state, now, state.round), now);
+    case 'intro':
+    case 'wager':
+      return enterQuestion(state, now);
     case 'question':
       return enterReveal(state, now);
-    case 'reveal':
-      return state.round >= state.deck.length ? enterPodium(state, now) : enterScore(state, now);
-    case 'score':
-      return closeIfDone(enterRound(state, now, state.round + 1), now);
-    case 'podium':
-      return stepPodium(state, now, enterDone);
+    case 'reveal': {
+      if (quizModeOf(state) === 'classic')
+        return isLastIndex(state, state.index)
+          ? enterPodium(state, now)
+          : enterQuestion(state, now);
+      if (isFinalIndex(state, state.index)) return enterDone(state, now);
+      const lastRegular = state.index === state.questionIds.length - 2;
+      return lastRegular ? enterWager(state, now) : enterQuestion(state, now);
+    }
+    case 'podium': {
+      const nextRank = occupiedPodiumRanks(state).find((rank) => rank < (state.podiumRank ?? 1));
+      return nextRank ? enterPodium(state, now, nextRank) : enterDone(state, now);
+    }
     default:
       return state;
   }
 }
 
+/** The drop of the last outstanding player ends the phase like their input would have
+ *  (review-loop #48): the room never sits out a full timer for someone who has gone. */
 function closeIfDone(state: State, now: number): State {
-  if (state.phase.paused) return state;
-  if (state.phase.id === 'talk' && eligibleIds(state).length === 0)
-    return closeIfDone(enterQuestion(state, now, state.round), now);
-  return state.phase.id === 'question' && !state.phase.paused && everyoneAnswered(state)
-    ? enterReveal(state, now)
-    : state;
+  if (state.phase.id === 'question') return finishQuestionIfDone(state, now, advance);
+  if (state.phase.id === 'wager') return finishWagerIfDone(state, now, advance);
+  return state;
+}
+/** A reconnecting participant can still use the original window during an early reading hold. */
+function restorePendingWindow(state: State): State {
+  const question = state.phase.id === 'question';
+  if (!question && state.phase.id !== 'wager') return state;
+  const done = question ? Object.keys(state.picks) : Object.keys(state.wagers);
+  const end = question ? state.answerClosesAt : state.wagerClosesAt;
+  if (end === undefined || allParticipantsDone(state, done) || state.phase.deadline === end)
+    return state;
+  return { ...state, phase: { ...state.phase, deadline: end } };
 }
 
-const coreReduce = composeReduce<State, Input>({
+// The SDK's skeleton: player → VIP → paused → the phase on stage.
+const reduce = composeReduce<State, Input>({
   phases: {
-    talk: reduceTalk,
+    intro: reduceIntro,
     question: reduceQuestion,
     reveal: reduceReveal,
-    score: reduceScore,
+    wager: reduceWager,
     podium: reducePodium,
   },
   advance,
   end: enterDone,
-  onPlayer: (state, event) => onPlayerEvent(state, event, { closeIfDone }),
-  prepare: (state, event) =>
-    event.type === 'vip' && event.action === 'resume' && state.phase.id === 'question'
-      ? { ...state, openedAt: state.openedAt + pausedFor(state, event.now) }
-      : state,
-  afterVip: (_before, after, event) => recheckOnResume(after, event, closeIfDone),
+  onPlayer: (state, event) => {
+    if (!isPlayer(state, event.playerId)) return state;
+    const next = onPlayerEvent({ ...state, left: state.left ?? [] }, event, { closeIfDone });
+    return event.connected ? restorePendingWindow(next) : next;
+  },
+  afterVip: (before, vip, event) => {
+    const resumed = event.type === 'vip' && event.action === 'resume' && before.phase.paused;
+    const shifted = resumed
+      ? shiftClocks(
+          vip,
+          ['answerClosesAt', 'questionReadableUntil', 'wagerClosesAt', 'wagerReadableUntil'],
+          pausedFor(before, event.now),
+        )
+      : vip;
+    return recheckOnResume(shifted, event, closeIfDone);
+  },
 });
 
-function reduce(state: State, event: Parameters<typeof coreReduce>[1]): State {
-  return state.phase.id === 'done' ? state : coreReduce(state, event);
-}
-
-const statusOf =
-  (state: State) =>
-  (id: string): PlayerStatus =>
-    state.phase.id !== 'question' || state.left.includes(id)
-      ? 'waiting'
-      : Object.hasOwn(state.answers, id)
-        ? 'submitted'
-        : 'active';
-
-function publicStandings(state: State): Standing[] {
-  const rows = standings(state);
-  return state.phase.id === 'podium'
-    ? rows.filter((r) => r.rank <= 3 && r.rank >= 3 - state.podiumStep)
-    : state.phase.id === 'score' || state.phase.id === 'done'
-      ? rows
-      : [];
-}
-
-function revealData(state: State): RevealData | null {
-  if (state.phase.id !== 'reveal') return null;
-  const q = currentQuestion(state);
-  const counts = [0, 0, 0, 0];
-  for (const answer of Object.values(state.answers))
-    counts[answer.choice] = (counts[answer.choice] ?? 0) + 1;
-  return {
-    correctChoice: q.correct,
-    explanation: q.explanation,
-    counts,
-    missed: Object.keys(state.players).length - Object.keys(state.answers).length,
-  };
-}
-
-function publicTeams(state: State, playerId?: string): PublicTeam[] {
-  const finalReveal = state.phase.id === 'reveal' && state.round === state.deck.length;
-  const receipt = ['reveal', 'score', 'podium', 'done'].includes(state.phase.id);
-  return (state.teams ?? []).map((team) => {
-    const rank = teamRank(state, team.id);
-    const withheld = finalReveal || (state.phase.id === 'podium' && rank < 3 - state.podiumStep);
-    const own = playerId !== undefined && team.members.includes(playerId);
-    return {
-      id: team.id,
-      name: team.name,
-      members: [...team.members],
-      score:
-        withheld && !own
-          ? (state.previousScores[team.members[0] ?? ''] ?? 0)
-          : (state.teamScores[team.id] ?? 0),
-      gained: receipt && (!withheld || own) ? (state.teamGains[team.id] ?? 0) : 0,
-      rank: withheld ? 0 : rank,
-    };
-  });
-}
-
-function tvView(state: State): QuizTvView {
-  return {
-    ...envelope(state, manifest.id, { statusOf: statusOf(state) }),
-    round: state.round,
-    rounds: state.deck.length,
-    mode: modeOf(state),
-    team: null,
-    teams: publicTeams(state),
-    decision: state.phase.id === 'reveal' ? state.decision : null,
-    question: ['talk', 'question', 'reveal'].includes(state.phase.id)
-      ? publicQuestion(state)
-      : null,
-    reveal: revealData(state),
-    standings: publicStandings(state),
-    answered: eligibleIds(state).filter((id) => Object.hasOwn(state.answers, id)).length,
-    eligible: eligibleIds(state).length,
-    podiumStep: state.podiumStep,
-  };
-}
-
-function controllerView(state: State, playerId: string): QuizControllerView {
-  const player = hasPlayer(state, playerId);
-  const stage = !player || state.phoneOnly || state.players[playerId]!.canSeeTv === false;
-  const questionOnStage = state.phase.id === 'question' || state.phase.id === 'reveal';
-  const answer = Object.hasOwn(state.answers, playerId) ? state.answers[playerId] : undefined;
-  const verdict =
-    state.phase.id !== 'question' &&
-    state.phase.id !== 'talk' &&
-    Object.hasOwn(state.verdicts, playerId)
-      ? state.verdicts[playerId]!
-      : null;
-  const score = player ? state.scores[playerId]! : 0;
-  const ownTeam = player ? teamOf(state, playerId) : null;
-  const rank = player
-    ? modeOf(state) !== 'solo' && ownTeam
-      ? teamRank(state, ownTeam.id)
-      : 1 + Object.values(state.scores).filter((s) => s > score).length
-    : 0;
-  const finalReveal = state.phase.id === 'reveal' && state.round === state.deck.length;
-  const withheld = finalReveal || (state.phase.id === 'podium' && rank < 3 - state.podiumStep);
-  const teams = publicTeams(state, player ? playerId : undefined);
-  return {
-    ...controllerEnvelope(state, manifest.id, playerId, { statusOf: statusOf(state) }),
-    round: state.round,
-    rounds: state.deck.length,
-    mode: modeOf(state),
-    team: ownTeam ? teams.find((team) => team.id === ownTeam.id)! : null,
-    teams,
-    decision: state.phase.id === 'reveal' ? state.decision : null,
-    question:
-      state.phase.id === 'talk' || (stage && questionOnStage) ? publicQuestion(state) : null,
-    reveal: stage ? revealData(state) : null,
-    standings: stage ? publicStandings(state) : [],
-    submitted: answer !== undefined,
-    selected: answer?.choice ?? null,
-    verdict,
-    score:
-      state.phase.id === 'question' || state.phase.id === 'talk'
-        ? player
-          ? state.previousScores[playerId]!
-          : 0
-        : score,
-    rank: withheld ? 0 : rank,
-    streak: player ? state.streaks[playerId]! : 0,
-    stage,
-    podiumStep: state.podiumStep,
-  };
-}
-
-export const game: GameDefinition<State, Input, QuizTvView, QuizControllerView> = {
+export const game: GameDefinition<State, Input> = {
+  recap,
   manifest,
   phases: PHASES,
   inputSchema,
   init,
   reduce,
-  tvView,
-  controllerView,
+  tvView: (state) => tvView(state, manifest.id),
+  controllerView: (state, playerId) => controllerView(state, manifest.id, playerId),
   results,
-  bot: { sampleInput: botInput },
+  bot: { sampleInput },
 };

@@ -1,44 +1,84 @@
-// Read validated original packs and shuffle questions and shape assignments once per match.
-import { shuffle } from '@partybox/game-sdk';
-import type { RngState } from '@partybox/game-sdk';
-import general from '../content/general.json' with { type: 'json' };
-import movies from '../content/movies.json' with { type: 'json' };
-import science from '../content/science.json' with { type: 'json' };
-import sports from '../content/sports.json' with { type: 'json' };
-import music from '../content/music.json' with { type: 'json' };
-import custom from '../content/custom.json' with { type: 'json' };
-import { packSchema } from '../content/schema';
-import type { Question } from '../content/schema';
-import type { PublicQuestion } from './views';
-import type { State } from './types';
+// Typed access to content/questions.json. Imported statically (bundled, no I/O); parsed once at
+// module load so a broken pack fails at import time and in the contract suite, never mid-game.
+import {
+  CATEGORIES,
+  SUBCATEGORIES,
+  labelOf,
+  questionsEsPackSchema,
+  questionsPackSchema,
+} from '../content/schema';
+import type { Category, Question } from '../content/schema';
+import questionsEsJson from '../content/questions.es.json' with { type: 'json' };
+import questionsJson from '../content/questions.json' with { type: 'json' };
+import { classicQuestionById, CLASSIC_PACKS } from './classic';
+import type { ClassicQuestion } from './classic';
 
-const PACKS = {
-  general: packSchema.parse(general),
-  movies: packSchema.parse(movies),
-  science: packSchema.parse(science),
-  sports: packSchema.parse(sports),
-  music: packSchema.parse(music),
-  custom: packSchema.parse(custom),
-};
+export type ContentLang = 'en' | 'es';
 
-export function makeDeck(pack: string, rounds: number, rng: RngState): [Question[], RngState] {
-  const source = Object.hasOwn(PACKS, pack) ? PACKS[pack as keyof typeof PACKS] : PACKS.general;
-  const [questions, after] = shuffle(rng, source.questions);
-  let next = after;
-  const deck = questions.slice(0, rounds).map((q): Question => {
-    const [order, r] = shuffle(next, [0, 1, 2, 3]);
-    next = r;
-    const options = order.map((i) => q.options[i]!) as Question['options'];
-    return { ...q, options, correct: order.indexOf(q.correct) };
-  });
-  return [deck, next];
+export const QUESTIONS: readonly Question[] = questionsPackSchema.parse(questionsJson).items;
+/** ADR-054: the Spanish deck — the English ids it translates, ES-only "<id>-es" replacements, and
+ *  the English ids it drops (questions about English itself). */
+const ES_PACK = questionsEsPackSchema.parse(questionsEsJson);
+export const QUESTIONS_ES: readonly Question[] = ES_PACK.items;
+export const DROPPED_ES: readonly string[] = ES_PACK.dropped;
+
+const byId = (qs: readonly Question[]): Readonly<Record<string, Question>> =>
+  Object.fromEntries(qs.map((q) => [q.id, q]));
+const BY_ID = byId(QUESTIONS);
+const BY_ID_ES = byId(QUESTIONS_ES);
+
+/** The whole deck in a game's content language (absent = English). */
+export function questionsOf(lang?: ContentLang): readonly Question[] {
+  return lang === 'es' ? QUESTIONS_ES : QUESTIONS;
 }
 
-export function currentQuestion(state: State): Question {
-  return state.deck[state.round - 1]!;
+export function questionById(
+  id: string,
+  lang?: ContentLang,
+): Question | ClassicQuestion | undefined {
+  const classic = classicQuestionById(id);
+  if (classic) return classic;
+  const table = lang === 'es' ? BY_ID_ES : BY_ID;
+  return Object.hasOwn(table, id) ? table[id] : undefined;
 }
 
-export function publicQuestion(state: State): PublicQuestion {
-  const q = currentQuestion(state);
-  return { id: q.id, prompt: q.prompt, options: [...q.options] };
+export function isCategory(value: string): value is Category {
+  return (CATEGORIES as readonly string[]).includes(value);
+}
+
+/** The topic ids of a category (empty for `all` or an unknown category). */
+export function subcategoriesOf(category: string): readonly string[] {
+  return isCategory(category) ? SUBCATEGORIES[category] : [];
+}
+
+/**
+ * Questions of one category, in pack order (empty for an unknown category); with `subcategories`,
+ * only those topics.
+ */
+export function questionsIn(
+  category: string,
+  subcategories: readonly string[] = [],
+  lang?: ContentLang,
+): readonly Question[] {
+  return questionsOf(lang).filter(
+    (q) =>
+      q.category === category &&
+      (subcategories.length === 0 || subcategories.includes(q.subcategory)),
+  );
+}
+
+/** Human label for a category id or `all` (the manifest's select labels, without importing it). */
+export function categoryLabel(category: string): string {
+  if (category.startsWith('classic-')) {
+    const pack = category.slice(8);
+    if (Object.hasOwn(CLASSIC_PACKS, pack))
+      return CLASSIC_PACKS[pack as keyof typeof CLASSIC_PACKS].name;
+  }
+  return labelOf(category);
+}
+
+/** "Sports · Basketball, Soccer" — what the intro pill says the game draws from. */
+export function drawLabel(category: string, subcategories: readonly string[]): string {
+  const head = categoryLabel(category);
+  return subcategories.length === 0 ? head : `${head} · ${subcategories.map(labelOf).join(', ')}`;
 }

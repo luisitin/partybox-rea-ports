@@ -1,10 +1,17 @@
-# kahoot — local rules
+# kahoot - local rules
 
-- README.md is the spec; update it with any rule change.
-- Each phase has its own server/phases file and fixtures JSON.
-- Server imports only @partybox/game-sdk; pure, seeded and JSON only.
-- Never spread a Question into a view: correct and explanation are secret until reveal.
-- Bot knowledge is authored separately; never read the shuffled answer key in bot.ts.
-- Test only this game: pnpm vitest run games/kahoot.
-- P01's historical evidence: jobs/P01-quiz-rush/.
-- Current teams/vote evidence and resumable handoff: jobs/P02-quiz-rush-teams/.
+- Spec lives in README.md (required headings); keep it true when rules change — the stress session
+  checks "scores never decrease" against it, and the final wager is the one allowed decrease.
+- One file per phase under server/phases/ exporting `enterX` + `reduceX(state, event, next)`; the
+  successor is injected from server/index.ts (`advance`) so phase files never import each other.
+- Hidden info is omitted by KEY (`correctIndex`, `pickIndex`, `wagerAmount`), never set to null —
+  `__tests__/contract.config.ts` asserts those key names are absent before the reveal.
+- Questions are referenced by id; content/questions.json is the truth (6 153 items, 10 categories × 59
+  topics, balanced `answerIndex`). Add questions with a `source` note and a `subcategory` from
+  content/schema.ts; never time-sensitive facts. The topics checklist is a `multiselect` setting (ADR-034).
+  Every existing wager-library English id also needs its Spanish twin in content/questions.es.json (or a `dropped` entry): content-es.test.ts. Separate authored classic packs are English-only under the P01 brief.
+- Imports: only @partybox/game-sdk (+ react in client/). server/ is pure (no Date.now, Math.random,
+  timers, I/O).
+- Fixtures are full states with real question ids; regenerate by hand with the reducer after a
+  state-shape change (`pnpm sim --dump-fixtures` does not exist yet).
+- Verify only this game with pnpm.cmd vitest run games/kahoot --maxWorkers=1 --pool=threads. Root owns all executions and at most one browser closed in finally; agents coordinate before changing tested source.

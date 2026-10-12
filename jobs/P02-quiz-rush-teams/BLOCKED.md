@@ -1,4 +1,6 @@
-# P02 blocked on the reopened P01 prerequisite
+# P02 historical prerequisite blocker — resolved
+
+Resolved 2026-10-12 by public P01 head4043226 with completed canonical engine/schema and green CI. P02 resumed under r2-local. The notes below describe the former blockage; current integration work and outstanding checks are in NEXT.md.
 
 Observed 2026-10-12, runner r2-local. P02 explicitly depends on P01 in JOBS.md.
 

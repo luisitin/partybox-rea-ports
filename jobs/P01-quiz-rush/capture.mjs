@@ -17,7 +17,7 @@ import { resolve } from 'node:path';
 
 const job = import.meta.dirname;
 const media = resolve(job, 'media');
-const temp = mkdtempSync(resolve(tmpdir(), 'pb-quiz-rush-capture-'));
+const temp = mkdtempSync(resolve(tmpdir(), 'pb-kahoot-capture-'));
 const profile = resolve(temp, 'capture-profile');
 let port;
 const browserPath = [
@@ -26,6 +26,9 @@ const browserPath = [
 ].find(existsSync);
 if (!browserPath) throw new Error('Neither the standard Chrome nor Edge executable exists.');
 const cases = JSON.parse(readFileSync(resolve(media, 'capture-manifest.json'), 'utf8'));
+const fontBytes = readFileSync(resolve(media, 'nunito-latin-wght-normal.woff2'));
+const tokenCSS = readFileSync(resolve(media, 'tokens.css'), 'utf8');
+const evidenceCSS = readFileSync(resolve(media, 'evidence.css'), 'utf8');
 mkdirSync(temp, { recursive: true });
 
 function pause(ms) {
@@ -70,13 +73,13 @@ class Devtools {
       }
     });
   }
-  call(method, params = {}) {
+  call(method, params = {}, timeoutMs = 30000) {
     return new Promise((resolveCall, reject) => {
       const id = this.nextId++;
       const timer = setTimeout(() => {
         this.pending.delete(id);
         reject(new Error(`DevTools timed out: ${method}`));
-      }, 30000);
+      }, timeoutMs);
       this.pending.set(id, {
         resolve: (result) => {
           clearTimeout(timer);
@@ -99,7 +102,18 @@ class Devtools {
 
 function measure() {
   const main = document.querySelector('.evidence-main');
-  const bounds = main.getBoundingClientRect();
+  const mainBounds = main.getBoundingClientRect();
+  const stage =
+    document.documentElement.dataset.surface === 'tv'
+      ? main.querySelector('[class*="_stage_"]')
+      : null;
+  const stageStyle = stage ? getComputedStyle(stage) : null;
+  const bounds = {
+    top: mainBounds.top + (stageStyle ? parseFloat(stageStyle.paddingTop) : 0),
+    bottom: mainBounds.bottom - (stageStyle ? parseFloat(stageStyle.paddingBottom) : 0),
+    left: mainBounds.left + (stageStyle ? parseFloat(stageStyle.paddingLeft) : 0),
+    right: mainBounds.right - (stageStyle ? parseFloat(stageStyle.paddingRight) : 0),
+  };
   const all = [...main.querySelectorAll('*')];
   const named = (el) =>
     `${el.tagName.toLowerCase()}.${String(el.className).split(' ')[0]} ${(el.textContent ?? '').slice(0, 70)}`;
@@ -119,12 +133,24 @@ function measure() {
   );
   const clipped = content
     .filter((el) => {
-      const r = el.getBoundingClientRect();
+      const insideStage = stage?.contains(el);
+      const limit = insideStage ? bounds : mainBounds;
+      let r = el.getBoundingClientRect();
+      // The TV's Next hint cancels transparent padding to keep its header stable.
+      // Check its visible words; the shell timer is a sibling outside the game Stage.
+      if (insideStage && el.matches('button')) {
+        const style = getComputedStyle(el);
+        if (style.backgroundColor === 'rgba(0, 0, 0, 0)' && parseFloat(style.marginTop) < 0) {
+          const range = document.createRange();
+          range.selectNodeContents(el);
+          r = range.getBoundingClientRect();
+        }
+      }
       return (
-        r.top < bounds.top - 1 ||
-        r.bottom > bounds.bottom + 1 ||
-        r.left < bounds.left - 1 ||
-        r.right > bounds.right + 1
+        r.top < limit.top - 1 ||
+        r.bottom > limit.bottom + 1 ||
+        r.left < limit.left - 1 ||
+        r.right > limit.right + 1
       );
     })
     .map(named);
@@ -148,10 +174,30 @@ function measure() {
   return {
     horizontalOverflow: document.documentElement.scrollWidth - innerWidth,
     verticalOverflow: document.documentElement.scrollHeight - innerHeight,
-    main: { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height },
+    main: {
+      x: mainBounds.x,
+      y: mainBounds.y,
+      width: mainBounds.width,
+      height: mainBounds.height,
+    },
+    safeBounds: bounds,
     scrollers,
     clipped,
     unstyled,
+    nameVisibility: [
+      ...main.querySelectorAll(
+        '[data-player] [class*="_name_"], [data-player] [class*="_wagerName_"]',
+      ),
+    ]
+      .filter(visible)
+      .map((el) => ({
+        playerId: el.closest('[data-player]').getAttribute('data-player'),
+        name: el.textContent.trim(),
+        title: el.getAttribute('title'),
+        availableWidth: el.clientWidth,
+        requiredWidth: el.scrollWidth,
+        truncated: el.scrollWidth > el.clientWidth + 1,
+      })),
     touchTargets: [...main.querySelectorAll('button')].map((el) => {
       const r = el.getBoundingClientRect();
       return {
@@ -164,11 +210,15 @@ function measure() {
       element: named(el),
       fontSize: parseFloat(getComputedStyle(el).fontSize),
     })),
+    nunitoLoaded: [...document.fonts].some(
+      (font) => font.family === 'Nunito Variable' && font.status === 'loaded',
+    ),
   };
 }
 
 let browser;
 let socket;
+let dev;
 let browserClosed = false;
 const metrics = [];
 try {
@@ -225,7 +275,7 @@ try {
     );
     socket.addEventListener('error', reject, { once: true });
   });
-  const dev = new Devtools(socket);
+  dev = new Devtools(socket);
   await dev.call('Page.enable');
   await dev.call('Runtime.enable');
   const { frameTree } = await dev.call('Page.getFrameTree');
@@ -258,16 +308,24 @@ try {
       await pause(100);
     }
     if (!ready) throw new Error(`Page content not ready: ${frame.name}`);
+    // Page.setDocumentContent has no file base URL. Load the committed local font bytes directly;
+    // opening the standalone HTML from disk uses the same adjacent OFL font, without a network.
     await dev.call('Runtime.evaluate', {
-      expression: 'document.fonts.ready.then(()=>true)',
+      expression: `(()=>{const tokens=document.createElement('style');tokens.textContent=${JSON.stringify(tokenCSS)};document.head.append(tokens);const rules=document.createElement('style');rules.textContent=${JSON.stringify(evidenceCSS)};document.head.append(rules);const bytes=Uint8Array.from(atob('${fontBytes.toString('base64')}'),char=>char.charCodeAt(0));const face=new FontFace('Nunito Variable',bytes,{weight:'200 1000',style:'normal'});document.fonts.add(face);return face.load().then(()=>document.fonts.ready).then(()=>true)})()`,
       awaitPromise: true,
+    });
+    // The real host's layout effect auto-collapses the named strip past two rows before paint.
+    // Static SSR has no layout effects, so apply that same measured decision to its two renders.
+    await dev.call('Runtime.evaluate', {
+      expression: `(()=>{const named=document.querySelector('[data-chips-named]');const faces=document.querySelector('[data-chips-faces]');const list=named?.querySelector('ul');if(list&&new Set([...list.children].map(el=>el.offsetTop)).size>2){named.hidden=true;faces.hidden=false;}return true})()`,
+      returnByValue: true,
     });
     const result = await dev.call('Runtime.evaluate', {
       expression: `(${measure.toString()})()`,
       returnByValue: true,
     });
     if (result.exceptionDetails) throw new Error(JSON.stringify(result.exceptionDetails));
-    metrics.push({ name: frame.name, ...result.result.value });
+    metrics.push({ name: frame.name, baseline: frame.baseline === true, ...result.result.value });
     const shot = await dev.call('Page.captureScreenshot', {
       format: 'png',
       captureBeyondViewport: false,
@@ -285,6 +343,19 @@ try {
   console.error('Capture failed:', error);
   throw error;
 } finally {
+  if (dev) {
+    let closeTimeout;
+    try {
+      await Promise.race([
+        dev.call('Browser.close', {}, 1500),
+        new Promise((done) => (closeTimeout = setTimeout(done, 2000))),
+      ]);
+    } catch {
+      // Exact owned process-tree fallback also covers a closed/unresponsive CDP connection.
+    } finally {
+      clearTimeout(closeTimeout);
+    }
+  }
   socket?.close();
   if (browser?.pid) {
     const killer = spawn('taskkill.exe', ['/PID', String(browser.pid), '/T', '/F'], {
@@ -309,7 +380,7 @@ try {
         const timeout = setTimeout(() => {
           verifier.unref();
           done(null);
-        }, 5000);
+        }, 15000);
         verifier.once('exit', (code) => {
           clearTimeout(timeout);
           done(code);
@@ -321,8 +392,8 @@ try {
       })) === 0;
     browser.unref();
     if (!browserClosed)
-      console.warn(
-        `Owned browser PID ${browser.pid} has not reported exit; preserving its profile.`,
+      throw new Error(
+        `Owned browser PID ${browser.pid} closure is unverified; preserving its profile.`,
       );
     else console.log(`Owned browser PID ${browser.pid} is closed.`);
   }
@@ -341,8 +412,8 @@ try {
   }
   const osTemp = resolve(tmpdir());
   if (
-    !temp.startsWith(`${osTemp}\\pb-quiz-rush-capture-`) &&
-    !temp.startsWith(`${osTemp}/pb-quiz-rush-capture-`)
+    !temp.startsWith(`${osTemp}\\pb-kahoot-capture-`) &&
+    !temp.startsWith(`${osTemp}/pb-kahoot-capture-`)
   )
     throw new Error('Refusing cleanup outside owned OS capture temp.');
   if (browserClosed) {
@@ -371,16 +442,22 @@ writeFileSync(
 );
 const failed = metrics.filter(
   (m) =>
-    m.horizontalOverflow > 1 ||
-    m.verticalOverflow > 1 ||
-    m.clipped.length ||
-    m.unstyled.length ||
-    m.scrollers.some((s) => s.overflow > 1),
+    !m.baseline &&
+    (m.horizontalOverflow > 1 ||
+      m.verticalOverflow > 1 ||
+      m.clipped.length ||
+      m.unstyled.length ||
+      !m.nunitoLoaded ||
+      m.scrollers.some((s) => s.overflow > 1)),
 );
 console.log(
   JSON.stringify(
     {
       screens: metrics.length,
+      currentScreens: metrics.filter((m) => !m.baseline).length,
+      baseline: metrics
+        .filter((m) => m.baseline)
+        .map((m) => ({ name: m.name, clipped: m.clipped })),
       bytes,
       failed: failed.map((m) => ({
         name: m.name,

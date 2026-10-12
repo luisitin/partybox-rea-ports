@@ -1,47 +1,24 @@
 # P02 continuation
 
-BLOCKED on reopened P01; read BLOCKED.md first. Latest public P01 head3586a79
-retires the engine below and is still implementing the required classic mode
-and pack schema. PR18 is CONFLICTING and cannot run synchronized CI. Resume
-only against the published updated canonical P01 implementation; preserve the
-reusable group payload, validator, authored facts, adapters and evidence here.
+Runner r2-local; branch job/P02-quiz-rush-teams; draft PR https://github.com/luisitin/partybox-rea-ports/pull/18 (base job/P01-quiz-rush).
 
-Runner r2-local; branch job/P02-quiz-rush-teams. P04 is DONE/readyPR1.
-P02's old blocker is lifted by public P01 PR2/branch1c8d264, merged here.
-The P02 PR will stack on job/P01-quiz-rush until that prerequisite merges.
+Resumed 2026-10-12 after P06 completed. The previous prerequisite blocker is resolved: P01 public head 4043226 has the canonical classic engine/schema, stamped answers, partial podium and green CI. P01 remains unmerged. P02's expired claim was refreshed on main after pull --rebase.
 
-Owner naming renames public games/quiz-rush to games/kahoot (Kahoot!).
-Research is complete: personal-device teams average scores after discussion;
-collective room-vote scoring is an explicit PartyBox adaptation. Read
-RESEARCH.md/SOURCES.md/ASSUMPTIONS.md. Existing Lightning Round already has
-P01's donor chart/audio; preserve its injected classic default and add only
-teams/tv-vote under the existing card (UPGRADE.md being authored).
+The canonical P01 module replaces the retired standalone implementation. Old P02 source is preserved in git at b254dd4 and in the local snapshot C:/Users/luisi_xlnbc7h/AppData/Local/Temp/p02-group-resume-e7b326feda9c47388516f671e73426fa/games/kahoot. No second game or injected retired engine is being installed.
 
-Server/client team/talk/vote logic, injected upgrade adapters/tests and
-40paired-source sports/music facts are drafted.13parserchecks pass and CLI
-sample validates5questions. Typecheck is green after two fixture corrections.
-The full scoped run passes all21,000matches/properties but fails21checks due to
-toy minigame metadata, manual word counts and missing talk.json. Corrected
-adapter/reading rerun passes25checks. Fresh SSR generation will supplytalk.json.
-Root owns commands/browser/CI/git. Mutation campaign passes20/20 with exact
-source restoration. Fresh SSR passes74checks and creates92frames. Native
-passes28assertions/36layouts, including pending-choice pause/refresh recovery;
-the final harness must establish a real local origin and verify bounded tree
-cleanup after intermittent Windows navigation/process-exit failures.
-Compact receipts fix the observed24px maximum phone-only reveal overflow;
-all92current captures now measure zero overflow/clipping. Draft PR18 is open
-on P01 base. Final capture cleanup/hash, full CI and convergence remain.
-Latest full run:305pass/2fail/1skip. Failures are a60second exhaustive-property
-wall bound (raised to180seconds) and P01's historical media count including the
-new root talk fixture (legacy rendering now filters solo). Native assertions
-retain all2,006traces and pass in6.9seconds;101focused SDK/legacy/CLI/draft
-checks pass. Drafts also include phaseAt to avoid a later-match collision.
-Custom packs compile from validated text to content/custom.json; no runtime
-SDK content-injection API is assumed. Rebuild/restart and select Custom.
+Current integration adds quizMode=teams/tv-vote directly to the canonical engine. Wager and Classic remain unchanged, with the legacy 1–16 roster, EN/ES library, 300-point streak cap and wager minigame. New groups use 2–8 players, seeded balanced teams, a reading-safe discussion phase and the English classic packs. Sports/music/custom extend the compatible pack schema.
 
-Finish client role/stage flows and targeted tests; run only games/kahoot
-with one worker plus typecheck/format. Execute new-mode1,000seed simulations
-at every2–8count, contracts/properties,20mutation cases and phase/role media.
-Keep one headless browser and close in finally; never whole-suite browser.
-Push milestones/refresh main CLAIMS after pull--rebase. Open P02 draft with
-README body on P01 base, get full CI green, then three no-gain KEEP GOING rounds.
+Parallel file ownership while active:
+
+- Server agent: games/kahoot/server/** and group-server.test.ts; types/views/team scoring/discussion.
+- Client agent: games/kahoot/client/** and group-screens.test.tsx; team/vote stages and controls.
+- Content agent: games/kahoot/content/**, validator/format docs and group content/CLI tests.
+- Root: manifest, remaining tests/fixtures/evidence, all executions, browser, docs/git/CI.
+
+Root must not run checks until all source edits settle. Then typecheck/format, focused group checks and full pnpm vitest run games/kahoot --maxWorkers=1 --pool=threads. Only this game's tests. Baseline P01 tests exercise 32,000 games; retain their assertions and add 1,000 group matches at every supported count/strength, seeds 1/2/3 plus 1,000 sampled property seeds, actual SDK group variants and 20 semantic mutations. The old 21,000-match/92-layout evidence is historical and cannot release this new integration.
+
+Regenerate group phase/role fixtures and TV/phone/phone-only/spectator media from the actual canonical components. Keep media under 10 MB; hash every file. Root owns at most one headless browser, closed in finally. Update capture/live/mutation tools for canonical fields before executing them.
+
+Refresh PR18's body from README.md, obtain green P02 CI, then run the KEEP GOING loop until three consecutive rounds have no noticeable gain. Push milestones at least every 30 minutes and refresh CLAIMS on each push, pulling --rebase before each claim commit.
+
+Read UPGRADE.md: the owner's current Lightning Round already has partial teams from T-1146; no owner deployment or private checkout edit is performed here. The missing discussion/room-vote/packs are the upgrade scope.

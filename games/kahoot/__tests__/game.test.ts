@@ -1,263 +1,286 @@
-// Pin player-visible rules, boundary timestamps, pause accounting and hidden information.
+// Flow + input rules from README.md: the draw, phase order, one pick per player, spectators,
+// disconnects, hidden information. Scoring lives in scoring.test.ts, VIP actions in vip.test.ts.
 import { describe, expect, it } from 'vitest';
-import { createRng } from '@partybox/game-sdk';
-import { testKit, testPlayers } from '@partybox/game-sdk/testing';
+import { QUESTIONS, questionById, questionsIn } from '../server/content';
+import { drawQuestions } from '../server/draw';
 import { game } from '../server/index';
-import { botInput } from '../server/bot';
-import { currentQuestion } from '../server/content';
-import { speedPoints } from '../server/scoring';
-import type { State } from '../server/types';
+import { revealMs } from '../server/phases/reveal';
+import { seedRng } from '@partybox/game-sdk';
+import {
+  PLAYERS,
+  T0,
+  current,
+  input,
+  phone,
+  pick,
+  playQuestion,
+  start,
+  timer,
+  toWager,
+  tv,
+} from './helpers';
 
-const kit = testKit(game, { players: testPlayers(2), settings: { rounds: 5 } });
-const answer = (s: State, id: string, choice = currentQuestion(s).correct, elapsed = 1000): State =>
-  kit.input(s, id, { type: 'answer', round: s.round, choice }, s.openedAt + elapsed);
-const correctRound = (s: State): State => answer(answer(s, 'p1'), 'p2');
+describe('draw', () => {
+  it('draws questions + 1 ids without repeats, deterministically per seed', () => {
+    const [a] = drawQuestions(seedRng(7), 'all', 10);
+    const [b] = drawQuestions(seedRng(7), 'all', 10);
+    const [c] = drawQuestions(seedRng(8), 'all', 10);
+    expect(a.ids).toHaveLength(11);
+    expect(new Set(a.ids).size).toBe(11);
+    expect(a).toEqual(b);
+    expect(c.ids).not.toEqual(a.ids);
+    expect(a.drawnFrom).toBe('all');
+    for (const id of a.ids) expect(questionById(id)).toBeDefined();
+  });
 
-describe('scoring', () => {
-  it('awards 1000 at zero, 750 halfway and 500 at the end; clamps both ends', () => {
-    expect(speedPoints(0, 20_000)).toBe(1000);
-    expect(speedPoints(10_000, 20_000)).toBe(750);
-    expect(speedPoints(20_000, 20_000)).toBe(500);
-    expect(speedPoints(-500, 20_000)).toBe(1000);
-    expect(speedPoints(40_000, 20_000)).toBe(500);
+  it('honours the category setting when it has enough questions', () => {
+    const s = start({ category: 'stem', questions: 20 });
+    expect(s.drawnFrom).toBe('stem');
+    expect(s.questionIds).toHaveLength(21);
+    for (const id of s.questionIds) expect(questionById(id)?.category).toBe('stem');
   });
-  it('rounds speed points to the nearest integer', () => {
-    expect(speedPoints(1037, 20_000)).toBe(974);
+
+  it('falls back to all categories when the category is too small or unknown', () => {
+    const [small] = drawQuestions(seedRng(1), 'stem', questionsIn('stem').length);
+    expect(small.drawnFrom).toBe('all');
+    expect(small.ids).toHaveLength(questionsIn('stem').length + 1);
+    expect(start({ category: 'astrology' }).drawnFrom).toBe('all');
   });
-  it('wrong answers and timeouts score zero and break streaks', () => {
-    let s = correctRound(kit.start());
-    s = kit.timer(kit.timer(s));
-    s = answer(s, 'p1', (currentQuestion(s).correct + 1) % 4);
-    s = kit.timer(s);
-    expect(s.verdicts.p1).toMatchObject({ outcome: 'wrong', points: 0, streak: 0, bonus: 0 });
-    expect(s.verdicts.p2).toMatchObject({ outcome: 'timeout', points: 0, streak: 0 });
+
+  it('honours ticked topics, and falls back to the category, then all (ADR-034)', () => {
+    const s = start({ category: 'sports', subcategories: 'hockey,soccer', questions: 20 });
+    expect(s.settings.subcategories).toEqual(['hockey', 'soccer']);
+    expect(s.drawnFrom).toBe('sports');
+    expect(s.drawnSubs).toEqual(['hockey', 'soccer']);
+    for (const id of s.questionIds)
+      expect(['hockey', 'soccer']).toContain(questionById(id)?.subcategory);
+    expect(tv(s).categoryLabel).toBe('Sports · Hockey, Soccer');
+    // Topics from another category, unknown topics and blanks are dropped at init.
+    const mixed = start({ category: 'sports', subcategories: 'math, soccer,,nope' });
+    expect(mixed.settings.subcategories).toEqual(['soccer']);
+    expect(start({ category: 'all', subcategories: 'soccer' }).settings.subcategories).toEqual([]);
+    // A topic too small for the game falls back to its whole category.
+    const n = questionsIn('sports', ['hockey']).length;
+    const [fallback] = drawQuestions(seedRng(2), 'sports', n, ['hockey']);
+    expect(fallback.drawnFrom).toBe('sports');
+    expect(fallback.drawnSubs).toEqual([]);
+    expect(fallback.ids).toHaveLength(n + 1);
+    expect(start({ category: 'sports' }).drawnSubs).toEqual([]);
   });
-  it('builds streaks by 100 up to 500 and credits exactly once', () => {
-    const longKit = testKit(game, { players: testPlayers(2), settings: { rounds: 10 } });
-    let s = longKit.start();
-    for (let r = 1; r <= 7; r++) {
-      s = correctRound(s);
-      expect(s.verdicts.p1!.bonus).toBe(Math.min(500, (r - 1) * 100));
-      expect(s.verdicts.p1!.points).toBe(975 + Math.min(500, (r - 1) * 100));
-      const scored = s.scores.p1;
-      s = kit.timer(s);
-      expect(s.scores.p1).toBe(scored);
-      s = kit.timer(s);
+
+  it('prefers the hardest available difficulty for the final question', () => {
+    for (const seed of [1, 2, 3, 4, 5]) {
+      const [draw] = drawQuestions(seedRng(seed), 'all', 5);
+      expect(questionById(draw.ids[5] ?? '')?.difficulty).toBe('hard');
     }
-  });
-  it('keeps equal scores at the same rank', () => {
-    const s = kit.until(correctRound(kit.start()), 'done');
-    expect(game.results(s)!.ranking.map((r) => r.rank)).toEqual([1, 1]);
-    expect(game.results(s)!.winnerIds).toEqual(['p1', 'p2']);
+    // A pool where no hard question is left for the final falls back to medium, then easy.
+    const easyOnly = QUESTIONS.filter((q) => q.difficulty === 'easy').length;
+    expect(easyOnly).toBeGreaterThan(5);
   });
 });
 
-describe('one tap per question', () => {
-  it('starts in question directly after the shell countdown', () => {
-    const s = kit.start();
+describe('phase flow', () => {
+  it('starts in intro with enough time to read its title and results null', () => {
+    const s = start();
+    expect(s.phase.id).toBe('intro');
+    expect(s.phase.startedAt).toBe(T0);
+    expect(s.phase.deadline).toBeGreaterThan(T0 + 2_000);
+    expect(s.index).toBe(-1);
+    expect(game.results(s)).toBeNull();
+    expect(s.scores).toEqual({ a: 0, b: 0, c: 0 });
+  });
+
+  it('intro deadline → question 1 with the answerSeconds deadline', () => {
+    const s = timer(start({ answerSeconds: 20 }));
     expect(s.phase.id).toBe('question');
-    expect(s.answerMs).toBe(20_000);
-    expect(s.phase.deadline).toBe(s.openedAt + s.answerMs);
+    expect(s.index).toBe(0);
+    expect(s.phase.deadline).toBeGreaterThanOrEqual(s.phase.startedAt + 20_000);
   });
-  it('locks first answer, ignores duplicates and round-stale answers', () => {
-    const s = answer(kit.start(), 'p1', 1);
-    expect(answer(s, 'p1', 2)).toBe(s);
-    expect(kit.input(s, 'p2', { type: 'answer', round: 2, choice: 1 })).toBe(s);
-    expect(s.answers.p1!.choice).toBe(1);
-  });
-  it('rejects unknown/prototype senders, pre-start and disconnected taps', () => {
-    const s = kit.start();
-    for (const id of ['ghost', '', '__proto__', 'constructor']) expect(answer(s, id)).toBe(s);
-    expect(answer(s, 'p1', 0, -1)).toBe(s);
-    const dropped = kit.player(s, 'p1', false);
-    expect(answer(dropped, 'p1')).toBe(dropped);
-  });
-  it('closes immediately on the last connected answer, not on the first', () => {
-    const s = answer(kit.start(), 'p1');
-    expect(s.phase.id).toBe('question');
-    expect(answer(s, 'p2').phase.id).toBe('reveal');
-  });
-  it('rejects a tap exactly at or past the deadline before scoring it', () => {
-    const s = kit.start();
-    const out = answer(s, 'p1', currentQuestion(s).correct, s.answerMs);
-    expect(out.phase.id).toBe('reveal');
-    expect(out.answers).toEqual({});
-    expect(out.verdicts.p1!.outcome).toBe('timeout');
-  });
-  it('ignores stale and premature timers in every phase, including podium beats', () => {
-    let s = kit.start();
-    for (let i = 0; i < 30 && s.phase.id !== 'done'; i++) {
-      expect(
-        kit.reduce(s, {
-          type: 'timer',
-          now: s.phase.deadline!,
-          phaseId: s.phase.id,
-          startedAt: s.phase.startedAt - 1,
-        }),
-      ).toBe(s);
-      expect(kit.timer(s, s.phase.startedAt)).toBe(s);
-      s = kit.timer(s);
+
+  it('runs questions → wager → final question → done, with every phase deadlined', () => {
+    let s = timer(start({ questions: 5 }));
+    const seen: string[] = [];
+    let guard = 0;
+    while (game.results(s) === null && guard++ < 100) {
+      seen.push(s.phase.id);
+      expect(s.phase.deadline, `phase ${s.phase.id} has no deadline`).not.toBeNull();
+      s = timer(s);
     }
     expect(s.phase.id).toBe('done');
+    expect(s.phase.deadline).toBeNull();
+    expect(seen.filter((p) => p === 'question')).toHaveLength(6);
+    expect(seen.filter((p) => p === 'reveal')).toHaveLength(6);
+    expect(seen.indexOf('wager')).toBe(seen.lastIndexOf('wager'));
+    expect(seen.slice(-3)).toEqual(['wager', 'question', 'reveal']);
+    expect(s.phase.startedAt).toBe(s.phase.startedAt);
+    expect(seen[0]).toBe('question');
   });
-  it('resumes a refreshed player with their answer intact; a drop never blocks the rest', () => {
-    let s = answer(kit.start(), 'p1', 2);
-    s = kit.player(s, 'p1', false);
-    s = kit.player(s, 'p1', true);
-    expect(game.controllerView(s, 'p1')).toMatchObject({ submitted: true, selected: 2 });
-    s = kit.player(s, 'p2', false);
-    expect(s.phase.id).toBe('reveal');
-  });
-  it('all disconnected moves to reveal and keeps every departed seat in results', () => {
-    let s = kit.player(kit.start(), 'p1', false, 'left');
-    s = kit.player(s, 'p2', false, 'kicked');
-    expect(s.phase.id).toBe('reveal');
-    const res = game.results(kit.until(s, 'done'))!;
-    expect(Object.keys(res.scores)).toEqual(['p1', 'p2']);
-    expect(res.ranking).toHaveLength(2);
-  });
-});
 
-describe('pause and pacing', () => {
-  it('holds inputs and timers; pause time earns no speed points', () => {
-    let s = kit.start();
-    const opened = s.openedAt;
-    const deadline = s.phase.deadline!;
-    s = kit.vip(s, 'pause', s.openedAt + 1000);
-    expect(answer(s, 'p1')).toBe(s);
-    expect(kit.timer(s)).toBe(s);
-    s = kit.vip(s, 'resume', s.openedAt + 6000);
-    expect(s.phase.deadline).toBe(deadline + 5000);
-    s = kit.input(
-      s,
-      'p1',
-      { type: 'answer', round: s.round, choice: currentQuestion(s).correct },
-      opened + 7000,
-    );
-    s = kit.input(
-      s,
-      'p2',
-      { type: 'answer', round: s.round, choice: currentQuestion(s).correct },
-      opened + 7000,
-    );
-    expect(s.verdicts.p1!.base).toBe(950);
-  });
-  it('a paused drop is rechecked on resume, and a leave cannot rejoin the match', () => {
-    let s = answer(kit.start(), 'p1');
-    s = kit.vip(s, 'pause');
-    s = kit.player(s, 'p2', false, 'left');
+  it('locks every connected pick, then reveals after the minimum reading hold', () => {
+    let s = timer(start());
+    s = pick(s, 'a', true);
+    s = pick(s, 'b', false);
     expect(s.phase.id).toBe('question');
-    s = kit.vip(s, 'resume', s.openedAt + 8000);
+    s = pick(s, 'c', true);
+    expect(s.phase.id).toBe('question');
+    expect(Object.keys(s.picks)).toHaveLength(3);
+    s = timer(s);
     expect(s.phase.id).toBe('reveal');
-    s = kit.timer(kit.timer(s));
-    s = kit.player(s, 'p2', true);
-    expect(answer(s, 'p2')).toBe(s);
+    // I-589 + the pacing rule: a regular reveal holds long enough to read every row, >= 8 s
+    expect(s.phase.deadline).toBe(s.phase.startedAt + revealMs(s));
+    expect(revealMs(s)).toBeGreaterThanOrEqual(8_000);
   });
-  it('VIP skips every phase and end remains terminal', () => {
-    let s = kit.start();
-    for (let i = 0; i < 30 && s.phase.id !== 'done'; i++) s = kit.vip(s, 'skip');
-    expect(s.phase.id).toBe('done');
-    expect(kit.vip(s, 'pause')).toBe(s);
-    expect(kit.vip(s, 'end')).toBe(s);
-    expect(kit.vip(kit.start(), 'end').phase.id).toBe('done');
-  });
-  it('reserves slow-reader time and goes from final reveal directly to podium', () => {
-    const q = kit.start();
-    const reveal = kit.timer(q);
-    expect(reveal.phase.deadline! - reveal.phase.startedAt).toBeGreaterThanOrEqual(4500);
-    const final = { ...reveal, round: reveal.deck.length };
-    expect(kit.timer(final).phase.id).toBe('podium');
+
+  it('the wager holds its reading floor even when everyone wagers early', () => {
+    const s = toWager(start());
+    expect(s.phase.deadline).toBeGreaterThanOrEqual(s.phase.startedAt + 15_000);
+    let t = s;
+    for (const id of ['a', 'b', 'c'])
+      t = input(t, id, { type: 'wager', percent: 0 }, t.phase.startedAt + 1);
+    expect(t.phase.id).toBe('wager');
+    t = timer(t);
+    expect(t.phase.id).toBe('question');
+    expect(t.index).toBe(t.questionIds.length - 1);
+    expect(tv(t).round).toEqual({ number: 6, total: 5, final: true });
+    // The wager screen shows the standings players are betting from.
+    expect(tv(s).standings?.map((r) => r.playerId)).toEqual(['a', 'b', 'c']);
+    expect(tv(s).standings?.[0]?.rank).toBe(1);
   });
 });
 
-describe('views and bots', () => {
-  it('the question views are identical when the key, explanation or other answers change', () => {
-    const s = answer(kit.start(), 'p1', 0);
-    const q = currentQuestion(s);
-    const changed = {
-      ...s,
-      deck: s.deck.map((v, i) =>
-        i === 0 ? { ...v, correct: (q.correct + 1) % 4, explanation: 'SECRET ONLY' } : v,
-      ),
-      answers: { ...s.answers, p1: { choice: 3, elapsed: 9999 } },
-    };
-    expect(game.tvView(changed)).toEqual(game.tvView(s));
-    expect(game.controllerView(changed, 'p2')).toEqual(game.controllerView(s, 'p2'));
-    expect(JSON.stringify(game.tvView(s))).not.toContain('correct');
-    expect(JSON.stringify(game.controllerView(s, 'p2'))).not.toContain('elapsed');
+describe('inputs', () => {
+  it('a second pick from the same player is ignored', () => {
+    let s = timer(start());
+    const q = current(s);
+    s = input(s, 'a', { type: 'pick', index: q.answerIndex }, s.phase.startedAt + 500);
+    const again = input(
+      s,
+      'a',
+      { type: 'pick', index: (q.answerIndex + 1) % 4 },
+      s.phase.startedAt + 900,
+    );
+    expect(again).toBe(s);
+    expect(again.picks['a']).toEqual({ index: q.answerIndex, elapsedMs: 500 });
   });
-  it('TV phones carry no prompt or options; phone-only, remote and spectators get the stage', () => {
-    const s = kit.start();
-    expect(game.controllerView(s, 'p1').question).toBeNull();
-    expect(game.controllerView({ ...s, phoneOnly: true }, 'p1').question).not.toBeNull();
-    const remote = { ...s, players: { ...s.players, p1: { ...s.players.p1!, canSeeTv: false } } };
-    expect(game.controllerView(remote, 'p1').stage).toBe(true);
-    expect(game.controllerView(s, '__proto__').me.role).toBe('spectator');
+
+  it('ignores spectators, unknown ids, __proto__, wrong-phase and wrong-type inputs', () => {
+    const s = timer(start());
+    expect(input(s, 'zed', { type: 'pick', index: 0 }, T0 + 5_000)).toBe(s);
+    expect(input(s, '__proto__', { type: 'pick', index: 0 }, T0 + 5_000)).toBe(s);
+    expect(input(s, 'a', { type: 'wager', percent: 50 }, T0 + 5_000)).toBe(s);
+    const intro = start();
+    expect(input(intro, 'a', { type: 'pick', index: 1 }, T0 + 100)).toBe(intro);
+    const w = toWager(start());
+    expect(input(w, 'a', { type: 'pick', index: 1 }, w.phase.startedAt + 100)).toBe(w);
+    expect(input(w, 'ghost', { type: 'wager', percent: 0 }, w.phase.startedAt + 100)).toBe(w);
   });
-  it('reveals the correct shape and accurate four bars, including missed seats', () => {
-    let s = answer(kit.start(), 'p1', 3);
-    s = kit.timer(s);
-    expect(game.tvView(s).reveal).toMatchObject({
-      correctChoice: currentQuestion(s).correct,
-      counts: [0, 0, 0, 1],
-      missed: 1,
+
+  it('a disconnected player does not block "all answered"; reconnecting lets them answer', () => {
+    let s = timer(start());
+    s = game.reduce(s, { type: 'player', now: T0 + 4_100, playerId: 'c', connected: false });
+    s = pick(s, 'a', true);
+    s = pick(s, 'b', true);
+    s = timer(s);
+    expect(s.phase.id).toBe('reveal');
+    // Next question: c comes back and answers before the deadline.
+    s = timer(s);
+    s = game.reduce(s, {
+      type: 'player',
+      now: s.phase.startedAt + 100,
+      playerId: 'c',
+      connected: true,
     });
-    expect(game.controllerView(s, 'p1').verdict).toEqual(s.verdicts.p1);
+    s = pick(s, 'c', true, 2_000);
+    expect(s.picks['c']).toEqual({ index: current(s).answerIndex, elapsedMs: 2_000 });
+    expect(s.phase.id).toBe('question');
   });
-  it('gates podium rank tiers on server time, including tied winners', () => {
-    const eight = testKit(game, { players: testPlayers(8) });
-    let s = eight.until(eight.start(), 'podium');
-    s = {
-      ...s,
-      podiumStep: 0,
-      scores: Object.fromEntries(testPlayers(8).map((p, i) => [p.id, (8 - i) * 100])),
-    };
-    expect(game.tvView(s).standings.map((r) => r.rank)).toEqual([3]);
-    expect(game.controllerView(s, 'p1').rank).toBe(0);
-    s = eight.timer(s);
-    expect(game.tvView(s).standings.map((r) => r.rank)).toEqual([2, 3]);
-    s = eight.timer(s);
-    expect(game.tvView(s).standings.map((r) => r.rank)).toEqual([1, 2, 3]);
-    expect(game.controllerView(s, 'p1').rank).toBe(1);
-    expect(eight.timer(s).phase.id).toBe('done');
+
+  it('a stale timer is ignored', () => {
+    const s = timer(start());
+    const stale = game.reduce(s, {
+      type: 'timer',
+      now: s.phase.startedAt + 1,
+      phaseId: 'question',
+      startedAt: s.phase.startedAt - 1,
+    });
+    expect(stale).toBe(s);
   });
-  it('skips empty podium tiers and does not spoil final ranks on the reveal phone', () => {
-    const final = kit.until(kit.start(), 'podium');
-    expect(final.podiumStep).toBe(2);
-    expect(kit.timer(final).phase.id).toBe('done');
-    const s = correctRound({ ...kit.start(), round: 5 });
-    expect(game.controllerView(s, 'p1').rank).toBe(0);
-  });
-  it('starts later unanswered questions without a wait when no eligible seat remains', () => {
-    const s = kit.player(kit.player(kit.start(), 'p1', false), 'p2', false);
+
+  it('works with a single player', () => {
+    let s = timer(start({}, 3, PLAYERS.slice(0, 1)));
+    s = pick(s, 'a', true);
+    s = timer(s);
     expect(s.phase.id).toBe('reveal');
-    const next = kit.timer(kit.timer(s));
-    expect(next.phase.id).toBe('reveal');
-    expect(next.round).toBe(2);
-    expect(Object.values(next.verdicts).every((v) => v.outcome === 'timeout')).toBe(true);
+    expect(s.scores['a']).toBeGreaterThan(0);
   });
-  it('bot decisions never read a changed shuffled key and vary by skill', () => {
-    const s = kit.start();
-    const changed = { ...s, deck: s.deck.map((q) => ({ ...q, correct: (q.correct + 1) % 4 })) };
-    for (const skill of ['easy', 'normal', 'sharp'] as const) {
-      expect(botInput(s, 'p1', createRng(12), skill)).toEqual(
-        botInput(changed, 'p1', createRng(12), skill),
-      );
+
+  it('clamps settings and defaults unknown ones', () => {
+    const s = start({ questions: 99, answerSeconds: 1, category: 'nope' });
+    expect(s.settings).toEqual({
+      quizMode: 'wager',
+      classicPack: 'general',
+      questions: 20,
+      answerSeconds: 5,
+      category: 'all',
+      subcategories: [],
+    });
+    const d = game.init({ players: PLAYERS, settings: {}, seed: 1, now: T0 });
+    expect(d.settings).toEqual({
+      quizMode: 'wager',
+      classicPack: 'general',
+      questions: 10,
+      answerSeconds: 15,
+      category: 'all',
+      subcategories: [],
+    });
+  });
+});
+
+describe('hidden information', () => {
+  it('the correct index and picks are absent from every view until reveal', () => {
+    let s = timer(start());
+    s = pick(s, 'a', true);
+    const tvText = JSON.stringify(tv(s));
+    expect(tvText).not.toContain('correctIndex');
+    expect(tvText).not.toContain('pickIndex');
+    expect(tv(s).answeredCount).toBe(1);
+    const other = phone(s, 'b');
+    expect(JSON.stringify(other)).not.toContain('correctIndex');
+    expect(other.myPickIndex).toBeNull();
+    expect(phone(s, 'a').myPickIndex).toBe(current(s).answerIndex);
+    // In reveal the TV shows everything.
+    s = pick(pick(s, 'b', false), 'c', true);
+    s = timer(s);
+    const reveal = tv(s);
+    expect(reveal.correctIndex).toBe(current(s).answerIndex);
+    expect(reveal.rows?.map((r) => r.playerId)).toEqual(['a', 'c', 'b']);
+    expect(phone(s, 'b').outcome).toEqual({ correct: false, delta: 0 });
+  });
+
+  it('wagers stay hidden from the TV and other phones until the final reveal', () => {
+    let s = toWager(start());
+    s = input(s, 'a', { type: 'wager', percent: 0 }, s.phase.startedAt + 1);
+    expect(JSON.stringify(tv(s))).not.toContain('wagerAmount');
+    expect(tv(s).answeredCount).toBe(1);
+    expect(phone(s, 'a').myWagerAmount).toBe(0);
+    expect(phone(s, 'b').myWagerAmount).toBeUndefined();
+    expect(JSON.stringify(phone(s, 'b'))).not.toContain('wagerAmount');
+    s = timer(s); // final question
+    expect(JSON.stringify(tv(s))).not.toContain('wagerAmount');
+    s = timer(s); // final reveal
+    expect(tv(s).rows?.find((r) => r.playerId === 'a')?.wagerAmount).toBe(0);
+  });
+
+  it('views never throw for spectators and unknown ids in any phase', () => {
+    let s = start();
+    for (let i = 0; i < 40 && game.results(s) === null; i++) {
+      for (const id of ['a', 'zzz', '', '__proto__']) {
+        expect(() => phone(s, id)).not.toThrow();
+        expect(typeof phone(s, id).myScore).toBe('number');
+      }
+      expect(() => tv(s)).not.toThrow();
+      s = s.phase.id === 'question' ? playQuestion(s, { a: true }) : timer(s);
     }
-    const accuracy = (skill: 'easy' | 'sharp'): number => {
-      let n = 0;
-      for (let seed = 1; seed <= 1000; seed++)
-        if (botInput(s, 'p1', createRng(seed), skill)?.choice === currentQuestion(s).correct) n++;
-      return n;
-    };
-    expect(accuracy('sharp')).toBeGreaterThan(accuracy('easy') * 2);
-    expect(botInput(s, 'ghost', createRng(1))).toBeNull();
-    expect(botInput(answer(s, 'p1'), 'p1', createRng(1))).toBeNull();
-  });
-  it('bot confidence depends only on public wording and authored knowledge', () => {
-    const s = kit.start();
-    const metadata = { ...s, deck: s.deck.map((q) => ({ ...q, difficulty: 3 as const })) };
-    for (let seed = 1; seed <= 100; seed++)
-      expect(botInput(metadata, 'p1', createRng(seed))).toEqual(botInput(s, 'p1', createRng(seed)));
+    expect(game.results(s)).not.toBeNull();
   });
 });

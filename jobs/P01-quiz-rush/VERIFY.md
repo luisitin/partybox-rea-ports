@@ -1,5 +1,188 @@
 # P01 verification
 
+## Current two-mode upgrade (2026-10-12, r1-local)
+
+Final source `1659b6e` is locally verified and
+[CI 38244205834](https://github.com/luisitin/partybox-rea-ports/actions/runs/38244205834) is green.
+PR [#2](https://github.com/luisitin/partybox-rea-ports/pull/2) is ready for owner review. Format
+83673 and all 239 media hashes pass (8,712,209 B); 93 post-run source, 77 capture-source and
+six restored mutation hashes match. Two early CSS/helper edits remain disclosed below; no
+all-93 before/after freeze is claimed for that run. No source changed in reviews 6–8, the first
+three consecutive no-gain rounds (6–8); root confirmed the independent final walkthrough gain 0.
+KEEP GOING is complete. Only final documentation-head CI remains before releasing the claim
+as DONE. Owner core migration remains an unapplied handoff.
+Executions stay game-only, one thread worker and one owned browser closed in finally.
+
+| Check                         | Command / evidence                                                                   | Current result                                                                                                                                                                                                      |
+| ----------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Install                       | `corepack enable`; `pnpm.cmd install --frozen-lockfile`                              | PASS; no added dependencies                                                                                                                                                                                         |
+| Types                         | `pnpm.cmd typecheck`                                                                 | Round-5 PASS session 32345                                                                                                                                                                                          |
+| Focused render/SSR            | Game-only Vitest with `--maxWorkers=1 --pool=threads`                                | PASS 43 tests/3 files; final ten-renderer file PASS after the last CSS/helper corrections                                                                                                                           |
+| Full game/SDK/properties/bots | `pnpm.cmd vitest run games/kahoot --maxWorkers=1 --pool=threads` with JSON reporting | PASS 242/242; 26 files; 484.58 s; session 37496 exit 0; SDK/properties/simulations included                                                                                                                         |
+| Mutations                     | `node jobs/P01-quiz-rush/mutate-upgrade.mjs`                                         | Pacing PASS 20/20, 72-test baseline, restored; current six restoration hashes match tested server source                                                                                                            |
+| Browser fit                   | `node jobs/P01-quiz-rush/capture.mjs`                                                | Session 50244 PASS 95/95 current; one labelled 85-clipped Finale baseline, 96 records total. Browser PID 52968 closed in finally; EPERM profile cleanup deferred                                                    |
+| Format/hash/CI                | `pnpm.cmd format`; media hashes; P01 workflow                                        | PASS final format 83673; 239 files/8,712,209 B, all 93 post-run/77 capture/six restoration hashes match; [CI 38244205834](https://github.com/luisitin/partybox-rea-ports/actions/runs/38244205834) green at 1659b6e |
+
+### Round-5 applied source and measured gain
+
+Five weaknesses: stakes identification, numeric density, extreme names, brief intro and wait
+perception. Thirteen–sixteen-seat stakes now use game-owned four-column/two-line 32 px cards
+for name/rank/score/placed; twelve or fewer retain the SDK board. Runtime edits are Tv.tsx,
+Tv.module.css and Spanish strings. Native normal stakes names improve four ellipses → zero,
+with 416 px name space; all sixteen scores/placed marks remain visible. Spanish twenty-question,
+legal 40-character names, five-digit leader/score and all-placed cases pass the current capture.
+`media/loop-5-stakes-fit.json` and archived `loop-5-stakes-before-tv.png` record the comparison.
+
+First capture session 39757 failed with 20 clipped last-row items under a long Spanish leader.
+The correction uses div.wagerStage specificity against SDK Stage plus wrapping 32 px rules.
+Capture helper now also uses exact pinned global.css:99–105 .pb-muted/.pb-caption rules.
+Final session 50244 passes all 95 current frames; 96 records include the separate deliberate
+Finale before baseline. The earlier 90/91 PNG-byte-identity comparison belongs to round 4,
+before this caption/reset correction, and is not claimed for the current recapture.
+Browser PID 52968 closed in finally; EPERM deferred only temporary-profile cleanup.
+
+Full 37496 PASS 242/242, 26 files, 484.58 s, exit 0. Raw report:
+`r1-local-kahoot-loop5-tests-20261012.json`. Runtime JS/server stayed frozen throughout;
+Tv.module.css and upgrade-evidence.ts changed early while properties ran. Do not claim the
+round-4 93-file before/after freeze for this run. `media/verification-upgrade.json` explicitly
+records those two before/after SHA values. The ten-renderer file ran after the final fixes and
+the current recapture verifies the painted UI; current 77 capture-source/six restoration hashes
+match. Typecheck 32345 PASS. Latest independent twelve-sheet/native phone/stakes QA found no
+remaining concrete visual defect. Final source 1659b6e CI is now green; only the final
+documentation-head CI remains pending.
+
+Final format session 83673 PASS. All 239 media hashes verify 8,712,209 B, below decimal
+10,000,000 B; current 93 post-run source/77 capture/six restoration hashes match. Source
+1659b6e and CI 38244205834 are green. The documentation-only first-review head b8141c3 also
+passed CI 38245368794. Rounds 6–8 found no demonstrated gain and changed no source; root
+confirmed the independent round-8 walkthrough gain 0, completing the three-review loop.
+Final documentation-head CI is still pending; no future green or CLAIMS DONE is assumed.
+PR #2 is ready and open for owner review; no merge or owner-core migration has been applied.
+
+### Round-4 green baseline
+
+Source 1333563/claim 3addcbb passed full 241/241, 26 files, 534.17 s; type/format and 235-file/
+8,279,090 B hashes passed. All 93 then-frozen game/test, 77 capture and six restoration hashes
+matched. Finale same-state clipped items fell 85 → zero; 94 current captures passed plus one
+labelled before baseline. PID 87684 closed, profile cleanup deferred. The 90/91 old PNG identity
+comparison and twelve-sheet/native review belong to that pre-caption-correction baseline.
+CI 38241666750 is green; these old freeze/artifact counts do not verify the later round-5 source.
+
+### Completed round-3 pacing baseline
+
+The server removed only the obsolete reveal minimum combining choices/roster words from disjoint
+old phone layouts, retaining 2 s settling plus max actual TV/phone/staged reading floors and the
+original scoring window. Eight-seat regressions improve EN 58,063 → 53,734 ms (4,329 ms saved)
+and ES 63,257 → 56,331 ms (6,926 ms saved). Full session 36474 PASS 240/240, 26 files, 881.47 s,
+exit 0; 32,000 bots and 2,006 property seeds regenerated. Mutation session 84630 PASS 20/20,
+72-test baseline, exit 0, source restored. Raw report: `round3-tests-20261012.json` in local temp.
+Typical wager medians improve eight-player 84,906 → 84,473 ms (433 ms) and sixteen-player
+115,642 → 113,910 ms (1,732 ms); longest sixteen-player match remains 1,425,695 ms.
+
+The `8cb7355` push omitted a regenerated fixture, an avoidable incomplete milestone by root;
+[CI 38238453616](https://github.com/luisitin/partybox-rea-ports/actions/runs/38238453616) failed its
+deadline comparison (108,498 versus 103,736). Root added the fixture at `df5322a`, then
+[CI 38238947209](https://github.com/luisitin/partybox-rea-ports/actions/runs/38238947209) failed
+formatting 21 fixtures. Root formatted/pushed `bd91828` and
+[CI 38239089152](https://github.com/luisitin/partybox-rea-ports/actions/runs/38239089152) passed.
+Both failures remain recorded; the later green verifies pacing, not the new Finale/copy source.
+
+### Completed round-2 baseline
+
+The full run passed 32,000 seeded matches: 1,000 at every count 1–16 in each mode, rotating
+strengths, packs, Spanish wager content and staged phones. Properties passed 1,003 seeds per mode
+(2,006 total), 96,436 events and 1,205,348 views. All 20 fresh mutations were behavioral kills
+against 72 baseline tests, with zero invalid mutations and source restored. The raw full report is
+`C:/Users/luisi_xlnbc7h/AppData/Local/Temp/r1-local-kahoot-round2-tests-20261012.json`;
+`media/verification-upgrade.json` and `media/loop-2-fit-pacing.json` record this baseline.
+
+Separate wager chart/race and ranked standings removed repeated question text. Median wager
+rounds improved at eight players 97,027 → 84,906 ms (12,121 ms saved), and at sixteen
+129,494 → 115,642 ms (13,852 ms saved). The longest sixteen-player wager match improved
+1,566,388 → 1,425,695 ms, below 26 × 120 = 3,120 s. These numbers precede the round-3 repair.
+
+Capture uses licensed Nunito Variable, pinned global h2/reset rules, a 692 px TV Stage/626 px
+inner area and the 60 px VIP phone header/27.6 px counter/4 px bar without an invented footer
+or extra timer. Intro/reveal/podium strips hide names/scores without freeing their height.
+All 91 round-2 frames pass, including all-seat totals, wide paired/3+ tied podiums, small rooms,
+EN/ES streak-20 races and the later rank separator. Browser PID 39756 closed in finally.
+Shared adjacent token/font assets prevent repeated CSS. Final baseline hashes cover 226 media
+files/9,843,669 B, below decimal 10,000,000 B; all 76 source, six restoration, font and token
+hashes matched. Round-3 source/capture/evidence changes require new hashes and a new cap check.
+
+### Earlier upgrade attempts and baseline evidence
+
+The following preserves earlier diagnostics and green baselines. Their dates/counts/frame sizes
+are historical; the current result and pending gates are above.
+
+The initial full run passed 196/227 tests and exposed an outdated 8-minute duration estimate,
+stale fixtures/SSR clock assumptions, remote-phone lock text pointing at a TV, and SDK minigame
+pool tests that require unrelated games. Those results are not counted as green. The estimate is
+now 26 minutes. The unmodified published SDK contract remains imported with discovery restricted
+to Kahoot!; dedicated game tests exercise the real SDK minigame wrapper for FFA/duel and its 100-second
+play budget. Only unrelated pool-availability assertions are omitted. Bounded reducer loops make
+phase-exit mutants fail behaviorally instead of hanging.
+
+The first upgrade capture failed five inherited wager phone-only reveals. Separate chart and
+standings beats plus compact final rows corrected them in the standalone capture harness.
+Black wager button text was an incomplete capture-shell reset, confirmed against pinned core
+`packages/client/src/styles/global.css`; the shell now inherits the same token text colour.
+An additional final-reveal case now covers 16 legal 40-character player names and five-digit
+totals in tests and phone-only/remote/spectator captures. An earlier four-file focused run passed 33/33
+in 14.58 s, and its 78-frame standalone capture was clean. Its owned browser PID 112464 closed in
+`finally`; temporary profile cleanup remains deferred after Windows returned EPERM.
+
+Round 1 is complete: default sixteen-seat race-name truncations fell from 15 to 0 in the old
+harness (name space 65 → 337 px, body 36 px, delta 32 px), and combined longest EN/ES text with
+streak 20 was repaired. The 82 resulting frames were clean only in that fake 900 px TV stage;
+their zero-overflow and safe-margin results do not prove fit inside the actual PartyBox host.
+Round 2 then identified the pinned actual host's smaller Stage: a 133.2 px header, 152.8 px player
+strip, 22 px bar and 80 px footer leave about 692 px, or 626 px inside Stage. At that checkpoint
+root was recreating the chrome; repairs, tests and captures were pending. The current results
+above supersede that checkpoint; the old standalone fit figures remain historical.
+
+All 20 planted defects were caught: inflated base points; inflated speed bonus; inflated streak
+cap; reduced streak growth; wrong-answer streak retention; double streak increments; wrong final
+wager wins; points for wrong answers; collection completes on first pick; duplicate replacement;
+wrong question id; wrong opening stamp; disconnected answer; deadline answer; early answer;
+question timer cannot exit; reveal timer cannot exit; removed reading hold; asking-phase key leak;
+all podium tiers unveiled immediately. `media/mutation-upgrade.json` records the failing behavioral
+assertions and source hashes. `mutate.mjs` below belongs to the superseded standalone port.
+
+The follow-up `pnpm.cmd vitest run games/kahoot/__tests__/sdk.test.ts --maxWorkers=1 --pool=threads`
+passed all 20 unmodified SDK contract checks (25.27 s, exit 0). The sole failure in the prior
+221/222 full run compared the canonical wager done fixture with the classic podium fixture.
+The documented `lastScores` hint now selects `wager-final-reveal`, preserving same-match continuity
+with canonical default-wager `done.json`; the classic podium remains a separate fixture. Added
+continuation regressions cover both classic and wager matches. No contract assertion was skipped.
+
+The earlier baseline simulation run passed 32,000/32,000 default-setting matches: 1,000 seeds at every count
+1–16 in each mode, rotating easy/normal/sharp, the three classic packs, Spanish wager games and
+phone-only rooms. The longest match was 1,566.388 s, below 26 × 120 = 3,120 s. Reports are
+`media/sim-{classic,wager}-{1..16}.json`. Median round lengths (question plus automatic reveal) at
+2/4/8/16 players: classic 52.171/56.933/66.024/84.205 s; wager 67.590/77.114/97.027/129.494 s.
+Properties passed seeds 1, 2, 3 plus 1,000 sampled seeds per mode: 96,436 events and 1,205,348 views.
+`media/property-upgrade.json` records seeds and invariants. The initial upgraded full rerun passed 224/224
+in 25 files (481.32 s, exit 0). `media/verification-upgrade.json` records the result and test hashes.
+Baseline repository formatting passed. Its 194 media files had SHA256 sums and total 7,373,326 bytes,
+below 10 MB. In that standalone harness, the smallest captured touch target was 45.27×46.19 px;
+TV timers were 128 px. Primary TV body text used 36 px or larger tokens, with captions for metadata.
+These measurements do not establish fit at the actual host's smaller Stage height.
+Baseline runtime/capture source hashes and all six mutation source hashes matched the verified bytes.
+[Initial CI run 38225649131](https://github.com/luisitin/partybox-rea-ports/actions/runs/38225649131)
+passed at `ca58d1b`. After round 1, full checks passed 226/226 in 25 files, 196.07 s, and
+[CI run 38229318876](https://github.com/luisitin/partybox-rea-ports/actions/runs/38229318876)
+passed at `4cf1a53`. These initial/post-round-1 results are historical baseline evidence for
+PR #2. They do not establish CI success for the current `e189d22` source milestone.
+
+## Owner-required upgrade baseline (historical, 2026-10-12)
+
+The results below this section describe the superseded standalone Quiz Rush at 1c8d264. They do not verify the replacement Lightning Round upgrade in games/kahoot. Provenance is pinned in core-base/SOURCE.json and CHANGE_NOTES.md. No new install/dependency was needed.
+
+`pnpm.cmd typecheck` passed on the imported 74-file baseline. `pnpm.cmd vitest run games/kahoot --maxWorkers=1 --pool=threads --reporter=dot` passed 108 tests and failed one expected old recap-name assertion (17 files, 15.37 s); this is not a green suite. Updated that assertion to official Kahoot! and ran `pnpm.cmd vitest run games/kahoot/__tests__/content-es.test.ts --maxWorkers=1 --pool=threads --reporter=dot`:8/8 passed, 2.15 s, exit 0. Existing libraries and wagering are not yet claimed verified after classic changes. Fresh full contract/property/simulation/mutation/screen checks follow implementation.
+
+## Historical standalone verification
+
 Run r1-local on Windows 11, Node 24 and pnpm 12.4.2. `pnpm.cmd` is the Windows entry point
 because this desktop blocks PowerShell shim scripts. No complete repository test suite was run.
 

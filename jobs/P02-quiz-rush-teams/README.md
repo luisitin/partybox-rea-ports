@@ -1,39 +1,23 @@
 # P02 Kahoot! team mode
 
-BLOCKED: P01 was reopened and replaced the old engine with its canonical
-Lightning Round base. Its updated classic engine/pack schema is still under
-construction. Read BLOCKED.md; PR18 remains draft and requires integration
-against the completed replacement before these checks can release it.
+An upgrade of P01's canonical Kahoot!/Lightning Round module: fixed teams discuss before individual answers and average eligible points; Room vote elects one shared answer from phone votes. Sports and music add twenty authored questions each. A strict text compiler bundles custom packs for offline use.
 
-Runner r2-local; branch job/P02-quiz-rush-teams. This extends the public P01
-engine in games/kahoot, renamed per the owner's official name table.
-P01 PR2 is the unmerged prerequisite; the P02 PR is stacked on that branch.
+Wager and Classic keep their existing behavior. Groups support 2–8 players, TV and phone-only rooms, spectators, bots and reconnects. No second picker card, retired quiz engine, runtime network calls or new dependencies.
 
-Teams discuss before answering, then average personal points without a
-larger-team sum advantage. Room vote elects one collective TV answer from
-phone votes. Both work with a TV or entirely on phones. Sports and music add
-20 original questions each. Default individual workshop play remains available.
+This PR is stacked on the public P01 branch until that prerequisite merges. P01's replacement is now published and green; the former blocker is resolved. New integration verification and the post-green quality loop are in progress. Earlier standalone evidence is historical.
 
-Core integration upgrades the existing Lightning Round card: its injected
-classic mode remains default; only teams and room vote are added. Read
-UPGRADE.md for host/module/content selection and later installed verification.
-This public clone does not claim a private deployment.
+## Run
 
-Install once with corepack enable and pnpm install. Windows uses pnpm.cmd.
+`corepack enable`, `pnpm install`; load games/kahoot through a PartyBox host. This public workshop does not include the host or perform the owner-core deployment. UPGRADE.md records the existing-core overlap and integration scope.
 
-```sh
-pnpm typecheck
-pnpm format
-pnpm vitest run games/kahoot --maxWorkers=1
-pnpm exec tsx jobs/P02-quiz-rush-teams/validate-pack.ts my-pack.txt
-pnpm exec tsx jobs/P02-quiz-rush-teams/validate-pack.ts my-pack.txt --out games/kahoot/content/custom.json
-```
+## Check
 
-The text format and example are in PACK_FORMAT.md and example-pack.txt.
-Select Custom local pack after rebuilding/restarting the host.
-No runtime file/network calls or new dependencies.
+- `pnpm typecheck`
+- `pnpm format`
+- `pnpm vitest run games/kahoot --maxWorkers=1 --pool=threads`
+- `pnpm exec tsx jobs/P02-quiz-rush-teams/validate-pack.ts my-pack.txt`
+- `pnpm exec tsx jobs/P02-quiz-rush-teams/validate-pack.ts my-pack.txt --out games/kahoot/content/classic-custom.json`
 
-RESEARCH.md/SOURCES.md distinguish original mechanics from adaptations;
-ASSUMPTIONS.md records decisions and access limits. VERIFY.md records executed
-checks. NEXT.md is the continuation; LOOP.md records convergence reviews;
-media/ and SHA256SUMS.txt contain final visual evidence.
+Select quizMode=teams or tv-vote, then classicPack. The text format/example are in PACK_FORMAT.md and example-pack.txt. Rebuild/restart after compiling a custom pack.
+
+Specification: games/kahoot/README.md. RESEARCH.md/SOURCES.md distinguish original mechanics from PartyBox adaptations; ASSUMPTIONS.md records decisions and access limits. VERIFY.md contains executed results; NEXT.md is the handoff; LOOP.md records convergence; media and SHA256SUMS.txt contain screen evidence.

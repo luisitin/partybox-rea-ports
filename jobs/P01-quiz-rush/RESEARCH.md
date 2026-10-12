@@ -1,6 +1,7 @@
-# P01 Quiz Rush research
+# P01 Kahoot! research
 
-Checked 2026-10-11. This is a mechanics reconstruction, not copied code, content or assets.
+Original reconstruction checked 2026-10-11; additive upgrade reviewed 2026-10-12.
+This is a mechanics reconstruction, not copied Kahoot publisher code, content or assets.
 Source identifiers and direct links are in [SOURCES.md](SOURCES.md).
 
 ## Access and method
@@ -43,11 +44,16 @@ an observed mean correct score near 800, equivalent under the documented formula
 8 seconds. That classroom result is a reference point, not a living-room player benchmark.
 
 K6 additionally documents a full-score exception below 0.5 seconds. Only one independent
-publisher was found for that detail; Quiz Rush deliberately uses the continuous formula instead.
+publisher was found for that detail; the PartyBox port uses the continuous formula instead.
 There is no verified universal original countdown, result-hold or podium duration here.
 The timings below are PartyBox choices and must be judged using this port's simulations and screens.
 
-## PartyBox decisions
+## Historical standalone PartyBox decisions
+
+The following design records the initial Quiz Rush implementation before the owner's 2026-10-12
+overlap instruction. Preserve it as research history, not as the specification of the current
+canonical `games/kahoot` upgrade. In particular, its 20-second default, 500-point streak cap,
+choice shuffling and separate minimum reveal/standings/podium timings are superseded below.
 
 - The PartyBox room shell supplies joining, names, avatars and the start beat. The game begins
   with a question and automatically moves onward; no host Next click is needed each question.
@@ -74,6 +80,60 @@ The timings below are PartyBox choices and must be judged using this port's simu
   binding job brief and is explicitly a PartyBox adaptation of the earlier design.
 - Use the existing PartyBox pulse bed, countdown/reveal cues and local verdict feedback,
   respecting mute, pause and reduced motion. No original music, samples or trademarked graphics.
+
+## Current additive adaptation (2026-10-12)
+
+The overlap review identified the existing PartyBox Lightning Round engine as the house quiz.
+The owner requires one canonical **Kahoot!** / `kahoot` registration, upgrading that engine rather
+than registering the standalone Quiz Rush beside it. Core provenance and the separate host migration
+handoff are pinned in `core-base/`; this public branch does not apply the handoff to the owner's checkout.
+
+- Preserve `quizMode: wager` as the default; a saved state with no mode also means wager. It keeps
+  the inherited 1–16 seats, requested regular question count plus a hardest-available extra final,
+  bilingual wager libraries, preset/custom stakes, awards, recap and minigame configuration.
+- Add `quizMode: classic` with the initial sixty original English questions: General Knowledge,
+  Movies and Science, twenty per pack. Draw exactly the requested 5–20 questions without an extra
+  finale or wager. Questions are drawn repeat-free from the seed; choices stay in authored order.
+- Both modes use the inherited regular scoring: 500 base + a rounded 500-to-zero speed component,
+  plus 100 per consecutive correct answer after the first, capped at **300**. Wrong/missing resets
+  the streak and awards zero. Classic shows speed and streak portions separately. Wager's final
+  remains +stake for correct and −stake for wrong/missing, with no regular points.
+- Re-read [K6 current official scoring help](https://support.kahoot.com/hc/en-us/articles/115002303908-How-points-work)
+  on 2026-10-12: it still documents the 1,000-point standard speed formula, the under-0.5-second
+  exception and no bonus for streaks. The PartyBox streak bonus follows the job and inherited engine;
+  it is an explicit adaptation, not a claim of present-day Kahoot scoring parity. Its continuous
+  speed function retains the prior exception decision. Historical K7/K8/I5 evidence remains above.
+- Default answer setting is **15 seconds**, selectable 5–30 in five-second steps. The setting is
+  a minimum: both modes extend to a reading floor covering prompt/options, names, UI labels and
+  any final wager footer. Reading budgets use `round(1.3 × (1500 + 333 × visibleWords))` ms and the
+  larger relevant TV/phone word budget. If everyone locks early, retain the words until that floor.
+  Keep the original answer close fixed for speed arithmetic; a reconnect can restore that window.
+- Wager retains a 15-second betting minimum, also extended for topic, standings and controls.
+  Early complete bets hold until their reading floor. Regular wager reveal budgets the race and
+  standings; final reveal budgets staged verdict/totals animations; both retain an 8-second minimum.
+  These extensions are reading-safety tuning, not measured original timings or new score rules.
+- Classic reveal first shows count bars, explicit correct marks and the authored explanation, then
+  standings before the next question. Its last question goes from the chart into occupied podium
+  competition ranks, descending third/second/first; tied totals share a tier and empty tiers are
+  skipped. Chart, standings and each podium tier have independent reading budgets. Final public
+  rows/standings and roster scores are withheld until their tier is unveiled, then restored at done;
+  each player retains their own total. Autoplay continues; the VIP may advance the reveal.
+- Classic phones beside a visible TV receive only the four shape pads during answering. Phone-only
+  and `canSeeTv: false` players receive prompt/options and public stage data. Inherited wager phones
+  retain their prompt and labelled-choice presentation. Spectators and permanently departed seats
+  see the public stage without inputs in either mode. `questionLang` honestly reports English for
+  classic independently of the host-controlled `contentLang`; wager retains EN/ES question support.
+- Classic answers carry current question id and phase-start stamps. Stale taps, wrong-phase input,
+  unknown ids, spectators, permanent departures and repeat submissions are ignored. The phone
+  distinguishes sending from confirmed acceptance and can retry the same stamped choice.
+- Keep the existing reveal/wager/personal cues and use SDK synthesized beds in the public branch.
+  File music and inherited art assets are excluded. No publisher audio, screenshot pixels or assets
+  are copied. Reading holds, pause-corrected clocks and reduced-motion handling govern both modes.
+
+The current spec is [games/kahoot/README.md](../../games/kahoot/README.md). The inherited charts and
+deadline guards already existed in core T-1117; do not claim them as new upgrade gains. Fresh checks,
+mutation evidence, captures and the KEEP GOING audit must validate this additive engine; historical
+standalone verification does not prove the upgrade.
 
 ## Eight strangers stress review
 

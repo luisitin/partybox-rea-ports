@@ -1,22 +1,42 @@
-// Secret numeric keys are omitted, not replaced by a guessable sentinel. Own selected answer is public to its phone.
+// Hints for the shared contract suite (packages/game-sdk/src/contract-tests). The suite checks that
+// none of the returned strings appears in the JSON of a view. Lightning Round's secrets are
+// positions and amounts (numbers), so what must stay out of a view is the KEY that would carry
+// them: `correctIndex` and `pickIndex` before the reveal, `wagerAmount` before the final reveal.
+// server/views.ts therefore omits those keys instead of setting them to null.
 import type { GameStateBase } from '@partybox/game-sdk';
 import type { State } from '../server/types';
 
-const secrets = (s: GameStateBase): string[] =>
-  s.phase.id === 'question' || s.phase.id === 'talk'
-    ? ['correctChoice', 'explanation', 'elapsed', 'verdicts']
-    : [];
-export const contractConfig = {
-  hiddenFromTv: secrets,
-  hiddenFromController: (s: GameStateBase, _viewer: string): string[] => secrets(s),
-  settingsVariants: [
-    { pack: 'movies', rounds: 5, seconds: 10 },
-    { pack: 'science', rounds: 20, seconds: 30 },
-    { mode: 'teams', teamCount: 4, talkSeconds: 20, pack: 'sports', rounds: 20 },
-    { mode: 'tv-vote', talkSeconds: 5, pack: 'music', rounds: 5 },
-  ],
-  lastScores: 'podium',
-};
+function finalPending(state: State): boolean {
+  const final = state.index === state.questionIds.length - 1;
+  return state.phase.id === 'wager' || (state.phase.id === 'question' && final);
+}
 
-// A compile-time assertion that config deals with this game's real state.
-export type ContractState = State;
+export const contractConfig = {
+  // Canonical fixtures follow the default wager match; podium is a classic-only phase.
+  lastScores: 'wager-final-reveal',
+  hiddenFromTv: (base: GameStateBase): string[] => {
+    const state = base as State;
+    const hidden: string[] = [];
+    if (state.phase.id === 'question')
+      hidden.push('correctIndex', 'pickIndex', 'answerDistribution');
+    if (finalPending(state)) hidden.push('wagerAmount');
+    return hidden;
+  },
+  hiddenFromController: (base: GameStateBase, _playerId: string): string[] => {
+    // Own values travel under `myPickIndex` / `myWagerAmount` (different key names by design).
+    const state = base as State;
+    const hidden: string[] = [];
+    if (state.phase.id === 'question')
+      hidden.push('correctIndex', 'pickIndex', 'answerDistribution');
+    if (finalPending(state)) hidden.push('wagerAmount');
+    return hidden;
+  },
+  settingsVariants: [
+    { questions: 5, answerSeconds: 5 },
+    { category: 'stem' },
+    { category: 'sports', subcategories: 'basketball,soccer' },
+    { quizMode: 'classic', classicPack: 'general', questions: 5, answerSeconds: 5 },
+    { quizMode: 'classic', classicPack: 'movies', questions: 20, answerSeconds: 15 },
+    { quizMode: 'classic', classicPack: 'science', questions: 10, answerSeconds: 30 },
+  ],
+};

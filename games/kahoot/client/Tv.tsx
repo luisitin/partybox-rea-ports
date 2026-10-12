@@ -1,115 +1,248 @@
-// The stage reveals the answer and placements. Timings and all scoring come from the server.
-import type { JSX } from 'react';
-import { Scoreboard, Stage, Timer, useSound, useT } from '@partybox/game-sdk/ui';
+// TV view for Lightning Round. Dumb component: renders `view`, composes game-sdk primitives, never
+// touches sockets or game logic. The shell already shows the timer, player chips and VIP overlay.
+import type { CSSProperties, JSX, ReactNode } from 'react';
+import { Avatar, BigText, Scoreboard, Stage, useT } from '@partybox/game-sdk/ui';
 import type { GameTvProps } from '@partybox/game-sdk/ui';
-import type { QuizTvView } from '../server/views';
-import { Podium, RevealChart, Shape, choiceClass, scoreRows } from './QuestionParts';
+import type { LightningTvView } from '../server/index';
+import { difficultyText, drawText } from './labels';
 import { STRINGS } from './strings';
-import { TeamRoster } from './TeamParts';
+import { FinalReveal } from './TvFinal';
+import { TvNext, useStandingsUp } from './NextStep';
+import { AnswerCard, RevealRows, RoundHeader, TvQuestion } from './TvQuestion';
+import { AnswerChart } from './AnswerChart';
+import { useStandingsCue } from './useRevealCue';
 import styles from './Tv.module.css';
+import { ClassicTv } from './ClassicTv';
 
-export function Tv({ view }: GameTvProps<QuizTvView>): JSX.Element {
+export function Tv(props: GameTvProps<LightningTvView>): JSX.Element {
+  return props.view.quizMode === 'classic' ? <ClassicTv {...props} /> : <WagerTv {...props} />;
+}
+
+/** Inline bolt (precedent: game-sdk Avatar), currentColor so every theme's accent-2 paints it. */
+function Bolt(): JSX.Element {
+  return (
+    <svg className={styles.bolt} viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <path d="M37 3 12 37h17l-4 24 27-34H35z" fill="currentColor" />
+    </svg>
+  );
+}
+
+/** A translated sentence with a `{topic}` slot, the slot filled with styled words. */
+function withTopic(text: string, topic: ReactNode): JSX.Element {
+  const [before, after] = text.split('{topic}');
+  return (
+    <>
+      {before}
+      {topic}
+      {after}
+    </>
+  );
+}
+
+function WagerTv({ view, skip }: GameTvProps<LightningTvView>): JSX.Element {
   const L = useT(STRINGS);
-  const play = useSound();
-  const question = view.question;
-  const phase = view.phaseId;
-  const round = L('Question {n} of {m}', { n: view.round, m: view.rounds });
-
-  if ((phase === 'question' || phase === 'talk') && question) {
+  const standings = view.standings ?? [];
+  useStandingsCue(view);
+  const standingsUp = useStandingsUp(
+    view.phaseId === 'reveal' ? view.deadline : null,
+    view.revealAt,
+    view.paused,
+    view.clockHeldAt,
+    view.leaderboardAt,
+  ); // I-589
+  if (view.phaseId === 'intro') {
+    // ADR-053: a 2 s title beat after the shell's stage (which showed the rules): bolt + title
+    // ride the shell's phase rise, the topic pill follows one beat later.
     return (
-      <Stage className={styles.stage}>
-        <div className={styles.question} data-teams={view.mode === 'teams' || undefined}>
-          <header className={styles.questionHeader}>
-            <div className={styles.progress}>
-              <p className={styles.kicker}>{round}</p>
-              <p className={styles.answered}>
-                {phase === 'talk'
-                  ? L('Discuss now · answers open after discussion')
-                  : view.mode === 'tv-vote'
-                    ? L('{n} of {m} voted · one room answer', {
-                        n: view.answered,
-                        m: view.eligible,
-                      })
-                    : L('{n} of {m} answered', { n: view.answered, m: view.eligible })}
-              </p>
+      <Stage center>
+        <Bolt />
+        <BigText level="display" tone="accent">
+          Kahoot!
+        </BigText>
+        <div className={styles.introLine} style={{ '--i': 1 } as CSSProperties}>
+          <span className={styles.introPill}>
+            {drawText(view.categoryLabel, L)} · {L('faster is worth more')}
+          </span>
+        </div>
+      </Stage>
+    );
+  }
+  if (view.phaseId === 'question') {
+    return (
+      <Stage>
+        <div className={styles.page}>
+          <TvQuestion
+            round={view.round}
+            question={view.question}
+            answeredCount={view.answeredCount}
+            totalCount={view.totalCount}
+            players={view.players}
+          />
+        </div>
+      </Stage>
+    );
+  }
+  if (view.phaseId === 'reveal') {
+    if (view.round?.final && view.question && view.correctIndex !== undefined) {
+      return (
+        <Stage>
+          {/* The host reserves its player strip in every phase. This container adapts the final
+              cards to the remaining stage height, including the host's safe bottom margin. */}
+          <div className={styles.page}>
+            <div className={styles.fit}>
+              <FinalReveal
+                key={`${view.round.number}/${view.revealAt ?? ''}`}
+                question={view.question}
+                correctIndex={view.correctIndex}
+                rows={view.rows ?? []}
+                startedAt={view.revealAt}
+                paused={view.paused}
+                clockHeldAt={view.clockHeldAt}
+              />
             </div>
-            <Timer
-              deadline={view.deadline}
-              phaseKey={`${phase}:${view.round}`}
-              phaseAt={view.phaseAt}
+          </div>
+        </Stage>
+      );
+    }
+    return (
+      <Stage>
+        <div className={styles.page}>
+          <div className={`${styles.fit} ${standingsUp ? styles.revealBoard : styles.revealRace}`}>
+            {standingsUp ? (
+              <div className={styles.standingsHeader}>
+                <BigText level="h2">{L('Scoreboard')}</BigText>
+                {view.next && skip ? (
+                  <TvNext
+                    next={view.next}
+                    skip={skip}
+                    vipName={view.players.find((p) => p.id === view.vip)?.name}
+                  />
+                ) : null}
+              </div>
+            ) : (
+              <RoundHeader round={view.round} question={view.question} />
+            )}
+            {!standingsUp ? (
+              <div className={styles.revealSummary}>
+                <p className={styles.asked}>{view.question?.text ?? '…'}</p>
+                {view.question && view.correctIndex !== undefined && view.answerDistribution ? (
+                  <AnswerChart
+                    question={view.question}
+                    correctIndex={view.correctIndex}
+                    distribution={view.answerDistribution}
+                  />
+                ) : null}
+              </div>
+            ) : null}
+            {!standingsUp && view.question && view.correctIndex !== undefined ? (
+              <AnswerCard question={view.question} correctIndex={view.correctIndex} />
+            ) : null}
+            {/* One mounted list keeps its identity and FLIP refs as the question gives way to
+                standings; only the preceding reading stage changes at leaderboardAt. */}
+            <RevealRows
+              key="receipts"
+              rows={view.rows ?? []}
+              startedAt={view.revealAt}
               paused={view.paused}
               clockHeldAt={view.clockHeldAt}
-              onTick={() => {
-                if (phase === 'question') play('countdown');
-              }}
+              leaderboardAt={view.leaderboardAt}
             />
-          </header>
-          <h2 className={styles.prompt}>{question.prompt}</h2>
-          <ol className={styles.options} aria-label={L('Answer choices')}>
-            {question.options.map((option, choice) => (
-              <li key={choice} className={`${styles.option} ${choiceClass(choice)}`}>
-                <Shape choice={choice} className={styles.shape} />
-                <span>{option}</span>
-              </li>
-            ))}
-          </ol>
-          <TeamRoster view={view} />
+          </div>
         </div>
       </Stage>
     );
   }
-
-  if (phase === 'reveal' && question && view.reveal) {
+  if (view.phaseId === 'wager') {
+    const gap = standings.length >= 2 ? standings[0]!.score - standings[1]!.score : 0;
     return (
-      <Stage className={styles.stage}>
-        <div className={styles.reveal}>
-          <p className={styles.kicker}>{round}</p>
-          <h2 className={styles.revealPrompt}>{question.prompt}</h2>
-          <RevealChart question={question} reveal={view.reveal} />
-          {view.mode === 'tv-vote' && view.decision !== null ? (
-            <p className={styles.answered}>
-              {L('The room chose {shape}', {
-                shape: ['Triangle', 'Diamond', 'Circle', 'Square'][view.decision] ?? '',
-              })}
+      <Stage className={standings.length >= 13 ? styles.wagerStage : undefined}>
+        <div className={styles.header}>
+          <span className={`${styles.kicker} ${styles.final}`}>{L('Final question next')}</span>
+          <span className={styles.placed} role="status">
+            <span key={view.answeredCount} className={styles.countNum}>
+              {view.answeredCount} / {view.totalCount}
+            </span>{' '}
+            {L('placed')}
+          </span>
+        </div>
+        {/* T-0175: the heading, the topic and the rules read as one block, so the board below
+            keeps clear of the TV's bottom 5 % */}
+        <div className={styles.wagerHead}>
+          <BigText level="h2">{L('Place your wagers')}</BigText>
+          {/* I-550 A: the bet is on a topic the room can see; T-0175: at body size, the topic
+              itself in white and only the difficulty in the accent (the whole h2 line in yellow
+              was hard to read) */}
+          {view.finalTopic ? (
+            <p className={styles.finalTopic}>
+              {withTopic(
+                L('Final question: {topic}'),
+                <>
+                  {L.sent(view.finalTopic.categoryLabel)} ·{' '}
+                  <strong>{L.sent(view.finalTopic.subcategoryLabel)}</strong> ·{' '}
+                  <strong className={styles.finalLevel}>
+                    {difficultyText(view.finalTopic.difficulty, L)}
+                  </strong>
+                </>,
+              )}
             </p>
           ) : null}
+          <p className={`pb-muted pb-caption ${styles.rules}`}>
+            {L('Right answer wins the bet · wrong answer loses it')}
+            {gap > 0 ? ` · ${L('{name} leads by {gap}', { name: standings[0]!.name, gap })}` : ''}
+          </p>
         </div>
+        {standings.length >= 13 ? (
+          <ol
+            className={styles.wagerBoard}
+            aria-label={L('Scoreboard')}
+            style={{ '--pb-wager-board-rows': Math.ceil(standings.length / 4) } as CSSProperties}
+          >
+            {standings.map((row, i) => {
+              const placed =
+                view.players.find((p) => p.id === row.playerId)?.status === 'submitted';
+              return (
+                <li
+                  key={row.playerId}
+                  data-player={row.playerId}
+                  data-rank={row.rank}
+                  style={{ '--i': i } as CSSProperties}
+                  aria-label={`${row.name} · ${L('Place {rank}', { rank: row.rank })} · ${L('{n} points', { n: row.score })}${placed ? ` · ${L('Wager placed')}` : ''}`}
+                >
+                  <b className={styles.wagerName} title={row.name}>
+                    {row.name}
+                  </b>
+                  <div className={styles.wagerDetails} aria-hidden="true">
+                    <Avatar avatarId={row.avatarId} dim={row.connected === false} size={32} />
+                    <span>
+                      <b className={styles.wagerRank}>#{row.rank}</b> · <b>{row.score}</b>
+                    </span>
+                    {placed ? <b className={styles.wagerMark}>✓</b> : null}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        ) : (
+          <Scoreboard
+            rows={standings}
+            noTrophy
+            // The unchanged SDK tiers keep one to twelve seats in their existing layout.
+            dense={standings.length >= 4}
+            size={standings.length >= 9 ? 'sm' : 'md'}
+            columns={standings.length >= 9 ? 3 : 2}
+            markIds={view.players.filter((p) => p.status === 'submitted').map((p) => p.id)}
+            stagger="down"
+          />
+        )}
       </Stage>
     );
   }
-
-  if (phase === 'podium') {
-    return (
-      <Stage className={styles.stage} center>
-        <p className={styles.kicker}>{L('The podium')}</p>
-        <h2 className={styles.headline}>
-          {view.podiumStep === 0
-            ? L('Third place')
-            : view.podiumStep === 1
-              ? L('Second place')
-              : L('First place')}
-        </h2>
-        <Podium standings={view.standings} />
-      </Stage>
-    );
-  }
-
   return (
-    <Stage className={styles.stage} center>
-      <p className={styles.kicker}>{phase === 'done' ? L('Kahoot!') : round}</p>
-      <h2 className={styles.headline}>
-        {phase === 'done' ? L('Final standings') : L('Scoreboard')}
-      </h2>
-      <div className={styles.scoreboard}>
-        <Scoreboard
-          key={`${phase}:${view.round}`}
-          rows={scoreRows(view.standings, phase === 'score')}
-          columns={2}
-          size="lg"
-          stagger="down"
-          noTrophy={view.standings.every((p) => p.score === 0)}
-        />
-      </div>
+    <Stage>
+      <BigText level="h1" tone="accent">
+        {L("That's the round!")}
+      </BigText>
+      <Scoreboard rows={standings} stagger="up" />
     </Stage>
   );
 }

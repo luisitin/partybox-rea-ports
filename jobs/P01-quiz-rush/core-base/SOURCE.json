@@ -1,0 +1,558 @@
+{
+  "status": "PREPARATORY_NOT_VERIFIED",
+  "createdAt": "2026-10-12T06:01:44.216Z",
+  "sourceRoot": "C:/dev/partybox",
+  "sourceGame": "games/lightning-round",
+  "coreHeadAtPreparation": "6ce46e613d3705624a56647592979613c4d6e468",
+  "gameLastCommit": "d0b89e3a89f40250349e2233fffe056960febb94",
+  "gameWorkingTreeStatus": "clean",
+  "canonicalGame": "games/kahoot",
+  "candidateManifest": {
+    "id": "kahoot",
+    "name": "Kahoot!",
+    "version": "1.1.0",
+    "minPlayers": 1,
+    "maxPlayers": 16,
+    "category": "classics",
+    "minigame": {
+      "modes": ["ffa", "duel"],
+      "seconds": 100,
+      "settings": {
+        "questions": 4,
+        "answerSeconds": 5,
+        "category": "all",
+        "subcategories": ""
+      },
+      "controls": ["Tap A, B, C or D", "Answer fast for more points"],
+      "howTo": [
+        "A question and four choices go up. Tap your answer.",
+        "Faster right answers score more. Wager on the last one."
+      ],
+      "practice": false
+    }
+  },
+  "deckCounts": {
+    "en": 6153,
+    "es": 5561
+  },
+  "sourceInventory": [
+    {
+      "destination": "games/kahoot/AGENTS.md",
+      "source": "games/lightning-round/AGENTS.md",
+      "sha256": "daccbb91a5369ca7bab9ad1377fe82b6b855d95fce7610a96adde870022fa9e7",
+      "bytes": 1390
+    },
+    {
+      "destination": "games/kahoot/CLAUDE.md",
+      "source": "games/lightning-round/CLAUDE.md",
+      "sha256": "a23df507aa8207ea24ed40dc3fa0e9da3b8420d86e3baba8f5871ada2ffe6b83",
+      "bytes": 140
+    },
+    {
+      "destination": "games/kahoot/README.md",
+      "source": "games/lightning-round/README.md",
+      "sha256": "69cac278a6a879779aafdee6c6430a6ed86656e5c44c1e016aab64a8275cf9f2",
+      "bytes": 19274
+    },
+    {
+      "destination": "games/kahoot/SOURCES.md",
+      "source": "games/lightning-round/SOURCES.md",
+      "sha256": "186790c31b922944a80b69b51d32c5d7b4c31b09d771d1f7369fdb7893d09275",
+      "bytes": 3630
+    },
+    {
+      "destination": "games/kahoot/__tests__/answer-chart.test.tsx",
+      "source": "games/lightning-round/__tests__/answer-chart.test.tsx",
+      "sha256": "22d9d060ac6694e1bf0c01ff016fe84bbc51f37810c8e583a1640c5d097c2a68",
+      "bytes": 4342
+    },
+    {
+      "destination": "games/kahoot/__tests__/answer-window.test.ts",
+      "source": "games/lightning-round/__tests__/answer-window.test.ts",
+      "sha256": "b3fc4a5464c2346303dcd77f5cc896e84266f5610dd99d19c4961b361d23d8c7",
+      "bytes": 3305
+    },
+    {
+      "destination": "games/kahoot/__tests__/connected-count.test.ts",
+      "source": "games/lightning-round/__tests__/connected-count.test.ts",
+      "sha256": "7c0a2a582972377f6ec65e2e28405d1b6be60e042e29611737bb4c78124b9a55",
+      "bytes": 1797
+    },
+    {
+      "destination": "games/kahoot/__tests__/content-es.test.ts",
+      "source": "games/lightning-round/__tests__/content-es.test.ts",
+      "sha256": "95a8260d06176e862d4e7d4791175a71dffb82bfd4414cfddbb60d68f2d95f34",
+      "bytes": 6233
+    },
+    {
+      "destination": "games/kahoot/__tests__/content.test.ts",
+      "source": "games/lightning-round/__tests__/content.test.ts",
+      "sha256": "8a2bacf452eb9809e7b564f06b0a595427adb6298d7b730d67c4a910f205f9c2",
+      "bytes": 5364
+    },
+    {
+      "destination": "games/kahoot/__tests__/contract.config.ts",
+      "source": "games/lightning-round/__tests__/contract.config.ts",
+      "sha256": "8bf564fe41c3b46c48683880da4baae3a0efd7f63a061442d5b4582241e0632a",
+      "bytes": 1697
+    },
+    {
+      "destination": "games/kahoot/__tests__/final-bet.test.ts",
+      "source": "games/lightning-round/__tests__/final-bet.test.ts",
+      "sha256": "d8605cd10c4d0792a7bae31d021df7557184493c0f5b984b2c94239a13e9be6f",
+      "bytes": 1345
+    },
+    {
+      "destination": "games/kahoot/__tests__/final-reload.test.tsx",
+      "source": "games/lightning-round/__tests__/final-reload.test.tsx",
+      "sha256": "666fc01e0eae5a3131fc291b08e3419767e4c0adb9a4a1accb68c9677f436436",
+      "bytes": 3044
+    },
+    {
+      "destination": "games/kahoot/__tests__/final-topic.test.ts",
+      "source": "games/lightning-round/__tests__/final-topic.test.ts",
+      "sha256": "d066651e2368e0757a7826c25e60a948916267bc69a8656c9e6a4be0630fe9fe",
+      "bytes": 910
+    },
+    {
+      "destination": "games/kahoot/__tests__/game.test.ts",
+      "source": "games/lightning-round/__tests__/game.test.ts",
+      "sha256": "393cd356e941c7177b807eef5de5b96dec8f25f5a6444860aacf5ffca4037c9d",
+      "bytes": 11170
+    },
+    {
+      "destination": "games/kahoot/__tests__/helpers.ts",
+      "source": "games/lightning-round/__tests__/helpers.ts",
+      "sha256": "6edd15f1d86d39590f6e7d3859db4d0fe2776dc44c3787daaa38120cb9a9ccff",
+      "bytes": 3632
+    },
+    {
+      "destination": "games/kahoot/__tests__/next-button.test.ts",
+      "source": "games/lightning-round/__tests__/next-button.test.ts",
+      "sha256": "55ea0a316dbaae943ca1b81304166b6348e799caa881f2bc71c704fcfb9fcf99",
+      "bytes": 2475
+    },
+    {
+      "destination": "games/kahoot/__tests__/phone-bundle.test.ts",
+      "source": "games/lightning-round/__tests__/phone-bundle.test.ts",
+      "sha256": "0630ee4bfa231fddf1a00d32b3f6b9d6ec741f95c242a9fb14512c7e30c496ad",
+      "bytes": 1981
+    },
+    {
+      "destination": "games/kahoot/__tests__/phone-timer.test.ts",
+      "source": "games/lightning-round/__tests__/phone-timer.test.ts",
+      "sha256": "6bee09af787b9b17a1f9169c2a2bbc63f21f05dbfc33bcb43c04a66cd7ee1b1c",
+      "bytes": 1067
+    },
+    {
+      "destination": "games/kahoot/__tests__/race-order.test.ts",
+      "source": "games/lightning-round/__tests__/race-order.test.ts",
+      "sha256": "e03c499ad1e9dedf5f323f3eedd729a6bb84bc5d879f0537dbdd08d2657c4571",
+      "bytes": 1465
+    },
+    {
+      "destination": "games/kahoot/__tests__/reveal-cues.test.ts",
+      "source": "games/lightning-round/__tests__/reveal-cues.test.ts",
+      "sha256": "011d2e1c6adaf55e6e692502f586678147a60bc07376360e89d1cc38b718ff70",
+      "bytes": 6390
+    },
+    {
+      "destination": "games/kahoot/__tests__/reveal-reload.test.tsx",
+      "source": "games/lightning-round/__tests__/reveal-reload.test.tsx",
+      "sha256": "47ed228001408a39d89349c96abb546f28c671ab99a41a44fd9fe20e138a77b8",
+      "bytes": 4859
+    },
+    {
+      "destination": "games/kahoot/__tests__/scoring.test.ts",
+      "source": "games/lightning-round/__tests__/scoring.test.ts",
+      "sha256": "eae1dacc17a659985399500ad3218e89eea079ab7f6e7abed651520932b59243",
+      "bytes": 8155
+    },
+    {
+      "destination": "games/kahoot/__tests__/vip.test.ts",
+      "source": "games/lightning-round/__tests__/vip.test.ts",
+      "sha256": "b9f9bf35c7afc5d589a6b6fa72db3a36c19945f43ed91773238edee0602584b8",
+      "bytes": 5037
+    },
+    {
+      "destination": "games/kahoot/client/AnswerChart.module.css",
+      "source": "games/lightning-round/client/AnswerChart.module.css",
+      "sha256": "8a0ad6de43202adb1a2f4de42e168afe0f33f2a7dc95d0095226a0a4c9d9053b",
+      "bytes": 1319
+    },
+    {
+      "destination": "games/kahoot/client/AnswerChart.tsx",
+      "source": "games/lightning-round/client/AnswerChart.tsx",
+      "sha256": "67e67164804e279e1af1eb6d96baa69c08c8329cf6a171fb9ad1016109a120e4",
+      "bytes": 1863
+    },
+    {
+      "destination": "games/kahoot/client/Controller.module.css",
+      "source": "games/lightning-round/client/Controller.module.css",
+      "sha256": "6a54720139bac97c874bcd72bb277768f98ad0d0cee6da9e5eb4214a491d946f",
+      "bytes": 11190
+    },
+    {
+      "destination": "games/kahoot/client/Controller.tsx",
+      "source": "games/lightning-round/client/Controller.tsx",
+      "sha256": "1b7e4545691394bad69b1d86b4bcd8160559b1f3a1b784c1249768387c3bfe07",
+      "bytes": 14033
+    },
+    {
+      "destination": "games/kahoot/client/ControllerBits.tsx",
+      "source": "games/lightning-round/client/ControllerBits.tsx",
+      "sha256": "fd8220e08c5308d53d816bea5a7c7bc5c0eae2eb19767a2a57bd48aeed1c8d98",
+      "bytes": 6859
+    },
+    {
+      "destination": "games/kahoot/client/CustomStake.tsx",
+      "source": "games/lightning-round/client/CustomStake.tsx",
+      "sha256": "275fd5d8e36f329621b6487ce473185047878de53234e43e682bb8ba1628025e",
+      "bytes": 4189
+    },
+    {
+      "destination": "games/kahoot/client/Finale.tsx",
+      "source": "games/lightning-round/client/Finale.tsx",
+      "sha256": "845eb081e6f09a68fa83d65264aa556d83f3e44025eb9a4e2058e0b16fe2d4a8",
+      "bytes": 860
+    },
+    {
+      "destination": "games/kahoot/client/NextStep.module.css",
+      "source": "games/lightning-round/client/NextStep.module.css",
+      "sha256": "2adff55b28d542838044afea5786317fd9e260e3153213315e2601b4a8a6b023",
+      "bytes": 1211
+    },
+    {
+      "destination": "games/kahoot/client/NextStep.tsx",
+      "source": "games/lightning-round/client/NextStep.tsx",
+      "sha256": "9d5bfe9e59347178a47e62681ffd82e39a236b0e9b331bbd75d65b5a44777dc2",
+      "bytes": 3279
+    },
+    {
+      "destination": "games/kahoot/client/Tv.module.css",
+      "source": "games/lightning-round/client/Tv.module.css",
+      "sha256": "f92de18478d7510c64bfbc0da378543c4ba4b1b49eae9ed400d03b12ce1646d1",
+      "bytes": 13401
+    },
+    {
+      "destination": "games/kahoot/client/Tv.tsx",
+      "source": "games/lightning-round/client/Tv.tsx",
+      "sha256": "c2f15333230ea71b52a370d243eece82123066b15fb36ac42da5b1ec7f9df8ad",
+      "bytes": 7574
+    },
+    {
+      "destination": "games/kahoot/client/TvFinal.tsx",
+      "source": "games/lightning-round/client/TvFinal.tsx",
+      "sha256": "37f6bfea5d309f8560162a868229c7ffc5a2b9d493e469dfc80126667dd16fd9",
+      "bytes": 6365
+    },
+    {
+      "destination": "games/kahoot/client/TvQuestion.tsx",
+      "source": "games/lightning-round/client/TvQuestion.tsx",
+      "sha256": "ff22f7817f58f82ef7aa3d1166a285861473bb6b606dec2d4c43d00032de2987",
+      "bytes": 11511
+    },
+    {
+      "destination": "games/kahoot/client/final-bet.ts",
+      "source": "games/lightning-round/client/final-bet.ts",
+      "sha256": "5d9aa1cc0edf1fb3a797586a4d1cff22ddbadbc5e61321443d31c9f206d26bc6",
+      "bytes": 712
+    },
+    {
+      "destination": "games/kahoot/client/flip.ts",
+      "source": "games/lightning-round/client/flip.ts",
+      "sha256": "f069effd461a82aeab1cdc747c9ad77ac0a4176fa2c106f10caae145df53626d",
+      "bytes": 2475
+    },
+    {
+      "destination": "games/kahoot/client/labels.ts",
+      "source": "games/lightning-round/client/labels.ts",
+      "sha256": "659f79de3e07c1e2233b0cdbd0e4b3208b4e8f08e65884f15118bd0383487e98",
+      "bytes": 2992
+    },
+    {
+      "destination": "games/kahoot/client/phone-entry.ts",
+      "source": "games/lightning-round/client/phone-entry.ts",
+      "sha256": "ec1f1e671b1b41cf6daf0adf63c55c4ea9482dea1c9ea9e9ffebbdfab62543c7",
+      "bytes": 303
+    },
+    {
+      "destination": "games/kahoot/client/reveal-clock.ts",
+      "source": "games/lightning-round/client/reveal-clock.ts",
+      "sha256": "dbdce2c7ef1095ce771504487f132c8b269d3658e7c08a08bab288492d41b20c",
+      "bytes": 1907
+    },
+    {
+      "destination": "games/kahoot/client/shared.ts",
+      "source": "games/lightning-round/client/shared.ts",
+      "sha256": "b30a1b0e93d96afd9ace136fcfe15b13e77344f81bc31884a5f3e06ec064b226",
+      "bytes": 744
+    },
+    {
+      "destination": "games/kahoot/client/strings-es.ts",
+      "source": "games/lightning-round/client/strings-es.ts",
+      "sha256": "f7b004aa13d183faeafe612ae9c26cf1efd90577e22d15a3e44a4001ef2f981c",
+      "bytes": 5914
+    },
+    {
+      "destination": "games/kahoot/client/strings.ts",
+      "source": "games/lightning-round/client/strings.ts",
+      "sha256": "45559813dcca1859efce56d6fe41c0f2ce96b947faa9caad5f95ffc6b36a12ae",
+      "bytes": 789
+    },
+    {
+      "destination": "games/kahoot/client/timing.ts",
+      "source": "games/lightning-round/client/timing.ts",
+      "sha256": "b4d1688a023552dba3c624ff0bd1501ece3dd5fd883c0fcf9e3bcd95c33834f0",
+      "bytes": 1393
+    },
+    {
+      "destination": "games/kahoot/client/tv-entry.ts",
+      "source": "games/lightning-round/client/tv-entry.ts",
+      "sha256": "84bf4de47f01d5cc3cf6cc4fa5b1d2d8610e7b96a38d7ad9d431798a1ccb35e7",
+      "bytes": 1131
+    },
+    {
+      "destination": "games/kahoot/client/useCustomWager.ts",
+      "source": "games/lightning-round/client/useCustomWager.ts",
+      "sha256": "14a52c04d7cf0d4f095e6c5655b7cee03956a0778f5ea33fbbe10bff2b335e8f",
+      "bytes": 1080
+    },
+    {
+      "destination": "games/kahoot/client/useRevealCue.ts",
+      "source": "games/lightning-round/client/useRevealCue.ts",
+      "sha256": "fdd5543c51ed1f3278b9d7f4f6848c06ba6053189a77fc5b53620fad5bf1bf3b",
+      "bytes": 2305
+    },
+    {
+      "destination": "games/kahoot/content/SOURCES.md",
+      "source": "games/lightning-round/content/SOURCES.md",
+      "sha256": "82f5b14a1f980c822ad95c0366bdb734eddf0b673b7b2c7ebc43589344e4e028",
+      "bytes": 58307
+    },
+    {
+      "destination": "games/kahoot/content/content-pack-origins.json",
+      "source": "games/lightning-round/content/content-pack-origins.json",
+      "sha256": "fe1bc2d3422e821aee1955988c33eb1e9fb4716c833da7517281d0fb38a44a72",
+      "bytes": 230961
+    },
+    {
+      "destination": "games/kahoot/content/labels-es.ts",
+      "source": "games/lightning-round/content/labels-es.ts",
+      "sha256": "e598ab7174b16bc53b4554e9a7eccf9be3840ee47aefd54e3e401c5bbbb6d33b",
+      "bytes": 3926
+    },
+    {
+      "destination": "games/kahoot/content/questions.es.json",
+      "source": "games/lightning-round/content/questions.es.json",
+      "sha256": "4ef071256161b8acc8e8f6761cc4f3d51f864bdc17c0546504ec111570ef8503",
+      "bytes": 2347034
+    },
+    {
+      "destination": "games/kahoot/content/questions.json",
+      "source": "games/lightning-round/content/questions.json",
+      "sha256": "76b1b3a60924ac364516219232f1ee3c36645aedc8f50222c1480fae2385f228",
+      "bytes": 2498777
+    },
+    {
+      "destination": "games/kahoot/content/schema.ts",
+      "source": "games/lightning-round/content/schema.ts",
+      "sha256": "27f001e01ecd2da9e3768a3f2e7551383f456e18af5bf163e530eb9645d3a2a6",
+      "bytes": 7987
+    },
+    {
+      "destination": "games/kahoot/fixtures/done.json",
+      "source": "games/lightning-round/fixtures/done.json",
+      "sha256": "9e651d2335c7c8cae2df46d45d8a0a896bb52ad1a71148f96f419ec9aa8dfc82",
+      "bytes": 1671
+    },
+    {
+      "destination": "games/kahoot/fixtures/intro.json",
+      "source": "games/lightning-round/fixtures/intro.json",
+      "sha256": "8cdd0692a87ee4a5b36824580f0f78e05caa00ce1d7126e6c59433816de56c36",
+      "bytes": 1584
+    },
+    {
+      "destination": "games/kahoot/fixtures/question.json",
+      "source": "games/lightning-round/fixtures/question.json",
+      "sha256": "5b027a653639e014c59e4e24ff18d5fefccfe8ac003fe76b25a69373db622dc8",
+      "bytes": 1787
+    },
+    {
+      "destination": "games/kahoot/fixtures/reveal.json",
+      "source": "games/lightning-round/fixtures/reveal.json",
+      "sha256": "bd78dca575fa82fb35a70b95eb1e50fb876713a5c18ffbfc7d922f499a439a8c",
+      "bytes": 1847
+    },
+    {
+      "destination": "games/kahoot/fixtures/wager.json",
+      "source": "games/lightning-round/fixtures/wager.json",
+      "sha256": "aaeb0eab530b81c07a734462663fb3a45ebadae9eff28ed1c80061ae0df44d2e",
+      "bytes": 1866
+    },
+    {
+      "destination": "games/kahoot/manifest.es.json",
+      "source": "games/lightning-round/manifest.es.json",
+      "sha256": "236cff5e48178238088f7dfd32661328fd66ff2fc16407f232f2388c8c6047f3",
+      "bytes": 4759
+    },
+    {
+      "destination": "games/kahoot/manifest.json",
+      "source": "games/lightning-round/manifest.json",
+      "sha256": "577457963c6f4c5384471cb20b03320cccc3d85b22199bbad1f7bb41b2f52881",
+      "bytes": 11969
+    },
+    {
+      "destination": "games/kahoot/server/bot.ts",
+      "source": "games/lightning-round/server/bot.ts",
+      "sha256": "f42ae03c32c8483c0e4f406b02f80a5ec5d8dec3f0143685a0c8bd629ef2aa25",
+      "bytes": 1650
+    },
+    {
+      "destination": "games/kahoot/server/content.ts",
+      "source": "games/lightning-round/server/content.ts",
+      "sha256": "997e32fe751f08804a881907e532ac9d8e4cbe7d10f43850fb91792c46e2ca64",
+      "bytes": 2889
+    },
+    {
+      "destination": "games/kahoot/server/draw.ts",
+      "source": "games/lightning-round/server/draw.ts",
+      "sha256": "faed39bfb8cbe66afc2821bb61434db73c8f52d3a729f65bc9d4551eab0efb36",
+      "bytes": 2591
+    },
+    {
+      "destination": "games/kahoot/server/index.ts",
+      "source": "games/lightning-round/server/index.ts",
+      "sha256": "9de6cd1ed520adf309a7967591e06125341bb052876c757b9326e6adeb00f512",
+      "bytes": 5007
+    },
+    {
+      "destination": "games/kahoot/server/phases/intro.ts",
+      "source": "games/lightning-round/server/phases/intro.ts",
+      "sha256": "7ffd0be7d57c8d35dd7d3a2a882f4ed721d80ddd32cf48b5a40ddb490c31be64",
+      "bytes": 797
+    },
+    {
+      "destination": "games/kahoot/server/phases/question.ts",
+      "source": "games/lightning-round/server/phases/question.ts",
+      "sha256": "cd2663abec39355d18a40c2f218912322a7a741c732eb384ea848ff93ee87349",
+      "bytes": 2430
+    },
+    {
+      "destination": "games/kahoot/server/phases/reveal.ts",
+      "source": "games/lightning-round/server/phases/reveal.ts",
+      "sha256": "ef127ccd8c11b3cca75f0d252d9cc9afea01e3af67591f6fa5ffa72df0f1f915",
+      "bytes": 1912
+    },
+    {
+      "destination": "games/kahoot/server/phases/wager.ts",
+      "source": "games/lightning-round/server/phases/wager.ts",
+      "sha256": "51c6ecac225cba2ab461f2f8868f6863e688c1b67e4aef89d87c8f0d7f4acaa3",
+      "bytes": 1547
+    },
+    {
+      "destination": "games/kahoot/server/recap.ts",
+      "source": "games/lightning-round/server/recap.ts",
+      "sha256": "09fd0ada98eef4349d9d408eabdea0f34aa8e8241e69e13022cd9fdf264f3971",
+      "bytes": 3880
+    },
+    {
+      "destination": "games/kahoot/server/scoring.ts",
+      "source": "games/lightning-round/server/scoring.ts",
+      "sha256": "3418650b7f145777ac98ad181a8d31441ef033a67497dfb35fcd23d3ee6bb3ea",
+      "bytes": 5072
+    },
+    {
+      "destination": "games/kahoot/server/types.ts",
+      "source": "games/lightning-round/server/types.ts",
+      "sha256": "73961c1c25178108c27e908c9d4c84a04e50965202c6eba0fccbd5e545904641",
+      "bytes": 5061
+    },
+    {
+      "destination": "games/kahoot/server/views.ts",
+      "source": "games/lightning-round/server/views.ts",
+      "sha256": "473a71f9b444f96f332a558cea894ccad4dd7d4b6bbf2309089515c5642dcc28",
+      "bytes": 13034
+    },
+    {
+      "destination": "games/kahoot/server/wager.ts",
+      "source": "games/lightning-round/server/wager.ts",
+      "sha256": "ca47edbff9f1325159ba779d0f05a51658c3c6b36f6517ea3829edb5f42f70d5",
+      "bytes": 883
+    },
+    {
+      "destination": "provenance/core-README.md",
+      "source": "games/lightning-round/README.md",
+      "sha256": "69cac278a6a879779aafdee6c6430a6ed86656e5c44c1e016aab64a8275cf9f2",
+      "bytes": 19274
+    },
+    {
+      "destination": "reports/content/lightning-round-sources.md",
+      "source": "reports/content/lightning-round-sources.md",
+      "sha256": "dd4f22d840946bc669da4587a50743ce38ff8571df82a8d8dbc015d9124c6e5a",
+      "bytes": 48192
+    }
+  ],
+  "excludedGameFiles": [
+    {
+      "path": "__tests__/name-your-baby.test.ts",
+      "reason": "Unrelated unwired Name Your Baby data/test excluded"
+    },
+    {
+      "path": "art/gouache/backdrop.svg",
+      "reason": "All art/media excluded"
+    },
+    {
+      "path": "art/gouache/icon.webp",
+      "reason": "All art/media excluded"
+    },
+    {
+      "path": "art/gouache/icon@256.webp",
+      "reason": "All art/media excluded"
+    },
+    {
+      "path": "art/gouache/icon@40.webp",
+      "reason": "All art/media excluded"
+    },
+    {
+      "path": "art/gouache/icon@96.webp",
+      "reason": "All art/media excluded"
+    },
+    {
+      "path": "art/gouache/tile.webp",
+      "reason": "All art/media excluded"
+    },
+    {
+      "path": "art/pop/backdrop.svg",
+      "reason": "All art/media excluded"
+    },
+    {
+      "path": "art/pop/icon.webp",
+      "reason": "All art/media excluded"
+    },
+    {
+      "path": "art/pop/icon@256.webp",
+      "reason": "All art/media excluded"
+    },
+    {
+      "path": "art/pop/icon@40.webp",
+      "reason": "All art/media excluded"
+    },
+    {
+      "path": "art/pop/icon@96.webp",
+      "reason": "All art/media excluded"
+    },
+    {
+      "path": "art/pop/tile.webp",
+      "reason": "All art/media excluded"
+    },
+    {
+      "path": "content/name-your-baby.json",
+      "reason": "Unrelated unwired Name Your Baby data/test excluded"
+    }
+  ],
+  "noClassicImplementation": true,
+  "noRepositoryWrites": true,
+  "noRefsClaimsOrExternalChanges": true,
+  "noTestsBuildInstallOrBrowser": true
+}

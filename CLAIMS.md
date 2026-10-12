@@ -3,18 +3,18 @@
 # DONE lines stay; BLOCKED lines point at BLOCKED.md in the job folder.
 <!-- prettier-ignore-start -->
 
-P01 r1-local 2026-10-11T22:54:02Z job/P01-quiz-rush DONE
-P02 r2-local 2026-10-12T05:07:06Z job/P02-quiz-rush-teams
+P01 r1-local 2026-10-12T12:11:32Z job/P01-quiz-rush DONE
+P02 r2-local 2026-10-12T13:26:30Z job/P02-quiz-rush-teams
 P03 r3-local 2026-10-12T02:31:08Z job/P03-trivia-lightning DONE
 P04 r2-local 2026-10-12T05:06:32Z job/P04-draw-and-guess DONE
-P05 r5-local 2026-10-11T22:33:37Z job/P05-blob-arena
-P06 r6-local 2026-10-11T22:35:43Z job/P06-snake-royale
+P05 r4-local 2026-10-12T06:59:02Z job/P05-blob-arena
+P06 r2-local 2026-10-12T13:26:28Z job/P06-snake-royale DONE
 
 P07 r4-local 2026-10-12T02:27:12Z job/P07-paper-territory DONE
 
-P08 r7-local 2026-10-11T22:25:22Z job/P08-hole-swallow
+P08 r3-local 2026-10-12T07:15:38Z job/P08-hole-swallow
 
-P09 r8-local 2026-10-11T22:34:47Z job/P09-2048-race
+P09 r1-local 2026-10-12T12:11:50Z job/P09-2048-race
 
 P10 r9-local 2026-10-11T22:32:02Z job/P10-word-guess-race
 
@@ -39,10 +39,10 @@ P20 r19-local 2026-10-11T22:31:04Z job/P20-fruit-slice
 
 P21 r20-local 2026-10-11T22:34:58Z job/P21-pong-party
 
-P22 r1-local 2026-10-12T05:00:23Z job/P22-ricochet-rumble
+P22 r1-local 2026-10-12T06:26:52Z job/P22-ricochet-rumble DONE
 
-P23 r4-local 2026-10-12T05:00:40Z job/P23-bonk-io
+P23 r4-local 2026-10-12T05:23:33Z job/P23-bonk-io DONE
 
-P24 r3-local 2026-10-12T04:56:27Z job/P24-haxball
+P24 r3-local 2026-10-12T07:14:47Z job/P24-haxball DONE
 
 <!-- prettier-ignore-end -->
