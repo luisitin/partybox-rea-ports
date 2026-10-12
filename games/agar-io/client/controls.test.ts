@@ -95,6 +95,31 @@ describe('keyboard focus and shortcuts', () => {
 });
 
 describe('input lifecycle', () => {
+  it('routes held-source release through the latest sender without recreating the session', () => {
+    const { session, inputs } = setup();
+    const next: Input[] = [];
+    session.pointerDown(17, { x: 1, y: 0 });
+    session.setSender((input) => next.push(input));
+    expect(session.setContext('play:1:p1:paused', false)).toBe(17);
+    expect(inputs).toEqual([{ type: 'steer', x: 1, y: 0 }]);
+    expect(next).toEqual([{ type: 'steer', x: 0, y: 0 }]);
+    session.setContext('play:1:p1:connected', true);
+    session.pointerMove(17, { x: 1, y: 0 });
+    expect(next).toHaveLength(1);
+  });
+  it('starts a floating touch neutral and derives steering only from displacement after that press', () => {
+    const { session, inputs } = setup();
+    expect(session.pointerDown(5, padVector(0, 0))).toBe(true);
+    expect(inputs).toHaveLength(0);
+    session.pointerMove(5, padVector(22, 0));
+    session.pointerMove(5, padVector(44, 0));
+    session.pointerUp(5);
+    expect(inputs).toEqual([
+      { type: 'steer', x: 0.5, y: 0 },
+      { type: 'steer', x: 1, y: 0 },
+      { type: 'steer', x: 0, y: 0 },
+    ]);
+  });
   it('releases every source once on reset and requires a fresh physical press', () => {
     const { session, inputs } = setup();
     session.key({ key: 'w', code: 'KeyW' }, true, false, false);

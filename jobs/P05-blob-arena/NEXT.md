@@ -9,11 +9,13 @@ This is an upgrade of that existing game. Owner server/content/fixtures already
 match the publicR2 source; three newer client input/lifecycle/layout files must
 be preserved. Owner checkout is read-only and no files there were changed.
 
-Current source edits are coordinated: server agent owns ONLY index.ts plus
-horn-boundary regressions; client agent researches the original before repairing
-player-follow camera, every-piece inside names, floating joystick, split glyph
-and phone HUD; verification agent owns tooling/hash/restoration upgrades.
-Do not run full tests, simulations or mutations until all game sources freeze.
+Server/client source is frozen for serial semantic mutations. The server horn
+and reading-floor repairs pass21focused cases; the client passes69focused cases.
+Real reducer phase fixtures regenerated after final score timing. Typecheckpassed
+at this snapshot. Serial mutation run exited0: focusedbaseline91/91,20/20semantic
+mutants caught in134913ms. Independent finalbyte/hash check confirmsRESTORED;
+gameimports, staging and capture are released. Fullbaseline is still deferred.
+Do not start the long full baseline until root releases the final clientcamera.
 Original live research finished in one Chrome: CloudFront403, no playable canvas.
 It closed in finally with zero owned PIDs; the browser slot is now free.
 
@@ -28,8 +30,16 @@ New fidelity gate is binding fromorigin/main RULES/JOBS. Existing whole-world
 phone camera, external identity tags, diamond food and fixed rectangular controls
 differ from the original. Miniclip guide/store screenshots were read and reviewed;
 original camera source is currently opaque WASM, with historical reverse-client
-formula available for explicitly labeled research. No new original live-play or
-audio claim yet. Research references stay outside public runtime assets.
+formula replaced by stronger pinned raw May1,2015 original archive (.25/965).
+Root fidelity tools replay authored binary packets through its untouched parser/
+renderer, with no network/assets. No new original live-play or audio claim.
+Settledtargets nowmatch; camera temporal behavior is undergoing a measured audit.
+Potentialonce-per-snapshot CSS keyframes can reproduceframe-recursive follow
+withoutper-framegameJS; no new code is allowed during thePLANTED window.
+
+Capture tooling is being rebuilt around actual mounted components/state reduction,
+all63SSRscenarios, actualownerframing and finally-owned singleChrome. Browser
+slot is reserved for rootoriginalfidelityfirst, thenverificationnative/screens.
 
 Historical154tests/7000simulations/20kills/63captures below do not prove finalR2
 or upcoming repairs. Fresh final checks/source hashes/true original-versus-ours

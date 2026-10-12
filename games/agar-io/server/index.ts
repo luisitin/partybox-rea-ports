@@ -121,7 +121,13 @@ const composed = composeReduce<State, Input>({
     if (!hasPlayer(state, event.playerId)) return state;
     const settled =
       state.phase.id === 'play' && !state.phase.paused ? settle(state, event.now) : state;
-    let s = setConnected(settled, event);
+    // A delayed horn timer must not let a leave erase mass already earned at the horn.
+    // Use the arriving event's time for the score hold, just like a late play timer.
+    const judged =
+      settled.phase.id === 'play' && !settled.phase.paused && event.now >= settled.endsAt
+        ? enterScore(settled, event.now)
+        : settled;
+    let s = setConnected(judged, event);
     const left =
       event.gone && !s.left.includes(event.playerId) ? [...s.left, event.playerId] : s.left;
     const departed = left.includes(event.playerId);

@@ -72,8 +72,21 @@ const noTvCopy = (html: string): void => {
 };
 
 function expectArena(html: string, state: State): void {
+  if (state.phase.id !== 'play') {
+    expect(html).not.toContain('data-arena="true"');
+    expect(html).not.toContain('data-name-inside=');
+    return;
+  }
   expect(html).toContain('<svg');
-  expect(html).toContain('viewBox="0 0 160 100"');
+  expect(html).toContain('data-arena="true"');
+  if (html.includes('data-camera="personal"')) {
+    expect(html).toContain('viewBox="0 0 362 420"');
+    expect(html).toContain('data-camera-clipping="intentional player viewport"');
+    expect(html).toContain('data-intentional-clipping="player-camera"');
+  } else {
+    expect(html).toContain('viewBox="0 0 160 100"');
+    expect(html).toContain('data-camera="overview"');
+  }
   expect(entityIds(html, 'cell')).toEqual(state.world.cells.map((c) => c.id).sort((a, b) => a - b));
   expect(entityIds(html, 'snack')).toEqual(
     state.world.pellets.map((p) => p.id).sort((a, b) => a - b),
@@ -87,7 +100,7 @@ describe.each(Object.entries(fixtures))('screens: %s', (_fixture, source) => {
   const state = withTv(source);
   const ids = Object.keys(state.players);
 
-  it('renders the entire public world and eight readable player rows on the TV', () => {
+  it('renders the public play overview and eight player rows, with summary-only results on the TV', () => {
     const html = tv(state);
     expectArena(html, state);
     expect((roster(html).match(/<li\b/g) ?? []).length).toBe(8);
@@ -100,7 +113,7 @@ describe.each(Object.entries(fixtures))('screens: %s', (_fixture, source) => {
   it('renders every player in both room modes and sends the same arena to phone-only players', () => {
     for (const id of ids) {
       const local = phone(state, id, false);
-      expect(local).not.toContain('<svg');
+      expect(local).not.toContain('data-arena="true"');
       const html = phone(state, id, true);
       expectArena(html, state);
       noTvCopy(html);
@@ -149,7 +162,7 @@ describe.each(Object.entries(fixtures))('screens: %s', (_fixture, source) => {
 describe('play states', () => {
   const state = withTv(fixtures.play!);
 
-  it('puts the same arena before the steering controls with a labelled split action', () => {
+  it('overlays floating steering and the original split glyph on the personal play field', () => {
     const view = game.controllerView({ ...state, phoneOnly: true }, 'p1');
     const html = renderController(view, true);
     expect(buttons(html)).toHaveLength(2);
@@ -158,6 +171,12 @@ describe('play states', () => {
     expect(html).toContain(view.splitReason);
     expect(html.indexOf('<svg')).toBeLessThan(html.indexOf('Steering pad.'));
     expect(html).toContain('aria-describedby="blob-split-reason"');
+    expect(html).toContain('data-controls-overlay="true"');
+    expect(html).toContain('data-floating-joystick="true"');
+    expect(html).toContain('data-split-glyph="true"');
+    expect(html).toContain(`Score: ${view.mass}`);
+    expect(html).toContain('Leaderboard');
+    expect(html).toContain('data-camera="personal"');
   });
 
   it('keeps a swallowed player watching the arena and explains their return', () => {
@@ -293,7 +312,7 @@ describe('stable identity and results', () => {
       expect(html).toContain('Ana, Ben tie for the win!');
   });
 
-  it('renders long names safely and labels all pieces while naming only one piece per player', () => {
+  it('escapes full names safely and names every physical split piece at its centre', () => {
     const view = game.tvView(withTv(fixtures.play!));
     const owner = view.cells[0]!.owner;
     const name = 'A very long <name> & friends';
@@ -307,11 +326,20 @@ describe('stable identity and results', () => {
     );
     expect(entityIds(html, 'cell')).toHaveLength(cells.length);
     expect((html.match(/data-cell-label-id=/g) ?? []).length).toBe(cells.length);
-    expect(html.lastIndexOf('data-cell-id=')).toBeLessThan(html.indexOf('data-name-owner='));
-    expect(html.lastIndexOf('data-name-owner=')).toBeLessThan(html.indexOf('data-cell-label-id='));
+    expect((html.match(/data-name-owner=/g) ?? []).length).toBe(cells.length);
+    expect((html.match(/data-name-inside="true"/g) ?? []).length).toBe(cells.length);
+    for (const cell of cells) {
+      const group = html.match(
+        new RegExp(`<g[^>]*data-cell-id="${cell.id}"[^>]*>([\\s\\S]*?)<\\/g>`),
+      )?.[1];
+      expect(group).toBeDefined();
+      expect(group!.indexOf('data-cell-body=')).toBeLessThan(group!.indexOf('data-name-owner='));
+    }
     expect(html).not.toContain('<name>');
     expect(html).toContain('&lt;name&gt; &amp; friends');
-    expect(html).toContain(`${name.slice(0, 8)}…`);
+    expect(html).toContain('…s</text>');
+    expect(html).not.toContain('data-cell-label-backplate=');
+    expect(html).not.toContain('data-name-leader=');
   });
 });
 
@@ -469,7 +497,7 @@ describe('connection, departure and compact stages', () => {
 });
 
 describe('public pose and identity layers', () => {
-  it('keeps small and grown physical cells visible outside their readable number plates', () => {
+  it('retains true physical radii and centres identity without opaque external plates', () => {
     const view = game.tvView(withTv(fixtures.play!));
     const cells = [24, 60].map((mass, index) => ({
       ...view.cells[index]!,
@@ -481,29 +509,31 @@ describe('public pose and identity layers', () => {
     for (const compact of [false, true]) {
       const html = renderToStaticMarkup(<Arena {...view} cells={cells} phone compact={compact} />);
       for (const cell of cells) {
-        const plate = html.match(
+        const body = html.match(
           new RegExp(
-            `<circle[^>]*data-cell-label-backplate="${cell.id}"[^>]*cx="([^"]+)"[^>]*cy="([^"]+)"[^>]*r="([^"]+)"`,
+            `<g[^>]*data-cell-id="${cell.id}"[^>]*>[\\s\\S]*?<circle[^>]*data-cell-body="true"[^>]*r="([^"]+)"`,
           ),
         );
-        expect(plate).not.toBeNull();
-        const dx = Math.abs(Number(plate![1])),
-          dy = Math.abs(Number(plate![2])),
-          plateRadius = Number(plate![3]);
-        expect(Math.max(dx, dy)).toBeGreaterThan(radius(cell.mass) + 0.9 + plateRadius);
-      }
-      expect(html.lastIndexOf('data-number-leader=')).toBeLessThan(html.indexOf('data-cell-id='));
-      if (!compact) {
-        expect(html.lastIndexOf('data-name-leader=')).toBeLessThan(
-          html.indexOf('data-name-owner='),
+        expect(body).not.toBeNull();
+        expect(Number(body![1])).toBeCloseTo(radius(cell.mass));
+        expect(html).toMatch(
+          new RegExp(
+            `<text[^>]*data-cell-label-id="${cell.id}"[^>]*data-name-inside="true"[^>]*x="0"[^>]*y="0"`,
+          ),
         );
-        expect(html.lastIndexOf('<line')).toBeLessThan(html.indexOf('data-name-owner='));
       }
-      expect(html.lastIndexOf('<line')).toBeLessThan(html.indexOf('data-cell-label-backplate='));
-      expect(html.lastIndexOf('<line')).toBeLessThan(html.indexOf('data-cell-label-id='));
+      expect(html).not.toContain('data-number-leader=');
+      expect(html).not.toContain('data-name-leader=');
+      expect(html).not.toContain('data-cell-label-backplate=');
+      for (const cell of cells) {
+        const group = html.match(
+          new RegExp(`<g[^>]*data-cell-id="${cell.id}"[^>]*>([\\s\\S]*?)<\\/g>`),
+        )?.[1];
+        expect(group).toContain(`data-cell-label-id="${cell.id}"`);
+      }
     }
   });
-  it('keeps each received body, contrast plate and number aligned before and after a movement snapshot', () => {
+  it('keeps each received body and inside name aligned before and after a movement snapshot', () => {
     const view = game.tvView(withTv(fixtures.play!));
     for (const cells of [
       view.cells,
@@ -515,20 +545,17 @@ describe('public pose and identity layers', () => {
           /<g\b[^>]*data-pose-cell="(\d+)"[^>]*data-pose-layer="([^"]+)"[^>]*style="([^"]*)"/g,
         ),
       ];
-      expect(layers).toHaveLength(cells.length * 3);
+      expect(layers).toHaveLength(cells.length);
       for (const cell of cells) {
         const poses = layers.filter((match) => Number(match[1]) === cell.id);
-        expect(poses.map((match) => match[2]).sort()).toEqual(['body', 'number', 'plate']);
+        expect(poses.map((match) => match[2])).toEqual(['cell']);
         for (const match of poses)
           expect(match[3]).toContain(`transform:translate(${cell.x}px, ${cell.y}px)`);
       }
-      expect(html.lastIndexOf('data-cell-label-backplate=')).toBeLessThan(
-        html.indexOf('data-cell-label-id='),
-      );
       expect(entityIds(html, 'cell')).toEqual(cells.map((cell) => cell.id).sort((a, b) => a - b));
     }
   });
-  it('retains a contrast-backed accessible number for every split piece in the compact phone world', () => {
+  it('retains outlined accessible identity on every coincident split piece in the compact world', () => {
     const view = game.tvView(withTv(fixtures.play!));
     const cells = view.cells.flatMap((cell, index) =>
       Array.from({ length: 4 }, (_, piece) => ({
@@ -544,7 +571,9 @@ describe('public pose and identity layers', () => {
     );
     expect(entityIds(html, 'cell')).toHaveLength(32);
     expect((html.match(/data-cell-label-id=/g) ?? []).length).toBe(32);
-    expect((html.match(/data-cell-label-backplate=/g) ?? []).length).toBe(32);
+    expect((html.match(/data-name-inside="true"/g) ?? []).length).toBe(32);
+    expect((html.match(/data-name-owner=/g) ?? []).length).toBe(32);
+    expect(html).not.toContain('data-cell-label-backplate=');
     for (const player of view.players)
       expect(html).toContain(`${player.name}, blob ${(view.slots[player.id] ?? 0) + 1}, 24 mass`);
     expect(html).toContain('Your blob');

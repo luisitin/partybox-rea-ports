@@ -20,7 +20,7 @@ export function normalized(x: number, y: number): Vector {
   return { x: Math.round((x / length) * 100) / 100, y: Math.round((y / length) * 100) / 100 };
 }
 
-/** The physical thumb and the transmitted direction share one 44px reach. */
+/** Physical drag displacement uses one 44px reach; the floating ring is visual. */
 export function padVector(dx: number, dy: number, reach = 44): Vector {
   const x = dx / Math.max(1, reach),
     y = dy / Math.max(1, reach);
@@ -56,6 +56,9 @@ export class SteeringSession {
     private send: (input: Input) => void,
     private show: (vector: Vector) => void = () => undefined,
   ) {}
+  setSender(send: (input: Input) => void): void {
+    this.send = send;
+  }
   setContext(context: string, active: boolean): number | null {
     if (context === this.context && active === this.active) return null;
     const id = this.reset();

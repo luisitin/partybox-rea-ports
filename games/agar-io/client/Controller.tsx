@@ -26,6 +26,7 @@ export function Controller({
   const active = playing && player && connected && view.mass > 0 && !view.paused;
   const ordered = phase === 'score' || phase === 'done';
   const rows = standings(view, ordered);
+  const leaders = [...rows].sort((a, b) => b.mass - a.mass || a.slot - b.slot);
   const msLeft = view.deadline === null ? 0 : Math.max(0, view.deadline - now);
   const ownPoints = view.scores[view.me.id] ?? 0;
   const winners = rows.filter((row) => row.rank === 1);
@@ -107,8 +108,8 @@ export function Controller({
           </p>
         ) : null}
       </header>
-      {showStage && view.arena ? (
-        <div className={styles.arena}>
+      {playing && showStage && view.arena ? (
+        <div className={styles.arena} data-player-arena={playing && player ? 'true' : undefined}>
           <Arena
             {...view.arena}
             players={view.players}
@@ -118,20 +119,49 @@ export function Controller({
             frozen={!playing || view.paused}
             phone
             compact={!playing || !player}
+            follow={playing && player}
           />
+          {playing && player ? (
+            <>
+              <div className={styles.gameHud} data-game-hud="true">
+                <p className={styles.score}>{L('Score: {n}', { n: view.mass })}</p>
+                <aside className={styles.leaderboard} aria-label={L('Live leaderboard')}>
+                  <h3>{L('Leaderboard')}</h3>
+                  <ol>
+                    {leaders.map((row, index) => (
+                      <li key={row.id} data-me={row.id === view.me.id ? 'true' : undefined}>
+                        <b>{index + 1}.</b>
+                        <span title={row.name}>{row.name}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </aside>
+              </div>
+              <Joystick
+                active={active}
+                canSplit={view.canSplit}
+                reason={!connected ? 'Disconnected' : view.splitReason}
+                contextKey={contextKey}
+                send={send}
+                overlay
+              />
+            </>
+          ) : null}
         </div>
       ) : null}
       <p className={styles.status} role="status">
         {status}
       </p>
       {playing && player ? (
-        <Joystick
-          active={active}
-          canSplit={view.canSplit}
-          reason={!connected ? 'Disconnected' : view.splitReason}
-          contextKey={contextKey}
-          send={send}
-        />
+        !view.arena ? (
+          <Joystick
+            active={active}
+            canSplit={view.canSplit}
+            reason={!connected ? 'Disconnected' : view.splitReason}
+            contextKey={contextKey}
+            send={send}
+          />
+        ) : null
       ) : (
         <div className={styles.standings}>
           <div className={styles.legend}>
@@ -174,8 +204,8 @@ export function Controller({
       {playing && player ? (
         <p className={styles.footer}>
           {showStage
-            ? L('Your number above. Buzzer mass scores.')
-            : L('Your number on the TV. Buzzer mass scores.')}
+            ? L('Your name above. Buzzer mass scores.')
+            : L('Your name on the TV. Buzzer mass scores.')}
         </p>
       ) : null}
     </div>

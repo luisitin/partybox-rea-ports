@@ -43,7 +43,9 @@ describe('the three-round match', () => {
     expect(ended.world.time).toBe(ROUND_MS);
     expect(ended.lastPoints).toEqual({ p1: 63, p2: 24, p3: 0 });
     expect(ended.scores).toEqual(ended.lastPoints);
-    expect(ended.phase.deadline).toBe(start.endsAt + SCORE_MS);
+    // Three one-word names, all rank/badge/gain/total fields and possible presence badges:
+    // the longest phone summary has 43 words under the SDK's UI reading rule.
+    expect(ended.phase.deadline).toBe(start.endsAt + 20_565);
     const stale = kit.reduce(ended, {
       type: 'timer',
       now: start.endsAt,
@@ -109,6 +111,245 @@ describe('the three-round match', () => {
     expect(ended.scores.p1).toBeGreaterThanOrEqual(99);
     expect(game.results(ended)).not.toBeNull();
     expect(kit.vip(ended, 'end', next.began + 2000).scores).toEqual(ended.scores);
+  });
+});
+
+describe('score summary reading time', () => {
+  function atHorn(names: string[]): State {
+    const state = kit.start({ players: testPlayers(names.length, { names }) });
+    return {
+      ...state,
+      world: world([cell('p1', { mass: 75 }), cell('p2', { id: 2, x: 120, mass: 24 })], {
+        time: ROUND_MS - STEP_MS,
+      }),
+    };
+  }
+
+  it.each([
+    { label: 'two ordinary names', names: ['Ana', 'Ben'], hold: 17_967 },
+    {
+      label: 'eight ordinary names',
+      names: ['Ana', 'Ben', 'Cy', 'Dee', 'Eli', 'Fay', 'Gus', 'Hal'],
+      hold: 33_552,
+    },
+    {
+      label: 'eight six-word legacy fixture names',
+      names: Array.from({ length: 8 }, (_, i) => `Player ${i + 1} with a long name`),
+      hold: 50_868,
+    },
+    {
+      label: 'eight maximally wordy legal names',
+      names: Array.from({ length: 8 }, (_, i) => `A ${i + 1} B C D E F G`),
+      hold: 57_794,
+    },
+  ])(
+    'reading floor: $label stays readable until its complete summary deadline',
+    ({ names, hold }) => {
+      const source = deepFreeze(atHorn(names));
+      const scored = kit.timer(source, source.endsAt);
+      expect(scored.phase.id).toBe('score');
+      expect(scored.phase.deadline).toBe(source.endsAt + hold);
+      expect(hold).toBeGreaterThanOrEqual(SCORE_MS);
+      expect(game.tvView(scored).deadline).toBe(scored.phase.deadline);
+      expect(game.controllerView(scored, 'p1').deadline).toBe(scored.phase.deadline);
+      expect(game.controllerView(scored, 'spectator').deadline).toBe(scored.phase.deadline);
+      expect(kit.timer(scored, source.endsAt + SCORE_MS)).toBe(scored);
+      expect(kit.timer(scored, source.endsAt + hold - 1)).toBe(scored);
+      const next = kit.timer(scored, source.endsAt + hold);
+      expect(next.phase.id).toBe('play');
+      expect(next.round).toBe(2);
+      expect(next.endsAt - next.began).toBe(ROUND_MS);
+      expect(next.scores).toEqual(scored.scores);
+      expect(source.scores.p1).toBe(0);
+    },
+  );
+
+  it('reading floor: late Left and Offline badges already have a complete reading budget', () => {
+    const source = atHorn(['Ana', 'Ben', 'Cy']);
+    const connected = deepFreeze(kit.timer(source, source.endsAt));
+    const offline = kit.player(connected, 'p2', false, undefined, source.endsAt + 100);
+    const left = kit.player(offline, 'p1', false, 'left', source.endsAt + 200);
+    const returned = kit.player(left, 'p2', true, undefined, source.endsAt + 300);
+    expect(left.left).toEqual(['p1']);
+    expect(offline.players.p2?.connected).toBe(false);
+    expect(returned.players.p2?.connected).toBe(true);
+    for (const state of [offline, left, returned]) {
+      expect(state.phase.deadline).toBe(source.endsAt + 20_565);
+      expect(state.lastPoints).toEqual(connected.lastPoints);
+      expect(state.scores).toEqual(connected.scores);
+      expect(kit.timer(state, source.endsAt + 20_564)).toBe(state);
+    }
+    const alreadyAway = kit.timer(
+      {
+        ...source,
+        players: { ...source.players, p2: { ...source.players.p2!, connected: false } },
+        left: ['p3'],
+      },
+      source.endsAt,
+    );
+    expect(alreadyAway.phase.deadline).toBe(connected.phase.deadline);
+  });
+
+  it('reading floor: final-round score, paused reload and resume retain the full remaining hold', () => {
+    const source = deepFreeze({
+      ...atHorn(Array.from({ length: 8 }, (_, i) => `A ${i + 1} B C D E F G`)),
+      round: 3,
+    });
+    const scored = kit.timer(source, source.endsAt);
+    const deadline = source.endsAt + 57_794;
+    expect(scored.phase.deadline).toBe(deadline);
+    const paused = deepFreeze(kit.vip(scored, 'pause', source.endsAt + 500));
+    const reloaded: State = JSON.parse(JSON.stringify(paused));
+    const returned = kit.player(reloaded, 'p1', true, undefined, deadline + 30_000);
+    expect(kit.timer(returned, deadline + 30_001)).toBe(returned);
+    expect(game.controllerView(returned, 'p1').clockHeldAt).toBe(source.endsAt + 500);
+    expect(game.controllerView(returned, 'p1').deadline).toBe(deadline);
+    const resumed = kit.vip(returned, 'resume', source.endsAt + 30_500);
+    expect(resumed.phase.deadline).toBe(deadline + 30_000);
+    expect(resumed.scores).toEqual(scored.scores);
+    expect(kit.timer(resumed, deadline + 29_999)).toBe(resumed);
+    const done = kit.timer(resumed, deadline + 30_000);
+    expect(done.phase.id).toBe('done');
+    expect(game.results(done)?.scores).toEqual(scored.scores);
+    expect(kit.timer(done)).toBe(done);
+  });
+
+  it('reading floor: the wordiest legal eight-seat match keeps all three rounds within its duration cap', () => {
+    let state = atHorn(Array.from({ length: 8 }, (_, i) => `A ${i + 1} B C D E F G`));
+    for (let round = 1; round <= 3; round++) {
+      expect(state.round).toBe(round);
+      expect(state.endsAt - state.began).toBe(ROUND_MS);
+      state = kit.timer({ ...state, world: world([], { time: ROUND_MS - STEP_MS }) }, state.endsAt);
+      expect(state.phase.deadline! - state.phase.startedAt).toBe(57_794);
+      state = kit.timer(state);
+    }
+    expect(state.phase.id).toBe('done');
+    expect(state.phase.startedAt - T0).toBe(443_382);
+    expect(state.phase.startedAt - T0).toBeLessThanOrEqual(
+      game.manifest.estimatedMinutes * 2 * 60_000,
+    );
+    expect(Object.keys(game.results(state)!.scores)).toHaveLength(8);
+  });
+});
+
+describe('connection events at the horn', () => {
+  function pendingHorn(): State {
+    return {
+      ...kit.start(),
+      world: world([cell('p1', { mass: 75 }), cell('p2', { id: 2, x: 120, mass: 24 })], {
+        time: ROUND_MS - STEP_MS,
+      }),
+    };
+  }
+
+  it.each(
+    (['left', 'kicked'] as const).flatMap((gone) =>
+      [0, 1, 1000].map((offset) => ({ gone, offset })),
+    ),
+  )(
+    'horn boundary: $gone at +$offset ms banks before retirement exactly once',
+    ({ gone, offset }) => {
+      const source = deepFreeze(pendingHorn());
+      const at = source.endsAt + offset;
+      const timed = kit.timer(source, at);
+      let scored = kit.player(source, 'p1', false, gone, at);
+      expect(scored.phase).toEqual(timed.phase);
+      expect(scored.phase).toEqual({ id: 'score', startedAt: at, deadline: at + 20_565 });
+      expect(scored.world.time).toBe(ROUND_MS);
+      expect(scored.lastPoints).toEqual({ p1: 75, p2: 24, p3: 0 });
+      expect(scored.scores).toEqual(timed.scores);
+      expect(scored.scores.p1).toBe(75);
+      expect(scored.left).toEqual(['p1']);
+      expect(scored.world.cells.some((c) => c.owner === 'p1')).toBe(false);
+      expect(scored.world.respawns).not.toHaveProperty('p1');
+      expect(kit.player(scored, 'p1', false, gone, at + 1)).toBe(scored);
+      expect(
+        kit.reduce(scored, { type: 'timer', phaseId: 'play', startedAt: T0, now: at + 2 }),
+      ).toBe(scored);
+      for (const connected of [true, false, true]) {
+        scored = kit.player(scored, 'p1', connected, undefined, at + 10);
+        expect(scored.players.p1?.connected).toBe(false);
+        expect(scored.left).toEqual(['p1']);
+        expect(scored.scores).toEqual(timed.scores);
+        expect(scored.lastPoints).toEqual(timed.lastPoints);
+      }
+      expect(kit.input(scored, 'p1', { type: 'steer', x: 1, y: 0 }, at + 11)).toBe(scored);
+      expect(kit.timer(scored, scored.phase.deadline! - 1)).toBe(scored);
+      const next = kit.timer(scored);
+      expect(next.phase.id).toBe('play');
+      expect(next.round).toBe(2);
+      expect(next.scores.p1).toBe(75);
+      expect(next.world.cells.some((c) => c.owner === 'p1')).toBe(false);
+      const done = kit.vip(next, 'end', next.began + STEP_MS);
+      expect(done.phase.id).toBe('done');
+      expect(game.results(done)?.scores.p1).toBe(75);
+      expect(kit.vip(done, 'end', next.began + STEP_MS * 2).scores.p1).toBe(75);
+      expect(source.scores.p1).toBe(0);
+      expect(source.world.cells[0]?.mass).toBe(75);
+    },
+  );
+
+  it.each(['left', 'kicked'] as const)(
+    'horn boundary: %s before the horn still forfeits current mass and retains banked points',
+    (gone) => {
+      const source = deepFreeze({ ...pendingHorn(), scores: { p1: 37, p2: 0, p3: 0 } });
+      const left = kit.player(source, 'p1', false, gone, source.endsAt - 1);
+      expect(left.phase.id).toBe('play');
+      expect(left.lastPoints).toEqual({});
+      expect(left.scores.p1).toBe(37);
+      expect(left.world.cells.some((c) => c.owner === 'p1')).toBe(false);
+      const scored = kit.timer(left, source.endsAt);
+      expect(scored.lastPoints.p1).toBe(0);
+      expect(scored.scores.p1).toBe(37);
+    },
+  );
+
+  it.each([
+    { label: 'refresh', gone: undefined },
+    { label: 'left', gone: 'left' as const },
+    { label: 'kicked', gone: 'kicked' as const },
+  ])('horn boundary: paused $label after the old wall deadline cannot bank early', ({ gone }) => {
+    const source = pendingHorn();
+    const paused = deepFreeze(kit.vip(source, 'pause', source.endsAt - 50));
+    const changed = kit.player(paused, 'p1', gone === undefined, gone, source.endsAt + 30_000);
+    expect(changed.phase).toEqual(paused.phase);
+    expect(changed.world.time).toBe(ROUND_MS - STEP_MS);
+    expect(changed.scores).toEqual(source.scores);
+    expect(changed.lastPoints).toEqual({});
+    expect(kit.timer(changed, source.endsAt + 31_000)).toBe(changed);
+    const resumed = kit.vip(changed, 'resume', source.endsAt + 60_000);
+    expect(resumed.endsAt).toBe(source.endsAt + 60_050);
+    const beforeHorn = kit.timer(resumed, resumed.endsAt - 1);
+    expect(beforeHorn.phase.id).toBe('play');
+    expect(beforeHorn.scores).toEqual(source.scores);
+    const scored = kit.timer(beforeHorn, resumed.endsAt);
+    expect(scored.phase.id).toBe('score');
+    expect(scored.lastPoints.p1).toBe(gone ? 0 : 75);
+    expect(scored.scores.p1).toBe(gone ? 0 : 75);
+  });
+
+  it('horn boundary: final-round departure adds horn mass to prior points once', () => {
+    const source = deepFreeze({
+      ...pendingHorn(),
+      round: 3,
+      scores: { p1: 37, p2: 11, p3: 0 },
+    });
+    const scored = kit.player(source, 'p1', false, 'left', source.endsAt + 1);
+    expect(scored.lastPoints).toEqual({ p1: 75, p2: 24, p3: 0 });
+    expect(scored.scores).toEqual({ p1: 112, p2: 35, p3: 0 });
+    const done = kit.timer(scored);
+    expect(done.phase.id).toBe('done');
+    expect(game.results(done)?.scores).toEqual(scored.scores);
+    expect(kit.timer(done)).toBe(done);
+    expect(kit.player(done, 'p1', true, undefined, done.phase.startedAt + 1).scores).toEqual(
+      scored.scores,
+    );
+  });
+
+  it('horn boundary: unknown connection events cannot bank or alter a round', () => {
+    const source = deepFreeze(pendingHorn());
+    for (const id of ['spectator', '__proto__', 'constructor'])
+      expect(kit.player(source, id, false, 'left', source.endsAt + 1)).toBe(source);
   });
 });
 

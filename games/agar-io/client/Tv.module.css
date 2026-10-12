@@ -34,6 +34,17 @@
   min-height: 0;
 }
 
+/* Round results are party plumbing: one readable summary, with no duplicate
+   arena labels competing with the server's measured reading hold. */
+.board[data-summary='true'] {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+}
+
+.board[data-summary='true'] .side {
+  width: min(100%, calc(var(--pb-space-8) * 22));
+}
+
 .headline {
   margin: 0;
   font-size: var(--pb-font-h2);

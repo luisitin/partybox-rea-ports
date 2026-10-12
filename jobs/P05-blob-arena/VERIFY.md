@@ -1,5 +1,17 @@
 # P05 verification
 
+## Current r1-local upgrade
+
+Prior reports below are historical and do not establish the upgraded source. Fresh final typecheck/format/scoped tests, seven1000-match groups,20semantic mutants, every-phase SSR/native captures, original-renderer pairs, media hashes and final-headCI remain pending. Source imports/generation/pushes are prohibited while mutation bugs are planted.
+
+Focused server repair: `pnpm.cmd vitest run games/agar-io/__tests__/game.test.ts --testNamePattern 'reading floor:|horn boundary:|settles the last physics step' --maxWorkers=1 --pool=threads --reporter=verbose`:21passed,26skipped,586ms, exit0. The earlier horn-only pass was13cases in432ms. These cover leave/kick before/at/after horn, paused active time, once-only totals, full reading deadlines and reconnect/reload boundaries; they are not a full suite or bot proof.
+
+Capture framing is freshly derived from immutable ownerHEAD0a97701d7: ordinary phone header56px plus quiet clock27.6px (VIP60+27.6), no arbitrary80px bottom shell reservation. Current quiet-timer TV game Stage832.8px, inner766.8px after12/54padding, width1728px; timer-free stages854.8/788.8. Actual browser measurements still must confirm this geometry. Owner checkout was read-only.
+
+The original-access attempt itself finished: Chrome1280×800, CloudFront403, no game canvas or controls, no original play/audio claim; finally browserClosedtrue/remainingPids[]. Reference comparison will use unmodified pinned May1renderer with authored packets and no original networking/assets, not claim a current2026 live session.
+
+## Historical r4-local verification
+
 Runner r4-local; official game Agar.io / agar-io; historical job slug P05-blob-arena.
 
 The inherited r5-local head 4f9e6aa passed [CI 38180746625](https://github.com/luisitin/partybox-rea-ports/actions/runs/38180746625). The official-name recovery head 672d748 passed [CI 38209133722](https://github.com/luisitin/partybox-rea-ports/actions/runs/38209133722). These green checks preceded the new lifecycle, fairness and layout fixes. They do not prove the current changes.

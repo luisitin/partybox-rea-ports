@@ -1,4 +1,4 @@
-// The stage keeps the shared arena visible through every round and its scored pause.
+// Shared play overview; scored rounds show one complete, readable party summary.
 import type { JSX } from 'react';
 import { Stage, useServerNow, useT } from '@partybox/game-sdk/ui';
 import type { GameTvProps } from '@partybox/game-sdk/ui';
@@ -39,17 +39,19 @@ export function Tv({ view }: GameTvProps<BlobArenaTvView>): JSX.Element {
           {headline}
         </h2>
       ) : null}
-      <div className={styles.board}>
-        <div className={styles.field}>
-          <Arena
-            cells={view.cells}
-            pellets={view.pellets}
-            players={view.players}
-            slots={view.slots}
-            checked={view.checked}
-            frozen={!playing || view.paused}
-          />
-        </div>
+      <div className={styles.board} data-summary={!playing ? 'true' : undefined}>
+        {playing ? (
+          <div className={styles.field}>
+            <Arena
+              cells={view.cells}
+              pellets={view.pellets}
+              players={view.players}
+              slots={view.slots}
+              checked={view.checked}
+              frozen={!playing || view.paused}
+            />
+          </div>
+        ) : null}
         <aside className={styles.side}>
           {view.phaseId !== 'done' ? <h2 className={styles.headline}>{headline}</h2> : null}
           {playing ? (

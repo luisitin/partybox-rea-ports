@@ -4,6 +4,9 @@ import type { BotSkill } from '@partybox/game-sdk';
 import { game } from '../../games/agar-io/server/index';
 import { ROUND_MS } from '../../games/agar-io/server/types';
 import type { State } from '../../games/agar-io/server/types';
+import { writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { behaviorSources, dependencySources, root, sameSources } from './provenance.mjs';
 
 export const SKILLS: BotSkill[] = ['easy', 'normal', 'sharp'];
 const T0 = 1_000_000;
@@ -25,6 +28,7 @@ export interface SimReport {
   games: number;
   gamesBySkill: Record<BotSkill, number>;
   medianRoundMs: number;
+  medianGameMs: number;
   maxGameMs: number;
   minScore: number;
   maxScore: number;
@@ -111,8 +115,17 @@ export function sweep(
   players: number,
   runs = 1000,
   skills: readonly BotSkill[] = SKILLS,
+  onCompleted?: (game: SimGame) => void,
 ): SimReport {
+  if (
+    !Number.isInteger(runs) ||
+    runs < 1 ||
+    skills.length === 0 ||
+    skills.some((skill) => !SKILLS.includes(skill))
+  )
+    throw new Error('Invalid simulation count or skill coverage');
   const rounds: number[] = [];
+  const durations: number[] = [];
   const gamesBySkill: Record<BotSkill, number> = { easy: 0, normal: 0, sharp: 0 };
   let maxGameMs = 0;
   let minScore = Infinity;
@@ -123,22 +136,31 @@ export function sweep(
     const skill = skills[(seed - 1) % skills.length]!;
     const run = simulate(players, seed, skill);
     gamesBySkill[skill]++;
+    durations.push(run.durationMs);
     rounds.push(...run.roundsMs);
     maxGameMs = Math.max(maxGameMs, run.durationMs);
     minScore = Math.min(minScore, ...Object.values(run.totalScores));
     maxScore = Math.max(maxScore, ...Object.values(run.totalScores));
     totalEvents += run.events;
     maxEvents = Math.max(maxEvents, run.events);
+    onCompleted?.(run);
   }
   rounds.sort((a, b) => a - b);
   const middle = Math.floor(rounds.length / 2);
   const medianRoundMs =
     rounds.length % 2 ? rounds[middle]! : (rounds[middle - 1]! + rounds[middle]!) / 2;
+  durations.sort((a, b) => a - b);
+  const gameMiddle = Math.floor(durations.length / 2);
+  const medianGameMs =
+    durations.length % 2
+      ? durations[gameMiddle]!
+      : (durations[gameMiddle - 1]! + durations[gameMiddle]!) / 2;
   return {
     players,
     games: runs,
     gamesBySkill,
     medianRoundMs,
+    medianGameMs,
     maxGameMs,
     minScore,
     maxScore,
@@ -147,7 +169,8 @@ export function sweep(
   };
 }
 
-// Root's TS loader resolves extensionless imports. Vitest imports the functions without invoking CLI.
+// The normal verification path gets these same seven groups from one full Vitest run.
+// A standalone diagnostic remains available, but cannot leave a historical PASS behind.
 if (process.argv[1]?.replaceAll('\\', '/').endsWith('/P05-blob-arena/sim.ts')) {
   const runs = Number(process.env['PB_SIM_RUNS'] ?? 1000);
   const counts = (process.env['PB_SIM_COUNTS'] ?? '2,3,4,5,6,7,8').split(',').map(Number);
@@ -155,9 +178,77 @@ if (process.argv[1]?.replaceAll('\\', '/').endsWith('/P05-blob-arena/sim.ts')) {
   if (
     !Number.isInteger(runs) ||
     runs < 1 ||
+    new Set(counts).size !== counts.length ||
     counts.some((n) => !Number.isInteger(n) || n < 2 || n > 8) ||
+    skills.length === 0 ||
     skills.some((skill) => !SKILLS.includes(skill))
   )
     throw new Error('Invalid PB_SIM_RUNS, PB_SIM_COUNTS or PB_SIM_SKILLS');
-  for (const players of counts) console.log(JSON.stringify(sweep(players, runs, skills)));
+  const sources = { ...behaviorSources(), ...dependencySources() };
+  const output = resolve(root, 'jobs/P05-blob-arena/sim-report.json');
+  const began = performance.now();
+  const startedAt = new Date().toISOString();
+  const reports: SimReport[] = [];
+  let games = 0;
+  let finishedAt: string | null = null;
+  const canonical =
+    runs === 1000 &&
+    counts.length === 7 &&
+    [2, 3, 4, 5, 6, 7, 8].every((count) => counts.includes(count)) &&
+    skills.length === 3 &&
+    SKILLS.every((skill) => skills.includes(skill));
+  function checkpoint(status: string): void {
+    writeFileSync(
+      output,
+      JSON.stringify(
+        {
+          runId: 'r1-local',
+          status,
+          incomplete: status !== 'passed',
+          startedAt,
+          finishedAt,
+          elapsedMs: Math.round(performance.now() - began),
+          command: 'node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/sim.ts',
+          sourceScope:
+            'All server/content/manifest bytes plus local SDK/shared/dependency configuration',
+          sources,
+          runsPerCount: runs,
+          seedRange: [1, runs],
+          counts,
+          skills,
+          expectedGames: counts.length * runs,
+          games,
+          maxAllowedGameMs: BUDGET_MS,
+          maxAllowedEvents: 5000,
+          reports,
+          totalEvents: reports.reduce((sum, report) => sum + report.totalEvents, 0),
+          maxGameMs: reports.length ? Math.max(...reports.map((report) => report.maxGameMs)) : null,
+        },
+        null,
+        2,
+      ) + '\n',
+      'utf8',
+    );
+  }
+  checkpoint('running');
+  try {
+    for (const players of counts) {
+      reports.push(
+        sweep(players, runs, skills, () => {
+          games++;
+          if (games % 25 === 0) checkpoint('running');
+        }),
+      );
+      checkpoint('running');
+      console.log(JSON.stringify(reports.at(-1)));
+      await new Promise((resume) => setTimeout(resume, 10));
+    }
+    if (!sameSources(sources, { ...behaviorSources(), ...dependencySources() }))
+      throw new Error('Game/SDK source changed during simulations; rerun against frozen source');
+    finishedAt = new Date().toISOString();
+    checkpoint(canonical ? 'passed' : 'diagnostic');
+  } catch (failure) {
+    checkpoint('failed');
+    throw failure;
+  }
 }

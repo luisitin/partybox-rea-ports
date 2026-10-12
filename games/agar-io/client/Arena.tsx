@@ -1,11 +1,12 @@
-// One public SVG stage. Received poses are eased, never predicted or simulated here.
+// Received poses and the personal camera move together; there is no client physics.
+import { useId, useLayoutEffect, useRef, useState } from 'react';
 import type { CSSProperties, JSX } from 'react';
 import { useT } from '@partybox/game-sdk/ui';
+import type { ViewPlayer } from '@partybox/game-sdk/ui';
 import { radius } from '../server/geometry';
 import type { ArenaView, MatchView } from '../server/index';
-import type { ViewPlayer } from '@partybox/game-sdk/ui';
+import { cameraTransform, cellName, cellNameSize, playerCamera } from './camera';
 import { playerStyle } from './display';
-import { placeLabels } from './labels';
 import { STRINGS } from './strings';
 import styles from './Arena.module.css';
 
@@ -17,6 +18,7 @@ export interface ArenaProps extends ArenaView {
   frozen?: boolean;
   phone?: boolean;
   compact?: boolean;
+  follow?: boolean;
 }
 
 export function Arena({
@@ -29,195 +31,134 @@ export function Arena({
   frozen,
   phone,
   compact,
+  follow,
 }: ArenaProps): JSX.Element {
   const L = useT(STRINGS);
-  const names = Object.fromEntries(players.map((p) => [p.id, p.name]));
-  const largest = new Map<string, number>();
-  for (const cell of cells) {
-    const old = cells.find((c) => c.id === largest.get(cell.owner));
-    if (!old || cell.mass > old.mass) largest.set(cell.owner, cell.id);
-  }
-  // The compact phone board is 220px wide inside its border; live is 362px.
-  const numberSize = phone ? (compact ? 12 : 7.2) : 4.2;
-  const plateRadius = numberSize * 0.65;
-  const bodyBounds = cells.map((cell) => {
-    const reach = radius(cell.mass) + (cell.shieldUntil > checked ? 0.9 : 0) + 0.4;
-    return { id: cell.id, x: cell.x, y: cell.y, width: reach * 2, height: reach * 2 };
-  });
-  const numbers = placeLabels(cells, plateRadius * 2, plateRadius * 2, bodyBounds);
-  const numberById = new Map(numbers.map((label) => [label.id, label]));
-  const nameSize = phone ? 6.4 : 4.2;
-  const nameWidth = phone ? 36 : 30,
-    nameHeight = phone ? 8.6 : 6.2;
-  const nameCells =
-    phone && compact ? [] : cells.filter((cell) => largest.get(cell.owner) === cell.id);
-  const tags = placeLabels(
-    nameCells.map((cell) => ({
-      id: cell.id,
-      x: cell.x,
-      y: cell.y + (cell.y < 15 ? radius(cell.mass) + 5 : -radius(cell.mass) - 3),
-    })),
-    nameWidth,
-    nameHeight,
-    [...bodyBounds, ...numbers],
-  );
-  const tagById = new Map(tags.map((label) => [label.id, label]));
+  const arena = useRef<SVGSVGElement>(null);
+  const [viewport, setViewport] = useState({ width: 362, height: 420 });
+  const clipId = useId();
+  const gridId = useId();
+  useLayoutEffect(() => {
+    const element = arena.current;
+    if (!element || !follow || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(([entry]) => {
+      if (!entry) return;
+      const { width, height } = entry.contentRect;
+      if (width < 1 || height < 1) return;
+      setViewport((current) =>
+        Math.abs(current.width - width) < 0.5 && Math.abs(current.height - height) < 0.5
+          ? current
+          : { width, height },
+      );
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [follow]);
+  const camera = follow ? playerCamera(cells, mine, viewport) : null;
+  const names = Object.fromEntries(players.map((player) => [player.id, player.name]));
+  const orderedCells = [...cells].sort((a, b) => radius(a.mass) - radius(b.mass) || a.id - b.id);
   const pose = (cell: { owner: string; x: number; y: number }): CSSProperties => ({
     ...playerStyle(slots[cell.owner] ?? 0),
     transform: `translate(${cell.x}px, ${cell.y}px)`,
   });
   const title = (cell: { owner: string; mass: number }): string =>
-    L('{name}, blob {slot}, {mass} mass', {
+    `${L('{name}, blob {slot}, {mass} mass', {
       name: names[cell.owner] ?? '',
       slot: (slots[cell.owner] ?? 0) + 1,
       mass: Math.floor(cell.mass),
-    });
+    })}${cell.owner === mine ? ` · ${L('Your blob')}` : ''}`;
   return (
     <svg
+      ref={arena}
       className={styles.arena}
-      viewBox="0 0 160 100"
+      viewBox={camera ? `0 0 ${viewport.width} ${viewport.height}` : '0 0 160 100'}
+      preserveAspectRatio={camera ? 'xMidYMid slice' : 'xMidYMid meet'}
       role="img"
       aria-label={L('Shared arena: {n} blobs and {m} snacks', {
         n: cells.length,
         m: pellets.length,
       })}
+      data-arena="true"
+      data-camera={camera ? 'personal' : 'overview'}
+      data-camera-clipping={camera ? 'intentional player viewport' : undefined}
+      data-camera-center={camera ? `${camera.x} ${camera.y}` : undefined}
+      data-camera-zoom={camera?.zoom}
       data-frozen={frozen ? 'true' : undefined}
       data-phone={phone ? 'true' : undefined}
+      data-compact={compact ? 'true' : undefined}
     >
-      <path
-        className={styles.grid}
-        d="M20 0V100 M40 0V100 M60 0V100 M80 0V100 M100 0V100 M120 0V100 M140 0V100 M0 20H160 M0 40H160 M0 60H160 M0 80H160"
-      />
-      {/* Every connector is behind every body, opaque plate and text label. */}
-      {cells.map((cell) => {
-        const number = numberById.get(cell.id)!;
-        const tag = tagById.get(cell.id);
-        return (
-          <g key={cell.id} data-leader-cell={cell.id} className={styles.pose} style={pose(cell)}>
-            <line
-              data-number-leader={cell.id}
-              className={styles.leader}
-              x1="0"
-              y1="0"
-              x2={number.x - cell.x}
-              y2={number.y - cell.y}
-            />
-            {tag ? (
-              <line
-                data-name-leader={cell.owner}
-                className={styles.leader}
-                x1="0"
-                y1="0"
-                x2={tag.x - cell.x}
-                y2={tag.y - cell.y}
-              />
-            ) : null}
-          </g>
-        );
-      })}
-      {pellets.map((p) => (
-        <g
-          key={p.id}
-          className={styles.snack}
-          data-snack-id={p.id}
-          transform={`translate(${p.x} ${p.y})`}
-        >
-          {p.id % 3 === 0 ? (
-            <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z" />
-          ) : (
-            <circle r={p.id % 3 === 1 ? 0.6 : 0.8} />
-          )}
-        </g>
-      ))}
-      {cells.map((cell) => {
-        const r = radius(cell.mass);
-        return (
-          <g
-            key={cell.id}
-            data-cell-id={cell.id}
-            data-pose-cell={cell.id}
-            data-pose-layer="body"
-            className={`${styles.cell} ${styles.pose}`}
-            style={pose(cell)}
-            data-mine={cell.owner === mine ? 'true' : undefined}
-          >
-            <title>{title(cell)}</title>
-            {cell.shieldUntil > checked ? <circle className={styles.shield} r={r + 0.9} /> : null}
-            <circle className={styles.body} r={r} />
-            <path
-              className={styles.shine}
-              d={`M${-r * 0.55} ${-r * 0.2}Q${-r * 0.6} ${-r * 0.7} ${-r * 0.05} ${-r * 0.68}`}
-            />
-          </g>
-        );
-      })}
-      {nameCells.map((cell) => {
-        const tag = tagById.get(cell.id)!;
-        const name = names[cell.owner] ?? '';
-        return (
-          <g key={cell.id} data-name-owner={cell.owner} className={styles.pose} style={pose(cell)}>
-            <title>{name}</title>
-            <g transform={`translate(${tag.x - cell.x} ${tag.y - cell.y})`}>
-              <rect
-                className={styles.tag}
-                x={-nameWidth / 2}
-                y={-nameHeight / 2}
-                width={nameWidth}
-                height={nameHeight}
-                rx="2"
-              />
-              <text className={styles.name} fontSize={nameSize}>
-                {name.length > 9 ? `${name.slice(0, 8)}…` : name}
-              </text>
-            </g>
-          </g>
-        );
-      })}
-      {/* All contrast plates precede all digits, including when pieces share a pose. */}
-      {cells.map((cell) => {
-        const label = numberById.get(cell.id)!;
-        return (
-          <g
-            key={cell.id}
-            className={styles.pose}
-            data-pose-cell={cell.id}
-            data-pose-layer="plate"
-            style={pose(cell)}
-            data-mine={cell.owner === mine ? 'true' : undefined}
-          >
+      <defs>
+        <clipPath id={clipId}>
+          <rect width="160" height="100" />
+        </clipPath>
+        <pattern id={gridId} width="2.75" height="2.75" patternUnits="userSpaceOnUse">
+          <path className={styles.grid} d="M2.75 0H0V2.75" />
+        </pattern>
+      </defs>
+      <g
+        className={styles.world}
+        style={camera ? { transform: cameraTransform(camera) } : undefined}
+        data-world-layer="true"
+        data-intentional-clipping={camera ? 'player-camera' : undefined}
+      >
+        <rect className={styles.worldBounds} width="160" height="100" />
+        <g clipPath={`url(#${clipId})`}>
+          <rect width="160" height="100" fill={`url(#${gridId})`} />
+          {pellets.map((pellet) => (
             <circle
-              className={styles.numberPlate}
-              data-cell-label-backplate={cell.id}
-              cx={label.x - cell.x}
-              cy={label.y - cell.y}
-              r={plateRadius}
+              key={pellet.id}
+              className={styles.snack}
+              data-snack-id={pellet.id}
+              cx={pellet.x}
+              cy={pellet.y}
+              r="0.6"
+              style={playerStyle(pellet.id % 8)}
             />
-          </g>
-        );
-      })}
-      {cells.map((cell) => {
-        const label = numberById.get(cell.id)!;
-        return (
-          <g
-            key={cell.id}
-            className={styles.pose}
-            data-pose-cell={cell.id}
-            data-pose-layer="number"
-            style={pose(cell)}
-          >
-            <title>{`${title(cell)}${cell.owner === mine ? ` · ${L('Your blob')}` : ''}`}</title>
-            <text
-              data-cell-label-id={cell.id}
-              className={styles.number}
-              fontSize={numberSize}
-              x={label.x - cell.x}
-              y={label.y - cell.y + 0.2}
-            >
-              {(slots[cell.owner] ?? 0) + 1}
-            </text>
-          </g>
-        );
-      })}
+          ))}
+          {orderedCells.map((cell) => {
+            const cellRadius = radius(cell.mass);
+            const name = names[cell.owner] ?? '';
+            return (
+              <g
+                key={cell.id}
+                data-cell-id={cell.id}
+                data-pose-cell={cell.id}
+                data-pose-layer="cell"
+                className={`${styles.cell} ${styles.pose}`}
+                style={pose(cell)}
+                data-mine={cell.owner === mine ? 'true' : undefined}
+              >
+                <title>{title(cell)}</title>
+                {cell.shieldUntil > checked ? (
+                  <circle
+                    className={styles.shield}
+                    r={cellRadius + 0.9}
+                    style={{ ['r' as string]: `${cellRadius + 0.9}px` }}
+                  />
+                ) : null}
+                <circle
+                  className={styles.body}
+                  data-cell-body="true"
+                  r={cellRadius}
+                  style={{ ['r' as string]: `${cellRadius}px` }}
+                />
+                {/* Each name travels with its body, allowing larger foreground cells to occlude both. */}
+                <text
+                  className={styles.name}
+                  data-name-owner={cell.owner}
+                  data-cell-label-id={cell.id}
+                  data-name-inside="true"
+                  fontSize={cellNameSize(cellRadius)}
+                  x="0"
+                  y="0"
+                >
+                  {cellName(name, cellRadius)}
+                </text>
+              </g>
+            );
+          })}
+        </g>
+      </g>
     </svg>
   );
 }

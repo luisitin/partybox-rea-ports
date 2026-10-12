@@ -1,5 +1,16 @@
 # P05 sources and provenance
 
+## Current r1-local upgrade — 2026-10-12
+
+The current owner overlap scan found the existing Agar.io import from this public PR9, among126 game manifests at ownerHEAD0a97701d7. P05 is an upgrade of that canonical game. The historical110-game scan below preceded that import. The owner checkout remained read-only.
+
+- [Miniclip-published mobile listing](https://play.google.com/store/apps/details?id=com.miniclip.agar.io): unmodified publisher screenshots reviewed for centered names on every split piece, round food, score at upper left and leaderboard at upper right. Image dimensions526×296 are published asset dimensions, not measured live viewport dimensions. Reference downloads stayed in OS-temp.
+- [Unmodified May1,2015 creator-client archive](https://github.com/Tombez/official-agar.io-client-by-matheus-valadares/blob/4e25418ae81043f391557422a5ee19f3f0c2e588/2015-05-01/main_out.js): pinned mirror at4e25418ae81043f391557422a5ee19f3f0c2e588; raw SHA25619e61e116c9dab1d215bec86e063349a7424caa4e2369e649f268a7664e044e9. Read for camera,120ms smoothstep interpolation, plain cell drawing, name placement, paint order and HUD. This third-party archive identifies the creator's original client; its folder date is not a recovered first-party server session. Source and companion quadtree stay outside the public runtime. Screenshots replay authored packets through its original parser/renderer with network and skins disabled.
+- [DnAp historical reverse engineering](https://github.com/DnAp/Agar.io-Reverse-Engineering/tree/58c0c1fcc75555109bee5a5c0e7d654125ba1430): readable .4/1080 camera formula used during research only. Its README explicitly describes FOV and enemy-color modifications; it is not the unmodified reference renderer. The stronger raw May1 source uses .25/965 and supersedes that formula here.
+- Current native access: one Chrome at1280×800 reached the ordinary CloudFront403 page; no canvas, play or audio was observed. Finally verified zero owned PIDs. The accessible current core wrapper delegates camera behavior into WASM, so current exact camera dynamics remain unverified.
+
+## Historical r5/r4 sources
+
 Initial research by r5-local on 2026-10-11; recovery source audit by r4-local on 2026-10-12 UTC. The owner naming override now uses Agar.io / agar-io for this authored PartyBox adaptation. Rendering and game code remain original. No source asset, trademark artwork, recording, font, client bundle, or copied implementation is shipped.
 
 | Source                                                                                                                                                                                                                                                            | Use                                                                                              | Access and confidence                                                                                                                |
