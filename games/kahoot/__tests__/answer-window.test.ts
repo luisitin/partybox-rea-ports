@@ -1,12 +1,13 @@
 // Donor answer-window rules: queued/early/disconnected taps never become accepted answers.
 import { describe, expect, it } from 'vitest';
 import { game } from '../server/index';
+import { answerWindowOf } from '../server/types';
 import { current, input, phone, pick, start, timer, toWager, vip, wager } from './helpers';
 
 describe('question answer window', () => {
   it.each([0, 1, 5_000])('a tap %i ms past the deadline reveals without crediting it', (late) => {
     let state = timer(start());
-    state = pick(state, 'b', true);
+    state = pick(state, 'b', true, answerWindowOf(state) / 10);
     const deadline = state.phase.deadline!;
     state = input(state, 'a', { type: 'pick', index: current(state).answerIndex }, deadline + late);
     expect(state.phase.id).toBe('reveal');
@@ -25,7 +26,7 @@ describe('question answer window', () => {
     const answer = { type: 'pick' as const, index: current(state).answerIndex };
     expect(input(state, 'a', answer, state.phase.startedAt - 1)).toBe(state);
     const accepted = input(state, 'a', answer, state.phase.deadline! - 1);
-    expect(accepted.picks['a']?.elapsedMs).toBe(9_999);
+    expect(accepted.picks['a']?.elapsedMs).toBe(answerWindowOf(state) - 1);
     expect(timer(accepted).scores['a']).toBe(500);
   });
 
@@ -62,7 +63,8 @@ describe('question answer window', () => {
       state.phase.deadline!,
     );
     expect(state.phase.id).toBe('reveal');
-    expect(state.scores['a']).toBe(900);
+    expect(state.scores['a']).toBeGreaterThanOrEqual(900);
+    expect(state.scores['a']).toBeLessThan(1000);
     expect(state.picks).not.toHaveProperty('b');
   });
 

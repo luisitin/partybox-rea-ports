@@ -3,6 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Rng } from '@partybox/game-sdk';
 import { game } from '../server/index';
+import { answerWindowOf } from '../server/types';
 import { awards, clampWager, questionPoints, wagerAmount, wagerOptions } from '../server/scoring';
 import {
   PLAYERS,
@@ -37,15 +38,16 @@ describe('per-question scoring in play', () => {
   it('scores correct picks by speed, wrong picks 0, and tracks streaks', () => {
     let s = timer(start({ answerSeconds: 10 }));
     s = pick(s, 'a', true, 0);
-    s = pick(s, 'b', true, 5_000);
+    s = pick(s, 'b', true, answerWindowOf(s) / 2);
     s = pick(s, 'c', false, 2_000);
+    if (s.phase.id === 'question') s = timer(s);
     expect(s.phase.id).toBe('reveal');
     expect(s.scores).toEqual({ a: 1000, b: 750, c: 0 });
     expect(s.streaks).toEqual({ a: 1, b: 1, c: 0 });
     expect(s.lastDelta).toEqual({ a: 1000, b: 750, c: 0 });
     // Second question: a keeps the streak (+100), b answers wrong (streak reset), c idle.
     s = timer(s);
-    s = pick(s, 'a', true, 9_999);
+    s = pick(s, 'a', true, answerWindowOf(s) - 1);
     s = pick(s, 'b', false, 100);
     s = timer(s);
     expect(s.scores).toEqual({ a: 1600, b: 750, c: 0 });
@@ -56,7 +58,7 @@ describe('per-question scoring in play', () => {
     let s = timer(start({ answerSeconds: 10, questions: 6 }));
     const gains: number[] = [];
     for (let i = 0; i < 5; i++) {
-      s = pick(s, 'a', true, 9_999); // last accepted millisecond rounds to base 500 + streak
+      s = pick(s, 'a', true, answerWindowOf(s) - 1); // last accepted millisecond: base + streak
       s = timer(s);
       gains.push(s.lastDelta['a'] ?? 0);
       s = timer(s);
@@ -139,6 +141,7 @@ describe('wagers', () => {
     s = wager(s, 'b', 50);
     s = wager(s, 'c', 25);
     const bets = { ...s.wagers };
+    if (s.phase.id === 'wager') s = timer(s);
     s = pick(s, 'a', true);
     s = pick(s, 'b', false);
     s = timer(s); // c idle
@@ -187,7 +190,8 @@ describe('awards and results', () => {
 
   it('gives no awards when nobody qualifies and shares first place on ties', () => {
     let s = start();
-    while (game.results(s) === null) s = timer(s);
+    for (let step = 0; step < 100 && game.results(s) === null; step++) s = timer(s);
+    expect(s.phase.id).toBe('done');
     const results = game.results(s);
     expect(results?.awards).toEqual([]);
     expect(results?.winnerIds.sort()).toEqual(['a', 'b', 'c']);

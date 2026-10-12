@@ -5,6 +5,8 @@ import type { RngState } from '@partybox/game-sdk';
 import type { Difficulty, Question } from '../content/schema';
 import { questionsIn, questionsOf } from './content';
 import type { ContentLang } from './content';
+import { CLASSIC_PACKS } from './classic';
+import type { ClassicPackId } from '../content/classic-schema';
 
 export interface Draw {
   ids: string[];
@@ -15,6 +17,21 @@ export interface Draw {
 }
 
 const HARDEST_FIRST: readonly Difficulty[] = ['hard', 'medium', 'easy'];
+
+/** Authored classic packs have exactly twenty questions and never append a wager finale. */
+export function drawClassicQuestions(
+  rng: RngState,
+  pack: ClassicPackId,
+  questions: number,
+): [Draw, RngState] {
+  const pool = CLASSIC_PACKS[pack].questions;
+  const count = Math.max(0, Math.min(questions, pool.length));
+  const result = drawFromDeck(rng, [], count, pool);
+  return [
+    { ids: result.drawn.map((q) => q.id), drawnFrom: `classic-${pack}`, drawnSubs: [] },
+    result.rng,
+  ];
+}
 
 /**
  * The pool a game draws from: the ticked topics of the chosen category if they hold

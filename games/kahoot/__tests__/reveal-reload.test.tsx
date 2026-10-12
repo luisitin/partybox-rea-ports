@@ -6,7 +6,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Controller } from '../client/Controller';
 import { Tv } from '../client/Tv';
 import tvStyles from '../client/Tv.module.css';
-import { STANDINGS_AT_MS } from '../client/timing';
 import { phone, pick, start, timer, toFirstQuestion, toWager, tv, vip, wager } from './helpers';
 import type { State } from '../server/types';
 
@@ -17,6 +16,7 @@ function regularReveal(): State {
   state = pick(state, 'a', true, 1000);
   state = pick(state, 'b', false, 2000);
   state = pick(state, 'c', true, 3000);
+  if (state.phase.id === 'question') state = timer(state);
   expect(state.phase.id).toBe('reveal');
   return state;
 }
@@ -26,6 +26,7 @@ function finalReveal(): State {
   for (const id of ['a', 'b', 'c']) state = wager(state, id, 50);
   if (state.phase.id === 'wager') state = timer(state);
   for (const id of ['a', 'b', 'c']) state = pick(state, id, id !== 'b');
+  if (state.phase.id === 'question') state = timer(state);
   expect(state.phase.id).toBe('reveal');
   return state;
 }
@@ -52,7 +53,7 @@ describe('Lightning Round reveal: a reload lands on the current beat', () => {
     const fresh = renderToStaticMarkup(<Tv view={{ ...tv(state), vip: 'a' }} skip={() => {}} />);
     expect(fresh).not.toContain(tvStyles.settled);
     expect(fresh).not.toContain('phone');
-    at(state, STANDINGS_AT_MS + 500);
+    at(state, tv(state).leaderboardAt! - state.phase.startedAt + 500);
     const late = renderToStaticMarkup(<Tv view={{ ...tv(state), vip: 'a' }} skip={() => {}} />);
     expect(late).toContain(tvStyles.settled);
     expect(late).toContain('Next on Ana');
@@ -74,7 +75,7 @@ describe('Lightning Round reveal: a reload lands on the current beat', () => {
     expect(renderToStaticMarkup(<Tv view={{ ...tv(resumed), vip: 'a' }} />)).not.toContain(
       tvStyles.settled,
     );
-    at(state, 10_000 + STANDINGS_AT_MS);
+    at(state, tv(resumed).leaderboardAt! - state.phase.startedAt);
     expect(renderToStaticMarkup(<Tv view={{ ...tv(resumed), vip: 'a' }} />)).toContain(
       tvStyles.settled,
     );
@@ -84,7 +85,7 @@ describe('Lightning Round reveal: a reload lands on the current beat', () => {
     const state = regularReveal();
     at(state, 0);
     expect(paintPhone(state, 'a')).not.toContain('Next question');
-    at(state, STANDINGS_AT_MS + 500);
+    at(state, phone(state, 'a').nextAt! - state.phase.startedAt + 500);
     expect(paintPhone(state, 'a')).toContain('Next question');
   });
 
@@ -97,7 +98,7 @@ describe('Lightning Round reveal: a reload lands on the current beat', () => {
       phase: { ...state.phase, deadline: (state.phase.deadline ?? 0) + pauseMs },
     };
     expect(tv(resumed).revealAt).toBe(state.phase.startedAt + pauseMs);
-    at(resumed, pauseMs + STANDINGS_AT_MS + 500);
+    at(resumed, phone(resumed, 'a').nextAt! - resumed.phase.startedAt + 500);
     expect(paintPhone(resumed, 'a')).toContain('Next question');
     at(resumed, pauseMs + 100);
     expect(paintPhone(resumed, 'a')).not.toContain('Next question');

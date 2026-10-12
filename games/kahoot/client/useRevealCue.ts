@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { buzz, useServerNow, useSound } from '@partybox/game-sdk/ui';
 import type { LightningControllerView, LightningTvView } from '../server/views';
-import { FINAL_REVEAL_HOLD_MS, REVEAL_BEAT_MS, STANDINGS_AT_MS } from './timing';
+import { FINAL_REVEAL_HOLD_MS, REVEAL_BEAT_MS, standingsDelay } from './timing';
 
 export interface RevealCueClock {
   /** Stable across pause/resume; null outside the relevant reveal. */
@@ -33,12 +33,17 @@ export function useStandingsCue(view: LightningTvView): void {
   const play = useSound();
   useRevealCue(
     {
-      key: view.phaseId === 'reveal' && !view.round?.final ? (view.question?.id ?? null) : null,
+      key:
+        view.phaseId === 'reveal' &&
+        !view.round?.final &&
+        !(view.quizMode === 'classic' && view.round?.last)
+          ? (view.question?.id ?? null)
+          : null,
       revealAt: view.revealAt,
       paused: view.paused,
       clockHeldAt: view.clockHeldAt,
     },
-    STANDINGS_AT_MS,
+    standingsDelay(view.revealAt, view.leaderboardAt),
     () => play('tally'),
   );
 }

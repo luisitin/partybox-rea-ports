@@ -8,7 +8,7 @@ import type { QuestionView, RevealRow, RoundView } from '../server/views';
 import { roundLabel, topicLine, waitingText } from './labels';
 import { STRINGS } from './strings';
 import { rowBoxes, slideRows } from './flip';
-import { STANDINGS_AT_MS } from './timing';
+import { standingsDelay } from './timing';
 import { revealElapsed } from './reveal-clock';
 import styles from './Tv.module.css';
 
@@ -218,6 +218,7 @@ export function RevealRows({
   startedAt,
   paused = false,
   clockHeldAt,
+  leaderboardAt,
 }: {
   rows: RevealRow[];
   /** The reveal's start on the room's clock (`revealAt`): a TV that reloads mid-reveal lands on
@@ -225,6 +226,8 @@ export function RevealRows({
   startedAt?: number;
   paused?: boolean;
   clockHeldAt?: number;
+  /** Server-computed end of the reading-safe race, aligned with revealAt after a pause. */
+  leaderboardAt?: number;
 }): JSX.Element {
   const L = useT(STRINGS);
   const offset = useServerOffset();
@@ -234,8 +237,9 @@ export function RevealRows({
   // Read once at mount: the rows are keyed by the reveal (one mount per reveal).
   const [mountedAt] = useState(() => Date.now() + offset);
   const since = startedAt ?? mountedAt;
+  const standingsMs = standingsDelay(startedAt, leaderboardAt);
   const [standings, setStandings] = useState(
-    () => revealElapsed(since, offset, paused ? clockHeldAt : undefined) >= STANDINGS_AT_MS,
+    () => revealElapsed(since, offset, paused ? clockHeldAt : undefined) >= standingsMs,
   );
   const list = useRef<HTMLOListElement>(null);
   const before = useRef<Map<string, DOMRect> | null>(null);
@@ -245,14 +249,14 @@ export function RevealRows({
       before.current = rowBoxes(list.current);
       setStandings(true);
     };
-    const wait = STANDINGS_AT_MS - revealElapsed(since, offset);
+    const wait = standingsMs - revealElapsed(since, offset);
     if (wait <= 0) {
       settle();
       return;
     }
     const h = setTimeout(settle, wait);
     return () => clearTimeout(h);
-  }, [since, offset, paused, standings]);
+  }, [since, offset, paused, standings, standingsMs]);
   useLayoutEffect(() => {
     const from = before.current;
     before.current = null;

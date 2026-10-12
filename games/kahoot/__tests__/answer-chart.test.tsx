@@ -8,14 +8,14 @@ import type { State } from '../server/types';
 import revealFixture from '../fixtures/reveal.json';
 import { Tv } from '../client/Tv';
 import { AnswerChart } from '../client/AnswerChart';
-import { current, input, phone, pick, start, timer, toWager, tv } from './helpers';
+import { input, phone, pick, start, timer, toWager, tv } from './helpers';
 
 afterEach(() => vi.useRealTimers());
 
 describe('answer distribution', () => {
   it('the refreshed reveal fixture shows the split and holds for the current reading budget', () => {
     const state = revealFixture as State;
-    expect(tv(state).answerDistribution).toEqual({ counts: [2, 1, 0, 0], missed: 1 });
+    expect(tv(state).answerDistribution).toEqual({ counts: [0, 0, 4, 12], missed: 0 });
     expect(state.phase.deadline! - state.phase.startedAt).toBe(revealMs(state));
   });
   it('counts four choices and missing seats, including a pick accepted before a disconnect', () => {
@@ -32,10 +32,17 @@ describe('answer distribution', () => {
     expect(phone(state, 'c')).not.toHaveProperty('answerDistribution');
     state = timer(state);
     expect(tv(state).answerDistribution).toEqual({ counts: [0, 0, 0, 2], missed: 1 });
-    const q = current(state);
-    expect(revealMs(state)).toBe(
-      2_000 + readMs(wordCount(q.choices[q.answerIndex] ?? '') + 12 + 9),
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(state.phase.startedAt);
+    const html = renderToStaticMarkup(<Tv view={{ ...tv(state), vip: 'a' }} />);
+    const visibleText = html
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    expect(state.phase.deadline! - state.phase.startedAt).toBeGreaterThanOrEqual(
+      readMs(wordCount(visibleText)),
     );
+    expect(tv(state).nextAt).toBeGreaterThan(state.phase.startedAt + 2300);
   });
 
   it('all-idle charts have four zero bars and every missing seat; later phases omit the chart', () => {

@@ -145,16 +145,20 @@ export function Worth({
   worth,
   deadline,
   held = false,
+  paused = false,
+  clockHeldAt,
 }: {
   worth: NonNullable<LightningControllerView['worth']>;
   deadline: number | null;
   /** Locked in: the line is hidden but keeps its height. */
   held?: boolean;
+  paused?: boolean;
+  clockHeldAt?: number;
 }): JSX.Element | null {
   const L = useT(STRINGS);
   // The server's clock (the shell's offset), not this phone's: a phone a second off would promise
   // points the server does not give. Ten looks a second, like the branch.
-  const now = useServerNow(100);
+  const now = useServerNow(100, paused, clockHeldAt);
   // No deadline yet: the line holds its place, so the answers below never move when it arrives.
   if (deadline === null)
     return (

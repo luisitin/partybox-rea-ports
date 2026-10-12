@@ -17,7 +17,7 @@ import { resolve } from 'node:path';
 
 const job = import.meta.dirname;
 const media = resolve(job, 'media');
-const temp = mkdtempSync(resolve(tmpdir(), 'pb-quiz-rush-capture-'));
+const temp = mkdtempSync(resolve(tmpdir(), 'pb-kahoot-capture-'));
 const profile = resolve(temp, 'capture-profile');
 let port;
 const browserPath = [
@@ -70,13 +70,13 @@ class Devtools {
       }
     });
   }
-  call(method, params = {}) {
+  call(method, params = {}, timeoutMs = 30000) {
     return new Promise((resolveCall, reject) => {
       const id = this.nextId++;
       const timer = setTimeout(() => {
         this.pending.delete(id);
         reject(new Error(`DevTools timed out: ${method}`));
-      }, 30000);
+      }, timeoutMs);
       this.pending.set(id, {
         resolve: (result) => {
           clearTimeout(timer);
@@ -169,6 +169,7 @@ function measure() {
 
 let browser;
 let socket;
+let dev;
 let browserClosed = false;
 const metrics = [];
 try {
@@ -225,7 +226,7 @@ try {
     );
     socket.addEventListener('error', reject, { once: true });
   });
-  const dev = new Devtools(socket);
+  dev = new Devtools(socket);
   await dev.call('Page.enable');
   await dev.call('Runtime.enable');
   const { frameTree } = await dev.call('Page.getFrameTree');
@@ -285,6 +286,19 @@ try {
   console.error('Capture failed:', error);
   throw error;
 } finally {
+  if (dev) {
+    let closeTimeout;
+    try {
+      await Promise.race([
+        dev.call('Browser.close', {}, 1500),
+        new Promise((done) => (closeTimeout = setTimeout(done, 2000))),
+      ]);
+    } catch {
+      // Exact owned process-tree fallback also covers a closed/unresponsive CDP connection.
+    } finally {
+      clearTimeout(closeTimeout);
+    }
+  }
   socket?.close();
   if (browser?.pid) {
     const killer = spawn('taskkill.exe', ['/PID', String(browser.pid), '/T', '/F'], {
@@ -309,7 +323,7 @@ try {
         const timeout = setTimeout(() => {
           verifier.unref();
           done(null);
-        }, 5000);
+        }, 15000);
         verifier.once('exit', (code) => {
           clearTimeout(timeout);
           done(code);
@@ -321,8 +335,8 @@ try {
       })) === 0;
     browser.unref();
     if (!browserClosed)
-      console.warn(
-        `Owned browser PID ${browser.pid} has not reported exit; preserving its profile.`,
+      throw new Error(
+        `Owned browser PID ${browser.pid} closure is unverified; preserving its profile.`,
       );
     else console.log(`Owned browser PID ${browser.pid} is closed.`);
   }
@@ -341,8 +355,8 @@ try {
   }
   const osTemp = resolve(tmpdir());
   if (
-    !temp.startsWith(`${osTemp}\\pb-quiz-rush-capture-`) &&
-    !temp.startsWith(`${osTemp}/pb-quiz-rush-capture-`)
+    !temp.startsWith(`${osTemp}\\pb-kahoot-capture-`) &&
+    !temp.startsWith(`${osTemp}/pb-kahoot-capture-`)
   )
     throw new Error('Refusing cleanup outside owned OS capture temp.');
   if (browserClosed) {

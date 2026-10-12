@@ -10,6 +10,8 @@ import {
 import type { Category, Question } from '../content/schema';
 import questionsEsJson from '../content/questions.es.json' with { type: 'json' };
 import questionsJson from '../content/questions.json' with { type: 'json' };
+import { classicQuestionById, CLASSIC_PACKS } from './classic';
+import type { ClassicQuestion } from './classic';
 
 export type ContentLang = 'en' | 'es';
 
@@ -30,7 +32,12 @@ export function questionsOf(lang?: ContentLang): readonly Question[] {
   return lang === 'es' ? QUESTIONS_ES : QUESTIONS;
 }
 
-export function questionById(id: string, lang?: ContentLang): Question | undefined {
+export function questionById(
+  id: string,
+  lang?: ContentLang,
+): Question | ClassicQuestion | undefined {
+  const classic = classicQuestionById(id);
+  if (classic) return classic;
   const table = lang === 'es' ? BY_ID_ES : BY_ID;
   return Object.hasOwn(table, id) ? table[id] : undefined;
 }
@@ -62,11 +69,16 @@ export function questionsIn(
 
 /** Human label for a category id or `all` (the manifest's select labels, without importing it). */
 export function categoryLabel(category: string): string {
+  if (category.startsWith('classic-')) {
+    const pack = category.slice(8);
+    if (Object.hasOwn(CLASSIC_PACKS, pack))
+      return CLASSIC_PACKS[pack as keyof typeof CLASSIC_PACKS].name;
+  }
   return labelOf(category);
 }
 
 /** "Sports · Basketball, Soccer" — what the intro pill says the game draws from. */
 export function drawLabel(category: string, subcategories: readonly string[]): string {
-  const head = labelOf(category);
+  const head = categoryLabel(category);
   return subcategories.length === 0 ? head : `${head} · ${subcategories.map(labelOf).join(', ')}`;
 }

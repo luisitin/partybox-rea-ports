@@ -13,8 +13,11 @@ const players = [
 ];
 
 function at(index: number, phase: 'question' | 'reveal'): State {
-  const s = game.init({ players, settings: { questions: 5 }, seed: 1, now: 0 }) as State;
-  return { ...s, index, phase: { id: phase, startedAt: 0, deadline: 1000 } } as State;
+  let s = game.init({ players, settings: { questions: 5 }, seed: 1, now: 0 }) as State;
+  for (let now = 1; now < 20 && (s.index !== index || s.phase.id !== phase); now++)
+    s = game.reduce(s, { type: 'vip', action: 'skip', now }) as State;
+  if (s.index !== index || s.phase.id !== phase) throw new Error('requested quiz beat not reached');
+  return s;
 }
 
 describe('I-589: the standings Next button', () => {
@@ -22,6 +25,8 @@ describe('I-589: the standings Next button', () => {
     const tv = tvView(at(0, 'reveal'), 'kahoot');
     expect(tv.next).toBe('question');
     expect(tv.vipSkipHidden).toBe(true);
+    expect(tv.nextAt).toBe(tv.leaderboardAt);
+    expect(tv.nextAt).toBeGreaterThan(tv.revealAt! + 2300);
     expect(controllerView(at(0, 'reveal'), 'kahoot', 'a').next).toBe('question');
     // question 5 of 5 → the wager comes next
     expect(tvView(at(4, 'reveal'), 'kahoot').next).toBe('wager');
@@ -32,6 +37,7 @@ describe('I-589: the standings Next button', () => {
       const tv = tvView(s, 'kahoot');
       expect(tv.next).toBeUndefined();
       expect(tv.vipSkipHidden).toBeUndefined();
+      expect(tv).not.toHaveProperty('nextAt');
     }
   });
 

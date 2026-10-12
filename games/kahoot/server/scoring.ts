@@ -10,6 +10,8 @@ import {
   STREAK_STEP_POINTS,
   WAGER_PERCENTS,
   isFinalIndex,
+  answerWindowOf,
+  quizModeOf,
 } from './types';
 import type { PlayerStats, State, WagerPercent } from './types';
 
@@ -67,7 +69,7 @@ export function scoreCurrentQuestion(state: State): State {
     if (final) delta = correct ? wager : 0 - wager;
     else
       delta =
-        correct && pick ? questionPoints(pick.elapsedMs, state.settings.answerSeconds, streak) : 0;
+        correct && pick ? questionPoints(pick.elapsedMs, answerWindowOf(state) / 1000, streak) : 0;
     scores[id] = (scores[id] ?? 0) + delta;
     streaks[id] = streak;
     lastDelta[id] = delta;
@@ -116,6 +118,7 @@ export function results(state: State): GameResults | null {
   // Everyone scored along the way but the final wager took it all back: say so, rather than the
   // shell's "ended before anyone could" (b2 audit, T-0381).
   const lostAll =
+    quizModeOf(state) === 'wager' &&
     Object.values(state.scores).every((n) => n <= 0) &&
     Object.values(state.stats).some((st) => st.correct > 0);
   return lostAll ? { ...base, headlineNote: 'The final wager took everyone’s points' } : base;

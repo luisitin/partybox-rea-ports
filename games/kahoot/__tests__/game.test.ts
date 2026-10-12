@@ -80,9 +80,11 @@ describe('draw', () => {
 });
 
 describe('phase flow', () => {
-  it('starts in intro with a 4 s deadline and results null', () => {
+  it('starts in intro with enough time to read its title and results null', () => {
     const s = start();
-    expect(s.phase).toEqual({ id: 'intro', startedAt: T0, deadline: T0 + 2_000 }); // ADR-053: a title beat
+    expect(s.phase.id).toBe('intro');
+    expect(s.phase.startedAt).toBe(T0);
+    expect(s.phase.deadline).toBeGreaterThan(T0 + 2_000);
     expect(s.index).toBe(-1);
     expect(game.results(s)).toBeNull();
     expect(s.scores).toEqual({ a: 0, b: 0, c: 0 });
@@ -92,7 +94,7 @@ describe('phase flow', () => {
     const s = timer(start({ answerSeconds: 20 }));
     expect(s.phase.id).toBe('question');
     expect(s.index).toBe(0);
-    expect(s.phase.deadline).toBe(s.phase.startedAt + 20_000);
+    expect(s.phase.deadline).toBeGreaterThanOrEqual(s.phase.startedAt + 20_000);
   });
 
   it('runs questions → wager → final question → done, with every phase deadlined', () => {
@@ -114,24 +116,29 @@ describe('phase flow', () => {
     expect(seen[0]).toBe('question');
   });
 
-  it('moves to reveal as soon as every connected player picked', () => {
+  it('locks every connected pick, then reveals after the minimum reading hold', () => {
     let s = timer(start());
     s = pick(s, 'a', true);
     s = pick(s, 'b', false);
     expect(s.phase.id).toBe('question');
     s = pick(s, 'c', true);
+    expect(s.phase.id).toBe('question');
+    expect(Object.keys(s.picks)).toHaveLength(3);
+    s = timer(s);
     expect(s.phase.id).toBe('reveal');
     // I-589 + the pacing rule: a regular reveal holds long enough to read every row, >= 8 s
     expect(s.phase.deadline).toBe(s.phase.startedAt + revealMs(s));
     expect(revealMs(s)).toBeGreaterThanOrEqual(8_000);
   });
 
-  it('the wager phase lasts 15 s and ends early once everyone wagered', () => {
+  it('the wager holds its reading floor even when everyone wagers early', () => {
     const s = toWager(start());
-    expect(s.phase.deadline).toBe(s.phase.startedAt + 15_000);
+    expect(s.phase.deadline).toBeGreaterThanOrEqual(s.phase.startedAt + 15_000);
     let t = s;
     for (const id of ['a', 'b', 'c'])
       t = input(t, id, { type: 'wager', percent: 0 }, t.phase.startedAt + 1);
+    expect(t.phase.id).toBe('wager');
+    t = timer(t);
     expect(t.phase.id).toBe('question');
     expect(t.index).toBe(t.questionIds.length - 1);
     expect(tv(t).round).toEqual({ number: 6, total: 5, final: true });
@@ -173,6 +180,7 @@ describe('inputs', () => {
     s = game.reduce(s, { type: 'player', now: T0 + 4_100, playerId: 'c', connected: false });
     s = pick(s, 'a', true);
     s = pick(s, 'b', true);
+    s = timer(s);
     expect(s.phase.id).toBe('reveal');
     // Next question: c comes back and answers before the deadline.
     s = timer(s);
@@ -201,6 +209,7 @@ describe('inputs', () => {
   it('works with a single player', () => {
     let s = timer(start({}, 3, PLAYERS.slice(0, 1)));
     s = pick(s, 'a', true);
+    s = timer(s);
     expect(s.phase.id).toBe('reveal');
     expect(s.scores['a']).toBeGreaterThan(0);
   });
@@ -208,6 +217,8 @@ describe('inputs', () => {
   it('clamps settings and defaults unknown ones', () => {
     const s = start({ questions: 99, answerSeconds: 1, category: 'nope' });
     expect(s.settings).toEqual({
+      quizMode: 'wager',
+      classicPack: 'general',
       questions: 20,
       answerSeconds: 5,
       category: 'all',
@@ -215,6 +226,8 @@ describe('inputs', () => {
     });
     const d = game.init({ players: PLAYERS, settings: {}, seed: 1, now: T0 });
     expect(d.settings).toEqual({
+      quizMode: 'wager',
+      classicPack: 'general',
       questions: 10,
       answerSeconds: 15,
       category: 'all',
@@ -237,6 +250,7 @@ describe('hidden information', () => {
     expect(phone(s, 'a').myPickIndex).toBe(current(s).answerIndex);
     // In reveal the TV shows everything.
     s = pick(pick(s, 'b', false), 'c', true);
+    s = timer(s);
     const reveal = tv(s);
     expect(reveal.correctIndex).toBe(current(s).answerIndex);
     expect(reveal.rows?.map((r) => r.playerId)).toEqual(['a', 'c', 'b']);

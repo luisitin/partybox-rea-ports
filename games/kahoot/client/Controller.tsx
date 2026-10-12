@@ -4,16 +4,18 @@ import { useEffect, useState } from 'react';
 import type { JSX } from 'react';
 import {
   ChoiceGrid,
+  PhoneOnlyProvider,
   WaitingScreen,
   buzz,
   useMediaQuery,
+  usePhoneOnly,
   useSecondsLeft,
   useT,
 } from '@partybox/game-sdk/ui';
 import type { GameControllerProps, Translator } from '@partybox/game-sdk/ui';
 import type { LightningControllerView } from '../server/index';
 import type { Input } from '../server/types';
-import { Outcome, RoomRows, Stake, Worth, wagerLabel } from './ControllerBits';
+import { Outcome, Stake, Worth, wagerLabel } from './ControllerBits';
 import { CustomStake } from './CustomStake';
 import { useCustomWager } from './useCustomWager';
 import { PhoneNext } from './NextStep';
@@ -25,6 +27,27 @@ import { finalBetLine } from './final-bet';
 import { STRINGS } from './strings';
 import { FINAL_REVEAL_HOLD_MS, REVEAL_BEAT_MS } from './timing';
 import { ContentLang } from '@partybox/game-sdk/ui';
+import { ClassicController } from './ClassicController';
+import { WagerStage } from './WagerStage';
+import { WagerRevealStage } from './WagerRevealStage';
+
+export function Controller(
+  props: GameControllerProps<LightningControllerView, Input>,
+): JSX.Element {
+  const phoneOnly = usePhoneOnly();
+  if (props.view.quizMode === 'classic') return <ClassicController {...props} />;
+  if (
+    !props.view.participating ||
+    ((props.view.showStage || phoneOnly) &&
+      (props.view.phaseId === 'intro' || props.view.phaseId === 'done'))
+  )
+    return <WagerStage view={props.view} />;
+  return (
+    <PhoneOnlyProvider value={props.view.phoneOnly === true || props.view.showStage || phoneOnly}>
+      <WagerController {...props} />
+    </PhoneOnlyProvider>
+  );
+}
 
 function roundKicker(view: LightningControllerView, L: Translator): string {
   const where = roundLabel(view.round, L);
@@ -39,11 +62,14 @@ function lockedLine(spare: number, phoneOnly: boolean, L: Translator): string {
     : L('✓ Locked in with {seconds} s to spare — look at the TV', { seconds: spare });
 }
 
-export function Controller({
-  view,
+function WagerController({
+  view: rawView,
   send,
   skip,
 }: GameControllerProps<LightningControllerView, Input>): JSX.Element {
+  const phoneOnly = usePhoneOnly();
+  const view = { ...rawView, phoneOnly: rawView.phoneOnly || rawView.showStage || phoneOnly };
+  const connected = view.players.find((seat) => seat.id === view.me.id)?.connected !== false;
   const L = useT(STRINGS);
   const { phaseId } = view;
   // The streak carried into the question: `myStreak` is already reset in the reveal view.
@@ -51,7 +77,7 @@ export function Controller({
   const custom = useCustomWager(view);
   // Speed is the point: remember the header's seconds-left at the tap so the locked line can say
   // how fast the pick was (same rounded number the shell prints, so hint and header agree).
-  const secondsLeft = useSecondsLeft(view.deadline, view.paused);
+  const secondsLeft = useSecondsLeft(view.deadline, view.paused, 250, view.clockHeldAt);
   // The final: four long answers, a long question and a two-line bet footer do not fit most
   // phones (record-review p04 on an SE, p05 on a 659-px iPhone page: D under the fold
   // mid-question). Below 760 px the bet is in the kicker only ("… · you bet 1822") and the final
@@ -87,6 +113,8 @@ export function Controller({
   useEffect(() => {
     if (buzzedQ !== null) buzz(40);
   }, [buzzedQ]);
+  if (phaseId === 'reveal' && view.phoneOnly)
+    return <WagerRevealStage view={view} skip={skip} streakBefore={streakBefore} />;
   if (view.me.role === 'spectator') {
     return (
       <WaitingScreen
@@ -154,20 +182,26 @@ export function Controller({
         correctId={
           revealed && shown && view.correctIndex !== undefined ? String(view.correctIndex) : null
         }
-        disabled={revealed}
+        disabled={revealed || view.paused || !connected}
         lockedHint={lockedHint}
         // I-288 B: while it's open, what a right answer is worth now
         prompt={
           <>
             {view.question.text}
             {/* [196a9e]: an ES phone is told the question and answers are English */}
-            <ContentLang content={view.contentLang} className={styles.englishNote} />
+            <ContentLang content={view.questionLang} className={styles.englishNote} />
             {/* I-789 B: after the tap the line keeps its space — locking in moves nothing;
                 I-790 C: the reveal band takes its place. The reveal view has no worth, so the
                 space is held by hand until the band lands (it went a beat early and the answers
                 jumped up under the verdict; record-review p01). */}
             {view.worth && !revealed ? (
-              <Worth worth={view.worth} deadline={view.deadline} held={locked} />
+              <Worth
+                worth={view.worth}
+                deadline={view.deadline}
+                held={locked}
+                paused={view.paused}
+                clockHeldAt={view.clockHeldAt}
+              />
             ) : revealed && !shown && !finalQ ? (
               <span className={`${styles.worth} ${styles.worthHeld}`} aria-hidden>
                 &nbsp;
@@ -187,10 +221,6 @@ export function Controller({
             </div>
           ) : undefined
         }
-        // A "phone only" room: the TV's rows, on the phone under the answers (the owner).
-        after={
-          revealed && shown && view.phoneOnly && view.rows ? <RoomRows rows={view.rows} /> : null
-        }
         onPick={(id) => {
           if (secondsLeft !== null) setLockedAt({ questionId, seconds: secondsLeft });
           send({ type: 'pick', index: Number(id) });
@@ -205,6 +235,8 @@ export function Controller({
               revealAt={view.revealAt}
               paused={view.paused}
               clockHeldAt={view.clockHeldAt}
+              leaderboardAt={view.leaderboardAt}
+              nextAt={view.nextAt}
             />
           ) : revealed && finalQ && roomy ? (
             // Stays past the verdict (the final has no Next): the answers never jump when the
@@ -267,7 +299,7 @@ export function Controller({
           label: wagerLabel(o, L),
         }))}
         selectedId={selected ? String(selected.percent) : null}
-        disabled={customPlaced !== null || custom.pending}
+        disabled={customPlaced !== null || custom.pending || view.paused || !connected}
         onPick={(id) => {
           const option = options.find((o) => String(o.percent) === id);
           if (option) send({ type: 'wager', percent: option.percent });
@@ -277,7 +309,7 @@ export function Controller({
             <CustomStake
               score={view.myScore}
               placed={customPlaced}
-              disabled={selected !== null}
+              disabled={selected !== null || view.paused || !connected}
               pending={custom.pending}
               failed={custom.failed}
               onPlace={(amount) => {

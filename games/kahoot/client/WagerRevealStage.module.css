@@ -1,0 +1,88 @@
+/* The remote reveal has one public focal beat and one compact personal receipt. */
+.screen {
+  flex: 1;
+  min-height: 0;
+}
+.screen > div:first-of-type {
+  gap: var(--pb-space-2);
+}
+.heading {
+  margin: 0;
+  text-align: center;
+  font-size: var(--pb-font-h2);
+  line-height: 1.2;
+}
+.prompt {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.answer {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.language,
+.status,
+.legend {
+  margin: 0;
+  font-size: var(--pb-font-caption);
+  line-height: 1.2;
+}
+.status {
+  text-align: center;
+}
+.chart > ol {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 2fr);
+  font-size: var(--pb-font-body);
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+}
+.chart > ol > li > span:first-child {
+  gap: var(--pb-space-1);
+  flex-wrap: wrap;
+}
+.chart > ol > li > span:first-child > span {
+  white-space: normal;
+  text-align: center;
+}
+.chart > ol > li:last-child > span:last-child {
+  width: 100%;
+}
+.standings > ol {
+  gap: var(--pb-space-1);
+}
+.standings li {
+  font-size: var(--pb-font-caption);
+  padding: var(--pb-space-1);
+  gap: var(--pb-space-1);
+}
+.results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--pb-space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.results li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-1);
+  min-width: 0;
+  padding: var(--pb-space-1);
+  border-radius: calc(var(--pb-radius) / 2);
+  background: var(--pb-surface);
+  font-size: var(--pb-font-caption);
+  line-height: 1.15;
+}
+.results b {
+  overflow-wrap: anywhere;
+}
+.results span {
+  font-variant-numeric: tabular-nums;
+}
+.results li[data-me='true'] {
+  outline: calc(var(--pb-space-1) / 2) solid var(--pb-accent-2);
+}

@@ -426,6 +426,11 @@
   --pb-final-step: 0ms;
 }
 
+.pausedFinal,
+.pausedFinal * {
+  animation-play-state: paused !important;
+}
+
 .rowFinal {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;

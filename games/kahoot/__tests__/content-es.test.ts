@@ -89,6 +89,7 @@ describe('a Spanish game (ADR-054)', () => {
     s = pick(s, 'b', false);
     expect(s.picks['a']?.index).toBe(q.answerIndex);
     s = pick(s, 'c', true);
+    if (s.phase.id === 'question') s = timer(s);
     expect(s.phase.id).toBe('reveal');
     expect(s.scores['a']).toBeGreaterThan(0);
     expect(s.scores['b']).toBe(0);

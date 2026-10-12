@@ -15,6 +15,11 @@ export const REVEAL_BEAT_MS = 300;
  */
 export const FINAL_REVEAL_HOLD_MS = 1200;
 
+/** Public final rows wait until the TV's stagger and totals beat have finished. */
+export function finalTotalsDelay(players: number): number {
+  return FINAL_REVEAL_HOLD_MS + Math.min(1500, Math.max(0, players - 1) * 300) + 600;
+}
+
 /**
  * I-589 B: a regular reveal shows the race (right answers fastest first, with times) this long,
  * then re-deals into the standings; the Next button (the owner's note) arrives with the standings.
@@ -27,3 +32,10 @@ export const RACE_MS = 2000;
  * rows slide to their new places at this moment, and the Next button arrives with them.
  */
 export const STANDINGS_AT_MS = REVEAL_BEAT_MS + RACE_MS;
+
+/** New snapshots name the absolute reading-safe beat; legacy fixtures keep their authored beat. */
+export function standingsDelay(revealAt?: number, leaderboardAt?: number): number {
+  return revealAt === undefined || leaderboardAt === undefined
+    ? STANDINGS_AT_MS
+    : Math.max(0, leaderboardAt - revealAt);
+}

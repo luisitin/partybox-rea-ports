@@ -12,11 +12,18 @@ export const tv: GameTvModule = {
   // round's question is on screen the moment it starts, not a beat later.
   irisInto: ['reveal'],
   // The final-wager board stays on the results stage until someone presses Play again / Home.
-  finale: (view) => view.phaseId === 'reveal' && Boolean((view as LightningTvView).round?.final),
+  finale: (view) =>
+    (view as unknown as LightningTvView).quizMode !== 'classic' &&
+    view.phaseId === 'reveal' &&
+    Boolean((view as unknown as LightningTvView).round?.final),
   Finale: lazyFinale(() => import('./Finale').then((m) => m.Finale)),
   // I-007 B: while a question (or the wager) is open, whoever has not locked in is ringed.
   stripActive: (view) =>
-    view.phaseId === 'question' || view.phaseId === 'wager'
+    (view as unknown as LightningTvView).quizMode !== 'classic' &&
+    (view.phaseId === 'question' || view.phaseId === 'wager')
       ? view.players.filter((p) => p.status === 'active' && p.connected).map((p) => p.id)
       : [],
+  // Classic podium totals only enter the payload as their occupied tier is revealed.
+  stripScores: (view) =>
+    (view as unknown as LightningTvView).quizMode !== 'classic' || view.phaseId === 'done',
 };

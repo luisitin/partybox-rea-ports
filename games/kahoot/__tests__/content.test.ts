@@ -107,7 +107,7 @@ describe('manifest', () => {
     expect(setting.options).toEqual(expected);
   });
 
-  it('declares the five phases in order', () => {
-    expect(game.phases).toEqual(['intro', 'question', 'reveal', 'wager', 'done']);
+  it('declares the shared phases, including the classic podium', () => {
+    expect(game.phases).toEqual(['intro', 'question', 'reveal', 'wager', 'podium', 'done']);
   });
 });

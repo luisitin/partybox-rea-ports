@@ -1,6 +1,7 @@
 // Content pack schema for Lightning Round. `packs` maps content/<name>.json → its zod schema; the
 // contract suite validates every pack with it and server/content.ts parses it at import time.
 import { z } from '@partybox/game-sdk';
+import { classicKnowledgeSchema, classicPackSchema } from './classic-schema';
 
 /** Every category in the pack, in the order the settings `select` lists them. */
 export const CATEGORIES = [
@@ -192,6 +193,10 @@ export const originsSchema = z.union([
 ]);
 
 export const packs = {
+  'classic-general': classicPackSchema,
+  'classic-movies': classicPackSchema,
+  'classic-science': classicPackSchema,
+  'classic-knowledge': classicKnowledgeSchema,
   'content-pack-origins': originsSchema,
   questions: questionsPackSchema,
   'questions.es': questionsEsPackSchema,

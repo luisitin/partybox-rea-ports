@@ -12,12 +12,16 @@ import { useT, VipNext } from '@partybox/game-sdk/ui';
 import type { Translator } from '@partybox/game-sdk/ui';
 import type { RevealNext } from '../server/views';
 import { STRINGS } from './strings';
-import { STANDINGS_AT_MS } from './timing';
+import { standingsDelay } from './timing';
 import { useRevealBeat } from './reveal-clock';
 import styles from './NextStep.module.css';
 
 function nextLabel(next: RevealNext, L: Translator): string {
-  return next === 'wager' ? L('On to the wager') : L('Next question');
+  return next === 'wager'
+    ? L('On to the wager')
+    : next === 'podium'
+      ? L('Show podium')
+      : L('Next question');
 }
 
 /** True once the standings are up: STANDINGS_AT_MS after the reveal began on the room's clock
@@ -27,8 +31,9 @@ export function useStandingsUp(
   revealAt: number | undefined,
   paused = false,
   clockHeldAt?: number,
+  leaderboardAt?: number,
 ): boolean {
-  return useRevealBeat(key, revealAt, STANDINGS_AT_MS, paused, clockHeldAt);
+  return useRevealBeat(key, revealAt, standingsDelay(revealAt, leaderboardAt), paused, clockHeldAt);
 }
 
 /** The TV stage's Next: a hint that says whose phone moves the room on (review 6c24ba (4): the
@@ -72,6 +77,8 @@ export function PhoneNext({
   revealAt,
   paused,
   clockHeldAt,
+  leaderboardAt,
+  nextAt,
 }: {
   next: RevealNext | undefined;
   skip: (() => void) | undefined;
@@ -79,9 +86,11 @@ export function PhoneNext({
   revealAt: number | undefined;
   paused?: boolean;
   clockHeldAt?: number;
+  leaderboardAt?: number;
+  nextAt?: number;
 }): JSX.Element | null {
   const L = useT(STRINGS);
-  const up = useStandingsUp(phaseKey, revealAt, paused, clockHeldAt);
+  const up = useStandingsUp(phaseKey, revealAt, paused, clockHeldAt, nextAt ?? leaderboardAt);
   if (!next || !skip || !up) return null;
   return <VipNext tone="neutral" skip={skip} label={nextLabel(next, L)} />;
 }

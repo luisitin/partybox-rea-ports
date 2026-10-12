@@ -8,7 +8,22 @@ import { phone, pick, start, timer, toWager, tv, vip, wager } from './helpers';
 afterEach(() => vi.useRealTimers());
 
 function finalReveal() {
-  let state = toWager(start(), { a: true, b: true, c: true });
+  // The SDK's shared initial SSR clock is real wall time. Keep simulated rooms after that
+  // snapshot so an initial reveal is not mistaken for an already-finished late reload.
+  const initial = start();
+  const at = 2_000_000_000_000;
+  const shifted = {
+    ...initial,
+    phase: {
+      ...initial.phase,
+      startedAt: at,
+      deadline:
+        initial.phase.deadline === null
+          ? null
+          : initial.phase.deadline + at - initial.phase.startedAt,
+    },
+  };
+  let state = toWager(shifted, { a: true, b: true, c: true });
   for (const id of ['a', 'b', 'c']) state = wager(state, id, 50);
   if (state.phase.id === 'wager') state = timer(state);
   state = pick(state, 'a', true);

@@ -51,7 +51,7 @@ describe('VIP skip', () => {
 
   it('skip in done is a no-op', () => {
     let s = start();
-    while (game.results(s) === null) s = vip(s, 'skip');
+    for (let step = 0; step < 100 && game.results(s) === null; step++) s = vip(s, 'skip');
     expect(s.phase.id).toBe('done');
     expect(vip(s, 'skip')).toEqual(s);
   });
@@ -77,6 +77,8 @@ describe('VIP end and pause', () => {
       expect(s.phase.id).toBe(phase);
       expect(s.phase.paused).toBeDefined();
       s = vip(s, 'resume', pausedAt + 10_000);
+      expect(s.phase.paused).toBeUndefined();
+      if (s.phase.id === phase) s = timer(s);
       expect(s.phase.id).toBe(phase === 'question' ? 'reveal' : 'question');
     },
   );
@@ -89,7 +91,10 @@ describe('VIP end and pause', () => {
     s = game.reduce(s, { type: 'player', playerId: 'c', connected: true, now: pausedAt + 9_000 });
     s = vip(s, 'resume', pausedAt + 10_000);
     expect(s.phase.id).toBe('question');
-    expect(pick(s, 'c', true, 13_000).phase.id).toBe('reveal');
+    s = pick(s, 'c', true, 13_000);
+    expect(s.picks['c']).toBeDefined();
+    if (s.phase.id === 'question') s = timer(s);
+    expect(s.phase.id).toBe('reveal');
   });
 
   it('end → done from any phase with the scores so far', () => {
@@ -97,6 +102,7 @@ describe('VIP end and pause', () => {
     s = pick(s, 'a', true);
     s = pick(s, 'b', true);
     s = pick(s, 'c', true); // reveal, scored
+    if (s.phase.id === 'question') s = timer(s);
     const scores = { ...s.scores };
     s = timer(s); // next question
     s = pick(s, 'a', true); // not yet revealed → not counted

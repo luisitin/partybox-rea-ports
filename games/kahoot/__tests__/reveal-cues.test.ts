@@ -124,7 +124,7 @@ describe('donor reveal cues', () => {
     expect(runtime.buzz).toHaveBeenCalledExactlyOnceWith(120);
   });
 
-  it('standings tally at 2300 ms, once, and the wager finale keeps its own cues', () => {
+  it('legacy snapshots tally at 2300 ms, once, and the wager finale keeps its own cues', () => {
     useStandingsCue(television());
     runtime.now += 2_299;
     useStandingsCue(television());
@@ -139,6 +139,49 @@ describe('donor reveal cues', () => {
     useStandingsCue(television({ round: { final: true } }));
     runtime.now += 3_000;
     useStandingsCue(television({ round: { final: true } }));
+    expect(runtime.play).not.toHaveBeenCalled();
+  });
+
+  it('new snapshots tally at their reading-safe scoreboard beat rather than the legacy beat', () => {
+    const view = television({ leaderboardAt: 18_000, nextAt: 18_000 });
+    useStandingsCue(view);
+    runtime.now = 12_300;
+    useStandingsCue(view);
+    runtime.now = 17_999;
+    useStandingsCue(view);
+    expect(runtime.play).not.toHaveBeenCalled();
+    runtime.now = 18_000;
+    useStandingsCue(view);
+    useStandingsCue(view);
+    expect(runtime.play).toHaveBeenCalledExactlyOnceWith('tally');
+  });
+
+  it('pause shifts a reading-safe scoreboard cue and cannot replay its tally', () => {
+    const view = television({ leaderboardAt: 18_000, nextAt: 18_000 });
+    useStandingsCue(view);
+    runtime.now = 77_999;
+    useStandingsCue({ ...view, paused: true, clockHeldAt: 17_999 });
+    expect(runtime.play).not.toHaveBeenCalled();
+    const resumed = { ...view, revealAt: 70_000, leaderboardAt: 78_000, nextAt: 78_000 };
+    useStandingsCue(resumed);
+    expect(runtime.play).not.toHaveBeenCalled();
+    runtime.now = 78_000;
+    useStandingsCue(resumed);
+    expect(runtime.play).toHaveBeenCalledExactlyOnceWith('tally');
+    runtime.now = 138_000;
+    useStandingsCue({ ...resumed, revealAt: 130_000, leaderboardAt: 138_000, nextAt: 138_000 });
+    expect(runtime.play).toHaveBeenCalledTimes(1);
+  });
+
+  it('the last classic chart has a Next beat without a scoreboard tally', () => {
+    const view = television({
+      quizMode: 'classic',
+      round: { final: false, last: true },
+      nextAt: 18_000,
+    });
+    useStandingsCue(view);
+    runtime.now = 18_000;
+    useStandingsCue(view);
     expect(runtime.play).not.toHaveBeenCalled();
   });
 

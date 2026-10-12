@@ -3,8 +3,9 @@
 // and stays quiet otherwise. Randomness comes from the given rng.
 import type { BotSkill, Rng } from '@partybox/game-sdk';
 import { questionById } from './content';
+import { CLASSIC_KNOWLEDGE } from './classic';
 import { wagerOptions } from './scoring';
-import { isPlayer } from './types';
+import { isParticipating, quizModeOf } from './types';
 import type { Input, State } from './types';
 
 /** How often a bot knows the answer, by the room's bot skill (normal: the harnesses' half). */
@@ -21,9 +22,31 @@ export function sampleInput(
   rng: Rng,
   skill: BotSkill = 'normal',
 ): Input | null {
-  if (!isPlayer(state, playerId)) return null;
+  if (
+    !isParticipating(state, playerId) ||
+    !state.players[playerId]?.connected ||
+    state.phase.paused
+  )
+    return null;
   if (state.phase.id === 'question' && !Object.hasOwn(state.picks, playerId)) {
     const question = questionById(state.questionIds[state.index] ?? '', state.contentLang);
+    if (quizModeOf(state) === 'classic') {
+      if (!question) return null;
+      const fact = Object.hasOwn(CLASSIC_KNOWLEDGE, question.id)
+        ? CLASSIC_KNOWLEDGE[question.id]
+        : undefined;
+      const known = fact === undefined ? -1 : question.choices.indexOf(fact);
+      const index =
+        known >= 0 && rng.chance(BOT_CORRECT_PROBABILITY[skill])
+          ? known
+          : rng.pick(known >= 0 ? CHOICE_INDICES.filter((i) => i !== known) : CHOICE_INDICES);
+      return {
+        type: 'answer',
+        index,
+        questionId: question.id,
+        questionStartedAt: state.phase.startedAt,
+      };
+    }
     if (!question) return { type: 'pick', index: rng.pick(CHOICE_INDICES) };
     if (rng.chance(BOT_CORRECT_PROBABILITY[skill]))
       return { type: 'pick', index: question.answerIndex };

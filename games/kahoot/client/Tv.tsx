@@ -12,6 +12,11 @@ import { AnswerCard, RevealRows, RoundHeader, TvQuestion } from './TvQuestion';
 import { AnswerChart } from './AnswerChart';
 import { useStandingsCue } from './useRevealCue';
 import styles from './Tv.module.css';
+import { ClassicTv } from './ClassicTv';
+
+export function Tv(props: GameTvProps<LightningTvView>): JSX.Element {
+  return props.view.quizMode === 'classic' ? <ClassicTv {...props} /> : <WagerTv {...props} />;
+}
 
 /** Inline bolt (precedent: game-sdk Avatar), currentColor so every theme's accent-2 paints it. */
 function Bolt(): JSX.Element {
@@ -34,7 +39,7 @@ function withTopic(text: string, topic: ReactNode): JSX.Element {
   );
 }
 
-export function Tv({ view, skip }: GameTvProps<LightningTvView>): JSX.Element {
+function WagerTv({ view, skip }: GameTvProps<LightningTvView>): JSX.Element {
   const L = useT(STRINGS);
   const standings = view.standings ?? [];
   useStandingsCue(view);
@@ -43,6 +48,7 @@ export function Tv({ view, skip }: GameTvProps<LightningTvView>): JSX.Element {
     view.revealAt,
     view.paused,
     view.clockHeldAt,
+    view.leaderboardAt,
   ); // I-589
   if (view.phaseId === 'intro') {
     // ADR-053: a 2 s title beat after the shell's stage (which showed the rules): bolt + title
@@ -90,6 +96,8 @@ export function Tv({ view, skip }: GameTvProps<LightningTvView>): JSX.Element {
                 correctIndex={view.correctIndex}
                 rows={view.rows ?? []}
                 startedAt={view.revealAt}
+                paused={view.paused}
+                clockHeldAt={view.clockHeldAt}
               />
             </div>
           </div>
@@ -130,6 +138,7 @@ export function Tv({ view, skip }: GameTvProps<LightningTvView>): JSX.Element {
           startedAt={view.revealAt}
           paused={view.paused}
           clockHeldAt={view.clockHeldAt}
+          leaderboardAt={view.leaderboardAt}
         />
       </Stage>
     );

@@ -16,21 +16,21 @@ Classic bots use a separate learned-answer-text map; no question library is down
 
 ## Modes
 
-| Mode | Questions | Ending | Phone beside a visible TV |
-| --- | --- | --- | --- |
-| `wager` | Requested regular count plus one hardest-available final | Bet, final reveal, results | Prompt and four labelled choices |
+| Mode      | Questions                                                          | Ending                                     | Phone beside a visible TV                                         |
+| --------- | ------------------------------------------------------------------ | ------------------------------------------ | ----------------------------------------------------------------- |
+| `wager`   | Requested regular count plus one hardest-available final           | Bet, final reveal, results                 | Prompt and four labelled choices                                  |
 | `classic` | Exactly the requested count from one authored pack; no extra final | Last chart, occupied podium tiers, results | Triangle, diamond, circle and square pads; no prompt/options text |
 
 ## Phases
 
-| Phase | TV | Phone | Exit |
-| --- | --- | --- | --- |
-| `intro` | Title and selected pack/topics | First-question notice | Reading budget; wager also has a 2 s minimum |
-| `question` | Prompt, four choices, clock and connected lock count | Mode's answer pad; one accepted choice locks | All connected participants answered after the reading hold, answer deadline, or VIP skip |
-| `reveal` | Classic: answer-count chart, explanation, then standings except on last question. Wager: chart and fastest-correct race, then standings; final shows bets/verdicts/totals | Correct/wrong/too slow, delta and total; classic separates speed and streak points and shows rank before the last question | Reading budgets, or VIP Next/skip; classic last → podium; wager last regular → wager; wager final → done |
-| `wager` | Final topic/difficulty, placed count and standings; no wager amounts | Preset shares or custom percent/points; personal bet receipt | All connected bets after the reading hold, max(15 s, reading budget), or VIP skip |
-| `podium` | Classic only: occupied ranks descending 3 → 2 → 1 | Public tiers on staged phones; otherwise reveal notice and personal rank once unveiled | Each tier's reading budget or VIP skip; empty tiers skipped, then done |
-| `done` | Complete final standings and shell results | Personal rank/score; staged phones also show standings | Terminal; `results()` is non-null |
+| Phase      | TV                                                                                                                                                                        | Phone                                                                                                                      | Exit                                                                                                     |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `intro`    | Title and selected pack/topics                                                                                                                                            | First-question notice                                                                                                      | Reading budget; wager also has a 2 s minimum                                                             |
+| `question` | Prompt, four choices, clock and connected lock count                                                                                                                      | Mode's answer pad; one accepted choice locks                                                                               | All connected participants answered after the reading hold, answer deadline, or VIP skip                 |
+| `reveal`   | Classic: answer-count chart, explanation, then standings except on last question. Wager: chart and fastest-correct race, then standings; final shows bets/verdicts/totals | Correct/wrong/too slow, delta and total; classic separates speed and streak points and shows rank before the last question | Reading budgets, or VIP Next/skip; classic last → podium; wager last regular → wager; wager final → done |
+| `wager`    | Final topic/difficulty, placed count and standings; no wager amounts                                                                                                      | Preset shares or custom percent/points; personal bet receipt                                                               | All connected bets after the reading hold, max(15 s, reading budget), or VIP skip                        |
+| `podium`   | Classic only: occupied ranks descending 3 → 2 → 1                                                                                                                         | Public tiers on staged phones; otherwise reveal notice and personal rank once unveiled                                     | Each tier's reading budget or VIP skip; empty tiers skipped, then done                                   |
+| `done`     | Complete final standings and shell results                                                                                                                                | Personal rank/score; staged phones also show standings                                                                     | Terminal; `results()` is non-null                                                                        |
 
 Classic's last reveal omits public final rows/standings and roster scores. Podium payloads contain
 only already unveiled top-three tiers; full standings return at `done`. Equal scores share competition
@@ -41,12 +41,12 @@ ranks, including podium ties. Phones retain their own total; they do not receive
 `ctx.presence.phoneOnly` is captured at init; `canSeeTv: false` also gives that player the stage.
 Clients honour the SDK `usePhoneOnly` context. Staged players never receive “look at the TV” instructions.
 
-| Beat | Phone-only/remote player | Spectator or permanently departed player |
-| --- | --- | --- |
-| Intro/question | Title notice; complete prompt/options and controls | Public title/question/options, without controls |
-| Reveal | Personal receipt; classic chart/standings; wager per-player rows | Public chart, rows/standings and explanations as appropriate |
-| Wager | Stakes controls and topic; missing bet defaults to zero | Topic, rules and standings; no stakes controls |
-| Podium/done | Unveiled tiers, then full board; personal rank/score | Same public stage, without personal controls |
+| Beat           | Phone-only/remote player                                         | Spectator or permanently departed player                     |
+| -------------- | ---------------------------------------------------------------- | ------------------------------------------------------------ |
+| Intro/question | Title notice; complete prompt/options and controls               | Public title/question/options, without controls              |
+| Reveal         | Personal receipt; classic chart/standings; wager per-player rows | Public chart, rows/standings and explanations as appropriate |
+| Wager          | Stakes controls and topic; missing bet defaults to zero          | Topic, rules and standings; no stakes controls               |
+| Podium/done    | Unveiled tiers, then full board; personal rank/score             | Same public stage, without personal controls                 |
 
 ## Inputs
 
@@ -96,7 +96,8 @@ the shared reveal beat. Token-based shapes, marks and words accompany colour; re
 plus comma-joined `subcategories` (empty = all topics; out-of-category topics discarded).
 Classic always uses English questions (`questionLang: en`), independently of host `contentLang`.
 Wager retains EN/ES content selection. The inherited 100 s minigame sets wager, four regular questions
-and a 5 s requested answer minimum; reading budgets still apply. Manifest estimate: 8 minutes.
+and a 5 s requested answer minimum; reading budgets still apply. Manifest estimate: 26 minutes;
+the adjustable estimate grows with question and player counts. Small classic matches are faster.
 
 ## Content
 

@@ -33,5 +33,8 @@ export const contractConfig = {
     { questions: 5, answerSeconds: 5 },
     { category: 'stem' },
     { category: 'sports', subcategories: 'basketball,soccer' },
+    { quizMode: 'classic', classicPack: 'general', questions: 5, answerSeconds: 5 },
+    { quizMode: 'classic', classicPack: 'movies', questions: 20, answerSeconds: 15 },
+    { quizMode: 'classic', classicPack: 'science', questions: 10, answerSeconds: 30 },
   ],
 };

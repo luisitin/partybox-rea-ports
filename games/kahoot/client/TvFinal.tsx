@@ -7,9 +7,9 @@ import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties, JSX } from 'react';
 import {
   Avatar,
+  beatAt,
   useReducedMotion,
-  useServerBeats,
-  useServerOffset,
+  useServerNow,
   useSound,
   useT,
 } from '@partybox/game-sdk/ui';
@@ -18,9 +18,10 @@ import { topicLine } from './labels';
 import { STRINGS } from './strings';
 import { AnswerCard, deltaText, rowsClass, verdictOf } from './TvQuestion';
 import styles from './Tv.module.css';
+import { FINAL_REVEAL_HOLD_MS, finalTotalsDelay } from './timing';
 
 const T_ANSWER_MS = 900;
-const T_VERDICT_MS = 1200;
+const T_VERDICT_MS = FINAL_REVEAL_HOLD_MS;
 const T_TOTALS_GAP_MS = 600;
 const STEP_MAX_MS = 300;
 const STEP_SPAN_MS = 1500;
@@ -41,6 +42,8 @@ export function FinalReveal({
   rows: unsorted,
   settled = false,
   startedAt,
+  paused = false,
+  clockHeldAt,
 }: {
   question: QuestionView;
   correctIndex: number;
@@ -49,19 +52,21 @@ export function FinalReveal({
   settled?: boolean;
   /** Public room clock; standalone previews without it still start from mount. */
   startedAt?: number;
+  paused?: boolean;
+  clockHeldAt?: number;
 }): JSX.Element {
   const L = useT(STRINGS);
   const rows = [...unsorted].sort(byWager);
   const n = rows.length;
   const stepMs = n > 1 ? Math.min(STEP_MAX_MS, STEP_SPAN_MS / (n - 1)) : 0;
-  const lastMs = T_VERDICT_MS + stepMs * (n - 1);
+  const lastMs = finalTotalsDelay(n) - T_TOTALS_GAP_MS;
   // The schedule is fixed for this mount: the row count cannot change inside one reveal.
-  const offset = useServerOffset();
-  const [mountedAt] = useState(() => Date.now() + offset);
+  const now = useServerNow(100, paused, clockHeldAt);
+  const [mountedAt] = useState(() => now);
   const since = startedAt ?? mountedAt;
   const elapsed = Math.max(0, mountedAt - since);
   const reduced = useReducedMotion();
-  const beats = useServerBeats(since, [
+  const beats = beatAt(Math.max(0, now - since), [
     0,
     T_ANSWER_MS,
     T_VERDICT_MS,
@@ -83,10 +88,10 @@ export function FinalReveal({
   const jackpot = rows.some((r) => r.delta > 0);
   const cued = useRef(settled || elapsed >= lastMs);
   useEffect(() => {
-    if (beat < 3 || cued.current) return;
+    if (paused || beat < 3 || cued.current) return;
     cued.current = true;
     play(jackpot ? 'jackpot' : 'bust');
-  }, [beat, jackpot, play]);
+  }, [beat, jackpot, paused, play]);
 
   const top = Math.max(0, ...rows.map((r) => r.score));
   const listStyle = {
@@ -116,7 +121,7 @@ export function FinalReveal({
       <ol
         // Three or four bet rows (two lines each, under the question and the answer) ran past the
         // host bar in one column: they take two columns, like five to eight do.
-        className={`${styles.rows} ${rowsClass(n > 2 ? Math.max(n, 5) : n)} ${styles.rowsFinal}`}
+        className={`${styles.rows} ${rowsClass(n > 2 ? Math.max(n, 5) : n)} ${styles.rowsFinal} ${paused ? styles.pausedFinal : ''}`}
         style={listStyle}
         aria-label={L('results')}
       >

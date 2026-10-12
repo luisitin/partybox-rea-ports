@@ -7,7 +7,7 @@ import { categoryLabel, drawLabel, questionById } from './content';
 import { labelOf } from '../content/schema';
 import { PICKER_ES } from '../content/labels-es';
 import type { State } from './types';
-import { isFinalIndex } from './types';
+import { isFinalIndex, questionLangOf } from './types';
 
 /** ADR-054: a Spanish game's recap is written in Spanish (its questions are); English otherwise. */
 const RECAP_ES: Readonly<Record<string, string>> = {
@@ -29,7 +29,7 @@ const RECAP_ES: Readonly<Record<string, string>> = {
 };
 
 export function recap(state: State, ctx: RecapContext<State>): GameRecap | null {
-  const es = state.contentLang === 'es';
+  const es = questionLangOf(state) === 'es';
   const T = (s: string): string => (es ? (RECAP_ES[s] ?? s) : s);
   const label = (s: string): string => (es ? (PICKER_ES[s] ?? s) : s);
   const drawn = (): string => {
