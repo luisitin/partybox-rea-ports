@@ -19,7 +19,7 @@ export function RaceStage({
   const rows = ranked(view.racers);
   const winner = view.winners[0];
   const headline = playing
-    ? L('Merge Sprint')
+    ? L('2048')
     : view.winners.length > 1
       ? L('A tie at the top!')
       : L('{name} wins!', { name: names[winner ?? ''] ?? L('The race') });
@@ -110,7 +110,11 @@ export function RaceStage({
           ? phoneOnly
             ? L('Same tiles for every racer. First to the target wins.')
             : L('Watching the race. First to the target wins.')
-          : L('Equal scores share a place.')}
+          : view.reason === 'target'
+            ? L('First to {target} wins. Reaching the target beats merge score.', {
+                target: view.target,
+              })
+            : L('Equal scores share a place.')}
       </p>
     </div>
   );

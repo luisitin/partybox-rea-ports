@@ -1,4 +1,4 @@
-# Merge Sprint
+# 2048
 
 ## Overview
 
@@ -20,7 +20,7 @@ are covered by seeded completion simulations. Spectators see the public race.
 | Phase    | TV                                                                     | Phone with TV                                                      | Exit                                                   |
 | -------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
 | `play`   | All boards, names, merge scores, large best tiles, race clock and goal | Own board, score, best tile, rank, timer; swipe and arrow controls | First 2048, deadline, every board blocked, or VIP skip |
-| `reveal` | Frozen boards and ranked scores; winner and reason                     | Own final result and full ranking, no controls                     | 8 s or VIP skip                                        |
+| `reveal` | Frozen boards and ranked scores; winner and reason                     | Own final result and full ranking, no controls                     | Reading-safe hold (at least 8 s) or VIP skip           |
 | `done`   | Final boards, winner and ranking                                       | Final result and ranking                                           | Terminal; `results()` available                        |
 
 The SDK shell gives rules, readiness and its opening countdown. Play begins

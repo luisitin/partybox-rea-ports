@@ -1,8 +1,8 @@
 // Build phase fixtures from one genuine seeded eight-player match.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { createRng } from '@partybox/game-sdk';
-import { game } from '../../../games/merge-sprint/server/index';
-import type { State } from '../../../games/merge-sprint/server/types';
+import { game } from '../../../games/2048/server/index';
+import type { State } from '../../../games/2048/server/types';
 
 const names = ['Ava', 'Diego', 'Mei', 'Sam', 'Priya', 'Leo', 'Nora', 'Jules'];
 const players = names.map((name, i) => ({
@@ -46,12 +46,9 @@ captured.done = game.reduce(state, {
   phaseId: 'reveal',
   startedAt: state.phase.startedAt,
 });
-mkdirSync('games/merge-sprint/fixtures', { recursive: true });
+mkdirSync('games/2048/fixtures', { recursive: true });
 for (const [name, snapshot] of Object.entries(captured))
-  writeFileSync(
-    `games/merge-sprint/fixtures/${name}.json`,
-    `${JSON.stringify(snapshot, null, 2)}\n`,
-  );
+  writeFileSync(`games/2048/fixtures/${name}.json`, `${JSON.stringify(snapshot, null, 2)}\n`);
 console.log(
   JSON.stringify(
     Object.fromEntries(

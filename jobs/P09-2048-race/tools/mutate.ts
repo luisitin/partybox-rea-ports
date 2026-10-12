@@ -10,7 +10,7 @@ interface Mutant {
   before: string | RegExp;
   after: string;
 }
-const prefix = 'games/merge-sprint/server/';
+const prefix = 'games/2048/server/';
 const mutants: Mutant[] = [
   {
     name: 'merge unequal tiles',
@@ -126,8 +126,8 @@ const command = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
 const args = [
   'vitest',
   'run',
-  'games/merge-sprint/__tests__/board.test.ts',
-  'games/merge-sprint/__tests__/game.test.ts',
+  'games/2048/__tests__/board.test.ts',
+  'games/2048/__tests__/game.test.ts',
   '--maxWorkers=1',
 ];
 

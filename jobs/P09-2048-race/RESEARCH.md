@@ -1,4 +1,16 @@
-# P09 research: equal-seed tile race
+# P09 2048 research: equal-seed race
+
+## Current resume evidence (2026-10-12, r1-local)
+
+The product is now canonically 2048; Merge Sprint is a superseded working name. Root checked
+117 core manifests with no overlap. Fresh access reopened the creator's hosted original page
+and confirmed the independent engine at its pinned raw URL. This confirms source/page access,
+not an interactive live playthrough; no live movement, audio or transition timing is claimed.
+The original and independent mechanics/probe evidence below is retained as historical research.
+Current work adds actual-host capture, correct spectator routing, feedback and reading-safe
+reveal pacing; old fake-chrome/spectator SSR evidence is not current fit proof.
+
+## Historical reconstruction (2026-10-11)
 
 Researched on 2026-10-11. The original mechanics were inspected through the
 creator's public repository and cross-checked against an independently written

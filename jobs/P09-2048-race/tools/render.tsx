@@ -8,10 +8,10 @@ import type { ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { format, resolveConfig } from 'prettier';
 import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
-import { Controller } from '../../../games/merge-sprint/client/Controller';
-import { Tv } from '../../../games/merge-sprint/client/Tv';
-import { game } from '../../../games/merge-sprint/server';
-import type { State } from '../../../games/merge-sprint/server/types';
+import { Controller } from '../../../games/2048/client/Controller';
+import { Tv } from '../../../games/2048/client/Tv';
+import { game } from '../../../games/2048/server';
+import type { State } from '../../../games/2048/server/types';
 
 declare global {
   var __partyboxCapturedCss: { url: string; localPath: string; css: string }[] | undefined;
@@ -21,7 +21,7 @@ const repository = fileURLToPath(new URL('../../../', import.meta.url));
 const job = fileURLToPath(new URL('../', import.meta.url));
 const media = resolve(job, 'media');
 const tokens = await readFile(resolve(repository, 'design/tokens.css'), 'utf8');
-const fixtures = resolve(repository, 'games/merge-sprint/fixtures');
+const fixtures = resolve(repository, 'games/2048/fixtures');
 const outputs: string[] = [];
 const formatOptions = await resolveConfig(resolve(repository, '.prettierrc'));
 
@@ -34,45 +34,32 @@ function escape(value: string): string {
 }
 
 function html(surface: 'tv' | 'phone', title: string, content: string, players: number): string {
-  const width = surface === 'tv' ? 1920 : 390;
-  const height = surface === 'tv' ? 1080 : 844;
-  const header = surface === 'tv' ? 100 : 56;
-  const footer = surface === 'tv' ? 64 : 16;
   const styles = (globalThis.__partyboxCapturedCss ?? [])
     .map((entry) => `/* ${entry.localPath} */\n${entry.css}`)
     .join('\n');
-
-  return `<!doctype html>
-<html lang="en" data-surface="${surface}" data-theme="night" data-motion="off">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=${width},initial-scale=1">
-<title>${escape(title)}</title>
-<style>${tokens}\n${styles}</style>
-<style>
-* { box-sizing: border-box; }
-html { font-size: 16px; }
-body { margin: 0; width: ${width}px; height: ${height}px; background: var(--pb-bg); color: var(--pb-text); font-family: var(--pb-font-family); }
-button { font-family: inherit; }
-#capture-root { width: 100%; height: 100%; display: grid; grid-template-rows: ${header}px minmax(0, 1fr) ${footer}px; }
-#shell-header { display: flex; align-items: center; justify-content: space-between; gap: var(--pb-space-4); padding: 0 var(--pb-space-4); border-bottom: calc(var(--pb-space-1) / 2) solid var(--pb-surface-2); font-size: var(--pb-font-body); }
-#shell-header strong { font-weight: 900; }
-#shell-header span { color: var(--pb-text-muted); }
-#game-frame { display: flex; flex-direction: column; min-width: 0; min-height: 0; --pb-stage-top: 0px; }
-#game-frame > * { width: 100%; }
-#shell-footer { display: flex; align-items: center; justify-content: center; color: var(--pb-text-muted); font-size: var(--pb-font-body); }
-</style>
-</head>
-<body data-capture="${escape(title)}">
-<!-- SSR fixture capture. Shell reserves ${header}px above and ${footer}px below the game. -->
-<div id="capture-root">
-<header id="shell-header"><strong>PartyBox</strong><span>${players} players</span></header>
-<main id="game-frame">${content}</main>
-<footer id="shell-footer">${surface === 'tv' ? 'Merge Sprint' : ''}</footer>
-</div>
-</body>
-</html>
-`;
+  return `<!doctype html><html lang="en" data-surface="${surface}" data-theme="night" data-motion="off"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(title)}</title>
+<style>${tokens}\n${styles}</style><style>
+@font-face{font-family:'Nunito Variable';font-style:normal;font-weight:200 1000;font-display:swap;src:url('./nunito-latin-wght-normal.woff2') format('woff2')}
+*,*::before,*::after{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family);font-size:var(--pb-font-body);line-height:1.4}
+h1,h2,h3,p{margin:0}h1{font-size:var(--pb-font-h1);line-height:1.15;font-weight:800}h2{font-size:var(--pb-font-h2);line-height:1.2;font-weight:700}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer;border:0;background:none;padding:0;touch-action:manipulation}
+#capture-root{display:grid;width:100%;height:100%;grid-template-rows:60px calc(var(--pb-font-caption)*1.4 + var(--pb-space-2)) minmax(0,1fr)}
+[data-surface=tv] #capture-root{grid-template-rows:calc(var(--pb-overscan-y) + var(--pb-font-h2)*1.4 + var(--pb-space-3)) var(--pb-space-3) minmax(0,1fr) calc(var(--pb-touch) + var(--pb-space-4) + var(--pb-space-2) + var(--pb-space-3))}
+#shell-header,#shell-footer{display:flex;align-items:center;justify-content:space-between;padding:var(--pb-space-4);background:var(--pb-surface);gap:var(--pb-space-3)}
+[data-surface=tv] #shell-header{padding:var(--pb-overscan-y) var(--pb-overscan-x) var(--pb-space-3);font-size:var(--pb-font-h2)}
+#shell-footer{font-size:var(--pb-font-caption);color:var(--pb-text-muted)}[data-surface=phone] #shell-footer{display:none}
+#shell-chrome{min-height:0;padding:0 var(--pb-overscan-x) var(--pb-space-3)}
+[data-surface=phone] #shell-chrome{display:flex;align-items:center;gap:var(--pb-space-2);padding:var(--pb-space-1) var(--pb-space-4);font-size:var(--pb-font-caption);color:var(--pb-text-muted)}
+#shell-chrome i{height:6px;flex:1;border-radius:999px;background:var(--pb-accent-2)}[data-surface=tv] #shell-chrome>*{display:none}
+#game-frame{display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden;--pb-stage-top:var(--pb-space-3)}#game-frame>*{width:100%}
+.pb-muted{color:var(--pb-text-muted)}.pb-caption{font-size:var(--pb-font-caption)}
+:root[data-motion=off] *,:root[data-motion=off] *::before,:root[data-motion=off] *::after{animation:none!important;transition:none!important}
+</style></head><body data-capture="${escape(title)}"><div id="capture-root">
+<header id="shell-header"><b>PartyBox</b><span>${players} players</span></header><div id="shell-chrome"><i></i><span>Race</span></div>
+<main id="game-frame" aria-label="Game stage">${content}</main><footer id="shell-footer"><span>2048</span><span>${surface}</span></footer>
+</div></body></html>`;
 }
 
 function clock(state: State, child: ReactNode): ReactNode {
@@ -146,7 +133,7 @@ const records = await Promise.all(
   }),
 );
 const bytes = records.reduce((sum, entry) => sum + entry.bytes, 0);
-if (bytes >= 10 * 1024 * 1024) throw new Error(`Media exceeds the 10 MB budget: ${bytes} bytes`);
+if (bytes >= 10_000_000) throw new Error(`Media exceeds the 10 MB budget: ${bytes} bytes`);
 await writeFile(
   resolve(job, 'SHA256SUMS.txt'),
   `${records.map((entry) => entry.line).join('\n')}\n`,

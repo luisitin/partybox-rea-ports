@@ -38,7 +38,7 @@ function phone(s: State, id = 'racer-0', phoneOnly = false): string {
   );
 }
 
-describe('Merge Sprint phone surfaces', () => {
+describe('2048 phone surfaces', () => {
   it('renders one private control surface and four labelled native direction buttons', () => {
     const html = phone(state());
     expect(html.match(/role="grid"/g)).toHaveLength(1);
@@ -121,7 +121,7 @@ describe('Merge Sprint phone surfaces', () => {
   });
 });
 
-describe('Merge Sprint TV', () => {
+describe('2048 TV', () => {
   it.each(['play', 'reveal', 'done'])('shows every player board and best tile in %s', (phase) => {
     const s = state();
     s.phase = { id: phase, startedAt: 0, deadline: phase === 'done' ? null : 180000 };
@@ -129,7 +129,7 @@ describe('Merge Sprint TV', () => {
     expect(html.match(/role="grid"/g)).toHaveLength(8);
     expect(html.match(/data-tv-map="true"/g)).toHaveLength(8);
     for (const player of PLAYERS) expect(html).toContain(player.name);
-    expect(html.match(/Best tile/g)).toHaveLength(8);
+    expect(html.match(/Best<\/span>/g)).toHaveLength(8);
     expect(html).not.toContain('<button');
   });
 });

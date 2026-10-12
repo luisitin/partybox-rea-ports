@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { JSX, KeyboardEvent, PointerEvent } from 'react';
 import { buzz, usePhoneOnly, useServerNow, useT } from '@partybox/game-sdk/ui';
 import type { GameControllerProps } from '@partybox/game-sdk/ui';
@@ -9,6 +9,7 @@ import { StandingsStrip } from './StandingsStrip';
 import { clockText, ranked } from './presentation';
 import { STRINGS } from './strings';
 import styles from './Controller.module.css';
+import { MOVE_CONFIRM_MS, initialFeedback, observeMove, reserveMove } from './move-feedback';
 
 const DIRECTIONS = ['left', 'up', 'down', 'right'] as const;
 const ARROWS = { left: '←', up: '↑', down: '↓', right: '→' } as const;
@@ -24,10 +25,49 @@ export function Controller({
   const gesture = useRef<{ id: number; x: number; y: number; key: string } | null>(null);
   const mine = view.mine;
   const playing = view.phaseId === 'play';
-  const canMove = playing && !view.paused && mine?.status === 'racing' && view.me.role === 'player';
+  const connected = view.players.find((p) => p.id === view.me.id)?.connected !== false;
+  const canMove =
+    playing && connected && !view.paused && mine?.status === 'racing' && view.me.role === 'player';
   const left = view.deadline === null ? null : Math.max(0, view.deadline - now);
   const leader = ranked(view.racers)[0];
   const names = Object.fromEntries(view.players.map((p) => [p.id, p.name]));
+  const feedbackView = {
+    key: `${view.phaseId}:${view.phaseAt}:${view.me.id}`,
+    moves: mine?.moves ?? 0,
+    score: mine?.score ?? 0,
+    active: canMove,
+  };
+  const feedbackRef = useRef(initialFeedback(feedbackView));
+  const [feedback, setFeedback] = useState(feedbackRef.current);
+  const observe = (): void => {
+    const receipt = observeMove(feedbackRef.current, feedbackView, Date.now());
+    feedbackRef.current = receipt.state;
+    setFeedback(receipt.state);
+    if (receipt.accepted && playing && !view.paused)
+      buzz(receipt.state.gain > 0 ? [20, 30, 20] : 8);
+  };
+  useEffect(observe, [feedbackView.key, feedbackView.moves, feedbackView.score, canMove]);
+  useEffect(() => {
+    const at =
+      feedback.pendingAt === null ? feedback.readyAt : feedback.pendingAt + MOVE_CONFIRM_MS;
+    const wait = at - Date.now();
+    if (wait <= 0) {
+      observe();
+      return;
+    }
+    const handle = setTimeout(() => {
+      const latest = feedbackRef.current;
+      if (
+        latest.key === feedback.key &&
+        latest.moves === feedback.moves &&
+        latest.pendingAt === feedback.pendingAt &&
+        latest.readyAt === feedback.readyAt
+      )
+        observe();
+    }, wait);
+    return () => clearTimeout(handle);
+  }, [feedback.key, feedback.pendingAt, feedback.readyAt, canMove]);
+  const ready = canMove && feedback.pendingAt === null && Date.now() >= feedback.readyAt;
   const gestureKey = `${view.phaseId}:${view.phaseAt}:${view.paused}:${mine?.status}:${mine?.moves}`;
   useEffect(() => {
     gesture.current = null;
@@ -35,11 +75,16 @@ export function Controller({
 
   const move = (dir: Input['dir']): void => {
     if (!canMove || !mine) return;
-    send({ type: 'move', dir, move: mine.moves });
-    buzz(8);
+    observe();
+    const current = feedbackRef.current;
+    const pending = reserveMove(current, feedbackView, mine.board, dir, Date.now());
+    if (!pending) return;
+    feedbackRef.current = pending;
+    setFeedback(pending);
+    send({ type: 'move', dir, move: current.moves });
   };
   const start = (event: PointerEvent<HTMLDivElement>): void => {
-    if (!canMove || !event.isPrimary || event.button !== 0) return;
+    if (!ready || !event.isPrimary || event.button !== 0) return;
     gesture.current = { id: event.pointerId, x: event.clientX, y: event.clientY, key: gestureKey };
     event.currentTarget.setPointerCapture(event.pointerId);
   };
@@ -74,7 +119,7 @@ export function Controller({
     <div className={styles.screen} data-phone-only={phoneOnly || undefined} onKeyDown={keyboard}>
       <header className={styles.header}>
         <div>
-          <h2>{L('Merge Sprint')}</h2>
+          <h2>{L('2048')}</h2>
           <p>{L('Race to {target}', { target: view.target })}</p>
         </div>
         <div className={styles.clock} role="timer" data-urgent={left !== null && left <= 5000}>
@@ -85,7 +130,12 @@ export function Controller({
       <dl className={styles.stats}>
         <div>
           <dt>{L('Score')}</dt>
-          <dd>{mine.score}</dd>
+          <dd>
+            {mine.score}
+            <span className={styles.gain} role="status" key={`${feedback.key}:${feedback.moves}`}>
+              {feedback.gain > 0 ? L('+{gain} points', { gain: feedback.gain }) : '\u00a0'}
+            </span>
+          </dd>
         </div>
         <div>
           <dt>{L('Best tile')}</dt>
@@ -101,7 +151,8 @@ export function Controller({
           className={styles.swipe}
           role="group"
           aria-label={L('Your board. Swipe or use arrow keys to move tiles.')}
-          tabIndex={canMove ? 0 : -1}
+          tabIndex={ready ? 0 : -1}
+          aria-busy={feedback.pendingAt !== null}
           onPointerDown={start}
           onPointerUp={finish}
           onPointerCancel={() => (gesture.current = null)}
@@ -125,7 +176,7 @@ export function Controller({
             key={dir}
             type="button"
             className={styles.direction}
-            disabled={!canMove}
+            disabled={!ready}
             onClick={() => move(dir)}
             aria-label={
               dir === 'left'
@@ -142,9 +193,15 @@ export function Controller({
         ))}
       </div>
       <p className={styles.rule}>
-        {view.paused
-          ? L('Race paused. Controls resume with the clock.')
-          : L('Equal tiles merge once per move.')}
+        {feedback.failed
+          ? L('Move not confirmed. Try again.')
+          : view.paused
+            ? L('Race paused. Controls resume with the clock.')
+            : phoneOnly
+              ? L('First to {target} wins. At the buzzer, highest score wins.', {
+                  target: view.target,
+                })
+              : L('Equal tiles merge once per move.')}
       </p>
     </div>
   );

@@ -1,11 +1,12 @@
-// Freeze the race for a readable eight-second standings beat.
+// Freeze the race until the full TV boards or phone standings have had their reading time.
 import { enterPhase, isTimerFor } from '@partybox/game-sdk';
 import type { GameEvent, Transition } from '@partybox/game-sdk';
-import { REVEAL_MS } from '../types';
+import { revealReadingMs } from '../reveal-reading';
 import type { Input, State } from '../types';
 
 export function enterReveal(state: State, now: number): State {
-  return enterPhase({ ...state, reason: state.reason ?? 'host' }, 'reveal', now, REVEAL_MS);
+  const frozen = { ...state, reason: state.reason ?? 'host' };
+  return enterPhase(frozen, 'reveal', now, revealReadingMs(frozen));
 }
 export function reduceReveal(
   state: State,

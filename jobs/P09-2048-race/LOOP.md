@@ -1,4 +1,3 @@
 # KEEP GOING
 
-The post-green loop begins once local gates and PR CI pass. Measured rounds are
-recorded below; no cosmetic-only pass is counted as an unperformed check.
+1. 2026-10-12 r1-local resumed after historical green PR12/head950245e6. Five weaknesses: actual-host fit, unreadable8s results, spectator routing, input confirmation, target/timeout rule copy. Fixed the measured worst alongside correctness repairs: TV header overlap26.65px?0 at actual host geometry; new rendered-floor tests pass for2/8long-name rosters and target results; single accepted-counter feedback prevents false intent haptics; phone-only/target copy is explicit. Local91tests pass and15current captures pass bounds/targets/text minimums. Fresh full sim/mutation/adversarial/manual QA and resulting CI remain. No no-gain round or DONE is claimed.

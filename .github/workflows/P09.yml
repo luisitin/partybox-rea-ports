@@ -1,8 +1,8 @@
-name: P09 Merge Sprint
+name: P09 2048
 on:
   pull_request:
     paths:
-      - 'games/merge-sprint/**'
+      - 'games/2048/**'
       - 'jobs/P09-2048-race/**'
       - '.github/workflows/P09.yml'
 permissions:
@@ -20,4 +20,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm format
-      - run: pnpm vitest run games/merge-sprint --maxWorkers=1
+      - run: pnpm vitest run games/2048 --maxWorkers=1

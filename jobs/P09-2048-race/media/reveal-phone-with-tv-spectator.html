@@ -2,7 +2,7 @@
 <html lang="en" data-surface="phone" data-theme="night" data-motion="off">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=390,initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>reveal-phone-with-tv-spectator</title>
     <style>
       /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
@@ -3156,8 +3156,8 @@ ight is the :root default above) ────────
         box-shadow: none;
       }
 
-      /* games/merge-sprint/client/Board.module.css */
-      .pb_Board_fede4cf3_board {
+      /* games/2048/client/Board.module.css */
+      .pb_Board_558e3b53_board {
         display: grid;
         grid-template-rows: repeat(4, minmax(0, 1fr));
         gap: var(--pb-space-2);
@@ -3170,14 +3170,14 @@ ight is the :root default above) ────────
         container-type: inline-size;
       }
 
-      .pb_Board_fede4cf3_row {
+      .pb_Board_558e3b53_row {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: var(--pb-space-2);
         min-height: 0;
       }
 
-      .pb_Board_fede4cf3_tile {
+      .pb_Board_558e3b53_tile {
         display: grid;
         place-items: center;
         min-width: 0;
@@ -3189,75 +3189,75 @@ ight is the :root default above) ────────
         font-variant-numeric: tabular-nums;
       }
 
-      .pb_Board_fede4cf3_tile[data-value='2'] {
+      .pb_Board_558e3b53_tile[data-value='2'] {
         background: var(--pb-surface);
       }
 
-      .pb_Board_fede4cf3_tile[data-value='4'] {
+      .pb_Board_558e3b53_tile[data-value='4'] {
         color: var(--pb-info);
       }
 
-      .pb_Board_fede4cf3_tile[data-value='8'],
-      .pb_Board_fede4cf3_tile[data-value='16'] {
+      .pb_Board_558e3b53_tile[data-value='8'],
+      .pb_Board_558e3b53_tile[data-value='16'] {
         color: var(--pb-accent-3);
       }
 
-      .pb_Board_fede4cf3_tile[data-value='32'],
-      .pb_Board_fede4cf3_tile[data-value='64'] {
+      .pb_Board_558e3b53_tile[data-value='32'],
+      .pb_Board_558e3b53_tile[data-value='64'] {
         color: var(--pb-accent);
       }
 
-      .pb_Board_fede4cf3_tile[data-value='128'],
-      .pb_Board_fede4cf3_tile[data-value='256'],
-      .pb_Board_fede4cf3_tile[data-value='512'],
-      .pb_Board_fede4cf3_tile[data-value='1024'] {
+      .pb_Board_558e3b53_tile[data-value='128'],
+      .pb_Board_558e3b53_tile[data-value='256'],
+      .pb_Board_558e3b53_tile[data-value='512'],
+      .pb_Board_558e3b53_tile[data-value='1024'] {
         color: var(--pb-accent-2);
       }
 
-      .pb_Board_fede4cf3_tile[data-value='2048'] {
+      .pb_Board_558e3b53_tile[data-value='2048'] {
         background: var(--pb-accent-2-fill);
         color: var(--pb-on-accent-2-fill);
       }
 
-      .pb_Board_fede4cf3_tile[data-digits='3'] {
+      .pb_Board_558e3b53_tile[data-digits='3'] {
         font-size: min(var(--pb-font-h1), 10cqw);
       }
 
-      .pb_Board_fede4cf3_tile[data-digits='4'] {
+      .pb_Board_558e3b53_tile[data-digits='4'] {
         font-size: min(var(--pb-font-h2), 8cqw);
       }
 
-      .pb_Board_fede4cf3_tile[data-pop='true'] {
+      .pb_Board_558e3b53_tile[data-pop='true'] {
         animation: pb-pop var(--pb-motion-fast) var(--pb-ease);
       }
 
       /* Small stage boards are a map; the card repeats their largest tile at display size. */
-      .pb_Board_fede4cf3_board[data-mini='true'] {
+      .pb_Board_558e3b53_board[data-mini='true'] {
         gap: var(--pb-space-1);
         padding: var(--pb-space-1);
         border-radius: var(--pb-radius);
       }
 
-      .pb_Board_fede4cf3_board[data-mini='true'] .pb_Board_fede4cf3_row {
+      .pb_Board_558e3b53_board[data-mini='true'] .pb_Board_558e3b53_row {
         gap: var(--pb-space-1);
       }
 
-      .pb_Board_fede4cf3_board[data-mini='true'] .pb_Board_fede4cf3_tile {
+      .pb_Board_558e3b53_board[data-mini='true'] .pb_Board_558e3b53_tile {
         border-radius: calc(var(--pb-radius) / 2);
         font-size: min(var(--pb-font-body), 13cqw);
       }
 
-      .pb_Board_fede4cf3_board[data-mini='true'] .pb_Board_fede4cf3_tile[data-digits='4'] {
+      .pb_Board_558e3b53_board[data-mini='true'] .pb_Board_558e3b53_tile[data-digits='4'] {
         font-size: min(calc(var(--pb-font-body) * 0.75), 8cqw);
       }
 
-      .pb_Board_fede4cf3_board[data-mini='true'] .pb_Board_fede4cf3_tile[data-digits='3'] {
+      .pb_Board_558e3b53_board[data-mini='true'] .pb_Board_558e3b53_tile[data-digits='3'] {
         font-size: min(var(--pb-font-body), 10cqw);
       }
 
       /* Wide TV map cells hold four-digit numbers at the sofa-readable 32px minimum.
    The playing board on a phone stays square. */
-      .pb_Board_fede4cf3_board[data-tv-map='true'] {
+      .pb_Board_558e3b53_board[data-tv-map='true'] {
         aspect-ratio: auto;
         height: calc(var(--pb-font-body) * 32 / 9 + var(--pb-space-1) * 5);
         gap: var(--pb-space-1);
@@ -3265,27 +3265,27 @@ ight is the :root default above) ────────
         border-radius: var(--pb-radius);
       }
 
-      .pb_Board_fede4cf3_board[data-tv-map='true'] .pb_Board_fede4cf3_row {
+      .pb_Board_558e3b53_board[data-tv-map='true'] .pb_Board_558e3b53_row {
         gap: var(--pb-space-1);
       }
 
-      .pb_Board_fede4cf3_board[data-tv-map='true'] .pb_Board_fede4cf3_tile {
+      .pb_Board_558e3b53_board[data-tv-map='true'] .pb_Board_558e3b53_tile {
         border-radius: calc(var(--pb-radius) / 2);
         font-size: calc(var(--pb-font-body) * 8 / 9);
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .pb_Board_fede4cf3_tile[data-pop='true'] {
+        .pb_Board_558e3b53_tile[data-pop='true'] {
           animation: none;
         }
       }
 
-      :root[data-motion='off'] .pb_Board_fede4cf3_tile[data-pop='true'] {
+      :root[data-motion='off'] .pb_Board_558e3b53_tile[data-pop='true'] {
         animation: none;
       }
 
-      /* games/merge-sprint/client/RaceStage.module.css */
-      .pb_RaceStage_44acaf9f_stage {
+      /* games/2048/client/RaceStage.module.css */
+      .pb_RaceStage_612ac0c5_stage {
         display: grid;
         grid-template-rows: auto minmax(0, 1fr) auto;
         gap: var(--pb-space-3);
@@ -3296,11 +3296,11 @@ ight is the :root default above) ────────
         color: var(--pb-text);
       }
 
-      .pb_RaceStage_44acaf9f_header {
+      .pb_RaceStage_612ac0c5_header {
         text-align: center;
       }
 
-      .pb_RaceStage_44acaf9f_header h2 {
+      .pb_RaceStage_612ac0c5_header h2 {
         margin: 0;
         font-size: var(--pb-font-h1);
         font-weight: 900;
@@ -3308,20 +3308,20 @@ ight is the :root default above) ────────
         overflow-wrap: anywhere;
       }
 
-      .pb_RaceStage_44acaf9f_header p {
+      .pb_RaceStage_612ac0c5_header p {
         margin: var(--pb-space-1) 0 0;
         color: var(--pb-text-muted);
         font-size: var(--pb-font-caption);
       }
 
-      .pb_RaceStage_44acaf9f_personal {
+      .pb_RaceStage_612ac0c5_personal {
         display: block;
         margin-top: var(--pb-space-2);
         color: var(--pb-accent-2);
         font-size: var(--pb-font-body);
       }
 
-      .pb_RaceStage_44acaf9f_boards {
+      .pb_RaceStage_612ac0c5_boards {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         grid-auto-rows: minmax(0, 1fr);
@@ -3329,7 +3329,7 @@ ight is the :root default above) ────────
         min-height: 0;
       }
 
-      .pb_RaceStage_44acaf9f_racer {
+      .pb_RaceStage_612ac0c5_racer {
         display: grid;
         grid-template-rows: auto minmax(0, 1fr) auto;
         justify-items: center;
@@ -3339,7 +3339,7 @@ ight is the :root default above) ────────
         container-type: size;
       }
 
-      .pb_RaceStage_44acaf9f_racer h3 {
+      .pb_RaceStage_612ac0c5_racer h3 {
         width: 100%;
         margin: 0;
         overflow: hidden;
@@ -3348,26 +3348,26 @@ ight is the :root default above) ────────
         font-size: var(--pb-font-caption);
       }
 
-      .pb_RaceStage_44acaf9f_racer h3 span {
+      .pb_RaceStage_612ac0c5_racer h3 span {
         color: var(--pb-text-muted);
       }
 
-      .pb_RaceStage_44acaf9f_racer > [role='grid'] {
+      .pb_RaceStage_612ac0c5_racer > [role='grid'] {
         width: min(100%, calc(100cqh - var(--pb-space-7)));
       }
 
-      .pb_RaceStage_44acaf9f_racer p {
+      .pb_RaceStage_612ac0c5_racer p {
         margin: 0;
         font-size: var(--pb-font-caption);
         color: var(--pb-text-muted);
         white-space: nowrap;
       }
 
-      .pb_RaceStage_44acaf9f_racer p strong {
+      .pb_RaceStage_612ac0c5_racer p strong {
         color: var(--pb-accent-2);
       }
 
-      .pb_RaceStage_44acaf9f_rows {
+      .pb_RaceStage_612ac0c5_rows {
         display: grid;
         align-content: center;
         gap: var(--pb-space-2);
@@ -3377,7 +3377,7 @@ ight is the :root default above) ────────
         list-style: none;
       }
 
-      .pb_RaceStage_44acaf9f_rows li {
+      .pb_RaceStage_612ac0c5_rows li {
         display: flex;
         align-items: center;
         gap: var(--pb-space-2);
@@ -3390,51 +3390,51 @@ ight is the :root default above) ────────
         font-size: var(--pb-font-body);
       }
 
-      .pb_RaceStage_44acaf9f_rows li[data-me='true'] {
+      .pb_RaceStage_612ac0c5_rows li[data-me='true'] {
         outline: calc(var(--pb-space-1) / 2) solid var(--pb-focus);
       }
 
-      .pb_RaceStage_44acaf9f_rank {
+      .pb_RaceStage_612ac0c5_rank {
         flex: none;
         min-width: 2ch;
         color: var(--pb-text-muted);
         font-variant-numeric: tabular-nums;
       }
 
-      .pb_RaceStage_44acaf9f_player {
+      .pb_RaceStage_612ac0c5_player {
         display: grid;
         min-width: 0;
       }
 
-      .pb_RaceStage_44acaf9f_player strong {
+      .pb_RaceStage_612ac0c5_player strong {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
 
-      .pb_RaceStage_44acaf9f_player span {
+      .pb_RaceStage_612ac0c5_player span {
         color: var(--pb-text-muted);
         font-size: var(--pb-font-caption);
       }
 
-      .pb_RaceStage_44acaf9f_score {
+      .pb_RaceStage_612ac0c5_score {
         margin-left: auto;
         font-variant-numeric: tabular-nums;
       }
 
-      .pb_RaceStage_44acaf9f_star {
+      .pb_RaceStage_612ac0c5_star {
         color: var(--pb-accent-2);
       }
 
-      .pb_RaceStage_44acaf9f_footer {
+      .pb_RaceStage_612ac0c5_footer {
         margin: 0;
         font-size: var(--pb-font-caption);
         color: var(--pb-text-muted);
         text-align: center;
       }
 
-      /* games/merge-sprint/client/StandingsStrip.module.css */
-      .pb_StandingsStrip_a42958ad_rows {
+      /* games/2048/client/StandingsStrip.module.css */
+      .pb_StandingsStrip_cd4f575c_rows {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         grid-auto-flow: row;
@@ -3449,35 +3449,35 @@ ight is the :root default above) ────────
         font-variant-numeric: tabular-nums;
       }
 
-      .pb_StandingsStrip_a42958ad_rows li {
+      .pb_StandingsStrip_cd4f575c_rows li {
         display: flex;
         align-items: center;
         gap: var(--pb-space-1);
         min-width: 0;
       }
 
-      .pb_StandingsStrip_a42958ad_rank {
+      .pb_StandingsStrip_cd4f575c_rank {
         flex: none;
         color: var(--pb-text-muted);
       }
 
-      .pb_StandingsStrip_a42958ad_name {
+      .pb_StandingsStrip_cd4f575c_name {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
 
-      .pb_StandingsStrip_a42958ad_rows b {
+      .pb_StandingsStrip_cd4f575c_rows b {
         margin-left: auto;
       }
 
-      .pb_StandingsStrip_a42958ad_rows li[data-me='true'] {
+      .pb_StandingsStrip_cd4f575c_rows li[data-me='true'] {
         color: var(--pb-accent-2);
         font-weight: 900;
       }
 
-      /* games/merge-sprint/client/Controller.module.css */
-      .pb_Controller_705355ba_screen {
+      /* games/2048/client/Controller.module.css */
+      .pb_Controller_d61e2ba9_screen {
         display: grid;
         grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
         gap: var(--pb-space-3);
@@ -3489,31 +3489,31 @@ ight is the :root default above) ────────
         color: var(--pb-text);
       }
 
-      .pb_Controller_705355ba_screen[data-phone-only='true'] {
+      .pb_Controller_d61e2ba9_screen[data-phone-only='true'] {
         grid-template-rows: auto auto minmax(0, 1fr) auto auto auto auto;
       }
 
-      .pb_Controller_705355ba_header {
+      .pb_Controller_d61e2ba9_header {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: var(--pb-space-3);
       }
 
-      .pb_Controller_705355ba_header h2 {
+      .pb_Controller_d61e2ba9_header h2 {
         margin: 0;
         font-size: var(--pb-font-h1);
         font-weight: 900;
         line-height: 1.15;
       }
 
-      .pb_Controller_705355ba_header p {
+      .pb_Controller_d61e2ba9_header p {
         margin: var(--pb-space-1) 0 0;
         font-size: var(--pb-font-caption);
         color: var(--pb-text-muted);
       }
 
-      .pb_Controller_705355ba_clock {
+      .pb_Controller_d61e2ba9_clock {
         display: grid;
         justify-items: end;
         flex: none;
@@ -3521,18 +3521,18 @@ ight is the :root default above) ────────
         color: var(--pb-text-muted);
       }
 
-      .pb_Controller_705355ba_clock strong {
+      .pb_Controller_d61e2ba9_clock strong {
         font-size: var(--pb-font-display);
         color: var(--pb-accent-2);
         line-height: 1;
         font-variant-numeric: tabular-nums;
       }
 
-      .pb_Controller_705355ba_clock[data-urgent='true'] strong {
+      .pb_Controller_d61e2ba9_clock[data-urgent='true'] strong {
         color: var(--pb-danger);
       }
 
-      .pb_Controller_705355ba_stats {
+      .pb_Controller_d61e2ba9_stats {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         margin: 0;
@@ -3542,12 +3542,12 @@ ight is the :root default above) ────────
         text-align: center;
       }
 
-      .pb_Controller_705355ba_stats dt {
+      .pb_Controller_d61e2ba9_stats dt {
         font-size: var(--pb-font-caption);
         color: var(--pb-text-muted);
       }
 
-      .pb_Controller_705355ba_stats dd {
+      .pb_Controller_d61e2ba9_stats dd {
         margin: 0;
         font-size: var(--pb-font-h1);
         line-height: 1.2;
@@ -3555,18 +3555,27 @@ ight is the :root default above) ────────
         font-variant-numeric: tabular-nums;
       }
 
-      .pb_Controller_705355ba_stats > div:nth-child(2) dd {
+      .pb_Controller_d61e2ba9_stats > div:nth-child(2) dd {
         color: var(--pb-accent-2);
       }
 
-      .pb_Controller_705355ba_boardSpace {
+      .pb_Controller_d61e2ba9_gain {
+        display: block;
+        min-height: calc(var(--pb-font-caption) * 1.3);
+        font-size: var(--pb-font-caption);
+        line-height: 1.3;
+        font-weight: 900;
+        color: var(--pb-accent-3);
+      }
+
+      .pb_Controller_d61e2ba9_boardSpace {
         display: grid;
         place-items: center;
         min-height: 0;
         container-type: size;
       }
 
-      .pb_Controller_705355ba_swipe {
+      .pb_Controller_d61e2ba9_swipe {
         position: relative;
         width: min(100%, 100cqh);
         aspect-ratio: 1;
@@ -3577,14 +3586,14 @@ ight is the :root default above) ────────
         border-radius: var(--pb-radius-lg);
       }
 
-      .pb_Controller_705355ba_swipe:focus-visible,
-      .pb_Controller_705355ba_direction:focus-visible {
+      .pb_Controller_d61e2ba9_swipe:focus-visible,
+      .pb_Controller_d61e2ba9_direction:focus-visible {
         outline: var(--pb-space-1) solid var(--pb-focus);
         outline-offset: var(--pb-space-1);
       }
 
-      .pb_Controller_705355ba_hint,
-      .pb_Controller_705355ba_rule {
+      .pb_Controller_d61e2ba9_hint,
+      .pb_Controller_d61e2ba9_rule {
         margin: 0;
         text-align: center;
         font-size: var(--pb-font-caption);
@@ -3592,20 +3601,20 @@ ight is the :root default above) ────────
         color: var(--pb-text-muted);
       }
 
-      .pb_Controller_705355ba_hint {
+      .pb_Controller_d61e2ba9_hint {
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
 
-      .pb_Controller_705355ba_controls {
+      .pb_Controller_d61e2ba9_controls {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: var(--pb-space-2);
       }
 
-      .pb_Controller_705355ba_direction {
+      .pb_Controller_d61e2ba9_direction {
         min-height: calc(var(--pb-touch) + var(--pb-space-5));
         min-width: var(--pb-touch);
         border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
@@ -3621,58 +3630,58 @@ ight is the :root default above) ────────
         -webkit-tap-highlight-color: transparent;
       }
 
-      .pb_Controller_705355ba_direction:active:not(:disabled) {
+      .pb_Controller_d61e2ba9_direction:active:not(:disabled) {
         transform: scale(0.94);
       }
 
-      .pb_Controller_705355ba_direction:disabled {
+      .pb_Controller_d61e2ba9_direction:disabled {
         background: var(--pb-surface-2);
         color: var(--pb-text-muted);
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .pb_Controller_705355ba_direction {
+        .pb_Controller_d61e2ba9_direction {
           transition: none;
         }
       }
 
-      :root[data-motion='off'] .pb_Controller_705355ba_direction {
+      :root[data-motion='off'] .pb_Controller_d61e2ba9_direction {
         transition: none;
       }
 
-      /* games/merge-sprint/client/Tv.module.css */
-      .pb_Tv_e5f54191_stage {
+      /* games/2048/client/Tv.module.css */
+      .pb_Tv_6d37bbeb_stage {
         flex: 1;
         min-height: 0;
         gap: var(--pb-space-5);
       }
 
-      .pb_Tv_e5f54191_header {
+      .pb_Tv_6d37bbeb_header {
         display: flex;
         align-items: center;
         gap: var(--pb-space-6);
       }
 
-      .pb_Tv_e5f54191_heading {
+      .pb_Tv_6d37bbeb_heading {
         flex: 1;
         min-width: 0;
       }
 
-      .pb_Tv_e5f54191_heading h1 {
+      .pb_Tv_6d37bbeb_heading h1 {
         margin: 0;
         font-size: var(--pb-font-h1);
         font-weight: 900;
         line-height: 1.1;
       }
 
-      .pb_Tv_e5f54191_heading p {
+      .pb_Tv_6d37bbeb_heading p {
         margin: var(--pb-space-2) 0 0;
         font-size: var(--pb-font-body);
         color: var(--pb-text-muted);
         line-height: 1.25;
       }
 
-      .pb_Tv_e5f54191_clock {
+      .pb_Tv_6d37bbeb_clock {
         display: grid;
         justify-items: end;
         flex: none;
@@ -3680,18 +3689,18 @@ ight is the :root default above) ────────
         color: var(--pb-text-muted);
       }
 
-      .pb_Tv_e5f54191_clock strong {
+      .pb_Tv_6d37bbeb_clock strong {
         font-size: calc(var(--pb-font-display) * 0.75);
         line-height: 1;
         color: var(--pb-accent-2);
         font-variant-numeric: tabular-nums;
       }
 
-      .pb_Tv_e5f54191_clock[data-urgent='true'] strong {
+      .pb_Tv_6d37bbeb_clock[data-urgent='true'] strong {
         color: var(--pb-danger);
       }
 
-      .pb_Tv_e5f54191_finish {
+      .pb_Tv_6d37bbeb_finish {
         display: flex;
         align-items: center;
         gap: var(--pb-space-4);
@@ -3699,11 +3708,11 @@ ight is the :root default above) ────────
         color: var(--pb-accent-2);
       }
 
-      .pb_Tv_e5f54191_finish span {
+      .pb_Tv_6d37bbeb_finish span {
         font-size: var(--pb-font-h1);
       }
 
-      .pb_Tv_e5f54191_racers {
+      .pb_Tv_6d37bbeb_racers {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: var(--pb-space-5);
@@ -3712,15 +3721,15 @@ ight is the :root default above) ────────
         align-content: center;
       }
 
-      .pb_Tv_e5f54191_racers[data-count='2'] {
+      .pb_Tv_6d37bbeb_racers[data-count='2'] {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .pb_Tv_e5f54191_racers[data-count='3'] {
+      .pb_Tv_6d37bbeb_racers[data-count='3'] {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
-      .pb_Tv_e5f54191_racer {
+      .pb_Tv_6d37bbeb_racer {
         display: grid;
         gap: var(--pb-space-2);
         min-width: 0;
@@ -3731,11 +3740,11 @@ ight is the :root default above) ────────
         border-radius: var(--pb-radius-lg);
       }
 
-      .pb_Tv_e5f54191_racer[data-winner='true'] {
+      .pb_Tv_6d37bbeb_racer[data-winner='true'] {
         border-color: var(--pb-accent-2);
       }
 
-      .pb_Tv_e5f54191_racerHeader {
+      .pb_Tv_6d37bbeb_racerHeader {
         display: flex;
         align-items: center;
         gap: var(--pb-space-3);
@@ -3743,7 +3752,7 @@ ight is the :root default above) ────────
         line-height: 1.2;
       }
 
-      .pb_Tv_e5f54191_racerHeader h2 {
+      .pb_Tv_6d37bbeb_racerHeader h2 {
         margin: 0;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -3751,25 +3760,25 @@ ight is the :root default above) ────────
         font-size: inherit;
       }
 
-      .pb_Tv_e5f54191_rank {
+      .pb_Tv_6d37bbeb_rank {
         color: var(--pb-text-muted);
         font-variant-numeric: tabular-nums;
       }
 
-      .pb_Tv_e5f54191_racerHeader > span {
+      .pb_Tv_6d37bbeb_racerHeader > span {
         margin-left: auto;
         color: var(--pb-accent-2);
         flex: none;
       }
 
-      .pb_Tv_e5f54191_summary {
+      .pb_Tv_6d37bbeb_summary {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         align-items: end;
         gap: var(--pb-space-3);
       }
 
-      .pb_Tv_e5f54191_best {
+      .pb_Tv_6d37bbeb_best {
         display: grid;
         justify-items: start;
         gap: var(--pb-space-2);
@@ -3777,7 +3786,7 @@ ight is the :root default above) ────────
         font-size: calc(var(--pb-font-body) * 8 / 9);
       }
 
-      .pb_Tv_e5f54191_best strong {
+      .pb_Tv_6d37bbeb_best strong {
         font-size: calc(var(--pb-font-display) * 0.5);
         font-weight: 900;
         font-variant-numeric: tabular-nums;
@@ -3785,15 +3794,15 @@ ight is the :root default above) ────────
         color: var(--pb-accent-2);
       }
 
-      .pb_Tv_e5f54191_status {
+      .pb_Tv_6d37bbeb_status {
         color: var(--pb-text-muted);
       }
 
-      .pb_Tv_e5f54191_racerHeader > .pb_Tv_e5f54191_status {
+      .pb_Tv_6d37bbeb_racerHeader > .pb_Tv_6d37bbeb_status {
         color: var(--pb-text-muted);
       }
 
-      .pb_Tv_e5f54191_score {
+      .pb_Tv_6d37bbeb_score {
         display: grid;
         justify-items: end;
         gap: var(--pb-space-2);
@@ -3801,144 +3810,256 @@ ight is the :root default above) ────────
         color: var(--pb-text-muted);
       }
 
-      .pb_Tv_e5f54191_score strong {
+      .pb_Tv_6d37bbeb_score strong {
         font-size: var(--pb-font-h2);
         line-height: 1;
         color: var(--pb-text);
         font-variant-numeric: tabular-nums;
       }
+
+      /* Eight full numeric boards fit the actual collapsed-strip host Stage. */
+      div.pb_Tv_6d37bbeb_stage {
+        gap: var(--pb-space-3);
+      }
+      .pb_Tv_6d37bbeb_racers {
+        align-content: start;
+      }
+      .pb_Tv_6d37bbeb_racer {
+        gap: var(--pb-space-1);
+      }
+      .pb_Tv_6d37bbeb_summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--pb-space-2);
+      }
+      .pb_Tv_6d37bbeb_best,
+      .pb_Tv_6d37bbeb_score {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+      }
+      .pb_Tv_6d37bbeb_best strong {
+        font-size: var(--pb-font-h2);
+        line-height: 1.4;
+      }
+      .pb_Tv_6d37bbeb_score strong {
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+        line-height: 1.4;
+      }
     </style>
     <style>
-      * {
+      @font-face {
+        font-family: 'Nunito Variable';
+        font-style: normal;
+        font-weight: 200 1000;
+        font-display: swap;
+        src: url('./nunito-latin-wght-normal.woff2') format('woff2');
+      }
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
       }
-      html {
-        font-size: 16px;
-      }
+      html,
       body {
         margin: 0;
-        width: 390px;
-        height: 844px;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
         background: var(--pb-bg);
         color: var(--pb-text);
         font-family: var(--pb-font-family);
+        font-size: var(--pb-font-body);
+        line-height: 1.4;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1 {
+        font-size: var(--pb-font-h1);
+        line-height: 1.15;
+        font-weight: 800;
+      }
+      h2 {
+        font-size: var(--pb-font-h2);
+        line-height: 1.2;
+        font-weight: 700;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+        color: inherit;
       }
       button {
-        font-family: inherit;
+        cursor: pointer;
+        border: 0;
+        background: none;
+        padding: 0;
+        touch-action: manipulation;
       }
       #capture-root {
+        display: grid;
         width: 100%;
         height: 100%;
-        display: grid;
-        grid-template-rows: 56px minmax(0, 1fr) 16px;
+        grid-template-rows: 60px calc(var(--pb-font-caption) * 1.4 + var(--pb-space-2)) minmax(
+            0,
+            1fr
+          );
       }
-      #shell-header {
+      [data-surface='tv'] #capture-root {
+        grid-template-rows:
+          calc(var(--pb-overscan-y) + var(--pb-font-h2) * 1.4 + var(--pb-space-3))
+          var(--pb-space-3) minmax(0, 1fr) calc(
+            var(--pb-touch) + var(--pb-space-4) + var(--pb-space-2) + var(--pb-space-3)
+          );
+      }
+      #shell-header,
+      #shell-footer {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: var(--pb-space-4);
-        padding: 0 var(--pb-space-4);
-        border-bottom: calc(var(--pb-space-1) / 2) solid var(--pb-surface-2);
-        font-size: var(--pb-font-body);
+        padding: var(--pb-space-4);
+        background: var(--pb-surface);
+        gap: var(--pb-space-3);
       }
-      #shell-header strong {
-        font-weight: 900;
+      [data-surface='tv'] #shell-header {
+        padding: var(--pb-overscan-y) var(--pb-overscan-x) var(--pb-space-3);
+        font-size: var(--pb-font-h2);
       }
-      #shell-header span {
+      #shell-footer {
+        font-size: var(--pb-font-caption);
         color: var(--pb-text-muted);
+      }
+      [data-surface='phone'] #shell-footer {
+        display: none;
+      }
+      #shell-chrome {
+        min-height: 0;
+        padding: 0 var(--pb-overscan-x) var(--pb-space-3);
+      }
+      [data-surface='phone'] #shell-chrome {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-1) var(--pb-space-4);
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+      #shell-chrome i {
+        height: 6px;
+        flex: 1;
+        border-radius: 999px;
+        background: var(--pb-accent-2);
+      }
+      [data-surface='tv'] #shell-chrome > * {
+        display: none;
       }
       #game-frame {
         display: flex;
         flex-direction: column;
-        min-width: 0;
         min-height: 0;
-        --pb-stage-top: 0px;
+        min-width: 0;
+        overflow: hidden;
+        --pb-stage-top: var(--pb-space-3);
       }
       #game-frame > * {
         width: 100%;
       }
-      #shell-footer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      .pb-muted {
         color: var(--pb-text-muted);
-        font-size: var(--pb-font-body);
+      }
+      .pb-caption {
+        font-size: var(--pb-font-caption);
+      }
+      :root[data-motion='off'] *,
+      :root[data-motion='off'] *::before,
+      :root[data-motion='off'] *::after {
+        animation: none !important;
+        transition: none !important;
       }
     </style>
   </head>
   <body data-capture="reveal-phone-with-tv-spectator">
-    <!-- SSR fixture capture. Shell reserves 56px above and 16px below the game. -->
     <div id="capture-root">
-      <header id="shell-header"><strong>PartyBox</strong><span>8 players</span></header>
-      <main id="game-frame">
-        <div class="pb_RaceStage_44acaf9f_stage">
-          <header class="pb_RaceStage_44acaf9f_header">
+      <header id="shell-header"><b>PartyBox</b><span>8 players</span></header>
+      <div id="shell-chrome"><i></i><span>Race</span></div>
+      <main id="game-frame" aria-label="Game stage">
+        <div class="pb_RaceStage_612ac0c5_stage">
+          <header class="pb_RaceStage_612ac0c5_header">
             <h2>Mei wins!</h2>
             <p>Time is up. Highest score wins.</p>
           </header>
-          <ol class="pb_RaceStage_44acaf9f_rows" aria-label="Final standings">
+          <ol class="pb_RaceStage_612ac0c5_rows" aria-label="Final standings">
             <li style="--racer-color: var(--pb-player-3)" data-winner="true">
-              <b class="pb_RaceStage_44acaf9f_rank">#1</b>
-              <div class="pb_RaceStage_44acaf9f_player">
+              <b class="pb_RaceStage_612ac0c5_rank">#1</b>
+              <div class="pb_RaceStage_612ac0c5_player">
                 <strong>Mei</strong><span>Best tile 512</span>
               </div>
-              <strong class="pb_RaceStage_44acaf9f_score">5348</strong
-              ><span class="pb_RaceStage_44acaf9f_star" aria-label="Winner">★</span>
+              <strong class="pb_RaceStage_612ac0c5_score">5348</strong
+              ><span class="pb_RaceStage_612ac0c5_star" aria-label="Winner">★</span>
             </li>
             <li style="--racer-color: var(--pb-player-2)">
-              <b class="pb_RaceStage_44acaf9f_rank">#2</b>
-              <div class="pb_RaceStage_44acaf9f_player">
+              <b class="pb_RaceStage_612ac0c5_rank">#2</b>
+              <div class="pb_RaceStage_612ac0c5_player">
                 <strong>Diego</strong><span>Best tile 512</span>
               </div>
-              <strong class="pb_RaceStage_44acaf9f_score">5304</strong>
+              <strong class="pb_RaceStage_612ac0c5_score">5304</strong>
             </li>
             <li style="--racer-color: var(--pb-player-5)">
-              <b class="pb_RaceStage_44acaf9f_rank">#3</b>
-              <div class="pb_RaceStage_44acaf9f_player">
+              <b class="pb_RaceStage_612ac0c5_rank">#3</b>
+              <div class="pb_RaceStage_612ac0c5_player">
                 <strong>Priya</strong><span>Best tile 512</span>
               </div>
-              <strong class="pb_RaceStage_44acaf9f_score">5300</strong>
+              <strong class="pb_RaceStage_612ac0c5_score">5300</strong>
             </li>
             <li style="--racer-color: var(--pb-player-6)">
-              <b class="pb_RaceStage_44acaf9f_rank">#4</b>
-              <div class="pb_RaceStage_44acaf9f_player">
+              <b class="pb_RaceStage_612ac0c5_rank">#4</b>
+              <div class="pb_RaceStage_612ac0c5_player">
                 <strong>Leo</strong><span>Best tile 512</span>
               </div>
-              <strong class="pb_RaceStage_44acaf9f_score">5284</strong>
+              <strong class="pb_RaceStage_612ac0c5_score">5284</strong>
             </li>
             <li style="--racer-color: var(--pb-player-8)">
-              <b class="pb_RaceStage_44acaf9f_rank">#5</b>
-              <div class="pb_RaceStage_44acaf9f_player">
+              <b class="pb_RaceStage_612ac0c5_rank">#5</b>
+              <div class="pb_RaceStage_612ac0c5_player">
                 <strong>Jules</strong><span>Best tile 512</span>
               </div>
-              <strong class="pb_RaceStage_44acaf9f_score">5276</strong>
+              <strong class="pb_RaceStage_612ac0c5_score">5276</strong>
             </li>
             <li style="--racer-color: var(--pb-player-1)">
-              <b class="pb_RaceStage_44acaf9f_rank">#6</b>
-              <div class="pb_RaceStage_44acaf9f_player">
+              <b class="pb_RaceStage_612ac0c5_rank">#6</b>
+              <div class="pb_RaceStage_612ac0c5_player">
                 <strong>Ava</strong><span>Best tile 256</span>
               </div>
-              <strong class="pb_RaceStage_44acaf9f_score">2744</strong>
+              <strong class="pb_RaceStage_612ac0c5_score">2744</strong>
             </li>
             <li style="--racer-color: var(--pb-player-4)">
-              <b class="pb_RaceStage_44acaf9f_rank">#7</b>
-              <div class="pb_RaceStage_44acaf9f_player">
+              <b class="pb_RaceStage_612ac0c5_rank">#7</b>
+              <div class="pb_RaceStage_612ac0c5_player">
                 <strong>Sam</strong><span>Best tile 128</span>
               </div>
-              <strong class="pb_RaceStage_44acaf9f_score">2072</strong>
+              <strong class="pb_RaceStage_612ac0c5_score">2072</strong>
             </li>
             <li style="--racer-color: var(--pb-player-7)">
-              <b class="pb_RaceStage_44acaf9f_rank">#8</b>
-              <div class="pb_RaceStage_44acaf9f_player">
+              <b class="pb_RaceStage_612ac0c5_rank">#8</b>
+              <div class="pb_RaceStage_612ac0c5_player">
                 <strong>Nora</strong><span>Best tile 32</span>
               </div>
-              <strong class="pb_RaceStage_44acaf9f_score">436</strong>
+              <strong class="pb_RaceStage_612ac0c5_score">436</strong>
             </li>
           </ol>
-          <p class="pb_RaceStage_44acaf9f_footer">Equal scores share a place.</p>
+          <p class="pb_RaceStage_612ac0c5_footer">Equal scores share a place.</p>
         </div>
       </main>
-      <footer id="shell-footer"></footer>
+      <footer id="shell-footer"><span>2048</span><span>phone</span></footer>
     </div>
   </body>
 </html>

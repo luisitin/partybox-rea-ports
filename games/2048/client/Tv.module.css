@@ -164,3 +164,34 @@
   color: var(--pb-text);
   font-variant-numeric: tabular-nums;
 }
+
+/* Eight full numeric boards fit the actual collapsed-strip host Stage. */
+div.stage {
+  gap: var(--pb-space-3);
+}
+.racers {
+  align-content: start;
+}
+.racer {
+  gap: var(--pb-space-1);
+}
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--pb-space-2);
+}
+.best,
+.score {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+}
+.best strong {
+  font-size: var(--pb-font-h2);
+  line-height: 1.4;
+}
+.score strong {
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  line-height: 1.4;
+}

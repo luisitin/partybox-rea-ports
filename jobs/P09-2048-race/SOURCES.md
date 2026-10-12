@@ -1,7 +1,10 @@
-# P09 sources and provenance
+# P09 2048 sources and provenance
 
-Accessed 2026-10-11. All links below are primary sources. Only mechanics and
-behavior were studied. No external code or assets are shipped in this job.
+Current resume (2026-10-12): canonical product/id 2048 replaces Merge Sprint. Root freshly
+opened the creator hosted page and confirmed the independently authored pinned raw engine;
+no interactive live play/audio session is claimed. Fresh independent access used the
+[pinned raw engine](https://raw.githubusercontent.com/nneonneo/2048-ai/41e298f4571a9505e421e3a19af7a1cb372a368c/2048.cpp). Original access/probes below date from
+2026-10-11. Only mechanics/behavior were studied; no original-game or solver code/assets ship.
 
 ## Original creator
 
@@ -45,3 +48,14 @@ termination and the 180-second cap come directly from this repository's P09 job.
 - Runtime: local SDK only; no calls to the original game, external research sites, or tracking services.
 
 No third-party asset license is required because no third-party asset is used.
+
+## Current capture provenance pending
+
+The old 15 captures use a fake host frame and incorrect spectator SSR routing; they are
+historical baseline only. Root's replacement capture will use pinned PartyBox TV/phone chrome
+and the correct public role/provider. Record any capture-only host CSS/font licence and fresh
+source/media hashes with that evidence. These styles are separate from original 2048 assets.
+The current canonical game, tools and workflow use games/2048; prior commands/names remain
+historical. PR #12's previous CI 38180992082 does not verify new repairs.
+
+- Capture-only Nunito Variable5.3.0 bytes and full SIL OFL are reused from the pinned PartyBox host via the completed P01 evidence, independent of original2048 assets. Actual collapsed-strip and phone chrome/global rules are reconstructed from pinned core6ce46e613d3705624a56647592979613c4d6e468.

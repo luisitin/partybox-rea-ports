@@ -3,8 +3,8 @@ import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { createRng } from '@partybox/game-sdk';
 import { testPlayers } from '@partybox/game-sdk/testing';
-import { game } from '../../../games/merge-sprint/server/index';
-import type { State } from '../../../games/merge-sprint/server/types';
+import { game } from '../../../games/2048/server/index';
+import type { State } from '../../../games/2048/server/types';
 
 const counts = [2, 3, 4, 5, 6, 7, 8];
 const skills = ['easy', 'normal', 'sharp'] as const;
@@ -19,6 +19,7 @@ for (const players of counts) {
   for (const skill of skills) {
     const lengths: number[] = [];
     const scores: number[] = [];
+    const totalLengths: number[] = [];
     const reasons: Record<string, number> = {};
     let moves = 0;
     const began = performance.now();
@@ -67,6 +68,7 @@ for (const players of counts) {
         phaseId: state.phase.id,
         startedAt: state.phase.startedAt,
       });
+      totalLengths.push(state.phase.startedAt - t0);
       const results = game.results(state);
       if (!results || state.phase.id !== 'done')
         throw new Error(`No results: ${players}/${skill}/${seed}`);
@@ -93,6 +95,7 @@ for (const players of counts) {
       beatMs,
       medianPlayMs: median,
       maxPlayMs: lengths.at(-1),
+      maxTotalMs: Math.max(...totalLengths),
       medianScore: scores[Math.floor(scores.length / 2)],
       totalAcceptedMoves: moves,
       reasons,

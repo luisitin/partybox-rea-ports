@@ -1,4 +1,4 @@
-// Merge Sprint is a deterministic same-seed race. The SDK owns event ordering and pause.
+// 2048 is a deterministic same-seed race. The SDK owns event ordering and pause.
 import {
   composeReduce,
   controllerEnvelope,

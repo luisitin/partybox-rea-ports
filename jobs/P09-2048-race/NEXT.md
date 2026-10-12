@@ -1,4 +1,63 @@
-# Resume
+# P09 resume
+
+## Latest r1-local checkpoint (2026-10-12 12:27 UTC)
+
+Canonical `games/2048` is implemented; PR #12 remains draft. Typecheck PASS after
+numeric ID and local pinned-host spectator opt-in repairs. Game-only command
+`pnpm vitest run games/2048 --maxWorkers=1 --pool=threads --reporter=default --reporter=json --outputFile=C:/Users/luisi_xlnbc7h/AppData/Local/Temp/r1-local-2048-tests-20261012.json`
+PASS: 91/91 tests, nine files, 20.74 s, exit 0. Includes the unmodified 20 SDK
+contracts, 1,003 race seeds, rendered reading floors, feedback and numeric-ID checks.
+Initial run failed three old `Best tile` copy expectations; updated to the new
+`Best` label and reran the full game green. Two earlier type failures exposed that
+the public kit lacks the pinned core spectator field; the phone module uses a local
+intersection type, with the real host runtime opt-in retained.
+
+Actual collapsed-strip TV Stage 854.8/inner788.8 px; phone60+27.6 px chrome.
+Local Nunito/OFL and pinned global reset replace the historical fake harness.
+First actual capture showed TV header overlap26.65px; compact best/score rows
+remove it. Current15 captures pass frame bounds, no clipped items, header separation,
+32px game body and44px targets; browser27260/113056 closed in finally, zero living
+owned children. Four representative frames reviewed by hand; all15/adversarial
+long-name/target/paused/receipt review remains required. Font ink overhang metrics
+remain explicit and must be reviewed; they are not silently deleted.
+Capture file navigation timed out once and closed browser114580; current CDP
+setDocumentContent loads exact HTML and local font bytes.
+
+Fresh simulation is PARTIAL: see completedGames/incomplete in simulation.json.
+All recorded groups terminate within480000ms; median play180000ms. Counts/strengths
+not present remain required. Owned process108044/59484 was stopped for the session
+deadline after complete group records were saved. Historical21k/20mutation results
+below remain baseline only. Fresh mutation rerun, full simulations, adversarial
+captures/manual QA, final CI and three consecutive no-gain rounds are pending.
+Shared manifest validator now allows leading digits under docs/DECISIONS.md;
+owner core is unchanged and also needs that validator when importing this port.
+
+## Earlier resume checkpoint (historical)
+
+## Current canonical resume (2026-10-12, r1-local)
+
+- Claim `206c2c0`; branch `job/P09-2048-race`, merged fresh main. Canonical game `games/2048`, id/name 2048. Former Merge Sprint name/path is historical; 117 core manifests were checked with no overlap.
+- PR #12's former ready/CI 38180992082 result is baseline only; it is reopened draft pending new checks. No current type/test/capture/CI PASS is claimed.
+- Root owns pinned-host capture; server owns visible-text reading floors; client owns canonical copy, spectator routing and accepted-move feedback. Old 15-image fake chrome and spectator SSR misrouting do not verify actual-host/read-only behavior.
+- Research was reopened: original hosted page and independent pinned raw engine were confirmed. No live interaction/audio session was performed. Historical original-engine VM probes remain labelled evidence.
+
+Remaining work:
+
+1. Finish current server/client repairs and root's pinned-host TV/phone/spectator captures; verify readable numbers, all eight boards/results, touch targets, actual spectator controls absence and owned-browser closure.
+2. Run `pnpm.cmd typecheck`, `pnpm.cmd format`, and only `pnpm.cmd vitest run games/2048 --maxWorkers=1 --pool=threads`. Refresh properties/SDK evidence and verify canonical discovery/fixtures.
+3. Regenerate all-count/all-strength 21,000 simulations with current reveal reading timing and the twice-estimate completion limit. Run meaningful mutations/restoration checks against current source; do not reuse historical counts as PASS.
+4. Refresh media/source hashes and decimal 10 MB total, push milestones, pull --rebase before every claim commit, refresh PR #12 (title P09 2048/body job README) and require new-head CI before marking ready.
+5. Begin the current KEEP GOING loop after green: root records five weaknesses, worst repair and measured outcome each round. Three consecutive no-gain reviews are pending; historical loop evidence does not release this resumed claim.
+
+One own-game worker and at most one owned headless browser closed in finally. Owner core
+stays read-only; no current completion/DONE claim.
+
+## Historical prior-run handoff (superseded)
+
+The following describes r8-local's former Merge Sprint work. Its ownership, paths, readiness
+and remaining-action text are historical and do not override the current resume above.
+
+### Original prior-run record
 
 Claim P09 r8-local, branch job/P09-2048-race, game games/merge-sprint.
 

@@ -4,6 +4,7 @@ import type { ControllerView, GameStateBase, TvView } from '@partybox/game-sdk';
 
 export const PHASES = ['play', 'reveal', 'done'] as const;
 export const TARGET = 2048;
+/** Minimum settling beat; the actual reveal also covers every visible word. */
 export const REVEAL_MS = 8000;
 export const MOVE_MS = 150;
 export const MAX_MOVES = 1200;

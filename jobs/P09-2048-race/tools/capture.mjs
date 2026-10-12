@@ -343,6 +343,7 @@ function measure() {
       ...describe(node),
       text: text.textContent.trim().slice(0, 120),
       fontPx: parseFloat(style.fontSize),
+      gameText: document.getElementById('game-frame').contains(node),
       rect: box(rect),
     };
     textFonts.push(font);
@@ -360,6 +361,16 @@ function measure() {
     }
   }
 
+  const gameFrame = document.getElementById('game-frame');
+  const gameHeader = gameFrame.querySelector('header');
+  const firstCard = gameFrame.querySelector('article');
+  const headerOverlap =
+    document.documentElement.dataset.surface === 'tv' && gameHeader && firstCard
+      ? Math.max(
+          0,
+          gameHeader.getBoundingClientRect().bottom - firstCard.getBoundingClientRect().top,
+        )
+      : 0;
   const directionTargets = [...document.querySelectorAll('button[aria-label^="Move "]')].map(
     (node) => {
       const rect = node.getBoundingClientRect();
@@ -373,6 +384,7 @@ function measure() {
   );
   return {
     title: document.title,
+    headerOverlap,
     surface: document.documentElement.dataset.surface,
     viewport,
     document: {
@@ -390,7 +402,7 @@ function measure() {
     directionTargets,
     tvTextBelow32px:
       document.documentElement.dataset.surface === 'tv'
-        ? textFonts.filter((text) => text.fontPx < 32)
+        ? textFonts.filter((text) => text.gameText && text.fontPx < 32)
         : [],
   };
 }
@@ -459,32 +471,17 @@ try {
       },
       sessionId,
     );
-    const navigation = await cdp.send(
-      'Page.navigate',
-      { url: pathToFileURL(join(media, filename)).href },
+    const frame = await cdp.send('Page.getFrameTree', {}, sessionId);
+    const contents = await readFile(join(media, filename), 'utf8');
+    const base = pathToFileURL(`${media}/`).href;
+    await cdp.send(
+      'Page.setDocumentContent',
+      {
+        frameId: frame.frameTree.frame.id,
+        html: contents.replace('<head>', `<head><base href="${base}">`),
+      },
       sessionId,
     );
-    if (navigation.errorText) throw new Error(`${filename}: ${navigation.errorText}`);
-    // Wait for the correct local document, fonts, and two layout frames without adding a browser.
-    let ready = false;
-    const readyDeadline = Date.now() + 60000;
-    while (Date.now() < readyDeadline) {
-      const result = await cdp.send(
-        'Runtime.evaluate',
-        {
-          expression: `document.readyState === 'complete' && document.title === ${JSON.stringify(basename(filename, '.html'))}`,
-          returnByValue: true,
-        },
-        sessionId,
-      );
-      if (result.result.value) {
-        ready = true;
-        break;
-      }
-      await delay(100);
-    }
-    if (!ready)
-      throw new Error(`${filename}: local document did not become ready within 60 seconds`);
     const settled = await cdp.send(
       'Runtime.evaluate',
       {
@@ -541,7 +538,17 @@ try {
   const bytes = sizes
     .filter((entry) => entry.isFile())
     .reduce((total, entry) => total + entry.size, 0);
-  if (bytes >= 10 * 1024 * 1024) throw new Error(`Media exceeds the 10 MB budget: ${bytes} bytes`);
+  const failed = layouts.filter(
+    (a) =>
+      a.outside.length ||
+      a.clipping.length ||
+      a.tvTextBelow32px.length ||
+      a.headerOverlap > 1 ||
+      a.directionTargets.some((t) => !t.passes44px),
+  );
+  if (failed.length)
+    throw new Error(`Current host fit failed: ${failed.map((a) => a.html).join(', ')}`);
+  if (bytes >= 10_000_000) throw new Error(`Media exceeds the 10 MB budget: ${bytes} bytes`);
   console.log(
     JSON.stringify({ captures: layouts.length, mediaBytes: bytes, report: 'media/layout.json' }),
   );

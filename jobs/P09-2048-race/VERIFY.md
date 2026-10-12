@@ -1,11 +1,78 @@
 # P09 verification
 
+## Latest r1-local checkpoint (2026-10-12 12:27 UTC)
+
+Canonical `games/2048` is implemented; PR #12 remains draft. Typecheck PASS after
+numeric ID and local pinned-host spectator opt-in repairs. Game-only command
+`pnpm vitest run games/2048 --maxWorkers=1 --pool=threads --reporter=default --reporter=json --outputFile=C:/Users/luisi_xlnbc7h/AppData/Local/Temp/r1-local-2048-tests-20261012.json`
+PASS: 91/91 tests, nine files, 20.74 s, exit 0. Includes the unmodified 20 SDK
+contracts, 1,003 race seeds, rendered reading floors, feedback and numeric-ID checks.
+Initial run failed three old `Best tile` copy expectations; updated to the new
+`Best` label and reran the full game green. Two earlier type failures exposed that
+the public kit lacks the pinned core spectator field; the phone module uses a local
+intersection type, with the real host runtime opt-in retained.
+
+Actual collapsed-strip TV Stage 854.8/inner788.8 px; phone60+27.6 px chrome.
+Local Nunito/OFL and pinned global reset replace the historical fake harness.
+First actual capture showed TV header overlap26.65px; compact best/score rows
+remove it. Current15 captures pass frame bounds, no clipped items, header separation,
+32px game body and44px targets; browser27260/113056 closed in finally, zero living
+owned children. Four representative frames reviewed by hand; all15/adversarial
+long-name/target/paused/receipt review remains required. Font ink overhang metrics
+remain explicit and must be reviewed; they are not silently deleted.
+Capture file navigation timed out once and closed browser114580; current CDP
+setDocumentContent loads exact HTML and local font bytes.
+
+Fresh simulation is PARTIAL: see completedGames/incomplete in simulation.json.
+All recorded groups terminate within480000ms; median play180000ms. Counts/strengths
+not present remain required. Owned process108044/59484 was stopped for the session
+deadline after complete group records were saved. Historical21k/20mutation results
+below remain baseline only. Fresh mutation rerun, full simulations, adversarial
+captures/manual QA, final CI and three consecutive no-gain rounds are pending.
+Shared manifest validator now allows leading digits under docs/DECISIONS.md;
+owner core is unchanged and also needs that validator when importing this port.
+
+## Earlier resume checkpoint (historical)
+
+## Current canonical resume (2026-10-12, r1-local)
+
+Canonical `games/2048` replaces the former Merge Sprint name/path; job branch remains
+`job/P09-2048-race`. Root's 117-core-manifest overlap scan found no duplicate. The current
+claim is `206c2c0`. All new-source gates remain pending; the old 76-test/21,000-game/
+20-mutation/15-capture figures below are historical baseline only.
+
+| Gate                     | Current command/evidence                                       | Status                                                                          |
+| ------------------------ | -------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Types                    | `pnpm.cmd typecheck`                                           | Pending canonical/current repairs                                               |
+| Format                   | `pnpm.cmd format`                                              | Pending                                                                         |
+| Own tests/SDK/properties | `pnpm.cmd vitest run games/2048 --maxWorkers=1 --pool=threads` | Pending; own game only                                                          |
+| Simulations/read timing  | Current P09 simulation tool; counts 2–8/all three strengths    | Pending regenerated 21,000 games and current reading-floor/estimate evidence    |
+| Mutations/restoration    | Current P09 mutation tool                                      | Pending fresh behavioral kills and restored-source hashes                       |
+| Actual-host captures     | Root's pinned chrome renderer/capture                          | Pending; old fake chrome/spectator SSR routing do not prove fit or read-only UI |
+| Media/source sums        | Current renderer/hash tools                                    | Pending fresh hashes and decimal 10 MB cap                                      |
+| CI/PR                    | P09 workflow / PR #12                                          | Reopened draft; fresh head CI pending; old CI 38180992082 is baseline           |
+| KEEP GOING               | Root-owned LOOP.md                                             | Fresh three-consecutive-no-gain loop pending                                    |
+
+The original hosted page and independent pinned raw engine were freshly opened/confirmed,
+but there was no live original gameplay/audio session. Historical VM probes are not new browser
+play. Prior screenshots used invented host reservations and misrouted spectator SSR; repair
+and actual-shell capture must precede any current layout/controls PASS. All execution stays
+one own-game thread worker and at most one owned browser closed in finally.
+
+## Historical prior-run evidence (superseded)
+
+PR #12 was previously ready with CI 38180992082. The original commands/results below describe
+`games/merge-sprint` and their source snapshot, not the renamed/repaired current implementation.
+Keep their benchmark/probe records; do not count them as fresh verification.
+
+### Original prior-run record
+
 In progress on `job/P09-2048-race`. Completed evidence is distinguished from
 pending gates below. An earlier passing command is not a claim about later edits.
 All commands run from the repository root. Windows uses the existing `pnpm.cmd`
 shim because machine policy blocks `pnpm.ps1`; CI uses `pnpm` on Ubuntu.
 
-## Setup, research, and implementation checks
+### Setup, research, and implementation checks
 
 | Check              | Exact command or evidence                                                                               | Result                                                                                                                                                   |
 | ------------------ | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -24,7 +91,7 @@ reconnection, dropped-player completion, all-phase views, private future draws,
 phone-only play, spectators, and three visible-board bot strategies. These are
 coverage descriptions; all passed in the 76-test run.
 
-## Seeded completion simulation — passed
+### Seeded completion simulation — passed
 
 Exact command:
 
@@ -57,7 +124,7 @@ race. It measures completion and standings, not touch latency or live browser
 performance. Every group records reasons, median score, accepted moves, and wall
 time in the JSON evidence. No other game's tests or browser were used.
 
-## Property seeds — passed
+### Property seeds — passed
 
 Included in the own-game command. Optional isolated reproduction:
 
@@ -72,7 +139,7 @@ under recorded fast-check seed **204809**. A separate replay property generates
 deterministic timer transitions, equal public views, and absent future draws.
 Latest result: **passed** in the 76-test own-game run.
 
-## Mutation check — passed, 20/20 caught
+### Mutation check — passed, 20/20 caught
 
 Exact outer command:
 
@@ -120,7 +187,7 @@ up to four original failure labels per mutant.
 | 19  | reveal timer never exits          | Caught; exit 1 | the first 2048 ends every board and wins even against a higher merge score              |
 | 20  | future draws leak to public views | Caught; exit 1 | changing future spawn luck and RNG leaves every public view identical in play           |
 
-## Screens and layout — passed
+### Screens and layout — passed
 
 Exact SSR command:
 
@@ -173,7 +240,7 @@ Total media is **4,218,520 bytes**, below 10 MB. The hash-only command passed;
 an independent PowerShell Get-FileHash comparison verified every entry and the
 media count. `git diff --check` also passed. Refresh after any recapture.
 
-## CI, pull request, and KEEP GOING — pending
+### CI, pull request, and KEEP GOING — pending
 
 `.github/workflows/P09.yml` targets pull requests touching this game/job. It uses
 `ubuntu-latest`, a 30-minute timeout, `contents: read`, and only `actions/*`

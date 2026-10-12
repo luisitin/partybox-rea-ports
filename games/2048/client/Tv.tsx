@@ -16,7 +16,7 @@ export function Tv({ view }: GameTvProps<TvMergeView>): JSX.Element {
   const rows = playing ? view.racers : ranked(view.racers);
   const winner = view.winners[0];
   const headline = playing
-    ? L('Merge Sprint')
+    ? L('2048')
     : view.winners.length > 1
       ? L('A tie at the top!')
       : L('{name} wins!', { name: names[winner ?? ''] ?? L('The race') });
@@ -61,7 +61,7 @@ export function Tv({ view }: GameTvProps<TvMergeView>): JSX.Element {
             >
               <header className={styles.racerHeader}>
                 <b className={styles.rank}>#{racer.rank}</b>
-                <h2>{names[racer.id] ?? racer.id}</h2>
+                <h2 title={names[racer.id] ?? racer.id}>{names[racer.id] ?? racer.id}</h2>
                 {view.winners.includes(racer.id) ? (
                   <span aria-label={L('Winner')}>★</span>
                 ) : racer.status === 'blocked' ? (
@@ -72,7 +72,7 @@ export function Tv({ view }: GameTvProps<TvMergeView>): JSX.Element {
               </header>
               <div className={styles.summary}>
                 <div className={styles.best}>
-                  <span>{L('Best tile')}</span>
+                  <span>{L('Best')}</span>
                   <strong>{racer.best}</strong>
                 </div>
                 <div className={styles.score}>
