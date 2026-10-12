@@ -14,6 +14,7 @@ import {
   PELLET_COUNT,
   PELLET_MASS,
   RESPAWN_MS,
+  ROUND_MS,
   SHIELD_MS,
   SPLIT_COOLDOWN_MS,
   SPLIT_MIN,
@@ -21,7 +22,8 @@ import {
   STEP_MS,
   W,
 } from '../server/types';
-import { apply, tick, totalMass } from '../server/world';
+import { apply, release, retire, tick, totalMass } from '../server/world';
+import type { State } from '../server/types';
 import { cell, deepFreeze, stateWithWorld, world } from './helpers';
 
 describe('growth and steering', () => {
@@ -41,7 +43,10 @@ describe('growth and steering', () => {
     expect(next.controls.p1?.y).toBeCloseTo(Math.SQRT1_2, 4);
     expect(Math.hypot(next.controls.p1!.x, next.controls.p1!.y)).toBeCloseTo(1, 4);
     expect(before.controls.p1?.x).toBe(0);
-    expect(apply(next, 'p1', { type: 'steer', x: 1, y: 1 }, 500)).toBe(next);
+    const repeated = apply(next, 'p1', { type: 'steer', x: 1, y: 1 }, 500);
+    expect(repeated.controls.p1).toEqual({ ...next.controls.p1!, at: 500 });
+    expect(apply(repeated, 'p1', { type: 'steer', x: -1, y: 0 }, 499)).toBe(repeated);
+    expect(apply(repeated, 'p1', { type: 'steer', x: 1, y: 1 }, 500)).toBe(repeated);
   });
 
   it('has slower large-cell travel, radius-aware walls, and no movement from a neutral pad', () => {
@@ -75,6 +80,36 @@ describe('growth and steering', () => {
     expect(apply(later, 'p1', { type: 'steer', x: -1, y: 0 }, 499)).toBe(later);
     const stepped = { ...later, time: 1000 };
     expect(apply(stepped, 'p1', { type: 'split' }, 999)).toBe(stepped);
+  });
+
+  it('an already-neutral release still records its event-time barrier without changing split cooldown', () => {
+    const start = deepFreeze(
+      world([cell()], {
+        time: 200,
+        controls: { p1: { x: 0, y: 0, at: 100, splitAt: 50 } },
+      }),
+    );
+    const released = release(start, 'p1', 235);
+    expect(released.controls.p1).toEqual({ x: 0, y: 0, at: 235, splitAt: 50 });
+    expect(apply(released, 'p1', { type: 'steer', x: 1, y: 0 }, 230)).toBe(released);
+    expect(apply(released, 'p1', { type: 'steer', x: 1, y: 0 }, 236).controls.p1?.x).toBe(1);
+    expect(release(start, 'p1', 100000).controls.p1?.at).toBe(ROUND_MS);
+    expect(release(start, 'p1', -100).controls.p1?.at).toBe(200);
+    expect(start.controls.p1?.at).toBe(100);
+  });
+
+  it('retirement removes all owned pieces and pending respawns while keeping other seats intact', () => {
+    const start = deepFreeze(
+      world([cell('p1'), cell('p1', { id: 2, x: 70 }), cell('p2', { id: 3, x: 100 })], {
+        respawns: { p1: 3000, p2: 4000 },
+      }),
+    );
+    const gone = retire(start, 'p1', 235);
+    expect(gone.cells).toEqual([start.cells[2]]);
+    expect(gone.respawns).toEqual({ p2: 4000 });
+    expect(gone.controls.p1).toMatchObject({ x: 0, y: 0, at: 235 });
+    expect(retire(gone, 'p1', 235)).toBe(gone);
+    expect(start.cells).toHaveLength(3);
   });
 });
 
@@ -223,6 +258,63 @@ describe('eating', () => {
     expect(end.cells[0]!.x).toBeGreaterThanOrEqual(radius(end.cells[0]!.mass) - 0.0001);
     expect(end.cells[0]!.y).toBeGreaterThanOrEqual(radius(end.cells[0]!.mass) - 0.0001);
   });
+
+  it('the nearest overlapping cell wins a snack independently of storage order without a tie draw', () => {
+    const start = deepFreeze(
+      world([cell('p1', { x: 58 }), cell('p2', { id: 2, x: 60.5 }), cell('p3', { id: 3, x: 61 })], {
+        pellets: [{ id: 0, x: 60, y: 50 }],
+      }),
+    );
+    const rng = seedRng(17);
+    const [end, next] = tick(start, rng, STEP_MS);
+    expect(end.cells.map((c) => c.mass)).toEqual([24, 27, 24]);
+    expect(next.step).toBe(rng.step + 2);
+    expect(tick({ ...start, cells: [...start.cells].reverse() }, rng, STEP_MS)).toEqual([
+      end,
+      next,
+    ]);
+    expect(end.cells.reduce((sum, c) => sum + c.mass, 0)).toBe(72 + PELLET_MASS);
+  });
+
+  it('equal and rounding-sized snack ties replay by seed and can reward either rival', () => {
+    for (const right of [61, 61.0004]) {
+      const start = deepFreeze(
+        world([cell('p1', { x: 59 }), cell('p2', { id: 2, x: right })], {
+          pellets: [{ id: 0, x: 60, y: 50 }],
+        }),
+      );
+      const winners = new Set<string>();
+      for (let seed = 1; seed <= 64; seed++) {
+        const rng = seedRng(seed);
+        const [end, next] = tick(start, rng, STEP_MS);
+        const winner = end.cells.find((c) => c.mass === START_MASS + PELLET_MASS)!;
+        winners.add(winner.owner);
+        expect(end.cells.reduce((sum, c) => sum + c.mass, 0)).toBe(48 + PELLET_MASS);
+        expect(next.step).toBe(rng.step + 3);
+        expect(tick(start, rng, STEP_MS)).toEqual([end, next]);
+        expect(tick({ ...start, cells: [...start.cells].reverse() }, rng, STEP_MS)).toEqual([
+          end,
+          next,
+        ]);
+      }
+      expect([...winners].sort()).toEqual(['p1', 'p2']);
+    }
+  });
+
+  it('snack ties use the actual minimum distance and exclude a farther tolerance chain', () => {
+    const start = world(
+      [cell('p1', { x: 61.0018 }), cell('p2', { id: 2, x: 61.0009 }), cell('p3', { id: 3, x: 59 })],
+      { pellets: [{ id: 0, x: 60, y: 50 }] },
+    );
+    const winners = new Set<string>();
+    for (let seed = 1; seed <= 64; seed++) {
+      const [end] = tick(start, seedRng(seed), STEP_MS);
+      const winner = end.cells.find((c) => c.mass === START_MASS + PELLET_MASS)!;
+      expect(winner.owner).not.toBe('p1');
+      winners.add(winner.owner);
+    }
+    expect([...winners].sort()).toEqual(['p2', 'p3']);
+  });
 });
 
 describe('spawn and clocks', () => {
@@ -322,5 +414,28 @@ describe('points and bot decisions', () => {
     ).toBe(true);
     expect(game.inputSchema.safeParse(botInput(s, 'p1', createRng(1), 'sharp')).success).toBe(true);
     expect(distance(s.world.cells[0]!, s.world.cells[1]!)).toBe(10);
+  });
+
+  it('ineligible bot seats consume no supplied RNG at every strength', () => {
+    const initial = stateWithWorld(world([cell()], { pellets: [{ id: 0, x: 70, y: 50 }] }));
+    for (const skill of ['easy', 'normal', 'sharp'] as const) {
+      const disconnected = {
+        ...initial,
+        players: { ...initial.players, p1: { ...initial.players.p1!, connected: false } },
+      };
+      const seats: [State, string][] = [
+        [disconnected, 'p1'],
+        [{ ...initial, left: ['p1'] }, 'p1'],
+        [initial, 'spectator'],
+        [initial, '__proto__'],
+        [initial, 'constructor'],
+      ];
+      for (const [state, id] of seats) {
+        const rng = createRng(23);
+        const before = rng.state();
+        expect(botInput(state, id, rng, skill)).toBeNull();
+        expect(rng.state()).toEqual(before);
+      }
+    }
   });
 });

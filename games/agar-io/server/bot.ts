@@ -1,8 +1,28 @@
 // Three honest strategies: graze, avoid predators, and make safe split attacks.
+import { hasPlayer } from '@partybox/game-sdk';
 import type { BotSkill, Rng } from '@partybox/game-sdk';
 import { distance, radius, round } from './geometry';
 import { EAT_RATIO, SPLIT_MIN, W, H } from './types';
 import type { Input, State } from './types';
+
+const TARGET_TIE_TOLERANCE = 0.001;
+
+function nearest<T extends { id: number; x: number; y: number }>(
+  me: { x: number; y: number },
+  candidates: readonly T[],
+  rng: Rng,
+): T | undefined {
+  let minimum = Infinity;
+  const ranked = candidates.map((candidate) => {
+    const gap = distance(me, candidate);
+    minimum = Math.min(minimum, gap);
+    return { candidate, gap };
+  });
+  const ties = ranked
+    .filter(({ gap }) => gap - minimum <= TARGET_TIE_TOLERANCE)
+    .sort((a, b) => a.candidate.id - b.candidate.id);
+  return ties.length > 1 ? rng.pick(ties).candidate : ties[0]?.candidate;
+}
 
 export function botInput(
   state: State,
@@ -10,18 +30,30 @@ export function botInput(
   rng: Rng,
   skill: BotSkill = 'normal',
 ): Input | null {
-  if (state.phase.id !== 'play' || state.phase.paused || state.left.includes(id)) return null;
+  if (
+    state.phase.id !== 'play' ||
+    state.phase.paused ||
+    !hasPlayer(state, id) ||
+    !state.players[id]?.connected ||
+    state.left.includes(id)
+  )
+    return null;
   const last = state.world.controls[id];
   if (last && state.world.time > 0 && state.world.time - last.at < 800) return null;
   const own = state.world.cells.filter((c) => c.owner === id);
-  const me = [...own].sort((a, b) => b.mass - a.mass)[0];
+  const me = [...own].sort((a, b) => b.mass - a.mass || a.id - b.id)[0];
   if (!me) return null;
   const rivals = state.world.cells.filter(
     (c) => c.owner !== id && c.shieldUntil <= state.world.time,
   );
-  const threat = rivals
-    .filter((c) => c.mass >= me.mass * EAT_RATIO)
-    .sort((a, b) => distance(me, a) - distance(me, b))[0];
+  const threat =
+    skill === 'easy'
+      ? undefined
+      : nearest(
+          me,
+          rivals.filter((c) => c.mass >= me.mass * EAT_RATIO),
+          rng,
+        );
   let target: { x: number; y: number } | undefined;
   if (
     skill !== 'easy' &&
@@ -30,9 +62,14 @@ export function botInput(
   ) {
     target = { x: me.x + (me.x - threat.x), y: me.y + (me.y - threat.y) };
   } else {
-    const prey = rivals
-      .filter((c) => me.mass >= c.mass * EAT_RATIO)
-      .sort((a, b) => distance(me, a) - distance(me, b))[0];
+    const prey =
+      skill === 'sharp'
+        ? nearest(
+            me,
+            rivals.filter((c) => me.mass >= c.mass * EAT_RATIO),
+            rng,
+          )
+        : undefined;
     if (skill === 'sharp' && prey && distance(me, prey) < 25) {
       const control = state.world.controls[id];
       const dx = prey.x - me.x,
@@ -51,13 +88,23 @@ export function botInput(
         return { type: 'split' };
       target = prey;
     } else {
-      const pellets = state.world.pellets
-        .map((pellet) => ({ pellet, distance: distance(me, pellet) }))
-        .sort((a, b) => a.distance - b.distance);
-      target = pellets[skill === 'easy' ? rng.int(0, Math.min(4, pellets.length - 1)) : 0]?.pellet;
+      if (skill === 'easy') {
+        const pellets = state.world.pellets
+          .map((pellet) => ({ pellet, gap: distance(me, pellet) }))
+          .sort((a, b) => a.gap - b.gap || a.pellet.id - b.pellet.id);
+        const cutoff = pellets[Math.min(4, pellets.length - 1)]?.gap;
+        // Easy varies among five nearby snacks; include all ties at that boundary fairly.
+        const choices =
+          cutoff === undefined
+            ? []
+            : pellets
+                .filter(({ gap }) => gap - cutoff <= TARGET_TIE_TOLERANCE)
+                .sort((a, b) => a.pellet.id - b.pellet.id);
+        target = choices.length ? rng.pick(choices).pellet : undefined;
+      } else target = nearest(me, state.world.pellets, rng);
     }
   }
-  if (!target) return { type: 'steer', x: 0, y: 0 };
+  if (!target) return last?.x || last?.y ? { type: 'steer', x: 0, y: 0 } : null;
   let dx = target.x - me.x,
     dy = target.y - me.y;
   // Avoid pinning a fleeing bot against the wall; take a tangent along it.

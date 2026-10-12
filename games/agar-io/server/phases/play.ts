@@ -19,6 +19,7 @@ export function enterPlay(state: State, now: number, round = state.round): State
   );
 }
 export function settle(state: State, now: number): State {
+  if (state.phase.id !== 'play' || state.phase.paused) return state;
   const to = Math.min(ROUND_MS, Math.max(0, now - state.began));
   const [world, rng] = tick(state.world, state.rng, to, state.left);
   return world === state.world ? state : { ...state, world, rng };
@@ -43,7 +44,15 @@ export function reducePlay(state: State, event: GameEvent<Input>, score: Transit
     state.left.includes(event.playerId)
   )
     return state;
-  if (event.now < state.began + state.world.time) return state;
+  const control = Object.hasOwn(state.world.controls, event.playerId)
+    ? state.world.controls[event.playerId]
+    : undefined;
+  if (
+    !control ||
+    !state.world.cells.some((cell) => cell.owner === event.playerId) ||
+    event.now < state.began + Math.max(state.world.time, control.at)
+  )
+    return state;
   const parsed =
     event.input?.type === 'steer' || event.input?.type === 'split' ? event.input : null;
   if (!parsed) return state;

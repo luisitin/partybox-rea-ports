@@ -1,0 +1,658 @@
+{
+  "numTotalTestSuites": 16,
+  "numPassedTestSuites": 16,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 60,
+  "numPassedTests": 60,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1791785491745,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["physical steering"],
+          "fullName": "physical steering uses the same half/full thumb reach independently of the surrounding pad size",
+          "status": "passed",
+          "title": "uses the same half/full thumb reach independently of the surrounding pad size",
+          "duration": 1.9921999999999969,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["physical steering"],
+          "fullName": "physical steering keeps aliases independent and opposing directions neutral",
+          "status": "passed",
+          "title": "keeps aliases independent and opposing directions neutral",
+          "duration": 0.5317999999999756,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["physical steering"],
+          "fullName": "physical steering restores a held keyboard direction after only the pointer is released",
+          "status": "passed",
+          "title": "restores a held keyboard direction after only the pointer is released",
+          "duration": 0.42130000000000223,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["keyboard focus and shortcuts"],
+          "fullName": "keyboard focus and shortcuts ignores modified steering/split keydowns but still releases existing holds: {\"ctrlKey\":true}",
+          "status": "passed",
+          "title": "ignores modified steering/split keydowns but still releases existing holds: {\"ctrlKey\":true}",
+          "duration": 0.9074999999999989,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["keyboard focus and shortcuts"],
+          "fullName": "keyboard focus and shortcuts ignores modified steering/split keydowns but still releases existing holds: {\"altKey\":true}",
+          "status": "passed",
+          "title": "ignores modified steering/split keydowns but still releases existing holds: {\"altKey\":true}",
+          "duration": 0.2752000000000123,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["keyboard focus and shortcuts"],
+          "fullName": "keyboard focus and shortcuts ignores modified steering/split keydowns but still releases existing holds: {\"metaKey\":true}",
+          "status": "passed",
+          "title": "ignores modified steering/split keydowns but still releases existing holds: {\"metaKey\":true}",
+          "duration": 0.21340000000000714,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["keyboard focus and shortcuts"],
+          "fullName": "keyboard focus and shortcuts releases body-focused keys from an editable target without losing a separate pointer hold: {\"tagName\":\"INPUT\"}",
+          "status": "passed",
+          "title": "releases body-focused keys from an editable target without losing a separate pointer hold: {\"tagName\":\"INPUT\"}",
+          "duration": 0.4918999999999869,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["keyboard focus and shortcuts"],
+          "fullName": "keyboard focus and shortcuts releases body-focused keys from an editable target without losing a separate pointer hold: {\"tagName\":\"TEXTAREA\"}",
+          "status": "passed",
+          "title": "releases body-focused keys from an editable target without losing a separate pointer hold: {\"tagName\":\"TEXTAREA\"}",
+          "duration": 0.3615000000000066,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["keyboard focus and shortcuts"],
+          "fullName": "keyboard focus and shortcuts releases body-focused keys from an editable target without losing a separate pointer hold: {\"tagName\":\"SELECT\"}",
+          "status": "passed",
+          "title": "releases body-focused keys from an editable target without losing a separate pointer hold: {\"tagName\":\"SELECT\"}",
+          "duration": 0.3879000000000019,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["keyboard focus and shortcuts"],
+          "fullName": "keyboard focus and shortcuts releases body-focused keys from an editable target without losing a separate pointer hold: {\"isContentEditable\":true}",
+          "status": "passed",
+          "title": "releases body-focused keys from an editable target without losing a separate pointer hold: {\"isContentEditable\":true}",
+          "duration": 0.3884000000000185,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["keyboard focus and shortcuts"],
+          "fullName": "keyboard focus and shortcuts sends split once per fresh press, requires server readiness and ignores repeat",
+          "status": "passed",
+          "title": "sends split once per fresh press, requires server readiness and ignores repeat",
+          "duration": 0.2231000000000165,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["input lifecycle"],
+          "fullName": "input lifecycle releases every source once on reset and requires a fresh physical press",
+          "status": "passed",
+          "title": "releases every source once on reset and requires a fresh physical press",
+          "duration": 0.22579999999999245,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["input lifecycle"],
+          "fullName": "input lifecycle a disconnect/reconnect in the same phase releases steer/split and never resumes them",
+          "status": "passed",
+          "title": "a disconnect/reconnect in the same phase releases steer/split and never resumes them",
+          "duration": 0.08289999999999509,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["input lifecycle"],
+          "fullName": "input lifecycle a new identity or round clears old holds while routine same-context views preserve them",
+          "status": "passed",
+          "title": "a new identity or round clears old holds while routine same-context views preserve them",
+          "duration": 0.13680000000002224,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["input lifecycle"],
+          "fullName": "input lifecycle returns the captured pointer for a changed context so the DOM can release capture immediately",
+          "status": "passed",
+          "title": "returns the captured pointer for a changed context so the DOM can release capture immediately",
+          "duration": 0.12380000000001701,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["input lifecycle"],
+          "fullName": "input lifecycle rejects actions while inactive",
+          "status": "passed",
+          "title": "rejects actions while inactive",
+          "duration": 0.16280000000000427,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "startTime": 1791785494581,
+      "endTime": 1791785494588.1628,
+      "status": "passed",
+      "message": "",
+      "name": "C:/dev/rea-runs/r4/games/agar-io/client/controls.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["arena identity labels"],
+          "fullName": "arena identity labels keeps 32 crowded compact-board identities distinct and inside the arena without changing source poses",
+          "status": "passed",
+          "title": "keeps 32 crowded compact-board identities distinct and inside the arena without changing source poses",
+          "duration": 10.1327,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["arena identity labels"],
+          "fullName": "arena identity labels puts names clear of numbered plates even when all players are close together",
+          "status": "passed",
+          "title": "puts names clear of numbered plates even when all players are close together",
+          "duration": 2.2099000000000046,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["arena identity labels"],
+          "fullName": "arena identity labels preserves the received center when an uncrowded label fits and clamps edge labels",
+          "status": "passed",
+          "title": "preserves the received center when an uncrowded label fits and clamps edge labels",
+          "duration": 0.7036999999999694,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "startTime": 1791785494300,
+      "endTime": 1791785494313.7036,
+      "status": "passed",
+      "message": "",
+      "name": "C:/dev/rea-runs/r4/games/agar-io/client/labels.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["screens: play"],
+          "fullName": "screens: play renders the entire public world and eight readable player rows on the TV",
+          "status": "passed",
+          "title": "renders the entire public world and eight readable player rows on the TV",
+          "duration": 20.63440000000014,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: play"],
+          "fullName": "screens: play renders every player in both room modes and sends the same arena to phone-only players",
+          "status": "passed",
+          "title": "renders every player in both room modes and sends the same arena to phone-only players",
+          "duration": 165.41370000000006,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: play"],
+          "fullName": "screens: play uses an arena-bearing remote view even when the phone-only provider is false",
+          "status": "passed",
+          "title": "uses an arena-bearing remote view even when the phone-only provider is false",
+          "duration": 18.579600000000028,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: play"],
+          "fullName": "screens: play lets spectators watch without steering or split buttons",
+          "status": "passed",
+          "title": "lets spectators watch without steering or split buttons",
+          "duration": 29.73700000000008,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score"],
+          "fullName": "screens: score renders the entire public world and eight readable player rows on the TV",
+          "status": "passed",
+          "title": "renders the entire public world and eight readable player rows on the TV",
+          "duration": 10.46569999999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score"],
+          "fullName": "screens: score renders every player in both room modes and sends the same arena to phone-only players",
+          "status": "passed",
+          "title": "renders every player in both room modes and sends the same arena to phone-only players",
+          "duration": 123.65830000000005,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score"],
+          "fullName": "screens: score uses an arena-bearing remote view even when the phone-only provider is false",
+          "status": "passed",
+          "title": "uses an arena-bearing remote view even when the phone-only provider is false",
+          "duration": 18.92269999999985,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score"],
+          "fullName": "screens: score lets spectators watch without steering or split buttons",
+          "status": "passed",
+          "title": "lets spectators watch without steering or split buttons",
+          "duration": 43.94509999999991,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score-last"],
+          "fullName": "screens: score-last renders the entire public world and eight readable player rows on the TV",
+          "status": "passed",
+          "title": "renders the entire public world and eight readable player rows on the TV",
+          "duration": 18.89099999999985,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score-last"],
+          "fullName": "screens: score-last renders every player in both room modes and sends the same arena to phone-only players",
+          "status": "passed",
+          "title": "renders every player in both room modes and sends the same arena to phone-only players",
+          "duration": 57.207800000000134,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score-last"],
+          "fullName": "screens: score-last uses an arena-bearing remote view even when the phone-only provider is false",
+          "status": "passed",
+          "title": "uses an arena-bearing remote view even when the phone-only provider is false",
+          "duration": 3.271299999999883,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: score-last"],
+          "fullName": "screens: score-last lets spectators watch without steering or split buttons",
+          "status": "passed",
+          "title": "lets spectators watch without steering or split buttons",
+          "duration": 6.39870000000019,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: done"],
+          "fullName": "screens: done renders the entire public world and eight readable player rows on the TV",
+          "status": "passed",
+          "title": "renders the entire public world and eight readable player rows on the TV",
+          "duration": 4.063900000000103,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: done"],
+          "fullName": "screens: done renders every player in both room modes and sends the same arena to phone-only players",
+          "status": "passed",
+          "title": "renders every player in both room modes and sends the same arena to phone-only players",
+          "duration": 19.947699999999713,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: done"],
+          "fullName": "screens: done uses an arena-bearing remote view even when the phone-only provider is false",
+          "status": "passed",
+          "title": "uses an arena-bearing remote view even when the phone-only provider is false",
+          "duration": 1.3386999999997897,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["screens: done"],
+          "fullName": "screens: done lets spectators watch without steering or split buttons",
+          "status": "passed",
+          "title": "lets spectators watch without steering or split buttons",
+          "duration": 4.2771999999999935,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states puts the same arena before the steering controls with a labelled split action",
+          "status": "passed",
+          "title": "puts the same arena before the steering controls with a labelled split action",
+          "duration": 3.0751000000000204,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states keeps a swallowed player watching the arena and explains their return",
+          "status": "passed",
+          "title": "keeps a swallowed player watching the arena and explains their return",
+          "duration": 3.041500000000269,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states holds the arena and disables both actions while paused",
+          "status": "passed",
+          "title": "holds the arena and disables both actions while paused",
+          "duration": 6.816699999999855,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Grow one blob to 48 mass",
+          "status": "passed",
+          "title": "explains unavailable split: Grow one blob to 48 mass",
+          "duration": 0.5948000000003049,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Steer to aim",
+          "status": "passed",
+          "title": "explains unavailable split: Steer to aim",
+          "duration": 0.40370000000029904,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Spawn shield",
+          "status": "passed",
+          "title": "explains unavailable split: Spawn shield",
+          "duration": 0.20899999999983265,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Split cooling down",
+          "status": "passed",
+          "title": "explains unavailable split: Split cooling down",
+          "duration": 0.17430000000013024,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Four blobs maximum",
+          "status": "passed",
+          "title": "explains unavailable split: Four blobs maximum",
+          "duration": 0.2244999999998072,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Returning soon",
+          "status": "passed",
+          "title": "explains unavailable split: Returning soon",
+          "duration": 0.3371999999999389,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states explains unavailable split: Round held",
+          "status": "passed",
+          "title": "explains unavailable split: Round held",
+          "duration": 0.21760000000040236,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["play states"],
+          "fullName": "play states enables split only when the public server view authorizes it",
+          "status": "passed",
+          "title": "enables split only when the public server view authorizes it",
+          "duration": 0.3152999999997519,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["stable identity and results"],
+          "fullName": "stable identity and results keeps seat numbers and tokens when envelope order differs from initial seat order",
+          "status": "passed",
+          "title": "keeps seat numbers and tokens when envelope order differs from initial seat order",
+          "duration": 3.4966999999996915,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["stable identity and results"],
+          "fullName": "stable identity and results announces the server-scored winner on both surfaces",
+          "status": "passed",
+          "title": "announces the server-scored winner on both surfaces",
+          "duration": 8.290599999999813,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["stable identity and results"],
+          "fullName": "stable identity and results promises final results after round three instead of another round",
+          "status": "passed",
+          "title": "promises final results after round three instead of another round",
+          "duration": 12.023599999999988,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["stable identity and results"],
+          "fullName": "stable identity and results names every tied winner without applying an extra tie-break",
+          "status": "passed",
+          "title": "names every tied winner without applying an extra tie-break",
+          "duration": 6.733799999999974,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["stable identity and results"],
+          "fullName": "stable identity and results renders long names safely and labels all pieces while naming only one piece per player",
+          "status": "passed",
+          "title": "renders long names safely and labels all pieces while naming only one piece per player",
+          "duration": 3.54950000000008,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["connection, departure and compact stages"],
+          "fullName": "connection, departure and compact stages disables a disconnected living seat and restores controls at the same pose on reconnect",
+          "status": "passed",
+          "title": "disables a disconnected living seat and restores controls at the same pose on reconnect",
+          "duration": 0.7210999999997512,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["connection, departure and compact stages"],
+          "fullName": "connection, departure and compact stages also stops when the shell envelope reports a drop before the reducer connection flag changes",
+          "status": "passed",
+          "title": "also stops when the shell envelope reports a drop before the reducer connection flag changes",
+          "duration": 0.28629999999975553,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["connection, departure and compact stages"],
+          "fullName": "connection, departure and compact stages a departed remote seat watches the public arena and never receives controls or a respawn promise",
+          "status": "passed",
+          "title": "a departed remote seat watches the public arena and never receives controls or a respawn promise",
+          "duration": 8.218899999999849,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["connection, departure and compact stages"],
+          "fullName": "connection, departure and compact stages keeps a departed seat’s banked score and final place inspectable without offering re-entry",
+          "status": "passed",
+          "title": "keeps a departed seat’s banked score and final place inspectable without offering re-entry",
+          "duration": 1.7762000000002445,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["connection, departure and compact stages"],
+          "fullName": "connection, departure and compact stages does not promise a three-second respawn beyond the final horn",
+          "status": "passed",
+          "title": "does not promise a three-second respawn beyond the final horn",
+          "duration": 2.2013999999999214,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["connection, departure and compact stages"],
+          "fullName": "connection, departure and compact stages keeps all eight long-name shared winners and duplicate places in compact results",
+          "status": "passed",
+          "title": "keeps all eight long-name shared winners and duplicate places in compact results",
+          "duration": 5.826300000000174,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["public pose and identity layers"],
+          "fullName": "public pose and identity layers keeps each received body, contrast plate and number aligned before and after a movement snapshot",
+          "status": "passed",
+          "title": "keeps each received body, contrast plate and number aligned before and after a movement snapshot",
+          "duration": 5.115799999999581,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["public pose and identity layers"],
+          "fullName": "public pose and identity layers retains a contrast-backed accessible number for every split piece in the compact phone world",
+          "status": "passed",
+          "title": "retains a contrast-backed accessible number for every split piece in the compact phone world",
+          "duration": 2.7916000000000167,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": ["theme and motion policy"],
+          "fullName": "theme and motion policy uses token colours and preserves the two reduced-motion controls",
+          "status": "passed",
+          "title": "uses token colours and preserves the two reduced-motion controls",
+          "duration": 0.676300000000083,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "startTime": 1791785493381,
+      "endTime": 1791785494007.6763,
+      "status": "passed",
+      "message": "",
+      "name": "C:/dev/rea-runs/r4/games/agar-io/__tests__/screens.test.tsx"
+    }
+  ]
+}

@@ -20,6 +20,8 @@ export interface Standing {
   gained: number;
   total: number;
   connected: boolean;
+  departed: boolean;
+  rank: number;
 }
 
 export function standings(
@@ -34,6 +36,8 @@ export function standings(
     gained: view.lastPoints[p.id] ?? 0,
     total: view.scores[p.id] ?? 0,
     connected: p.connected,
+    departed: view.departedIds.includes(p.id),
+    rank: 1 + Object.values(view.scores).filter((total) => total > (view.scores[p.id] ?? 0)).length,
   }));
   return rows.sort((a, b) => (ordered ? b.total - a.total : 0) || a.slot - b.slot);
 }

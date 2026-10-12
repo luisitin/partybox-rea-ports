@@ -22,9 +22,9 @@ import { enterDone } from './phases/done';
 import { advancePlay, enterPlay, reducePlay, settle } from './phases/play';
 import { enterScore, reduceScore } from './phases/score';
 import { results } from './scoring';
-import { PHASES, SPLIT_COOLDOWN_MS, SPLIT_MIN, MAX_CELLS, inputSchema } from './types';
+import { PHASES, ROUND_MS, SPLIT_COOLDOWN_MS, SPLIT_MIN, MAX_CELLS, inputSchema } from './types';
 import type { Cell, Input, Pellet, State } from './types';
-import { totalMass } from './world';
+import { release, retire, totalMass } from './world';
 
 const manifest = gameManifestSchema.parse(manifestJson);
 export interface MatchView {
@@ -37,6 +37,7 @@ export interface MatchView {
   lastPoints: Record<string, number>;
   masses: Record<string, number>;
   slots: Record<string, number>;
+  departedIds: string[];
 }
 export interface ArenaView {
   cells: Cell[];
@@ -51,6 +52,9 @@ export interface BlobArenaControllerView extends ControllerView, MatchView {
   splitReason: string;
   respawnIn: number;
   rank: number | null;
+  member: boolean;
+  departed: boolean;
+  connected: boolean;
 }
 function init(ctx: InitContext): State {
   const players = Object.fromEntries(ctx.players.map((p) => [p.id, p]));
@@ -75,7 +79,13 @@ const advance = (state: State, now: number): State => {
     return state.round >= 3 ? enterDone(state, now) : enterPlay(state, now, state.round + 1);
   return state;
 };
-const reduce = composeReduce<State, Input>({
+/** Releases use frozen active time while paused, never wall time accumulated during the hold. */
+const releaseTime = (state: State, now: number): number =>
+  state.phase.id === 'play'
+    ? Math.max(0, Math.min(ROUND_MS, (state.phase.paused?.at ?? now) - state.began))
+    : state.world.time;
+
+const composed = composeReduce<State, Input>({
   phases: { play: reducePlay, score: reduceScore },
   advance,
   skip: (state, now) =>
@@ -97,13 +107,10 @@ const reduce = composeReduce<State, Input>({
       const settled = settle(state, event.now);
       // The phone releases its pad when pause disables it; paused inputs cannot deliver that stop.
       // Neutralize held steering now so an idle phone never resumes an old direction.
-      const controls = Object.fromEntries(
-        Object.entries(settled.world.controls).map(([id, control]) => [
-          id,
-          { ...control, x: 0, y: 0 },
-        ]),
-      );
-      return { ...settled, world: { ...settled.world, controls } };
+      return {
+        ...settled,
+        world: release(settled.world, undefined, releaseTime(settled, event.now)),
+      };
     }
     if (event.type !== 'vip' || event.action !== 'resume' || state.phase.id !== 'play')
       return state;
@@ -114,22 +121,31 @@ const reduce = composeReduce<State, Input>({
     if (!hasPlayer(state, event.playerId)) return state;
     const settled =
       state.phase.id === 'play' && !state.phase.paused ? settle(state, event.now) : state;
-    const s = setConnected(settled, event);
+    let s = setConnected(settled, event);
     const left =
       event.gone && !s.left.includes(event.playerId) ? [...s.left, event.playerId] : s.left;
-    const control = s.world.controls[event.playerId];
-    return !event.connected && control
-      ? {
-          ...s,
-          left,
-          world: {
-            ...s.world,
-            controls: { ...s.world.controls, [event.playerId]: { ...control, x: 0, y: 0 } },
-          },
-        }
-      : { ...s, left };
+    const departed = left.includes(event.playerId);
+    if (departed && s.players[event.playerId]?.connected)
+      s = {
+        ...s,
+        players: {
+          ...s.players,
+          [event.playerId]: { ...s.players[event.playerId]!, connected: false },
+        },
+      };
+    const at = releaseTime(s, event.now);
+    const world = departed
+      ? retire(s.world, event.playerId, at)
+      : !event.connected
+        ? release(s.world, event.playerId, at)
+        : s.world;
+    return world === s.world && left === s.left ? s : { ...s, left, world };
   },
 });
+const reduce: typeof composed = (state, event) =>
+  event.type === 'input' && !inputSchema.safeParse(event.input).success
+    ? state
+    : composed(state, event);
 const statusOf =
   (state: State) =>
   (id: string): PlayerStatus =>
@@ -146,6 +162,7 @@ const matchView = (state: State): MatchView => ({
   checked: state.world.time,
   scores: state.scores,
   lastPoints: state.lastPoints,
+  departedIds: state.left,
   slots: Object.fromEntries(Object.keys(state.players).map((id, i) => [id, i])),
   masses: Object.fromEntries(
     Object.keys(state.players).map((id) => [id, Math.floor(totalMass(state.world, id))]),
@@ -165,27 +182,33 @@ function tvView(state: State): BlobArenaTvView {
 }
 function controllerView(state: State, playerId: string): BlobArenaControllerView {
   const mine = state.world.cells.filter((c) => c.owner === playerId);
-  const member = hasPlayer(state, playerId) && !state.left.includes(playerId);
+  const known = hasPlayer(state, playerId);
+  const departed = state.left.includes(playerId);
+  const member = known && !departed;
+  const connected = known && !departed && !!state.players[playerId]?.connected;
   const control = Object.hasOwn(state.world.controls, playerId)
     ? state.world.controls[playerId]
     : undefined;
   let splitReason = !member
     ? 'Watching'
-    : mine.length === 0
-      ? 'Returning soon'
-      : mine.length >= MAX_CELLS
-        ? 'Four blobs maximum'
-        : !mine.some((c) => c.mass >= SPLIT_MIN)
-          ? 'Grow one blob to 48 mass'
-          : mine.every((c) => c.shieldUntil > state.world.time)
-            ? 'Spawn shield'
-            : control && state.world.time - control.splitAt < SPLIT_COOLDOWN_MS
-              ? 'Split cooling down'
-              : !control || Math.hypot(control.x, control.y) < 0.1
-                ? 'Steer to aim'
-                : 'Ready to lunge';
-  if (state.phase.id !== 'play' || state.phase.paused) splitReason = 'Round held';
-  const stage = state.phoneOnly || (member && state.players[playerId]?.canSeeTv === false);
+    : !connected
+      ? 'Disconnected'
+      : mine.length === 0
+        ? 'Returning soon'
+        : mine.length >= MAX_CELLS
+          ? 'Four blobs maximum'
+          : !mine.some((c) => c.mass >= SPLIT_MIN)
+            ? 'Grow one blob to 48 mass'
+            : mine.filter((c) => c.mass >= SPLIT_MIN).every((c) => c.shieldUntil > state.world.time)
+              ? 'Spawn shield'
+              : control && state.world.time - control.splitAt < SPLIT_COOLDOWN_MS
+                ? 'Split cooling down'
+                : !control || Math.hypot(control.x, control.y) < 0.1
+                  ? 'Steer to aim'
+                  : 'Ready to lunge';
+  if (member && (state.phase.id !== 'play' || state.phase.paused)) splitReason = 'Round held';
+  const stage =
+    !member || state.phoneOnly || (known && state.players[playerId]?.canSeeTv === false);
   return {
     ...controllerEnvelope(state, manifest.id, playerId, { statusOf: statusOf(state) }),
     ...matchView(state),
@@ -193,13 +216,17 @@ function controllerView(state: State, playerId: string): BlobArenaControllerView
     ...(stage ? { arena: { cells: state.world.cells, pellets: state.world.pellets } } : {}),
     slot: Object.keys(state.players).indexOf(playerId),
     mass: Math.floor(totalMass(state.world, playerId)),
+    member,
+    departed,
+    connected,
     canSplit: splitReason === 'Ready to lunge',
     splitReason,
-    respawnIn: Object.hasOwn(state.world.respawns, playerId)
-      ? Math.max(0, state.world.respawns[playerId]! - state.world.time)
-      : 0,
+    respawnIn:
+      member && Object.hasOwn(state.world.respawns, playerId)
+        ? Math.max(0, state.world.respawns[playerId]! - state.world.time)
+        : 0,
     rank:
-      state.phase.id === 'done' && member
+      state.phase.id === 'done' && known
         ? 1 + Object.values(state.scores).filter((n) => n > (state.scores[playerId] ?? 0)).length
         : null,
   };

@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { PhoneOnlyProvider } from '@partybox/game-sdk/ui';
+import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
 import { Arena } from '../client/Arena';
 import { Controller } from '../client/Controller';
 import { Tv } from '../client/Tv';
@@ -35,13 +35,15 @@ const withTv = (state: State): State => {
 
 function renderController(view: BlobArenaControllerView, phoneOnly: boolean): string {
   return renderToStaticMarkup(
-    <PhoneOnlyProvider value={phoneOnly}>
-      <Controller
-        view={{ ...view, vip: null }}
-        me={{ id: view.me.id, name: 'Viewer', avatarId: 'fox' }}
-        send={() => undefined}
-      />
-    </PhoneOnlyProvider>,
+    <ServerClockProvider offsetMs={view.began + view.checked - Date.now()}>
+      <PhoneOnlyProvider value={phoneOnly}>
+        <Controller
+          view={{ ...view, vip: null }}
+          me={{ id: view.me.id, name: 'Viewer', avatarId: 'fox' }}
+          send={() => undefined}
+        />
+      </PhoneOnlyProvider>
+    </ServerClockProvider>,
   );
 }
 
@@ -52,7 +54,11 @@ function phone(state: State, id: string, phoneOnly: boolean): string {
   );
 }
 const tv = (state: State): string =>
-  renderToStaticMarkup(<Tv view={{ ...game.tvView(state), vip: null }} />);
+  renderToStaticMarkup(
+    <ServerClockProvider offsetMs={state.began + state.world.time - Date.now()}>
+      <Tv view={{ ...game.tvView(state), vip: null }} />
+    </ServerClockProvider>,
+  );
 const entityIds = (html: string, kind: 'cell' | 'snack'): number[] =>
   [...html.matchAll(new RegExp(`data-${kind}-id="(\\d+)"`, 'g'))]
     .map((m) => Number(m[1]))
@@ -128,7 +134,8 @@ describe.each(Object.entries(fixtures))('screens: %s', (_fixture, source) => {
   it('lets spectators watch without steering or split buttons', () => {
     const local = phone(state, 'spectator', false);
     expect(buttons(local)).toHaveLength(0);
-    expect(local).not.toContain('<svg');
+    expectArena(local, state);
+    noTvCopy(local);
     const html = phone(state, 'spectator', true);
     expectArena(html, state);
     expect(buttons(html)).toHaveLength(0);
@@ -175,7 +182,7 @@ describe('play states', () => {
     };
     const html = phone(paused, 'p1', true);
     expectArena(html, paused);
-    expect(html).toContain('Paused — steering is held');
+    expect(html).toContain('Paused — steering stopped');
     expect(html).toContain('data-frozen="true"');
     expect(buttons(html).every((button) => button.includes('disabled=""'))).toBe(true);
     expect(tv(paused)).toContain('Paused');
@@ -260,14 +267,14 @@ describe('stable identity and results', () => {
   it('promises final results after round three instead of another round', () => {
     const last = withTv(fixtures['score-last']!);
     expect(last.round).toBe(3);
+    expect(tv(last)).toContain('Final results follow shortly.');
     for (const html of [
-      tv(last),
       phone(last, 'p1', true),
       phone(last, 'p1', false),
       phone(last, 'spectator', true),
     ]) {
-      expect(html).toContain('Final results follow shortly.');
-      expect(html).not.toContain('Next round starts shortly.');
+      expect(html).toContain('Final results in');
+      expect(html).not.toContain('Next round in');
     }
     expect(tv(withTv(fixtures.score!))).toContain('Next round starts shortly.');
   });
@@ -304,6 +311,191 @@ describe('stable identity and results', () => {
     expect(html).not.toContain('<name>');
     expect(html).toContain('&lt;name&gt; &amp; friends');
     expect(html).toContain(`${name.slice(0, 8)}…`);
+  });
+});
+
+describe('connection, departure and compact stages', () => {
+  it('disables a disconnected living seat and restores controls at the same pose on reconnect', () => {
+    const state = withTv(fixtures.play!);
+    const base = game.controllerView(state, 'p1');
+    const offline = {
+      ...base,
+      connected: false,
+      players: base.players.map((row) => (row.id === 'p1' ? { ...row, connected: false } : row)),
+    };
+    const html = renderController(offline, false);
+    expect(html).toContain('Disconnected — steering stopped. Reconnect to play.');
+    expect(html).not.toContain('Swallowed!');
+    expect(buttons(html)).toHaveLength(2);
+    expect(buttons(html).every((button) => button.includes('disabled=""'))).toBe(true);
+    const restored = renderController(
+      { ...base, canSplit: true, splitReason: 'Ready to lunge' },
+      false,
+    );
+    expect(buttons(restored).every((button) => !button.includes('disabled=""'))).toBe(true);
+    expect(restored).toContain('Snack to grow. Swallow smaller rivals.');
+  });
+
+  it('also stops when the shell envelope reports a drop before the reducer connection flag changes', () => {
+    const base = game.controllerView(withTv(fixtures.play!), 'p1');
+    expect(base.connected).toBe(true);
+    const html = renderController(
+      {
+        ...base,
+        players: base.players.map((row) => (row.id === 'p1' ? { ...row, connected: false } : row)),
+      },
+      false,
+    );
+    expect(html).toContain('Disconnected — steering stopped.');
+    expect(buttons(html).every((button) => button.includes('disabled=""'))).toBe(true);
+  });
+
+  it('a departed remote seat watches the public arena and never receives controls or a respawn promise', () => {
+    const source = withTv(fixtures.play!);
+    const left: State = {
+      ...source,
+      left: ['p1'],
+      players: {
+        ...source.players,
+        p1: { ...source.players.p1!, connected: false, canSeeTv: false },
+      },
+      world: {
+        ...source.world,
+        cells: source.world.cells.filter((cell) => cell.owner !== 'p1'),
+        respawns: {},
+      },
+    };
+    const html = phone(left, 'p1', false);
+    expectArena(html, left);
+    noTvCopy(html);
+    expect(buttons(html)).toHaveLength(0);
+    expect(html).toContain('You left this match — watching the arena.');
+    expect(html).not.toMatch(/Back in|Returning soon|Your blob/);
+    expect(roster(html)).toContain('Left');
+    expect(tv(left)).not.toContain('Swallowed blobs return in 3s.');
+    const paused: State = {
+      ...left,
+      phase: { ...left.phase, paused: { at: left.began + left.world.time } },
+    };
+    expect(buttons(phone(paused, 'p1', false))).toHaveLength(0);
+    expect(phone(paused, 'p1', false)).toContain('You left this match');
+  });
+
+  it('keeps a departed seat’s banked score and final place inspectable without offering re-entry', () => {
+    const source = withTv(fixtures.done!);
+    const left: State = {
+      ...source,
+      left: ['p1'],
+      players: { ...source.players, p1: { ...source.players.p1!, connected: false } },
+      world: {
+        ...source.world,
+        cells: source.world.cells.filter((cell) => cell.owner !== 'p1'),
+        respawns: {},
+      },
+    };
+    const view = game.controllerView(left, 'p1');
+    expect(view.rank).not.toBeNull();
+    const html = phone(left, 'p1', false);
+    expectArena(html, left);
+    expect(html).toContain(`Place ${view.rank} · ${left.scores.p1} points`);
+    expect(roster(html)).toContain('data-me="true"');
+    expect(roster(html)).toContain('Left');
+    expect(buttons(html)).toHaveLength(0);
+    expect(html).not.toMatch(/Back in|Next round in/);
+  });
+
+  it('does not promise a three-second respawn beyond the final horn', () => {
+    const source = withTv(fixtures.play!);
+    const state: State = {
+      ...source,
+      round: 3,
+      endsAt: source.began + source.world.time + 1000,
+      world: {
+        ...source.world,
+        cells: source.world.cells.filter((cell) => cell.owner !== 'p1'),
+        respawns: { p1: source.world.time + 3000 },
+      },
+    };
+    const html = phone(state, 'p1', true);
+    expect(html).toContain('Swallowed — watching until the round ends.');
+    expect(html).not.toContain('Back in 3s');
+    expect(buttons(html).every((button) => button.includes('disabled=""'))).toBe(true);
+  });
+
+  it('keeps all eight long-name shared winners and duplicate places in compact results', () => {
+    const source = withTv(fixtures.done!);
+    const names = Object.keys(source.players).map(
+      (_, index) => `Player ${index + 1} with a long name`,
+    );
+    const state: State = {
+      ...source,
+      players: Object.fromEntries(
+        Object.entries(source.players).map(([id, row], index) => [
+          id,
+          { ...row, name: names[index]! },
+        ]),
+      ),
+      scores: Object.fromEntries(Object.keys(source.players).map((id) => [id, 5000])),
+    };
+    const html = phone(state, 'p1', true);
+    expect(html).toMatch(/<h2[^>]*>8 tied winners<\/h2>/);
+    expect(html).toContain('Tied top place! 5000 points');
+    expect((roster(html).match(/aria-label="Place 1"/g) ?? []).length).toBe(8);
+    expect((roster(html).match(/data-winner="true"/g) ?? []).length).toBe(8);
+    for (const name of names) expect(roster(html)).toContain(`title="${name}"`);
+    expect(html).toContain('Place / player');
+    expect(buttons(html)).toHaveLength(0);
+    expect(tv(state)).toMatch(/<h2[^>]*>8 tied winners<\/h2>/);
+  });
+});
+
+describe('public pose and identity layers', () => {
+  it('keeps each received body, contrast plate and number aligned before and after a movement snapshot', () => {
+    const view = game.tvView(withTv(fixtures.play!));
+    for (const cells of [
+      view.cells,
+      view.cells.map((cell) => ({ ...cell, x: cell.x + (cell.x < 150 ? 4 : -4) })),
+    ]) {
+      const html = renderToStaticMarkup(<Arena {...view} cells={cells} />);
+      const layers = [
+        ...html.matchAll(
+          /<g\b[^>]*data-pose-cell="(\d+)"[^>]*data-pose-layer="([^"]+)"[^>]*style="([^"]*)"/g,
+        ),
+      ];
+      expect(layers).toHaveLength(cells.length * 3);
+      for (const cell of cells) {
+        const poses = layers.filter((match) => Number(match[1]) === cell.id);
+        expect(poses.map((match) => match[2]).sort()).toEqual(['body', 'number', 'plate']);
+        for (const match of poses)
+          expect(match[3]).toContain(`transform:translate(${cell.x}px, ${cell.y}px)`);
+      }
+      expect(html.lastIndexOf('data-cell-label-backplate=')).toBeLessThan(
+        html.indexOf('data-cell-label-id='),
+      );
+      expect(entityIds(html, 'cell')).toEqual(cells.map((cell) => cell.id).sort((a, b) => a - b));
+    }
+  });
+  it('retains a contrast-backed accessible number for every split piece in the compact phone world', () => {
+    const view = game.tvView(withTv(fixtures.play!));
+    const cells = view.cells.flatMap((cell, index) =>
+      Array.from({ length: 4 }, (_, piece) => ({
+        ...cell,
+        id: 10000 + index * 4 + piece,
+        x: 80,
+        y: 50,
+        mass: 24,
+      })),
+    );
+    const html = renderToStaticMarkup(
+      <Arena {...view} cells={cells} phone compact frozen mine="p1" />,
+    );
+    expect(entityIds(html, 'cell')).toHaveLength(32);
+    expect((html.match(/data-cell-label-id=/g) ?? []).length).toBe(32);
+    expect((html.match(/data-cell-label-backplate=/g) ?? []).length).toBe(32);
+    for (const player of view.players)
+      expect(html).toContain(`${player.name}, blob ${(view.slots[player.id] ?? 0) + 1}, 24 mass`);
+    expect(html).toContain('Your blob');
+    expect(html).toContain('data-frozen="true"');
   });
 });
 

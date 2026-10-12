@@ -1,9 +1,11 @@
 import { createRng } from '@partybox/game-sdk';
+import type { GameEvent } from '@partybox/game-sdk';
 import { testPlayers } from '@partybox/game-sdk/testing';
 import { describe, expect, it } from 'vitest';
 import { game } from '../server/index';
 import { radius } from '../server/geometry';
 import { ROUND_MS, SCORE_MS, STEP_MS, WAKE_MS } from '../server/types';
+import type { Input, State } from '../server/types';
 import { cell, deepFreeze, kit, T0, world } from './helpers';
 
 describe('the three-round match', () => {
@@ -123,7 +125,12 @@ describe('pause, stale events and reconnect', () => {
     expect(paused.world.cells[0]!.x).toBe(62);
     expect(paused.world.cells[1]!.y).toBe(78);
     for (const id of ['p1', 'p2']) {
-      expect(paused.world.controls[id]).toEqual({ ...held.world.controls[id]!, x: 0, y: 0 });
+      expect(paused.world.controls[id]).toEqual({
+        ...held.world.controls[id]!,
+        x: 0,
+        y: 0,
+        at: 200,
+      });
     }
     expect(held.world.controls.p1?.x).toBe(1);
     expect(held.world.controls.p2?.y).toBe(-1);
@@ -217,6 +224,117 @@ describe('pause, stale events and reconnect', () => {
     expect(game.controllerView(returned, 'p1').slot).toBe(0);
   });
 
+  it('a non-grid drop prevents an older hold restarting after reconnect', () => {
+    let s = kit.input(kit.start(), 'p1', { type: 'steer', x: 1, y: 0 }, T0 + 100);
+    s = kit.timer(s, T0 + 200);
+    const dropped = kit.player(s, 'p1', false, undefined, T0 + 235);
+    expect(dropped.world.time).toBe(200);
+    expect(dropped.world.controls.p1).toMatchObject({ x: 0, y: 0, at: 235 });
+    const returned = kit.player(dropped, 'p1', true, undefined, T0 + 236);
+    expect(returned.world).toBe(dropped.world);
+    expect(kit.input(returned, 'p1', { type: 'steer', x: 1, y: 0 }, T0 + 230)).toBe(returned);
+    const fresh = kit.input(returned, 'p1', { type: 'steer', x: -1, y: 0 }, T0 + 236);
+    expect(fresh.world.controls.p1).toMatchObject({ x: -1, y: 0, at: 236 });
+  });
+
+  it('a newer already-neutral hold blocks older steering without advancing off the physics grid', () => {
+    const settled = kit.timer(kit.start(), T0 + 200);
+    const neutral = kit.input(settled, 'p1', { type: 'steer', x: 0, y: 0 }, T0 + 235);
+    expect(neutral.world.time).toBe(200);
+    expect(neutral.world.controls.p1).toMatchObject({ x: 0, y: 0, at: 235 });
+    expect(kit.input(neutral, 'p1', { type: 'steer', x: 1, y: 0 }, T0 + 230)).toBe(neutral);
+  });
+
+  it('a non-grid pause blocks stale steering after resume and keeps relative cooldown clocks', () => {
+    const start = kit.input(kit.start(), 'p1', { type: 'steer', x: 1, y: 0 }, T0 + 100);
+    const paused = kit.vip(start, 'pause', T0 + 235);
+    expect(paused.world.time).toBe(200);
+    expect(paused.world.controls.p1).toMatchObject({ x: 0, y: 0, at: 235, splitAt: -1000 });
+    const resumed = kit.vip(paused, 'resume', T0 + 5235);
+    expect(resumed.world).toEqual(paused.world);
+    expect(kit.input(resumed, 'p1', { type: 'steer', x: 1, y: 0 }, resumed.began + 230)).toBe(
+      resumed,
+    );
+    expect(
+      kit.input(resumed, 'p1', { type: 'steer', x: -1, y: 0 }, resumed.began + 235).world.controls
+        .p1,
+    ).toMatchObject({ x: -1, at: 235, splitAt: -1000 });
+  });
+
+  it('a long paused drop uses frozen active time and permits fresh steering immediately on resume', () => {
+    const start = kit.input(kit.start(), 'p1', { type: 'steer', x: 1, y: 0 }, T0 + 100);
+    const paused = kit.vip(start, 'pause', T0 + 235);
+    const dropped = kit.player(paused, 'p1', false, undefined, T0 + 20235);
+    const returned = kit.player(dropped, 'p1', true, undefined, T0 + 25235);
+    expect(returned.world.controls.p1).toMatchObject({ x: 0, y: 0, at: 235 });
+    const resumed = kit.vip(returned, 'resume', T0 + 30235);
+    expect(resumed.began).toBe(T0 + 30000);
+    expect(resumed.world).toEqual(returned.world);
+    const fresh = kit.input(resumed, 'p1', { type: 'steer', x: -1, y: 0 }, T0 + 30235);
+    expect(fresh.world.controls.p1).toMatchObject({ x: -1, y: 0, at: 235 });
+  });
+
+  it('malformed controls cannot settle physics or change mass before rejection', () => {
+    const s = kit.start();
+    for (const input of [null, {}, { type: 'steer', x: NaN, y: 0 }, { type: 'steer', x: 2, y: 0 }])
+      expect(
+        kit.reduce(s, { type: 'input', playerId: 'p1', now: T0 + 1000, input } as GameEvent<Input>),
+      ).toBe(s);
+  });
+
+  it('a swallowed player cannot queue steering or split during its respawn wait', () => {
+    const s = {
+      ...kit.start(),
+      world: world([cell('p2', { id: 2, mass: 96 })], {
+        time: 100,
+        controls: {
+          p1: { x: 0, y: 0, at: 100, splitAt: -1000 },
+          p2: { x: 0, y: 0, at: 0, splitAt: -1000 },
+        },
+        respawns: { p1: 3100 },
+      }),
+    };
+    expect(kit.input(s, 'p1', { type: 'steer', x: 1, y: 0 }, T0 + 300)).toBe(s);
+    expect(kit.input(s, 'p1', { type: 'split' }, T0 + 300)).toBe(s);
+    const returned = kit.timer(s, T0 + 3100);
+    expect(returned.world.cells.find((c) => c.owner === 'p1')?.mass).toBe(24);
+    expect(returned.world.controls.p1).toMatchObject({ x: 0, y: 0 });
+  });
+
+  it.each(['left', 'kicked'] as const)(
+    'a %s seat stays retired across refresh and every later round',
+    (gone) => {
+      let s: State = { ...kit.start(), scores: { p1: 0, p2: 37, p3: 0 } };
+      s = kit.player(s, 'p2', false, gone, T0 + 235);
+      expect(s.world.cells.some((c) => c.owner === 'p2')).toBe(false);
+      expect(s.world.respawns).not.toHaveProperty('p2');
+      for (const connected of [true, false, true]) {
+        s = kit.player(s, 'p2', connected, undefined, T0 + 236);
+        expect(s.players.p2?.connected).toBe(false);
+        expect(s.left).toEqual(['p2']);
+        expect(s.world.cells.some((c) => c.owner === 'p2')).toBe(false);
+      }
+      expect(kit.input(s, 'p2', { type: 'steer', x: 1, y: 0 }, T0 + 1000)).toBe(s);
+      const cv = game.controllerView(s, 'p2');
+      expect(cv).toMatchObject({
+        member: false,
+        departed: true,
+        connected: false,
+        canSplit: false,
+        respawnIn: 0,
+      });
+      expect(cv.splitReason).toBe('Watching');
+      expect(cv.arena?.cells).toEqual(s.world.cells);
+      expect(game.tvView(s).departedIds).toEqual(['p2']);
+      while (s.phase.id !== 'done') s = kit.vip(s, 'skip', T0 + 1000);
+      expect(s.scores.p2).toBe(37);
+      expect(game.controllerView(s, 'p2').rank).not.toBeNull();
+      expect(
+        game.results(s)?.ranking.some((row) => row.playerId === 'p2' && row.score === 37),
+      ).toBe(true);
+    },
+  );
+
   it('keeps departed seats in results, blocks their input, and never resurrects them next round', () => {
     const left = kit.player(kit.start(), 'p2', false, 'left', T0 + 1000);
     expect(left.left).toEqual(['p2']);
@@ -282,7 +400,62 @@ describe('public views', () => {
     };
     expect(game.controllerView(remote, 'p1').arena).toBeDefined();
     expect(game.controllerView(remote, 'p2').arena).toBeUndefined();
-    expect(game.controllerView(remote, 'spectator').arena).toBeUndefined();
+    expect(game.controllerView(remote, 'spectator').arena).toEqual({
+      cells: s.world.cells,
+      pellets: s.world.pellets,
+    });
+  });
+
+  it('explicit member and connection fields govern controls while spectators always receive the public stage', () => {
+    const initial = {
+      ...kit.start(),
+      world: world([cell('p1', { mass: 96 })], {
+        time: 2000,
+        controls: { p1: { x: 1, y: 0, at: 0, splitAt: 0 } },
+      }),
+    };
+    expect(game.controllerView(initial, 'p1')).toMatchObject({
+      member: true,
+      departed: false,
+      connected: true,
+      canSplit: true,
+    });
+    const disconnected = {
+      ...initial,
+      players: { ...initial.players, p1: { ...initial.players.p1!, connected: false } },
+    };
+    expect(game.controllerView(disconnected, 'p1')).toMatchObject({
+      member: true,
+      departed: false,
+      connected: false,
+      canSplit: false,
+      splitReason: 'Disconnected',
+    });
+    for (const id of ['spectator', '__proto__', 'constructor']) {
+      const cv = game.controllerView(initial, id);
+      expect(cv).toMatchObject({
+        member: false,
+        departed: false,
+        connected: false,
+        canSplit: false,
+        respawnIn: 0,
+      });
+      expect(cv.arena).toEqual({ cells: initial.world.cells, pellets: initial.world.pellets });
+    }
+    const mixedShields = {
+      ...initial,
+      world: {
+        ...initial.world,
+        cells: [
+          cell('p1', { mass: 96, shieldUntil: 3000 }),
+          cell('p1', { id: 2, x: 80, mass: 24 }),
+        ],
+      },
+    };
+    expect(game.controllerView(mixedShields, 'p1')).toMatchObject({
+      canSplit: false,
+      splitReason: 'Spawn shield',
+    });
   });
 
   it('split availability reflects shield, cooldown, neutral aim, cap and paused state', () => {

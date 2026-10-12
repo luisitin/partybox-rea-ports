@@ -11,3 +11,11 @@ Current verification is pending source freeze. Required checks: typecheck, whole
 Only this game's tests run, with one worker. Full simulations run in scoped CI. The SDK 5,000-event cap, binding three 90-second rounds and existing dependencies are unchanged. No original-site browser is launched. The new capture runner must own one local headless browser and close it in finally.
 
 Historical results remain in the existing raw reports and [r5-history/VERIFY.md](r5-history/VERIFY.md). Old fit used bottom zero and is historical evidence only. Original access attempts and old preview inputs retain their r5-local provenance.
+
+## R1 local source checks
+
+`pnpm.cmd typecheck`: exit 0 after source freeze. `PB_SIM_RUNS=1 PB_RECORD_VERIFY=1 pnpm.cmd vitest run games/agar-io --maxWorkers=1 --reporter=verbose --reporter=json --outputFile=jobs/P05-blob-arena/r4-pilot-tests.json --disableConsoleIntercept`: 153 passed / one failed, 154 total in nine files, 213.23 s. All real SDK contracts, seven one-count pilot matches plus the repeated eight-seat replay, 1,000 world properties and 1,003 lifecycle traces passed. Lifecycle totals: 61,767 events, 50-74 per trace. The failed rendering check caught an empty title caused by multiple JSX title children; its raw result remains retained.
+
+After the single-string title fix, `pnpm.cmd vitest run games/agar-io/__tests__/screens.test.tsx games/agar-io/client --maxWorkers=1 --reporter=json --outputFile=jobs/P05-blob-arena/r4-client-tests.json`: 60/60 passed, exit 0. Fixtures then regenerated from seed 17 using common snapshots and per-seat RNGs; play/score/score-last/done retain a single reducer match. Mutations, captures and fresh full CI remain pending.
+
+`node jobs/P05-blob-arena/mutations.mjs`: exit 0, **20/20 semantic bugs caught by assertion failures**. Baseline 61/61 passed. No compiler/import failure or timeout counts as a catch. All 45 original game files retained their exact bytes after the serial run. `mutations.json` records each planted replacement and failed assertion. `r5-history/mutations.json` preserves the prior runner result.

@@ -16,44 +16,62 @@ export function Controller({
   const L = useT(STRINGS);
   const phoneOnly = usePhoneOnly();
   const now = useServerNow(250, view.paused, view.clockHeldAt);
-  const phase = view.phaseId;
-  const playing = phase === 'play';
-  const player = view.me.role === 'player' && view.slot >= 0 && view.splitReason !== 'Watching';
-  // A remote phone gets the arena even when the room has a TV. The same stage is also safe for spectators.
+  const phase = view.phaseId,
+    playing = phase === 'play';
+  const seat = view.me.role === 'player' && view.slot >= 0;
+  const player = seat && view.member && !view.departed;
+  const connected =
+    view.connected && view.players.some((row) => row.id === view.me.id && row.connected);
   const showStage = phoneOnly || view.arena !== undefined;
-  const active = playing && player && view.mass > 0 && !view.paused;
+  const active = playing && player && connected && view.mass > 0 && !view.paused;
   const ordered = phase === 'score' || phase === 'done';
   const rows = standings(view, ordered);
   const msLeft = view.deadline === null ? 0 : Math.max(0, view.deadline - now);
   const ownPoints = view.scores[view.me.id] ?? 0;
-  const won = phase === 'done' && view.rank === 1;
-  let headline = L('Round {n} of {m}', { n: view.round, m: view.rounds });
-  if (phase === 'score') headline = L('Round {n} over', { n: view.round });
-  if (phase === 'done') {
-    const top = Math.max(0, ...rows.map((row) => row.total));
-    const winners = rows.filter((row) => row.total === top).map((row) => row.name);
-    headline =
-      winners.length === 1
-        ? L('{name} wins!', { name: winners[0] ?? '' })
-        : L('{names} tie for the win!', { names: winners.join(', ') });
+  const winners = rows.filter((row) => row.rank === 1);
+  const winnerNames = winners.map((row) => row.name);
+  const winnerLine =
+    winners.length === 1
+      ? L('{name} wins!', { name: winnerNames[0] ?? '' })
+      : L('{names} tie for the win!', { names: winnerNames.join(', ') });
+  const headline =
+    phase === 'done'
+      ? winners.length > 2
+        ? L('{n} tied winners', { n: winners.length })
+        : winnerLine
+      : phase === 'score'
+        ? L('Round {n} over', { n: view.round })
+        : L('Round {n} of {m}', { n: view.round, m: view.rounds });
+  let status = L('Watching the arena');
+  if (playing) {
+    if (view.departed) status = L('You left this match — watching the arena.');
+    else if (player && !connected)
+      status = L('Disconnected — steering stopped. Reconnect to play.');
+    else if (view.paused)
+      status = player ? L('Paused — steering stopped') : L('Paused — watching the arena');
+    else if (player && view.mass === 0)
+      status =
+        view.respawnIn > msLeft
+          ? L('Swallowed — watching until the round ends.')
+          : L('Swallowed! Back in {n}s', { n: Math.max(1, Math.ceil(view.respawnIn / 1000)) });
+    else if (player) status = L('Snack to grow. Swallow smaller rivals.');
+  } else if (phase === 'score') {
+    status = seat
+      ? L('+{n} this round · {total} points', {
+          n: view.lastPoints[view.me.id] ?? 0,
+          total: ownPoints,
+        })
+      : L('Mass at the buzzer becomes points.');
+    status += ` ${view.paused ? L('Paused') : view.round >= view.rounds ? L('Final results in {n}s', { n: Math.ceil(msLeft / 1000) }) : L('Next round in {n}s', { n: Math.ceil(msLeft / 1000) })}`;
+  } else if (phase === 'done' && seat && view.rank !== null) {
+    status =
+      view.rank === 1
+        ? winners.length > 1
+          ? L('Tied top place! {n} points', { n: ownPoints })
+          : L('Top place! {n} points', { n: ownPoints })
+        : L('Place {rank} · {n} points', { rank: view.rank, n: ownPoints });
   }
-  let status = player ? L('Snack to grow. Swallow smaller rivals.') : L('Watching the arena');
-  if (view.paused) status = L('Paused — steering is held');
-  else if (playing && player && view.mass === 0)
-    status = L('Swallowed! Back in {n}s', { n: Math.max(1, Math.ceil(view.respawnIn / 1000)) });
-  else if (phase === 'score' && player)
-    status = L('+{n} this round · {total} points', {
-      n: view.lastPoints[view.me.id] ?? 0,
-      total: ownPoints,
-    });
-  else if (phase === 'done' && player && view.rank !== null)
-    status = won
-      ? L('Top place! {n} points', { n: ownPoints })
-      : L('Place {rank} · {n} points', { rank: view.rank, n: ownPoints });
-  else if (!playing) status = L('Mass at the buzzer becomes points.');
-  if (phase === 'score' && view.round >= view.rounds && !view.paused)
-    status = `${status} ${L('Final results follow shortly.')}`;
-
+  const contextKey = `${phase}:${view.round}:${view.me.id}:${view.member}:${view.departed}:${connected}:${view.paused}:${view.mass > 0}`;
   return (
     <div
       className={styles.screen}
@@ -63,12 +81,23 @@ export function Controller({
       data-phase={phase}
     >
       <header className={styles.header}>
-        <div>
-          <h2 className={styles.headline}>{headline}</h2>
-          {player ? (
+        <div className={styles.heading}>
+          <h2
+            className={styles.headline}
+            title={phase === 'done' ? winnerLine : undefined}
+            aria-label={phase === 'done' ? winnerLine : undefined}
+          >
+            {headline}
+          </h2>
+          {seat ? (
             <p className={styles.identity}>
               <b className={styles.badge}>{view.slot + 1}</b>
-              {L('Your blob')} · <b>{L('{n} mass', { n: view.mass })}</b>
+              {ordered || view.departed ? L('Your total') : L('Your blob')} ·{' '}
+              <b>
+                {ordered || view.departed
+                  ? L('{n} points', { n: ownPoints })
+                  : L('{n} mass', { n: view.mass })}
+              </b>
             </p>
           ) : null}
         </div>
@@ -85,8 +114,10 @@ export function Controller({
             players={view.players}
             slots={view.slots}
             checked={view.checked}
-            mine={player ? view.me.id : undefined}
+            mine={seat ? view.me.id : undefined}
             frozen={!playing || view.paused}
+            phone
+            compact={!playing || !player}
           />
         </div>
       ) : null}
@@ -97,14 +128,14 @@ export function Controller({
         <Joystick
           active={active}
           canSplit={view.canSplit}
-          reason={view.splitReason}
-          roundKey={`${phase}:${view.round}`}
+          reason={!connected ? 'Disconnected' : view.splitReason}
+          contextKey={contextKey}
           send={send}
         />
       ) : (
         <div className={styles.standings}>
           <div className={styles.legend}>
-            <span>{L('Players')}</span>
+            <span>{ordered ? L('Place / player') : L('Players')}</span>
             <span>{playing ? L('Mass') : L('Round / total')}</span>
           </div>
           <ol className={styles.rows} aria-label={L('All players')}>
@@ -113,10 +144,22 @@ export function Controller({
                 key={row.id}
                 style={playerStyle(row.slot)}
                 data-me={row.id === view.me.id ? 'true' : undefined}
+                data-winner={phase === 'done' && row.rank === 1 ? 'true' : undefined}
               >
-                <b className={styles.badge}>{row.slot + 1}</b>
-                <span className={styles.name}>{row.name}</span>
-                {!row.connected ? (
+                {ordered ? (
+                  <b className={styles.rank} aria-label={L('Place {rank}', { rank: row.rank })}>
+                    {row.rank}
+                  </b>
+                ) : null}
+                <b className={styles.badge} aria-label={L('Blob {n}', { n: row.slot + 1 })}>
+                  {row.slot + 1}
+                </b>
+                <span className={styles.name} title={row.name}>
+                  {row.name}
+                </span>
+                {row.departed ? (
+                  <span className={styles.offline}>{L('Left')}</span>
+                ) : !row.connected ? (
                   <span className={styles.offline} aria-label={L('Disconnected')}>
                     ○
                   </span>
@@ -131,8 +174,8 @@ export function Controller({
       {playing && player ? (
         <p className={styles.footer}>
           {showStage
-            ? L('Find your number above. Mass at the buzzer scores.')
-            : L('Find your number on the TV. Mass at the buzzer scores.')}
+            ? L('Your number above. Buzzer mass scores.')
+            : L('Your number on the TV. Buzzer mass scores.')}
         </p>
       ) : null}
     </div>

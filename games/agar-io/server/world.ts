@@ -1,4 +1,5 @@
 // Fixed-grid physics, including eating, replenishment and respawns. No engine clocks here.
+import { nextInt } from '@partybox/game-sdk';
 import type { RngState } from '@partybox/game-sdk';
 import { makePellet } from './content';
 import { resolveCells } from './collisions';
@@ -9,11 +10,45 @@ import {
   MERGE_MS,
   PELLET_MASS,
   RESPAWN_MS,
+  ROUND_MS,
   SPLIT_COOLDOWN_MS,
   SPLIT_MIN,
   STEP_MS,
 } from './types';
-import type { Input, World } from './types';
+import type { Cell, Input, World } from './types';
+
+// Positions are rounded to four decimals; this absorbs their negligible distance noise.
+const PELLET_TIE_TOLERANCE = 0.001;
+
+/** Neutralize holds at their active event time, including a newer already-neutral release. */
+export function release(world: World, id?: string, at?: number): World {
+  const barrier =
+    at !== undefined && Number.isFinite(at)
+      ? Math.max(world.time, Math.min(ROUND_MS, Math.max(0, at)))
+      : world.time;
+  let changed = false;
+  const controls = Object.fromEntries(
+    Object.entries(world.controls).map(([owner, control]) => {
+      if (id !== undefined && owner !== id) return [owner, control];
+      const time = Math.max(control.at, barrier);
+      if (control.x === 0 && control.y === 0 && time === control.at) return [owner, control];
+      changed = true;
+      return [owner, { ...control, x: 0, y: 0, at: time }];
+    }),
+  );
+  return changed ? { ...world, controls } : world;
+}
+
+/** A permanent departure removes its pieces and pending return without losing banked points. */
+export function retire(world: World, id: string, at?: number): World {
+  const released = release(world, id, at);
+  const cells = released.cells.filter((cell) => cell.owner !== id);
+  const pending = Object.hasOwn(released.respawns, id);
+  if (cells.length === released.cells.length && !pending) return released;
+  const respawns = { ...released.respawns };
+  delete respawns[id];
+  return { ...released, cells, respawns };
+}
 
 export function apply(world: World, id: string, input: Input, time: number): World {
   const control = Object.hasOwn(world.controls, id) ? world.controls[id] : undefined;
@@ -22,7 +57,7 @@ export function apply(world: World, id: string, input: Input, time: number): Wor
     const length = Math.max(1, Math.hypot(input.x, input.y));
     const x = round(input.x / length),
       y = round(input.y / length);
-    if (control.x === x && control.y === y) return world;
+    if (control.x === x && control.y === y && time === control.at) return world;
     return { ...world, controls: { ...world.controls, [id]: { ...control, x, y, at: time } } };
   }
   if (time - control.splitAt < SPLIT_COOLDOWN_MS || Math.hypot(control.x, control.y) < 0.1)
@@ -97,10 +132,36 @@ export function tick(
     });
     // A fixed pellet array bounds both state size and update cost.
     const pellets = world.pellets.map((p) => {
-      const eater = cells.find(
-        (c) => (c.x - p.x) ** 2 + (c.y - p.y) ** 2 <= Math.min(24 ** 2, c.mass * 0.55 ** 2),
-      );
+      let eater: Cell | undefined;
+      let nearest = Infinity;
+      let ties: { cell: Cell; gap: number }[] | undefined;
+      for (const candidate of cells) {
+        const square = (candidate.x - p.x) ** 2 + (candidate.y - p.y) ** 2;
+        if (square > Math.min(24 ** 2, candidate.mass * 0.55 ** 2)) continue;
+        const gap = Math.sqrt(square);
+        if (gap < nearest) {
+          const previous = eater;
+          const previousGap = nearest;
+          eater = candidate;
+          nearest = gap;
+          if (previous && previousGap - gap <= PELLET_TIE_TOLERANCE) {
+            ties ??= [{ cell: previous, gap: previousGap }];
+            ties.push({ cell: candidate, gap });
+            // Compare to the actual minimum, avoiding a chain of progressively farther ties.
+            ties = ties.filter((tie) => tie.gap - nearest <= PELLET_TIE_TOLERANCE);
+          } else ties = undefined;
+        } else if (gap - nearest <= PELLET_TIE_TOLERANCE) {
+          ties ??= [{ cell: eater!, gap: nearest }];
+          ties.push({ cell: candidate, gap });
+        }
+      }
       if (!eater) return p;
+      if (ties && ties.length > 1) {
+        ties.sort((a, b) => a.cell.id - b.cell.id);
+        let chosen: number;
+        [chosen, r] = nextInt(r, 0, ties.length - 1);
+        eater = ties[chosen]!.cell;
+      }
       eater.mass += PELLET_MASS;
       const [fresh, next] = makePellet(r, p.id);
       r = next;
@@ -114,7 +175,7 @@ export function tick(
       if (left.includes(id) || cells.some((c) => c.owner === id)) continue;
       if (!Object.hasOwn(respawns, id)) {
         respawns[id] = time + RESPAWN_MS;
-        controls[id] = { ...controls[id]!, x: 0, y: 0 };
+        controls[id] = { ...controls[id]!, x: 0, y: 0, at: Math.max(time, controls[id]!.at) };
       }
       if (time >= respawns[id]!) {
         const [cell, next] = spawnCell(world, id, r);

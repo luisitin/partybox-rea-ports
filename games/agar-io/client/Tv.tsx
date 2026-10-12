@@ -17,17 +17,28 @@ export function Tv({ view }: GameTvProps<BlobArenaTvView>): JSX.Element {
   let headline = playing
     ? L('Round {n} of {m}', { n: view.round, m: view.rounds })
     : L('Round {n} over', { n: view.round });
+  let winnerLabel: string | undefined;
   if (view.phaseId === 'done') {
     const top = Math.max(0, ...rows.map((row) => row.total));
     const winners = rows.filter((row) => row.total === top).map((row) => row.name);
-    headline =
+    winnerLabel =
       winners.length === 1
         ? L('{name} wins!', { name: winners[0] ?? '' })
         : L('{names} tie for the win!', { names: winners.join(', ') });
+    headline =
+      winners.length === 1
+        ? L('{name} wins!', { name: winners[0] ?? '' })
+        : winners.length > 2
+          ? L('{n} tied winners', { n: winners.length })
+          : L('{names} tie for the win!', { names: winners.join(', ') });
   }
   return (
     <Stage className={styles.stage}>
-      {view.phaseId === 'done' ? <h2 className={styles.matchHeadline}>{headline}</h2> : null}
+      {view.phaseId === 'done' ? (
+        <h2 className={styles.matchHeadline} title={winnerLabel} aria-label={winnerLabel}>
+          {headline}
+        </h2>
+      ) : null}
       <div className={styles.board}>
         <div className={styles.field}>
           <Arena
@@ -64,19 +75,29 @@ export function Tv({ view }: GameTvProps<BlobArenaTvView>): JSX.Element {
                 <li
                   key={row.id}
                   style={playerStyle(row.slot)}
-                  data-returning={playing && row.mass === 0 ? 'true' : undefined}
+                  data-returning={
+                    playing && row.mass === 0 && !row.departed && row.connected ? 'true' : undefined
+                  }
                 >
                   <div className={styles.player}>
                     <b className={styles.badge}>{row.slot + 1}</b>
-                    <span className={styles.name}>{row.name}</span>
-                    {!row.connected ? (
+                    <span className={styles.name} title={row.name}>
+                      {row.name}
+                    </span>
+                    {row.departed ? (
+                      <span className={styles.offline}>{L('Left')}</span>
+                    ) : !row.connected ? (
                       <span className={styles.offline} aria-label={L('Disconnected')}>
                         ○
                       </span>
                     ) : null}
                   </div>
                   <span className={styles.value} data-column="round">
-                    {playing ? (row.mass === 0 ? L('↻') : row.mass) : `+${row.gained}`}
+                    {playing
+                      ? row.mass === 0 && !row.departed && row.connected
+                        ? L('↻')
+                        : row.mass
+                      : `+${row.gained}`}
                   </span>
                   <b className={styles.total} data-column="total">
                     {row.total}
@@ -97,7 +118,7 @@ export function Tv({ view }: GameTvProps<BlobArenaTvView>): JSX.Element {
                   ? L('Final results follow shortly.')
                   : L('Next round starts shortly.')}
           </p>
-          {playing && rows.some((row) => row.mass === 0) ? (
+          {playing && rows.some((row) => row.mass === 0 && !row.departed && row.connected) ? (
             <p className={styles.hint}>{L('↻ Swallowed blobs return in 3s.')}</p>
           ) : null}
         </aside>

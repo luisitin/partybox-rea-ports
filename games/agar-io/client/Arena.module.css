@@ -52,10 +52,41 @@
 
 /* These are SVG board coordinates, like the collision radii and snack geometry. */
 .number {
-  fill: var(--pb-on-accent-2-fill);
-  paint-order: stroke;
+  fill: var(--pb-text);
+}
+
+.numberPlate {
+  fill: var(--pb-bg);
   stroke: var(--blob-colour);
-  stroke-width: 0.2;
+  stroke-width: 0.4;
+}
+
+[data-mine='true'] .numberPlate {
+  stroke: var(--pb-focus);
+  stroke-width: 0.65;
+}
+
+.leader {
+  stroke: var(--blob-colour);
+  stroke-width: 0.25;
+}
+
+.pose {
+  transition: transform calc(var(--pb-motion-fast) * 1.3333333333) linear;
+}
+
+.arena[data-frozen='true'] .pose {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arena .pose {
+    transition: none;
+  }
+}
+
+:global(:root[data-motion='off']) .arena .pose {
+  transition: none;
 }
 
 .name {
