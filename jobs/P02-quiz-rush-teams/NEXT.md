@@ -14,8 +14,8 @@ Gameplay changes: native chart → full explanation → standings; reveal cuts f
 
 Continuation before release:
 
-1. Push the refreshed evidence/source/docs and first zero-gain Round10; refresh the main CLAIMS line after pull --rebase and PR18 body from README.md.
-2. Log and push the independent Round11 companion/spectator review, then Round12 lifecycle/source review. Require three consecutive rounds with no player-visible gain; any concrete defect resets the count and must be fixed/measured.
+1. The evidence/source/docs and first zero-gain Round10 are pushed at 5cf1e32; its main claim and PR body are refreshed.
+2. Round11 companion/spectator review also found no player-visible gain; push this second zero-gain record, then record/push Round12 lifecycle/source review. Require three consecutive rounds with no player-visible gain; any concrete defect resets the count and must be fixed/measured.
 3. Require the final committed head's P02/P01 CI green, typecheck/format green, all hashes correct and media below 10,000,000 bytes. Make PR18 ready only then, refresh the concrete release record, mark P02 DONE on main after pull --rebase, then re-audit the queue for the lowest eligible job.
 
 Root owns commands, the single browser, git/claims/PR/CI and final evidence. Run only games/kahoot tests with one worker. Historical standalone and failed captures in git/LOOP.md do not release this implementation.
