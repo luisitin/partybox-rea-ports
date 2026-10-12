@@ -1,0 +1,88 @@
+{
+  "id": "kahoot",
+  "name": "Kahoot!",
+  "icon": "⚡",
+  "tagline": "Know it. Tap it. Climb the podium.",
+  "description": "A fast house quiz with four shape buttons, speed points and streak bonuses. Pick a pack, race the clock, then see the room's answers and the leaderboard. Questions appear on your phone when there is no TV.",
+  "howToPlay": [
+    "Read the question and match your answer to its shape. Tap once to lock it in.",
+    "Correct answers earn 500–1000 speed points. Streaks add up to 500 bonus points.",
+    "After each answer reveal, climb the leaderboard. Most points after the last question wins."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 15,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-10-11",
+  "contentLangs": ["en"],
+  "settings": [
+    {
+      "key": "mode",
+      "label": "Quiz mode",
+      "type": "select",
+      "default": "solo",
+      "options": [
+        { "value": "solo", "label": "Individual" },
+        { "value": "teams", "label": "Teams" },
+        { "value": "tv-vote", "label": "Room vote" }
+      ]
+    },
+    {
+      "key": "pack",
+      "label": "Question pack",
+      "type": "select",
+      "default": "general",
+      "options": [
+        { "value": "general", "label": "General knowledge" },
+        { "value": "movies", "label": "Movies" },
+        { "value": "science", "label": "Science" },
+        { "value": "sports", "label": "Sports" },
+        { "value": "music", "label": "Music" },
+        { "value": "custom", "label": "Custom local pack" }
+      ]
+    },
+    {
+      "key": "rounds",
+      "label": "Questions",
+      "type": "number",
+      "default": 10,
+      "min": 5,
+      "max": 20,
+      "step": 1
+    },
+    {
+      "key": "seconds",
+      "label": "Minimum answer seconds",
+      "type": "number",
+      "default": 20,
+      "min": 10,
+      "max": 30,
+      "step": 5
+    },
+    {
+      "key": "teamCount",
+      "label": "Teams",
+      "description": "Balanced fixed teams; limited to the number of players",
+      "type": "number",
+      "default": 2,
+      "min": 2,
+      "max": 4,
+      "maxFromPlayers": 0,
+      "step": 1
+    },
+    {
+      "key": "talkSeconds",
+      "label": "Discussion seconds",
+      "description": "Teams and room vote discuss before the answer clock; reading time is always reserved",
+      "type": "number",
+      "default": 5,
+      "min": 5,
+      "max": 20,
+      "step": 5
+    }
+  ],
+  "supportsBots": true
+}

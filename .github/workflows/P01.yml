@@ -2,7 +2,7 @@ name: P01 Quiz Rush
 on:
   pull_request:
     paths:
-      - 'games/quiz-rush/**'
+      - 'games/kahoot/**'
       - 'jobs/P01-quiz-rush/**'
       - '.github/workflows/P01.yml'
 permissions:
@@ -20,4 +20,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm format
-      - run: pnpm vitest run games/quiz-rush --maxWorkers=1
+      - run: pnpm vitest run games/kahoot --maxWorkers=1

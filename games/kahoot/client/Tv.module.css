@@ -1,0 +1,102 @@
+.stage {
+  height: 100%;
+  min-height: 0;
+  gap: var(--pb-space-4);
+  color: var(--pb-text);
+}
+
+.question {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: var(--pb-space-5);
+  height: 100%;
+  min-height: 0;
+}
+
+.questionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pb-space-6);
+}
+.question[data-teams] {
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+}
+
+.progress {
+  display: grid;
+  gap: var(--pb-space-2);
+}
+.kicker {
+  margin: 0;
+  color: var(--pb-text-muted);
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+}
+.answered {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.prompt {
+  margin: 0;
+  font-size: var(--pb-font-h1);
+  font-weight: 900;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: var(--pb-space-5);
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.option {
+  display: grid;
+  grid-template-columns: calc(var(--pb-space-8) * 1.5) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--pb-space-5);
+  padding: var(--pb-space-5) var(--pb-space-6);
+  border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+  border-left: var(--pb-space-2) solid var(--pb-quiz-choice-color);
+  border-radius: var(--pb-radius-lg);
+  background: var(--pb-surface);
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.shape {
+  width: calc(var(--pb-space-8) * 1.5);
+  height: calc(var(--pb-space-8) * 1.5);
+  color: var(--pb-quiz-choice-color);
+}
+.reveal {
+  display: grid;
+  gap: var(--pb-space-4);
+}
+.revealPrompt {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.headline {
+  margin: 0;
+  font-size: var(--pb-font-h1);
+  font-weight: 900;
+  line-height: 1.2;
+}
+.scoreboard {
+  width: 100%;
+  min-width: 0;
+}
