@@ -14,7 +14,8 @@ export function useStageCues(view: DrawTvView, seconds: number): void {
   const ticks = useRef({ turn: view.turn, mask: seconds > 0 && seconds <= 5 ? 1 << seconds : 0 });
   useEffect(() => {
     const before = previous.current;
-    if (ticks.current.turn !== view.turn) ticks.current = { turn: view.turn, mask: 0 };
+    if (ticks.current.turn !== view.turn || (view.phaseId === 'draw' && before.phase !== 'draw'))
+      ticks.current = { turn: view.turn, mask: 0 };
     if (!view.paused && before.turn === view.turn) {
       if (
         before.phase === 'draw' &&

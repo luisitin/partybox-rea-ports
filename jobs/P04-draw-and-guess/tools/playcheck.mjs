@@ -314,6 +314,22 @@ try {
   await evaluate('p04.ack()');
   await settle();
   check((await evaluate('p04.cues().length')) === pausedCues, 'Paused views must remain quiet');
+  await evaluate('p04.pause(false); p04.end()');
+  await settle();
+  await evaluate('p04.restartTv()');
+  await settle();
+  await evaluate('p04.beginDraw()');
+  await settle();
+  for (const second of [5, 4, 3, 2, 1]) {
+    await evaluate(`p04.seconds(${second})`);
+    await evaluate('new Promise(done => setTimeout(done, 300))');
+    await settle();
+  }
+  const rematchTicks = await evaluate('p04.cues().filter(c=>c==="tick").length');
+  check(
+    rematchTicks === finalTicks + 5,
+    `The same TV must play five new countdown ticks after early end/restart (before=${finalTicks}, after=${rematchTicks})`,
+  );
   const report = {
     checks: NATIVE_CHECKS,
     firstGestureChunks: gesture.revision - gestureBaseRevision,
@@ -324,6 +340,8 @@ try {
     solved,
     solvedPhoneCues,
     nextMatchPhoneCues,
+    finalTicks,
+    rematchTicks,
     normalArtist,
     compactArtist,
     pausedInk,

@@ -1,5 +1,12 @@
 # P04 verification
 
+R34 countdown scope:
+
+- `gh run view 38204596894 --log`: current R32/R33 CI is green for44c437e,41s; all331tests in32files pass in20.14s, including7,000matches and SDK/property checks.
+- Pre-fix `node jobs/P04-draw-and-guess/tools/playcheck.mjs` reproduces the new assertion: the same mounted TV has5ticks before early end/restart and5after, rather than10. The script exits1 through finally, and process inspection confirms no active harness browser before the retry.
+- The source resets the tick mask when entering a fresh draw from another phase. Pause and clock-offset updates stay draw-to-draw; reconnect initializes its own marker and cannot replay a past cue. Post-fix `node jobs/P04-draw-and-guess/tools/playcheck.mjs`:57checks pass, exit0; rematch tick total5→10, paused extras0, phone success1after solved remount and2after next-match solve.26chunks take one Undo, both endpoint errors0px, paused dot spacing280.7ms, all draft/brush/exact-once recovery checks and zero viewport overflows remain green. One browser closes in finally. No markup/CSS or server source changed.
+- Final `pnpm.cmd typecheck`, `pnpm.cmd format` and `git diff --check`:pass, exit0. Scoped Prettier follows the generated report. `node jobs/P04-draw-and-guess/tools/hash-media.mjs`:68files,2,157,072bytes; hashes current.
+
 R25/R26 milestone: local typecheck passes, exit0. Scoped ink packet/pause/target
 tests pass23checks in1.41s; scoped guessDraft/draft-recovery tests pass24checks
 in1.56s. Commands use `pnpm.cmd vitest run games/skribbl/client/<file>` with

@@ -55,4 +55,5 @@ export const NATIVE_CHECKS = [
   'public solve sound once',
   'five final-second ticks',
   'paused sound silence',
+  'same-mounted TV countdown survives early-end rematch',
 ];

@@ -7,20 +7,18 @@ The public game and injected Broken Pencil live-mode upgrade are complete.
 UPGRADE.md records core installation boundaries; no private deployment is claimed.
 Telephone remains the injected default under the existing card.
 
-R32 preserves brush-only Gray/Thick selections; R33 prevents a restored solved
-phone from replaying success while a new match still celebrates.36focused ink
-checks and final local typecheck pass.56native checks pass, exit0: cue total1
-survives solved remount, a fresh match advances it to2 once, and all ink/draft/
-pause/Undo/fit/audio checks remain green. Known-unsent recovery sends each dot
-and tail once, with0replay; brush next-stroke color5/width18 and0recovery taps.
+R34 fixes same-mounted TV countdown after early end/restart on reused turn1.
+Native regression first reproduces0new ticks, then57checks pass with5new ticks.
+Pause remains quiet; solved phone refresh keeps1cue and next match earns a
+second. All brush/known-unsent ink/draft/Undo/viewport checks pass, exit0.
 Single browser closes in finally; no concurrent browsers were launched.
 
-R25/R26/R28/R30 gains remain intact. Prior full CI38202484673 passed327checks/
+R25/R26/R28/R30 gains remain intact. CI38204596894 for44c437e passes331checks/
 32files and7,000matches/contracts/properties. Server sources still match the
 fresh20/20R23mutation campaign. Rendering markup/CSS and33SSR captures are
 unchanged;68media files total2,157,072bytes and are rehashed after final reports.
 
-Push the R32/R33 milestone and refresh CLAIMS, then wait for current complete CI.
+Push the R34 milestone and refresh CLAIMS, then wait for current complete CI.
 Three fresh no-gain rounds are required (streak0/3). Rank/log five residuals per
 round, push/refresh each. Refresh PR body from this job README and ready only on
 latest green CI, then mark P04 DONE before taking the next lowest eligible job.

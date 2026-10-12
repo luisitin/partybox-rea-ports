@@ -159,6 +159,25 @@ function send(input: Input) {
     tv = false;
     publish();
   },
+  end() {
+    state = game.reduce(state, { type: 'vip', action: 'end', now: ++now });
+    publish();
+  },
+  restartTv() {
+    now += 1000;
+    state = game.init({ players, settings: state.settings, seed: 44, now });
+    gameRun++;
+    publish();
+  },
+  beginDraw() {
+    state = game.reduce(state, {
+      type: 'input',
+      playerId: state.drawer,
+      input: { type: 'choose', index: 0 },
+      now: ++now,
+    });
+    publish();
+  },
   guesser() {
     id = players.find((p) => p.id !== state.drawer)!.id;
     publish();
