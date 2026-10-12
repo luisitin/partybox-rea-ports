@@ -135,18 +135,15 @@ describe('normalize — the machine locale never matters', () => {
   });
 
   it('gives the same output in a child process started under a Turkish locale', () => {
-    const source = new URL('./normalize.ts', import.meta.url).href;
-    const script = `import { normalize } from ${JSON.stringify(source)};
+    const source = fileURLToPath(new URL('./normalize.ts', import.meta.url));
+    const script = `const { normalize } = require(${JSON.stringify(source)});
       console.log(JSON.stringify(${JSON.stringify(TURKISH)}.map((t) => normalize(t, 'en').norm)));`;
-    const child = spawnSync(
-      process.execPath,
-      ['--import', 'tsx', '--input-type=module', '-e', script],
-      {
-        cwd: fileURLToPath(new URL('../../../..', import.meta.url)),
-        env: { ...process.env, LANG: 'tr_TR.UTF-8', LC_ALL: 'tr_TR.UTF-8' },
-        encoding: 'utf8',
-      },
-    );
+    // The CJS hook avoids an ESM loader worker competing with the suite on a loaded machine.
+    const child = spawnSync(process.execPath, ['--require', 'tsx/cjs', '-e', script], {
+      cwd: fileURLToPath(new URL('../../../..', import.meta.url)),
+      env: { ...process.env, LANG: 'tr_TR.UTF-8', LC_ALL: 'tr_TR.UTF-8' },
+      encoding: 'utf8',
+    });
     expect(child.status, child.stderr).toBe(0);
     expect(JSON.parse(child.stdout)).toEqual(TURKISH_NORM);
   });

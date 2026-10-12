@@ -53,8 +53,8 @@ Examples: `feat(wisecrack): add vote phase`, `fix(engine): F-012 VIP handover ig
 
 ## Git worktrees (parallel sessions)
 
-Every agent works in its own worktree and branch: `git -C C:/dev/partybox worktree add C:/dev/partybox-<name>
+Every agent works in its own worktree and branch: `git -C . worktree add ../partybox-<name>
 -b <branch> main` (early sessions used `claude --worktree <name>`, giving `.claude/worktrees/<name>`, gitignored).
-Branches reach `main` only through review and the merge queue (`C:/dev/team/TEAM.md` §6–§7); never merge
+Branches reach `main` only through review and the merge queue (the team manual §6–§7); never merge
 `main` in just to stay fresh. Ports: 42069 is the owner's server; team ports are in
-`C:/dev/team/board/agents.json`. See `reports/README.md`.
+the team's agent registry. See `reports/README.md`.

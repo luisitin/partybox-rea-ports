@@ -68,7 +68,9 @@ The TV shell sets the TV column; the controller shell sets the phone column; tok
 - Keyframes live in `global.css` (`pb-rise`, `pb-pop`, `pb-shake`, `pb-confetti`); a CSS module must reference them as `animation: global(pb-rise) …` — CSS Modules localise bare animation names, so `animation: pb-rise` silently never runs (every module did this until 2026-09-15).
 - TV chrome (`TvFrame`): 🏠 + brand top-left is Home — first click arms ("Click again to start over", danger colour, 4 s), second resets the room via the dev API. For 10 minutes the retired code leads to the new room, so the phones that came in by the QR rejoin by themselves (I-658 A); each phone's address then carries the new code and the TV fetches its new QR at once (I-658 B). The corner controls (🎨 🔊 ⛶) sit top-right.
 - Phone: `env(safe-area-inset-*)` padding, `100dvh` layouts, `overscroll-behavior: none` in game views,
-  the submit button lives in a sticky bottom bar so the iOS keyboard never hides it.
+  the submit button lives in a sticky bottom bar. The controller shell follows the on-screen keyboard
+  (`controller/keyboardSafe.ts`, T-1045: visualViewport + `navigator.virtualKeyboard`): while it is up the shell is
+  as tall as the visible area, so the bar and the focused field sit above the keys; down, nothing moves.
 - Touch targets ≥ 44 × 44 px (`--pb-touch` = 44 px), ≥ 8 px apart.
 
 ## Motion
@@ -96,9 +98,9 @@ per device; Bingo's card-style sheet has the row). Both collapse the `--pb-motio
 Keyframes in global.css: `pb-rise`, `pb-pop`, `pb-tick` (a keyed change that must never blank a frame — a countdown digit — squeezes from 1.3× and is visible from its first frame), `pb-shake`, `pb-fade-in` / `pb-fade-out` (the
 server-lost dim arrives and leaves over `--pb-motion-base`), `pb-spin` (a reconnecting ⟳; only under no-preference),
 `pb-confetti`, `pb-land` (a card replacing a card: a bounce from half opacity, never from transparent, so a stage never blinks empty between two), `pb-deal` (a card dealt onto a table: up from below with a small tilt that settles), `pb-flip` (a card turned face-up in 3D — transform only: animating opacity alongside it flattens Chromium's 3D context and shows the face mirrored), `pb-crown` (a winning card lifts off the table with a warm bloom). PlayerChip reserves its glyph slot, so a ✓ landing pops in place and never shifts the row.
-Phone: every `Screen` rises on mount (`pb-rise`, `--pb-motion-base`, fill backwards); a game keys its Screen or grid
+Phone: every `Screen` rises on mount (`pb-rise`, `--pb-motion-base`, fill backwards); results → lobby hands over here too (T-1034); a game keys its Screen or grid
 when a phase should read as a new screen, and never keys the Controller itself (game-local state would reset).
-TV status swaps (lobby / selecting / playing / results) are keyed and rise (`pb-rise`, fill backwards); a game chunk that
+TV status swaps (lobby / selecting / playing / results) are keyed and rise (`pb-rise`, fill backwards); results → lobby hands over (T-1034): the lobby stays hidden and paused until the results' ghost is gone, then rises, its room code whole; a game chunk that
 takes > 150 ms shows a centred "<game> — Getting the game ready…" card, never a stray glyph. The card leaves no fading copy over the game when it lands (`WaitingScreen ghost={false}`, T-0281), and the phone's countdown row is there in every phase that shows a timer, with a fixed line height, so the game's header does not jump when the first deadline arrives.
 `ChoiceGrid` takes a `className` for its Screen (I-026), so a game can style a state of the grid — Lightning's placed
 wager steps the other rows back to 60 % and bumps the chosen row's chips.
