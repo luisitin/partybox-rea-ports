@@ -85,7 +85,7 @@
         --pb-chip-size: 40px;
       }
 
-      /* ── Themes (src/theme.ts sets data-theme on <html>; 
+      /* ── Themes (src/theme.ts sets data-theme on <html>;
 ight is the :root default above) ────────
    Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
    colours stay bright in every theme — they are avatar discs, not text. */
@@ -434,6 +434,23 @@ ight is the :root default above) ────────
         }
       }
 
+      /* Safari's keyboard can reduce the visual viewport without changing media queries. */
+      ._screen_49b69d[data-compact='true'] {
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-2);
+      }
+
+      ._screen_49b69d[data-compact='true'][data-stage='true'][data-phase='draw'] ._picture_49b69d {
+        max-height: calc(var(--pb-space-8) * 2);
+      }
+
+      ._screen_49b69d[data-compact='true'][data-phase='draw']
+        ._status_49b69d
+        p:not(._correct_49b69d),
+      ._screen_49b69d[data-compact='true'] ._breath_49b69d {
+        display: none;
+      }
+
       ._pad_2a652a {
         display: grid;
         grid-template-rows: minmax(0, 1fr) auto auto auto;
@@ -446,14 +463,16 @@ ight is the :root default above) ────────
         min-height: 0;
         display: grid;
         place-items: center;
+        container-type: size;
       }
 
       ._paper_2a652a canvas {
         display: block;
-        width: auto;
+        width: min(
+          calc(100% - var(--pb-space-1) - var(--pb-space-1)),
+          calc((100cqh - var(--pb-space-1) - var(--pb-space-1)) * 5 / 3)
+        );
         height: auto;
-        max-width: calc(100% - var(--pb-space-1) - var(--pb-space-1));
-        max-height: calc(100% - var(--pb-space-1) - var(--pb-space-1));
         box-sizing: content-box;
         border: var(--pb-space-1) solid var(--pb-surface-2);
         background: var(--pb-bg);
@@ -833,7 +852,13 @@ ight is the :root default above) ────────
   </head>
   <body>
     <main>
-      <section class="_screen_49b69d" data-phase="done" data-drawing="false" data-stage="true">
+      <section
+        class="_screen_49b69d"
+        data-phase="done"
+        data-drawing="false"
+        data-stage="true"
+        data-compact="false"
+      >
         <header class="_header_49b69d">
           <div class="_heading_49b69d">
             <p class="_kicker_49b69d">Drawing champions</p>
@@ -877,44 +902,44 @@ ight is the :root default above) ────────
           </svg>
         </div>
         <ul class="_rows_4e881f" aria-label="Final standings" data-phone="true" data-final="true">
-          <li data-me="false" data-solved="false" data-winner="true">
+          <li data-me="false" data-solved="false" data-winner="true" data-offline="false">
             <span class="_mark_4e881f" role="img" aria-label="Winner, place 1">★</span
             ><span class="_identity_4e881f"
               ><span class="_name_4e881f" title="Cy">Cy</span
               ><span class="_winnerLabel_4e881f" aria-hidden="true">Winner</span></span
             ><b class="_points_4e881f">6686</b>
           </li>
-          <li data-me="false" data-solved="false" data-winner="false">
+          <li data-me="false" data-solved="false" data-winner="false" data-offline="false">
             <span class="_mark_4e881f" role="img" aria-label="Place 2">2</span
             ><span class="_identity_4e881f"><span class="_name_4e881f" title="Eli">Eli</span></span
             ><b class="_points_4e881f">6476</b>
           </li>
-          <li data-me="false" data-solved="false" data-winner="false">
+          <li data-me="false" data-solved="false" data-winner="false" data-offline="false">
             <span class="_mark_4e881f" role="img" aria-label="Place 3">3</span
             ><span class="_identity_4e881f"><span class="_name_4e881f" title="Ben">Ben</span></span
             ><b class="_points_4e881f">6266</b>
           </li>
-          <li data-me="false" data-solved="false" data-winner="false">
+          <li data-me="false" data-solved="false" data-winner="false" data-offline="false">
             <span class="_mark_4e881f" role="img" aria-label="Place 4">4</span
             ><span class="_identity_4e881f"><span class="_name_4e881f" title="Gus">Gus</span></span
             ><b class="_points_4e881f">3084</b>
           </li>
-          <li data-me="false" data-solved="false" data-winner="false">
+          <li data-me="false" data-solved="false" data-winner="false" data-offline="false">
             <span class="_mark_4e881f" role="img" aria-label="Place 5">5</span
             ><span class="_identity_4e881f"><span class="_name_4e881f" title="Ana">Ana</span></span
             ><b class="_points_4e881f">750</b>
           </li>
-          <li data-me="false" data-solved="false" data-winner="false">
+          <li data-me="false" data-solved="false" data-winner="false" data-offline="false">
             <span class="_mark_4e881f" role="img" aria-label="Place 5">5</span
             ><span class="_identity_4e881f"><span class="_name_4e881f" title="Dee">Dee</span></span
             ><b class="_points_4e881f">750</b>
           </li>
-          <li data-me="false" data-solved="false" data-winner="false">
+          <li data-me="false" data-solved="false" data-winner="false" data-offline="false">
             <span class="_mark_4e881f" role="img" aria-label="Place 5">5</span
             ><span class="_identity_4e881f"><span class="_name_4e881f" title="Fay">Fay</span></span
             ><b class="_points_4e881f">750</b>
           </li>
-          <li data-me="false" data-solved="false" data-winner="false">
+          <li data-me="false" data-solved="false" data-winner="false" data-offline="false">
             <span class="_mark_4e881f" role="img" aria-label="Place 5">5</span
             ><span class="_identity_4e881f"><span class="_name_4e881f" title="Hal">Hal</span></span
             ><b class="_points_4e881f">750</b>

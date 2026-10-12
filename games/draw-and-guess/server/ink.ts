@@ -58,7 +58,8 @@ interface Candidate {
 }
 
 /** Remove the least visible bends first, with index-stable ties and O(n log n) work. */
-function simplify(points: Point[], target: number): Point[] {
+export function simplifyInkPoints(points: Point[], target: number): Point[] {
+  if (points.length <= target) return points;
   const before = Int32Array.from(points, (_, i) => i - 1);
   const after = Int32Array.from(points, (_, i) => i + 1);
   const revisions = new Uint32Array(points.length);
@@ -136,7 +137,10 @@ export function compactInk(strokes: Stroke[]): Stroke[] {
     for (let i = 1; i < out.length; i++)
       if (out[i]!.points.length > out[index]!.points.length) index = i;
     const stroke = out[index]!;
-    const simplified = simplify(stroke.points, Math.max(2, Math.ceil(stroke.points.length / 2)));
+    const simplified = simplifyInkPoints(
+      stroke.points,
+      Math.max(2, Math.ceil(stroke.points.length / 2)),
+    );
     points -= stroke.points.length - simplified.length;
     out[index] = { ...stroke, points: simplified };
   }

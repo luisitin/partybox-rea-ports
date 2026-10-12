@@ -120,7 +120,10 @@ function document(
   const tv = surface === 'tv';
   const width = tv ? 1920 : 390;
   const height = heightOverride ?? (tv ? 1080 : 844);
-  return `<!doctype html>\n<html lang="en" data-surface="${tv ? 'tv' : 'controller'}" data-motion="off"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>\n${tokens}\n${stylesFor()}\n*{box-sizing:border-box}html,body{margin:0;width:${width}px;height:${height}px;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family)}body{overflow:hidden}main{width:100%;height:100%;min-height:0}button,input{font:inherit}h1,h2,p{margin-top:0}\n</style></head><body><main>${markup}</main></body></html>\n`;
+  return `<!doctype html>\n<html lang="en" data-surface="${tv ? 'tv' : 'controller'}" data-motion="off"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>\n${tokens}\n${stylesFor()}\n*{box-sizing:border-box}html,body{margin:0;width:${width}px;height:${height}px;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family)}body{overflow:hidden}main{width:100%;height:100%;min-height:0}button,input{font:inherit}h1,h2,p{margin-top:0}\n</style></head><body><main>${markup}</main></body></html>\n`.replace(
+    /[ \t]+$/gm,
+    '',
+  );
 }
 
 describe('review evidence and every phone phase', () => {

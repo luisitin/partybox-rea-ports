@@ -1,14 +1,14 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 2 failed) 34ms
-     × awards 300 base plus 700 times remaining time, only once; the artist also earns points 4ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 2 failed) 25ms
+     × awards 300 base plus 700 times remaining time, only once; the artist also earns points 3ms
      × adds points to earlier turns instead of replacing either player total 2ms
 
  Test Files  1 failed (1)
       Tests  2 failed | 22 passed (24)
-   Start at  17:54:03
-   Duration  918ms (transform 400ms, setup 0ms, import 607ms, tests 34ms, environment 0ms)
+   Start at  20:45:13
+   Duration  614ms (transform 274ms, setup 0ms, import 427ms, tests 25ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
@@ -44,3 +44,6 @@ AssertionError: expected 2300 to be 2550 // Object.is equality
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
 
+close timed out after 10000ms
+Tests closed successfully but something prevents Vite server from exiting
+You can try to identify the cause by enabling "hanging-process" reporter. See https://vitest.dev/guide/reporters.html#hanging-process-reporter

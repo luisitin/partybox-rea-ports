@@ -1,3 +1,4 @@
+import { canvasProjection } from './pointer-check.mjs';
 // One local headless browser for real phone interaction checks, closed in finally.
 import { spawn, spawnSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
@@ -15,6 +16,7 @@ const server = await createServer({
     noDiscovery: true,
     include: ['react', 'react-dom/client', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'zod'],
   },
+  clearScreen: false,
   resolve: {
     alias: {
       '@partybox/shared': resolve('packages/shared/src/index.ts'),
@@ -136,7 +138,7 @@ try {
   }
   const settle = () =>
     evaluate(
-      'new Promise(done => requestAnimationFrame(() => requestAnimationFrame(() => done(true))))',
+      'new Promise(done => setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => done(true))), 150))',
     );
   const button = async (label) => {
     await evaluate(
@@ -180,87 +182,12 @@ try {
   const check = (condition, message) => {
     if (!condition) throw new Error(message);
   };
-  const canvasProjection = async (height) => {
-    await rpc(socket, 'Emulation.setDeviceMetricsOverride', {
-      width: 390,
-      height,
-      deviceScaleFactor: 1,
-      mobile: true,
-    });
-    await settle();
-    await evaluate('new Promise(done => setTimeout(done, 300))');
-    await settle();
-    const box = await evaluate(`(() => {
-      const c=document.querySelector('canvas'), r=c.getBoundingClientRect(), s=getComputedStyle(c);
-      const width=parseFloat(s.width), height=parseFloat(s.height);
-      const left=parseFloat(s.borderLeftWidth), right=parseFloat(s.borderRightWidth);
-      const top=parseFloat(s.borderTopWidth), bottom=parseFloat(s.borderBottomWidth);
-      const sx=r.width/(width+left+right), sy=r.height/(height+top+bottom);
-      return {left:r.left+left*sx,top:r.top+top*sy,width:width*sx,height:height*sy};
-    })()`);
-    check(
-      box.width > 0 && box.height > 0 && Math.abs(box.width / box.height - 5 / 3) < 0.005,
-      `${height}px artist bitmap must remain 5:3 (got ${box.width}×${box.height})`,
-    );
-    const start = { x: box.left + box.width * 0.05, y: box.top + box.height * 0.05 };
-    const end = { x: box.left + box.width * 0.95, y: box.top + box.height * 0.95 };
-    const hit = await evaluate(`(() => {
-      const e=document.elementFromPoint(${start.x},${start.y});
-      window.pointerProbe=[];
-      for(const type of ['pointerdown','pointerup','pointercancel','lostpointercapture'])
-        document.querySelector('canvas').addEventListener(type,e=>pointerProbe.push({type,primary:e.isPrimary,button:e.button,x:e.clientX,y:e.clientY}));
-      return {tag:e?.tagName, label:e?.getAttribute('aria-label'),
-        viewport:{width:innerWidth,height:innerHeight}, state:p04.info()};
-    })()`);
-    check(
-      hit.tag === 'CANVAS',
-      `${height}px artist pointer must hit canvas: ${JSON.stringify({ box, hit })}`,
-    );
-    await rpc(socket, 'Input.dispatchMouseEvent', {
-      type: 'mousePressed',
-      ...start,
-      button: 'left',
-      buttons: 1,
-      clickCount: 1,
-    });
-    await rpc(socket, 'Input.dispatchMouseEvent', {
-      type: 'mouseMoved',
-      ...end,
-      button: 'none',
-      buttons: 1,
-    });
-    await rpc(socket, 'Input.dispatchMouseEvent', {
-      type: 'mouseReleased',
-      ...end,
-      button: 'left',
-      buttons: 0,
-      clickCount: 1,
-    });
-    await settle();
-    const points = await evaluate('p04.info().strokes.at(-1)?.points');
-    const first = points?.[0];
-    const last = points?.at(-1);
-    const projectionErrorPx =
-      first && last
-        ? Math.max(
-            (Math.abs(first[0] - 50) * box.width) / 1000,
-            (Math.abs(first[1] - 30) * box.height) / 600,
-            (Math.abs(last[0] - 950) * box.width) / 1000,
-            (Math.abs(last[1] - 570) * box.height) / 600,
-          )
-        : Infinity;
-    check(
-      projectionErrorPx <= 1.25,
-      `${height}px pointer endpoints must map inside the border (got ${JSON.stringify({ box, hit, first, last, state: await evaluate('p04.info()'), events: await evaluate('pointerProbe') })})`,
-    );
-    await button('Clear');
-    await button('Tap again to clear');
-    return { ...box, first, last, projectionErrorPx };
-  };
+  const projectCanvas = (height) =>
+    canvasProjection({ rpc, socket, evaluate, settle, button, check }, height);
   await evaluate('new Promise(done => setTimeout(done, 1000))');
   await settle();
-  const normalArtist = await canvasProjection(844);
-  const compactArtist = await canvasProjection(500);
+  const normalArtist = await projectCanvas(844);
+  const compactArtist = await projectCanvas(500);
   await rpc(socket, 'Emulation.setDeviceMetricsOverride', {
     width: 390,
     height: 844,
@@ -336,11 +263,24 @@ try {
   const fit = async () =>
     JSON.parse(
       await evaluate(
-        'JSON.stringify({height:innerHeight,overflow:[...document.querySelectorAll("h2,p,input,button")].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.bottom>innerHeight+1||r.top< -1||r.left< -1)}).map(e=>e.textContent||e.id)})',
+        'JSON.stringify({height:visualViewport.height,layoutHeight:innerHeight,compact:document.querySelector("section").dataset.compact,overflow:[...document.querySelectorAll("h2,p,input,button")].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.bottom>visualViewport.height+1||r.top< -1||r.left< -1)}).map(e=>e.textContent||e.id)})',
       ),
     );
   const normal = await fit();
   check(normal.overflow.length === 0, 'Phone-only guess layout must fit');
+  await evaluate(`Object.defineProperty(visualViewport,'height',{configurable:true,value:500});
+    visualViewport.dispatchEvent(new Event('resize'))`);
+  await settle();
+  const safariKeyboard = await fit();
+  check(
+    safariKeyboard.layoutHeight === 844 &&
+      safariKeyboard.height === 500 &&
+      safariKeyboard.compact === 'true' &&
+      safariKeyboard.overflow.length === 0,
+    `Visual-viewport-only keyboard must compact and fit: ${JSON.stringify(safariKeyboard)}`,
+  );
+  await evaluate("delete visualViewport.height; visualViewport.dispatchEvent(new Event('resize'))");
+  await settle();
   await rpc(socket, 'Emulation.setDeviceMetricsOverride', {
     width: 390,
     height: 500,
@@ -393,6 +333,8 @@ try {
       'compact artist 5:3 bitmap',
       'normal pointer border projection',
       'compact pointer border projection',
+      'normal release-only endpoint',
+      'compact release-only endpoint',
       'pointer chunk merge',
       'one Undo per gesture',
       'accidental Clear preserves ink',
@@ -404,6 +346,7 @@ try {
       'same-text retry receipt',
       'new draft survives old refusal',
       'phone-only guess fit',
+      'Safari visual-viewport-only keyboard fit',
       'keyboard-height guess fit',
       'immediate point receipt',
       'keyboard-height solved fit',
@@ -414,6 +357,7 @@ try {
     firstGestureChunks: gesture.revision - gestureBaseRevision,
     finalRevision: restored.revision,
     normal,
+    safariKeyboard,
     keyboard,
     solved,
     normalArtist,

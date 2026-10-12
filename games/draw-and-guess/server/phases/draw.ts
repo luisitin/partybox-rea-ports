@@ -3,6 +3,7 @@ import { enterPhase, hasPlayer, isTimerFor, shuffle } from '@partybox/game-sdk';
 import type { GameEvent } from '@partybox/game-sdk';
 import { normalize as normalizeAnswer } from '@partybox/game-sdk/match';
 import { guessPoints } from '../scoring';
+import { answerCompact, answerSpellings } from '../answerMatch';
 import { appendInk, continuesInk, undoInk } from '../ink';
 import { BEAT_MS, MAX_STROKES } from '../types';
 import type { State, Input, Transition } from '../types';
@@ -127,10 +128,10 @@ export function reduceDraw(state: State, event: GameEvent<Input>, next: Transiti
     guesses,
     lastGuessAt: { ...state.lastGuessAt, [playerId]: now },
   };
-  const compact = normalizeAnswer(text, 'en').compact;
-  const answer = normalizeAnswer(state.word, 'en').compact;
+  const compact = answerCompact(text);
+  const answer = answerCompact(state.word);
   if (compact !== answer) {
-    const close = oneEditApart(compact, answer);
+    const close = answerSpellings(state.word).some((spelling) => oneEditApart(compact, spelling));
     return {
       ...fresh,
       feedback: { ...state.feedback, [playerId]: close ? 'Close!' : 'Try another word' },

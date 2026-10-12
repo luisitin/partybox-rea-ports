@@ -37,6 +37,7 @@ export function Roster({
       {rows.map((player) => {
         const drawing = player.id === board.drawer;
         const solved = board.solvedIds.includes(player.id);
+        const offline = !final && !player.connected;
         const score = board.scores[player.id] ?? 0;
         const rank = 1 + players.filter((other) => (board.scores[other.id] ?? 0) > score).length;
         const winner = final && score === top;
@@ -47,28 +48,36 @@ export function Roster({
             data-me={player.id === me}
             data-solved={!final && solved}
             data-winner={winner}
+            data-offline={offline}
           >
             <span
               className={styles.mark}
-              role={final ? 'img' : undefined}
+              role="img"
               aria-label={
                 final
                   ? winner
                     ? L('{result}, place {n}', { result: winnerLabel, n: rank })
                     : L('Place {n}', { n: rank })
-                  : drawing
-                    ? L('Artist')
-                    : solved
-                      ? L('Solved')
-                      : L('Guessing')
+                  : offline
+                    ? drawing
+                      ? L('Artist · Offline')
+                      : solved
+                        ? L('Solved · Offline')
+                        : L('Offline')
+                    : drawing
+                      ? L('Artist')
+                      : solved
+                        ? L('Solved')
+                        : L('Guessing')
               }
             >
-              {final ? (winner ? '★' : rank) : drawing ? '✎' : solved ? '✓' : '·'}
+              {final ? (winner ? '★' : rank) : drawing ? '✎' : solved ? '✓' : offline ? '○' : '·'}
             </span>
             <span className={styles.identity}>
               <span className={styles.name} title={player.name}>
                 {player.name}
               </span>
+              {offline ? <span aria-hidden="true">{L('Offline')}</span> : null}
               {winner ? (
                 <span className={styles.winnerLabel} aria-hidden="true">
                   {winnerLabel}

@@ -32,3 +32,13 @@
   its exact value in the game README and VERIFY.md.
 
 The research proposal mentioned an eraser. The shipped small toolset uses complete-gesture Undo and two-tap Clear to correct drawings; no pixel eraser is needed by the job. This is a deliberate phone usability choice.
+
+- The existing `.claims-main` worktree belongs to this runner inside its clone.
+  It is used only for small CLAIMS commits, always preceded by pull --rebase.
+- Exact regional spellings are accepted for four original words; synonyms and
+  plurals are separate guesses, consistent with the displayed letter mask.
+- Browser-local performance.now controls packet spacing only. Game clocks,
+  hints, scoring and phase exits still use injected event.now exclusively.
+- Continuous ordinary finger input is sampled within the packet budget.
+  Extreme synthetic tap/edit floods can accumulate ordered delivery latency;
+  they do not produce a transport burst or merge optimistic revisions.

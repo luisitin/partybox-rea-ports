@@ -137,3 +137,20 @@ This run exited0 despite Windows fork-cleanup timeout warnings under load;
 no warning is counted as an assertion success. R11 CI passed in36seconds.
 Typecheck and scoped formatting pass. Actual compact artist/retry browser
 measurements and refreshed PNG/hash evidence are the next verification step.
+
+R15-R20 final checks:
+
+- `pnpm.cmd typecheck`: pass, exit0.
+- `$env:WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/draw-and-guess --maxWorkers=1 --pool=threads --disableConsoleIntercept`:246tests in23files pass in81.24s, exit0. The one-worker thread pool avoids the desktop fork-cleanup warnings; no other game was loaded. SDK contract, seeds1/2/3 plus1,000generated seeds, all7,000bot matches and evidence generation pass. Median drawing seconds at2/4/8seats remain24/4/4,32/8/4 and32/12/4 for easy/normal/sharp; worst8-seat match401s (<1,440s).
+- `node jobs/P04-draw-and-guess/tools/playcheck.mjs`:24actual browser checks pass, exit0. Both 5:3 canvases retain release-only endpoints with0px projection error. Safari visual500/layout844, ordinary390×844 and keyboard390×500 controls have zero overflow.18packets form one complete Undo gesture; accepted guesses clear, rejected retries return, newer drafts survive old receipts. One success cue and exactly5final ticks remain correctly deduplicated. Browser closes in finally; unique-profile cleanup handles Windows launcher PID handoff.
+- `node jobs/P04-draw-and-guess/tools/capture.mjs`:33screens pass with zero viewport overflow, including compact artist, longest word, all8long-name tied winners and every phase/role. Manual image inspection confirms readable TV drawing/mask/timer, full phone names, scores, winner labels and compact guessing controls. Artist SSR canvas is blank by design; live checks confirm actual painted ink.
+- `node jobs/P04-draw-and-guess/tools/mutate.mjs`:20/20current-source mutants caught by assertions; originals restored in finally; restored baseline green. New draw matching retains the scoring/privacy mutation anchors. Source hashes/logs were regenerated.
+
+Milestone CI38192396855 failed only formatting of newly regenerated
+`playcheck-results.json`; browser output must precede final Prettier and hashing.
+The PR was returned to draft until final checks and refreshed CI pass.
+
+Final `pnpm.cmd format` passes, exit0. Final formatting followed browser output;
+`node jobs/P04-draw-and-guess/tools/hash-media.mjs` hashes all66HTML/PNG files
+(2,080,808bytes, under10MB). `git diff --check` passes. No game source changed
+after the246-test suite; only formatting and evidence/documentation followed.

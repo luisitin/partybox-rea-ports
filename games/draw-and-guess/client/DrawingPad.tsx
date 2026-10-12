@@ -1,10 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { JSX, PointerEvent } from 'react';
-import { useT, useThemeColor } from '@partybox/game-sdk/ui';
+import { useServerNow, useT, useThemeColor } from '@partybox/game-sdk/ui';
 import type { Input, Point, Stroke } from '../server/types';
 import { canvasContentRect, drawingPoint, finishDrawingPoints } from './drawingGeometry';
 import { gestureCount, nextGesture, previewInk } from './ink';
 import type { InkOperation, PendingInk } from './ink';
+import {
+  boundInkPoints,
+  clearInkPackets,
+  emptyInkPackets,
+  enqueueInkPacket,
+  inkPacketReady,
+  takeInkPacket,
+} from './inkPackets';
 import { COLORS, WIDTHS } from './palette';
 import { STRINGS } from './strings';
 import styles from './DrawingPad.module.css';
@@ -47,6 +55,7 @@ export function DrawingPad({
   const [localCount, setLocalCount] = useState(gestureCount(strokes));
   const [localFragments, setLocalFragments] = useState(strokes.length);
   const [clearArmed, setClearArmed] = useState(false);
+  const tick = useServerNow(40, disabled);
   const ink = useThemeColor('--pb-text', '');
   const rose = useThemeColor('--pb-accent', '');
   const gold = useThemeColor('--pb-accent-2', '');
@@ -61,13 +70,13 @@ export function DrawingPad({
   const sentRevision = useRef(inkRevision);
   const serial = useRef(0);
   const pending = useRef<PendingInk[]>([]);
+  const outgoing = useRef(emptyInkPackets());
   const active = useRef({
     id: -1,
     points: [] as Point[],
     color: 0,
     gesture: 0,
     width: 9 as 4 | 9 | 18,
-    sentAt: 0,
     dirty: false,
   });
   const full = localFragments >= 240;
@@ -82,6 +91,8 @@ export function DrawingPad({
 
   useEffect(() => {
     // Edits have revisions too: a delayed Clear acknowledgement cannot consume a later stroke.
+    if (inkRevision < previousRevision.current)
+      outgoing.current = clearInkPackets(outgoing.current);
     pending.current =
       inkRevision < previousRevision.current
         ? []
@@ -100,38 +111,62 @@ export function DrawingPad({
     const id = active.current.id;
     active.current.id = -1;
     active.current.points = [];
+    active.current.dirty = false;
     if (canvas.current?.hasPointerCapture(id)) canvas.current.releasePointerCapture(id);
     pending.current = [];
+    outgoing.current = clearInkPackets(outgoing.current);
     sentRevision.current = inkRevision;
     setLocalCount(gestureCount(strokes));
     setLocalFragments(strokes.length);
     repaint();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disabled, inkRevision]);
+  useEffect(
+    () => () => {
+      outgoing.current = clearInkPackets(outgoing.current);
+      pending.current = [];
+      active.current.id = -1;
+      active.current.points = [];
+      active.current.dirty = false;
+    },
+    [],
+  );
 
   const queue = (input: InkOperation): void => {
     sentRevision.current = Math.max(sentRevision.current, inkRevision) + 1;
-    pending.current.push({ revision: sentRevision.current, input });
-    send(input);
+    const operation = { revision: sentRevision.current, input };
+    pending.current.push(operation);
+    outgoing.current = enqueueInkPacket(outgoing.current, operation);
     const picture = previewInk(strokes, pending.current);
     setLocalCount(gestureCount(picture));
     setLocalFragments(picture.length);
   };
 
-  const flush = (at: number): void => {
+  const flush = (): void => {
     const drag = active.current;
-    if (!drag.dirty || disabled) return;
+    if (drag.id === -1 || !drag.dirty || !drag.points.length || disabled) return;
     const stroke: Stroke = {
       color: drag.color,
       width: drag.width,
       gesture: drag.gesture,
-      points: [...drag.points],
+      points: boundInkPoints(drag.points),
     };
     queue({ type: 'stroke', stroke });
     drag.points = drag.points.slice(-1);
-    drag.sentAt = at;
     drag.dirty = false;
   };
+  useEffect(() => {
+    if (disabled) return;
+    // The SDK tick wakes the sender; only a local monotonic clock controls socket spacing.
+    // A server-offset correction or acknowledgement must never accelerate this queue.
+    const at = performance.now();
+    if (!inkPacketReady(outgoing.current, at)) return;
+    if (!outgoing.current.operations.length) flush();
+    const packet = takeInkPacket(outgoing.current, at);
+    outgoing.current = packet.queue;
+    if (packet.operation) send(packet.operation.input);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tick, disabled]);
   const finish = (event: PointerEvent<HTMLCanvasElement>): void => {
     const drag = active.current;
     if (drag.id !== event.pointerId) return;
@@ -144,13 +179,14 @@ export function DrawingPad({
         paperBounds(),
       );
       if (points !== drag.points) {
-        drag.points = points;
+        drag.points = boundInkPoints(points);
         drag.dirty = true;
       }
     }
-    flush(event.timeStamp);
+    flush();
     active.current.id = -1;
     active.current.points = [];
+    active.current.dirty = false;
     if (event.currentTarget.hasPointerCapture(event.pointerId))
       event.currentTarget.releasePointerCapture(event.pointerId);
     repaint();
@@ -176,7 +212,6 @@ export function DrawingPad({
       color,
       gesture: serial.current,
       width,
-      sentAt: event.timeStamp,
       dirty: true,
     };
     repaint();
@@ -193,17 +228,18 @@ export function DrawingPad({
       if (last && Math.hypot(point[0] - last[0], point[1] - last[1]) < 2) continue;
       drag.points.push(point);
       drag.dirty = true;
-      if (drag.points.length >= 24) flush(event.timeStamp);
     }
-    // Event time is local only; it controls packet density, never game time or scoring.
-    if (event.timeStamp - drag.sentAt >= 80) flush(event.timeStamp);
+    drag.points = boundInkPoints(drag.points);
     repaint();
   };
   const edit = (type: 'clear' | 'undo'): void => {
+    if (disabled) return;
     setClearArmed(false);
+    flush();
     const id = active.current.id;
     active.current.id = -1;
     active.current.points = [];
+    active.current.dirty = false;
     if (canvas.current?.hasPointerCapture(id)) canvas.current.releasePointerCapture(id);
     queue({ type });
     repaint();

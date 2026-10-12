@@ -46,9 +46,11 @@ Phone play fits 390 × 844. The drawing stage stays visible above the form; arti
   drawing, Undo, pause and a new turn cancel the armed state.
 - `guess`: 1-40 characters, non-artist only during `draw`. Case, outer
   whitespace, punctuation and leading articles use SDK normalization. An exact normalized word/phrase solves.
+  Ordinary English spellings also count: donut/doughnut, airplane/aeroplane,
+  snowplow/snowplough and lasagna/lasagne. Synonyms and abbreviations do not count.
   Optional integer `request` (1-1,000,000,000) correlates a private text-free receipt.
 
-Six colours and three brush sizes keep the tool row simple. At most 240 paths are stored; a current gesture can keep drawing throughout the turn. A 3,500-point budget simplifies long paths while preserving their endpoints. Accepted ink and edits carry a per-turn revision for ordered phone acknowledgements. Guesses are accepted at most once every 750 ms per seat, and only the most recent 24 are retained. Raw guesses never appear on the shared stage; one missing, extra or replaced letter gets private “Close!” feedback. A solved seat cannot score or submit more guesses that turn. Throttled guesses return to an untouched input for retry; late receipts cannot overwrite newer typing. Canvas proportions and finger registration match the shared drawing at ordinary and compact phone heights.
+Six colours and three brush sizes keep the tool row simple. At most 240 paths are stored; a current gesture can keep drawing throughout the turn. A 3,500-point budget simplifies long paths while preserving their endpoints. Accepted ink and edits carry a per-turn revision for ordered phone acknowledgements. Guesses are accepted at most once every 750 ms per seat, and only the most recent 24 are retained. Raw guesses never appear on the shared stage; one missing, extra or replaced letter from any accepted spelling gets private “Close!” feedback without points. A solved seat cannot score or submit more guesses that turn. Throttled guesses return to an untouched input for retry; late receipts cannot overwrite newer typing. Canvas proportions and finger registration match the shared drawing at ordinary and compact phone heights.
 
 ## Scoring
 
@@ -62,6 +64,9 @@ A correct guess earns `300 + floor(700 × remaining / duration)`, clamped to 300
   Departure during word choice skips that unstarted turn immediately, so no
   empty answer reveal delays the next artist.
   Departed seats retain their earned points in the final results.
+  During play and reveal, the roster labels disconnected seats Offline while
+  preserving their artist/solved marks and scores; reconnect restores the active label.
+  Final standings show ranks and winners for every seat.
 - Stale timers, strangers, wrong-phase inputs and drawing by guessers do nothing.
 - Pause shifts the drawing clock and hint schedule; paused time cannot reduce
   guess points. All time comes from events and all randomness from state.

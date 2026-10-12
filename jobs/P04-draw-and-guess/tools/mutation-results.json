@@ -1,7 +1,7 @@
 {
   "command": "pnpm.cmd vitest run games/draw-and-guess/__tests__/game.test.ts --maxWorkers=1",
   "total": 20,
-  "caught": 12,
+  "caught": 20,
   "restored": true,
   "results": [
     {
@@ -40,8 +40,8 @@
       "file": "games/draw-and-guess/server/phases/draw.ts",
       "caught": true,
       "exitCode": 1,
-      "originalSha256": "d96f0faf5817cf57913c6822a386156cb1eddb5667c9655743e86cb9bdbe1c96",
-      "mutantSha256": "9f4049e184dc053dc81f2c4020fd3e227e4dea6da727d86ad02faf74556aa451",
+      "originalSha256": "41f2ba7d26541a2e08b2a5c946c84f77682d353f146eddc5e25e37880576d998",
+      "mutantSha256": "af41db8f3cd003a8854f18c7d41673eff5915ac25d48b0ae0e33dccb593c13e2",
       "testLog": "tools/mutation-logs/M04.txt"
     },
     {
@@ -50,8 +50,8 @@
       "file": "games/draw-and-guess/server/phases/draw.ts",
       "caught": true,
       "exitCode": 1,
-      "originalSha256": "d96f0faf5817cf57913c6822a386156cb1eddb5667c9655743e86cb9bdbe1c96",
-      "mutantSha256": "0863cb1a1c5f2881d47007b5cb40fb0350f912399bf7ea605d1ed2c3126b7946",
+      "originalSha256": "41f2ba7d26541a2e08b2a5c946c84f77682d353f146eddc5e25e37880576d998",
+      "mutantSha256": "29f753d11fc2563795454ae7f3e0418a4beb3c68c4e4fd81a33c11010dc7e911",
       "testLog": "tools/mutation-logs/M05.txt"
     },
     {
@@ -60,8 +60,8 @@
       "file": "games/draw-and-guess/server/phases/draw.ts",
       "caught": true,
       "exitCode": 1,
-      "originalSha256": "d96f0faf5817cf57913c6822a386156cb1eddb5667c9655743e86cb9bdbe1c96",
-      "mutantSha256": "c836c01db48018a4b15d86cd8aaa860bd3eb11b617208f41ca92dc59fca7abe1",
+      "originalSha256": "41f2ba7d26541a2e08b2a5c946c84f77682d353f146eddc5e25e37880576d998",
+      "mutantSha256": "941c27e0901c641303c24a63d8a8607c9da843c7a55b4e8b97a851f1a2831157",
       "testLog": "tools/mutation-logs/M06.txt"
     },
     {
@@ -70,8 +70,8 @@
       "file": "games/draw-and-guess/server/phases/draw.ts",
       "caught": true,
       "exitCode": 1,
-      "originalSha256": "d96f0faf5817cf57913c6822a386156cb1eddb5667c9655743e86cb9bdbe1c96",
-      "mutantSha256": "7aaf32a2d165f1862c6594aac8bde945efa3ab2f5139bcc5707a21eddfb924a8",
+      "originalSha256": "41f2ba7d26541a2e08b2a5c946c84f77682d353f146eddc5e25e37880576d998",
+      "mutantSha256": "4136df99720991c5cbcda40ff48d895b5408df24131e490ee008ac572328cc0c",
       "testLog": "tools/mutation-logs/M07.txt"
     },
     {
@@ -120,9 +120,89 @@
       "file": "games/draw-and-guess/server/phases/draw.ts",
       "caught": true,
       "exitCode": 1,
-      "originalSha256": "d96f0faf5817cf57913c6822a386156cb1eddb5667c9655743e86cb9bdbe1c96",
-      "mutantSha256": "98a649da039f2a2f9207eb48bfa80b4d7b7a98f56429db91e88efbb7e8b9b094",
+      "originalSha256": "41f2ba7d26541a2e08b2a5c946c84f77682d353f146eddc5e25e37880576d998",
+      "mutantSha256": "7e62ab7eea43fcfec21764ff817b1bab1f98af8108c9e4d462383e2facc396b7",
       "testLog": "tools/mutation-logs/M12.txt"
+    },
+    {
+      "id": "M13",
+      "description": "Undo deletes the oldest stroke",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "41f2ba7d26541a2e08b2a5c946c84f77682d353f146eddc5e25e37880576d998",
+      "mutantSha256": "6db5898b7b172ef217a1fe0ded823921f4e4b9dff4c55302adc73688f8b6abf6",
+      "testLog": "tools/mutation-logs/M13.txt"
+    },
+    {
+      "id": "M14",
+      "description": "Clear keeps all strokes",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "41f2ba7d26541a2e08b2a5c946c84f77682d353f146eddc5e25e37880576d998",
+      "mutantSha256": "2758e2942312d1761d99ae9794c1eaaf296174858cbcc7936cade9a618313010",
+      "testLog": "tools/mutation-logs/M14.txt"
+    },
+    {
+      "id": "M15",
+      "description": "Stroke limit permits an extra stroke",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "41f2ba7d26541a2e08b2a5c946c84f77682d353f146eddc5e25e37880576d998",
+      "mutantSha256": "dd379d224704c31f210bc0cebcc8c383d61dbecb3a87314b5dfb4d34e54263c7",
+      "testLog": "tools/mutation-logs/M15.txt"
+    },
+    {
+      "id": "M16",
+      "description": "Hints appear twice as early",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "41f2ba7d26541a2e08b2a5c946c84f77682d353f146eddc5e25e37880576d998",
+      "mutantSha256": "9b87db6ff7077265544143dfb029a96429bad6ce57ae6a2c12113564b1fbf1c8",
+      "testLog": "tools/mutation-logs/M16.txt"
+    },
+    {
+      "id": "M17",
+      "description": "Idle drawing never exits at its cap",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "41f2ba7d26541a2e08b2a5c946c84f77682d353f146eddc5e25e37880576d998",
+      "mutantSha256": "cb44b3f925fdb712f86b3f0d014694397016f1f74fb42485355a1bab20f9721c",
+      "testLog": "tools/mutation-logs/M17.txt"
+    },
+    {
+      "id": "M18",
+      "description": "Draw duration accidentally doubles",
+      "file": "games/draw-and-guess/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "41f2ba7d26541a2e08b2a5c946c84f77682d353f146eddc5e25e37880576d998",
+      "mutantSha256": "4c52124bb91fce1aa7e179c1adeb8a8d21b34f93a960b6cc63d6ca284d10af44",
+      "testLog": "tools/mutation-logs/M18.txt"
+    },
+    {
+      "id": "M19",
+      "description": "Rotation skips every second artist",
+      "file": "games/draw-and-guess/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "0642a82050b7372afb00b9d3486d25d0c2048513bd1957f79ce1b9b6c1d97f52",
+      "mutantSha256": "c9375c0f31c74660723539ced549bb016c55e00308a73fb7911c550216c838e5",
+      "testLog": "tools/mutation-logs/M19.txt"
+    },
+    {
+      "id": "M20",
+      "description": "Pause consumes drawing time",
+      "file": "games/draw-and-guess/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "0642a82050b7372afb00b9d3486d25d0c2048513bd1957f79ce1b9b6c1d97f52",
+      "mutantSha256": "c8909bdbce1e65683f4aac4a4d298397566faccc6961424fb05a5f057246c188",
+      "testLog": "tools/mutation-logs/M20.txt"
     }
   ]
 }

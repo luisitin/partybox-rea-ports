@@ -4,6 +4,8 @@
     "compact artist 5:3 bitmap",
     "normal pointer border projection",
     "compact pointer border projection",
+    "normal release-only endpoint",
+    "compact release-only endpoint",
     "pointer chunk merge",
     "one Undo per gesture",
     "accidental Clear preserves ink",
@@ -15,6 +17,7 @@
     "same-text retry receipt",
     "new draft survives old refusal",
     "phone-only guess fit",
+    "Safari visual-viewport-only keyboard fit",
     "keyboard-height guess fit",
     "immediate point receipt",
     "keyboard-height solved fit",
@@ -22,18 +25,30 @@
     "five final-second ticks",
     "paused sound silence"
   ],
-  "firstGestureChunks": 20,
-  "finalRevision": 75,
+  "firstGestureChunks": 18,
+  "finalRevision": 61,
   "normal": {
     "height": 844,
+    "layoutHeight": 844,
+    "compact": "false",
+    "overflow": []
+  },
+  "safariKeyboard": {
+    "height": 500,
+    "layoutHeight": 844,
+    "compact": "true",
     "overflow": []
   },
   "keyboard": {
     "height": 500,
+    "layoutHeight": 500,
+    "compact": "true",
     "overflow": []
   },
   "solved": {
     "height": 500,
+    "layoutHeight": 500,
+    "compact": "true",
     "overflow": []
   },
   "normalArtist": {
@@ -41,14 +56,8 @@
     "top": 190.1874977558046,
     "width": 358,
     "height": 214.79687948839077,
-    "first": [
-      50,
-      30
-    ],
-    "last": [
-      950,
-      570
-    ],
+    "first": [50, 30],
+    "last": [950, 570],
     "projectionErrorPx": 0
   },
   "compactArtist": {
@@ -56,14 +65,8 @@
     "top": 94.18749850292454,
     "width": 98.01562311348519,
     "height": 58.79687799415093,
-    "first": [
-      50,
-      30
-    ],
-    "last": [
-      950,
-      570
-    ],
+    "first": [50, 30],
+    "last": [950, 570],
     "projectionErrorPx": 0
   },
   "refusedDrafts": {

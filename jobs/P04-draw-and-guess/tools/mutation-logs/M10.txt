@@ -1,14 +1,14 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 2 failed) 31ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 2 failed) 27ms
      × choices and the answer stay off every public surface until reveal, even after a correct guess 5ms
      × views are identical when unrevealed secrets alone change, and bots cannot peek at them 3ms
 
  Test Files  1 failed (1)
       Tests  2 failed | 22 passed (24)
-   Start at  17:54:13
-   Duration  873ms (transform 457ms, setup 0ms, import 646ms, tests 31ms, environment 0ms)
+   Start at  20:46:16
+   Duration  603ms (transform 275ms, setup 0ms, import 422ms, tests 27ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
@@ -59,3 +59,4 @@ AssertionError: expected { gameId: 'draw-and-guess', …(29) } to deeply equal {
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
 
+[vitest-pool]: Timeout terminating forks worker for test files C:/dev/rea-runs/r2/games/draw-and-guess/__tests__/game.test.ts.
