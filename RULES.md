@@ -25,6 +25,10 @@ Exactly the shape of `games/curve-fever/` (read all of it before you start): `ma
 
 A port is NEAR-IDENTICAL to the original game: same look, same camera and zoom (follow the player the way the original does, never a zoomed-out whole-world view unless the original has one), same models/sprites/3D where the original has them, same HUD placement (a name sits where the original puts it, e.g. inside your blob), same animations, timings and feel. The ONLY allowed differences: the PartyBox colour palette, the party plumbing (phones as controllers, the TV as the shared view) and the official name. Those games are already tested and improved: do not make them worse. Every job ships games/<id>/fidelity/ with original and ours screenshots of the same moments, a ranked GAPS.md and a side-by-side.png; reviewers treat a visible difference as a must.
 
+## Party format (owner 2026-10-12, binding)
+
+The multiplayer layer is the ONE thing a port designs itself, so design it, do not bolt it on. Every port's README answers, and the code matches: (a) what happens when a player loses or finishes early: they spectate the live leaders, never a retry that cannot catch the leader; (b) can a trailing player still catch up, and if not, why that is fine; (c) when the round ends: everyone out, or one shared clock ends it for all; (d) who wins and how clearly it is shown. "Here is the game, here is a multiplayer version" fails review. Example: Stack with a BUILD AGAIN button during a shared 45 s race was wrong; one tower each, lose -> spectate, the clock ends it for everyone.
+
 ## Research first (the REA part)
 
 Study the original: play it, read what you can of its client (public bundles are fine to read; never copy code or assets), write down round structure, timings, scoring, feel, sounds and the moments that make it fun. Put that in `games/<id>/README.md` under Sources and in `RESEARCH.md` in the job folder. Then design the PartyBox version: what is on the TV, what is on the phone, what changes for 8 players in a living room. Facts need 2 independent sources.
