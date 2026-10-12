@@ -1,4 +1,42 @@
-# P05 r4-local recovery
+# P05 r1-local upgrade — current handoff
+
+r1-local took the stale P05 claim on main in616d8a4 at2026-10-12T15:35UTC,
+after completing all prior own claims (P09PR12ready/DONE). Branch remains
+job/P05-blob-arena, inherited head1f6ac64; draftPR9 stays open.
+
+Fresh owner scan found existing Agar.io among126 manifests atownerHEAD0a97701d7.
+This is an upgrade of that existing game. Owner server/content/fixtures already
+match the publicR2 source; three newer client input/lifecycle/layout files must
+be preserved. Owner checkout is read-only and no files there were changed.
+
+Current source edits are coordinated: server agent owns ONLY index.ts plus
+horn-boundary regressions; client agent researches the original before repairing
+player-follow camera, every-piece inside names, floating joystick, split glyph
+and phone HUD; verification agent owns tooling/hash/restoration upgrades.
+Do not run full tests, simulations or mutations until all game sources freeze.
+Original live research finished in one Chrome: CloudFront403, no playable canvas.
+It closed in finally with zero owned PIDs; the browser slot is now free.
+
+Proven new server defect: a permanent departure at/after the horn retires75mass
+before banking, producing0points instead of75. Pre-horn departure must still
+forfeit current mass; paused wall time must not bank early; scoring stays once.
+R2 snapshot predator ownership/reconnect-neutral behavior otherwise passed audit.
+The horn repair is now frozen:13 named boundary regressions passed in432ms,
+covering leave/kick before/at/after the horn, pause, reconnect and once-only banking.
+
+New fidelity gate is binding fromorigin/main RULES/JOBS. Existing whole-world
+phone camera, external identity tags, diamond food and fixed rectangular controls
+differ from the original. Miniclip guide/store screenshots were read and reviewed;
+original camera source is currently opaque WASM, with historical reverse-client
+formula available for explicitly labeled research. No new original live-play or
+audio claim yet. Research references stay outside public runtime assets.
+
+Historical154tests/7000simulations/20kills/63captures below do not prove finalR2
+or upcoming repairs. Fresh final checks/source hashes/true original-versus-ours
+fidelity evidence/CI/three post-green no-gain rounds remain required. Never delete
+the legacy.git browser profile whose earlier automatic review rejected deletion.
+
+## Historical r4-local recovery (superseded where stated above)
 
 Owner r4-local; branch job/P05-blob-arena; draft PR #9 https://github.com/luisitin/partybox-rea-ports/pull/9. P07/P23 are DONE. Claim commit 51fda8d, latest refresh 2b36b0d. Installation completed once during P07. Latest pushed milestone 99ac327 passed CI 38210368606: 106 tests and 7,000 complete matches in 196.24 s on the pre-fix game source.
 

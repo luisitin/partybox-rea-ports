@@ -1,5 +1,19 @@
 # P05 assumptions and explicit deviations
 
+## Current r1-local upgrade (2026-10-12)
+
+- The stale claim and branch were both over eight hours old. r1-local claimedP05 in616d8a4 after finishing P09 with final-headCI green, readyPR12 andDONE claim. Prior runner records below are historical.
+- Fresh read-only owner scan found exactly one existing Agar.io among126 manifests atHEAD0a97701d7. Owner docs identify import from publicPR9/head1f6ac64. This job upgrades that existing canonicalgame, not a duplicate. No owner files were changed.
+- Owner server/content/fixtures match the publicR2 source. Three newer owner client files contain steering-sender/lifecycle and short-viewport improvements; the public upgrade preserves that behavior while applying fidelity repairs.
+- Binding owner10-12 fidelity instructions are read from origin/main RULES/JOBS, superseding this branch's older working-name rules. Private phone gameplay must follow the player and place names inside every piece; shared TV overview is the explicitP05 party arena.
+- Fresh original research read Miniclip's control guide and publisher GooglePlay screenshots, plus a pinned historical reverse-client atDnAp58c0c1fcc75555109bee5a5c0e7d654125ba1430. The current readable official wrapper delegates camera behavior into WASM; no current exact formula is claimed. Published reference dimensions526×296 are image asset sizes, not measured live device viewport sizes.
+- The web fetch of agar.io returned403; a single owned nativeChrome research attempt is being tried before relying on primary published/archived alternatives. No live original play/audio claim is made until it actually succeeds. Reference source/images remain outside runtime game assets.
+- An isolated valid leave/kick-at-horn probe found a75-point loss: retirement removed horn mass before banking. At/after-horn events must bank once first; pre-horn forfeiture and paused active time remain unchanged.
+- Full tests/simulations/mutations are deferred until coordinated client/server repairs freeze. Earlier154tests/7000simulations/20kills/63screens establish earlier source only. Mutation tooling is being hardened with semantic failures, exact restoration and source guards; no mutation executes during game edits.
+- The old.git browser profile's automatic deletion rejection remains binding for that old target. It is left alone. New research/capture uses a uniquely owned OS-temp profile, at most one browser, closed in finally.
+
+## Historical r5/r4 assumptions (superseded where stated above)
+
 - The owner's public-repo queue instructions authorize this clone, job branches, direct CLAIMS.md commits on main, GitHub pushes, and PR creation. They override the older team manual's private PartyBox worktree/board/merge-queue flow for this job. Identity is `codex`; initial runner `r5-local`, recovery runner `r4-local`.
 - P05 requires 2–8 players, a phone joystick, eating pellets and smaller blobs, a split lunge, three 90-second rounds, and mass-end scoring. Those are binding house requirements, not claims that the original has the same match format.
 - Interactive original play was first attempted through the installed browser tool, but no browser surface was available (`apps: []`, `browsers: []`). The root runner then used installed full Chrome through CDP to navigate to `https://agar.io/`; navigation timed out (`CDP timed out: Page.navigate`), recorded in [original-access.json](original-access.json). Direct HTTP HTML and public client bundles were reachable and read in memory. Neither browser attempt produced successful interactive play or a listening session, and no original behavior is presented as observed play.
