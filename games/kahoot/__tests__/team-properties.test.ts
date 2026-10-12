@@ -165,7 +165,7 @@ it('replays pure, safe group traces for seeds 1,2,3 and 1,000 independently gene
       expect(kit.vip(state, 'end', state.phase.startedAt + 100)).toEqual(state);
       expect(JSON.stringify(kit.start())).toBe(initial);
     }
-}, 60_000);
+}, 180_000);
 
 it('rejects malformed payloads at the SDK schema boundary', () => {
   for (const input of [

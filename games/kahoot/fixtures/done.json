@@ -1,7 +1,7 @@
 {
   "phase": {
     "id": "done",
-    "startedAt": 1234500,
+    "startedAt": 1218500,
     "deadline": null
   },
   "rng": {
@@ -59,9 +59,12 @@
     }
   },
   "settings": {
+    "mode": "solo",
     "pack": "general",
     "rounds": 5,
-    "seconds": 20
+    "seconds": 30,
+    "teamCount": 4,
+    "talkSeconds": 20
   },
   "deck": [
     {
@@ -109,57 +112,57 @@
   "answers": {
     "p1": {
       "choice": 2,
-      "elapsed": 1100
+      "elapsed": 700
     },
     "p2": {
       "choice": 2,
-      "elapsed": 1900
+      "elapsed": 1100
     },
     "p3": {
       "choice": 2,
-      "elapsed": 2700
+      "elapsed": 1500
     },
     "p4": {
-      "choice": 1,
-      "elapsed": 3500
+      "choice": 0,
+      "elapsed": 1900
     },
     "p5": {
       "choice": 2,
-      "elapsed": 4300
+      "elapsed": 2300
     },
     "p6": {
-      "choice": 3,
-      "elapsed": 5100
+      "choice": 0,
+      "elapsed": 2700
     },
     "p7": {
-      "choice": 0,
-      "elapsed": 5900
+      "choice": 3,
+      "elapsed": 3100
     },
     "p8": {
-      "choice": 1,
-      "elapsed": 6700
+      "choice": 2,
+      "elapsed": 3500
     }
   },
   "verdicts": {
     "p1": {
       "outcome": "correct",
-      "base": 973,
+      "base": 988,
       "bonus": 400,
-      "points": 1373,
+      "points": 1388,
       "streak": 5
     },
     "p2": {
       "outcome": "correct",
-      "base": 953,
+      "base": 982,
       "bonus": 400,
-      "points": 1353,
+      "points": 1382,
       "streak": 5
     },
     "p3": {
       "outcome": "correct",
-      "base": 933,
+      "base": 975,
       "bonus": 400,
-      "points": 1333,
+      "points": 1375,
       "streak": 5
     },
     "p4": {
@@ -171,9 +174,9 @@
     },
     "p5": {
       "outcome": "correct",
-      "base": 893,
+      "base": 962,
       "bonus": 0,
-      "points": 893,
+      "points": 962,
       "streak": 1
     },
     "p6": {
@@ -191,22 +194,22 @@
       "streak": 0
     },
     "p8": {
-      "outcome": "wrong",
-      "base": 0,
+      "outcome": "correct",
+      "base": 942,
       "bonus": 0,
-      "points": 0,
-      "streak": 0
+      "points": 942,
+      "streak": 1
     }
   },
   "scores": {
-    "p1": 5865,
-    "p2": 5765,
-    "p3": 5665,
-    "p4": 1926,
-    "p5": 893,
-    "p6": 873,
-    "p7": 853,
-    "p8": 1766
+    "p1": 5940,
+    "p2": 5910,
+    "p3": 5875,
+    "p4": 968,
+    "p5": 1924,
+    "p6": 1910,
+    "p7": 948,
+    "p8": 1884
   },
   "streaks": {
     "p1": 5,
@@ -216,21 +219,26 @@
     "p5": 1,
     "p6": 0,
     "p7": 0,
-    "p8": 0
+    "p8": 1
   },
   "previousScores": {
-    "p1": 4492,
-    "p2": 4412,
-    "p3": 4332,
-    "p4": 1926,
-    "p5": 0,
-    "p6": 873,
-    "p7": 853,
-    "p8": 1766
+    "p1": 4552,
+    "p2": 4528,
+    "p3": 4500,
+    "p4": 968,
+    "p5": 962,
+    "p6": 1910,
+    "p7": 948,
+    "p8": 942
   },
+  "teams": [],
+  "teamScores": {},
+  "teamGains": {},
+  "decision": null,
+  "roomStreak": 0,
   "left": [],
-  "openedAt": 1181669,
-  "answerMs": 20000,
+  "openedAt": 1168869,
+  "answerMs": 30000,
   "podiumStep": 2,
   "phoneOnly": false
 }

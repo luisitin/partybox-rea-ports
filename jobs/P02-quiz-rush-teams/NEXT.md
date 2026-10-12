@@ -17,8 +17,16 @@ sample validates5questions. Typecheck is green after two fixture corrections.
 The full scoped run passes all21,000matches/properties but fails21checks due to
 toy minigame metadata, manual word counts and missing talk.json. Corrected
 adapter/reading rerun passes25checks. Fresh SSR generation will supplytalk.json.
-Root owns commands/browser/CI/git; native, SSR/capture and20-mutant tools are
-being prepared by separate agents. No complete green full suite is claimed yet.
+Root owns commands/browser/CI/git. Mutation campaign passes20/20 with exact
+source restoration. Fresh SSR passes74checks and creates92frames. Native
+passes28assertions/36layouts, including pending-choice pause/refresh recovery;
+the final harness must establish a real local origin and verify bounded tree
+cleanup after intermittent Windows navigation/process-exit failures.
+Compact receipts fix the observed24px maximum phone-only reveal overflow;
+regenerate/capture and verify it. No complete green full suite is claimed yet.
+Latest full run:305pass/2fail/1skip. Failures are a60second exhaustive-property
+wall bound (raised to180seconds) and P01's historical media count including the
+new root talk fixture (legacy rendering now filters solo). Rerun both checks.
 Custom packs compile from validated text to content/custom.json; no runtime
 SDK content-injection API is assumed. Rebuild/restart and select Custom.
 

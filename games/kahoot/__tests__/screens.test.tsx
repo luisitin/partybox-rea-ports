@@ -29,7 +29,8 @@ const fixtures = readdirSync(fixturesDir)
   .map((name) => ({
     name: name.replace('.json', ''),
     state: JSON.parse(readFileSync(resolve(fixturesDir, name), 'utf8')) as State,
-  }));
+  }))
+  .filter(({ state }) => state.settings.mode === 'solo'); // P02 discussion/media are checked by team-screens.
 const question = fixtures.find((fixture) => fixture.name === 'question')!.state;
 const podium = fixtures.find((fixture) => fixture.name === 'podium-2')!.state;
 const longNames = (state: State): State => ({

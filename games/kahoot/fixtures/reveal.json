@@ -1,8 +1,8 @@
 {
   "phase": {
     "id": "reveal",
-    "startedAt": 1006700,
-    "deadline": 1023536
+    "startedAt": 1003500,
+    "deadline": 1020336
   },
   "rng": {
     "seed": 19,
@@ -59,9 +59,12 @@
     }
   },
   "settings": {
+    "mode": "solo",
     "pack": "general",
     "rounds": 5,
-    "seconds": 20
+    "seconds": 30,
+    "teamCount": 4,
+    "talkSeconds": 20
   },
   "deck": [
     {
@@ -109,57 +112,57 @@
   "answers": {
     "p1": {
       "choice": 3,
-      "elapsed": 1100
+      "elapsed": 700
     },
     "p2": {
       "choice": 3,
-      "elapsed": 1900
+      "elapsed": 1100
     },
     "p3": {
       "choice": 3,
-      "elapsed": 2700
+      "elapsed": 1500
     },
     "p4": {
       "choice": 1,
-      "elapsed": 3500
+      "elapsed": 1900
     },
     "p5": {
-      "choice": 2,
-      "elapsed": 4300
+      "choice": 0,
+      "elapsed": 2300
     },
     "p6": {
       "choice": 3,
-      "elapsed": 5100
+      "elapsed": 2700
     },
     "p7": {
       "choice": 0,
-      "elapsed": 5900
+      "elapsed": 3100
     },
     "p8": {
       "choice": 1,
-      "elapsed": 6700
+      "elapsed": 3500
     }
   },
   "verdicts": {
     "p1": {
       "outcome": "correct",
-      "base": 973,
+      "base": 988,
       "bonus": 0,
-      "points": 973,
+      "points": 988,
       "streak": 1
     },
     "p2": {
       "outcome": "correct",
-      "base": 953,
+      "base": 982,
       "bonus": 0,
-      "points": 953,
+      "points": 982,
       "streak": 1
     },
     "p3": {
       "outcome": "correct",
-      "base": 933,
+      "base": 975,
       "bonus": 0,
-      "points": 933,
+      "points": 975,
       "streak": 1
     },
     "p4": {
@@ -178,9 +181,9 @@
     },
     "p6": {
       "outcome": "correct",
-      "base": 873,
+      "base": 955,
       "bonus": 0,
-      "points": 873,
+      "points": 955,
       "streak": 1
     },
     "p7": {
@@ -199,12 +202,12 @@
     }
   },
   "scores": {
-    "p1": 973,
-    "p2": 953,
-    "p3": 933,
+    "p1": 988,
+    "p2": 982,
+    "p3": 975,
     "p4": 0,
     "p5": 0,
-    "p6": 873,
+    "p6": 955,
     "p7": 0,
     "p8": 0
   },
@@ -228,9 +231,14 @@
     "p7": 0,
     "p8": 0
   },
+  "teams": [],
+  "teamScores": {},
+  "teamGains": {},
+  "decision": null,
+  "roomStreak": 0,
   "left": [],
   "openedAt": 1000000,
-  "answerMs": 20000,
+  "answerMs": 30000,
   "podiumStep": 0,
   "phoneOnly": false
 }

@@ -1,0 +1,807 @@
+{
+  "command": "node jobs/P02-quiz-rush-teams/mutate.mjs",
+  "testCommand": "pnpm vitest run games/kahoot/__tests__/game.test.ts games/kahoot/__tests__/teams.test.ts --pool=threads --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile=jobs/P02-quiz-rush-teams/.mutation-work-hsovTE/vitest.json",
+  "timeoutMs": 30000,
+  "sourceHashes": {
+    "games/kahoot/server/scoring.ts": "e2d56449dffd3a5ce5b0e0c58151adfba647a56db3657d5c7837a72a95774211",
+    "games/kahoot/server/teams.ts": "dbf3f503bd1ed81487764d4e4d320aaf200ee1b8455e845ce84d0834c51b5ea4",
+    "games/kahoot/server/phases/talk.ts": "d621cfa461afdb68828b981076fe2259e06d27bc7bf26fed3e4b64f35565f393",
+    "games/kahoot/server/index.ts": "95012e754ebfbcdd5d4d29a2e26529f4f00ebd3113e8992085dedfcda58d5fbd",
+    "games/kahoot/server/phases/question.ts": "f343f673f10a17e5b09dfc9bda21f13def43d48ae44799c160dc601058fe81f3",
+    "games/kahoot/server/content.ts": "40ee802b06f865a29da7f49612b9224c894eef6fd9aee4a05133666d39af2ab6"
+  },
+  "baseline": {
+    "exitCode": 0,
+    "signal": null,
+    "timedout": false,
+    "durationMs": 1456,
+    "tests": 47,
+    "failed": [],
+    "invalidReason": "",
+    "logFile": "mutation-logs/baseline.log"
+  },
+  "postBaseline": {
+    "exitCode": 0,
+    "signal": null,
+    "timedout": false,
+    "durationMs": 1484,
+    "tests": 47,
+    "failed": [],
+    "invalidReason": "",
+    "logFile": "mutation-logs/post-baseline.log"
+  },
+  "results": [
+    {
+      "id": "M01",
+      "description": "Speed awards are inflated tenfold",
+      "file": "games/kahoot/server/scoring.ts",
+      "expected": "game.test.ts: scoring boundaries; teams.test.ts: mean and room credit",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1360,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "scoring awards 1000 at zero, 750 halfway and 500 at the end; clamps both ends",
+          "messages": [
+            "AssertionError: expected 10000 to be 1000 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/game.test.ts:18:36\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "scoring rounds speed points to the nearest integer",
+          "messages": [
+            "AssertionError: expected 9741 to be 974 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/game.test.ts:25:39\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "scoring builds streaks by 100 up to 500 and credits exactly once",
+          "messages": [
+            "AssertionError: expected 9750 to be 975 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/game.test.ts:41:37\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "pause and pacing holds inputs and timers; pause time earns no speed points",
+          "messages": [
+            "AssertionError: expected 9500 to be 950 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/game.test.ts:143:33\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "fixed teams and discussion rejects all taps and bots during teams discussion and excludes talk from speed",
+          "messages": [
+            "AssertionError: expected 9750 to be 975 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:64:53\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "fixed teams and discussion rejects all taps and bots during tv-vote discussion and excludes talk from speed",
+          "messages": [
+            "AssertionError: expected 9750 to be 975 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:64:53\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mean team credit credits the rounded mean once, shares totals and preserves personal outcomes and streaks",
+          "messages": [
+            "AssertionError: expected 5000 to be 500 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:122:41\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mean team credit uses the mean rather than a sum for unequal balanced team sizes",
+          "messages": [
+            "AssertionError: expected 3333 to be 333 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:140:36\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mean team credit averages personal streak bonuses and restores a returning unanswered seat to eligibility",
+          "messages": [
+            "AssertionError: expected 10300 to be 1300 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:151:41\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mean team credit excludes an unanswered offline seat (undefined) but not a connected timeout",
+          "messages": [
+            "AssertionError: expected 10000 to be 1000 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:162:54\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mean team credit excludes an unanswered offline seat (left) but not a connected timeout",
+          "messages": [
+            "AssertionError: expected 10000 to be 1000 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:162:54\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mean team credit retains an already submitted departed member in both the mean and final results",
+          "messages": [
+            "AssertionError: expected 5000 to be 500 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:174:41\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "one room vote chooses the plurality once and scores mean accepted elapsed with a shared streak",
+          "messages": [
+            "AssertionError: expected 9250 to be 925 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:214:30\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "one room vote keeps accepted departed votes, ignores absent votes, and gives no-vote timeouts zero",
+          "messages": [
+            "AssertionError: expected 9500 to be 950 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:249:30\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "one room vote resets a room streak on no votes and clears the previous decision before a new discussion",
+          "messages": [
+            "AssertionError: expected 10000 to be 1000 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:275:30\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility withholds final opponent totals and all unrevealed group ranks",
+          "messages": [
+            "AssertionError: expected { id: 'team-1', name: 'Team 1', …(4) } to match object { score: 1000, gained: 1000, rank: +0 }\n(3 matching properties omitted from actual)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1283:10)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:317:22\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility leaves default solo phases, deck RNG, points and result shape unchanged",
+          "messages": [
+            "AssertionError: expected [ 9750, 9750, 9750, 9750 ] to deeply equal [ 975, 975, 975, 975 ]\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:340:37\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M01.log"
+    },
+    {
+      "id": "M02",
+      "description": "Wrong answers preserve the previous streak",
+      "file": "games/kahoot/server/scoring.ts",
+      "expected": "game.test.ts: wrong answers and timeouts break streaks; teams.test.ts: no-vote room streak",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1404,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "scoring wrong answers and timeouts score zero and break streaks",
+          "messages": [
+            "AssertionError: expected { outcome: 'wrong', base: +0, …(3) } to match object { outcome: 'wrong', points: +0, …(2) }\n(1 matching property omitted from actual)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1283:10)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/game.test.ts:32:27\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        },
+        {
+          "name": "one room vote resets a room streak on no votes and clears the previous decision before a new discussion",
+          "messages": [
+            "AssertionError: expected 1 to be +0 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:271:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M02.log"
+    },
+    {
+      "id": "M03",
+      "description": "Team gain sums member points instead of averaging",
+      "file": "games/kahoot/server/scoring.ts",
+      "expected": "teams.test.ts: rounded mean and unequal team sizes; team-properties.test.ts: equal performance",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1548,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "mean team credit credits the rounded mean once, shares totals and preserves personal outcomes and streaks",
+          "messages": [
+            "AssertionError: expected 1000 to be 500 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:122:41\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mean team credit uses the mean rather than a sum for unequal balanced team sizes",
+          "messages": [
+            "AssertionError: expected 1000 to be 333 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:140:36\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mean team credit averages personal streak bonuses and restores a returning unanswered seat to eligibility",
+          "messages": [
+            "AssertionError: expected 2600 to be 1300 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:151:41\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mean team credit excludes an unanswered offline seat (undefined) but not a connected timeout",
+          "messages": [
+            "AssertionError: expected 1000 to be 500 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:164:62\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mean team credit excludes an unanswered offline seat (left) but not a connected timeout",
+          "messages": [
+            "AssertionError: expected 1000 to be 500 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:164:62\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mean team credit retains an already submitted departed member in both the mean and final results",
+          "messages": [
+            "AssertionError: expected 1000 to be 500 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:174:41\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility withholds final opponent totals and all unrevealed group ranks",
+          "messages": [
+            "AssertionError: expected { id: 'team-1', name: 'Team 1', …(4) } to match object { score: 1000, gained: 1000, rank: +0 }\n(3 matching properties omitted from actual)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1283:10)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:317:22\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M03.log"
+    },
+    {
+      "id": "M04",
+      "description": "Unanswered offline seats dilute their team",
+      "file": "games/kahoot/server/teams.ts",
+      "expected": "teams.test.ts: unanswered offline exclusion; team-properties.test.ts: offline nonvoters",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 2004,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "mean team credit excludes an unanswered offline seat (undefined) but not a connected timeout",
+          "messages": [
+            "AssertionError: expected 500 to be 1000 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:162:54\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mean team credit excludes an unanswered offline seat (left) but not a connected timeout",
+          "messages": [
+            "AssertionError: expected 500 to be 1000 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:162:54\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M04.log"
+    },
+    {
+      "id": "M05",
+      "description": "Already answered departed members are removed from the mean",
+      "file": "games/kahoot/server/teams.ts",
+      "expected": "teams.test.ts: submitted departed member retained in mean and results",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1509,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "mean team credit retains an already submitted departed member in both the mean and final results",
+          "messages": [
+            "AssertionError: expected +0 to be 500 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:174:41\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M05.log"
+    },
+    {
+      "id": "M06",
+      "description": "Room vote chooses the least popular answer",
+      "file": "games/kahoot/server/scoring.ts",
+      "expected": "teams.test.ts: plurality and tie candidates; team-properties.test.ts: room plurality",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1386,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "fixed teams and discussion rejects all taps and bots during tv-vote discussion and excludes talk from speed",
+          "messages": [
+            "AssertionError: expected +0 to be 975 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:64:53\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "one room vote chooses the plurality once and scores mean accepted elapsed with a shared streak",
+          "messages": [
+            "AssertionError: expected 1 to be 2 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:213:24\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "one room vote breaks a tied plurality with only seeded tied choices and unchanged first votes",
+          "messages": [
+            "AssertionError: expected [ +0, 2 ] to include 3\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:235:22\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        },
+        {
+          "name": "one room vote keeps accepted departed votes, ignores absent votes, and gives no-vote timeouts zero",
+          "messages": [
+            "AssertionError: expected +0 to be 950 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:249:30\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "one room vote resets a room streak on no votes and clears the previous decision before a new discussion",
+          "messages": [
+            "AssertionError: expected +0 to be 1000 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:275:30\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M06.log"
+    },
+    {
+      "id": "M07",
+      "description": "Tied votes always choose the lowest tied index",
+      "file": "games/kahoot/server/scoring.ts",
+      "expected": "teams.test.ts: seeded ties reach both tied choices",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1922,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "one room vote breaks a tied plurality with only seeded tied choices and unchanged first votes",
+          "messages": [
+            "AssertionError: expected Set{ +0 } to deeply equal Set{ +0, 2 }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:242:23\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M07.log"
+    },
+    {
+      "id": "M08",
+      "description": "Room speed uses summed elapsed instead of the mean",
+      "file": "games/kahoot/server/scoring.ts",
+      "expected": "teams.test.ts: mean accepted elapsed gives 925 points",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1730,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "one room vote chooses the plurality once and scores mean accepted elapsed with a shared streak",
+          "messages": [
+            "AssertionError: expected 700 to be 925 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:214:30\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M08.log"
+    },
+    {
+      "id": "M09",
+      "description": "Room streak is reset before every collective verdict",
+      "file": "games/kahoot/server/scoring.ts",
+      "expected": "teams.test.ts: second correct room answer includes the shared streak bonus",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1487,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "one room vote chooses the plurality once and scores mean accepted elapsed with a shared streak",
+          "messages": [
+            "AssertionError: expected 1000 to be 1100 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:219:30\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M09.log"
+    },
+    {
+      "id": "M10",
+      "description": "Discussion deadline never opens the question",
+      "file": "games/kahoot/server/phases/talk.ts",
+      "expected": "teams.test.ts: discussion exit; team-properties.test.ts: trace termination",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1552,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "fixed teams and discussion rejects all taps and bots during teams discussion and excludes talk from speed",
+          "messages": [
+            "AssertionError: expected 1000000 to be 1021863 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:61:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "fixed teams and discussion rejects all taps and bots during tv-vote discussion and excludes talk from speed",
+          "messages": [
+            "AssertionError: expected 1000000 to be 1018400 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:61:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mean team credit credits the rounded mean once, shares totals and preserves personal outcomes and streaks",
+          "messages": [
+            "AssertionError: expected undefined to be 500 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:122:41\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mean team credit uses the mean rather than a sum for unequal balanced team sizes",
+          "messages": [
+            "AssertionError: expected 'talk' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:138:24\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mean team credit averages personal streak bonuses and restores a returning unanswered seat to eligibility",
+          "messages": [
+            "AssertionError: expected undefined to be 1300 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:151:41\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mean team credit excludes an unanswered offline seat (undefined) but not a connected timeout",
+          "messages": [
+            "AssertionError: expected undefined to be 1000 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:162:54\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mean team credit excludes an unanswered offline seat (left) but not a connected timeout",
+          "messages": [
+            "AssertionError: expected undefined to be 1000 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:162:54\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mean team credit retains an already submitted departed member in both the mean and final results",
+          "messages": [
+            "AssertionError: expected undefined to be 500 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:174:41\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mean team credit ranks group rows and every member by groups rather than duplicated player totals",
+          "messages": [
+            "AssertionError: expected [ 1, 1, 1, 1 ] to deeply equal [ 1, 2, 3, 4 ]\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:185:49\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "one room vote chooses the plurality once and scores mean accepted elapsed with a shared streak",
+          "messages": [
+            "AssertionError: expected null to be 2 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:213:24\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "one room vote breaks a tied plurality with only seeded tied choices and unchanged first votes",
+          "messages": [
+            "AssertionError: expected [ +0, 2 ] to include null\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:235:22\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        },
+        {
+          "name": "one room vote keeps accepted departed votes, ignores absent votes, and gives no-vote timeouts zero",
+          "messages": [
+            "AssertionError: expected undefined to be 950 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:249:30\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "one room vote resets a room streak on no votes and clears the previous decision before a new discussion",
+          "messages": [
+            "AssertionError: expected undefined to be +0 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:272:30\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility keeps teams choices, elapsed and the answer key private until reveal",
+          "messages": [
+            "AssertionError: expected { gameId: 'kahoot', …(17) } to deeply equal { gameId: 'kahoot', …(17) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:295:38\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility keeps tv-vote choices, elapsed and the answer key private until reveal",
+          "messages": [
+            "AssertionError: expected { gameId: 'kahoot', …(17) } to deeply equal { gameId: 'kahoot', …(17) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:295:38\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility withholds final opponent totals and all unrevealed group ranks",
+          "messages": [
+            "AssertionError: expected false to be true // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:315:7\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M10.log"
+    },
+    {
+      "id": "M11",
+      "description": "Discussion accepts answer inputs",
+      "file": "games/kahoot/server/index.ts",
+      "expected": "teams.test.ts: no discussion taps; team-properties.test.ts: out-of-phase inputs ignored",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1640,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "fixed teams and discussion rejects all taps and bots during teams discussion and excludes talk from speed",
+          "messages": [
+            "AssertionError: expected { phase: { id: 'talk', …(2) }, …(20) } to be { phase: { id: 'talk', …(2) }, …(20) } // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:56:31\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "fixed teams and discussion rejects all taps and bots during tv-vote discussion and excludes talk from speed",
+          "messages": [
+            "AssertionError: expected { phase: { id: 'talk', …(2) }, …(20) } to be { phase: { id: 'talk', …(2) }, …(20) } // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:56:31\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M11.log"
+    },
+    {
+      "id": "M12",
+      "description": "Paused time is included in answer speed",
+      "file": "games/kahoot/server/index.ts",
+      "expected": "game.test.ts: pause accounting; team-properties.test.ts: later elapsed excludes pause",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1572,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "pause and pacing holds inputs and timers; pause time earns no speed points",
+          "messages": [
+            "AssertionError: expected 825 to be 950 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/game.test.ts:143:33\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M12.log"
+    },
+    {
+      "id": "M13",
+      "description": "Duplicate votes overwrite the first choice",
+      "file": "games/kahoot/server/phases/question.ts",
+      "expected": "game.test.ts: first answer locks; teams.test.ts: immutable room votes",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1479,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "one tap per question locks first answer, ignores duplicates and round-stale answers",
+          "messages": [
+            "AssertionError: expected { …(21) } to be { …(21) } // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/game.test.ts:64:32\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "one room vote breaks a tied plurality with only seeded tied choices and unchanged first votes",
+          "messages": [
+            "AssertionError: expected { …(21) } to be { …(21) } // Object.is equality\n    at tied (C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:226:31)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:234:17\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M13.log"
+    },
+    {
+      "id": "M14",
+      "description": "Stale round votes are accepted",
+      "file": "games/kahoot/server/phases/question.ts",
+      "expected": "game.test.ts: stale round answers; team-properties.test.ts: hostile round receipts",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1391,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "one tap per question locks first answer, ignores duplicates and round-stale answers",
+          "messages": [
+            "AssertionError: expected { Object (phase, rng, ...) } to be { …(21) } // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/game.test.ts:65:73\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "one room vote breaks a tied plurality with only seeded tied choices and unchanged first votes",
+          "messages": [
+            "AssertionError: expected { …(21) } to be { …(21) } // Object.is equality\n    at tied (C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:227:75)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:234:17\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M14.log"
+    },
+    {
+      "id": "M15",
+      "description": "Public questions expose the answer key and explanation",
+      "file": "games/kahoot/server/content.ts",
+      "expected": "game.test.ts and team-properties.test.ts: public view secret diffs",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1671,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "views and bots the question views are identical when the key, explanation or other answers change",
+          "messages": [
+            "AssertionError: expected { gameId: 'kahoot', …(17) } to deeply equal { gameId: 'kahoot', …(17) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/game.test.ts:184:34\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility keeps teams choices, elapsed and the answer key private until reveal",
+          "messages": [
+            "AssertionError: expected { gameId: 'kahoot', …(17) } to deeply equal { gameId: 'kahoot', …(17) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:295:38\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility keeps tv-vote choices, elapsed and the answer key private until reveal",
+          "messages": [
+            "AssertionError: expected { gameId: 'kahoot', …(17) } to deeply equal { gameId: 'kahoot', …(17) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:295:38\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M15.log"
+    },
+    {
+      "id": "M16",
+      "description": "First submitted vote becomes the TV decision before reveal",
+      "file": "games/kahoot/server/index.ts",
+      "expected": "teams.test.ts: decision null before reveal; team-properties.test.ts: other-player choice diffs",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1521,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "views and bots the question views are identical when the key, explanation or other answers change",
+          "messages": [
+            "AssertionError: expected { gameId: 'kahoot', …(17) } to deeply equal { gameId: 'kahoot', …(17) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/game.test.ts:184:34\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility keeps teams choices, elapsed and the answer key private until reveal",
+          "messages": [
+            "AssertionError: expected { gameId: 'kahoot', …(17) } to deeply equal { gameId: 'kahoot', …(17) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:295:38\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility keeps tv-vote choices, elapsed and the answer key private until reveal",
+          "messages": [
+            "AssertionError: expected { gameId: 'kahoot', …(17) } to deeply equal { gameId: 'kahoot', …(17) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:295:38\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M16.log"
+    },
+    {
+      "id": "M17",
+      "description": "Phones expose the first opponent selection",
+      "file": "games/kahoot/server/index.ts",
+      "expected": "game.test.ts and team-properties.test.ts: opponent choices cannot change another phone",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1415,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "views and bots the question views are identical when the key, explanation or other answers change",
+          "messages": [
+            "AssertionError: expected { gameId: 'kahoot', …(23) } to deeply equal { gameId: 'kahoot', …(23) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/game.test.ts:185:48\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility keeps teams choices, elapsed and the answer key private until reveal",
+          "messages": [
+            "AssertionError: expected { gameId: 'kahoot', …(23) } to deeply equal { gameId: 'kahoot', …(23) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:296:52\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility keeps tv-vote choices, elapsed and the answer key private until reveal",
+          "messages": [
+            "AssertionError: expected { gameId: 'kahoot', …(23) } to deeply equal { gameId: 'kahoot', …(23) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:296:52\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M17.log"
+    },
+    {
+      "id": "M18",
+      "description": "Final opponent team totals appear before the podium",
+      "file": "games/kahoot/server/index.ts",
+      "expected": "teams.test.ts: final opponent totals withheld; unrevealed group ranks",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1546,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "mode privacy and solo compatibility withholds final opponent totals and all unrevealed group ranks",
+          "messages": [
+            "AssertionError: expected false to be true // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:315:7\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M18.log"
+    },
+    {
+      "id": "M19",
+      "description": "First podium beat shows every final standing",
+      "file": "games/kahoot/server/index.ts",
+      "expected": "game.test.ts: server podium tiers; teams.test.ts: group podium tiers",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1353,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "views and bots gates podium rank tiers on server time, including tied winners",
+          "messages": [
+            "AssertionError: expected [ 1, 2, 3, 4, 5, 6, 7, 8 ] to deeply equal [ 3 ]\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/game.test.ts:215:57\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "mode privacy and solo compatibility withholds final opponent totals and all unrevealed group ranks",
+          "messages": [
+            "AssertionError: expected [ 1, 2, 3, 4 ] to deeply equal [ 3 ]\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:324:61\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M19.log"
+    },
+    {
+      "id": "M20",
+      "description": "VIP end credits the unfinished question before producing results",
+      "file": "games/kahoot/server/index.ts",
+      "expected": "teams.test.ts: unfinished end produces zero result credit",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 1935,
+      "tests": 47,
+      "failed": [
+        {
+          "name": "fixed teams and discussion pauses discussion and answer speed, skips to the proper phase and ends without unfinished credit",
+          "messages": [
+            "AssertionError: expected [ 475, +0, 475, +0 ] to deeply equal [ +0, +0, +0, +0 ]\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/teams.test.ts:110:55\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M20.log"
+    }
+  ],
+  "restorationVerified": true,
+  "error": "",
+  "restoredHashes": {
+    "games/kahoot/server/scoring.ts": "e2d56449dffd3a5ce5b0e0c58151adfba647a56db3657d5c7837a72a95774211",
+    "games/kahoot/server/teams.ts": "dbf3f503bd1ed81487764d4e4d320aaf200ee1b8455e845ce84d0834c51b5ea4",
+    "games/kahoot/server/phases/talk.ts": "d621cfa461afdb68828b981076fe2259e06d27bc7bf26fed3e4b64f35565f393",
+    "games/kahoot/server/index.ts": "95012e754ebfbcdd5d4d29a2e26529f4f00ebd3113e8992085dedfcda58d5fbd",
+    "games/kahoot/server/phases/question.ts": "f343f673f10a17e5b09dfc9bda21f13def43d48ae44799c160dc601058fe81f3",
+    "games/kahoot/server/content.ts": "40ee802b06f865a29da7f49612b9224c894eef6fd9aee4a05133666d39af2ab6"
+  },
+  "mutations": 20,
+  "killed": 20,
+  "invalidMutations": 0,
+  "complete": true
+}

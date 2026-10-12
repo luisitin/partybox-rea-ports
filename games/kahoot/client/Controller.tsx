@@ -5,6 +5,7 @@ import {
   MOTION_SLOW,
   Screen,
   buzz,
+  useDraft,
   usePhoneOnly,
   useServerNow,
   useSound,
@@ -19,13 +20,9 @@ import { PhoneStandings, VerdictCard } from './PhoneParts';
 import { STRINGS } from './strings';
 import { TalkScreen } from './TalkScreen';
 import { TeamReceipt } from './TeamParts';
+import { pendingSnapshot, restorePending } from './pendingAnswer';
+import type { PendingAnswer } from './pendingAnswer';
 import styles from './Controller.module.css';
-
-interface Pending {
-  round: number;
-  choice: number;
-  at: number;
-}
 
 export function Controller({
   view,
@@ -35,13 +32,28 @@ export function Controller({
   const play = useSound();
   const phoneOnly = usePhoneOnly();
   const now = useServerNow(250, view.paused, view.clockHeldAt);
-  const [pending, setPending] = useState<Pending | null>(null);
-  const pendingRef = useRef<Pending | null>(null);
-  const mine = pending?.round === view.round ? pending : null;
   const spectator = view.me.role !== 'player';
   const seat = view.players.find((player) => player.id === view.me.id);
   const stage = phoneOnly || view.stage || spectator;
   const phase = view.phaseId;
+  const slot = useDraft(`answer:${view.mode}:${view.round}:${view.me.id}`);
+  const identity = `${phase}:${view.mode}:${view.round}:${view.me.id}`;
+  const recoverable =
+    phase === 'question' && !spectator && seat?.status === 'active' && !view.submitted;
+  const [local, setLocal] = useState(() => ({
+    slot,
+    identity,
+    pending: restorePending(slot, view.round, recoverable, now, MOTION_SLOW * 2),
+  }));
+  const pendingRef = useRef<PendingAnswer | null>(local.pending);
+  const current = useRef({ slot, identity, canAnswer: false });
+  if (local.slot !== slot || local.identity !== identity) {
+    // A new SDK scope/round/role must hydrate before its controls commit, never from the old phone state.
+    const pending = restorePending(slot, view.round, recoverable, now, MOTION_SLOW * 2);
+    pendingRef.current = pending;
+    setLocal({ slot, identity, pending });
+  }
+  const mine = recoverable && local.pending?.round === view.round ? local.pending : null;
   const canAnswer =
     phase === 'question' &&
     !spectator &&
@@ -50,32 +62,60 @@ export function Controller({
     !view.submitted &&
     !view.paused &&
     (view.deadline === null || now < view.deadline);
+  current.current = { slot, identity, canAnswer };
   const selected = view.submitted ? view.selected : (mine?.choice ?? null);
   const retry = canAnswer && mine !== null && now - mine.at >= MOTION_SLOW * 2;
   const question = view.question;
   const round = L('Question {n} of {m}', { n: view.round, m: view.rounds });
 
   const answer = (choice: number): void => {
-    if (!canAnswer || pendingRef.current?.round === view.round) return;
+    if (
+      current.current.slot !== slot ||
+      current.current.identity !== identity ||
+      !canAnswer ||
+      !current.current.canAnswer ||
+      pendingRef.current?.round === view.round
+    )
+      return;
     const next = { round: view.round, choice, at: now };
+    const snapshot = pendingSnapshot(next);
+    if (!snapshot) return;
     pendingRef.current = next;
-    setPending(next);
+    setLocal({ slot, identity, pending: next });
+    slot.write(snapshot);
     buzz(20);
     send({ type: 'answer', round: view.round, choice });
   };
   const resend = (): void => {
-    if (!retry || !mine) return;
+    if (
+      current.current.slot !== slot ||
+      current.current.identity !== identity ||
+      !current.current.canAnswer ||
+      !retry ||
+      !mine
+    )
+      return;
     const next = { ...mine, at: now };
     pendingRef.current = next;
-    setPending(next);
+    setLocal({ slot, identity, pending: next });
+    slot.write(pendingSnapshot(next));
     send({ type: 'answer', round: view.round, choice: mine.choice });
   };
+  const previousSlot = useRef(slot);
   useEffect(() => {
-    if (phase !== 'question' || pendingRef.current?.round !== view.round) {
+    if (previousSlot.current !== slot) previousSlot.current.clear();
+    previousSlot.current = slot;
+    if (!recoverable) {
+      slot.clear();
       pendingRef.current = null;
-      setPending(null);
-    }
-  }, [phase, view.round]);
+      setLocal((value) =>
+        value.slot === slot && value.identity === identity && value.pending
+          ? { ...value, pending: null }
+          : value,
+      );
+    } else if (pendingRef.current === null) slot.clear();
+    // No unmount cleanup: the unresolved choice deliberately survives a phone refresh.
+  }, [slot, identity, recoverable]);
   const judged = useRef(
     phase === 'reveal' && view.verdict ? `${view.round}:${view.verdict.outcome}` : '',
   );
@@ -116,7 +156,7 @@ export function Controller({
           view.mode === 'solo' ? (
             <VerdictCard verdict={view.verdict} rank={view.rank} compact={stage} />
           ) : (
-            <TeamReceipt view={view} />
+            <TeamReceipt view={view} compact={stage} />
           )
         ) : null}
         {stage && question && view.reveal ? (

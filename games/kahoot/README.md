@@ -31,9 +31,16 @@ VIP end preserves credited points and never scores an unfinished question.
 ### Phone only
 
 `usePhoneOnly`, the server presence flag, remote seats and spectators enable stage information.
-Talk always shows the question/options. In question, stage phones show text on each shape pad;
-spectators get a read-only list. Reveal shows the chart/explanation plus the player's receipt.
-Score/podium/done show compact group or individual standings. Nothing directs these rooms to a TV.
+Nothing directs these rooms to a TV. Solo omits discussion.
+
+| Phase    | Player phone only                                                 | Spectator                          |
+| -------- | ----------------------------------------------------------------- | ---------------------------------- |
+| talk     | Own group, members, prompt/options and discussion clock; no input | Read-only prompt/options and clock |
+| question | Prompt and four shape/text pads; immutable lock and manual retry  | Prompt and four read-only options  |
+| reveal   | Personal/group receipt, answer chart and explanation              | Answer chart and explanation       |
+| score    | Own points/rank and compact standings                             | Compact standings                  |
+| podium   | Only revealed group/individual tiers                              | Same revealed tiers                |
+| done     | Final standings and own result                                    | Complete standings                 |
 
 ## Inputs
 
@@ -60,7 +67,8 @@ results include every starter and all tied winning team members.
 
 ## Edge cases
 
-- Refresh restores accepted choices, current groups, points and phase. Personal cues do not replay.
+- Refresh restores accepted choices, groups, points and phase; unconfirmed choices retain manual
+  same-choice retry through SDK draft storage. Personal cues do not replay.
 - Disconnects never make the room wait; answered departures keep earned contributions.
 - Pause holds input/timers; resume shifts discussion and answer clocks. Stale timers do nothing.
 - Before reveal, no key, explanation, other person's choice, vote chart or decision is public.

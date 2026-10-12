@@ -33,7 +33,13 @@ export function TeamRoster({ view }: { view: QuizTvView }): JSX.Element | null {
   ) : null;
 }
 
-export function TeamReceipt({ view }: { view: QuizControllerView }): JSX.Element | null {
+export function TeamReceipt({
+  view,
+  compact = false,
+}: {
+  view: QuizControllerView;
+  compact?: boolean;
+}): JSX.Element | null {
   const L = useT(STRINGS);
   if (!view.verdict || !view.team) return null;
   const correct = view.verdict.outcome === 'correct';
@@ -50,7 +56,12 @@ export function TeamReceipt({ view }: { view: QuizControllerView }): JSX.Element
           ? L('Your answer: too slow')
           : L('Your answer: missed');
   return (
-    <div className={styles.receipt} data-correct={correct || undefined} role="status">
+    <div
+      className={styles.receipt}
+      data-correct={correct || undefined}
+      data-compact={compact || undefined}
+      role="status"
+    >
       <h3>
         {correct ? '✓ ' : '× '}
         {title}

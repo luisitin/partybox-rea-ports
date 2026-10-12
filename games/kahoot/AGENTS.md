@@ -6,4 +6,5 @@
 - Never spread a Question into a view: correct and explanation are secret until reveal.
 - Bot knowledge is authored separately; never read the shuffled answer key in bot.ts.
 - Test only this game: pnpm vitest run games/kahoot.
-- Job evidence and resumable handoff: jobs/P01-quiz-rush/.
+- P01's historical evidence: jobs/P01-quiz-rush/.
+- Current teams/vote evidence and resumable handoff: jobs/P02-quiz-rush-teams/.
