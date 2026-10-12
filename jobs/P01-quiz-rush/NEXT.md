@@ -2,22 +2,20 @@
 
 ## Resumed locally (2026-10-12, r1-local)
 
-- P01 remains the unfinished r1-local claim; P22 is DONE. Continue `job/P01-quiz-rush`; dependencies have no additions and the owner's core checkout is read-only. Pacing head `bd91828` is green; last recorded claim refresh `646f3a0`. New Finale/copy source awaits final push/CI.
-- Round 3 pacing is complete: [CI 38239089152](https://github.com/luisitin/partybox-rea-ports/actions/runs/38239089152), local 240/240 tests in 26 files/881.47 s, 32,000 simulations/2,006 property seeds and fresh 20/20 mutations against 72 baseline tests with restored source. Eight-/sixteen-player wager median gains are 433/1,732 ms. The omitted fixture and 21-format CI failures were corrected before that green; retain their history in VERIFY.md.
-- Round 4 fixes Finale host fit and misleading Classic start text. EN/ES instructions distinguish Classic podium/Wager final bet. Real Results Stage is 866.8 px/758.8 px inside, including winner hero/recap. All sixteen bet/delta/total rows remain at 32 px.
-- Current capture PASS 94/94, zero overflow/clipped/unstyled elements/scrolling. A deliberately labelled same-state before-repair baseline has 85 clipped items, giving 95 records total. Ninety earlier PNGs are byte-identical to `e189d22` except the separate standings rank-separator change. Shared `evidence.css` avoids duplicate CSS; media checkpoint is 235 files/8,279,094 B.
-- Browser PID 87684 verified closed in finally. Temporary profile cleanup is deferred after Windows EPERM; it is not a live browser. Typecheck 41896 PASS; current SSR 42/42 and the nine-renderer follow-up PASS after guards/type fixes.
-- Current full session 60859 remains active (expected 241 tests/26 files, not a result), without PB_WRITE_EVIDENCE so formatted fixtures stay intact. Current runtime differs from the pacing baseline; stable fresh hashes, final formatting, source/artifact push and resulting-head CI remain pending. No no-gain rounds or DONE are claimed.
+- P01 is unfinished; P22 is DONE. Stay on `job/P01-quiz-rush`; no added dependencies, owner core read-only. Round-4 `1333563` [CI 38241666750](https://github.com/luisitin/partybox-rea-ports/actions/runs/38241666750) is green; last recorded main claim refresh `3addcbb`. Round-5 source/artifacts await final format/hash/push/CI.
+- Round 5 is applied: only 13–16-seat stakes use own four-column/two-line 32 px name/rank/score/placed cards; ≤12 retains SDK. Four normal stakes-name ellipses → zero, name width 416 px, all sixteen scores/marks visible. Spanish 40-character/five-digit/long-leader/all-placed cases pass; before PNG and loop-5 fit JSON are recorded.
+- First new capture 39757 failed 20 clipped last-row items. Corrected div.wagerStage specificity and wrapping 32 px rules; helper now matches pinned global .pb-muted/.pb-caption. Final 50244 PASS 95/95 current, plus one deliberate 85-clipped Finale baseline (96 records). PID 52968 closed in finally; EPERM profile cleanup deferred. The old 90/91 byte identity was round 4 before caption correction.
+- Full 37496 PASS 242/242, 26 files, 484.58 s, exit 0; raw `r1-local-kahoot-loop5-tests-20261012.json`. Runtime JS/server froze throughout, but Tv.module.css and upgrade-evidence.ts changed early during properties. No 93-file freeze claim for this run. Verification JSON records both before/after SHAs; final ten-renderer file ran after fixes and current 77 capture/six restoration hashes match.
+- Typecheck 32345 PASS; focused 43 tests/3 files and final ten-renderer PASS. Independent twelve-sheet/native phone/stakes QA found no remaining concrete visual defect. Final media checkpoint 8,710,478 B before loop-5 JSON; complete final hashes/format and resulting-head CI remain pending. No no-gain rounds or DONE.
 
 Next actions:
 
-1. Finish session 60859 and record actual test count/files/time/exit. Keep the 95 capture records separated into 94 current PASS plus one deliberate before-repair baseline.
-2. Finish current format and stable source/capture/media hashes; verify all-media bytes below 10,000,000 B. Preserve the confirmed browser closure and record EPERM profile cleanup as deferred. Carry mutation evidence only with matching tested-source/restoration hashes.
-3. Push Finale/copy sources and artifacts/docs, pull --rebase before refreshing P01's claim, and refresh PR #2 from the job README. Require CI at that resulting head; `bd91828` green verifies pacing only.
-4. Finish round 4's measured-gain/full/CI record and continue fresh five-weakness walkthroughs until three consecutive no-gain rounds pass. None is claimed yet; historical standalone rounds do not count. DONE requires that loop and all final-head checks.
+1. Finish final round-5 formatting and stable source/capture/restoration/media hashes; verify the complete payload below 10,000,000 B. Preserve the two-file early-change disclosure and avoid applying the round-4 93-file freeze to this run.
+2. Push source/artifacts/docs, pull --rebase before P01 claim refresh, and refresh PR #2 from the job README. Require CI at that resulting head; prior round-4 green does not release this source.
+3. After latest CI, conduct a fresh five-weakness walkthrough and record its measured outcome. Continue until three consecutive no-gain rounds pass; none is claimed yet and historical standalone rounds do not count. DONE requires the loop and final-head checks.
 
-Root owns one test worker and one headless browser closed in finally. Current full/head CI,
-final hashes/format, three no-gain rounds and DONE remain pending.
+Root owns one test worker and one headless browser closed in finally. Final format/hash/push/CI,
+three no-gain rounds and DONE remain pending.
 
 ## Owner-required upgrade baseline (historical context)
 

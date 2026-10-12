@@ -1,7 +1,7 @@
 // TV view for Lightning Round. Dumb component: renders `view`, composes game-sdk primitives, never
 // touches sockets or game logic. The shell already shows the timer, player chips and VIP overlay.
 import type { CSSProperties, JSX, ReactNode } from 'react';
-import { BigText, Scoreboard, Stage, useT } from '@partybox/game-sdk/ui';
+import { Avatar, BigText, Scoreboard, Stage, useT } from '@partybox/game-sdk/ui';
 import type { GameTvProps } from '@partybox/game-sdk/ui';
 import type { LightningTvView } from '../server/index';
 import { difficultyText, drawText } from './labels';
@@ -155,7 +155,7 @@ function WagerTv({ view, skip }: GameTvProps<LightningTvView>): JSX.Element {
   if (view.phaseId === 'wager') {
     const gap = standings.length >= 2 ? standings[0]!.score - standings[1]!.score : 0;
     return (
-      <Stage>
+      <Stage className={standings.length >= 13 ? styles.wagerStage : undefined}>
         <div className={styles.header}>
           <span className={`${styles.kicker} ${styles.final}`}>{L('Final question next')}</span>
           <span className={styles.placed} role="status">
@@ -191,19 +191,49 @@ function WagerTv({ view, skip }: GameTvProps<LightningTvView>): JSX.Element {
             {gap > 0 ? ` · ${L('{name} leads by {gap}', { name: standings[0]!.name, gap })}` : ''}
           </p>
         </div>
-        <Scoreboard
-          rows={standings}
-          noTrophy
-          // T-0175: four h2 rows in one column ran into the overscan; two columns of two use the width
-          dense={standings.length >= 4}
-          // Six h2 rows per column plus this header overflow 1080 px (review-loop #53); once the
-          // roster is three rows (9+), even six small rows run into the host bar, and four rows
-          // (13+) leave room for four rows of standings only: four columns.
-          size={standings.length >= 9 ? 'sm' : 'md'}
-          columns={standings.length >= 13 ? 4 : standings.length >= 9 ? 3 : 2}
-          markIds={view.players.filter((p) => p.status === 'submitted').map((p) => p.id)}
-          stagger="down"
-        />
+        {standings.length >= 13 ? (
+          <ol
+            className={styles.wagerBoard}
+            aria-label={L('Scoreboard')}
+            style={{ '--pb-wager-board-rows': Math.ceil(standings.length / 4) } as CSSProperties}
+          >
+            {standings.map((row, i) => {
+              const placed =
+                view.players.find((p) => p.id === row.playerId)?.status === 'submitted';
+              return (
+                <li
+                  key={row.playerId}
+                  data-player={row.playerId}
+                  data-rank={row.rank}
+                  style={{ '--i': i } as CSSProperties}
+                  aria-label={`${row.name} · ${L('Place {rank}', { rank: row.rank })} · ${L('{n} points', { n: row.score })}${placed ? ` · ${L('Wager placed')}` : ''}`}
+                >
+                  <b className={styles.wagerName} title={row.name}>
+                    {row.name}
+                  </b>
+                  <div className={styles.wagerDetails} aria-hidden="true">
+                    <Avatar avatarId={row.avatarId} dim={row.connected === false} size={32} />
+                    <span>
+                      <b className={styles.wagerRank}>#{row.rank}</b> · <b>{row.score}</b>
+                    </span>
+                    {placed ? <b className={styles.wagerMark}>✓</b> : null}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        ) : (
+          <Scoreboard
+            rows={standings}
+            noTrophy
+            // The unchanged SDK tiers keep one to twelve seats in their existing layout.
+            dense={standings.length >= 4}
+            size={standings.length >= 9 ? 'sm' : 'md'}
+            columns={standings.length >= 9 ? 3 : 2}
+            markIds={view.players.filter((p) => p.status === 'submitted').map((p) => p.id)}
+            stagger="down"
+          />
+        )}
       </Stage>
     );
   }

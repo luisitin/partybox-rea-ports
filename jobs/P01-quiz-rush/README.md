@@ -2,12 +2,12 @@
 
 This upgrade extends PartyBox's existing Lightning Round under the canonical Kahoot! name.
 It replaces the former standalone Quiz Rush implementation rather than adding a duplicate.
-Round-3 pacing is complete: 240 tests, 32,000 bots, 2,006 property seeds, 20 mutation kills and
-[CI 38239089152](https://github.com/luisitin/partybox-rea-ports/actions/runs/38239089152) green at `bd91828`; later Finale/start-copy source changes belong to round 4.
-Real Results fit now retains all sixteen bet/delta/totals at 32 px; EN/ES start copy describes both modes.
-Current 94/94 captures are clean; one explicit before-repair baseline has 85 clipped items.
-Media: 235 files/8,279,094 B. Browser 87684 closed; temporary-profile EPERM cleanup is deferred.
-Typecheck, 42/42 SSR and nine renderer checks pass; full session 60859 and final format/hash/push/head CI remain pending.
+Round-4 `1333563` [CI 38241666750](https://github.com/luisitin/partybox-rea-ports/actions/runs/38241666750) is green; round-5 stakes repair is now applied.
+Normal sixteen-seat stakes names improve four ellipses → zero; all scores/marks remain visible.
+Current capture PASS 95/95 plus one labelled Finale before baseline; browser 52968 closed.
+Full PASS 242/242, 26 files, 484.58 s; types/SSR pass. Two early CSS/helper edits are disclosed;
+final SSR ran after fixes, runtime JS/server stayed frozen, and current capture/restoration hashes match.
+Media checkpoint 8,710,478 B before loop-5 JSON; final format/hash/push/head CI remain pending.
 No no-gain rounds or DONE are claimed; three consecutive no-gain rounds remain required.
 
 The upgrade preserves 1–16 players, EN/ES libraries, category/topic draws, speed points,

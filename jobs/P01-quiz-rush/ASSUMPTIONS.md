@@ -100,11 +100,32 @@
   has 85 clipped items; 95 records include that deliberate baseline, not a current failure.
   Ninety of the earlier 91 PNGs are byte-identical to e189d22; the remaining old frame changes
   the standings rank separator. Shared evidence CSS preserves actual selectors/tokens/font.
-  Media checkpoint: 235 files/8,279,094 B, below decimal 10 MB; stable fresh hashes are pending.
-- Browser PID 87684 verified closed in finally. EPERM deferred profile cleanup only. Current
-  typecheck 41896 passes; SSR 42/42 and nine-renderer follow-up pass after guards/type fixes.
-  Full 60859 is active without PB_WRITE_EVIDENCE; expected 241 tests in 26 files is not a result. Final
-  formatting/hashes, source/artifact push and resulting-head CI remain pending.
+  Final media hashes: 235 files/8,279,090 B, below decimal 10 MB.
+- Browser PID 87684 verified closed in finally. EPERM deferred profile cleanup only. Typecheck
+  41896 and format 66656 pass; format follows the second evidence.css formatting pass. Full
+  60859 passes 241/241 tests, 26 files, 534.17 s, exit 0, without PB_WRITE_EVIDENCE. All 93
+  frozen game/test hashes match before/after; 77 capture-source/six restoration/font/token
+  hashes match. Verification summary identifies the exact tested working tree at
+  133356320d66ebdccf3def6e2c384f61581d1e77. Pushed 1333563/claim 3addcbb; CI 38241666750
+  is green. PR #2 body was refreshed.
+- Independent review covered all twelve sheets plus native cases. Ninety of the earlier 91
+  PNGs are byte-identical to e189d22; the remaining old frame changes the intended rank middot.
+- Round 5 applies own four-column/two-line 32 px stakes cards only at 13–16 seats; ≤12 retains
+  SDK. Four normal positive-score names' ellipses → zero with 416 px name space; all sixteen
+  scores/placed marks remain visible. Spanish 40-character/five-digit/long-leader/all-placed
+  cases pass. Archived stakes-before PNG and loop-5 fit JSON preserve the comparison.
+- First capture 39757 failed 20 clipped last-row items. Specific div.wagerStage and wrapping
+  32 px rules fixed them; helper now copies exact pinned global muted/caption rules. The old
+  90/91 PNG identity proof belongs only to round 4 before this helper correction.
+  Final 50244 PASS 95/95 current plus one explicit 85-clipped Finale baseline (96 records).
+  PID 52968 closed in finally; EPERM profile cleanup deferred. Checkpoint 8,710,478 B precedes
+  loop-5 JSON, so final all-media size/hash remains pending.
+- Full 37496 PASS 242/242, 26 files, 484.58 s, exit 0; typecheck 32345 PASS. Runtime JS/server
+  stayed frozen; Tv.module.css and upgrade-evidence.ts changed early while properties ran.
+  No all-93 freeze claim applies. Verification JSON records both before/after SHAs; final ten
+  renderer tests ran after fixes and current 77 capture/six restoration hashes match. Independent
+  twelve-sheet/native phone/stakes QA found no concrete remaining visual defect. Final
+  format/stable hashes/push/head CI and three consecutive no-gain rounds remain pending.
 - VIP Next/skip is an inherited platform input without a phase stamp (public shared/protocol.ts;
   pinned core Playing.tsx and engine/vip.ts). A delayed old-screen Next can skip the new current
   phase after automatic advance; local duplicate-click guards do not prevent that across devices.

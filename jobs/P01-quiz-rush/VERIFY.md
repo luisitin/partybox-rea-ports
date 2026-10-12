@@ -2,46 +2,60 @@
 
 ## Current two-mode upgrade (2026-10-12, r1-local)
 
-The canonical implementation is `games/kahoot`, derived from `core-base/SOURCE.json`.
-Round-3 pacing is complete and CI-green at `bd91828`. Round 4 changes Finale/start-copy source;
-its current captures, SSR and types pass, while the full run and resulting-head CI remain pending.
-Latest recorded main claim refresh: `646f3a0`. Executions stay game-only, one thread worker and
-one owned browser closed in finally. Prior full/mutation counts do not verify later client source.
+Round-4 `1333563` [CI 38241666750](https://github.com/luisitin/partybox-rea-ports/actions/runs/38241666750)
+is green. Round 5's stakes repair is applied and locally verified; final format/hash/push/head CI
+remain pending. No three-no-gain completion or DONE is claimed. All executions remain game-only,
+one thread worker and one owned browser closed in finally.
 
-| Check                         | Command / evidence                                                                   | Status                                                                                                                                                                         |
-| ----------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Install                       | `corepack enable`; `pnpm.cmd install --frozen-lockfile`                              | PASS; no added dependencies                                                                                                                                                    |
-| Types                         | `pnpm.cmd typecheck`                                                                 | Current session 41896 PASS                                                                                                                                                     |
-| Focused render/SSR            | Game-only Vitest with `--maxWorkers=1 --pool=threads`                                | Current 42/42 SSR PASS; nine-renderer follow-up PASS after guards/type fix                                                                                                     |
-| SDK/full game/properties/bots | `pnpm.cmd vitest run games/kahoot --maxWorkers=1 --pool=threads` with JSON reporting | Current session 60859 active; 241 tests in 26 files expected, not a result. No PB_WRITE_EVIDENCE; fixtures remain formatted. Prior pacing PASS 240/240, 26 files, 881.47 s     |
-| Mutations                     | `node jobs/P01-quiz-rush/mutate-upgrade.mjs`                                         | Pacing baseline session 84630 PASS 20/20; 72-test baseline; exit 0; source restored                                                                                            |
-| Browser fit                   | `node jobs/P01-quiz-rush/capture.mjs`                                                | Current PASS 94/94; one deliberate before-repair comparison (85 clipped items), 95 records total. Browser PID 87684 verified closed in finally; EPERM profile cleanup deferred |
-| Format                        | `pnpm.cmd format`                                                                    | Pacing fixtures formatted and CI-green at bd91828; current Finale/copy/docs final format pending                                                                               |
-| Media/hash cap                | `node jobs/P01-quiz-rush/hash-media.mjs`                                             | Current media checkpoint 235 files/8,279,094 B, below decimal 10 MB; stable fresh source/media hashes pending                                                                  |
-| CI                            | Job P01 workflow                                                                     | [Pacing PASS 38239089152](https://github.com/luisitin/partybox-rea-ports/actions/runs/38239089152) at bd91828; current Finale/copy resulting-head CI pending                   |
+| Check                         | Command / evidence                                                                   | Current result                                                                                                                                                   |
+| ----------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Install                       | `corepack enable`; `pnpm.cmd install --frozen-lockfile`                              | PASS; no added dependencies                                                                                                                                      |
+| Types                         | `pnpm.cmd typecheck`                                                                 | Round-5 PASS session 32345                                                                                                                                       |
+| Focused render/SSR            | Game-only Vitest with `--maxWorkers=1 --pool=threads`                                | PASS 43 tests/3 files; final ten-renderer file PASS after the last CSS/helper corrections                                                                        |
+| Full game/SDK/properties/bots | `pnpm.cmd vitest run games/kahoot --maxWorkers=1 --pool=threads` with JSON reporting | PASS 242/242; 26 files; 484.58 s; session 37496 exit 0; SDK/properties/simulations included                                                                      |
+| Mutations                     | `node jobs/P01-quiz-rush/mutate-upgrade.mjs`                                         | Pacing PASS 20/20, 72-test baseline, restored; current six restoration hashes match tested server source                                                         |
+| Browser fit                   | `node jobs/P01-quiz-rush/capture.mjs`                                                | Session 50244 PASS 95/95 current; one labelled 85-clipped Finale baseline, 96 records total. Browser PID 52968 closed in finally; EPERM profile cleanup deferred |
+| Format/hash/CI                | `pnpm.cmd format`; media hashes; P01 workflow                                        | Final round-5 format, stable source/media hashes, push and resulting-head CI pending; checkpoint 8,710,478 B before loop-5 JSON                                  |
 
-### Round-4 confirmed source/capture gains and pending full checks
+### Round-5 applied source and measured gain
 
-Five weaknesses: Finale host missing from fit evidence, Classic start promising a wager,
-twenty-question replay pool, receipt-time latency and English-only classic content. Fixed the
-first two. Finale now fits the actual results host with its winner hero/recap: Stage 866.8 px,
-inner 758.8 px. Every one of sixteen seats retains its bet, delta and total at 32 px.
-Static EN/ES step 3 distinguishes Classic's podium from Wager's final bet.
+Five weaknesses: stakes identification, numeric density, extreme names, brief intro and wait
+perception. Thirteen–sixteen-seat stakes now use game-owned four-column/two-line 32 px cards
+for name/rank/score/placed; twelve or fewer retain the SDK board. Runtime edits are Tv.tsx,
+Tv.module.css and Spanish strings. Native normal stakes names improve four ellipses → zero,
+with 416 px name space; all sixteen scores/placed marks remain visible. Spanish twenty-question,
+legal 40-character names, five-digit leader/score and all-placed cases pass the current capture.
+`media/loop-5-stakes-fit.json` and archived `loop-5-stakes-before-tv.png` record the comparison.
 
-The same actual three-winner/sixteen-wide-name reducer state demonstrates the fit repair:
-one explicitly labelled before-repair comparison has 85 clipped items; the current equivalent
-and all 94 current captures have zero overflow, clipped/unstyled elements or scrolling. This is
-95 records total, not 95 current PASS frames. Ninety of the earlier 91 PNGs remain byte-identical
-to `e189d22`; the other changes only the standings rank separator. Shared local `evidence.css`
-removes repeated module/shell CSS while retaining the actual selectors, tokens and licensed font.
-Media totals 235 files/8,279,094 B. Browser PID 87684 closed in finally and was verified closed;
-Windows EPERM deferred temporary-profile cleanup, not process closure.
+First capture session 39757 failed with 20 clipped last-row items under a long Spanish leader.
+The correction uses div.wagerStage specificity against SDK Stage plus wrapping 32 px rules.
+Capture helper now also uses exact pinned global.css:99–105 .pb-muted/.pb-caption rules.
+Final session 50244 passes all 95 current frames; 96 records include the separate deliberate
+Finale before baseline. The earlier 90/91 PNG-byte-identity comparison belongs to round 4,
+before this caption/reset correction, and is not claimed for the current recapture.
+Browser PID 52968 closed in finally; EPERM deferred only temporary-profile cleanup.
 
-Current typecheck 41896 passes. SSR passes 42/42, followed by nine renderer checks after guards/
-type fixes. Full session 60859 is active; expected 241 tests/26 files is not a passing result.
-It runs without PB_WRITE_EVIDENCE to preserve the already formatted fixtures. Root will finish
-formatting/stable source-media hashes, push sources/artifacts and require CI at the resulting
-head. Round-4 full/head CI and three consecutive no-gain rounds remain pending; no DONE claim.
+Full 37496 PASS 242/242, 26 files, 484.58 s, exit 0. Raw report:
+`r1-local-kahoot-loop5-tests-20261012.json`. Runtime JS/server stayed frozen throughout;
+Tv.module.css and upgrade-evidence.ts changed early while properties ran. Do not claim the
+round-4 93-file before/after freeze for this run. `media/verification-upgrade.json` explicitly
+records those two before/after SHA values. The ten-renderer file ran after the final fixes and
+the current recapture verifies the painted UI; current 77 capture-source/six restoration hashes
+match. Typecheck 32345 PASS. Latest independent twelve-sheet/native phone/stakes QA found no
+remaining concrete visual defect. Fresh final-head CI remains required for the final source.
+
+Checkpoint media is 8,710,478 B before the loop-5 JSON; format/stable final hashes must record
+the complete payload and decimal 10,000,000 B cap. Root will push after those checks. No future
+CI PASS or no-gain result is implied; three consecutive no-gain walkthroughs remain required.
+
+### Round-4 green baseline
+
+Source 1333563/claim 3addcbb passed full 241/241, 26 files, 534.17 s; type/format and 235-file/
+8,279,090 B hashes passed. All 93 then-frozen game/test, 77 capture and six restoration hashes
+matched. Finale same-state clipped items fell 85 → zero; 94 current captures passed plus one
+labelled before baseline. PID 87684 closed, profile cleanup deferred. The 90/91 old PNG identity
+comparison and twelve-sheet/native review belong to that pre-caption-correction baseline.
+CI 38241666750 is green; these old freeze/artifact counts do not verify the later round-5 source.
 
 ### Completed round-3 pacing baseline
 

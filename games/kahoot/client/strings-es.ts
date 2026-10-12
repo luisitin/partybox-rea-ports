@@ -133,6 +133,7 @@ export const SCREENS_ES: Readonly<Record<string, string>> = {
   'picked {letter}, correct': 'eligió la {letter}, correcta',
   'picked {letter}, wrong': 'eligió la {letter}, incorrecta',
   placed: 'apostaron',
+  'Wager placed': 'Apuesta confirmada',
   'Place your wagers': '¡A apostar!',
   'Right answer wins the bet · wrong answer loses it':
     'Si aciertas, ganas la apuesta · si fallas, la pierdes',

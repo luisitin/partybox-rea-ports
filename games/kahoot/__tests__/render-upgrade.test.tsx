@@ -716,6 +716,41 @@ it('fits the actual host results Finale beneath wins and wide-name ties with sav
   );
 });
 
+it('fits translated sixteen-player stakes with a long leader, five-digit totals and placed marks', () => {
+  const players = seats(16).map((player, index) => ({
+    ...player,
+    name: `${String(index + 1).padStart(2, '0')}${'W'.repeat(38)}`,
+  }));
+  const initial = game.init({
+    players,
+    settings: { quizMode: 'wager', category: 'all', questions: 20, answerSeconds: 10 },
+    seed: 42,
+    now: T0,
+    contentLang: 'es',
+    presence: { mode: 'together', phoneOnly: false },
+  });
+  let stakes = first(played('wager', false, initial), 'wager');
+  expect(tv(stakes).standings?.[0]?.score).toBeGreaterThanOrEqual(10000);
+  expect(tv(stakes).standings?.[0]?.score).toBeGreaterThan(tv(stakes).standings?.[1]?.score ?? 0);
+  for (const player of players)
+    stakes = input(
+      stakes,
+      player.id,
+      { type: 'wager', percent: 100 },
+      stakes.phase.startedAt + 500,
+    );
+  expect(stakes.phase.id).toBe('wager');
+  expect(tv(stakes).answeredCount).toBe(16);
+  language.value = 'es';
+  const name = 'wager-stakes-wide-spanish-all-placed';
+  paint(name, stakes, stakes.phase.startedAt + 1500, ['tv']);
+  const frame = frames[frames.length - 1]!;
+  expect(frame.html.match(/data-player=/g)).toHaveLength(16);
+  expect(frame.html.match(/Apuesta confirmada/g)).toHaveLength(16);
+  for (const player of players) expect(frame.html).toContain(`title="${player.name}"`);
+  fixtures[name] = stakes;
+});
+
 function captureFrames(): UpgradeFrame[] {
   return frames.filter((frame) => {
     const name = frame.name.slice('upgrade-'.length, -(frame.surface.length + 1));
@@ -723,6 +758,7 @@ function captureFrames(): UpgradeFrame[] {
       frame.surface === 'tv' || frame.surface === 'phone-tv' || frame.surface === 'phone-only';
     const stage = frame.surface === 'tv' || frame.surface === 'phone-only';
     if (name === 'wager-final-wide-names-five-digits') return true;
+    if (name === 'wager-stakes-wide-spanish-all-placed') return true;
     if (name.startsWith('wager-results-')) return true;
     if (/^classic-podium-wide-tie-/.test(name)) return true;
     if (/^wager-small-/.test(name) || /^wager-(?:en|es)-longest-standings$/.test(name)) return true;
@@ -760,7 +796,7 @@ it('writes current HTML and manifest only when the root requests fresh evidence'
   );
   const captures = captureFrames();
   expect(captures.length).toBeGreaterThanOrEqual(65);
-  expect(captures.filter((frame) => !frame.baseline).length).toBe(94);
+  expect(captures.filter((frame) => !frame.baseline).length).toBe(95);
   expect(captures.filter((frame) => frame.baseline).length).toBe(1);
   expect(timer(fixtures['classic-podium-1']!)).toEqual(fixtures['classic-done']);
   expect(timer(fixtures['wager-final-reveal']!)).toEqual(fixtures['wager-done']);

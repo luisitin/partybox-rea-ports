@@ -294,6 +294,69 @@
   margin-bottom: var(--pb-space-4);
 }
 
+/* At thirteen to sixteen seats, names get their own full-width line above the rank, score
+   and placed mark. Four short rows keep room for a translated topic and long leader sentence. */
+div.wagerStage {
+  gap: var(--pb-space-3);
+}
+
+.wagerStage .rules {
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  overflow-wrap: anywhere;
+}
+
+.wagerBoard {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(var(--pb-wager-board-rows), auto);
+  grid-auto-flow: column;
+  gap: var(--pb-space-2);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  line-height: 1;
+}
+
+.wagerBoard > li {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  padding: var(--pb-space-1);
+  border: calc(var(--pb-space-1) / 4) solid var(--pb-border);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  animation: global(pb-rise) var(--pb-motion-base) var(--pb-ease) both;
+  animation-delay: calc(var(--pb-motion-fast) * var(--i) / 2);
+}
+
+.wagerName {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wagerDetails {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.wagerRank {
+  color: var(--pb-accent-2);
+}
+
+.wagerMark {
+  margin-inline-start: auto;
+  color: var(--pb-accent-3);
+}
+
 .count {
   font-size: var(--pb-font-h2);
   color: var(--pb-text-muted);

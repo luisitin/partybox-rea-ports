@@ -39,20 +39,35 @@ The `8cb7355` milestone omitted a regenerated fixture and failed CI 38238453616;
 it at `df5322a`, then CI 38238947209 failed formatting 21 fixtures. Root formatted/pushed
 `bd91828`; CI 38239089152 is green, with main claim refresh `646f3a0`. Failed runs are not PASS.
 
-Round 4 fixes Finale host fit and unconditional wager start copy. The real Results Stage is
+Round 4 fixes Finale host fit and unconditional wager start copy. Real Results Stage is
 866.8 px/758.8 px inner with winner hero/recap; all sixteen bets/deltas/totals remain at 32 px.
-EN/ES step 3 distinguishes Classic podium from Wager final bet. Current runtime differs from
-round-3 pacing; its full/head CI checks remain pending.
+EN/ES step 3 distinguishes Classic podium from Wager final bet. Current capture PASS 94/94;
+one explicit before baseline has 85 clipped items (95 records total). Twelve-sheet/native QA
+completed. Ninety old PNGs are byte-identical to e189d22; the remaining old frame changes the rank
+middot. Shared evidence CSS preserves actual selectors/font/tokens. Final media hashes PASS
+235 files/8,279,090 B. PID 87684 verified closed; EPERM profile cleanup deferred.
 
-Current capture passes 94/94 with zero overflow/clipping/unstyled content/scrolling; a deliberate
-same-state before-repair baseline has 85 clipped items, giving 95 records total. Ninety earlier
-PNGs remain byte-identical to e189d22; the remaining old frame changes the rank separator.
-Shared evidence CSS bundles the actual module selectors plus capture shell, keeping local tokens/
-font and reducing the checkpoint to 235 files/8,279,094 B. Browser PID 87684 verified closed in
-finally; EPERM profile cleanup is deferred. Typecheck 41896 PASS, SSR 42/42 and nine renderer
-checks PASS. Full 60859 is active without evidence fixture generation; expected 241 tests in 26 files is not
-PASS. Root will format, produce stable fresh hashes, push sources/artifacts and require final-head
-CI. Three no-gain rounds remain; no completed upgrade loop or DONE. Historical hashes stay below.
+Round-4 full PASS 241/241, 26 files, 534.17 s, session 60859 exit 0; typecheck 41896 and full
+format 66656 PASS after the second evidence.css format. All 93 frozen game/test before/after,
+77 capture-source, six restoration and font/token hashes match. Verification summary records
+tested snapshot 133356320d66ebdccf3def6e2c384f61581d1e77. Source/artifacts pushed at 1333563,
+claim 3addcbb, PR #2 body refreshed. CI 38241666750 is green; this is the round-4 baseline.
+
+Round 5 applies own 13–16-seat four-column/two-line 32 px stakes cards; ≤12 retains SDK.
+Normal name ellipses improve four → zero, name space 416 px, all sixteen scores/marks visible.
+Spanish 40-character/five-digit/long-leader/all-placed capture passes. Initial 39757 failed 20
+clipped last-row items; div.wagerStage specificity and wrapping rules corrected them. Helper
+now matches pinned global .pb-muted/.pb-caption. Old 90/91 PNG identity is round-4 history.
+Final 50244 PASS 95/95 plus one labelled 85-clipped Finale baseline, 96 records; PID 52968
+closed, EPERM profile cleanup deferred. Archived stakes-before PNG and loop-5 JSON record gain.
+
+Full 37496 PASS 242/242, 26 files, 484.58 s, exit 0; typecheck 32345 PASS, focused 43/3 and
+final ten-renderer PASS. Runtime JS/server froze; Tv.module.css/helper changed early during
+properties, so no all-93 freeze claim. Verification JSON records both SHAs; final SSR ran after
+fixes and current 77 capture/six restoration hashes match. Independent twelve-sheet/native
+phone/stakes QA found no remaining concrete defect. Checkpoint media 8,710,478 B precedes
+loop-5 JSON; final format/stable hashes/push/head CI remain. Three no-gain rounds remain;
+no completed loop or DONE. Preparation hashes below stay historical.
 
 ## Historical preparation snapshot
 

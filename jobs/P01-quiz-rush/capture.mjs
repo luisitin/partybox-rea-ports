@@ -184,7 +184,11 @@ function measure() {
     scrollers,
     clipped,
     unstyled,
-    nameVisibility: [...main.querySelectorAll('[data-player] [class*="_name_"]')]
+    nameVisibility: [
+      ...main.querySelectorAll(
+        '[data-player] [class*="_name_"], [data-player] [class*="_wagerName_"]',
+      ),
+    ]
       .filter(visible)
       .map((el) => ({
         playerId: el.closest('[data-player]').getAttribute('data-player'),

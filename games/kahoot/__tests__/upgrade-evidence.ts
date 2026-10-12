@@ -124,6 +124,7 @@ h1,h2,h3,p{margin:0}h1{font-size:var(--pb-font-h1);line-height:1.15;font-weight:
 .evidence-main{display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden;--pb-stage-top:var(--pb-space-3)}
 .evidence-code{font-weight:900;color:var(--pb-accent-2)}
 .pb-visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.pb-muted{color:var(--pb-text-muted)}.pb-caption{font-size:var(--pb-font-caption)}
 :root[data-motion=off] *,:root[data-motion=off] *::before,:root[data-motion=off] *::after{animation:none!important;transition:none!important}
 `;
 
