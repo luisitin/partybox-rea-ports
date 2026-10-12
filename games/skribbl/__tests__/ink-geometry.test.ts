@@ -72,16 +72,8 @@ describe('geometry-preserving dense ink', () => {
     expect(result.at(-1)).toEqual(points.at(-1));
     for (let i = 175; i < points.length; i += 350) expect(result).toContainEqual(points[i]);
     expect(compactInk(input)).toEqual(compacted);
-    const times = Array.from({ length: 20 }, () => {
-      const began = performance.now();
-      compactInk(input);
-      return performance.now() - began;
-    }).sort((a, b) => a - b);
-    console.info(
-      `dense curved maximum deviation: ${before} -> ${after.toFixed(3)} logical pixels; ` +
-        `3501-point compaction median ${times[10]!.toFixed(2)} ms, p95 ${times[19]!.toFixed(2)} ms`,
-    );
-  });
+    console.info(`dense curved maximum deviation: ${before} -> ${after.toFixed(3)} logical pixels`);
+  }, 60_000);
 
   it('removes repeated/forward-collinear points while preserving direction reversals', () => {
     const corners: Point[] = [

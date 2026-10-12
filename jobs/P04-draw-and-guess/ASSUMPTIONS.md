@@ -42,3 +42,11 @@ The research proposal mentioned an eraser. The shipped small toolset uses comple
 - Continuous ordinary finger input is sampled within the packet budget.
   Extreme synthetic tap/edit floods can accumulate ordered delivery latency;
   they do not produce a transport burst or merge optimistic revisions.
+- Origin/main's owner10-11 update supersedes the earlier working-title rule.
+  P04 is now Skribbl.io / skribbl. Its historical job folder and branch keep
+  their original slugs so claims, PR and resume links remain stable.
+- Broken Pencil exists in the private core but is absent from this public
+  workshop. Deliver original injected-base adapters as an opt-in live mode
+  upgrade, retain the existing core identity/telephone mode, and never copy
+  private source or add a second core game card. Core deployment is outside
+  this authorized public-clone task; UPGRADE.md records integration boundaries.

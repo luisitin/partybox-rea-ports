@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 
 vi.mock('../../../packages/game-sdk/src/contract-tests/load', async (original) => {
   const actual = await original<Record<string, unknown>>();
-  return { ...actual, listGameIds: () => ['draw-and-guess'], shardIds: () => ['draw-and-guess'] };
+  return { ...actual, listGameIds: () => ['skribbl'], shardIds: () => ['skribbl'] };
 });
 
 await import('../../../packages/game-sdk/src/contract-tests/contract.test');

@@ -1,7 +1,21 @@
-# P04 Draw and Guess research
+# P04 Skribbl.io research
 
 Research date: 2026-10-11. Original references: skribbl.io and Gartic.io. The
-PartyBox title is **Draw and Guess**; original names appear only as references.
+Workshop title is **Skribbl.io**, id **skribbl**, following the owner's10-11
+name-table update. The earlier working title was Draw and Guess.
+
+## Existing-game check
+
+Read-only inspection of `C:/dev/partybox/games/broken-pencil/manifest.json`,
+its README and `docs/games/broken-pencil.md` confirms an existing3–8-player
+telephone drawing game: simultaneous private books, guess/redraw passes,
+owner-led presentation and no competitive points. Its words, drawing tools,
+private drafts and phone-only support overlap this job. Per JOBS.md, this
+payload therefore targets an opt-in live guessing upgrade of that existing
+game, retaining its telephone mode and canonical identity rather than adding
+a second core drawing card. See UPGRADE.md for the injected-base adapters.
+No private source or assets are copied into this public repository, and the
+private checkout is not modified.
 
 ## Method and limits
 

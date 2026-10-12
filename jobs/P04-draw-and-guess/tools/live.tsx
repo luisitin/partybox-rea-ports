@@ -1,10 +1,10 @@
 // Local verification harness: the real controller/reducer with deliberately delayed views.
 import { createRoot } from 'react-dom/client';
 import { PhoneOnlyProvider, ServerClockProvider, SoundProvider } from '@partybox/game-sdk/ui';
-import { Controller } from '../../../games/draw-and-guess/client/Controller';
-import { Tv } from '../../../games/draw-and-guess/client/Tv';
-import { game } from '../../../games/draw-and-guess/server/index';
-import type { Input } from '../../../games/draw-and-guess/server/types';
+import { Controller } from '../../../games/skribbl/client/Controller';
+import { Tv } from '../../../games/skribbl/client/Tv';
+import { game } from '../../../games/skribbl/server/index';
+import type { Input } from '../../../games/skribbl/server/types';
 import '../../../design/tokens.css';
 
 const players = Array.from({ length: 8 }, (_, i) => ({

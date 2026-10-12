@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../../..');
-const gameDir = join(root, 'games/draw-and-guess');
+const gameDir = join(root, 'games/skribbl');
 const logDir = join(here, 'mutation-logs');
 mkdirSync(logDir, { recursive: true });
 
@@ -143,7 +143,7 @@ const bugs = [
   ],
 ];
 
-const command = 'pnpm.cmd vitest run games/draw-and-guess/__tests__/game.test.ts --maxWorkers=1';
+const command = 'pnpm.cmd vitest run games/skribbl/__tests__/game.test.ts --maxWorkers=1';
 function runTests() {
   const result =
     process.platform === 'win32'
@@ -156,7 +156,7 @@ function runTests() {
         })
       : spawnSync(
           'pnpm',
-          ['vitest', 'run', 'games/draw-and-guess/__tests__/game.test.ts', '--maxWorkers=1'],
+          ['vitest', 'run', 'games/skribbl/__tests__/game.test.ts', '--maxWorkers=1'],
           { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024, timeout: 120_000 },
         );
   if (result.error) throw result.error;
@@ -196,7 +196,7 @@ try {
     results.push({
       id,
       description,
-      file: `games/draw-and-guess/server/${file}`,
+      file: `games/skribbl/server/${file}`,
       caught,
       exitCode: result.exitCode,
       originalSha256: createHash('sha256').update(original).digest('hex'),

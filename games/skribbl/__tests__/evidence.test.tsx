@@ -14,7 +14,7 @@ import type { State } from '../server/types';
 import { kit, T0 } from './helpers';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
-const fixtureDir = join(root, 'games/draw-and-guess/fixtures');
+const fixtureDir = join(root, 'games/skribbl/fixtures');
 const jobDir = join(root, 'jobs/P04-draw-and-guess');
 const mediaDir = join(jobDir, 'media');
 const writing = process.env['WRITE_EVIDENCE'] === '1';
@@ -88,7 +88,7 @@ function cssFiles(dir: string): string[] {
 
 const cssSources = await Promise.all(
   [
-    ...cssFiles(join(root, 'games/draw-and-guess/client')),
+    ...cssFiles(join(root, 'games/skribbl/client')),
     join(root, 'packages/game-sdk/src/tv/Stage.module.css'),
   ].map(async (file) => {
     const mod = (await import(pathToFileURL(file).href)) as { default?: Record<string, string> };

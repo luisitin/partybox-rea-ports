@@ -1,8 +1,8 @@
-name: P04 Draw and Guess
+name: P04 Skribbl.io
 on:
   pull_request:
     paths:
-      - 'games/draw-and-guess/**'
+      - 'games/skribbl/**'
       - 'jobs/P04-draw-and-guess/**'
       - '.github/workflows/P04.yml'
 permissions:
@@ -21,4 +21,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm format
-      - run: pnpm vitest run games/draw-and-guess --maxWorkers=1
+      - run: pnpm vitest run games/skribbl --maxWorkers=1

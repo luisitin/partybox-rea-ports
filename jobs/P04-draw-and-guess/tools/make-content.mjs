@@ -14,7 +14,7 @@ for (const [name, text] of Object.entries(decks)) {
     unique.add(word);
   }
   writeFileSync(
-    new URL(`../../../games/draw-and-guess/content/${name}.json`, import.meta.url),
+    new URL(`../../../games/skribbl/content/${name}.json`, import.meta.url),
     JSON.stringify(words, null, 2) + '\n',
   );
 }

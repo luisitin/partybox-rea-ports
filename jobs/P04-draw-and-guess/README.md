@@ -1,10 +1,12 @@
-# P04 Draw and Guess
+# P04 Skribbl.io
 
-Run: `r2-local`. Game: `games/draw-and-guess`. Branch:
+Run: `r2-local`. Upgrade payload: `games/skribbl`. Branch:
 `job/P04-draw-and-guess`.
 
-This port turns a private word choice, phone drawing and speed-weighted guesses
-into a two-to-eight-player PartyBox game. The TV is the live drawing stage;
+This payload adds live guessing to the existing Broken Pencil drawing game.
+Its standalone workshop manifest is Skribbl.io / skribbl per the owner's name
+table; core integration keeps the existing card and telephone mode (UPGRADE.md).
+The TV is the live drawing stage;
 phone-only rooms receive the stage on every phone. It ships 300 original words
 in three difficulties and seeded bots with three strengths.
 
@@ -20,7 +22,7 @@ Check only this game's tests, plus repository static checks:
 ```sh
 pnpm typecheck
 pnpm format
-pnpm vitest run games/draw-and-guess
+pnpm vitest run games/skribbl
 ```
 
 On Windows PowerShell with script execution disabled, use `corepack.cmd` and

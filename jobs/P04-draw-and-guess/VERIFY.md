@@ -169,3 +169,23 @@ zero overflow and closes its one browser in finally. Scoped Prettier follows
 capture output; `node jobs/P04-draw-and-guess/tools/hash-media.mjs` hashes66files
 totaling2,076,820bytes. Server mechanics are unchanged since the246-test run;
 CI will run all250checks including the four new rendered-copy cases.
+
+R22 owner update and SDK sync:
+
+- `git merge --no-edit origin/main` incorporates the owner's official name table and current SDK. The public folder/id/name is now games/skribbl / skribbl / Skribbl.io; historical job paths and branch remain stable.
+- `pnpm.cmd typecheck` passes, exit0, after fixing three new adapter-test fixture types (presence mode, Settings annotation and numeric bot seed).
+- `pnpm.cmd vitest run games/skribbl/server/upgrade.test.ts games/skribbl/client/upgrade.test.tsx --maxWorkers=1 --pool=threads`:26checks pass, exit0, in970ms. Default telephone state/context/hooks and metadata are retained. Inputs cannot cross modes; private views remain private; pause/resume mirrors agree. Nine wrapped live matches at2/4/8seats × seeds1/2/3 equal direct live state/results throughout. No private implementation is imported by these tests.
+- `$env:WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/skribbl/__tests__/evidence.test.tsx games/skribbl/__tests__/choice-reading.test.tsx --maxWorkers=1 --pool=threads`:14checks pass, exit0,1.11s. Vite reports a desktop shutdown timeout after assertions; this warning is recorded and does not substitute for a successful check.
+- `node jobs/P04-draw-and-guess/tools/playcheck.mjs`:24native checks pass, exit0.37packets remain one Undo gesture; projection remains0px and all normal/Safari/keyboard layouts fit.
+- The first renamed capture stalled before saving an image. Its isolated profile was closed, then the script reached finally and exited1. The harness now bounds RPC/open/endpoint fetches and activates its target before waiting for animation frames. `node jobs/P04-draw-and-guess/tools/capture.mjs` then passes all33screens, exit0, with zero overflow and one browser closed in finally. Manual inspection confirms the shorter artist instructions and all three large choices fit.
+
+Historical commands above use the original working folder. Current commands
+use games/skribbl; mutation server source is unchanged by the rename, and its
+20/20assertion logs remain the measured prior campaign rather than edited logs.
+
+The refreshed full run exceeded Vitest's5s default in its independent dense
+geometry check under desktop load (24s); its functional assertions completed.
+The20repeat, nonasserting benchmark was unnecessary in every test run and is
+removed. The same deviation, corner, wire, endpoint, immutability and determinism
+assertions retain a bounded60s deadline. Earlier isolated performance measurements
+remain historical evidence; the focused rerun and full final results follow.

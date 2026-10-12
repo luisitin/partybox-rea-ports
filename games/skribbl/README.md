@@ -1,4 +1,9 @@
-# Draw and Guess
+# Skribbl.io
+
+This public payload upgrades Broken Pencil with an opt-in live guessing mode.
+The workshop manifest follows the owner's official name/id table; core rollout
+uses the existing card and retains telephone mode. See
+`jobs/P04-draw-and-guess/UPGRADE.md` for the original injected-base adapters.
 
 An original PartyBox drawing race inspired by the choose, draw and recognize flow of browser Pictionary games. One artist draws a secret word on a phone; the shared picture grows live while everyone else types guesses. Familiar shapes, questionable doodles and two late letter hints keep the room moving. English only; original content and artwork; no external runtime requests.
 

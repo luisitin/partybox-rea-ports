@@ -29,15 +29,50 @@ const pending = new Map();
 function rpc(ws, method, params = {}) {
   const id = ++nextId;
   return new Promise((resolveCall, reject) => {
-    pending.set(id, { resolve: resolveCall, reject });
+    const deadline = setTimeout(() => {
+      pending.delete(id);
+      reject(new Error(`Browser RPC timed out: ${method}`));
+    }, 15_000);
+    pending.set(id, {
+      resolve: (value) => {
+        clearTimeout(deadline);
+        resolveCall(value);
+      },
+      reject: (error) => {
+        clearTimeout(deadline);
+        reject(error);
+      },
+    });
     ws.send(JSON.stringify({ id, method, params }));
   });
 }
 async function connect(url) {
   const ws = new WebSocket(url);
   await new Promise((resolveOpen, reject) => {
-    ws.addEventListener('open', resolveOpen, { once: true });
-    ws.addEventListener('error', reject, { once: true });
+    const deadline = setTimeout(() => {
+      reject(new Error('Browser WebSocket did not open'));
+      try {
+        ws.close();
+      } catch {
+        /* An opening connection can already have failed. */
+      }
+    }, 15_000);
+    ws.addEventListener(
+      'open',
+      () => {
+        clearTimeout(deadline);
+        resolveOpen();
+      },
+      { once: true },
+    );
+    ws.addEventListener(
+      'error',
+      (error) => {
+        clearTimeout(deadline);
+        reject(error);
+      },
+      { once: true },
+    );
   });
   ws.addEventListener('message', (event) => {
     const message = JSON.parse(event.data);
@@ -87,8 +122,13 @@ try {
   browserSocket = await connect(endpoint);
   const { targetId } = await rpc(browserSocket, 'Target.createTarget', { url: 'about:blank' });
   const base = endpoint.slice(0, endpoint.indexOf('/devtools/'));
-  const targets = await (await fetch(base.replace('ws:', 'http:') + '/json/list')).json();
+  const targets = await (
+    await fetch(base.replace('ws:', 'http:') + '/json/list', {
+      signal: AbortSignal.timeout(15_000),
+    })
+  ).json();
   socket = await connect(targets.find((t) => t.id === targetId).webSocketDebuggerUrl);
+  await rpc(browserSocket, 'Target.activateTarget', { targetId });
   await rpc(socket, 'Page.enable');
   const reports = [];
   for (const name of readdirSync(dir)
