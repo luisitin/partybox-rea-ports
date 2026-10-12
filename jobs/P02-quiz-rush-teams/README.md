@@ -23,6 +23,6 @@ Compile custom text using `pnpm exec tsx jobs/P02-quiz-rush-teams/validate-pack.
 - `pnpm vitest run games/kahoot --maxWorkers=1 --pool=threads`
 - `pnpm exec tsx jobs/P02-quiz-rush-teams/validate-pack.ts my-pack.txt`
 
-Current runtime CI passed 502 tests, required simulations and properties. Final SSR/capture passed 229 surfaces with all geometry/native-disclosure checks, closed PID77304 and media below 10 MB; all unique frames have agent review. Semantic mutations killed 24/24 with zero invalid, green 141-check baselines and restored hashes. One zero-gain review is recorded; final-head CI and two remaining reviews keep PR18 draft.
+Current runtime CI passed 502 tests, required simulations and properties. Final SSR/capture passed 229 surfaces with all geometry/native-disclosure checks, closed PID77304 and media below 10 MB; all unique frames have agent review. Semantic mutations killed 24/24 with zero invalid, green 141-check baselines and restored hashes. Three consecutive zero-gain reviews are recorded after nine material rounds; latest committed-head CI must succeed before PR18 leaves draft.
 
 Specification: [games/kahoot/README.md](../../games/kahoot/README.md). RESEARCH.md/SOURCES.md distinguish original mechanics and allowed PartyBox adaptations; ASSUMPTIONS.md records access limits. VERIFY.md contains executed results; NEXT.md is the handoff; LOOP.md records measured rounds. Current CI reports and captured inputs are bound by evidence-source.json; historical checks remain labeled in LOOP.md.

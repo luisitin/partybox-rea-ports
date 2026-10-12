@@ -1,0 +1,231 @@
+{
+  "round": 12,
+  "reviewer": "p02_content",
+  "independentConvergenceReview": 3,
+  "method": "Read-only source/regression review and mental eight-stranger play-through; no tests, browser, git or runtime edits.",
+  "context": "Parent reports source restoration and runtime CI green; this reviewer did not execute or independently rerun CI.",
+  "concreteMaterialDefects": [],
+  "requestedScenarios": [
+    {
+      "scenario": "Eight strangers on mixed devices",
+      "result": "Near-TV players receive shape pads and own-team discussion; stage/remote players receive prompt/options plus their local clock; late or permanently departed players receive a read-only public stage. Fixed teams are seeded and balanced at init."
+    },
+    {
+      "scenario": "Early lock-in and transport retry",
+      "result": "First canonical stamped answer is immutable. The player can resend the same pending choice until confirmation; everybody remains in the shared phase until its reading hold or deadline. Opposite choices leave TV/non-owner/spectator views equal before reveal."
+    },
+    {
+      "scenario": "Pause/resume",
+      "result": "SDK pause rejects game inputs/timers. Resume shifts the fixed speed end and reading end while preserving the answer stamp. Frozen group reveal cuts shift uniformly; presence cannot recalculate them."
+    },
+    {
+      "scenario": "Temporary disconnect/reconnect",
+      "result": "Accepted picks remain in aggregate progress/scoring. An unanswered absent seat leaves the denominator; returning eligible seats restore the original pending answer window when necessary."
+    },
+    {
+      "scenario": "Permanent leave and return",
+      "result": "Fixed membership and banked team scoring remain; accepted choices cannot be erased. A permanent return stays nonparticipating, sees the current public stage and cannot revise or submit another choice."
+    },
+    {
+      "scenario": "VIP loss / automatic progression",
+      "result": "Every unpaused group phase has a finite deadline. Reveal and occupied podium tiers traverse automatically without a VIP Next tap. Host VIP reassignment/authentication, especially loss during a paused phase, is a shell integration boundary not reproduced in this source-only review."
+    },
+    {
+      "scenario": "Seeded plurality tie",
+      "result": "SDK majorityPick selects only among tied aggregate choices with state RNG, without the answer key. Closed tie copy explicitly describes random selection. Private vote and shared correctness remain distinct."
+    },
+    {
+      "scenario": "Catch-up",
+      "result": "Correctness, speed and capped streaks can close a reachable gap. There is no handicap; an insurmountable lead cannot be caught. README says this explicitly rather than promising a universal comeback."
+    },
+    {
+      "scenario": "Final Room podium",
+      "result": "Final reveal publishes shared correctness/own vote but omits final team rows, score chips, rank and numeric shared gain. The single occupied first-place tier then unveils the room score; done supplies the complete shared board and no individual awards."
+    }
+  ],
+  "remainingWeaknesses": [
+    {
+      "rank": 1,
+      "classification": "evidence limitation",
+      "weakness": "No observed live eight-stranger session establishes comprehension, delivered audio, network recovery or shell VIP transfer. Reducer/SSR evidence cannot replace that experience.",
+      "concreteDefect": false,
+      "necessarySourceChange": false
+    },
+    {
+      "rank": 2,
+      "classification": "evidence limitation / documented design tradeoff",
+      "weakness": "An uncatchable team lead can reduce late-game stakes. The README truthfully retains discussion/questions for everyone, but continued enjoyment cannot be inferred from correct scoring. Adding rubber-band points would change the documented rules.",
+      "concreteDefect": false,
+      "necessarySourceChange": false
+    },
+    {
+      "rank": 3,
+      "classification": "cosmetic / onboarding clarity",
+      "weakness": "Presence-dependent averaging takes a first-timer a second reading: an unanswered absent seat leaves the mean, while an accepted departed pick stays. Intro and beside-TV receipt explain averaging; compact staged receipts prioritize personal/shared gains rather than repeating the full eligibility sentence.",
+      "concreteDefect": false,
+      "necessarySourceChange": false
+    },
+    {
+      "rank": 4,
+      "classification": "cosmetic / authored-content tradeoff",
+      "weakness": "Pathological legal text remains dense, particularly crossed-out unbroken alternatives, and the required reading floor makes wordy custom rounds slower. This is not lost text or an incorrect timer; concise authored packs are the practical mitigation.",
+      "concreteDefect": false,
+      "necessarySourceChange": false
+    },
+    {
+      "rank": 5,
+      "classification": "cosmetic",
+      "weakness": "Room podium still draws empty second/third plinths beside its one shared first-place entry. No nonexistent competitor is named, no future identity is leaked, and the cooperative result is truthful.",
+      "concreteDefect": false,
+      "necessarySourceChange": false
+    }
+  ],
+  "regressionEvidenceRead": [
+    "group-server.test.ts: fixed teams, stamps, pause, denominator/retained answers, room plurality/mean/streak, privacy and result ranks",
+    "group-retained-progress.test.tsx: both group modes across TV/staged/remote/spectator, presence lifecycle, real reveal scoring, next-question clearing and unchanged individual counters",
+    "group-reveal-sequence.test.tsx: boundaries, mixed roles, pause/resume, early all-answered privacy, VIP Next and final automatic podium",
+    "group-reveal-cut-stability.test.ts: frozen scored cuts under leave/reconnect and pause",
+    "group-final-room-privacy.test.tsx: final shared gain/total/rank omission and truthful nonfinal fields",
+    "group-room-tie.test.tsx and group-room-tie-pacing.test.ts: real seeded ties, one public cue per surface and translated reading budget",
+    "group-pacing.test.ts: final usable VIP window and timer-only completion",
+    "group-properties.test.ts: mixed canSeeTv roles, frozen deterministic lifecycle replay, secret omissions and bounded finite terminal traversal",
+    "group-screens.test.tsx: discussion identity, read-only observers, truthful personal/shared receipts and podium tiers",
+    "vip.test.ts and next-button.test.ts: inherited SDK pause/skip/end and Next behavior"
+  ],
+  "conclusion": "No concrete material defect or necessary runtime change identified. The documented party behavior is coherent under the requested mental trace. Remaining gains are presentation refinements or evidence expansion; this is not a claim of live-human or original-audio convergence.",
+  "reviewedAtUtc": "2026-10-12T17:26:24.0680538Z",
+  "sourceHashes": [
+    {
+      "path": "games/kahoot/README.md",
+      "sha256": "1F48017A8F699F2306EAABF04C41178368408A669CCDDCE7A2694CE2D0ED6F45"
+    },
+    {
+      "path": "games/kahoot/server/index.ts",
+      "sha256": "2229DEC5E51F95B8C400A604FFD7406BC8CA332B516B17DA7012D30E48FD3A61"
+    },
+    {
+      "path": "games/kahoot/server/views.ts",
+      "sha256": "1BAA475F9454040B5FF160D738B5541456E62BE6051B42B9602658EFC0F78FA5"
+    },
+    {
+      "path": "games/kahoot/server/pacing.ts",
+      "sha256": "182CDBF202437565D9572410FBC1AF57DA432CDB8753697FEEA248CF13062FFE"
+    },
+    {
+      "path": "games/kahoot/server/types.ts",
+      "sha256": "5916F651DD14281311892A3FC0185BB240B3E02F1A7F0F5DE3119E95CC56AA81"
+    },
+    {
+      "path": "games/kahoot/server/teams.ts",
+      "sha256": "6A3813DE1DE00345BB35651782498BA1CE70C8680B49D46B5CD01A8424CC739A"
+    },
+    {
+      "path": "games/kahoot/server/scoring.ts",
+      "sha256": "980F5F449AE204A5C850AE17AEB22D023AA0B106FEF639262C243F2C06AC5E10"
+    },
+    {
+      "path": "games/kahoot/server/standings.ts",
+      "sha256": "7BF4A114484E9E233FFA3A5964B559FA55939991C34865C4A557E4F4756F6589"
+    },
+    {
+      "path": "games/kahoot/server/phases/question.ts",
+      "sha256": "2E568660F95BA746CC58CBFBDEDFA8BF0B5F0DA67E9A3DFE59DA34C23F4AB4F1"
+    },
+    {
+      "path": "games/kahoot/server/phases/talk.ts",
+      "sha256": "41E12300575417A8F1CFC8612A2432FDEFA384ADB5137E79D60406FA2F4FD1C2"
+    },
+    {
+      "path": "games/kahoot/server/phases/reveal.ts",
+      "sha256": "4398E1498A4A934D6DBA7A2E63B705552EA159E15FB08E434E0864FCCDD13A1A"
+    },
+    {
+      "path": "games/kahoot/server/phases/podium.ts",
+      "sha256": "6F9B9B9BC7FF1530F18EA628F1335342B266F0ADAEE40D95E7B2F756DC16A1E8"
+    },
+    {
+      "path": "games/kahoot/client/ClassicController.tsx",
+      "sha256": "5E96E0FA6DD8E4785B1D1B627682BFC14CB84526DA4248E1FDE1309876C40F42"
+    },
+    {
+      "path": "games/kahoot/client/ClassicParts.tsx",
+      "sha256": "ABE405D8EF9919CD873DB8D0C414A7C1F8C9B9147EC1C6D5478416C7C6635837"
+    },
+    {
+      "path": "games/kahoot/client/GroupTalk.tsx",
+      "sha256": "76623C2A9694BB6E6A685B95BC9F8213243A5BE6353625046584D7BD146C349F"
+    },
+    {
+      "path": "games/kahoot/client/GroupParts.tsx",
+      "sha256": "9EE81BCADDFEB2BF0F2F9C06A431AC2750759A18C17BF1BDF51FBD1152F13238"
+    },
+    {
+      "path": "games/kahoot/client/GroupStageVerdict.tsx",
+      "sha256": "059115E991A96F11E35C95F2EF9BE53660166580C9C1D48C4AA67B97D50D1F0B"
+    },
+    {
+      "path": "games/kahoot/client/GroupIntroRules.tsx",
+      "sha256": "52C695EFE884947DD047ED5315EC565EC0204D317BC616AE08FD3392B2954061"
+    },
+    {
+      "path": "packages/game-sdk/src/reduce.ts",
+      "sha256": "A1E78D13A33C17546F0F3EA806B0FBB1AA72F46834E8689C0B67BF0C2D9AAA57"
+    },
+    {
+      "path": "packages/game-sdk/src/timer.ts",
+      "sha256": "49CB77302150267846673F417595C75C2B59373D0AEA057907347195D191FA6A"
+    },
+    {
+      "path": "packages/game-sdk/src/turns.ts",
+      "sha256": "49C2F738EC1508FAB2E34F95A4151D52DB776B0C4E1F5C0B86BBC810EDCF32CF"
+    },
+    {
+      "path": "games/kahoot/__tests__/group-retained-progress.test.tsx",
+      "sha256": "E7FFEDCCE3BAFA8DA8B78617500D9CD15DF781DED40E979FAA66B3FD17F1388F"
+    },
+    {
+      "path": "games/kahoot/__tests__/group-reveal-cut-stability.test.ts",
+      "sha256": "C6C47D3C3AC323813C432522489B46BBA12D36A18C32ABF602D35EFD5E66D992"
+    },
+    {
+      "path": "games/kahoot/__tests__/group-reveal-sequence.test.tsx",
+      "sha256": "171DF2785E95C92AE42257CE965B4FB3D742401CEDB1E615B7C56560A40A7E80"
+    },
+    {
+      "path": "games/kahoot/__tests__/group-final-room-privacy.test.tsx",
+      "sha256": "7437DB31587A37FF7DDF65988341B4472A571358B377736CB7AC59047B9ADB23"
+    },
+    {
+      "path": "games/kahoot/__tests__/group-room-tie.test.tsx",
+      "sha256": "1C9E0AFDE65D735E9F4174BD6F0536700833DD4604A51ECB688A004F2995884E"
+    },
+    {
+      "path": "games/kahoot/__tests__/group-room-tie-pacing.test.ts",
+      "sha256": "BD2B61E6F29DC1D6B30607747085F761218CB54BB27F720B193176E6976ADD7A"
+    },
+    {
+      "path": "games/kahoot/__tests__/group-pacing.test.ts",
+      "sha256": "E6333F17A327B92ACC40AB6AC7CCD2C0514B372FA68F01EB2A8E4C9CFA2A2866"
+    },
+    {
+      "path": "games/kahoot/__tests__/group-server.test.ts",
+      "sha256": "980BE085F5DDDD4754693010253A1CC2A507BE696B6575F222FFB69C760AEB70"
+    },
+    {
+      "path": "games/kahoot/__tests__/group-properties.test.ts",
+      "sha256": "E38097204326F16D064CE370A6DA54F28956BB4E8BBE2936FFC79E3AF87E7F5C"
+    },
+    {
+      "path": "games/kahoot/__tests__/group-screens.test.tsx",
+      "sha256": "F78A9760B757B3276527A7F43A4C4F938CFC25F7B365F35F07F835C012744592"
+    },
+    {
+      "path": "games/kahoot/__tests__/vip.test.ts",
+      "sha256": "89EE6210B7D0CA6D88DCE94502036B58CF0FD00BAE86C76408D98A353CE1CEC4"
+    },
+    {
+      "path": "games/kahoot/__tests__/next-button.test.ts",
+      "sha256": "6205A51BAF5CBE29DE66DEDE943BCE1204E8329ADD0052FA7CD431FE33587A02"
+    }
+  ]
+}
