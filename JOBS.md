@@ -6,6 +6,8 @@ Every job also delivers: `games/<id>/README.md` as the spec (phases table for TV
 
 Manifest `category`: `arcade` for the P-jobs, `party` for the Q-jobs; `tags` from the reference manifest; English only.
 
+**Fidelity (owner 10-12, binding, see RULES.md):** near-identical to the original game (camera, models, HUD, names, feel); only the PartyBox palette and the party plumbing differ. Ship games/<id>/fidelity/ (original vs ours shots, GAPS.md, side-by-side.png).
+
 ## Names (owner 10-11: official names, personal use; overrides the working titles below)
 
 Use these as the manifest `name` and the game `id`. A PR already open under a working title renames its folder, id and strings on its next push. Before building, check the PartyBox monorepo game list for the same game (Quiz Rush = Lightning Round and Draw and Guess = Broken Pencil turned out to be duplicates): an overlap becomes an upgrade of the existing game, not a new one.
