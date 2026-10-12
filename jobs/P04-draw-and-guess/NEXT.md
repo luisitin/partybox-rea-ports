@@ -19,10 +19,24 @@ bots331/345 become0/0. Explicit choices, other decks, hint RNG and8s timing stay
 intact.35focused choice/game checks and typecheck pass; refreshed20/20mutants
 are caught and restored baseline passes. No fixture or screen change is needed.
 
-CI38198077870 passes47s on R23. PR remains draft until three consecutive no-gain
-KEEP GOING rounds pass. R24 is the first; no-gain count:1/3. Log two further reviews' five ranked remaining weaknesses,
-push and refresh the claim. Then refresh PR body from this job README, mark ready
-on green CI and mark CLAIMS DONE. Current candidates: extended disconnect
-forfeits, exact synonym policy, general bot vision, extra tools and cosmetic labels.
+CI38198077870 passes47s on R23; the R24 documentation CI is also green.
+R25 found two real pause defects, so the no-gain count resets to0/3. Unsent ink
+and an active dirty tail now survive pause for resume; a guess caught before its
+receipt returns for manual retry.32focused client checks and typecheck pass
+locally, exit0; Vitest records a Vite shutdown warning. Browser verification is
+pending. Its first retry failed an old endpoint check because it sampled before
+queued packets drained; the bounded observation now waits for that endpoint.
+The failed browser reached finally and exited1; no active profile remains.
+
+Independent ink review also found that a queued Undo could erase an older
+authoritative stroke after its intended new gesture was rejected at pause.
+Target-aware Undo and its six regressions are complete;23focused ink checks
+pass, exit0. R26 also preserves private drafts through the SDK scoped store;
+24focused guess/refresh checks pass, exit0. Final local typecheck passes.
+The enhanced44-check native harness and full client checks are running.
+Regenerate format/hash evidence after browser completion and run scoped CI.
+Server sources are unchanged since the fresh20/20R23mutation campaign.
+Keep the PR draft until all checks and three genuine no-gain rounds
+pass; refresh PR body from this job README before ready/DONE.
 
 Original interactive play was unavailable through CUA; see RESEARCH.md.

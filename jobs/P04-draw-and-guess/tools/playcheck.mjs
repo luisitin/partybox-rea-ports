@@ -1,4 +1,7 @@
 import { canvasProjection } from './pointer-check.mjs';
+import { drawGesture, pausedGuessChecks, pausedInkChecks } from './pause-check.mjs';
+import { createCDP } from './cdp.mjs';
+import { draftChecks } from './draft-check.mjs';
 // One local headless browser for real phone interaction checks, closed in finally.
 import { spawn, spawnSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
@@ -48,35 +51,7 @@ const processHandle = spawn(
 );
 let socket;
 let browserSocket;
-let nextId = 0;
-const pending = new Map();
-function rpc(ws, method, params = {}) {
-  const id = ++nextId;
-  return new Promise((resolveCall, reject) => {
-    pending.set(id, { resolve: resolveCall, reject });
-    ws.send(JSON.stringify({ id, method, params }));
-  });
-}
-async function connect(url) {
-  const ws = new WebSocket(url);
-  await new Promise((resolveOpen, reject) => {
-    ws.addEventListener('open', resolveOpen, { once: true });
-    ws.addEventListener('error', reject, { once: true });
-  });
-  ws.addEventListener('message', (event) => {
-    const message = JSON.parse(event.data);
-    if (!message.id) return;
-    const item = pending.get(message.id);
-    pending.delete(message.id);
-    if (message.error) item?.reject(new Error(message.error.message));
-    else item?.resolve(message.result);
-  });
-  ws.addEventListener('close', () => {
-    for (const item of pending.values()) item.reject(new Error('Browser connection closed'));
-    pending.clear();
-  });
-  return ws;
-}
+const { rpc, connect } = createCDP();
 try {
   const endpoint = await new Promise((resolveEndpoint, reject) => {
     // Windows launchers may hand off to a child that does not inherit stderr.
@@ -111,7 +86,11 @@ try {
   browserSocket = await connect(endpoint);
   const { targetId } = await rpc(browserSocket, 'Target.createTarget', { url: 'about:blank' });
   const base = endpoint.slice(0, endpoint.indexOf('/devtools/'));
-  const targets = await (await fetch(base.replace('ws:', 'http:') + '/json/list')).json();
+  const targets = await (
+    await fetch(base.replace('ws:', 'http:') + '/json/list', {
+      signal: AbortSignal.timeout(15000),
+    })
+  ).json();
   socket = await connect(targets.find((t) => t.id === targetId).webSocketDebuggerUrl);
   await rpc(socket, 'Page.enable');
   await rpc(socket, 'Emulation.setDeviceMetricsOverride', {
@@ -123,6 +102,7 @@ try {
   await rpc(socket, 'Page.navigate', {
     url: server.resolvedUrls.local[0] + 'jobs/P04-draw-and-guess/tools/live.html',
   });
+  await rpc(browserSocket, 'Target.activateTarget', { targetId });
   const evaluate = async (expression) => {
     const result = await rpc(socket, 'Runtime.evaluate', {
       expression,
@@ -146,39 +126,7 @@ try {
     );
     await settle();
   };
-  const draw = async () => {
-    const rect = await evaluate(
-      'JSON.stringify(Object.fromEntries(["x","y","width","height"].map(k => [k,document.querySelector("canvas").getBoundingClientRect()[k]])))',
-    );
-    const r = JSON.parse(rect),
-      x = r.x + 12,
-      y = r.y + r.height / 2;
-    await rpc(socket, 'Input.dispatchMouseEvent', {
-      type: 'mousePressed',
-      x,
-      y,
-      button: 'left',
-      buttons: 1,
-      clickCount: 1,
-    });
-    for (let i = 1; i <= 100; i++)
-      await rpc(socket, 'Input.dispatchMouseEvent', {
-        type: 'mouseMoved',
-        x: x + (i % 60) * 4,
-        y: y + (i % 6) * 3,
-        button: 'none',
-        buttons: 1,
-      });
-    await rpc(socket, 'Input.dispatchMouseEvent', {
-      type: 'mouseReleased',
-      x: x + 40,
-      y,
-      button: 'left',
-      buttons: 0,
-      clickCount: 1,
-    });
-    await settle();
-  };
+  const draw = () => drawGesture({ rpc, socket, evaluate, settle });
   const check = (condition, message) => {
     if (!condition) throw new Error(message);
   };
@@ -232,6 +180,8 @@ try {
     'document.querySelector("canvas").getContext("2d").getImageData(0,0,1000,600).data.some((v,i)=>i%4===3&&v>0)',
   );
   check(pixels, 'Acknowledged canvas must paint actual ink');
+  await evaluate('p04.hold(false)');
+  const pausedInk = await pausedInkChecks({ rpc, socket, evaluate, settle, button, check });
   await evaluate('p04.hold(false); p04.guesser()');
   await settle();
   const typeGuess = async (text) => {
@@ -242,6 +192,25 @@ try {
     await settle();
   };
   const currentDraft = () => evaluate('document.querySelector("input").value');
+  const pausedGuess = await pausedGuessChecks({
+    rpc,
+    socket,
+    evaluate,
+    settle,
+    button,
+    check,
+    typeGuess,
+    currentDraft,
+  });
+  const refreshedDraft = await draftChecks({
+    evaluate,
+    settle,
+    button,
+    check,
+    typeGuess,
+    currentDraft,
+  });
+  await evaluate('p04.advance(1000)');
   await typeGuess('definitely wrong');
   await button('Guess');
   check((await currentDraft()) === '', 'An accepted guess must clear its draft');
@@ -341,6 +310,26 @@ try {
       'second Clear confirms deletion',
       'delayed Clear/Undo acknowledgements',
       'real canvas paint',
+      'known-unsent ink preview survives pause',
+      'known-unsent dot resumes exactly once',
+      'paused ink preserves FIFO and 80ms spacing',
+      'cancelled Undo preserves older dot preview',
+      'cancelled Undo never sends against older dot',
+      'active dirty tail preview survives pause',
+      'resumed active tail preserves endpoints',
+      'one Undo for resumed gesture',
+      'unmounted drawing queue never replays',
+      'pause restores guess without a receipt',
+      'paused guess stops awaiting feedback',
+      'paused guess fits keyboard viewport',
+      'paused draft survives phone remount',
+      'resume never automatically resends a guess',
+      'manual retry after pause accepted and cleared',
+      'unsent guess survives phone remount',
+      'draft restore never submits automatically',
+      'accepted guess stays cleared after remount',
+      'hydrated receipt preserves newer typing',
+      'remount never duplicates in-flight submission',
       'accepted guess clears draft',
       'refused guess retained',
       'same-text retry receipt',
@@ -362,6 +351,9 @@ try {
     solved,
     normalArtist,
     compactArtist,
+    pausedInk,
+    pausedGuess,
+    refreshedDraft,
     refusedDrafts: { firstRefusal, repeatedRefusal, newerDraft },
   };
   writeFileSync(

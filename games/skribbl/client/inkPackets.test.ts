@@ -84,7 +84,7 @@ describe('drawing transport pacing', () => {
     expect(queue.operations).toHaveLength(4);
   });
 
-  it('drops disabled/unmounted work without resetting the transport gate', () => {
+  it('drops turn/unmounted work without resetting the transport gate', () => {
     const sent = takeInkPacket(
       enqueueInkPacket(emptyInkPackets(), { revision: 1, input: { type: 'undo' } }),
       1_000,

@@ -75,6 +75,10 @@ A correct guess earns `300 + floor(700 × remaining / duration)`, clamped to 300
 - Stale timers, strangers, wrong-phase inputs and drawing by guessers do nothing.
 - Pause shifts the drawing clock and hint schedule; paused time cannot reduce
   guess points. All time comes from events and all randomness from state.
+  Known-unsent drawing and dirty finger tails resume in order; a queued Undo
+  retains its intended gesture. Already-sent ink reconciles to the server's
+  pause cutoff without replaying ambiguous edits. A guess caught by pause
+  returns for manual retry; later receipts cannot overwrite newer typing.
 - Words avoid repeats while the selected deck has enough unused choices.
 
 ## Settings

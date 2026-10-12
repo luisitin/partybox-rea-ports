@@ -54,3 +54,13 @@ The research proposal mentioned an eraser. The shipped small toolset uses comple
   Choosing deliberately still selects exactly that button; single-level decks
   retain their first-option fallback. This bounded policy change reduces
   newcomer frustration without extending the choice clock or consuming RNG.
+- Server arrival order defines the VIP pause cutoff, as in the SDK contract.
+  Already-sent ambiguous ink is reconciled to authoritative state, never blindly
+  replayed. Known-unsent ink and dirty active tails retain their FIFO for resume;
+  targeted local Undo must not erase a different gesture after reconciliation.
+  Resume views carry current authoritative ink before retained work drains.
+- A guess caught by pause without a receipt returns to its field for manual
+  retry. Late receipts remain correlated by request/revision/edit; resume does
+  not submit automatically. The native harness gates actual SDK interval
+  callbacks only while delivering deterministic pointer batches, then releases
+  them. Production scheduling and reducer clocks are unchanged.

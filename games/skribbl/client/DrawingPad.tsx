@@ -3,14 +3,16 @@ import type { JSX, PointerEvent } from 'react';
 import { useServerNow, useT, useThemeColor } from '@partybox/game-sdk/ui';
 import type { Input, Point, Stroke } from '../server/types';
 import { canvasContentRect, drawingPoint, finishDrawingPoints } from './drawingGeometry';
-import { gestureCount, nextGesture, previewInk } from './ink';
+import { gestureCount, nextGesture, pendingInkOperation, previewInk } from './ink';
 import type { InkOperation, PendingInk } from './ink';
 import {
+  activeInkTail,
   boundInkPoints,
   clearInkPackets,
   emptyInkPackets,
   enqueueInkPacket,
   inkPacketReady,
+  reconcileInkPackets,
   takeInkPacket,
 } from './inkPackets';
 import { COLORS, WIDTHS } from './palette';
@@ -67,6 +69,7 @@ export function DrawingPad({
     [ink, rose, gold, mint, sky, gray],
   );
   const previousRevision = useRef(inkRevision);
+  const wasPaused = useRef(disabled);
   const sentRevision = useRef(inkRevision);
   const serial = useRef(0);
   const pending = useRef<PendingInk[]>([]);
@@ -90,37 +93,36 @@ export function DrawingPad({
   };
 
   useEffect(() => {
-    // Edits have revisions too: a delayed Clear acknowledgement cannot consume a later stroke.
-    if (inkRevision < previousRevision.current)
-      outgoing.current = clearInkPackets(outgoing.current);
-    pending.current =
-      inkRevision < previousRevision.current
-        ? []
-        : pending.current.filter((operation) => operation.revision > inkRevision);
+    const drag = active.current;
+    const snapshot = reconcileInkPackets({
+      queue: outgoing.current,
+      pending: pending.current,
+      inkRevision,
+      previousRevision: previousRevision.current,
+      paused: disabled,
+      wasPaused: wasPaused.current,
+      tail: activeInkTail(drag),
+      strokes,
+    });
+    outgoing.current = snapshot.queue;
+    pending.current = snapshot.pending;
+    sentRevision.current = snapshot.nextRevision;
+    if (disabled || inkRevision < previousRevision.current) {
+      setClearArmed(false);
+      const id = drag.id;
+      drag.id = -1;
+      drag.points = [];
+      drag.dirty = false;
+      if (canvas.current?.hasPointerCapture(id)) canvas.current.releasePointerCapture(id);
+    }
     previousRevision.current = inkRevision;
-    sentRevision.current = Math.max(inkRevision, pending.current.at(-1)?.revision ?? inkRevision);
+    wasPaused.current = disabled;
     const picture = previewInk(strokes, pending.current);
     setLocalCount(gestureCount(picture));
     setLocalFragments(picture.length);
     repaint();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strokes, inkRevision, colors]);
-  useEffect(() => {
-    if (!disabled) return;
-    setClearArmed(false);
-    const id = active.current.id;
-    active.current.id = -1;
-    active.current.points = [];
-    active.current.dirty = false;
-    if (canvas.current?.hasPointerCapture(id)) canvas.current.releasePointerCapture(id);
-    pending.current = [];
-    outgoing.current = clearInkPackets(outgoing.current);
-    sentRevision.current = inkRevision;
-    setLocalCount(gestureCount(strokes));
-    setLocalFragments(strokes.length);
-    repaint();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [disabled, inkRevision]);
+  }, [strokes, inkRevision, colors, disabled]);
   useEffect(
     () => () => {
       outgoing.current = clearInkPackets(outgoing.current);
@@ -134,7 +136,11 @@ export function DrawingPad({
 
   const queue = (input: InkOperation): void => {
     sentRevision.current = Math.max(sentRevision.current, inkRevision) + 1;
-    const operation = { revision: sentRevision.current, input };
+    const operation = pendingInkOperation(
+      sentRevision.current,
+      input,
+      previewInk(strokes, pending.current),
+    );
     pending.current.push(operation);
     outgoing.current = enqueueInkPacket(outgoing.current, operation);
     const picture = previewInk(strokes, pending.current);
@@ -144,13 +150,8 @@ export function DrawingPad({
 
   const flush = (): void => {
     const drag = active.current;
-    if (drag.id === -1 || !drag.dirty || !drag.points.length || disabled) return;
-    const stroke: Stroke = {
-      color: drag.color,
-      width: drag.width,
-      gesture: drag.gesture,
-      points: boundInkPoints(drag.points),
-    };
+    const stroke = activeInkTail(drag);
+    if (!stroke || disabled) return;
     queue({ type: 'stroke', stroke });
     drag.points = drag.points.slice(-1);
     drag.dirty = false;
@@ -169,19 +170,17 @@ export function DrawingPad({
   }, [tick, disabled]);
   const finish = (event: PointerEvent<HTMLCanvasElement>): void => {
     const drag = active.current;
-    if (drag.id !== event.pointerId) return;
-    if (!disabled) {
-      const points = finishDrawingPoints(
-        drag.points,
-        event.type,
-        event.clientX,
-        event.clientY,
-        paperBounds(),
-      );
-      if (points !== drag.points) {
-        drag.points = boundInkPoints(points);
-        drag.dirty = true;
-      }
+    if (drag.id !== event.pointerId || disabled) return;
+    const points = finishDrawingPoints(
+      drag.points,
+      event.type,
+      event.clientX,
+      event.clientY,
+      paperBounds(),
+    );
+    if (points !== drag.points) {
+      drag.points = boundInkPoints(points);
+      drag.dirty = true;
     }
     flush();
     active.current.id = -1;

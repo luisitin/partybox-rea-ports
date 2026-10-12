@@ -1,10 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties, FormEvent, JSX } from 'react';
-import { buzz, usePhoneOnly, useServerNow, useSound, useT } from '@partybox/game-sdk/ui';
+import { buzz, useDraft, usePhoneOnly, useServerNow, useSound, useT } from '@partybox/game-sdk/ui';
 import type { GameControllerProps } from '@partybox/game-sdk/ui';
 import type { DrawControllerView, Input } from '../server/types';
 import { DrawingPad } from './DrawingPad';
-import { acknowledgeGuess, editGuess, nextGuessRequest, submitGuess } from './guessDraft';
+import {
+  acknowledgeGuess,
+  editGuess,
+  emptyGuessDraft,
+  nextGuessRequest,
+  pauseGuess,
+  restoreGuessDraft,
+  saveGuessDraft,
+  submitGuess,
+} from './guessDraft';
 import type { GuessDraft } from './guessDraft';
 import { Pencil, Picture } from './Picture';
 import { leaderNames, Roster } from './Roster';
@@ -19,11 +28,48 @@ export function Controller({
   const phoneOnly = usePhoneOnly();
   const play = useSound();
   const now = useServerNow(250, view.paused, view.clockHeldAt);
-  const [draft, setDraft] = useState<GuessDraft>({ turn: -1, text: '', edit: 0 });
+  const phase = view.phaseId;
+  const player = view.me.role === 'player';
+  const guessing = player && !view.isDrawer && phase === 'draw' && !view.solved;
+  const slotKey = `guess:${view.me.id}:${view.turn}`;
+  const slot = useDraft(slotKey);
+  const loadedSlot = useRef({ slot, slotKey });
+  const draftReady = loadedSlot.current.slot === slot && loadedSlot.current.slotKey === slotKey;
+  const [draft, setDraft] = useState<GuessDraft>(() =>
+    guessing
+      ? restoreGuessDraft(slot.read(), view.turn, view.guessReceipt)
+      : emptyGuessDraft(view.turn),
+  );
   const requestSerial = useRef(0);
   useEffect(() => {
+    if (loadedSlot.current.slot === slot && loadedSlot.current.slotKey === slotKey) return;
+    loadedSlot.current.slot.clear();
+    loadedSlot.current = { slot, slotKey };
+    setDraft(
+      guessing
+        ? restoreGuessDraft(slot.read(), view.turn, view.guessReceipt)
+        : emptyGuessDraft(view.turn),
+    );
+    // The current pushed receipt wins on a new slot; ordinary receipt changes use the next effect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slot, slotKey]);
+  useEffect(() => {
     setDraft((current) => acknowledgeGuess(current, view.turn, view.guessReceipt));
-  }, [view.turn, view.guessReceipt]);
+  }, [slot, view.turn, view.guessReceipt]);
+  useEffect(() => {
+    // Process a matching receipt first; only unresolved submissions need pause recovery.
+    if (view.paused) setDraft((current) => pauseGuess(current, view.turn));
+  }, [view.paused, view.turn]);
+  useEffect(() => {
+    if (!guessing) {
+      slot.clear();
+      setDraft((current) =>
+        current.text === '' && current.pending === undefined && current.turn === view.turn
+          ? current
+          : emptyGuessDraft(view.turn),
+      );
+    } else if (draftReady && draft.turn === view.turn) slot.write(saveGuessDraft(draft));
+  }, [slot, guessing, draftReady, draft, view.turn]);
   const [visibleHeight, setVisibleHeight] = useState<number>();
   useEffect(() => {
     // Mobile keyboards can shrink the visual viewport without shrinking 100dvh (notably Safari).
@@ -43,8 +89,6 @@ export function Controller({
       : {
           maxHeight: `calc(${visibleHeight}px - var(--pb-space-8) - var(--pb-space-6) - var(--pb-space-1))`,
         };
-  const phase = view.phaseId;
-  const player = view.me.role === 'player';
   const celebrated = useRef('');
   useEffect(() => {
     const key = `${view.turn}:${view.me.id}`;
@@ -62,9 +106,8 @@ export function Controller({
   }, [view.turn, view.me.id, view.isDrawer, view.solved, view.myPoints, player, play]);
   const seconds = Math.max(0, Math.ceil((view.endsAt - now) / 1000));
   const stage = phoneOnly || view.phoneStage || !player;
-  const text = draft.turn === view.turn ? draft.text : '';
+  const text = draftReady && draft.turn === view.turn ? draft.text : '';
   const leaders = leaderNames(view, view.players);
-  const guessing = player && !view.isDrawer && phase === 'draw' && !view.solved;
   const title =
     phase === 'choose'
       ? view.isDrawer && player
@@ -82,15 +125,18 @@ export function Controller({
   const submit = (event: FormEvent): void => {
     event.preventDefault();
     const value = text.trim();
-    if (!value || !view.canGuess || view.paused) return;
+    if (!value || !view.canGuess || view.paused || !draftReady) return;
+    // A restored in-flight ID must not be reused by its manual retry after refresh.
+    if (!requestSerial.current && draft.pending) requestSerial.current = draft.pending.request;
     requestSerial.current = nextGuessRequest(requestSerial.current, view.guessReceipt);
     const request = requestSerial.current;
-    setDraft((current) =>
-      submitGuess(current, view.turn, request, value, view.guessReceipt.revision),
-    );
+    const next = submitGuess(draft, view.turn, request, value, view.guessReceipt.revision);
+    slot.write(saveGuessDraft(next));
+    setDraft(next);
     send({ type: 'guess', text: value, request });
   };
-  const awaiting = draft.turn === view.turn && draft.pending !== undefined;
+  const pausedDraft = draft.turn === view.turn && draft.pending?.paused === true;
+  const awaiting = draft.turn === view.turn && draft.pending !== undefined && !pausedDraft;
 
   return (
     <section
@@ -184,7 +230,13 @@ export function Controller({
           {guessing ? (
             <form className={styles.guess} onSubmit={submit}>
               <div className={styles.feedback} aria-live="polite">
-                {awaiting ? L('Guess sent…') : L.sent(view.feedback || L('What is the picture?'))}
+                {awaiting
+                  ? L('Guess sent…')
+                  : pausedDraft
+                    ? view.paused
+                      ? L('Guess kept for retry')
+                      : L('Tap Guess to retry')
+                    : L.sent(view.feedback || L('What is the picture?'))}
                 {!awaiting && view.lastGuess ? (
                   <span>{L('Your guess: {word}', { word: view.lastGuess })}</span>
                 ) : null}
@@ -199,10 +251,12 @@ export function Controller({
                   autoCapitalize="none"
                   spellCheck={false}
                   enterKeyHint="send"
-                  disabled={view.paused || !view.canGuess}
+                  disabled={view.paused || !view.canGuess || !draftReady}
                   onChange={(event) => {
                     const value = event.target.value;
-                    setDraft((current) => editGuess(current, view.turn, value));
+                    const next = editGuess(draft, view.turn, value);
+                    slot.write(saveGuessDraft(next));
+                    setDraft(next);
                   }}
                 />
                 <button type="submit" disabled={!text.trim() || view.paused || !view.canGuess}>

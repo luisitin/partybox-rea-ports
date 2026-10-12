@@ -1,5 +1,11 @@
 # P04 verification
 
+R25/R26 milestone: local typecheck passes, exit0. Scoped ink packet/pause/target
+tests pass23checks in1.41s; scoped guessDraft/draft-recovery tests pass24checks
+in1.56s. Commands use `pnpm.cmd vitest run games/skribbl/client/<file>` with
+`--maxWorkers=1 --pool=threads`. Full client and enhanced native checks are
+running; this milestone does not claim their results. Source formatting passes.
+
 Windows11, Node24.19.0, pnpm12.4.2. `pnpm.cmd` is the Windows launcher for the
 documented pnpm commands; PowerShell blocks pnpm.ps1. Only this game was tested.
 

@@ -1,6 +1,11 @@
 // Local verification harness: the real controller/reducer with deliberately delayed views.
 import { createRoot } from 'react-dom/client';
-import { PhoneOnlyProvider, ServerClockProvider, SoundProvider } from '@partybox/game-sdk/ui';
+import {
+  DraftScopeProvider,
+  PhoneOnlyProvider,
+  ServerClockProvider,
+  SoundProvider,
+} from '@partybox/game-sdk/ui';
 import { Controller } from '../../../games/skribbl/client/Controller';
 import { Tv } from '../../../games/skribbl/client/Tv';
 import { game } from '../../../games/skribbl/server/index';
@@ -29,22 +34,44 @@ state = game.reduce(state, {
 let id = state.drawer;
 let held = false;
 let tv = false;
+let phoneMount = 0;
+let clocksHeld = false;
+let afterStroke: 'pause' | 'holdClock' | undefined;
+let deferGuessToPause = false;
+let rejectStrokeToPause = false;
+// Freeze only the SDK clock callbacks while CDP delivers a native gesture batch.
+// Releasing this harness gate resumes the real intervals; it never manufactures a game tick.
+const nativeInterval = window.setInterval.bind(window);
+window.setInterval = ((handler: TimerHandler, interval?: number, ...args: unknown[]) =>
+  typeof handler === 'function' && (interval === 40 || interval === 250)
+    ? nativeInterval(() => {
+        if (!clocksHeld) handler(...args);
+      }, interval)
+    : nativeInterval(handler, interval, ...args)) as typeof window.setInterval;
 const cues: string[] = [];
 const play = (cue: string) => {
   cues.push(cue);
 };
 const sent: Input[] = [];
+const sentAt: number[] = [];
 const root = createRoot(document.getElementById('root')!);
 function publish() {
   root.render(
     <ServerClockProvider offsetMs={state.clock - Date.now()}>
       <PhoneOnlyProvider value={true}>
         <SoundProvider play={play}>
-          {tv ? (
-            <Tv view={game.tvView(state)} />
-          ) : (
-            <Controller view={game.controllerView(state, id)} me={state.players[id]!} send={send} />
-          )}
+          <DraftScopeProvider value={`p04-native:${id}:${state.turn}:${state.phase.id}`}>
+            {tv ? (
+              <Tv view={{ ...game.tvView(state), vip: null }} />
+            ) : (
+              <Controller
+                key={phoneMount}
+                view={{ ...game.controllerView(state, id), vip: null }}
+                me={state.players[id]!}
+                send={send}
+              />
+            )}
+          </DraftScopeProvider>
         </SoundProvider>
       </PhoneOnlyProvider>
     </ServerClockProvider>,
@@ -52,7 +79,23 @@ function publish() {
 }
 function send(input: Input) {
   sent.push(input);
-  state = game.reduce(state, { type: 'input', playerId: id, input, now: (now += 80) });
+  sentAt.push(performance.now());
+  now += 80;
+  if (
+    (input.type === 'guess' && deferGuessToPause) ||
+    (input.type === 'stroke' && rejectStrokeToPause)
+  ) {
+    deferGuessToPause = false;
+    rejectStrokeToPause = false;
+    state = game.reduce(state, { type: 'vip', action: 'pause', now });
+  }
+  state = game.reduce(state, { type: 'input', playerId: id, input, now });
+  if (input.type === 'stroke' && afterStroke) {
+    const action = afterStroke;
+    afterStroke = undefined;
+    if (action === 'pause') state = game.reduce(state, { type: 'vip', action: 'pause', now });
+    else clocksHeld = true;
+  }
   if (!held) publish();
 }
 (window as any).p04 = {
@@ -66,7 +109,41 @@ function send(input: Input) {
     now += milliseconds;
   },
   info() {
-    return { sent, strokes: state.strokes, revision: state.inkRevision, phase: state.phase.id };
+    return {
+      sent,
+      sentAt,
+      strokes: state.strokes,
+      revision: state.inkRevision,
+      phase: state.phase.id,
+      paused: state.phase.paused !== undefined,
+      receipt: game.controllerView(state, id).guessReceipt,
+      playerId: id,
+      drawer: state.drawer,
+    };
+  },
+  holdClocks(value: boolean) {
+    clocksHeld = value;
+  },
+  pauseAfterNextStroke() {
+    afterStroke = 'pause';
+  },
+  holdClocksAfterNextStroke() {
+    afterStroke = 'holdClock';
+  },
+  deferNextGuessToPause() {
+    deferGuessToPause = true;
+  },
+  rejectNextStrokeToPause() {
+    rejectStrokeToPause = true;
+  },
+  artist() {
+    id = state.drawer;
+    tv = false;
+    publish();
+  },
+  remountPhone() {
+    phoneMount++;
+    publish();
   },
   guesser() {
     id = players.find((p) => p.id !== state.drawer)!.id;

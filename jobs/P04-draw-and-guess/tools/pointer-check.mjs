@@ -55,6 +55,11 @@ export async function canvasProjection(harness, height) {
     clickCount: 1,
   });
   await settle();
+  // An SDK wake-up may be delayed on the shared desktop; observe the queued endpoint.
+  for (let attempt = 0; attempt < 20; attempt++) {
+    if (await evaluate('p04.info().strokes.at(-1)?.points.at(-1)?.[0] >= 949')) break;
+    await settle();
+  }
   const points = await evaluate('p04.info().strokes.at(-1)?.points');
   const first = points?.[0];
   const last = points?.at(-1);
