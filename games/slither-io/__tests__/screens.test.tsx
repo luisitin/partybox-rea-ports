@@ -177,6 +177,44 @@ describe('play feedback and guards', () => {
     expect(html).toContain('Needs size above 8');
   });
 
+  it('a paused spectator retains the stage and a visible pause explanation without controls', () => {
+    const state = fresh();
+    const paused: State = {
+      ...state,
+      phase: { ...state.phase, paused: { at: state.began + 10_000 } },
+    };
+    for (const mode of ['spectator-tv', 'spectator-phone'] as const) {
+      const html = phone(paused, 'guest', mode);
+      expect(html).toContain('Paused · spectating');
+      expect(html).toContain('aria-label="Snake arena.');
+      expect(buttons(html)).toHaveLength(0);
+      expect(html).toContain(clockText(state.endsAt - (state.began + 10_000)));
+    }
+  });
+
+  it('a disconnected player sees reconnect status rather than usable controls or a promised respawn', () => {
+    const state = fresh();
+    for (const crashed of [false, true]) {
+      const disconnected: State = {
+        ...state,
+        players: { ...state.players, p1: { ...state.players['p1']!, connected: false } },
+        world: {
+          ...state.world,
+          snakes: state.world.snakes.map((snake) =>
+            crashed && snake.id === 'p1' ? { ...snake, body: [], mass: 8, respawnAt: 2000 } : snake,
+          ),
+        },
+      };
+      for (const mode of ['tv-room', 'phone-only', 'remote'] as const) {
+        const html = phone(disconnected, 'p1', mode);
+        expect(html).toContain('Reconnecting · controls released');
+        expect(html).not.toContain('Crashed! Back in');
+        expect(buttons(html)).toHaveLength(2);
+        expect(buttons(html).every((button) => button.includes('disabled'))).toBe(true);
+      }
+    }
+  });
+
   it('displayed size is the same integer the scoring function will bank', () => {
     const state = fresh();
     const fractional: State = {
@@ -194,6 +232,47 @@ describe('play feedback and guards', () => {
 });
 
 describe('score and final results', () => {
+  it('arbitrary player ids retain their arena snake numbers and colours on every result surface', () => {
+    const initial = game.init({
+      players: [
+        { id: 'z-seat', name: 'Zoe', avatarId: 'fox', connected: true },
+        { id: 'a-seat', name: 'Amir', avatarId: 'fox', connected: true },
+      ],
+      settings: {},
+      seed: 7,
+      now: 1_000_000,
+    });
+    for (const phase of ['score', 'done'] as const) {
+      const state: State = {
+        ...initial,
+        phase: {
+          id: phase,
+          startedAt: initial.began,
+          deadline: phase === 'done' ? null : initial.began + 7000,
+        },
+        scores: { 'z-seat': 10, 'a-seat': 20 },
+        lastPoints: { 'z-seat': 10, 'a-seat': 20 },
+      };
+      const view = game.controllerView(state, 'z-seat');
+      expect(view.players.map((player) => player.id)).toEqual(['a-seat', 'z-seat']);
+      expect(view.snakeIds).toEqual(['z-seat', 'a-seat']);
+      for (const html of [
+        tv(state),
+        ...(['tv-room', 'phone-only', 'remote'] as const).map((mode) =>
+          phone(state, 'z-seat', mode),
+        ),
+      ]) {
+        const rows = html.match(/<li\b[^>]*>[\s\S]*?<\/li>/g) ?? [];
+        const zoe = rows.find((row) => row.includes('Zoe'));
+        const amir = rows.find((row) => row.includes('Amir'));
+        expect(zoe).toContain('aria-label="Snake 1"');
+        expect(zoe).toContain('--pb-player-1');
+        expect(amir).toContain('aria-label="Snake 2"');
+        expect(amir).toContain('--pb-player-2');
+      }
+    }
+  });
+
   it('the final score beat promises results, while earlier scores promise another round', () => {
     expect(tv(fixtures['score-last']!)).toContain('Final results');
     for (const mode of ['tv-room', 'phone-only', 'remote'] as const) {

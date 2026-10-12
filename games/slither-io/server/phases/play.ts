@@ -1,14 +1,20 @@
 // Timer wakes are coarser than physics; deadline is rearmed and views show the true round end.
 import { enterPhase, hasPlayer, isTimerFor, nextStep } from '@partybox/game-sdk';
 import type { GameEvent } from '@partybox/game-sdk';
-import { ROUND_MS } from '../types';
+import { MIN_MASS, ROUND_MS } from '../types';
 import type { Input, State, Transition } from '../types';
 import { makeWorld, tick } from '../world';
 
-export const WAKE_MS = 600;
+export const WAKE_MS = 100;
 
 export function enterPlay(state: State, now: number, round = state.round): State {
-  const [world, rng] = makeWorld(Object.keys(state.players), state.rng);
+  const [fresh, rng] = makeWorld(Object.keys(state.players), state.rng);
+  const world = {
+    ...fresh,
+    snakes: fresh.snakes.map((s) =>
+      state.players[s.id]!.connected ? s : { ...s, body: [], mass: MIN_MASS, respawnAt: 0 },
+    ),
+  };
   return enterPhase(
     { ...state, world, rng, round, began: now, endsAt: now + ROUND_MS },
     'play',
@@ -61,7 +67,14 @@ export function reducePlay(state: State, event: GameEvent<Input>, next: Transiti
     world: {
       ...s.world,
       snakes: s.world.snakes.map((x) =>
-        x.id === event.playerId ? { ...x, target: event.input.angle, boost: event.input.boost } : x,
+        x.id === event.playerId
+          ? {
+              ...x,
+              target: event.input.angle,
+              boost: event.input.boost,
+              steeredAt: s.world.elapsed,
+            }
+          : x,
       ),
     },
   };

@@ -5,7 +5,7 @@ import { finishGame, jsonSize, testKit, testPlayers } from '@partybox/game-sdk/t
 import { botInput } from './bot';
 import { segmentDistance2 } from './geometry';
 import { game } from './index';
-import { WAKE_MS } from './phases/play';
+import { WAKE_MS, settle } from './phases/play';
 import { roundPoints } from './scoring';
 import {
   BOOST_COST,
@@ -101,7 +101,7 @@ describe('movement and the price of a lunge', () => {
     expect(seam.angle).toBeCloseTo(-Math.PI + 0.1);
   });
   it('bounds the body even after repeated movement at maximum mass', () => {
-    const body = Array.from({ length: MAX_MASS + 20 }, (_, i): Point => [80 - i / 10, 50]);
+    const body = Array.from({ length: MAX_MASS + 20 }, (_, i): Point => [80 - i * 1.6, 50]);
     expect(move(snake('a', { mass: MAX_MASS, body })).body).toHaveLength(MAX_MASS);
   });
 });
@@ -314,8 +314,74 @@ describe('match controls, scoring and hostile senders', () => {
     const absent = kit.player(boosted, 'p1', false, undefined, kit.t0);
     expect(absent.world.snakes.find((s) => s.id === 'p1')?.boost).toBe(false);
     expect(kit.input(absent, 'p1', input(1), kit.t0)).toBe(absent);
-    expect(finishGame(game, absent)?.phase.id).toBe('done');
+    expect(finishGame(game, absent, 3000)?.phase.id).toBe('done');
     expect(kit.player(absent, 'p1', true, undefined, kit.t0).world).toEqual(absent.world);
+  });
+  it('disconnect judges prior boosting before releasing the held control', () => {
+    const boosted = kit.input(kit.start(), 'p1', input(0, true), kit.t0);
+    const judged = settle(boosted, kit.t0 + 500);
+    const absent = kit.player(boosted, 'p1', false, undefined, kit.t0 + 500);
+    expect(absent.world.elapsed).toBe(500);
+    expect(absent.world.food).toEqual(judged.world.food);
+    expect(absent.world.snakes).toEqual(
+      judged.world.snakes.map((s) => (s.id === 'p1' ? { ...s, boost: false } : s)),
+    );
+    expect(absent.players['p1']?.connected).toBe(false);
+    expect(game.controllerView(absent, 'p1').alive).toBe(false);
+    expect(kit.player(absent, 'p1', false, undefined, kit.t0 + 1000)).toBe(absent);
+  });
+  it('reconnect never respawns a snake during its disconnected past', () => {
+    const start = kit.start();
+    const absent = {
+      ...start,
+      players: { ...start.players, p1: { ...start.players['p1']!, connected: false } },
+      world: {
+        ...start.world,
+        snakes: start.world.snakes.map((s) =>
+          s.id === 'p1' ? { ...s, body: [], mass: MIN_MASS, respawnAt: 200 } : s,
+        ),
+      },
+    };
+    const back = kit.player(absent, 'p1', true, undefined, kit.t0 + 500);
+    expect(back.world.elapsed).toBe(500);
+    expect(back.world.snakes.find((s) => s.id === 'p1')?.respawnAt).toBe(200);
+    expect(back.world.snakes.find((s) => s.id === 'p1')?.body).toEqual([]);
+    const moved = kit.timer(back, kit.t0 + 600);
+    expect(moved.world.snakes.find((s) => s.id === 'p1')?.respawnAt).toBeNull();
+    expect(moved.world.snakes.find((s) => s.id === 'p1')?.safeUntil).toBe(600 + GRACE_MS);
+  });
+  it('player changes while paused preserve the frozen arena', () => {
+    const held = kit.vip(kit.start(), 'pause', kit.t0 + 500);
+    const absent = kit.player(held, 'p1', false, undefined, kit.t0 + 5000);
+    expect(absent.world).toEqual(held.world);
+    expect(kit.player(absent, 'p1', true, undefined, kit.t0 + 6000).world).toEqual(held.world);
+  });
+  it('a disconnected seat starts later rounds offstage and enters only after reconnect', () => {
+    const start = kit.start({ settings: { rounds: 2 } });
+    const absent = kit.player(start, 'p1', false, undefined, kit.t0);
+    const scored = kit.vip(absent, 'skip', kit.t0);
+    const next = kit.vip(scored, 'skip', kit.t0 + 1);
+    const missing = next.world.snakes.find((s) => s.id === 'p1')!;
+    expect(missing.body).toEqual([]);
+    expect(missing.mass).toBe(MIN_MASS);
+    expect(missing.respawnAt).toBe(0);
+    const waiting = kit.timer(next);
+    expect(waiting.world.snakes.find((s) => s.id === 'p1')?.body).toEqual([]);
+    const back = kit.player(waiting, 'p1', true, undefined, waiting.phase.deadline! - 1);
+    expect(back.world.snakes.find((s) => s.id === 'p1')?.respawnAt).toBe(0);
+    const entered = kit.timer(back);
+    expect(entered.world.snakes.find((s) => s.id === 'p1')?.respawnAt).toBeNull();
+    expect(entered.world.snakes.find((s) => s.id === 'p1')?.mass).toBe(START_MASS);
+  });
+  it('views expose stable snake order for arbitrary player ids', () => {
+    const players = testPlayers(2).map((p, i) => ({ ...p, id: i ? 'guest-99' : 'owner-alex' }));
+    const state = kit.start({ players });
+    const ids = players.map((p) => p.id);
+    expect(game.tvView(state).snakeIds).toEqual(ids);
+    expect(game.controllerView(state, players[1]!.id).snakeIds).toEqual(ids);
+    expect(game.controllerView(state, players[1]!.id).slot).toBe(1);
+    const done = kit.vip(state, 'end', kit.t0);
+    expect(game.controllerView(done, players[1]!.id).snakeIds).toEqual(ids);
   });
   it('spectators and prototype ids cannot steer or modify the roster', () => {
     const s = kit.start();

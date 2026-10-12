@@ -9,6 +9,8 @@ export const SCORE_MS = 7000;
 export const W = 160;
 export const H = 100;
 export const SPEED = 16;
+export const BODY_SPACING = 1.6;
+export const BOT_DECISION_MS = 1000;
 export const BOOST_SPEED = 28;
 export const TURN_RATE = 3.5;
 export const MIN_MASS = 8;
@@ -38,6 +40,7 @@ export interface Snake {
   respawnAt: number | null;
   safeUntil: number;
   crashes: number;
+  steeredAt?: number;
 }
 export interface Food {
   x: number;

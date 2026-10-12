@@ -36,12 +36,12 @@ At the end of each round, floor each snake's current mass and add it once to its
 
 ## Edge cases
 
-- The server judges 100ms fixed steps; headings apply at the next judged step. Timer wake is 600ms, rearmed without restarting the round countdown; inputs also settle movement. Late timers catch up only to the 90-second cap. Swept head/body and relative head/head checks prevent tunnelling.
+- The server judges 100ms fixed steps; headings apply at the next judged step. Timer wake is 100ms, rearmed without restarting the round countdown; inputs also settle movement. Late timers catch up only to the 90-second cap. Swept head/body and relative head/head checks prevent tunnelling.
 - Heads touching another snake's body die regardless of size. Self-crossing is safe. Simultaneous head collisions kill both. Walls are always lethal. Deaths resolve together before corpse food is made.
-- A fresh snake has one second of collision protection from rivals (walls still kill); protected bodies cannot kill rivals. Bodies are bounded to 90 samples and food to 240 pieces; new corpse food survives the cap.
-- Normal speed is 16 units/s, sprint 28 units/s. Boost spends 0.3 mass per 100ms step and stops at mass 8. Mass caps at 90. Turning is bounded to 3.5rad/s. These are original balance constants.
+- A fresh snake has one second of collision protection from rivals (walls still kill); protected bodies cannot kill rivals. Bodies use fixed 1.6-unit spacing, at most 90 samples; sprinting never stretches the collision body. Food is capped at 240 pieces, with equal capacity and conserved mass for simultaneous corpses.
+- Normal speed is 16 units/s, sprint 28 units/s. Boost spends 0.3 mass per 100ms step and stops at mass 8. Mass caps at 90. Turning is bounded to 3.5rad/s. Bots reconsider at most once per simulated second. These are original balance constants.
 - The nearest head gets a food piece; exactly tied heads split its value. Corpse food represents the crashed mass. Spent boost mass becomes small tail sparks. Ordinary food is seeded and replenished when fewer than 70 pieces remain.
-- Disconnect clears boost, leaves the current heading moving and never holds a timer. A disconnected crashed seat stays out until it reconnects. Refresh restores the latest world, heading, size and score.
+- Disconnect clears boost, leaves the current heading moving and never holds a timer. Presence changes settle the preceding movement before changing connectivity. Disconnected seats start subsequent rounds offstage; a crashed seat stays out until it reconnects. Returning snakes search 31 deterministic ring/interior spots for clear bodies, choosing the clearest fallback if every candidate is occupied. Refresh restores the latest world, heading, size and score.
 - Pause settles movement once, clears boost and shifts start/end clocks on resume. Timers and inputs cannot move a paused world; repeated pause is idempotent. Scores and results retain every starting player.
 
 ## Settings

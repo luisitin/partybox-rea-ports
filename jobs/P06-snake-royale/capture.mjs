@@ -10,9 +10,10 @@ import {
 } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { prepareLiveControls, runLiveControls } from './experiments/controls/live-controls.mjs';
 
 const dir = resolve('jobs/P06-snake-royale/media');
-const profile = resolve('reports/r6-snake-browser');
+const profile = resolve(`reports/r2-snake-browser-${process.pid}`);
 mkdirSync(profile, { recursive: true });
 const activeFile = resolve(profile, 'DevToolsActivePort');
 if (existsSync(activeFile)) unlinkSync(activeFile);
@@ -67,7 +68,10 @@ const call = (method, params = {}) =>
     socket.send(JSON.stringify({ id, method, params }));
   });
 try {
-  for (let i = 0; i < 100 && !existsSync(activeFile); i++) await pause(100);
+  for (let i = 0; i < 300 && !existsSync(activeFile) && child.exitCode === null; i++)
+    await pause(100);
+  if (!existsSync(activeFile))
+    throw new Error(`Isolated Chromium failed to start (${child.exitCode})`);
   const port = readFileSync(activeFile, 'utf8').split('\n')[0];
   const targets = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
   const target = targets.find((t) => t.type === 'page');
@@ -164,7 +168,11 @@ try {
       deviceScaleFactor: 1,
       mobile: false,
     });
-    await call('Page.navigate', { url: pathToFileURL(resolve(dir, name)).href });
+    const { frameTree } = await call('Page.getFrameTree');
+    await call('Page.setDocumentContent', {
+      frameId: frameTree.frame.id,
+      html: readFileSync(resolve(dir, name), 'utf8'),
+    });
     await pause(150);
     const check = await call('Runtime.evaluate', {
       expression: `JSON.stringify({width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth,scrollHeight:document.documentElement.scrollHeight,overflow:[...document.querySelectorAll('#root *')].filter(e=>e.children.length===0&&e.getBoundingClientRect().width>0).filter(e=>{const r=e.getBoundingClientRect();return r.right>innerWidth+.5||r.bottom>innerHeight+.5||r.left<-.5||r.top<-.5}).map(e=>e.textContent.slice(0,60))})`,
@@ -178,7 +186,17 @@ try {
     });
     writeFileSync(resolve(dir, name.replace('.html', '.png')), Buffer.from(capture.data, 'base64'));
   }
-  if (!original) writeFileSync(resolve(dir, 'fit.json'), JSON.stringify(fits, null, 2) + '\n');
+  if (!original) {
+    writeFileSync(resolve(dir, 'fit.json'), JSON.stringify(fits, null, 2) + '\n');
+    if (
+      fits.some(
+        (fit) =>
+          fit.scrollWidth !== fit.width || fit.scrollHeight !== fit.height || fit.overflow.length,
+      )
+    )
+      throw new Error('A captured phase overflows its viewport');
+    await runLiveControls(call, await prepareLiveControls());
+  }
   console.log(JSON.stringify(fits));
 } finally {
   if (socket?.readyState === WebSocket.OPEN) {

@@ -36,7 +36,7 @@ export function simulate(
   const roundLengths: number[] = [];
   let maxBytes = 0;
   let events = 0;
-  while (s.phase.id !== 'done' && events++ < 600) {
+  while (s.phase.id !== 'done' && events++ < 3000) {
     const now = s.phase.deadline!;
     if (s.phase.id === 'play') {
       for (const id of Object.keys(s.players)) {
@@ -74,6 +74,8 @@ describe('seeded bot completion', () => {
         expect(Object.values(result.scores).every(Number.isFinite)).toBe(true);
         lengths.push(...run.roundLengths);
         maxBytes = Math.max(maxBytes, run.maxBytes);
+        if (runs >= 100 && seed % 100 === 0)
+          console.log(`${count} players: ${seed}/${runs} matches`);
       }
       expect(maxBytes).toBeLessThan(256 * 1024);
       lengths.sort((a, b) => a - b);

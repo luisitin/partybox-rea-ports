@@ -3,6 +3,7 @@ import type { World } from '../server/types';
 
 interface Source {
   players: readonly { id: string; name: string; connected: boolean }[];
+  snakeIds?: readonly string[];
   world?: World;
   scores: Record<string, number>;
   lastPoints: Record<string, number>;
@@ -23,7 +24,7 @@ export interface StandingRow {
 
 export function standingsRows(view: Source, ranked: boolean): StandingRow[] {
   const names = new Map(view.players.map((player) => [player.id, player]));
-  const order = view.world?.snakes ?? view.players;
+  const order = view.world?.snakes ?? view.snakeIds?.map((id) => ({ id })) ?? view.players;
   const rows = order.map((snake, slot): StandingRow => {
     const active = view.world?.snakes.find((candidate) => candidate.id === snake.id);
     return {

@@ -11,7 +11,7 @@
     "file": "games/slither-io/server/phases/score.ts",
     "killed": true,
     "exit": 1,
-    "diagnostic": " FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > the round cap banks points exactly once even with a repeated timer | AssertionError: expected { p1: 46, p2: 42 } to deeply equal { p1: 23, p2: 21 } |  FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > VIP end banks the active round once and terminal scores remain fixed"
+    "diagnostic": " FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > the round cap banks points exactly once even with a repeated timer | AssertionError: expected { p1: 38, p2: 36 } to deeply equal { p1: 19, p2: 18 } |  FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > VIP end banks the active round once and terminal scores remain fixed"
   },
   {
     "name": "missing results",
@@ -25,7 +25,7 @@
     "file": "games/slither-io/server/phases/play.ts",
     "killed": true,
     "exit": 1,
-    "diagnostic": " FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > the round cap banks points exactly once even with a repeated timer | AssertionError: expected 'play' to be 'score' // Object.is equality"
+    "diagnostic": " FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > the round cap banks points exactly once even with a repeated timer | AssertionError: expected 'play' to be 'score' // Object.is equality |  FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > a disconnected seat starts later rounds offstage and enters only after reconnect"
   },
   {
     "name": "accept early timer",
@@ -53,21 +53,21 @@
     "file": "games/slither-io/server/index.ts",
     "killed": true,
     "exit": 1,
-    "diagnostic": " FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > disconnect releases boost, rejects inputs and never prevents the round ending | AssertionError: expected { phase: { id: 'play', …(2) }, …(10) } to be { phase: { id: 'play', …(2) }, …(10) } // Object.is equality"
+    "diagnostic": " FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > disconnect releases boost, rejects inputs and never prevents the round ending | AssertionError: expected { phase: { id: 'play', …(2) }, …(10) } to be { phase: { id: 'play', …(2) }, …(10) } // Object.is equality |  FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > disconnect judges prior boosting before releasing the held control"
   },
   {
     "name": "boost sticks on disconnect",
     "file": "games/slither-io/server/index.ts",
     "killed": true,
     "exit": 1,
-    "diagnostic": " FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > disconnect releases boost, rejects inputs and never prevents the round ending | AssertionError: expected true to be false // Object.is equality"
+    "diagnostic": " FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > disconnect releases boost, rejects inputs and never prevents the round ending | AssertionError: expected true to be false // Object.is equality |  FAIL  games/slither-io/server/rules.test.ts > match controls, scoring and hostile senders > disconnect judges prior boosting before releasing the held control"
   },
   {
     "name": "ignore phone-only arena",
     "file": "games/slither-io/server/index.ts",
     "killed": true,
     "exit": 1,
-    "diagnostic": " FAIL  games/slither-io/__tests__/artifacts.test.tsx > every phase renders a real arena for TV, phone-only and spectators | AssertionError: expected '<section class=\"_screen_99408e\" style…' to contain '<svg'"
+    "diagnostic": " FAIL  games/slither-io/__tests__/artifacts.test.tsx > every phase renders a real arena for TV, phone-only and spectators | AssertionError: expected '<section class=\"_screen_d9f44b\" style…' to contain '<svg'"
   },
   {
     "name": "free boosting",
@@ -109,7 +109,7 @@
     "file": "games/slither-io/server/world.ts",
     "killed": true,
     "exit": 1,
-    "diagnostic": " FAIL  games/slither-io/server/rules.test.ts > movement and the price of a lunge > returns spent boost mass as food behind the snake | AssertionError: expected [ { x: 10, y: 10, value: 1 }, …(71) ] to deep equally contain { x: 70, y: 50, value: 0.3 } |  FAIL  games/slither-io/server/rules.test.ts > simultaneous crashes and return > hitting another body kills the attacker and leaves its owner alive"
+    "diagnostic": " FAIL  games/slither-io/server/rules.test.ts > movement and the price of a lunge > returns spent boost mass as food behind the snake | AssertionError: expected [ { x: 10, y: 10, value: 1 }, …(74) ] to deep equally contain { x: 70, y: 50, value: 0.3 } |  FAIL  games/slither-io/server/rules.test.ts > simultaneous crashes and return > hitting another body kills the attacker and leaves its owner alive"
   },
   {
     "name": "head collision immunity",

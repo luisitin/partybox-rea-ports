@@ -29,7 +29,9 @@ export function Tv({ view }: GameTvProps<SnakeTvView>): JSX.Element {
     <Stage className={styles.stage}>
       <header className={styles.header}>
         <div>
-          <h1 className={styles.title}>{headline}</h1>
+          <h1 className={styles.title} title={headline}>
+            {headline}
+          </h1>
           <p className={styles.hint}>
             {playing
               ? L('Eat sparks. Cut off rivals. Size at the buzzer scores.')

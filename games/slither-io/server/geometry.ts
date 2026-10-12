@@ -15,7 +15,7 @@ export function pointSegment2(p: Point, a: Point, b: Point): number {
           0,
           Math.min(1, ((p[0] - a[0]) * (b[0] - a[0]) + (p[1] - a[1]) * (b[1] - a[1])) / d),
         );
-  return distance2(p, [a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])]);
+  return (p[0] - (a[0] + t * (b[0] - a[0]))) ** 2 + (p[1] - (a[1] + t * (b[1] - a[1]))) ** 2;
 }
 
 export function segmentDistance2(a: Point, b: Point, c: Point, d: Point): number {

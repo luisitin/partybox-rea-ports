@@ -1,6 +1,6 @@
 // Event-driven heading input. Releases never wait for a timer or the next server snapshot.
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { PointerEvent } from 'react';
+import type { PointerEvent, RefObject } from 'react';
 import type { Input } from '../server/types';
 import { keyboardHeading, pointerHeading } from './timing';
 
@@ -9,6 +9,7 @@ interface Options {
   enabled: boolean;
   canBoost: boolean;
   send: (input: Input) => void;
+  compass: RefObject<SVGSVGElement | null>;
 }
 
 interface PointerHandlers {
@@ -40,7 +41,13 @@ const DIRECTIONS: Readonly<Record<string, string>> = {
   s: 'down',
 };
 
-export function useSteering({ angle, enabled, canBoost, send }: Options): SteeringControls {
+export function useSteering({
+  angle,
+  enabled,
+  canBoost,
+  send,
+  compass,
+}: Options): SteeringControls {
   const [display, setDisplay] = useState({ angle, boost: false });
   const latest = useRef({ angle, enabled, canBoost, send });
   latest.current = { angle, enabled, canBoost, send };
@@ -101,14 +108,18 @@ export function useSteering({ angle, enabled, canBoost, send }: Options): Steeri
     const key =
       (down: boolean) =>
       (event: KeyboardEvent): void => {
-        if (event.altKey || event.ctrlKey || event.metaKey) return;
+        const name = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+        // A release belongs to the physical key already held, even after focus or modifiers change.
+        const trackedRelease =
+          !down && (input.current.keys.has(name) || input.current.boostKeys.has(event.code));
+        if (!trackedRelease && (event.altKey || event.ctrlKey || event.metaKey)) return;
         const target = event.target;
         if (
+          !trackedRelease &&
           target instanceof HTMLElement &&
           (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName))
         )
           return;
-        const name = event.key.length === 1 ? event.key.toLowerCase() : event.key;
         const direction = DIRECTIONS[name];
         if (direction) {
           event.preventDefault();
@@ -151,13 +162,25 @@ export function useSteering({ angle, enabled, canBoost, send }: Options): Steeri
 
   const steer = (event: PointerEvent<HTMLButtonElement>): void => {
     if (!latest.current.enabled || input.current.steerPointer !== event.pointerId) return;
-    const bounds = event.currentTarget.getBoundingClientRect();
-    const heading = pointerHeading(
-      event.clientX - bounds.left,
-      event.clientY - bounds.top,
-      bounds.width,
-      bounds.height,
-    );
+    const svg = compass.current;
+    const matrix = svg?.getScreenCTM();
+    let heading: number | null;
+    if (svg && matrix) {
+      // SVG coordinates account for its label offset and any preserveAspectRatio letterboxing.
+      const screenPoint = svg.createSVGPoint();
+      screenPoint.x = event.clientX;
+      screenPoint.y = event.clientY;
+      const local = screenPoint.matrixTransform(matrix.inverse());
+      heading = pointerHeading(local.x, local.y, 100, 100);
+    } else {
+      const bounds = event.currentTarget.getBoundingClientRect();
+      heading = pointerHeading(
+        event.clientX - bounds.left,
+        event.clientY - bounds.top,
+        bounds.width,
+        bounds.height,
+      );
+    }
     if (heading !== null) emit(Math.round(heading * 100) / 100, input.current.boost);
   };
   const boostKey = (down: boolean, key: string): void => {

@@ -214,7 +214,7 @@ ight is the :root default above) ────────
         align-items: safe center;
         text-align: center;
       }
-      ._arena_bc8d47 {
+      ._arena_1f8074 {
         /* One SVG unit is derived from the spacing token; geometry stays in the server's 160 × 100 arena. */
         --arena-unit: calc(var(--pb-space-1) / 4);
         display: block;
@@ -223,33 +223,33 @@ ight is the :root default above) ────────
         overflow: hidden;
       }
 
-      ._floor_bc8d47 {
+      ._floor_1f8074 {
         fill: var(--pb-bg);
       }
 
-      ._grid_bc8d47 {
+      ._grid_1f8074 {
         fill: none;
         stroke: var(--pb-surface-2);
         stroke-width: calc(var(--arena-unit) * 0.15);
       }
 
-      ._wall_bc8d47 {
+      ._wall_1f8074 {
         fill: none;
         stroke: var(--pb-text-muted);
         stroke-width: calc(var(--arena-unit) * 0.6);
       }
 
-      ._food_bc8d47 {
+      ._food_1f8074 {
         fill: var(--pb-accent-2);
       }
 
-      ._corpseFood_bc8d47 {
+      ._corpseFood_1f8074 {
         fill: var(--pb-accent-3);
         stroke: var(--pb-text);
         stroke-width: calc(var(--arena-unit) * 0.15);
       }
 
-      ._body_bc8d47 {
+      ._body_1f8074 {
         fill: none;
         stroke: var(--snake-color);
         stroke-width: calc(var(--arena-unit) * 3);
@@ -257,24 +257,24 @@ ight is the :root default above) ────────
         stroke-linejoin: round;
       }
 
-      ._marks_bc8d47 {
+      ._marks_1f8074 {
         fill: none;
         stroke: var(--pb-bg);
         stroke-width: calc(var(--arena-unit) * 0.65);
         stroke-linecap: round;
       }
 
-      ._head_bc8d47 {
+      ._head_1f8074 {
         fill: var(--snake-color);
         stroke: var(--pb-text);
         stroke-width: calc(var(--arena-unit) * 0.3);
       }
 
-      ._eye_bc8d47 {
+      ._eye_1f8074 {
         fill: var(--pb-on-accent-2-fill);
       }
 
-      ._number_bc8d47 {
+      ._number_1f8074 {
         fill: var(--pb-text);
         stroke: var(--pb-bg);
         stroke-width: calc(var(--arena-unit) * 0.65);
@@ -285,25 +285,25 @@ ight is the :root default above) ────────
         font-weight: 900;
       }
 
-      ._shield_bc8d47 {
+      ._shield_1f8074 {
         fill: none;
         stroke: var(--pb-info);
         stroke-width: calc(var(--arena-unit) * 0.4);
         stroke-dasharray: var(--arena-unit) var(--arena-unit);
       }
 
-      ._boost_bc8d47 {
+      ._boost_1f8074 {
         fill: none;
         stroke: var(--pb-text);
         stroke-width: calc(var(--arena-unit) * 0.6);
         stroke-linecap: round;
       }
 
-      [data-me='true'] ._number_bc8d47 {
+      [data-me='true'] ._number_1f8074 {
         fill: var(--pb-accent-2);
       }
 
-      ._stage_e24928 {
+      ._stage_0ad49a {
         height: 100%;
         min-height: 0;
         gap: var(--pb-space-4);
@@ -312,37 +312,41 @@ ight is the :root default above) ────────
         overflow: hidden;
       }
 
-      ._header_e24928 {
+      ._header_0ad49a {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: var(--pb-space-5);
       }
 
-      ._header_e24928 > div:first-child {
+      ._header_0ad49a > div:first-child {
         min-width: 0;
+        flex: 1;
       }
 
-      ._title_e24928 {
+      ._title_0ad49a {
         margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-size: var(--pb-font-h1);
         font-weight: 900;
         line-height: 1.1;
       }
 
-      ._hint_e24928,
-      ._legend_e24928 {
+      ._hint_0ad49a,
+      ._legend_0ad49a {
         margin: 0;
         font-size: var(--pb-font-body);
         color: var(--pb-text-muted);
         line-height: 1.2;
       }
 
-      ._hint_e24928 {
+      ._hint_0ad49a {
         margin-top: var(--pb-space-2);
       }
 
-      ._clock_e24928 {
+      ._clock_0ad49a {
         display: grid;
         flex: none;
         justify-items: center;
@@ -351,16 +355,16 @@ ight is the :root default above) ────────
         font-variant-numeric: tabular-nums;
       }
 
-      ._clock_e24928 b {
+      ._clock_0ad49a b {
         font-size: calc(var(--pb-font-display) * 0.75);
         line-height: 1;
       }
 
-      ._clock_e24928[data-low='true'] b {
+      ._clock_0ad49a[data-low='true'] b {
         color: var(--pb-accent-2);
       }
 
-      ._board_e24928 {
+      ._board_0ad49a {
         display: grid;
         flex: 1;
         min-height: 0;
@@ -368,7 +372,7 @@ ight is the :root default above) ────────
         gap: var(--pb-space-5);
       }
 
-      ._arena_e24928 {
+      ._arena_0ad49a {
         min-width: 0;
         min-height: 0;
         background: var(--pb-bg);
@@ -376,21 +380,21 @@ ight is the :root default above) ────────
         overflow: hidden;
       }
 
-      ._side_e24928 {
+      ._side_0ad49a {
         min-height: 0;
         min-width: 0;
       }
 
-      ._railTitle_e24928 {
+      ._railTitle_0ad49a {
         margin: 0 0 var(--pb-space-2);
         font-size: var(--pb-font-body);
       }
 
-      ._legend_e24928 {
+      ._legend_0ad49a {
         text-align: center;
       }
 
-      ._screen_99408e {
+      ._screen_d9f44b {
         display: flex;
         flex-direction: column;
         height: 100%;
@@ -407,7 +411,7 @@ ight is the :root default above) ────────
         color: var(--pb-text);
       }
 
-      ._header_99408e {
+      ._header_d9f44b {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -416,7 +420,7 @@ ight is the :root default above) ────────
         min-width: 0;
       }
 
-      ._title_99408e {
+      ._title_d9f44b {
         margin: 0;
         min-width: 0;
         overflow: hidden;
@@ -427,7 +431,7 @@ ight is the :root default above) ────────
         line-height: 1.2;
       }
 
-      ._clock_99408e {
+      ._clock_d9f44b {
         flex: none;
         font-size: var(--pb-font-h1);
         font-weight: 900;
@@ -435,7 +439,7 @@ ight is the :root default above) ────────
         line-height: 1.1;
       }
 
-      ._stats_99408e {
+      ._stats_d9f44b {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -447,25 +451,25 @@ ight is the :root default above) ────────
         font-size: var(--pb-font-caption);
       }
 
-      ._stats_99408e > span {
+      ._stats_d9f44b > span {
         display: grid;
         justify-items: center;
         gap: var(--pb-space-1);
         line-height: 1;
       }
 
-      ._stats_99408e b {
+      ._stats_d9f44b b {
         font-size: var(--pb-font-h2);
         font-variant-numeric: tabular-nums;
       }
 
-      ._stats_99408e ._seat_99408e {
+      ._stats_d9f44b ._seat_d9f44b {
         display: flex;
         gap: var(--pb-space-2);
       }
 
-      ._seat_99408e b,
-      ._snakeNumber_99408e {
+      ._seat_d9f44b b,
+      ._snakeNumber_d9f44b {
         display: grid;
         place-items: center;
         flex: none;
@@ -476,12 +480,12 @@ ight is the :root default above) ────────
         font-weight: 900;
       }
 
-      ._seat_99408e b {
+      ._seat_d9f44b b {
         width: calc(var(--pb-touch) * 0.8);
         height: calc(var(--pb-touch) * 0.8);
       }
 
-      ._arena_99408e {
+      ._arena_d9f44b {
         flex: 1;
         min-height: calc(var(--pb-touch) * 2);
         overflow: hidden;
@@ -489,7 +493,7 @@ ight is the :root default above) ────────
         background: var(--pb-bg);
       }
 
-      ._identity_99408e {
+      ._identity_d9f44b {
         display: flex;
         flex: 1;
         min-height: 0;
@@ -500,35 +504,35 @@ ight is the :root default above) ────────
         gap: var(--pb-space-2);
       }
 
-      ._snakeNumber_99408e {
+      ._snakeNumber_d9f44b {
         width: calc(var(--pb-touch) * 2);
         height: calc(var(--pb-touch) * 2);
         font-size: var(--pb-font-display);
       }
 
-      ._identity_99408e h2 {
+      ._identity_d9f44b h2 {
         margin: 0;
         font-size: var(--pb-font-h1);
       }
 
-      ._identity_99408e p,
-      ._hint_99408e,
-      ._spectating_99408e,
-      ._result_99408e p {
+      ._identity_d9f44b p,
+      ._hint_d9f44b,
+      ._spectating_d9f44b,
+      ._result_d9f44b p {
         margin: 0;
         font-size: var(--pb-font-caption);
         line-height: 1.3;
         color: var(--pb-text-muted);
       }
 
-      ._hint_99408e,
-      ._spectating_99408e,
-      ._result_99408e {
+      ._hint_d9f44b,
+      ._spectating_d9f44b,
+      ._result_d9f44b {
         text-align: center;
         flex: none;
       }
 
-      ._notice_99408e {
+      ._notice_d9f44b {
         margin: 0;
         padding: var(--pb-space-2);
         border-radius: var(--pb-radius);
@@ -538,19 +542,19 @@ ight is the :root default above) ────────
         font-weight: 800;
       }
 
-      ._result_99408e {
+      ._result_d9f44b {
         display: grid;
         gap: var(--pb-space-2);
         padding: var(--pb-space-2);
         font-size: var(--pb-font-body);
       }
 
-      ._screen_99408e[data-stage]:not([data-phase='play']) ._arena_99408e {
+      ._screen_d9f44b[data-stage]:not([data-phase='play']) ._arena_d9f44b {
         max-height: calc(var(--pb-touch) * 5);
         flex-basis: calc(var(--pb-touch) * 4);
       }
 
-      ._controls_70eb3c {
+      ._controls_f0a65c {
         display: grid;
         grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
         gap: var(--pb-space-3);
@@ -559,8 +563,8 @@ ight is the :root default above) ────────
         color: var(--pb-text);
       }
 
-      ._pad_70eb3c,
-      ._boost_70eb3c {
+      ._pad_f0a65c,
+      ._boost_f0a65c {
         position: relative;
         display: flex;
         flex-direction: column;
@@ -582,35 +586,35 @@ ight is the :root default above) ────────
         transition: background var(--pb-motion-fast) var(--pb-ease);
       }
 
-      ._pad_70eb3c:focus-visible,
-      ._boost_70eb3c:focus-visible {
+      ._pad_f0a65c:focus-visible,
+      ._boost_f0a65c:focus-visible {
         outline: var(--pb-space-1) solid var(--pb-focus);
         outline-offset: var(--pb-space-1);
       }
 
-      ._pad_70eb3c:disabled,
-      ._boost_70eb3c:disabled {
+      ._pad_f0a65c:disabled,
+      ._boost_f0a65c:disabled {
         opacity: 0.5;
       }
 
-      ._direction_70eb3c {
+      ._direction_f0a65c {
         flex: 1;
         min-height: 0;
         width: 100%;
         max-height: calc(var(--pb-touch) * 3);
       }
 
-      ._padRing_70eb3c {
+      ._padRing_f0a65c {
         fill: var(--pb-surface);
         stroke: var(--snake-color);
         stroke-width: calc(var(--pb-space-1) / 2);
       }
 
-      ._compass_70eb3c {
+      ._compass_f0a65c {
         fill: var(--pb-text-muted);
       }
 
-      ._heading_70eb3c {
+      ._heading_f0a65c {
         fill: none;
         stroke: var(--pb-text);
         stroke-width: var(--pb-space-1);
@@ -618,34 +622,34 @@ ight is the :root default above) ────────
         stroke-linejoin: round;
       }
 
-      ._label_70eb3c,
-      ._cost_70eb3c {
+      ._label_f0a65c,
+      ._cost_f0a65c {
         font-size: var(--pb-font-caption);
         line-height: 1.2;
       }
 
-      ._label_70eb3c {
+      ._label_f0a65c {
         font-weight: 900;
       }
 
-      ._boost_70eb3c[data-held='true'] {
+      ._boost_f0a65c[data-held='true'] {
         background: var(--snake-color);
         color: var(--pb-on-accent-2-fill);
       }
 
-      ._bolt_70eb3c {
+      ._bolt_f0a65c {
         font-size: var(--pb-font-display);
         line-height: 1;
       }
 
       @media (prefers-reduced-motion: reduce) {
-        ._pad_70eb3c,
-        ._boost_70eb3c {
+        ._pad_f0a65c,
+        ._boost_f0a65c {
           transition: none;
         }
       }
 
-      ._rows_61b6c5 {
+      ._rows_e51e00 {
         display: grid;
         align-content: start;
         gap: var(--pb-space-2);
@@ -657,7 +661,7 @@ ight is the :root default above) ────────
         line-height: 1.1;
       }
 
-      ._rows_61b6c5 li {
+      ._rows_e51e00 li {
         display: flex;
         align-items: center;
         gap: var(--pb-space-2);
@@ -668,7 +672,7 @@ ight is the :root default above) ────────
         background: var(--pb-surface);
       }
 
-      ._number_61b6c5 {
+      ._number_e51e00 {
         display: grid;
         place-items: center;
         flex: none;
@@ -681,24 +685,24 @@ ight is the :root default above) ────────
         border: calc(var(--pb-space-1) / 2) solid var(--pb-text);
       }
 
-      ._identity_61b6c5 {
+      ._identity_e51e00 {
         display: grid;
         min-width: 0;
       }
 
-      ._name_61b6c5 {
+      ._name_e51e00 {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
 
-      ._status_61b6c5 {
+      ._status_e51e00 {
         font-size: inherit;
         color: var(--pb-text-muted);
         line-height: 1.1;
       }
 
-      ._value_61b6c5 {
+      ._value_e51e00 {
         display: grid;
         justify-items: end;
         flex: none;
@@ -707,65 +711,65 @@ ight is the :root default above) ────────
         line-height: 1.1;
       }
 
-      ._gain_61b6c5 {
+      ._gain_e51e00 {
         color: var(--pb-accent-2);
       }
 
-      ._rows_61b6c5 li[data-me='true'] {
+      ._rows_e51e00 li[data-me='true'] {
         outline: calc(var(--pb-space-1) / 2) solid var(--snake-color);
         outline-offset: calc(var(--pb-space-1) / -2);
       }
 
-      ._rows_61b6c5 li[data-respawn='true'] ._number_61b6c5 {
+      ._rows_e51e00 li[data-respawn='true'] ._number_e51e00 {
         border-style: dashed;
       }
 
       /* Eight names occupy four rows on a score stage, or two small rows under a live phone arena. */
-      ._rows_61b6c5[data-compact='true'] {
+      ._rows_e51e00[data-compact='true'] {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: var(--pb-space-1);
         font-size: var(--pb-font-caption);
       }
 
-      ._rows_61b6c5[data-compact='true'] li {
+      ._rows_e51e00[data-compact='true'] li {
         min-height: var(--pb-touch);
         gap: var(--pb-space-1);
         padding: var(--pb-space-1);
       }
 
-      ._rows_61b6c5[data-compact='true'] ._number_61b6c5 {
+      ._rows_e51e00[data-compact='true'] ._number_e51e00 {
         width: calc(var(--pb-touch) / 2);
         height: calc(var(--pb-touch) / 2);
       }
 
-      ._rows_61b6c5[data-compact='true'] ._status_61b6c5 {
+      ._rows_e51e00[data-compact='true'] ._status_e51e00 {
         font-size: var(--pb-font-caption);
       }
 
-      ._rows_61b6c5[data-compact='true'][aria-label] ._value_61b6c5 {
+      ._rows_e51e00[data-compact='true'][aria-label] ._value_e51e00 {
         font-size: var(--pb-font-body);
       }
 
-      ._rows_61b6c5[data-compact='true'][data-phase='play'] {
+      ._rows_e51e00[data-compact='true'][data-phase='play'] {
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
 
-      ._rows_61b6c5[data-compact='true'][data-phase='play'] li {
+      ._rows_e51e00[data-compact='true'][data-phase='play'] li {
         display: grid;
         grid-template-columns: auto minmax(0, 1fr);
         column-gap: var(--pb-space-1);
         row-gap: 0;
       }
 
-      ._rows_61b6c5[data-compact='true'][data-phase='play'] ._number_61b6c5 {
+      ._rows_e51e00[data-compact='true'][data-phase='play'] ._number_e51e00 {
         grid-row: span 2;
       }
 
-      ._rows_61b6c5[data-compact='true'][data-phase='play'] ._status_61b6c5 {
+      ._rows_e51e00[data-compact='true'][data-phase='play'] ._status_e51e00 {
         display: none;
       }
 
-      ._rows_61b6c5[data-compact='true'][data-phase='play'] ._value_61b6c5 {
+      ._rows_e51e00[data-compact='true'][data-phase='play'] ._value_e51e00 {
         grid-column: 2;
         justify-items: start;
         margin-left: 0;
@@ -798,48 +802,48 @@ ight is the :root default above) ────────
   </head>
   <body>
     <div id="root">
-      <section class="_screen_99408e" style="--snake-color: var(--pb-player-1)" data-phase="play">
-        <header class="_header_99408e">
-          <h1 class="_title_99408e" title="Round 1 of 3">Round 1 of 3</h1>
-          <div class="_clock_99408e" role="timer" aria-label="Time left">1:23</div>
+      <section class="_screen_d9f44b" style="--snake-color: var(--pb-player-1)" data-phase="play">
+        <header class="_header_d9f44b">
+          <h1 class="_title_d9f44b" title="Round 1 of 3">Round 1 of 3</h1>
+          <div class="_clock_d9f44b" role="timer" aria-label="Time left">1:23</div>
         </header>
-        <div class="_stats_99408e">
-          <span class="_seat_99408e"><b>1</b>Your snake</span><span><b>14</b>Size</span
+        <div class="_stats_d9f44b">
+          <span class="_seat_d9f44b"><b>1</b>Your snake</span><span><b>16</b>Size</span
           ><span><b>0</b>Match points</span>
         </div>
-        <div class="_identity_99408e">
-          <span class="_snakeNumber_99408e">1</span>
+        <div class="_identity_d9f44b">
+          <span class="_snakeNumber_d9f44b">1</span>
           <h2>You are snake 1</h2>
           <p>Eat sparks. Avoid walls and other snakes.</p>
           <p>Your size at the buzzer becomes points.</p>
         </div>
-        <div class="_controls_70eb3c" role="group" aria-label="Snake controls">
+        <div class="_controls_f0a65c" role="group" aria-label="Snake controls">
           <button
             type="button"
-            class="_pad_70eb3c"
+            class="_pad_f0a65c"
             aria-label="Direction pad. Drag toward your heading, or use arrow keys or WASD."
           >
-            <svg class="_direction_70eb3c" viewBox="0 0 100 100" aria-hidden="true">
-              <circle class="_padRing_70eb3c" cx="50" cy="50" r="37"></circle>
+            <svg class="_direction_f0a65c" viewBox="0 0 100 100" aria-hidden="true">
+              <circle class="_padRing_f0a65c" cx="50" cy="50" r="37"></circle>
               <path
-                class="_compass_70eb3c"
+                class="_compass_f0a65c"
                 d="M50 6l-3 6h6ZM94 50l-6-3v6ZM50 94l3-6h-6ZM6 50l6 3v-6Z"
               ></path>
-              <g transform="rotate(147.96347968940842 50 50)">
-                <path class="_heading_70eb3c" d="M34 50H69M60 40l10 10-10 10"></path>
+              <g transform="rotate(-149.4273929701187 50 50)">
+                <path class="_heading_f0a65c" d="M34 50H69M60 40l10 10-10 10"></path>
               </g></svg
-            ><span class="_label_70eb3c">DRAG TO STEER</span></button
+            ><span class="_label_f0a65c">DRAG TO STEER</span></button
           ><button
             type="button"
-            class="_boost_70eb3c"
+            class="_boost_f0a65c"
             aria-pressed="false"
             aria-label="Hold BOOST to sprint. Spends 3 size per second. Space or Shift also works."
           >
-            <span class="_bolt_70eb3c" aria-hidden="true">↯</span><b>BOOST</b
-            ><span class="_cost_70eb3c">Hold · −3 size/s</span>
+            <span class="_bolt_f0a65c" aria-hidden="true">↯</span><b>BOOST</b
+            ><span class="_cost_f0a65c">Hold · −3 size/s</span>
           </button>
         </div>
-        <p class="_hint_99408e">Drag to steer · Arrow keys / WASD · Space / Shift to boost</p>
+        <p class="_hint_d9f44b">Drag to steer · Arrow keys / WASD · Space / Shift to boost</p>
       </section>
     </div>
   </body>

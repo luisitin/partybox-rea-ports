@@ -16,10 +16,14 @@
 
 .header > div:first-child {
   min-width: 0;
+  flex: 1;
 }
 
 .title {
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: var(--pb-font-h1);
   font-weight: 900;
   line-height: 1.1;

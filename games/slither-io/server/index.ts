@@ -22,6 +22,7 @@ import type { Input, State, World } from './types';
 
 const manifest = gameManifestSchema.parse(manifestJson);
 interface MatchView {
+  snakeIds: string[];
   round: number;
   rounds: number;
   began: number;
@@ -82,8 +83,11 @@ const reduce = composeReduce<State, Input>({
       now,
     ),
   onPlayer: (s, e) => {
-    const next = setConnected(s, e);
-    return e.connected || !hasPlayer(s, e.playerId)
+    if (!hasPlayer(s, e.playerId) || s.players[e.playerId]!.connected === e.connected) return s;
+    // Judge elapsed movement with the presence that applied before this event.
+    const judged = s.phase.id === 'play' && !s.phase.paused ? settle(s, e.now) : s;
+    const next = setConnected(judged, e);
+    return e.connected
       ? next
       : {
           ...next,
@@ -111,6 +115,7 @@ const reduce = composeReduce<State, Input>({
 });
 
 const matchView = (s: State): MatchView => ({
+  snakeIds: s.world.snakes.map((snake) => snake.id),
   round: s.round,
   rounds: s.settings.rounds,
   began: s.began,
@@ -147,7 +152,7 @@ function controllerView(s: State, id: string): SnakeControllerView {
     ...(stage ? { world: s.world } : {}),
     slot,
     mass: snake?.mass ?? 0,
-    alive: snake?.respawnAt === null,
+    alive: snake?.respawnAt === null && s.players[id]?.connected === true,
     angle: snake?.target ?? 0,
     boost: snake?.boost ?? false,
     respawnIn:

@@ -1,4 +1,5 @@
 // Two simultaneous thumb targets: absolute heading and a separate, costly hold-to-boost action.
+import { useRef } from 'react';
 import type { JSX } from 'react';
 import { useT } from '@partybox/game-sdk/ui';
 import type { Input } from '../server/types';
@@ -16,7 +17,8 @@ interface ControlsProps {
 export function Controls({ angle, mass, enabled, send }: ControlsProps): JSX.Element {
   const L = useT(STRINGS);
   const canBoost = mass > 8;
-  const controls = useSteering({ angle, enabled, canBoost, send });
+  const compass = useRef<SVGSVGElement>(null);
+  const controls = useSteering({ angle, enabled, canBoost, send, compass });
   return (
     <div className={styles.controls} role="group" aria-label={L('Snake controls')}>
       <button
@@ -26,7 +28,7 @@ export function Controls({ angle, mass, enabled, send }: ControlsProps): JSX.Ele
         aria-label={L('Direction pad. Drag toward your heading, or use arrow keys or WASD.')}
         {...controls.steerHandlers}
       >
-        <svg className={styles.direction} viewBox="0 0 100 100" aria-hidden="true">
+        <svg ref={compass} className={styles.direction} viewBox="0 0 100 100" aria-hidden="true">
           <circle className={styles.padRing} cx="50" cy="50" r="37" />
           <path
             className={styles.compass}

@@ -1,12 +1,13 @@
 // Three strengths choose open routes toward nearby food; sharp bots look farther ahead.
 import type { BotSkill } from '@partybox/game-sdk';
 import { angleDelta, distance2, pointSegment2, rounded } from './geometry';
-import { H, MIN_MASS, W } from './types';
+import { BOT_DECISION_MS, H, MIN_MASS, W } from './types';
 import type { Food, Input, Point, World } from './types';
 
 export function botInput(world: World, id: string, skill: BotSkill = 'normal'): Input | null {
   const snake = world.snakes.find((s) => s.id === id);
   if (!snake || snake.respawnAt !== null) return null;
+  if (world.elapsed - (snake.steeredAt ?? -BOT_DECISION_MS) < BOT_DECISION_MS) return null;
   const head = snake.body[0]!;
   const look = skill === 'easy' ? 8 : skill === 'sharp' ? 20 : 14;
   let nearest: Food | undefined;

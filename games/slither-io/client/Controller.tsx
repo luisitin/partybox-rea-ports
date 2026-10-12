@@ -22,8 +22,9 @@ export function Controller({
   const playing = view.phaseId === 'play';
   const finalRound = view.round >= view.rounds;
   const player = view.me.role === 'player';
+  const connected = view.players.find((person) => person.id === view.me.id)?.connected === true;
   const showStage = phoneOnly || view.world !== undefined || !player;
-  const enabled = playing && player && view.alive && !view.paused;
+  const enabled = playing && player && connected && view.alive && !view.paused;
   const rows = standingsRows(view, !playing);
   const leaders = rows.filter((row) => row.total === (rows[0]?.total ?? 0));
   const points = view.scores[view.me.id] ?? 0;
@@ -75,7 +76,9 @@ export function Controller({
           </span>
         </div>
       ) : (
-        <p className={styles.spectating}>{L('Spectating · grow, crash, return')}</p>
+        <p className={styles.spectating}>
+          {view.paused ? L('Paused · spectating') : L('Spectating · grow, crash, return')}
+        </p>
       )}
       {showStage && view.world ? (
         <div className={styles.arena}>
@@ -98,11 +101,13 @@ export function Controller({
       ) : null}
       {playing && player ? (
         <>
-          {!view.alive || view.paused ? (
+          {!connected || !view.alive || view.paused ? (
             <p className={styles.notice} role="status">
               {view.paused
                 ? L('Paused · controls released')
-                : L('Crashed! Back in {n}s with a shield.', { n: respawnSeconds })}
+                : !connected
+                  ? L('Reconnecting · controls released')
+                  : L('Crashed! Back in {n}s with a shield.', { n: respawnSeconds })}
             </p>
           ) : null}
           <Controls

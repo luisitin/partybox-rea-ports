@@ -1,9 +1,11 @@
 # P06 handoff
 
-Claim: r2-local, branch job/P06-snake-royale. Resume before claiming any new job.
+Claim r2-local; branch job/P06-snake-royale; draft PR https://github.com/luisitin/partybox-rea-ports/pull/19. Resume this job before claiming another.
 
-The inherited port and reports were checked out; official-name migration to games/slither-io is complete. Corepack enable and pnpm.cmd install completed in r2 on 2026-10-12. Previous r6 verification is historical evidence, not a fresh result for any gameplay changes.
+Official-name migration is complete. Current reviewed game passed 130 tests across 8 files, including all 20 actual SDK assertions and 3000 mixed lifecycle property traces. Regenerated all fixtures/screens; all16 captures fit, 19 live-control checks pass, and all20 planted bugs are caught. Browser was closed in finally; no production server runs.
 
-Current work: fresh targeted semantic/client/SDK checks, typecheck and formatting; review live heading/boost, server cadence, boost body length, connection chronology and occupied respawns. The inherited NEXT mentioned ignored proposal directories, but none are present in this clone. Implement only defects verified against current source.
+Quality loop1 fixed cadence, boost body length, wall/head order, corpse fairness, occupied returns, presence chronology, compass/key releases and snake identity. VERIFY.md distinguishes fresh results from inherited evidence.
 
-Remaining: fix material audited defects with regressions; regenerate fixtures/screens, validate real controls in one isolated browser closed in finally; run seeded properties, mutations and exhaustive 1000 matches at every count 2–8; refresh VERIFY and media hashes. Open draft PR with this folder's README as body, obtain green CI, run KEEP GOING until three rounds show no player-visible gain, then mark claim DONE. No production server started.
+Running next: exhaustive1000 default three-round matches at every player count2–8 in one Vitest worker, with per-count reports in media/sim-N.json. Keep old reports labelled historical until replaced. Finish that run, format reports, refresh SHA256SUMS, obtain green P06 CI, then perform three consecutive KEEP GOING rounds with no player-visible gain before making PR ready and marking claim DONE.
+
+Owned claims worktree is now C:/dev/rea-runs/r2-claims so pnpm format does not scan a duplicate repo. Pull --rebase in that worktree before each CLAIMS commit and refresh P06 every branch push. No further job is claimed.

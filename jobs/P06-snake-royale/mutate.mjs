@@ -28,8 +28,8 @@ const mutations = [
   [
     'skip connected status update',
     'index.ts',
-    'const next = setConnected(s, e);',
-    'const next = s;',
+    'const next = setConnected(judged, e);',
+    'const next = judged;',
   ],
   [
     'boost sticks on disconnect',

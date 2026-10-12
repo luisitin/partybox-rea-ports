@@ -214,7 +214,7 @@ ight is the :root default above) ────────
         align-items: safe center;
         text-align: center;
       }
-      ._arena_bc8d47 {
+      ._arena_1f8074 {
         /* One SVG unit is derived from the spacing token; geometry stays in the server's 160 × 100 arena. */
         --arena-unit: calc(var(--pb-space-1) / 4);
         display: block;
@@ -223,33 +223,33 @@ ight is the :root default above) ────────
         overflow: hidden;
       }
 
-      ._floor_bc8d47 {
+      ._floor_1f8074 {
         fill: var(--pb-bg);
       }
 
-      ._grid_bc8d47 {
+      ._grid_1f8074 {
         fill: none;
         stroke: var(--pb-surface-2);
         stroke-width: calc(var(--arena-unit) * 0.15);
       }
 
-      ._wall_bc8d47 {
+      ._wall_1f8074 {
         fill: none;
         stroke: var(--pb-text-muted);
         stroke-width: calc(var(--arena-unit) * 0.6);
       }
 
-      ._food_bc8d47 {
+      ._food_1f8074 {
         fill: var(--pb-accent-2);
       }
 
-      ._corpseFood_bc8d47 {
+      ._corpseFood_1f8074 {
         fill: var(--pb-accent-3);
         stroke: var(--pb-text);
         stroke-width: calc(var(--arena-unit) * 0.15);
       }
 
-      ._body_bc8d47 {
+      ._body_1f8074 {
         fill: none;
         stroke: var(--snake-color);
         stroke-width: calc(var(--arena-unit) * 3);
@@ -257,24 +257,24 @@ ight is the :root default above) ────────
         stroke-linejoin: round;
       }
 
-      ._marks_bc8d47 {
+      ._marks_1f8074 {
         fill: none;
         stroke: var(--pb-bg);
         stroke-width: calc(var(--arena-unit) * 0.65);
         stroke-linecap: round;
       }
 
-      ._head_bc8d47 {
+      ._head_1f8074 {
         fill: var(--snake-color);
         stroke: var(--pb-text);
         stroke-width: calc(var(--arena-unit) * 0.3);
       }
 
-      ._eye_bc8d47 {
+      ._eye_1f8074 {
         fill: var(--pb-on-accent-2-fill);
       }
 
-      ._number_bc8d47 {
+      ._number_1f8074 {
         fill: var(--pb-text);
         stroke: var(--pb-bg);
         stroke-width: calc(var(--arena-unit) * 0.65);
@@ -285,25 +285,25 @@ ight is the :root default above) ────────
         font-weight: 900;
       }
 
-      ._shield_bc8d47 {
+      ._shield_1f8074 {
         fill: none;
         stroke: var(--pb-info);
         stroke-width: calc(var(--arena-unit) * 0.4);
         stroke-dasharray: var(--arena-unit) var(--arena-unit);
       }
 
-      ._boost_bc8d47 {
+      ._boost_1f8074 {
         fill: none;
         stroke: var(--pb-text);
         stroke-width: calc(var(--arena-unit) * 0.6);
         stroke-linecap: round;
       }
 
-      [data-me='true'] ._number_bc8d47 {
+      [data-me='true'] ._number_1f8074 {
         fill: var(--pb-accent-2);
       }
 
-      ._stage_e24928 {
+      ._stage_0ad49a {
         height: 100%;
         min-height: 0;
         gap: var(--pb-space-4);
@@ -312,37 +312,41 @@ ight is the :root default above) ────────
         overflow: hidden;
       }
 
-      ._header_e24928 {
+      ._header_0ad49a {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: var(--pb-space-5);
       }
 
-      ._header_e24928 > div:first-child {
+      ._header_0ad49a > div:first-child {
         min-width: 0;
+        flex: 1;
       }
 
-      ._title_e24928 {
+      ._title_0ad49a {
         margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-size: var(--pb-font-h1);
         font-weight: 900;
         line-height: 1.1;
       }
 
-      ._hint_e24928,
-      ._legend_e24928 {
+      ._hint_0ad49a,
+      ._legend_0ad49a {
         margin: 0;
         font-size: var(--pb-font-body);
         color: var(--pb-text-muted);
         line-height: 1.2;
       }
 
-      ._hint_e24928 {
+      ._hint_0ad49a {
         margin-top: var(--pb-space-2);
       }
 
-      ._clock_e24928 {
+      ._clock_0ad49a {
         display: grid;
         flex: none;
         justify-items: center;
@@ -351,16 +355,16 @@ ight is the :root default above) ────────
         font-variant-numeric: tabular-nums;
       }
 
-      ._clock_e24928 b {
+      ._clock_0ad49a b {
         font-size: calc(var(--pb-font-display) * 0.75);
         line-height: 1;
       }
 
-      ._clock_e24928[data-low='true'] b {
+      ._clock_0ad49a[data-low='true'] b {
         color: var(--pb-accent-2);
       }
 
-      ._board_e24928 {
+      ._board_0ad49a {
         display: grid;
         flex: 1;
         min-height: 0;
@@ -368,7 +372,7 @@ ight is the :root default above) ────────
         gap: var(--pb-space-5);
       }
 
-      ._arena_e24928 {
+      ._arena_0ad49a {
         min-width: 0;
         min-height: 0;
         background: var(--pb-bg);
@@ -376,21 +380,21 @@ ight is the :root default above) ────────
         overflow: hidden;
       }
 
-      ._side_e24928 {
+      ._side_0ad49a {
         min-height: 0;
         min-width: 0;
       }
 
-      ._railTitle_e24928 {
+      ._railTitle_0ad49a {
         margin: 0 0 var(--pb-space-2);
         font-size: var(--pb-font-body);
       }
 
-      ._legend_e24928 {
+      ._legend_0ad49a {
         text-align: center;
       }
 
-      ._screen_99408e {
+      ._screen_d9f44b {
         display: flex;
         flex-direction: column;
         height: 100%;
@@ -407,7 +411,7 @@ ight is the :root default above) ────────
         color: var(--pb-text);
       }
 
-      ._header_99408e {
+      ._header_d9f44b {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -416,7 +420,7 @@ ight is the :root default above) ────────
         min-width: 0;
       }
 
-      ._title_99408e {
+      ._title_d9f44b {
         margin: 0;
         min-width: 0;
         overflow: hidden;
@@ -427,7 +431,7 @@ ight is the :root default above) ────────
         line-height: 1.2;
       }
 
-      ._clock_99408e {
+      ._clock_d9f44b {
         flex: none;
         font-size: var(--pb-font-h1);
         font-weight: 900;
@@ -435,7 +439,7 @@ ight is the :root default above) ────────
         line-height: 1.1;
       }
 
-      ._stats_99408e {
+      ._stats_d9f44b {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -447,25 +451,25 @@ ight is the :root default above) ────────
         font-size: var(--pb-font-caption);
       }
 
-      ._stats_99408e > span {
+      ._stats_d9f44b > span {
         display: grid;
         justify-items: center;
         gap: var(--pb-space-1);
         line-height: 1;
       }
 
-      ._stats_99408e b {
+      ._stats_d9f44b b {
         font-size: var(--pb-font-h2);
         font-variant-numeric: tabular-nums;
       }
 
-      ._stats_99408e ._seat_99408e {
+      ._stats_d9f44b ._seat_d9f44b {
         display: flex;
         gap: var(--pb-space-2);
       }
 
-      ._seat_99408e b,
-      ._snakeNumber_99408e {
+      ._seat_d9f44b b,
+      ._snakeNumber_d9f44b {
         display: grid;
         place-items: center;
         flex: none;
@@ -476,12 +480,12 @@ ight is the :root default above) ────────
         font-weight: 900;
       }
 
-      ._seat_99408e b {
+      ._seat_d9f44b b {
         width: calc(var(--pb-touch) * 0.8);
         height: calc(var(--pb-touch) * 0.8);
       }
 
-      ._arena_99408e {
+      ._arena_d9f44b {
         flex: 1;
         min-height: calc(var(--pb-touch) * 2);
         overflow: hidden;
@@ -489,7 +493,7 @@ ight is the :root default above) ────────
         background: var(--pb-bg);
       }
 
-      ._identity_99408e {
+      ._identity_d9f44b {
         display: flex;
         flex: 1;
         min-height: 0;
@@ -500,35 +504,35 @@ ight is the :root default above) ────────
         gap: var(--pb-space-2);
       }
 
-      ._snakeNumber_99408e {
+      ._snakeNumber_d9f44b {
         width: calc(var(--pb-touch) * 2);
         height: calc(var(--pb-touch) * 2);
         font-size: var(--pb-font-display);
       }
 
-      ._identity_99408e h2 {
+      ._identity_d9f44b h2 {
         margin: 0;
         font-size: var(--pb-font-h1);
       }
 
-      ._identity_99408e p,
-      ._hint_99408e,
-      ._spectating_99408e,
-      ._result_99408e p {
+      ._identity_d9f44b p,
+      ._hint_d9f44b,
+      ._spectating_d9f44b,
+      ._result_d9f44b p {
         margin: 0;
         font-size: var(--pb-font-caption);
         line-height: 1.3;
         color: var(--pb-text-muted);
       }
 
-      ._hint_99408e,
-      ._spectating_99408e,
-      ._result_99408e {
+      ._hint_d9f44b,
+      ._spectating_d9f44b,
+      ._result_d9f44b {
         text-align: center;
         flex: none;
       }
 
-      ._notice_99408e {
+      ._notice_d9f44b {
         margin: 0;
         padding: var(--pb-space-2);
         border-radius: var(--pb-radius);
@@ -538,19 +542,19 @@ ight is the :root default above) ────────
         font-weight: 800;
       }
 
-      ._result_99408e {
+      ._result_d9f44b {
         display: grid;
         gap: var(--pb-space-2);
         padding: var(--pb-space-2);
         font-size: var(--pb-font-body);
       }
 
-      ._screen_99408e[data-stage]:not([data-phase='play']) ._arena_99408e {
+      ._screen_d9f44b[data-stage]:not([data-phase='play']) ._arena_d9f44b {
         max-height: calc(var(--pb-touch) * 5);
         flex-basis: calc(var(--pb-touch) * 4);
       }
 
-      ._controls_70eb3c {
+      ._controls_f0a65c {
         display: grid;
         grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
         gap: var(--pb-space-3);
@@ -559,8 +563,8 @@ ight is the :root default above) ────────
         color: var(--pb-text);
       }
 
-      ._pad_70eb3c,
-      ._boost_70eb3c {
+      ._pad_f0a65c,
+      ._boost_f0a65c {
         position: relative;
         display: flex;
         flex-direction: column;
@@ -582,35 +586,35 @@ ight is the :root default above) ────────
         transition: background var(--pb-motion-fast) var(--pb-ease);
       }
 
-      ._pad_70eb3c:focus-visible,
-      ._boost_70eb3c:focus-visible {
+      ._pad_f0a65c:focus-visible,
+      ._boost_f0a65c:focus-visible {
         outline: var(--pb-space-1) solid var(--pb-focus);
         outline-offset: var(--pb-space-1);
       }
 
-      ._pad_70eb3c:disabled,
-      ._boost_70eb3c:disabled {
+      ._pad_f0a65c:disabled,
+      ._boost_f0a65c:disabled {
         opacity: 0.5;
       }
 
-      ._direction_70eb3c {
+      ._direction_f0a65c {
         flex: 1;
         min-height: 0;
         width: 100%;
         max-height: calc(var(--pb-touch) * 3);
       }
 
-      ._padRing_70eb3c {
+      ._padRing_f0a65c {
         fill: var(--pb-surface);
         stroke: var(--snake-color);
         stroke-width: calc(var(--pb-space-1) / 2);
       }
 
-      ._compass_70eb3c {
+      ._compass_f0a65c {
         fill: var(--pb-text-muted);
       }
 
-      ._heading_70eb3c {
+      ._heading_f0a65c {
         fill: none;
         stroke: var(--pb-text);
         stroke-width: var(--pb-space-1);
@@ -618,34 +622,34 @@ ight is the :root default above) ────────
         stroke-linejoin: round;
       }
 
-      ._label_70eb3c,
-      ._cost_70eb3c {
+      ._label_f0a65c,
+      ._cost_f0a65c {
         font-size: var(--pb-font-caption);
         line-height: 1.2;
       }
 
-      ._label_70eb3c {
+      ._label_f0a65c {
         font-weight: 900;
       }
 
-      ._boost_70eb3c[data-held='true'] {
+      ._boost_f0a65c[data-held='true'] {
         background: var(--snake-color);
         color: var(--pb-on-accent-2-fill);
       }
 
-      ._bolt_70eb3c {
+      ._bolt_f0a65c {
         font-size: var(--pb-font-display);
         line-height: 1;
       }
 
       @media (prefers-reduced-motion: reduce) {
-        ._pad_70eb3c,
-        ._boost_70eb3c {
+        ._pad_f0a65c,
+        ._boost_f0a65c {
           transition: none;
         }
       }
 
-      ._rows_61b6c5 {
+      ._rows_e51e00 {
         display: grid;
         align-content: start;
         gap: var(--pb-space-2);
@@ -657,7 +661,7 @@ ight is the :root default above) ────────
         line-height: 1.1;
       }
 
-      ._rows_61b6c5 li {
+      ._rows_e51e00 li {
         display: flex;
         align-items: center;
         gap: var(--pb-space-2);
@@ -668,7 +672,7 @@ ight is the :root default above) ────────
         background: var(--pb-surface);
       }
 
-      ._number_61b6c5 {
+      ._number_e51e00 {
         display: grid;
         place-items: center;
         flex: none;
@@ -681,24 +685,24 @@ ight is the :root default above) ────────
         border: calc(var(--pb-space-1) / 2) solid var(--pb-text);
       }
 
-      ._identity_61b6c5 {
+      ._identity_e51e00 {
         display: grid;
         min-width: 0;
       }
 
-      ._name_61b6c5 {
+      ._name_e51e00 {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
 
-      ._status_61b6c5 {
+      ._status_e51e00 {
         font-size: inherit;
         color: var(--pb-text-muted);
         line-height: 1.1;
       }
 
-      ._value_61b6c5 {
+      ._value_e51e00 {
         display: grid;
         justify-items: end;
         flex: none;
@@ -707,65 +711,65 @@ ight is the :root default above) ────────
         line-height: 1.1;
       }
 
-      ._gain_61b6c5 {
+      ._gain_e51e00 {
         color: var(--pb-accent-2);
       }
 
-      ._rows_61b6c5 li[data-me='true'] {
+      ._rows_e51e00 li[data-me='true'] {
         outline: calc(var(--pb-space-1) / 2) solid var(--snake-color);
         outline-offset: calc(var(--pb-space-1) / -2);
       }
 
-      ._rows_61b6c5 li[data-respawn='true'] ._number_61b6c5 {
+      ._rows_e51e00 li[data-respawn='true'] ._number_e51e00 {
         border-style: dashed;
       }
 
       /* Eight names occupy four rows on a score stage, or two small rows under a live phone arena. */
-      ._rows_61b6c5[data-compact='true'] {
+      ._rows_e51e00[data-compact='true'] {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: var(--pb-space-1);
         font-size: var(--pb-font-caption);
       }
 
-      ._rows_61b6c5[data-compact='true'] li {
+      ._rows_e51e00[data-compact='true'] li {
         min-height: var(--pb-touch);
         gap: var(--pb-space-1);
         padding: var(--pb-space-1);
       }
 
-      ._rows_61b6c5[data-compact='true'] ._number_61b6c5 {
+      ._rows_e51e00[data-compact='true'] ._number_e51e00 {
         width: calc(var(--pb-touch) / 2);
         height: calc(var(--pb-touch) / 2);
       }
 
-      ._rows_61b6c5[data-compact='true'] ._status_61b6c5 {
+      ._rows_e51e00[data-compact='true'] ._status_e51e00 {
         font-size: var(--pb-font-caption);
       }
 
-      ._rows_61b6c5[data-compact='true'][aria-label] ._value_61b6c5 {
+      ._rows_e51e00[data-compact='true'][aria-label] ._value_e51e00 {
         font-size: var(--pb-font-body);
       }
 
-      ._rows_61b6c5[data-compact='true'][data-phase='play'] {
+      ._rows_e51e00[data-compact='true'][data-phase='play'] {
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
 
-      ._rows_61b6c5[data-compact='true'][data-phase='play'] li {
+      ._rows_e51e00[data-compact='true'][data-phase='play'] li {
         display: grid;
         grid-template-columns: auto minmax(0, 1fr);
         column-gap: var(--pb-space-1);
         row-gap: 0;
       }
 
-      ._rows_61b6c5[data-compact='true'][data-phase='play'] ._number_61b6c5 {
+      ._rows_e51e00[data-compact='true'][data-phase='play'] ._number_e51e00 {
         grid-row: span 2;
       }
 
-      ._rows_61b6c5[data-compact='true'][data-phase='play'] ._status_61b6c5 {
+      ._rows_e51e00[data-compact='true'][data-phase='play'] ._status_e51e00 {
         display: none;
       }
 
-      ._rows_61b6c5[data-compact='true'][data-phase='play'] ._value_61b6c5 {
+      ._rows_e51e00[data-compact='true'][data-phase='play'] ._value_e51e00 {
         grid-column: 2;
         justify-items: start;
         margin-left: 0;
@@ -799,450 +803,534 @@ ight is the :root default above) ────────
   <body>
     <div id="root">
       <section
-        class="_screen_99408e"
+        class="_screen_d9f44b"
         style="--snake-color: var(--pb-player-1)"
         data-stage="true"
         data-phase="score"
       >
-        <header class="_header_99408e">
-          <h1 class="_title_99408e" title="Round 3 banked!">Round 3 banked!</h1>
-          <div class="_clock_99408e" role="timer" aria-label="Final results">0:07</div>
+        <header class="_header_d9f44b">
+          <h1 class="_title_d9f44b" title="Round 3 banked!">Round 3 banked!</h1>
+          <div class="_clock_d9f44b" role="timer" aria-label="Final results">0:07</div>
         </header>
-        <p class="_spectating_99408e">Spectating · grow, crash, return</p>
-        <div class="_arena_99408e">
+        <p class="_spectating_d9f44b">Spectating · grow, crash, return</p>
+        <div class="_arena_d9f44b">
           <svg
-            class="_arena_bc8d47"
+            class="_arena_1f8074"
             viewBox="0 0 160 100"
             role="img"
             aria-label="Snake arena. Eat sparks; avoid walls and other snakes."
           >
-            <rect class="_floor_bc8d47" x="0" y="0" width="160" height="100" rx="2"></rect>
+            <rect class="_floor_1f8074" x="0" y="0" width="160" height="100" rx="2"></rect>
             <path
-              class="_grid_bc8d47"
+              class="_grid_1f8074"
               d="M40 0V100M80 0V100M120 0V100M0 25H160M0 50H160M0 75H160"
             ></path>
-            <circle class="_food_bc8d47" cx="20.633" cy="24.521" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="21.205" cy="33.338" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="60.212" cy="34.754" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="60.838" cy="37.892" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="66.406" cy="44.663" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="127.012" cy="50.158" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="121.864" cy="58.264" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="114.229" cy="62.575" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="111.029" cy="62.591" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="107.829" cy="62.607" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="104.629" cy="62.623" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="101.429" cy="62.639" r="0.55"></circle>
-            <path class="_corpseFood_bc8d47" d="M116.449 29.063l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <circle class="_food_bc8d47" cx="120.178" cy="74.412" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="115.27" cy="82.662" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="113.634" cy="85.412" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="100.796" cy="94.481" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="99.944" cy="91.447" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="113.075" cy="40.468" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="107.283" cy="33.174" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="78.519" cy="31.59" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="97.405" cy="49.882" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="71.853" cy="48.186" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="68.659" cy="47.974" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="65.465" cy="47.762" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="62.271" cy="47.55" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="59.077" cy="47.338" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="95.313" cy="2" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="94.639" cy="4.067" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="96.106" cy="6.856" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="114.664" cy="11.404" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="117.792" cy="12.076" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="120.92" cy="12.748" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="130.166" cy="11.813" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="133.178" cy="10.735" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="136.19" cy="9.657" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="139.202" cy="8.579" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="142.269" cy="7.69" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="80.041" cy="76.934" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="77.601" cy="74.862" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="75.161" cy="72.79" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="74.078" cy="69.831" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="20.475" cy="54.259" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="23.655" cy="53.903" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="26.835" cy="53.547" r="0.55"></circle>
+            <path class="_corpseFood_1f8074" d="M2 29.59l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M3.769 30.404l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M6.622 29.066l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M7.942 26.205l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
             <path
-              class="_corpseFood_bc8d47"
-              d="M118.954 77.39200000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              class="_corpseFood_1f8074"
+              d="M7.646 23.017999999999997l1.1 1.1-1.1 1.1-1.1-1.1Z"
             ></path>
-            <path class="_corpseFood_bc8d47" d="M121.564 79.242l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M129.394 84.792l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M7.708 19.839l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
             <path
-              class="_corpseFood_bc8d47"
-              d="M132.004 86.64200000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              class="_corpseFood_1f8074"
+              d="M9.633 17.343999999999998l1.1 1.1-1.1 1.1-1.1-1.1Z"
             ></path>
+            <path class="_corpseFood_1f8074" d="M12.712 16.674l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
             <path
-              class="_corpseFood_bc8d47"
-              d="M144.896 82.81400000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              class="_corpseFood_1f8074"
+              d="M20.598 26.279999999999998l1.1 1.1-1.1 1.1-1.1-1.1Z"
             ></path>
-            <path class="_corpseFood_bc8d47" d="M143.702 79.846l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M142.508 76.878l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M22.298 28.991l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
             <path
-              class="_corpseFood_bc8d47"
-              d="M42.979 16.229999999999997l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              class="_corpseFood_1f8074"
+              d="M23.999 31.701999999999998l1.1 1.1-1.1 1.1-1.1-1.1Z"
             ></path>
-            <path class="_corpseFood_bc8d47" d="M41.269 18.878l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M40.027 21.828l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <circle class="_food_bc8d47" cx="43.12" cy="14.353" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="39.984" cy="14.991" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="33.712" cy="16.267" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="30.576" cy="16.905" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="27.44" cy="17.543" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="24.304" cy="18.181" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="21.168" cy="18.819" r="0.55"></circle>
+            <path class="_corpseFood_1f8074" d="M25.7 34.412l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M27.4 37.123l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
             <path
-              class="_corpseFood_bc8d47"
-              d="M115.583 22.506999999999998l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              class="_corpseFood_1f8074"
+              d="M29.101 39.833999999999996l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M62.96 56.643l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M92.577 68.57900000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M95.441 67.263l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M98.077 65.44900000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M100.712 63.633l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M109.94 57.286l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <circle class="_food_1f8074" cx="116.916" cy="60.458" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="126.089" cy="54.098" r="0.55"></circle>
+            <path class="_corpseFood_1f8074" d="M70.299 47.61l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M61.003 49.66l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M57.923 50.528l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M54.843 51.396l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M36.363 56.604l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M27.123 59.208l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M24.043 60.076l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M20.963 60.943999999999996l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M17.883 61.812l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M15.728 71.94800000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M17.042 74.866l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M18.356 77.784l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M31.63 84.07700000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
             ></path>
             <path
-              class="_corpseFood_bc8d47"
-              d="M113.283 24.732999999999997l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              class="_corpseFood_1f8074"
+              d="M34.795 84.54700000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
             ></path>
             <path
-              class="_corpseFood_bc8d47"
-              d="M110.267 25.645999999999997l1.1 1.1-1.1 1.1-1.1-1.1Z"
-            ></path>
-            <path class="_corpseFood_bc8d47" d="M97.803 22.718l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path
-              class="_corpseFood_bc8d47"
-              d="M51.984 21.093999999999998l1.1 1.1-1.1 1.1-1.1-1.1Z"
-            ></path>
-            <path class="_corpseFood_bc8d47" d="M54.258 18.842l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M82.404 13.852l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M94.9 16.644l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M98.024 17.342l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path
-              class="_corpseFood_bc8d47"
-              d="M101.181 17.561999999999998l1.1 1.1-1.1 1.1-1.1-1.1Z"
-            ></path>
-            <path class="_corpseFood_bc8d47" d="M110.594 9.012l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M112.868 6.76l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path
-              class="_corpseFood_bc8d47"
-              d="M115.142 4.507999999999999l1.1 1.1-1.1 1.1-1.1-1.1Z"
-            ></path>
-            <path class="_corpseFood_bc8d47" d="M117.575 2.444l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M120.71 2.125l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path
-              class="_corpseFood_bc8d47"
-              d="M123.314 3.9010000000000002l1.1 1.1-1.1 1.1-1.1-1.1Z"
-            ></path>
-            <path class="_corpseFood_bc8d47" d="M124.161 6.936l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path
-              class="_corpseFood_bc8d47"
-              d="M124.471 10.120000000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
-            ></path>
-            <path class="_corpseFood_bc8d47" d="M124.781 13.304l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M125.091 16.488l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M129.616 34.195l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M132.464 35.655l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M141.637 36.995l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <circle class="_food_bc8d47" cx="19.436" cy="84.361" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="126.234" cy="55.181" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="124.136" cy="52.83" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="121.622" cy="50.85" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="100.64" cy="55.012" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="97.616" cy="56.058" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="94.592" cy="57.104" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="91.568" cy="58.15" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="8.758" cy="64.388" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="9.044" cy="67.576" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="9.33" cy="70.764" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="11.015" cy="73.426" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="30.867" cy="83.8" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="33.703" cy="85.282" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="36.539" cy="86.764" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="50.922" cy="86.577" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="53.702" cy="84.991" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="56.482" cy="83.405" r="0.55"></circle>
-            <path class="_corpseFood_bc8d47" d="M70.997 55.223l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path class="_corpseFood_bc8d47" d="M69.407 58.001l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <path
-              class="_corpseFood_bc8d47"
-              d="M67.685 60.693999999999996l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              class="_corpseFood_1f8074"
+              d="M37.961 85.01700000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
             ></path>
             <path
-              class="_corpseFood_bc8d47"
-              d="M65.895 63.34499999999999l1.1 1.1-1.1 1.1-1.1-1.1Z"
+              class="_corpseFood_1f8074"
+              d="M41.126 85.48700000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
             ></path>
-            <path class="_corpseFood_bc8d47" d="M70.036 71.152l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
-            <circle class="_food_bc8d47" cx="158" cy="66.33" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="156.343" cy="64.525" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="153.205" cy="64.808" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="150.591" cy="66.654" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="147.977" cy="68.5" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="145.363" cy="70.346" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="142.749" cy="72.192" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="140.135" cy="74.038" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="137.521" cy="75.884" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="134.907" cy="77.73" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="132.293" cy="79.576" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="129.679" cy="81.422" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="119.223" cy="88.806" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="116.609" cy="90.652" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="113.995" cy="92.498" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="111.381" cy="94.344" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="108.767" cy="96.19" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="105.919" cy="97.544" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="102.729" cy="97.298" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="99.539" cy="97.052" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="96.926" cy="95.29" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="96.062" cy="92.259" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="97.354" cy="89.385" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="100.194" cy="88.019" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="103.384" cy="88.263" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="106.574" cy="88.507" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="109.764" cy="88.751" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="112.954" cy="88.995" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="116.144" cy="89.239" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="85.596" cy="2" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="86.077" cy="4.574" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="86.007" cy="7.774" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="85.937" cy="10.974" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="85.867" cy="14.174" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="85.797" cy="17.374" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="85.256" cy="20.492" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="82.895" cy="22.579" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="77.435" cy="25.919" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="74.502" cy="27.07" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="23.111" cy="88.234" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="23.766" cy="85.152" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="25.91" cy="82.776" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="28.054" cy="80.4" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="30.198" cy="78.024" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="32.342" cy="75.648" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="34.486" cy="73.272" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="37.433" cy="72.158" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="40.591" cy="72.68" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="43.749" cy="73.202" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="77.503" cy="40.283" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="79.678" cy="38.004" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="81.45" cy="35.34" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="82.789" cy="32.474" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="82.047" cy="29.411" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="80.763" cy="26.479" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="79.479" cy="23.547" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="78.195" cy="20.615" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="76.911" cy="17.683" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="69.085" cy="13.473" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="65.925" cy="12.969" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="62.765" cy="12.465" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="59.605" cy="11.961" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="56.425" cy="11.682" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="53.672" cy="13.215" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="51.19" cy="15.235" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="49.062" cy="17.576" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="48.864" cy="20.721" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="49.222" cy="23.901" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="49.102" cy="27.063" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="47.041" cy="29.447" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="44.559" cy="31.467" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="42.077" cy="33.487" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="39.595" cy="35.507" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="37.113" cy="37.527" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="34.631" cy="39.547" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="32.149" cy="41.567" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="29.667" cy="43.587" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="27.185" cy="45.607" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="24.703" cy="47.627" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="22.221" cy="49.647" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="19.739" cy="51.667" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="17.257" cy="53.687" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="14.775" cy="55.707" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="12.293" cy="57.727" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="9.811" cy="59.747" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="7.329" cy="61.767" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="5.201" cy="64.108" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="76.456" cy="39.023" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="75.824" cy="35.936" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="74.646" cy="32.96" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="73.125" cy="30.171" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="70.253" cy="28.875" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="67.151" cy="28.087" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="64.002" cy="27.775" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="61.359" cy="29.492" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="59.019" cy="31.676" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="56.679" cy="33.86" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="54.339" cy="36.044" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="51.999" cy="38.228" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="49.659" cy="40.412" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="47.319" cy="42.596" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="44.979" cy="44.78" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="42.639" cy="46.964" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="40.299" cy="49.148" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="37.959" cy="51.332" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="35.994" cy="53.813" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="36.011" cy="56.964" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="36.585" cy="60.112" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="32.447" cy="67.978" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="30.107" cy="70.162" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="27.767" cy="72.346" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="25.427" cy="74.53" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="23.087" cy="76.714" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="20.747" cy="78.898" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="18.407" cy="81.082" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="16.067" cy="83.266" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="14.245" cy="85.837" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="14.508" cy="88.977" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="127.475" cy="98" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="128.769" cy="96.319" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="127.907" cy="93.288" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="125.607" cy="91.062" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="123.538" cy="88.639" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="123.265" cy="85.5" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="124.623" cy="82.602" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="125.981" cy="79.704" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="126.014" cy="76.553" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="124.438" cy="73.767" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="122.862" cy="70.981" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="122.735" cy="67.833" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="124.227" cy="65.001" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="125.719" cy="62.169" r="0.55"></circle>
-            <circle class="_food_bc8d47" cx="127.211" cy="59.337" r="0.55"></circle>
+            <path
+              class="_corpseFood_1f8074"
+              d="M44.291 85.95700000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M47.457 86.427l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M50.622 86.897l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M53.787 87.367l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M56.952 87.837l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M60.118 88.307l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M92.615 41.522999999999996l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M60.613 47.711999999999996l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M57.419 47.513999999999996l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M54.225 47.315999999999995l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M51.031 47.118l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M41.492 46.119l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M38.327 45.650999999999996l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M31.54 32.226l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M92.682 64.55000000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M91.288 61.67l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M89.894 58.789l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M88.5 55.909l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M86.71 53.3l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M83.695 52.382999999999996l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M80.518 51.998999999999995l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M77.341 51.615l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M67.811 50.463l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M64.763 49.615l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M62.921 47.056999999999995l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M61.527 44.177l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M60.133 41.297l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M58.739 38.416l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M54.557 29.775l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M53.163 26.894l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M51.769 24.014l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M50.374 21.134l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M46.193 12.492l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M46.401 9.349l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M48.6 7.089l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M51.734 6.757999999999999l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M54.34 8.535l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M56.638 10.762l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M58.936 12.988l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M91.145 65.299l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M88.013 65.953l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M84.88 66.607l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M81.748 67.26100000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M78.589 67.438l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M76.022 65.60900000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M73.778 63.327000000000005l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M71.535 61.046l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M67.047 56.482l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M64.803 54.202l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M61.812 53.211l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M58.679 53.865l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M55.547 54.519l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M46.15 56.481l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M40.236 54.233l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M37.354 52.841l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M28.71 48.665l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M25.829 47.272999999999996l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M22.947 45.881l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M20.066 44.489l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M86.824 46.836l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M83.658 47.298l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M80.491 47.76l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M77.325 48.222l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M74.543 49.699999999999996l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M72.846 52.414l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M71.151 55.128l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M69.454 57.839999999999996l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M67.759 60.555l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M66.063 63.267999999999994l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M63.519 67.339l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <circle class="_food_1f8074" cx="98.727" cy="51.364" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="99.953" cy="48.408" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="101.179" cy="45.452" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="102.405" cy="42.496" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="104.04" cy="39.787" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="106.996" cy="38.698" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="113.296" cy="37.566" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="116.445" cy="37" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="119.595" cy="36.434" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="122.744" cy="35.868" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="125.892" cy="36.018" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="128.206" cy="38.158" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="126.089" cy="47.175" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="124.837" cy="50.12" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="123.585" cy="53.065" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="122.333" cy="56.01" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="121.081" cy="58.955" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="119.829" cy="61.899" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="118.577" cy="64.844" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="116.605" cy="67.304" r="0.55"></circle>
+            <path class="_corpseFood_1f8074" d="M70.291 17.221l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M71.78 14.444l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M74.503 12.762l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M77.225 11.08l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M79.947 9.398l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M82.669 7.716000000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M85.811 7.469000000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M88.697 8.851l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M91.516 10.358l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M63.561 79.64500000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M60.362 79.70500000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M57.162 79.765l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M54.025 79.351l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M51.842 77.078l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M50.062 74.41900000000001l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M48.282 71.76l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M46.502 69.101l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M44.722 66.441l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path
+              class="_corpseFood_1f8074"
+              d="M42.942 63.782000000000004l1.1 1.1-1.1 1.1-1.1-1.1Z"
+            ></path>
+            <path class="_corpseFood_1f8074" d="M41.595 60.919l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M42.329 57.855l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M43.605 54.92l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M44.881 51.986l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <path class="_corpseFood_1f8074" d="M49.985 40.247l1.1 1.1-1.1 1.1-1.1-1.1Z"></path>
+            <circle class="_food_1f8074" cx="65.752" cy="80.656" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="66.334" cy="83.803" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="67.6" cy="86.688" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="70.427" cy="88.08" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="73.62" cy="87.864" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="76.813" cy="87.648" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="80.005" cy="87.432" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="83.198" cy="87.216" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="86.391" cy="87" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="89.583" cy="86.784" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="92.776" cy="86.568" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="95.969" cy="86.352" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="99.162" cy="86.136" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="102.354" cy="85.92" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="105.547" cy="85.704" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="108.74" cy="85.488" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="111.932" cy="85.272" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="115.019" cy="84.582" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="116.99" cy="82.121" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="121.622" cy="73.712" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="123.562" cy="71.213" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="126.62" cy="70.453" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="129.813" cy="70.237" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="133.005" cy="70.021" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="136.198" cy="69.805" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="144.665" cy="73.159" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="147.171" cy="75.149" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="149.676" cy="77.139" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="152.182" cy="79.129" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="154.684" cy="81.124" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="156.972" cy="83.34" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="157.578" cy="86.431" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="156.017" cy="89.172" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="153.064" cy="90.278" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="150.096" cy="89.208" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="147.307" cy="87.639" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="87.907" cy="41.399" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="90.073" cy="39.043" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="92.239" cy="36.688" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="94.405" cy="34.332" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="96.571" cy="31.977" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="98.737" cy="29.621" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="107.094" cy="24.897" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="109.88" cy="23.323" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="112.666" cy="21.749" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="115.452" cy="20.175" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="118.239" cy="18.601" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="121.025" cy="17.027" r="0.55"></circle>
+            <circle class="_food_1f8074" cx="133.562" cy="9.944" r="0.55"></circle>
+            <g style="--snake-color: var(--pb-player-1)">
+              <title>Alex, snake 1</title>
+              <polyline
+                class="_body_1f8074"
+                points="12.532,76.826 12.686,75.233 12.84,73.641 12.994,72.048 13.148,70.456 13.302,68.863 13.456,67.271 13.61,65.678 13.764,64.085 13.918,62.493 14.072,60.9 14.226,59.308 14.38,57.715 14.534,56.123 14.688,54.53 14.842,52.937 14.996,51.345 15.15,49.752 15.304,48.16 15.458,46.567 15.612,44.975 15.766,43.382 15.92,41.789 16.074,40.197 16.228,38.604 16.382,37.012 16.536,35.419 16.69,33.827 16.844,32.234 16.998,30.641 17.152,29.049 17.306,27.456 17.46,25.864 17.614,24.271 17.768,22.679 17.922,21.086 18.076,19.493 18.23,17.901 18.384,16.308 18.538,14.716 18.692,13.123 18.846,11.531 19,9.938 19.617,8.462 20.694,7.278 22.112,6.538 23.535,5.807 25.121,5.594 26.684,5.938 28.034,6.797 29.016,8.06 29.501,9.584 29.428,11.183 28.81,12.659 27.724,13.834 26.306,14.575 24.883,15.307 23.461,16.04 22.038,16.771 20.615,17.503 19.193,18.236 17.77,18.968 16.347,19.699 14.925,20.432 13.782,21.552 13.085,22.992 12.932,24.585 12.779,26.177 12.626,27.77 12.473,29.363 12.32,30.955 12.167,32.548 12.014,34.141 11.861,35.733 11.708,37.326 11.555,38.919 11.402,40.511 11.249,42.104"
+              ></polyline>
+              <g transform="translate(12.532 76.826) rotate(95.51206444830824)">
+                <circle class="_head_1f8074" r="1.8"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="-0.7" r="0.35"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="0.7" r="0.35"></circle>
+              </g>
+              <text class="_number_1f8074" x="12.532" y="72.826">1</text>
+            </g>
             <g style="--snake-color: var(--pb-player-2)">
               <title>Bailey, snake 2</title>
               <polyline
-                class="_body_bc8d47"
-                points="80.207,13.251 78.616,13.421 77.18,14.127 75.744,14.833 74.308,15.539 72.872,16.245 71.436,16.951 70,17.657 68.564,18.363 67.128,19.069 65.692,19.775 64.256,20.481 62.82,21.187 61.384,21.893 59.948,22.599 58.512,23.305 57.076,24.011 55.64,24.717 54.204,25.423"
+                class="_body_1f8074"
+                points="139.444,73.575 139.978,72.067 140.512,70.559 141.046,69.05 141.58,67.542 142.114,66.034 142.648,64.525 142.76,62.929 142.318,61.392 141.375,60.099 140.432,58.807 139.489,57.514 138.546,56.222 137.604,54.928 136.661,53.636 135.718,52.343 134.775,51.051 133.832,49.757 132.89,48.465"
               ></polyline>
               <polyline
-                class="_marks_bc8d47"
-                points="80.207,13.251 78.616,13.421 77.18,14.127 75.744,14.833 74.308,15.539 72.872,16.245 71.436,16.951 70,17.657 68.564,18.363 67.128,19.069 65.692,19.775 64.256,20.481 62.82,21.187 61.384,21.893 59.948,22.599 58.512,23.305 57.076,24.011 55.64,24.717 54.204,25.423"
+                class="_marks_1f8074"
+                points="139.444,73.575 139.978,72.067 140.512,70.559 141.046,69.05 141.58,67.542 142.114,66.034 142.648,64.525 142.76,62.929 142.318,61.392 141.375,60.099 140.432,58.807 139.489,57.514 138.546,56.222 137.604,54.928 136.661,53.636 135.718,52.343 134.775,51.051 133.832,49.757 132.89,48.465"
                 stroke-dasharray="0.6 2.4"
               ></polyline>
-              <g transform="translate(80.207 13.251) rotate(-6.112866007450562)">
-                <circle class="_head_bc8d47" r="1.8"></circle>
-                <circle class="_eye_bc8d47" cx="0.8" cy="-0.7" r="0.35"></circle>
-                <circle class="_eye_bc8d47" cx="0.8" cy="0.7" r="0.35"></circle>
+              <g transform="translate(139.444 73.575) rotate(109.49223464950032)">
+                <circle class="_head_1f8074" r="1.8"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="-0.7" r="0.35"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="0.7" r="0.35"></circle>
               </g>
-              <text class="_number_bc8d47" x="80.207" y="9.251">2</text>
+              <text class="_number_1f8074" x="139.444" y="69.575">2</text>
             </g>
             <g style="--snake-color: var(--pb-player-3)">
               <title>Cameron, snake 3</title>
               <polyline
-                class="_body_bc8d47"
-                points="25.618,53.99 26.804,55.064 27.99,56.138 29.176,57.212 30.362,58.286 31.548,59.36 32.734,60.434 33.92,61.508 35.106,62.582 36.292,63.656 37.478,64.73 38.664,65.804 39.85,66.878 41.036,67.951 42.223,69.025 43.409,70.099 44.595,71.173 45.781,72.247 46.967,73.32 48.153,74.394 49.34,75.468 50.526,76.542 51.712,77.616"
+                class="_body_1f8074"
+                points="89.757,17.18 88.976,18.577 87.891,19.753 86.469,20.485 84.881,20.685 83.294,20.885 81.706,21.085 80.119,21.285 78.532,21.485 76.944,21.685 75.357,21.885 73.769,22.085 72.182,22.285 70.594,22.485 69.007,22.685 67.419,22.885 65.832,23.086"
               ></polyline>
               <polyline
-                class="_marks_bc8d47"
-                points="25.618,53.99 26.804,55.064 27.99,56.138 29.176,57.212 30.362,58.286 31.548,59.36 32.734,60.434 33.92,61.508 35.106,62.582 36.292,63.656 37.478,64.73 38.664,65.804 39.85,66.878 41.036,67.951 42.223,69.025 43.409,70.099 44.595,71.173 45.781,72.247 46.967,73.32 48.153,74.394 49.34,75.468 50.526,76.542 51.712,77.616"
+                class="_marks_1f8074"
+                points="89.757,17.18 88.976,18.577 87.891,19.753 86.469,20.485 84.881,20.685 83.294,20.885 81.706,21.085 80.119,21.285 78.532,21.485 76.944,21.685 75.357,21.885 73.769,22.085 72.182,22.285 70.594,22.485 69.007,22.685 67.419,22.885 65.832,23.086"
                 stroke-dasharray="0.7 2.8"
               ></polyline>
-              <circle class="_shield_bc8d47" cx="25.618" cy="53.99" r="3.4"></circle>
-              <g transform="translate(25.618 53.99) rotate(-137.84626298660083)">
-                <circle class="_head_bc8d47" r="1.8"></circle>
-                <circle class="_eye_bc8d47" cx="0.8" cy="-0.7" r="0.35"></circle>
-                <circle class="_eye_bc8d47" cx="0.8" cy="0.7" r="0.35"></circle>
+              <g transform="translate(89.757 17.18) rotate(-60.79082206338034)">
+                <circle class="_head_1f8074" r="1.8"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="-0.7" r="0.35"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="0.7" r="0.35"></circle>
               </g>
-              <text class="_number_bc8d47" x="25.618" y="49.99">3</text>
+              <text class="_number_1f8074" x="89.757" y="13.18">3</text>
             </g>
             <g style="--snake-color: var(--pb-player-4)">
               <title>Devon, snake 4</title>
               <polyline
-                class="_body_bc8d47"
-                points="109.85,78.335 108.632,77.297 107.414,76.259 106.196,75.221 104.978,74.183 103.76,73.145 102.542,72.107 101.324,71.069 100.106,70.031 98.888,68.993 97.67,67.955 96.452,66.917 95.234,65.879 94.016,64.841 92.798,63.803 91.58,62.765 90.362,61.727 89.144,60.689 87.674,60.057 86.077,59.967 84.546,60.431 83.015,60.895 81.484,61.359 79.953,61.823 78.422,62.287 76.891,62.751 75.36,63.215 73.829,63.679 72.298,64.143 70.767,64.607 69.441,65.502 68.503,66.798 68.066,68.337 67.629,69.876 67.192,71.415 66.755,72.954 66.318,74.493 65.881,76.032 65.277,77.514 64.673,78.996 64.159,80.511 64.196,82.111 64.779,83.601 65.838,84.801 67.244,85.565 68.65,86.329 70.056,87.093 71.462,87.857 73.031,88.171 74.612,87.928 76.014,87.157 77.416,86.386 78.818,85.615 80.22,84.844 81.622,84.073 83.024,83.302 84.426,82.531 85.828,81.76 87.23,80.989 88.632,80.218 90.034,79.447 91.436,78.676"
+                class="_body_1f8074"
+                points="120.855,79.995 119.772,78.818 118.688,77.64 117.605,76.463 116.521,75.285 115.438,74.108 114.355,72.931 113.271,71.753 112.188,70.576 111.104,69.398 110.021,68.221 108.938,67.044 107.854,65.866 106.771,64.689 105.688,63.511 104.605,62.334 103.521,61.156 102.438,59.979 101.354,58.801 100.271,57.624 99.188,56.447 98.104,55.269 97.021,54.092"
               ></polyline>
               <polyline
-                class="_marks_bc8d47"
-                points="109.85,78.335 108.632,77.297 107.414,76.259 106.196,75.221 104.978,74.183 103.76,73.145 102.542,72.107 101.324,71.069 100.106,70.031 98.888,68.993 97.67,67.955 96.452,66.917 95.234,65.879 94.016,64.841 92.798,63.803 91.58,62.765 90.362,61.727 89.144,60.689 87.674,60.057 86.077,59.967 84.546,60.431 83.015,60.895 81.484,61.359 79.953,61.823 78.422,62.287 76.891,62.751 75.36,63.215 73.829,63.679 72.298,64.143 70.767,64.607 69.441,65.502 68.503,66.798 68.066,68.337 67.629,69.876 67.192,71.415 66.755,72.954 66.318,74.493 65.881,76.032 65.277,77.514 64.673,78.996 64.159,80.511 64.196,82.111 64.779,83.601 65.838,84.801 67.244,85.565 68.65,86.329 70.056,87.093 71.462,87.857 73.031,88.171 74.612,87.928 76.014,87.157 77.416,86.386 78.818,85.615 80.22,84.844 81.622,84.073 83.024,83.302 84.426,82.531 85.828,81.76 87.23,80.989 88.632,80.218 90.034,79.447 91.436,78.676"
+                class="_marks_1f8074"
+                points="120.855,79.995 119.772,78.818 118.688,77.64 117.605,76.463 116.521,75.285 115.438,74.108 114.355,72.931 113.271,71.753 112.188,70.576 111.104,69.398 110.021,68.221 108.938,67.044 107.854,65.866 106.771,64.689 105.688,63.511 104.605,62.334 103.521,61.156 102.438,59.979 101.354,58.801 100.271,57.624 99.188,56.447 98.104,55.269 97.021,54.092"
                 stroke-dasharray="0.8 3.2"
               ></polyline>
-              <g transform="translate(109.85 78.335) rotate(40.45082033623612)">
-                <circle class="_head_bc8d47" r="1.8"></circle>
-                <circle class="_eye_bc8d47" cx="0.8" cy="-0.7" r="0.35"></circle>
-                <circle class="_eye_bc8d47" cx="0.8" cy="0.7" r="0.35"></circle>
+              <g transform="translate(120.855 79.995) rotate(47.38360965731908)">
+                <circle class="_head_1f8074" r="1.8"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="-0.7" r="0.35"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="0.7" r="0.35"></circle>
               </g>
-              <text class="_number_bc8d47" x="109.85" y="74.335">4</text>
+              <text class="_number_1f8074" x="120.855" y="75.995">4</text>
             </g>
             <g style="--snake-color: var(--pb-player-5)">
               <title>Emerson, snake 5</title>
               <polyline
-                class="_body_bc8d47"
-                points="41.42,59.362 42.975,58.985 44.53,58.608 46.085,58.231 47.64,57.854 49.195,57.477 50.75,57.1 52.305,56.723 53.86,56.346 55.415,55.969 56.97,55.592 58.525,55.215 60.08,54.838 61.635,54.461 63.19,54.084 64.745,53.707 66.3,53.33 67.855,52.953 69.41,52.576 70.965,52.199 72.52,51.822 74.075,51.445 75.63,51.068 77.185,50.691 78.74,50.314 80.295,49.937 81.85,49.56 83.405,49.183 84.96,48.806 86.515,48.429 88.07,48.052 89.625,47.675 91.18,47.298 92.735,46.921 94.29,46.544 95.845,46.167 97.4,45.79 98.955,45.413 100.51,45.036 102.065,44.659 103.62,44.282 105.175,43.905 106.73,43.528 108.285,43.151 109.88,43.275 111.475,43.399 113.07,43.523 114.665,43.647 116.181,44.157 117.431,45.156 118.262,46.523 118.574,48.092 118.329,49.673 117.557,51.074 116.351,52.125 114.858,52.699 113.258,52.726 111.658,52.753 110.058,52.78 108.458,52.807"
+                class="_body_1f8074"
+                points="34.23,26.414 35.788,26.78 37.345,27.146 38.903,27.512 40.283,28.322 41.302,29.555 41.837,31.063 42.371,32.571 42.905,34.079 43.439,35.588 43.973,37.096 44.507,38.604 45.041,40.113 45.575,41.621 46.109,43.129 46.643,44.637 47.177,46.146 47.711,47.654"
               ></polyline>
               <polyline
-                class="_marks_bc8d47"
-                points="41.42,59.362 42.975,58.985 44.53,58.608 46.085,58.231 47.64,57.854 49.195,57.477 50.75,57.1 52.305,56.723 53.86,56.346 55.415,55.969 56.97,55.592 58.525,55.215 60.08,54.838 61.635,54.461 63.19,54.084 64.745,53.707 66.3,53.33 67.855,52.953 69.41,52.576 70.965,52.199 72.52,51.822 74.075,51.445 75.63,51.068 77.185,50.691 78.74,50.314 80.295,49.937 81.85,49.56 83.405,49.183 84.96,48.806 86.515,48.429 88.07,48.052 89.625,47.675 91.18,47.298 92.735,46.921 94.29,46.544 95.845,46.167 97.4,45.79 98.955,45.413 100.51,45.036 102.065,44.659 103.62,44.282 105.175,43.905 106.73,43.528 108.285,43.151 109.88,43.275 111.475,43.399 113.07,43.523 114.665,43.647 116.181,44.157 117.431,45.156 118.262,46.523 118.574,48.092 118.329,49.673 117.557,51.074 116.351,52.125 114.858,52.699 113.258,52.726 111.658,52.753 110.058,52.78 108.458,52.807"
+                class="_marks_1f8074"
+                points="34.23,26.414 35.788,26.78 37.345,27.146 38.903,27.512 40.283,28.322 41.302,29.555 41.837,31.063 42.371,32.571 42.905,34.079 43.439,35.588 43.973,37.096 44.507,38.604 45.041,40.113 45.575,41.621 46.109,43.129 46.643,44.637 47.177,46.146 47.711,47.654"
                 stroke-dasharray="0.9 3.6"
               ></polyline>
-              <g transform="translate(41.42 59.362) rotate(166.3869437059911)">
-                <circle class="_head_bc8d47" r="1.8"></circle>
-                <circle class="_eye_bc8d47" cx="0.8" cy="-0.7" r="0.35"></circle>
-                <circle class="_eye_bc8d47" cx="0.8" cy="0.7" r="0.35"></circle>
+              <g transform="translate(34.23 26.414) rotate(-166.78801416258264)">
+                <circle class="_head_1f8074" r="1.8"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="-0.7" r="0.35"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="0.7" r="0.35"></circle>
               </g>
-              <text class="_number_bc8d47" x="41.42" y="55.362">5</text>
+              <text class="_number_1f8074" x="34.23" y="22.414">5</text>
+            </g>
+            <g style="--snake-color: var(--pb-player-6)">
+              <title>Frankie, snake 6</title>
+              <polyline
+                class="_body_1f8074"
+                points="34.965,45.916 34.387,47.408 33.809,48.9 33.231,50.392 32.653,51.884 32.075,53.376 31.497,54.868 31.385,56.464 31.827,58.002 32.77,59.294 33.713,60.587 34.656,61.879 35.599,63.172 36.541,64.465 37.484,65.758 38.427,67.05 39.37,68.343 40.312,69.636 41.256,70.928 42.199,72.221 43.142,73.513 44.085,74.806 45.028,76.098"
+              ></polyline>
+              <polyline
+                class="_marks_1f8074"
+                points="34.965,45.916 34.387,47.408 33.809,48.9 33.231,50.392 32.653,51.884 32.075,53.376 31.497,54.868 31.385,56.464 31.827,58.002 32.77,59.294 33.713,60.587 34.656,61.879 35.599,63.172 36.541,64.465 37.484,65.758 38.427,67.05 39.37,68.343 40.312,69.636 41.256,70.928 42.199,72.221 43.142,73.513 44.085,74.806 45.028,76.098"
+                stroke-dasharray="1 4"
+              ></polyline>
+              <circle class="_shield_1f8074" cx="34.965" cy="45.916" r="3.4"></circle>
+              <g transform="translate(34.965 45.916) rotate(-68.81223119521188)">
+                <circle class="_head_1f8074" r="1.8"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="-0.7" r="0.35"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="0.7" r="0.35"></circle>
+              </g>
+              <text class="_number_1f8074" x="34.965" y="41.916">6</text>
             </g>
             <g style="--snake-color: var(--pb-player-7)">
               <title>Gray, snake 7</title>
               <polyline
-                class="_body_bc8d47"
-                points="137.486,14.131 138.914,14.854 140.007,16.022 141.1,17.19 142.193,18.358 143.286,19.526 143.985,20.965 144.148,22.557 143.756,24.108 143.364,25.659 142.972,27.21 142.58,28.761 141.747,30.127 140.496,31.124 138.979,31.632 137.462,32.14 135.945,32.648 134.428,33.156 132.828,33.193 131.313,32.679 130.066,31.677 128.819,30.675 127.572,29.673 126.325,28.671 125.078,27.669 123.831,26.667 122.584,25.665 121.337,24.663 120.09,23.661 118.843,22.659 117.596,21.657 116.349,20.655 115.102,19.653 113.855,18.651 112.608,17.649 111.361,16.647 110.114,15.645 108.867,14.643 107.62,13.641 106.373,12.639 105.126,11.637 103.879,10.635 102.391,10.046 100.792,10.003 99.275,10.511 97.758,11.019 96.241,11.527 94.724,12.035 93.425,12.969 92.524,14.292 92.132,15.843 91.74,17.394 91.348,18.945 90.956,20.496 91.039,22.094 91.665,23.566 92.758,24.734 93.851,25.902 94.944,27.07 96.037,28.238 97.13,29.406 98.223,30.574 99.316,31.742 100.409,32.91 101.502,34.078 102.595,35.246 103.985,36.039 105.562,36.307 107.136,36.018 108.71,35.729 110.284,35.44 111.858,35.151 113.432,34.862 115.006,34.573 116.58,34.284 118.154,33.995 119.728,33.706 121.302,33.417 122.876,33.128 124.45,32.839 126.024,32.55 127.598,32.261 129.172,31.972 130.746,31.683 132.345,31.626 133.866,32.121 135.125,33.108 135.97,34.467 136.298,36.033 136.069,37.616"
+                class="_body_1f8074"
+                points="142.695,25.617 142.062,24.148 141.429,22.678 140.796,21.209 140.163,19.739 139.528,18.27 138.488,17.055 137.095,16.268 135.517,16.007 133.938,15.746 132.36,15.485 130.781,15.224 129.202,14.963 127.624,14.702 126.045,14.441 124.467,14.18 122.888,13.919 121.31,13.658 119.731,13.397 118.152,13.136"
               ></polyline>
               <polyline
-                class="_marks_bc8d47"
-                points="137.486,14.131 138.914,14.854 140.007,16.022 141.1,17.19 142.193,18.358 143.286,19.526 143.985,20.965 144.148,22.557 143.756,24.108 143.364,25.659 142.972,27.21 142.58,28.761 141.747,30.127 140.496,31.124 138.979,31.632 137.462,32.14 135.945,32.648 134.428,33.156 132.828,33.193 131.313,32.679 130.066,31.677 128.819,30.675 127.572,29.673 126.325,28.671 125.078,27.669 123.831,26.667 122.584,25.665 121.337,24.663 120.09,23.661 118.843,22.659 117.596,21.657 116.349,20.655 115.102,19.653 113.855,18.651 112.608,17.649 111.361,16.647 110.114,15.645 108.867,14.643 107.62,13.641 106.373,12.639 105.126,11.637 103.879,10.635 102.391,10.046 100.792,10.003 99.275,10.511 97.758,11.019 96.241,11.527 94.724,12.035 93.425,12.969 92.524,14.292 92.132,15.843 91.74,17.394 91.348,18.945 90.956,20.496 91.039,22.094 91.665,23.566 92.758,24.734 93.851,25.902 94.944,27.07 96.037,28.238 97.13,29.406 98.223,30.574 99.316,31.742 100.409,32.91 101.502,34.078 102.595,35.246 103.985,36.039 105.562,36.307 107.136,36.018 108.71,35.729 110.284,35.44 111.858,35.151 113.432,34.862 115.006,34.573 116.58,34.284 118.154,33.995 119.728,33.706 121.302,33.417 122.876,33.128 124.45,32.839 126.024,32.55 127.598,32.261 129.172,31.972 130.746,31.683 132.345,31.626 133.866,32.121 135.125,33.108 135.97,34.467 136.298,36.033 136.069,37.616"
+                class="_marks_1f8074"
+                points="142.695,25.617 142.062,24.148 141.429,22.678 140.796,21.209 140.163,19.739 139.528,18.27 138.488,17.055 137.095,16.268 135.517,16.007 133.938,15.746 132.36,15.485 130.781,15.224 129.202,14.963 127.624,14.702 126.045,14.441 124.467,14.18 122.888,13.919 121.31,13.658 119.731,13.397 118.152,13.136"
                 stroke-dasharray="1.1 4.4"
               ></polyline>
-              <g transform="translate(137.486 14.131) rotate(-153.15161863846905)">
-                <circle class="_head_bc8d47" r="1.8"></circle>
-                <circle class="_eye_bc8d47" cx="0.8" cy="-0.7" r="0.35"></circle>
-                <circle class="_eye_bc8d47" cx="0.8" cy="0.7" r="0.35"></circle>
+              <g transform="translate(142.695 25.617) rotate(66.69228735322781)">
+                <circle class="_head_1f8074" r="1.8"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="-0.7" r="0.35"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="0.7" r="0.35"></circle>
               </g>
-              <text class="_number_bc8d47" x="137.486" y="10.131">7</text>
+              <text class="_number_1f8074" x="142.695" y="21.617">7</text>
             </g>
-            <rect class="_wall_bc8d47" x="0.3" y="0.3" width="159.4" height="99.4" rx="2"></rect>
+            <g style="--snake-color: var(--pb-player-8)">
+              <title>Harper, snake 8</title>
+              <polyline
+                class="_body_1f8074"
+                points="111.471,39.945 110.493,38.679 109.515,37.413 108.537,36.146 107.559,34.88 106.581,33.614 105.603,32.347 104.625,31.081 103.647,29.815 102.669,28.549 101.691,27.282 100.712,26.017 99.711,24.769 98.344,23.937"
+              ></polyline>
+              <polyline
+                class="_marks_1f8074"
+                points="111.471,39.945 110.493,38.679 109.515,37.413 108.537,36.146 107.559,34.88 106.581,33.614 105.603,32.347 104.625,31.081 103.647,29.815 102.669,28.549 101.691,27.282 100.712,26.017 99.711,24.769 98.344,23.937"
+                stroke-dasharray="1.2000000000000002 4.800000000000001"
+              ></polyline>
+              <g transform="translate(111.471 39.945) rotate(52.311046695444155)">
+                <circle class="_head_1f8074" r="1.8"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="-0.7" r="0.35"></circle>
+                <circle class="_eye_1f8074" cx="0.8" cy="0.7" r="0.35"></circle>
+              </g>
+              <text class="_number_1f8074" x="111.471" y="35.945">8</text>
+            </g>
+            <rect class="_wall_1f8074" x="0.3" y="0.3" width="159.4" height="99.4" rx="2"></rect>
           </svg>
         </div>
         <ol
-          class="_rows_61b6c5"
+          class="_rows_e51e00"
           data-compact="true"
           data-phase="score"
           aria-label="Match standings"
         >
-          <li style="--snake-color: var(--pb-player-7)">
-            <span class="_number_61b6c5" aria-label="Snake 7">7</span>
-            <div class="_identity_61b6c5"><b class="_name_61b6c5" title="Gray">Gray</b></div>
-            <div class="_value_61b6c5"><b>172</b><span class="_gain_61b6c5">+90</span></div>
-          </li>
-          <li style="--snake-color: var(--pb-player-5)">
-            <span class="_number_61b6c5" aria-label="Snake 5">5</span>
-            <div class="_identity_61b6c5"><b class="_name_61b6c5" title="Emerson">Emerson</b></div>
-            <div class="_value_61b6c5"><b>147</b><span class="_gain_61b6c5">+59</span></div>
-          </li>
-          <li style="--snake-color: var(--pb-player-3)">
-            <span class="_number_61b6c5" aria-label="Snake 3">3</span>
-            <div class="_identity_61b6c5"><b class="_name_61b6c5" title="Cameron">Cameron</b></div>
-            <div class="_value_61b6c5"><b>128</b><span class="_gain_61b6c5">+23</span></div>
-          </li>
-          <li style="--snake-color: var(--pb-player-8)" data-respawn="true">
-            <span class="_number_61b6c5" aria-label="Snake 8">8</span>
-            <div class="_identity_61b6c5"><b class="_name_61b6c5" title="Harper">Harper</b></div>
-            <div class="_value_61b6c5"><b>97</b><span class="_gain_61b6c5">+8</span></div>
+          <li style="--snake-color: var(--pb-player-1)">
+            <span class="_number_e51e00" aria-label="Snake 1">1</span>
+            <div class="_identity_e51e00"><b class="_name_e51e00" title="Alex">Alex</b></div>
+            <div class="_value_e51e00"><b>165</b><span class="_gain_e51e00">+78</span></div>
           </li>
           <li style="--snake-color: var(--pb-player-4)">
-            <span class="_number_61b6c5" aria-label="Snake 4">4</span>
-            <div class="_identity_61b6c5"><b class="_name_61b6c5" title="Devon">Devon</b></div>
-            <div class="_value_61b6c5"><b>77</b><span class="_gain_61b6c5">+61</span></div>
-          </li>
-          <li style="--snake-color: var(--pb-player-6)" data-respawn="true">
-            <span class="_number_61b6c5" aria-label="Snake 6">6</span>
-            <div class="_identity_61b6c5"><b class="_name_61b6c5" title="Frankie">Frankie</b></div>
-            <div class="_value_61b6c5"><b>75</b><span class="_gain_61b6c5">+8</span></div>
+            <span class="_number_e51e00" aria-label="Snake 4">4</span>
+            <div class="_identity_e51e00"><b class="_name_e51e00" title="Devon">Devon</b></div>
+            <div class="_value_e51e00"><b>162</b><span class="_gain_e51e00">+56</span></div>
           </li>
           <li style="--snake-color: var(--pb-player-2)">
-            <span class="_number_61b6c5" aria-label="Snake 2">2</span>
-            <div class="_identity_61b6c5"><b class="_name_61b6c5" title="Bailey">Bailey</b></div>
-            <div class="_value_61b6c5"><b>67</b><span class="_gain_61b6c5">+19</span></div>
+            <span class="_number_e51e00" aria-label="Snake 2">2</span>
+            <div class="_identity_e51e00"><b class="_name_e51e00" title="Bailey">Bailey</b></div>
+            <div class="_value_e51e00"><b>138</b><span class="_gain_e51e00">+21</span></div>
           </li>
-          <li style="--snake-color: var(--pb-player-1)" data-respawn="true">
-            <span class="_number_61b6c5" aria-label="Snake 1">1</span>
-            <div class="_identity_61b6c5"><b class="_name_61b6c5" title="Alex">Alex</b></div>
-            <div class="_value_61b6c5"><b>36</b><span class="_gain_61b6c5">+8</span></div>
+          <li style="--snake-color: var(--pb-player-6)">
+            <span class="_number_e51e00" aria-label="Snake 6">6</span>
+            <div class="_identity_e51e00"><b class="_name_e51e00" title="Frankie">Frankie</b></div>
+            <div class="_value_e51e00"><b>101</b><span class="_gain_e51e00">+25</span></div>
+          </li>
+          <li style="--snake-color: var(--pb-player-5)">
+            <span class="_number_e51e00" aria-label="Snake 5">5</span>
+            <div class="_identity_e51e00"><b class="_name_e51e00" title="Emerson">Emerson</b></div>
+            <div class="_value_e51e00"><b>85</b><span class="_gain_e51e00">+30</span></div>
+          </li>
+          <li style="--snake-color: var(--pb-player-7)">
+            <span class="_number_e51e00" aria-label="Snake 7">7</span>
+            <div class="_identity_e51e00"><b class="_name_e51e00" title="Gray">Gray</b></div>
+            <div class="_value_e51e00"><b>80</b><span class="_gain_e51e00">+19</span></div>
+          </li>
+          <li style="--snake-color: var(--pb-player-8)">
+            <span class="_number_e51e00" aria-label="Snake 8">8</span>
+            <div class="_identity_e51e00"><b class="_name_e51e00" title="Harper">Harper</b></div>
+            <div class="_value_e51e00"><b>78</b><span class="_gain_e51e00">+19</span></div>
+          </li>
+          <li style="--snake-color: var(--pb-player-3)">
+            <span class="_number_e51e00" aria-label="Snake 3">3</span>
+            <div class="_identity_e51e00"><b class="_name_e51e00" title="Cameron">Cameron</b></div>
+            <div class="_value_e51e00"><b>62</b><span class="_gain_e51e00">+16</span></div>
           </li>
         </ol>
-        <div class="_result_99408e" role="status">
+        <div class="_result_d9f44b" role="status">
           <p>All rounds banked. Final results coming up.</p>
         </div>
       </section>
