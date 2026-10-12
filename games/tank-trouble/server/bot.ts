@@ -80,8 +80,8 @@ export function route(world: World, from: Point, goal: Point): number[] {
   return routeFromTree(routeTree(world, from), mazeCell(world.maze, goal));
 }
 
-/** Check the first body along each ricochet. A return to the owner is unsafe, even if it misses now. */
-export function shotTarget(world: World, me: Tank, angle: number): string | null {
+/** First predicted body on one emitted static line; blocked and empty lines return null. */
+function shotLine(world: World, me: Tank, angle: number): string | null {
   const mouth = {
     x: me.x + Math.cos(angle) * (TANK_RADIUS + SHELL_RADIUS + 0.15),
     y: me.y + Math.sin(angle) * (TANK_RADIUS + SHELL_RADIUS + 0.15),
@@ -120,10 +120,21 @@ export function shotTarget(world: World, me: Tank, angle: number): string | null
         hit = tank.id;
       } else if (Math.abs(along - first) <= 1e-9 && tank.id === me.id) hit = me.id;
     }
-    if (hit) return hit === me.id ? null : hit;
+    if (hit) return hit;
     traveled += length;
   }
   return null;
+}
+
+/** Every emitted Burst pellet must avoid its owner; prefer the center's rival when available. */
+export function shotTarget(world: World, me: Tank, angle: number): string | null {
+  let target: string | null = null;
+  for (const offset of me.weapon === 'scatter' ? [0, -0.2, 0.2] : [0]) {
+    const hit = shotLine(world, me, angle + offset);
+    if (hit === me.id) return null;
+    target ??= hit;
+  }
+  return target;
 }
 
 /** Three actual strengths: route/aim precision, bank shots and projectile lookahead vary. */

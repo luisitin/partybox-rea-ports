@@ -141,4 +141,54 @@ describe('bot shot safety and actual first contacts', () => {
       expect(alive(out, 'a')).toBe(true);
     }
   });
+
+  it('rejects Burst when a side pellet kills its owner before the safe center reaches the rival', () => {
+    const me = weapon(makeTank('a', 0, 26, 33), 'scatter');
+    const world = scene([me, makeTank('b', 1, 40, 33)], {
+      x1: 32,
+      y1: 16,
+      x2: 32,
+      y2: 32,
+    });
+    expect(shotTarget(world, me, 0)).toBeNull();
+    const center = weapon(me, 'shell');
+    const centerWorld = { ...world, tanks: [center, world.tanks[1]!] };
+    expect(shotTarget(centerWorld, center, 0)).toBe('b');
+    const safeCenter = tick(fire(centerWorld), 160);
+    expect(alive(safeCenter, 'a')).toBe(true);
+    expect(alive(safeCenter, 'b')).toBe(false);
+    const burst = fire(world);
+    expect(alive(tick(burst, 100), 'a')).toBe(true);
+    const out = tick(burst, 120);
+    expect(alive(out, 'a')).toBe(false);
+    expect(alive(out, 'b')).toBe(true);
+    expect(out.tanks[0]!.died).toBe(120);
+  });
+
+  it('accepts safe Burst and ignores a side pellet blocked at its muzzle', () => {
+    const me = weapon(makeTank('a', 0, 28.9, 33), 'scatter');
+    const world = scene([me, makeTank('b', 1, 40, 33)], {
+      x1: 32,
+      y1: 16,
+      x2: 32,
+      y2: 32,
+    });
+    expect(shotTarget(world, me, 0)).toBe('b');
+    const shot = fire(world);
+    expect(tick(shot, STEP_MS).bullets).toHaveLength(2);
+    const out = tick(shot, 200);
+    expect(alive(out, 'a')).toBe(true);
+    expect(alive(out, 'b')).toBe(false);
+  });
+
+  it('accepts a safe outer-only Burst hit when the center misses', () => {
+    const me = weapon(makeTank('a', 0, 24, 24), 'scatter');
+    const world = scene([me, makeTank('b', 1, 60, 34)]);
+    const center = weapon(me, 'shell');
+    expect(shotTarget({ ...world, tanks: [center, world.tanks[1]!] }, center, 0)).toBeNull();
+    expect(shotTarget(world, me, 0)).toBe('b');
+    const out = tick(fire(world), 1000);
+    expect(alive(out, 'a')).toBe(true);
+    expect(alive(out, 'b')).toBe(false);
+  });
 });

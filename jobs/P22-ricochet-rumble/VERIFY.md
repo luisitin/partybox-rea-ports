@@ -161,3 +161,7 @@ Read-only calculations from design/tokens.css (opacity 1) for before→after Fir
 ## KEEP GOING R9 verification
 
 `pnpm.cmd vitest run games/tank-trouble/__tests__/lifecycle-order.test.ts games/tank-trouble/__tests__/game.test.ts games/tank-trouble/__tests__/physics.test.ts games/tank-trouble/__tests__/sdk.test.ts games/tank-trouble/__tests__/screens.test.tsx --maxWorkers=1 --pool=threads --reporter=dot` passed 112 tests, exit 0, 60.89 s. `pnpm.cmd typecheck` passed. Five new regressions pin actual pending-hit physics, expired-cap draws, scoring before presence, completion before pause, retained scores and future exclusions, and ongoing-pause two-departure deferral. Existing input state remains byte-identical. No client rendering changed.
+
+## KEEP GOING R10 verification
+
+`pnpm.cmd vitest run games/tank-trouble/__tests__/bot-shot.test.ts games/tank-trouble/__tests__/bot-route.test.ts games/tank-trouble/__tests__/physics.test.ts games/tank-trouble/__tests__/game.test.ts games/tank-trouble/__tests__/sdk.test.ts --maxWorkers=1 --pool=threads --reporter=dot` passed 87 tests, exit 0, 140.10 s. `pnpm.cmd typecheck` passed. Three new Burst regressions use actual physics for unsafe side returns, blocked side muzzles and an outer-only rival contact; independent source review found no concrete defect. Full simulations will refresh after all loop changes. No rendering changed.
