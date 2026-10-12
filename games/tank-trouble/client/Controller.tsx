@@ -63,6 +63,7 @@ export function Controller({
   // Sounds confirm changes in this hand, never a client-side firing decision.
   const previous = useRef({
     round: view.round,
+    phase,
     ammo: view.ammo,
     weapon: view.weapon,
     alive: view.alive,
@@ -74,15 +75,24 @@ export function Controller({
         sound('clack', { quiet: true, gain: 0.6 });
         buzz(30);
       } else if (view.ammo < old.ammo && view.alive) sound('submit', { quiet: true, gain: 0.35 });
-      if (old.alive && !view.alive) buzz(90);
     }
+    if (
+      old.round === view.round &&
+      player &&
+      !view.paused &&
+      old.alive &&
+      !view.alive &&
+      (phase === 'play' || (phase === 'score' && old.phase === 'play'))
+    )
+      buzz(90);
     previous.current = {
       round: view.round,
+      phase,
       ammo: view.ammo,
       weapon: view.weapon,
       alive: view.alive,
     };
-  }, [view.round, view.ammo, view.weapon, view.alive, phase, player, sound]);
+  }, [view.round, view.ammo, view.weapon, view.alive, view.paused, phase, player, sound]);
 
   const steering = (event: PointerEvent<HTMLDivElement>): [-1 | 0 | 1, -1 | 0 | 1] => {
     const box = event.currentTarget.getBoundingClientRect();

@@ -1,6 +1,6 @@
 {
-  "artifact": "input-harness-376975b233af.html",
-  "harnessSha256": "376975b233afd33f201ecbff12b4c910d2bc74995e3713cf66c1891a52053b05",
+  "artifact": "input-harness.html",
+  "harnessSha256": "3ca9c79e0dd66c81ff79f8fbab00f2e31e08950360f938ef813ea2d4dc464014",
   "viewport": {
     "width": 390,
     "height": 844
@@ -103,6 +103,18 @@
           "drive": 1,
           "turn": 1,
           "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": true
         }
       ],
       "observed": {
@@ -123,18 +135,6 @@
         "fire": true
       },
       "commands": [
-        {
-          "type": "control",
-          "drive": 1,
-          "turn": 1,
-          "fire": true
-        },
-        {
-          "type": "control",
-          "drive": 0,
-          "turn": 0,
-          "fire": true
-        },
         {
           "type": "control",
           "drive": 0,
@@ -185,6 +185,12 @@
         "fire": false
       },
       "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        },
         {
           "type": "control",
           "drive": 0,
@@ -282,12 +288,6 @@
       "commands": [
         {
           "type": "control",
-          "drive": 1,
-          "turn": 1,
-          "fire": true
-        },
-        {
-          "type": "control",
           "drive": 0,
           "turn": 0,
           "fire": false
@@ -352,18 +352,6 @@
         "fire": false
       },
       "commands": [
-        {
-          "type": "control",
-          "drive": 1,
-          "turn": 1,
-          "fire": true
-        },
-        {
-          "type": "control",
-          "drive": 1,
-          "turn": 1,
-          "fire": true
-        },
         {
           "type": "control",
           "drive": 0,
@@ -435,6 +423,12 @@
           "drive": 1,
           "turn": 1,
           "fire": false
+        },
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": false
         }
       ],
       "observed": {
@@ -455,12 +449,6 @@
         "fire": false
       },
       "commands": [
-        {
-          "type": "control",
-          "drive": -1,
-          "turn": -1,
-          "fire": false
-        },
         {
           "type": "control",
           "drive": -1,
@@ -630,6 +618,18 @@
           "drive": 0,
           "turn": -1,
           "fire": false
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": -1,
+          "fire": false
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": -1,
+          "fire": false
         }
       ],
       "observed": {
@@ -680,6 +680,12 @@
           "drive": 0,
           "turn": 1,
           "fire": false
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 1,
+          "fire": false
         }
       ],
       "observed": {
@@ -725,6 +731,12 @@
         "fire": true
       },
       "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        },
         {
           "type": "control",
           "drive": 0,

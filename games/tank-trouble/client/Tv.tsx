@@ -19,7 +19,7 @@ export function Tv({ view }: GameTvProps<TankTroubleTvView>): JSX.Element {
   const left = view.deadline === null ? 0 : Math.max(0, view.deadline - now);
   const seconds = Math.ceil(left / 1000);
   const ticked = useRef('');
-  const previous = useRef({ round: view.round, alive: view.aliveCount });
+  const previous = useRef({ round: view.round, alive: view.aliveCount, phase });
   useEffect(() => {
     const key = `${view.round}:${phase}:${seconds}`;
     const ticking = phase === 'ready' || (phase === 'play' && seconds <= 5);
@@ -28,13 +28,13 @@ export function Tv({ view }: GameTvProps<TankTroubleTvView>): JSX.Element {
       sound('countdown');
     }
     if (
-      phase === 'play' &&
+      (phase === 'play' || (phase === 'score' && previous.current.phase === 'play')) &&
       !view.paused &&
       previous.current.round === view.round &&
       view.aliveCount < previous.current.alive
     )
       sound('thud', { quiet: true, gain: 0.6 });
-    previous.current = { round: view.round, alive: view.aliveCount };
+    previous.current = { round: view.round, alive: view.aliveCount, phase };
   }, [view.round, view.aliveCount, view.paused, phase, seconds, sound]);
 
   if (phase === 'ready')

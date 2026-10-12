@@ -84,6 +84,9 @@ Five rounds and the fight cap are fixed so the party knows its match length.
 No word packs. Mazes, spawns and pickups use seeded RNG. All graphics are original inline
 SVG and CSS; all colors, type and motion use PartyBox tokens. Controls and labels are English.
 Sound uses existing SDK cues; reduced motion retains all information.
+PLAY poses and tank numbers transition together over the snapshot cadence; pause and
+reduced motion show exact poses. The decisive knockout requests one TV cue and the
+eliminated phone's loss buzz; paused departures and later results do not replay it.
 
 ## Sources
 
