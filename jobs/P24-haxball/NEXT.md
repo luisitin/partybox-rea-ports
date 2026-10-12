@@ -1,20 +1,21 @@
 # Resume P24 Haxball
 
-Runner r3-local on job/P24-haxball. Implementation complete; final verification in progress.
+Runner r3-local on job/P24-haxball. All local checks pass; publication/CI and KEEP GOING remain.
 
-- Passed: typecheck;34 focused server rules;25 client tests;11 SSR phase/edge cases;
-  67 mounted checks with trusted touch/keyboard,60px minimum buttons and no layout issues.
-- Capture browser154.0.8037.99 and exact endpoint verified closed. All55 static screens passed
-  geometry/TV typography: minimum jersey37.863px, body36px, timer128px. Final recapture pending.
-- Initial full shard:89passed/4failed in508.54s. Fixed paused VIP End, spectator/held copy,
-  SDK500-step last-score fixture cap and bot centre-line deadlock; no initial full pass claim.
-- Corrected2-player probe:1000 actual2x90s matches terminate,5320 goals across all3 strengths
-  (easy1769, normal1553, sharp1998). This is a probe, not the required full7000 result.
-- Final full games/haxball run with PB_WRITE_EVIDENCE=1 is active in root session81617.
-  It regenerates fixtures/media and writes honest partial/final simulation metrics.
-- Remaining: final full shard,20 mutations, final capture/format/media hashes/budget,
-  PR plus green P24 CI, then KEEP GOING until3 successive audits have no player-visible gain.
-- Install already complete; use pnpm.cmd. Root alone executes own game tests and one browser
-  closed in finally. No original live practice or human LAN/eight-stranger playtest claimed.
-- Push each milestone/at least30min; refresh main CLAIMS.md each push and pull --rebase before
-  every CLAIMS commit. No PR yet.
+- Current game: two90s wall-clock halves,8s halftime,50ms physics/100ms hostbeat;
+  edge-armed kicks,650ms leases, balanced numbered teams, odd-seat helper and3 bot strengths.
+- Full game shard PASS98tests/7files (906.54s), including20 real SDK tests and1003 property seeds.
+  All7000 seeded default bot matches (1000 each2–8) terminate at188000ms;22275 goals;
+  every strength has actual goal activity at every count.20/20 valid mutations killed/restored.
+- Final frame-settled capture2026-10-12T04:14:00.653Z:55 static pages and67 mounted checks pass.
+  Controls60px,spacing8px;TV minimum jersey37.863px/body36px/timer128px. Browser/endpointclosed.
+- Retained media120files/5,832,972bytes; SHA256SUMS.txt includes every file. Recompute after
+  any media change using hash-media.mjs and independently verify with PowerShell Get-FileHash.
+- Typecheck and root format pass. Stage/commit final evidence after the final docs/format/hash
+  check, push and refresh CLAIMS; create draft PR titled P24 Haxball with jobREADME asbody.
+- Keep PRdraft until exact-head P24 CI is green. Then run actual five-weakness KEEP GOING
+  rounds, fix/measure worst, log/push until3 consecutive rounds gain nothing player-visible.
+- No post-green audit claimed yet. No original live or human LAN/eight-stranger playtest claimed.
+- Install already complete; pnpm.cmd on PowerShell. Only own game tests withoneworker;
+  root alone runs atmostone headless browser closed in finally. Never whole-suite browser.
+- Refresh main CLAIMS.md after every push; pull --rebase before every CLAIMS commit.

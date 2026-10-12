@@ -1,0 +1,89 @@
+{
+  "capturedAt": "2026-10-12T03:39:18.498Z",
+  "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "pages": [],
+  "browserVersion": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "touchDispatchFeatureFlag": "--disable-features=SyntheticPointerActions",
+  "interaction": {
+    "report": "interaction.json",
+    "passed": true,
+    "checks": 67,
+    "captures": 3
+  },
+  "cleanup": {
+    "browser": {
+      "verifiedClosed": true,
+      "verification": "CDP process membership plus native PID/creation/exit checks",
+      "browserPid": 27256,
+      "observedProcesses": 7,
+      "forcedProcesses": 4,
+      "exitedRecords": [
+        {
+          "pid": 93124,
+          "type": "renderer",
+          "nativeState": "exited"
+        },
+        {
+          "pid": 75156,
+          "type": "launcher",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 27256,
+          "created": "2026-10-12T03:39:19.0063753Z",
+          "type": "browser",
+          "nativeState": "exited"
+        },
+        {
+          "pid": 125008,
+          "created": "2026-10-12T03:39:19.5645555Z",
+          "type": "renderer",
+          "nativeState": "exited"
+        },
+        {
+          "pid": 109420,
+          "created": "2026-10-12T03:39:19.4260855Z",
+          "type": "renderer",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 113744,
+          "created": "2026-10-12T03:39:19.3815786Z",
+          "type": "renderer",
+          "nativeState": "exited"
+        },
+        {
+          "pid": 86512,
+          "created": "2026-10-12T03:39:19.2694574Z",
+          "type": "GPU",
+          "nativeState": "exited"
+        },
+        {
+          "pid": 95428,
+          "created": "2026-10-12T03:39:19.2720171Z",
+          "type": "network.mojom.NetworkService",
+          "nativeState": "exited"
+        },
+        {
+          "pid": 109528,
+          "created": "2026-10-12T03:39:19.3004375Z",
+          "type": "storage.mojom.StorageService",
+          "nativeState": "exited"
+        }
+      ],
+      "endpoint": {
+        "checked": true,
+        "closed": true
+      },
+      "warning": "Windows retains native-exited Chrome records; no owned active process remains."
+    },
+    "profileRemoved": false,
+    "warning": "Private Chrome is verified closed; temporary profile partybox-p24-capture-mUhNre remains locked (EBUSY)."
+  }
+}

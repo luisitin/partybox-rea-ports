@@ -1,0 +1,6221 @@
+{
+  "capturedAt": "2026-10-12T04:14:15.497Z",
+  "source": "media/interaction-views.json: public controller views only",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "browserOwnership": "Reuses capture.mjs browser and attached page; launches no browser.",
+  "checks": [
+    {
+      "name": "touch diagonal pad emits both axes",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 1,
+          "dy": -1,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": 1,
+          "dy": -1,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "second thumb keeps diagonal and adds kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 1,
+          "dy": -1,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 1,
+          "dy": -1,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "mounted layout fits: interaction-two-thumbs.png",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 9,
+          "controlIssues": 0,
+          "controlSpacingIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0,
+          "svgJerseyIssues": 0,
+          "tvBodyFontIssues": 0,
+          "tvTimerFontIssues": 0,
+          "typographyIssues": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "individual touchEnd releases only browser pointer for contact 11",
+      "passed": true,
+      "observed": {
+        "expectedPointer": 2,
+        "type": "touchEnd",
+        "ids": [11],
+        "releasedId": 11,
+        "remainingIds": [12],
+        "method": "explicit released point",
+        "observed": {
+          "pointers": [
+            {
+              "type": "pointerup",
+              "pointerId": 2,
+              "pointerType": "touch",
+              "trusted": true,
+              "control": "up-right"
+            },
+            {
+              "type": "lostpointercapture",
+              "pointerId": 2,
+              "pointerType": "touch",
+              "trusted": true,
+              "control": "up-right"
+            }
+          ],
+          "last": {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 2,
+            "dx": 0,
+            "dy": 0,
+            "kick": true
+          },
+          "heldControls": ["kick"]
+        }
+      }
+    },
+    {
+      "name": "lifting movement thumb preserves independent kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "final touchEnd releases kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 3,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "touch pointers are trusted browser events",
+      "passed": true,
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 2,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "up-right"
+          },
+          {
+            "type": "pointerdown",
+            "pointerId": 3,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          },
+          {
+            "type": "pointerup",
+            "pointerId": 2,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "up-right"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 2,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "up-right"
+          },
+          {
+            "type": "pointerup",
+            "pointerId": 3,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 3,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ]
+      }
+    },
+    {
+      "name": "touch release stops heartbeats",
+      "passed": true,
+      "observed": {
+        "before": 4,
+        "after": 4,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 3,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "opposite independent directions cancel",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "individual touchEnd releases only browser pointer for contact 22",
+      "passed": true,
+      "observed": {
+        "expectedPointer": 5,
+        "type": "touchEnd",
+        "ids": [22],
+        "releasedId": 22,
+        "remainingIds": [21],
+        "method": "explicit released point",
+        "observed": {
+          "pointers": [
+            {
+              "type": "pointerup",
+              "pointerId": 5,
+              "pointerType": "touch",
+              "trusted": true,
+              "control": "right"
+            },
+            {
+              "type": "lostpointercapture",
+              "pointerId": 5,
+              "pointerType": "touch",
+              "trusted": true,
+              "control": "right"
+            }
+          ],
+          "last": {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 2,
+            "dx": -1,
+            "dy": 0,
+            "kick": false
+          },
+          "heldControls": ["left"]
+        }
+      }
+    },
+    {
+      "name": "lifting one opposite thumb restores the other direction",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": -1,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": -1,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "touchCancel sends neutral",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 3,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "touchCancel reaches a trusted pointercancel",
+      "passed": true,
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 4,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          },
+          {
+            "type": "pointerdown",
+            "pointerId": 5,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "right"
+          },
+          {
+            "type": "pointerup",
+            "pointerId": 5,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "right"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 5,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "right"
+          },
+          {
+            "type": "pointercancel",
+            "pointerId": 4,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 4,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          }
+        ]
+      }
+    },
+    {
+      "name": "touch cancellation stops heartbeats",
+      "passed": true,
+      "observed": {
+        "before": 4,
+        "after": 4,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 3,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "dragging to neutral centre releases only movement",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "captured pointer changes direction across pad cells",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": -1,
+          "dy": 1,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 3,
+          "dx": -1,
+          "dy": 1,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "dragging outside pad releases movement and keeps kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 4,
+          "dx": 0,
+          "dy": 0,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "individual touchEnd releases only browser pointer for contact 32",
+      "passed": true,
+      "observed": {
+        "expectedPointer": 7,
+        "type": "touchEnd",
+        "ids": [32],
+        "releasedId": 32,
+        "remainingIds": [31],
+        "method": "explicit released point",
+        "observed": {
+          "pointers": [
+            {
+              "type": "pointerup",
+              "pointerId": 7,
+              "pointerType": "touch",
+              "trusted": true,
+              "control": "kick"
+            },
+            {
+              "type": "lostpointercapture",
+              "pointerId": 7,
+              "pointerType": "touch",
+              "trusted": true,
+              "control": "kick"
+            }
+          ],
+          "last": {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 6,
+            "dx": 0,
+            "dy": 0,
+            "kick": false
+          },
+          "heldControls": []
+        }
+      }
+    },
+    {
+      "name": "independent kick release after pad drag is neutral",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 6,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "held controls renew on roughly 300ms heartbeat",
+      "passed": true,
+      "observed": {
+        "configuredMs": 300,
+        "observedDeltasMs": [193, 307, 294],
+        "packets": [
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 92,
+            "dx": 1,
+            "dy": 1,
+            "kick": true
+          },
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 93,
+            "dx": 1,
+            "dy": 1,
+            "kick": true
+          },
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 94,
+            "dx": 1,
+            "dy": 1,
+            "kick": true
+          },
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 95,
+            "dx": 1,
+            "dy": 1,
+            "kick": true
+          }
+        ],
+        "note": "First interval is anchored to component mount, so steady heartbeat intervals exclude it."
+      }
+    },
+    {
+      "name": "sequence begins above authoritative acceptedSeq and increases",
+      "passed": true,
+      "observed": {
+        "acceptedSeq": 90,
+        "emittedSeq": [91, 92, 93, 94, 95]
+      }
+    },
+    {
+      "name": "every held packet carries current play phaseAt",
+      "passed": true,
+      "observed": {
+        "expected": 1700000000000,
+        "stamps": [1700000000000, 1700000000000, 1700000000000, 1700000000000, 1700000000000]
+      }
+    },
+    {
+      "name": "individual touchEnd releases only browser pointer for contact 41",
+      "passed": true,
+      "observed": {
+        "expectedPointer": 8,
+        "type": "touchEnd",
+        "ids": [41],
+        "releasedId": 41,
+        "remainingIds": [42],
+        "method": "explicit released point",
+        "observed": {
+          "pointers": [
+            {
+              "type": "pointerup",
+              "pointerId": 8,
+              "pointerType": "touch",
+              "trusted": true,
+              "control": "down-right"
+            },
+            {
+              "type": "lostpointercapture",
+              "pointerId": 8,
+              "pointerType": "touch",
+              "trusted": true,
+              "control": "down-right"
+            }
+          ],
+          "last": {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 96,
+            "dx": 0,
+            "dy": 0,
+            "kick": true
+          },
+          "heldControls": ["kick"]
+        }
+      }
+    },
+    {
+      "name": "heartbeat stops after independent releases",
+      "passed": true,
+      "observed": {
+        "before": 8,
+        "after": 8,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 98,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "blur handler publishes neutral input",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "blur handler stops heartbeats",
+      "passed": true,
+      "observed": {
+        "before": 3,
+        "after": 3,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "visibility handler publishes neutral input",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "visibility handler stops heartbeats",
+      "passed": true,
+      "observed": {
+        "before": 2,
+        "after": 2,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "paused push publishes neutral input",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "paused screen contains no gameplay controls",
+      "passed": true,
+      "observed": {
+        "controls": 0
+      }
+    },
+    {
+      "name": "paused push stops heartbeats",
+      "passed": true,
+      "observed": {
+        "before": 3,
+        "after": 3,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "mounted layout fits: interaction-paused.png",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 0,
+          "controlIssues": 0,
+          "controlSpacingIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0,
+          "svgJerseyIssues": 0,
+          "tvBodyFontIssues": 0,
+          "tvTimerFontIssues": 0,
+          "typographyIssues": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "resume cannot revive pointers held before pause",
+      "passed": true,
+      "observed": {
+        "resumed": 3,
+        "later": 3,
+        "waitedMs": 650
+      }
+    },
+    {
+      "name": "goal push publishes neutral input",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000001000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "goal screen contains no gameplay controls",
+      "passed": true,
+      "observed": {
+        "controls": 0
+      }
+    },
+    {
+      "name": "goal push stops heartbeats",
+      "passed": true,
+      "observed": {
+        "before": 3,
+        "after": 3,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000001000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "departed push publishes neutral input",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "departed screen contains no gameplay controls",
+      "passed": true,
+      "observed": {
+        "controls": 0
+      }
+    },
+    {
+      "name": "departed push stops heartbeats",
+      "passed": true,
+      "observed": {
+        "before": 3,
+        "after": 3,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "done push publishes neutral input",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000188000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "done screen contains no gameplay controls",
+      "passed": true,
+      "observed": {
+        "controls": 0
+      }
+    },
+    {
+      "name": "done push stops heartbeats",
+      "passed": true,
+      "observed": {
+        "before": 3,
+        "after": 3,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000188000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "after a goal every new packet uses new play phaseAt",
+      "passed": true,
+      "observed": {
+        "phaseAt": 1700000003000,
+        "acceptedSeq": 1,
+        "packets": [
+          {
+            "type": "control",
+            "phaseAt": 1700000003000,
+            "seq": 3,
+            "dx": 1,
+            "dy": 0,
+            "kick": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "keyboard diagonal combines two held axes",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 1,
+          "dy": -1,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 1,
+          "dy": -1,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "auto-repeat does not flood duplicate input",
+      "passed": true,
+      "observed": {
+        "repeatedKeydowns": 5,
+        "packets": [
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 2,
+            "dx": 1,
+            "dy": -1,
+            "kick": false
+          }
+        ],
+        "elapsedMs": 155,
+        "heartbeatAllowance": 1,
+        "note": "Scheduled heartbeats may occur during the repeated keydown window."
+      }
+    },
+    {
+      "name": "X adds kick without losing keyboard movement",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 1,
+          "dy": -1,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 3,
+          "dx": 1,
+          "dy": -1,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "releasing one keyboard axis retains the other and kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": -1,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 4,
+          "dx": 0,
+          "dy": -1,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "X release removes only kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": -1,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 5,
+          "dx": 0,
+          "dy": -1,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "Space also holds kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": -1,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 6,
+          "dx": 0,
+          "dy": -1,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "keyboard final key release sends neutral",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 9,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "WASD keys provide the same held diagonal",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 1,
+          "dy": -1,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 11,
+          "dx": 1,
+          "dy": -1,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "Enter holds the focused direction control",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": -1,
+          "dy": -1,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 14,
+          "dx": -1,
+          "dy": -1,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "keyboard events are trusted CDP events",
+      "passed": true,
+      "observed": {
+        "keys": [
+          {
+            "type": "keydown",
+            "key": "ArrowUp",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keyup",
+            "key": "ArrowRight",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keyup",
+            "key": "x",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": " ",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keyup",
+            "key": " ",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keyup",
+            "key": "ArrowUp",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "w",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "d",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keyup",
+            "key": "w",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keyup",
+            "key": "d",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "Enter",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keyup",
+            "key": "Enter",
+            "repeat": false,
+            "trusted": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "keyboard release stops heartbeats",
+      "passed": true,
+      "observed": {
+        "before": 14,
+        "after": 14,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 15,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "unmount publishes neutral before a fresh controller mounts",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "old controller heartbeat stops after unmount",
+      "passed": true,
+      "observed": {
+        "before": 1,
+        "after": 1,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "local kick hold does not fake an accepted kick sound",
+      "passed": true,
+      "observed": {
+        "cues": []
+      }
+    },
+    {
+      "name": "new authoritative lastKickAt cues one thud",
+      "passed": true,
+      "observed": {
+        "cues": ["thud"]
+      }
+    },
+    {
+      "name": "duplicate public push cannot replay kick cue",
+      "passed": true,
+      "observed": {
+        "cues": ["thud"]
+      }
+    },
+    {
+      "name": "a later authoritative kick stamp cues exactly once more",
+      "passed": true,
+      "observed": {
+        "cues": ["thud", "thud"]
+      }
+    },
+    {
+      "name": "remount with retained lastKickAt does not replay old kick",
+      "passed": true,
+      "observed": {
+        "cues": []
+      }
+    },
+    {
+      "name": "spectator sees public stage without gameplay controls",
+      "passed": true,
+      "observed": {
+        "controls": 0
+      }
+    },
+    {
+      "name": "spectator keyboard does not emit player controls",
+      "passed": true,
+      "observed": {
+        "packets": []
+      }
+    },
+    {
+      "name": "mounted layout fits: interaction-spectator.png",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 0,
+          "controlIssues": 0,
+          "controlSpacingIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0,
+          "svgJerseyIssues": 0,
+          "tvBodyFontIssues": 0,
+          "tvTimerFontIssues": 0,
+          "typographyIssues": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "mounted page reports no uncaught runtime errors",
+      "passed": true,
+      "observed": {
+        "errors": []
+      }
+    },
+    {
+      "name": "mounted with-TV controller fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 9,
+          "controlIssues": 0,
+          "controlSpacingIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0,
+          "svgJerseyIssues": 0,
+          "tvBodyFontIssues": 0,
+          "tvTimerFontIssues": 0,
+          "typographyIssues": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "job media stays below 10 MB",
+      "passed": true,
+      "observed": {
+        "bytes": 5834346,
+        "limitBytes": 10000000
+      }
+    }
+  ],
+  "captures": [
+    {
+      "file": "interaction-two-thumbs.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Red · R2 · you",
+          "bounds": {
+            "x": 12,
+            "y": 82,
+            "width": 366,
+            "height": 25.3
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "25.3px"
+        },
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "First half",
+          "bounds": {
+            "x": 12,
+            "y": 197.3,
+            "width": 366,
+            "height": 15.39
+          },
+          "hidden": null,
+          "fontSize": "14px",
+          "lineHeight": "15.4px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_direction_j6luw_73",
+          "text": "Move up and left",
+          "bounds": {
+            "x": 36,
+            "y": 493.09,
+            "width": 60,
+            "height": 60
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_direction_j6luw_73",
+          "text": "Move up",
+          "bounds": {
+            "x": 104,
+            "y": 493.09,
+            "width": 60,
+            "height": 60
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_direction_j6luw_73",
+          "text": "Move up and right",
+          "bounds": {
+            "x": 172,
+            "y": 493.09,
+            "width": 60,
+            "height": 60
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_direction_j6luw_73",
+          "text": "Move left",
+          "bounds": {
+            "x": 36,
+            "y": 561.09,
+            "width": 60,
+            "height": 60
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_direction_j6luw_73",
+          "text": "Move right",
+          "bounds": {
+            "x": 172,
+            "y": 561.09,
+            "width": 60,
+            "height": 60
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_direction_j6luw_73",
+          "text": "Move down and left",
+          "bounds": {
+            "x": 36,
+            "y": 629.09,
+            "width": 60,
+            "height": 60
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_direction_j6luw_73",
+          "text": "Move down",
+          "bounds": {
+            "x": 104,
+            "y": 629.09,
+            "width": 60,
+            "height": 60
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_direction_j6luw_73",
+          "text": "Move down and right",
+          "bounds": {
+            "x": 172,
+            "y": 629.09,
+            "width": 60,
+            "height": 60
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_kick_j6luw_74",
+          "text": "Hold Kick near the ball; release after kicking",
+          "bounds": {
+            "x": 244,
+            "y": 525.09,
+            "width": 110,
+            "height": 132
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "controlSpacing": {
+        "requiredMinimumPx": 8,
+        "visibleControls": 9,
+        "pairs": [
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and left",
+              "bounds": {
+                "x": 36,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up",
+              "bounds": {
+                "x": 104,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 8,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 8,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and left",
+              "bounds": {
+                "x": 36,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and right",
+              "bounds": {
+                "x": 172,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-right"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 76,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 76,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and left",
+              "bounds": {
+                "x": 36,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move left",
+              "bounds": {
+                "x": 36,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "left"
+            },
+            "geometry": "vertical",
+            "horizontalGapPx": 0,
+            "verticalGapPx": 8,
+            "edgeSeparationPx": 8,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and left",
+              "bounds": {
+                "x": 36,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move right",
+              "bounds": {
+                "x": 172,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "right"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 76,
+            "verticalGapPx": 8,
+            "edgeSeparationPx": 76.4198926981712,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and left",
+              "bounds": {
+                "x": 36,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and left",
+              "bounds": {
+                "x": 36,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-left"
+            },
+            "geometry": "vertical",
+            "horizontalGapPx": 0,
+            "verticalGapPx": 76,
+            "edgeSeparationPx": 76,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and left",
+              "bounds": {
+                "x": 36,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down",
+              "bounds": {
+                "x": 104,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 8,
+            "verticalGapPx": 76,
+            "edgeSeparationPx": 76.4198926981712,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and left",
+              "bounds": {
+                "x": 36,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and right",
+              "bounds": {
+                "x": 172,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-right"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 76,
+            "verticalGapPx": 76,
+            "edgeSeparationPx": 107.48023074035522,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and left",
+              "bounds": {
+                "x": 36,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_kick_j6luw_74",
+              "text": "Hold Kick near the ball; release after kicking",
+              "bounds": {
+                "x": 244,
+                "y": 525.09,
+                "width": 110,
+                "height": 132
+              },
+              "control": "kick"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 148,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 148,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up",
+              "bounds": {
+                "x": 104,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and right",
+              "bounds": {
+                "x": 172,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-right"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 8,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 8,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up",
+              "bounds": {
+                "x": 104,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move left",
+              "bounds": {
+                "x": 36,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "left"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 8,
+            "verticalGapPx": 8,
+            "edgeSeparationPx": 11.313708498984761,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up",
+              "bounds": {
+                "x": 104,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move right",
+              "bounds": {
+                "x": 172,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "right"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 8,
+            "verticalGapPx": 8,
+            "edgeSeparationPx": 11.313708498984761,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up",
+              "bounds": {
+                "x": 104,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and left",
+              "bounds": {
+                "x": 36,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-left"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 8,
+            "verticalGapPx": 76,
+            "edgeSeparationPx": 76.4198926981712,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up",
+              "bounds": {
+                "x": 104,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down",
+              "bounds": {
+                "x": 104,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down"
+            },
+            "geometry": "vertical",
+            "horizontalGapPx": 0,
+            "verticalGapPx": 76,
+            "edgeSeparationPx": 76,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up",
+              "bounds": {
+                "x": 104,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and right",
+              "bounds": {
+                "x": 172,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-right"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 8,
+            "verticalGapPx": 76,
+            "edgeSeparationPx": 76.4198926981712,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up",
+              "bounds": {
+                "x": 104,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_kick_j6luw_74",
+              "text": "Hold Kick near the ball; release after kicking",
+              "bounds": {
+                "x": 244,
+                "y": 525.09,
+                "width": 110,
+                "height": 132
+              },
+              "control": "kick"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 80,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 80,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and right",
+              "bounds": {
+                "x": 172,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-right"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move left",
+              "bounds": {
+                "x": 36,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "left"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 76,
+            "verticalGapPx": 8,
+            "edgeSeparationPx": 76.4198926981712,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and right",
+              "bounds": {
+                "x": 172,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-right"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move right",
+              "bounds": {
+                "x": 172,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "right"
+            },
+            "geometry": "vertical",
+            "horizontalGapPx": 0,
+            "verticalGapPx": 8,
+            "edgeSeparationPx": 8,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and right",
+              "bounds": {
+                "x": 172,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-right"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and left",
+              "bounds": {
+                "x": 36,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-left"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 76,
+            "verticalGapPx": 76,
+            "edgeSeparationPx": 107.48023074035522,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and right",
+              "bounds": {
+                "x": 172,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-right"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down",
+              "bounds": {
+                "x": 104,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 8,
+            "verticalGapPx": 76,
+            "edgeSeparationPx": 76.4198926981712,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and right",
+              "bounds": {
+                "x": 172,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-right"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and right",
+              "bounds": {
+                "x": 172,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-right"
+            },
+            "geometry": "vertical",
+            "horizontalGapPx": 0,
+            "verticalGapPx": 76,
+            "edgeSeparationPx": 76,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move up and right",
+              "bounds": {
+                "x": 172,
+                "y": 493.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "up-right"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_kick_j6luw_74",
+              "text": "Hold Kick near the ball; release after kicking",
+              "bounds": {
+                "x": 244,
+                "y": 525.09,
+                "width": 110,
+                "height": 132
+              },
+              "control": "kick"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 12,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 12,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move left",
+              "bounds": {
+                "x": 36,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move right",
+              "bounds": {
+                "x": 172,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "right"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 76,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 76,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move left",
+              "bounds": {
+                "x": 36,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and left",
+              "bounds": {
+                "x": 36,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-left"
+            },
+            "geometry": "vertical",
+            "horizontalGapPx": 0,
+            "verticalGapPx": 8,
+            "edgeSeparationPx": 8,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move left",
+              "bounds": {
+                "x": 36,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down",
+              "bounds": {
+                "x": 104,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 8,
+            "verticalGapPx": 8,
+            "edgeSeparationPx": 11.313708498984761,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move left",
+              "bounds": {
+                "x": 36,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and right",
+              "bounds": {
+                "x": 172,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-right"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 76,
+            "verticalGapPx": 8,
+            "edgeSeparationPx": 76.4198926981712,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move left",
+              "bounds": {
+                "x": 36,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_kick_j6luw_74",
+              "text": "Hold Kick near the ball; release after kicking",
+              "bounds": {
+                "x": 244,
+                "y": 525.09,
+                "width": 110,
+                "height": 132
+              },
+              "control": "kick"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 148,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 148,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move right",
+              "bounds": {
+                "x": 172,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "right"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and left",
+              "bounds": {
+                "x": 36,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-left"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 76,
+            "verticalGapPx": 8,
+            "edgeSeparationPx": 76.4198926981712,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move right",
+              "bounds": {
+                "x": 172,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "right"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down",
+              "bounds": {
+                "x": 104,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down"
+            },
+            "geometry": "diagonal",
+            "horizontalGapPx": 8,
+            "verticalGapPx": 8,
+            "edgeSeparationPx": 11.313708498984761,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move right",
+              "bounds": {
+                "x": 172,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "right"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and right",
+              "bounds": {
+                "x": 172,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-right"
+            },
+            "geometry": "vertical",
+            "horizontalGapPx": 0,
+            "verticalGapPx": 8,
+            "edgeSeparationPx": 8,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move right",
+              "bounds": {
+                "x": 172,
+                "y": 561.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "right"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_kick_j6luw_74",
+              "text": "Hold Kick near the ball; release after kicking",
+              "bounds": {
+                "x": 244,
+                "y": 525.09,
+                "width": 110,
+                "height": 132
+              },
+              "control": "kick"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 12,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 12,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and left",
+              "bounds": {
+                "x": 36,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down",
+              "bounds": {
+                "x": 104,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 8,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 8,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and left",
+              "bounds": {
+                "x": 36,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and right",
+              "bounds": {
+                "x": 172,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-right"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 76,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 76,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and left",
+              "bounds": {
+                "x": 36,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-left"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_kick_j6luw_74",
+              "text": "Hold Kick near the ball; release after kicking",
+              "bounds": {
+                "x": 244,
+                "y": 525.09,
+                "width": 110,
+                "height": 132
+              },
+              "control": "kick"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 148,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 148,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down",
+              "bounds": {
+                "x": 104,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and right",
+              "bounds": {
+                "x": 172,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-right"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 8,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 8,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down",
+              "bounds": {
+                "x": 104,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_kick_j6luw_74",
+              "text": "Hold Kick near the ball; release after kicking",
+              "bounds": {
+                "x": 244,
+                "y": 525.09,
+                "width": 110,
+                "height": 132
+              },
+              "control": "kick"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 80,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 80,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          },
+          {
+            "first": {
+              "tag": "button",
+              "class": "_direction_j6luw_73",
+              "text": "Move down and right",
+              "bounds": {
+                "x": 172,
+                "y": 629.09,
+                "width": 60,
+                "height": 60
+              },
+              "control": "down-right"
+            },
+            "second": {
+              "tag": "button",
+              "class": "_kick_j6luw_74",
+              "text": "Hold Kick near the ball; release after kicking",
+              "bounds": {
+                "x": 244,
+                "y": 525.09,
+                "width": 110,
+                "height": 132
+              },
+              "control": "kick"
+            },
+            "geometry": "horizontal",
+            "horizontalGapPx": 12,
+            "verticalGapPx": 0,
+            "edgeSeparationPx": 12,
+            "requiredMinimumPx": 8,
+            "meetsMinimum": true
+          }
+        ],
+        "minimumSpacingPx": 8,
+        "nestedPairsExcluded": [],
+        "issues": []
+      },
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "svgJerseys": {
+        "selector": "svg[data-haxball-pitch=\"true\"] g[data-jersey] text",
+        "labels": [
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R1",
+            "bounds": {
+              "x": 141.86,
+              "y": 308.69,
+              "width": 13.02,
+              "height": 16
+            },
+            "jersey": "R1",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.7142857142857142,
+              "b": 0,
+              "c": 0,
+              "d": 1.7142857142857142
+            },
+            "minimumLinearScale": 1.7142857142857142,
+            "effectiveFontPx": 12,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B1",
+            "bounds": {
+              "x": 235.25,
+              "y": 308.69,
+              "width": 12.77,
+              "height": 16
+            },
+            "jersey": "B1",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.7142857142857142,
+              "b": 0,
+              "c": 0,
+              "d": 1.7142857142857142
+            },
+            "minimumLinearScale": 1.7142857142857142,
+            "effectiveFontPx": 12,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R2",
+            "bounds": {
+              "x": 91.63,
+              "y": 308.69,
+              "width": 14.82,
+              "height": 16
+            },
+            "jersey": "R2",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.7142857142857142,
+              "b": 0,
+              "c": 0,
+              "d": 1.7142857142857142
+            },
+            "minimumLinearScale": 1.7142857142857142,
+            "effectiveFontPx": 12,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B2",
+            "bounds": {
+              "x": 283.76,
+              "y": 308.69,
+              "width": 14.58,
+              "height": 16
+            },
+            "jersey": "B2",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.7142857142857142,
+              "b": 0,
+              "c": 0,
+              "d": 1.7142857142857142
+            },
+            "minimumLinearScale": 1.7142857142857142,
+            "effectiveFontPx": 12,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R3",
+            "bounds": {
+              "x": 119.06,
+              "y": 269.26,
+              "width": 14.82,
+              "height": 16
+            },
+            "jersey": "R3",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.7142857142857142,
+              "b": 0,
+              "c": 0,
+              "d": 1.7142857142857142
+            },
+            "minimumLinearScale": 1.7142857142857142,
+            "effectiveFontPx": 12,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B3",
+            "bounds": {
+              "x": 256.33,
+              "y": 269.26,
+              "width": 14.58,
+              "height": 16
+            },
+            "jersey": "B3",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.7142857142857142,
+              "b": 0,
+              "c": 0,
+              "d": 1.7142857142857142
+            },
+            "minimumLinearScale": 1.7142857142857142,
+            "effectiveFontPx": 12,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R4",
+            "bounds": {
+              "x": 119.06,
+              "y": 348.12,
+              "width": 14.82,
+              "height": 16
+            },
+            "jersey": "R4",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.7142857142857142,
+              "b": 0,
+              "c": 0,
+              "d": 1.7142857142857142
+            },
+            "minimumLinearScale": 1.7142857142857142,
+            "effectiveFontPx": 12,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B4",
+            "bounds": {
+              "x": 256.33,
+              "y": 348.12,
+              "width": 14.58,
+              "height": 16
+            },
+            "jersey": "B4",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.7142857142857142,
+              "b": 0,
+              "c": 0,
+              "d": 1.7142857142857142
+            },
+            "minimumLinearScale": 1.7142857142857142,
+            "effectiveFontPx": 12,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          }
+        ],
+        "minimumTvPx": null,
+        "minimumPhonePx": 12,
+        "issues": []
+      },
+      "tvTypography": {
+        "body": [],
+        "timers": [],
+        "minimumBodyPx": null,
+        "minimumTimerPx": null,
+        "issues": []
+      },
+      "typographyIssues": [],
+      "summary": {
+        "controls": 9,
+        "controlIssues": 0,
+        "controlSpacingIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0,
+        "svgJerseyIssues": 0,
+        "tvBodyFontIssues": 0,
+        "tvTimerFontIssues": 0,
+        "typographyIssues": 0
+      }
+    },
+    {
+      "file": "interaction-paused.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Red · R2 · you",
+          "bounds": {
+            "x": 12,
+            "y": 82,
+            "width": 366,
+            "height": 25.3
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "25.3px"
+        },
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Match paused",
+          "bounds": {
+            "x": 12,
+            "y": 197.3,
+            "width": 366,
+            "height": 24.19
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "24.2px"
+        },
+        {
+          "tag": "h3",
+          "class": "",
+          "text": "Red team",
+          "bounds": {
+            "x": 12,
+            "y": 610.5,
+            "width": 179,
+            "height": 24
+          },
+          "hidden": null,
+          "fontSize": "18px",
+          "lineHeight": "normal"
+        },
+        {
+          "tag": "h3",
+          "class": "",
+          "text": "Blue team",
+          "bounds": {
+            "x": 199,
+            "y": 610.5,
+            "width": 179,
+            "height": 24
+          },
+          "hidden": null,
+          "fontSize": "18px",
+          "lineHeight": "normal"
+        }
+      ],
+      "controls": [],
+      "controlIssues": [],
+      "controlSpacing": {
+        "requiredMinimumPx": 8,
+        "visibleControls": 0,
+        "pairs": [],
+        "minimumSpacingPx": null,
+        "nestedPairsExcluded": [],
+        "issues": []
+      },
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "svgJerseys": {
+        "selector": "svg[data-haxball-pitch=\"true\"] g[data-jersey] text",
+        "labels": [
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R1",
+            "bounds": {
+              "x": 134.66,
+              "y": 406.99,
+              "width": 14.77,
+              "height": 18
+            },
+            "jersey": "R1",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B1",
+            "bounds": {
+              "x": 240.71,
+              "y": 406.99,
+              "width": 14.48,
+              "height": 18
+            },
+            "jersey": "B1",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R2",
+            "bounds": {
+              "x": 77.62,
+              "y": 406.99,
+              "width": 16.88,
+              "height": 18
+            },
+            "jersey": "R2",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B2",
+            "bounds": {
+              "x": 295.8,
+              "y": 406.99,
+              "width": 16.6,
+              "height": 18
+            },
+            "jersey": "B2",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R3",
+            "bounds": {
+              "x": 108.77,
+              "y": 362.22,
+              "width": 16.88,
+              "height": 18
+            },
+            "jersey": "R3",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B3",
+            "bounds": {
+              "x": 264.65,
+              "y": 362.22,
+              "width": 16.6,
+              "height": 18
+            },
+            "jersey": "B3",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R4",
+            "bounds": {
+              "x": 108.77,
+              "y": 451.77,
+              "width": 16.88,
+              "height": 18
+            },
+            "jersey": "R4",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B4",
+            "bounds": {
+              "x": 264.65,
+              "y": 451.77,
+              "width": 16.6,
+              "height": 18
+            },
+            "jersey": "B4",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          }
+        ],
+        "minimumTvPx": null,
+        "minimumPhonePx": 13.627659574468085,
+        "issues": []
+      },
+      "tvTypography": {
+        "body": [],
+        "timers": [],
+        "minimumBodyPx": null,
+        "minimumTimerPx": null,
+        "issues": []
+      },
+      "typographyIssues": [],
+      "summary": {
+        "controls": 0,
+        "controlIssues": 0,
+        "controlSpacingIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0,
+        "svgJerseyIssues": 0,
+        "tvBodyFontIssues": 0,
+        "tvTimerFontIssues": 0,
+        "typographyIssues": 0
+      }
+    },
+    {
+      "file": "interaction-spectator.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Watching Haxball",
+          "bounds": {
+            "x": 12,
+            "y": 82,
+            "width": 366,
+            "height": 25.3
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "25.3px"
+        },
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "First half",
+          "bounds": {
+            "x": 12,
+            "y": 174.3,
+            "width": 366,
+            "height": 24.19
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "24.2px"
+        },
+        {
+          "tag": "h3",
+          "class": "",
+          "text": "Red team",
+          "bounds": {
+            "x": 12,
+            "y": 610.5,
+            "width": 179,
+            "height": 24
+          },
+          "hidden": null,
+          "fontSize": "18px",
+          "lineHeight": "normal"
+        },
+        {
+          "tag": "h3",
+          "class": "",
+          "text": "Blue team",
+          "bounds": {
+            "x": 199,
+            "y": 610.5,
+            "width": 179,
+            "height": 24
+          },
+          "hidden": null,
+          "fontSize": "18px",
+          "lineHeight": "normal"
+        }
+      ],
+      "controls": [],
+      "controlIssues": [],
+      "controlSpacing": {
+        "requiredMinimumPx": 8,
+        "visibleControls": 0,
+        "pairs": [],
+        "minimumSpacingPx": null,
+        "nestedPairsExcluded": [],
+        "issues": []
+      },
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "svgJerseys": {
+        "selector": "svg[data-haxball-pitch=\"true\"] g[data-jersey] text",
+        "labels": [
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R1",
+            "bounds": {
+              "x": 134.66,
+              "y": 395.49,
+              "width": 14.77,
+              "height": 18
+            },
+            "jersey": "R1",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B1",
+            "bounds": {
+              "x": 240.71,
+              "y": 395.49,
+              "width": 14.48,
+              "height": 18
+            },
+            "jersey": "B1",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R2",
+            "bounds": {
+              "x": 77.62,
+              "y": 395.49,
+              "width": 16.88,
+              "height": 18
+            },
+            "jersey": "R2",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B2",
+            "bounds": {
+              "x": 295.8,
+              "y": 395.49,
+              "width": 16.6,
+              "height": 18
+            },
+            "jersey": "B2",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R3",
+            "bounds": {
+              "x": 108.77,
+              "y": 350.72,
+              "width": 16.88,
+              "height": 18
+            },
+            "jersey": "R3",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B3",
+            "bounds": {
+              "x": 264.65,
+              "y": 350.72,
+              "width": 16.6,
+              "height": 18
+            },
+            "jersey": "B3",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R4",
+            "bounds": {
+              "x": 108.77,
+              "y": 440.27,
+              "width": 16.88,
+              "height": 18
+            },
+            "jersey": "R4",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B4",
+            "bounds": {
+              "x": 264.65,
+              "y": 440.27,
+              "width": 16.6,
+              "height": 18
+            },
+            "jersey": "B4",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          }
+        ],
+        "minimumTvPx": null,
+        "minimumPhonePx": 13.627659574468085,
+        "issues": []
+      },
+      "tvTypography": {
+        "body": [],
+        "timers": [],
+        "minimumBodyPx": null,
+        "minimumTimerPx": null,
+        "issues": []
+      },
+      "typographyIssues": [],
+      "summary": {
+        "controls": 0,
+        "controlIssues": 0,
+        "controlSpacingIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0,
+        "svgJerseyIssues": 0,
+        "tvBodyFontIssues": 0,
+        "tvTimerFontIssues": 0,
+        "typographyIssues": 0
+      }
+    }
+  ],
+  "passed": true,
+  "browserVersion": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "touchProtocol": [
+    {
+      "type": "touchStart",
+      "ids": [11],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 2,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "up-right"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": 1,
+          "dy": -1,
+          "kick": false
+        },
+        "heldControls": ["up-right"]
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [11, 12],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 3,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 1,
+          "dy": -1,
+          "kick": true
+        },
+        "heldControls": ["up-right", "kick"]
+      }
+    },
+    {
+      "type": "touchEnd",
+      "ids": [11],
+      "releasedId": 11,
+      "remainingIds": [12],
+      "method": "explicit released point",
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerup",
+            "pointerId": 2,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "up-right"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 2,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "up-right"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": true
+        },
+        "heldControls": ["kick"]
+      }
+    },
+    {
+      "type": "touchEnd",
+      "ids": [],
+      "releasedId": 12,
+      "remainingIds": [],
+      "method": "empty final release",
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerup",
+            "pointerId": 3,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 3,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 3,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [21],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 4,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": -1,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": ["left"]
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [21, 22],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 5,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "right"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": ["left", "right"]
+      }
+    },
+    {
+      "type": "touchEnd",
+      "ids": [22],
+      "releasedId": 22,
+      "remainingIds": [21],
+      "method": "explicit released point",
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerup",
+            "pointerId": 5,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "right"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 5,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "right"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": -1,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": ["left"]
+      }
+    },
+    {
+      "type": "touchCancel",
+      "ids": [],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointercancel",
+            "pointerId": 4,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 4,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 3,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [31],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 6,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": -1,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": ["left"]
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [31, 32],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 7,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": -1,
+          "dy": 0,
+          "kick": true
+        },
+        "heldControls": ["left", "kick"]
+      }
+    },
+    {
+      "type": "touchMove",
+      "ids": [31, 32],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointermove",
+            "pointerId": 6,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": true
+        },
+        "heldControls": ["kick"]
+      }
+    },
+    {
+      "type": "touchMove",
+      "ids": [31, 32],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointermove",
+            "pointerId": 6,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 3,
+          "dx": -1,
+          "dy": 1,
+          "kick": true
+        },
+        "heldControls": ["down-left", "kick"]
+      }
+    },
+    {
+      "type": "touchMove",
+      "ids": [31, 32],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointermove",
+            "pointerId": 6,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 4,
+          "dx": 0,
+          "dy": 0,
+          "kick": true
+        },
+        "heldControls": ["kick"]
+      }
+    },
+    {
+      "type": "touchEnd",
+      "ids": [32],
+      "releasedId": 32,
+      "remainingIds": [31],
+      "method": "explicit released point",
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerup",
+            "pointerId": 7,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 7,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 6,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchEnd",
+      "ids": [],
+      "releasedId": 31,
+      "remainingIds": [],
+      "method": "empty final release",
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerup",
+            "pointerId": 6,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 6,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 6,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [41],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 8,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "down-right"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 91,
+          "dx": 1,
+          "dy": 1,
+          "kick": false
+        },
+        "heldControls": ["down-right"]
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [41, 42],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 9,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 92,
+          "dx": 1,
+          "dy": 1,
+          "kick": true
+        },
+        "heldControls": ["down-right", "kick"]
+      }
+    },
+    {
+      "type": "touchEnd",
+      "ids": [41],
+      "releasedId": 41,
+      "remainingIds": [42],
+      "method": "explicit released point",
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerup",
+            "pointerId": 8,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "down-right"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 8,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "down-right"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 96,
+          "dx": 0,
+          "dy": 0,
+          "kick": true
+        },
+        "heldControls": ["kick"]
+      }
+    },
+    {
+      "type": "touchEnd",
+      "ids": [],
+      "releasedId": 42,
+      "remainingIds": [],
+      "method": "empty final release",
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerup",
+            "pointerId": 9,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 9,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 98,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [51],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 10,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "up"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": 0,
+          "dy": -1,
+          "kick": false
+        },
+        "heldControls": ["up"]
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [51, 52],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 11,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 0,
+          "dy": -1,
+          "kick": true
+        },
+        "heldControls": ["up", "kick"]
+      }
+    },
+    {
+      "type": "touchCancel",
+      "ids": [],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointercancel",
+            "pointerId": 10,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "up"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 10,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "up"
+          },
+          {
+            "type": "pointercancel",
+            "pointerId": 11,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 11,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [61],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 12,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "right"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": 1,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": ["right"]
+      }
+    },
+    {
+      "type": "touchCancel",
+      "ids": [],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointercancel",
+            "pointerId": 12,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "right"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 12,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "right"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [71],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 13,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "down-left"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": -1,
+          "dy": 1,
+          "kick": false
+        },
+        "heldControls": ["down-left"]
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [71, 72],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 14,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": -1,
+          "dy": 1,
+          "kick": true
+        },
+        "heldControls": ["down-left", "kick"]
+      }
+    },
+    {
+      "type": "touchCancel",
+      "ids": [],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointercancel",
+            "pointerId": 13,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "down-left"
+          },
+          {
+            "type": "pointercancel",
+            "pointerId": 14,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [71],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 15,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "down-left"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": -1,
+          "dy": 1,
+          "kick": false
+        },
+        "heldControls": ["down-left"]
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [71, 72],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 16,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": -1,
+          "dy": 1,
+          "kick": true
+        },
+        "heldControls": ["down-left", "kick"]
+      }
+    },
+    {
+      "type": "touchCancel",
+      "ids": [],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointercancel",
+            "pointerId": 15,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": null
+          },
+          {
+            "type": "pointercancel",
+            "pointerId": 16,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": null
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000001000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [71],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 17,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "down-left"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": -1,
+          "dy": 1,
+          "kick": false
+        },
+        "heldControls": ["down-left"]
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [71, 72],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 18,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": -1,
+          "dy": 1,
+          "kick": true
+        },
+        "heldControls": ["down-left", "kick"]
+      }
+    },
+    {
+      "type": "touchCancel",
+      "ids": [],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointercancel",
+            "pointerId": 17,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": null
+          },
+          {
+            "type": "pointercancel",
+            "pointerId": 18,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": null
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [71],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 19,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "down-left"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": -1,
+          "dy": 1,
+          "kick": false
+        },
+        "heldControls": ["down-left"]
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [71, 72],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 20,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": -1,
+          "dy": 1,
+          "kick": true
+        },
+        "heldControls": ["down-left", "kick"]
+      }
+    },
+    {
+      "type": "touchCancel",
+      "ids": [],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointercancel",
+            "pointerId": 19,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": null
+          },
+          {
+            "type": "pointercancel",
+            "pointerId": 20,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": null
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000188000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [81],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 21,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "left"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": -1,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": ["left"]
+      }
+    },
+    {
+      "type": "touchCancel",
+      "ids": [],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointercancel",
+            "pointerId": 21,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": null
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000001000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [82],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 22,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "right"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000003000,
+          "seq": 3,
+          "dx": 1,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": ["right"]
+      }
+    },
+    {
+      "type": "touchCancel",
+      "ids": [],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointercancel",
+            "pointerId": 22,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "right"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 22,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "right"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000003000,
+          "seq": 4,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [88],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 23,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "up"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": 0,
+          "dy": -1,
+          "kick": false
+        },
+        "heldControls": ["up"]
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [88, 89],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 24,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 0,
+          "dy": -1,
+          "kick": true
+        },
+        "heldControls": ["up", "kick"]
+      }
+    },
+    {
+      "type": "touchCancel",
+      "ids": [],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointercancel",
+            "pointerId": 23,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "up"
+          },
+          {
+            "type": "pointercancel",
+            "pointerId": 24,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    },
+    {
+      "type": "touchStart",
+      "ids": [91],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointerdown",
+            "pointerId": 25,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 0,
+          "dx": 0,
+          "dy": 0,
+          "kick": true
+        },
+        "heldControls": ["kick"]
+      }
+    },
+    {
+      "type": "touchCancel",
+      "ids": [],
+      "observed": {
+        "pointers": [
+          {
+            "type": "pointercancel",
+            "pointerId": 25,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          },
+          {
+            "type": "lostpointercapture",
+            "pointerId": 25,
+            "pointerType": "touch",
+            "trusted": true,
+            "control": "kick"
+          }
+        ],
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 6,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": []
+      }
+    }
+  ],
+  "inputMethod": "CDP trusted touch and keyboard; named touchEnd lifts an individual thumb on Chromium WebTouch path",
+  "touchProvenance": {
+    "disabledFeature": "SyntheticPointerActions",
+    "dispatchPath": "DispatchWebTouchEvent / CreateWebTouchEvents",
+    "individualRelease": "touchEnd with only the released contact; remaining contacts stay stationary and active",
+    "finalRelease": "touchEnd with an empty point list",
+    "source": "https://chromium.googlesource.com/chromium/src/+/refs/heads/main/content/browser/devtools/protocol/input_handler.cc",
+    "featureSource": "https://chromium.googlesource.com/chromium/src/+/refs/heads/main/content/public/common/content_features.cc",
+    "note": "Primary source inspected: WebTouch erases supplied touchEnd IDs; active-point omission releases belong to the optional SyntheticPointerActions branch. Protocol documentation differs from the default WebTouch implementation."
+  },
+  "lifecycleMethod": "Pause/phase/departure use supplied public views; blur and document-hidden signals are explicitly synthetic handler tests.",
+  "withTv": {
+    "viewport": {
+      "width": 390,
+      "height": 844,
+      "surface": "phone"
+    },
+    "document": {
+      "clientWidth": 390,
+      "clientHeight": 844,
+      "scrollWidth": 390,
+      "scrollHeight": 844,
+      "bodyClientWidth": 390,
+      "bodyClientHeight": 844,
+      "bodyScrollWidth": 390,
+      "bodyScrollHeight": 844
+    },
+    "overflow": {
+      "horizontal": false,
+      "vertical": false
+    },
+    "headings": [
+      {
+        "tag": "h2",
+        "class": "",
+        "text": "Red · R2 · you",
+        "bounds": {
+          "x": 12,
+          "y": 82,
+          "width": 366,
+          "height": 25.3
+        },
+        "hidden": null,
+        "fontSize": "22px",
+        "lineHeight": "25.3px"
+      }
+    ],
+    "controls": [
+      {
+        "tag": "button",
+        "class": "_direction_j6luw_73",
+        "text": "Move up and left",
+        "bounds": {
+          "x": 36,
+          "y": 395.89,
+          "width": 60,
+          "height": 60
+        },
+        "disabled": false,
+        "insideViewport": true,
+        "clippedBy": [],
+        "minimumTouchSize": 44,
+        "targetFits": true
+      },
+      {
+        "tag": "button",
+        "class": "_direction_j6luw_73",
+        "text": "Move up",
+        "bounds": {
+          "x": 104,
+          "y": 395.89,
+          "width": 60,
+          "height": 60
+        },
+        "disabled": false,
+        "insideViewport": true,
+        "clippedBy": [],
+        "minimumTouchSize": 44,
+        "targetFits": true
+      },
+      {
+        "tag": "button",
+        "class": "_direction_j6luw_73",
+        "text": "Move up and right",
+        "bounds": {
+          "x": 172,
+          "y": 395.89,
+          "width": 60,
+          "height": 60
+        },
+        "disabled": false,
+        "insideViewport": true,
+        "clippedBy": [],
+        "minimumTouchSize": 44,
+        "targetFits": true
+      },
+      {
+        "tag": "button",
+        "class": "_direction_j6luw_73",
+        "text": "Move left",
+        "bounds": {
+          "x": 36,
+          "y": 463.89,
+          "width": 60,
+          "height": 60
+        },
+        "disabled": false,
+        "insideViewport": true,
+        "clippedBy": [],
+        "minimumTouchSize": 44,
+        "targetFits": true
+      },
+      {
+        "tag": "button",
+        "class": "_direction_j6luw_73",
+        "text": "Move right",
+        "bounds": {
+          "x": 172,
+          "y": 463.89,
+          "width": 60,
+          "height": 60
+        },
+        "disabled": false,
+        "insideViewport": true,
+        "clippedBy": [],
+        "minimumTouchSize": 44,
+        "targetFits": true
+      },
+      {
+        "tag": "button",
+        "class": "_direction_j6luw_73",
+        "text": "Move down and left",
+        "bounds": {
+          "x": 36,
+          "y": 531.89,
+          "width": 60,
+          "height": 60
+        },
+        "disabled": false,
+        "insideViewport": true,
+        "clippedBy": [],
+        "minimumTouchSize": 44,
+        "targetFits": true
+      },
+      {
+        "tag": "button",
+        "class": "_direction_j6luw_73",
+        "text": "Move down",
+        "bounds": {
+          "x": 104,
+          "y": 531.89,
+          "width": 60,
+          "height": 60
+        },
+        "disabled": false,
+        "insideViewport": true,
+        "clippedBy": [],
+        "minimumTouchSize": 44,
+        "targetFits": true
+      },
+      {
+        "tag": "button",
+        "class": "_direction_j6luw_73",
+        "text": "Move down and right",
+        "bounds": {
+          "x": 172,
+          "y": 531.89,
+          "width": 60,
+          "height": 60
+        },
+        "disabled": false,
+        "insideViewport": true,
+        "clippedBy": [],
+        "minimumTouchSize": 44,
+        "targetFits": true
+      },
+      {
+        "tag": "button",
+        "class": "_kick_j6luw_74",
+        "text": "Hold Kick near the ball; release after kicking",
+        "bounds": {
+          "x": 244,
+          "y": 427.89,
+          "width": 110,
+          "height": 132
+        },
+        "disabled": false,
+        "insideViewport": true,
+        "clippedBy": [],
+        "minimumTouchSize": 44,
+        "targetFits": true
+      }
+    ],
+    "controlIssues": [],
+    "controlSpacing": {
+      "requiredMinimumPx": 8,
+      "visibleControls": 9,
+      "pairs": [
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and left",
+            "bounds": {
+              "x": 36,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up",
+            "bounds": {
+              "x": 104,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 8,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 8,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and left",
+            "bounds": {
+              "x": 36,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and right",
+            "bounds": {
+              "x": 172,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-right"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 76,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 76,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and left",
+            "bounds": {
+              "x": 36,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move left",
+            "bounds": {
+              "x": 36,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "left"
+          },
+          "geometry": "vertical",
+          "horizontalGapPx": 0,
+          "verticalGapPx": 8,
+          "edgeSeparationPx": 8,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and left",
+            "bounds": {
+              "x": 36,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move right",
+            "bounds": {
+              "x": 172,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "right"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 76,
+          "verticalGapPx": 8,
+          "edgeSeparationPx": 76.4198926981712,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and left",
+            "bounds": {
+              "x": 36,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and left",
+            "bounds": {
+              "x": 36,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-left"
+          },
+          "geometry": "vertical",
+          "horizontalGapPx": 0,
+          "verticalGapPx": 76,
+          "edgeSeparationPx": 76,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and left",
+            "bounds": {
+              "x": 36,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down",
+            "bounds": {
+              "x": 104,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 8,
+          "verticalGapPx": 76,
+          "edgeSeparationPx": 76.4198926981712,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and left",
+            "bounds": {
+              "x": 36,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and right",
+            "bounds": {
+              "x": 172,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-right"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 76,
+          "verticalGapPx": 76,
+          "edgeSeparationPx": 107.48023074035522,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and left",
+            "bounds": {
+              "x": 36,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_kick_j6luw_74",
+            "text": "Hold Kick near the ball; release after kicking",
+            "bounds": {
+              "x": 244,
+              "y": 427.89,
+              "width": 110,
+              "height": 132
+            },
+            "control": "kick"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 148,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 148,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up",
+            "bounds": {
+              "x": 104,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and right",
+            "bounds": {
+              "x": 172,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-right"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 8,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 8,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up",
+            "bounds": {
+              "x": 104,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move left",
+            "bounds": {
+              "x": 36,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "left"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 8,
+          "verticalGapPx": 8,
+          "edgeSeparationPx": 11.313708498984761,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up",
+            "bounds": {
+              "x": 104,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move right",
+            "bounds": {
+              "x": 172,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "right"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 8,
+          "verticalGapPx": 8,
+          "edgeSeparationPx": 11.313708498984761,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up",
+            "bounds": {
+              "x": 104,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and left",
+            "bounds": {
+              "x": 36,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-left"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 8,
+          "verticalGapPx": 76,
+          "edgeSeparationPx": 76.4198926981712,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up",
+            "bounds": {
+              "x": 104,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down",
+            "bounds": {
+              "x": 104,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down"
+          },
+          "geometry": "vertical",
+          "horizontalGapPx": 0,
+          "verticalGapPx": 76,
+          "edgeSeparationPx": 76,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up",
+            "bounds": {
+              "x": 104,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and right",
+            "bounds": {
+              "x": 172,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-right"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 8,
+          "verticalGapPx": 76,
+          "edgeSeparationPx": 76.4198926981712,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up",
+            "bounds": {
+              "x": 104,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_kick_j6luw_74",
+            "text": "Hold Kick near the ball; release after kicking",
+            "bounds": {
+              "x": 244,
+              "y": 427.89,
+              "width": 110,
+              "height": 132
+            },
+            "control": "kick"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 80,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 80,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and right",
+            "bounds": {
+              "x": 172,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-right"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move left",
+            "bounds": {
+              "x": 36,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "left"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 76,
+          "verticalGapPx": 8,
+          "edgeSeparationPx": 76.4198926981712,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and right",
+            "bounds": {
+              "x": 172,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-right"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move right",
+            "bounds": {
+              "x": 172,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "right"
+          },
+          "geometry": "vertical",
+          "horizontalGapPx": 0,
+          "verticalGapPx": 8,
+          "edgeSeparationPx": 8,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and right",
+            "bounds": {
+              "x": 172,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-right"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and left",
+            "bounds": {
+              "x": 36,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-left"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 76,
+          "verticalGapPx": 76,
+          "edgeSeparationPx": 107.48023074035522,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and right",
+            "bounds": {
+              "x": 172,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-right"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down",
+            "bounds": {
+              "x": 104,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 8,
+          "verticalGapPx": 76,
+          "edgeSeparationPx": 76.4198926981712,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and right",
+            "bounds": {
+              "x": 172,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-right"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and right",
+            "bounds": {
+              "x": 172,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-right"
+          },
+          "geometry": "vertical",
+          "horizontalGapPx": 0,
+          "verticalGapPx": 76,
+          "edgeSeparationPx": 76,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and right",
+            "bounds": {
+              "x": 172,
+              "y": 395.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "up-right"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_kick_j6luw_74",
+            "text": "Hold Kick near the ball; release after kicking",
+            "bounds": {
+              "x": 244,
+              "y": 427.89,
+              "width": 110,
+              "height": 132
+            },
+            "control": "kick"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 12,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 12,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move left",
+            "bounds": {
+              "x": 36,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move right",
+            "bounds": {
+              "x": 172,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "right"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 76,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 76,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move left",
+            "bounds": {
+              "x": 36,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and left",
+            "bounds": {
+              "x": 36,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-left"
+          },
+          "geometry": "vertical",
+          "horizontalGapPx": 0,
+          "verticalGapPx": 8,
+          "edgeSeparationPx": 8,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move left",
+            "bounds": {
+              "x": 36,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down",
+            "bounds": {
+              "x": 104,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 8,
+          "verticalGapPx": 8,
+          "edgeSeparationPx": 11.313708498984761,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move left",
+            "bounds": {
+              "x": 36,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and right",
+            "bounds": {
+              "x": 172,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-right"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 76,
+          "verticalGapPx": 8,
+          "edgeSeparationPx": 76.4198926981712,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move left",
+            "bounds": {
+              "x": 36,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_kick_j6luw_74",
+            "text": "Hold Kick near the ball; release after kicking",
+            "bounds": {
+              "x": 244,
+              "y": 427.89,
+              "width": 110,
+              "height": 132
+            },
+            "control": "kick"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 148,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 148,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move right",
+            "bounds": {
+              "x": 172,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "right"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and left",
+            "bounds": {
+              "x": 36,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-left"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 76,
+          "verticalGapPx": 8,
+          "edgeSeparationPx": 76.4198926981712,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move right",
+            "bounds": {
+              "x": 172,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "right"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down",
+            "bounds": {
+              "x": 104,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down"
+          },
+          "geometry": "diagonal",
+          "horizontalGapPx": 8,
+          "verticalGapPx": 8,
+          "edgeSeparationPx": 11.313708498984761,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move right",
+            "bounds": {
+              "x": 172,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "right"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and right",
+            "bounds": {
+              "x": 172,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-right"
+          },
+          "geometry": "vertical",
+          "horizontalGapPx": 0,
+          "verticalGapPx": 8,
+          "edgeSeparationPx": 8,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move right",
+            "bounds": {
+              "x": 172,
+              "y": 463.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "right"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_kick_j6luw_74",
+            "text": "Hold Kick near the ball; release after kicking",
+            "bounds": {
+              "x": 244,
+              "y": 427.89,
+              "width": 110,
+              "height": 132
+            },
+            "control": "kick"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 12,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 12,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and left",
+            "bounds": {
+              "x": 36,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down",
+            "bounds": {
+              "x": 104,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 8,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 8,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and left",
+            "bounds": {
+              "x": 36,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and right",
+            "bounds": {
+              "x": 172,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-right"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 76,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 76,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and left",
+            "bounds": {
+              "x": 36,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-left"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_kick_j6luw_74",
+            "text": "Hold Kick near the ball; release after kicking",
+            "bounds": {
+              "x": 244,
+              "y": 427.89,
+              "width": 110,
+              "height": 132
+            },
+            "control": "kick"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 148,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 148,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down",
+            "bounds": {
+              "x": 104,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and right",
+            "bounds": {
+              "x": 172,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-right"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 8,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 8,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down",
+            "bounds": {
+              "x": 104,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_kick_j6luw_74",
+            "text": "Hold Kick near the ball; release after kicking",
+            "bounds": {
+              "x": 244,
+              "y": 427.89,
+              "width": 110,
+              "height": 132
+            },
+            "control": "kick"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 80,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 80,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        },
+        {
+          "first": {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and right",
+            "bounds": {
+              "x": 172,
+              "y": 531.89,
+              "width": 60,
+              "height": 60
+            },
+            "control": "down-right"
+          },
+          "second": {
+            "tag": "button",
+            "class": "_kick_j6luw_74",
+            "text": "Hold Kick near the ball; release after kicking",
+            "bounds": {
+              "x": 244,
+              "y": 427.89,
+              "width": 110,
+              "height": 132
+            },
+            "control": "kick"
+          },
+          "geometry": "horizontal",
+          "horizontalGapPx": 12,
+          "verticalGapPx": 0,
+          "edgeSeparationPx": 12,
+          "requiredMinimumPx": 8,
+          "meetsMinimum": true
+        }
+      ],
+      "minimumSpacingPx": 8,
+      "nestedPairsExcluded": [],
+      "issues": []
+    },
+    "offscreen": [],
+    "textClipped": [],
+    "scrollContainers": [],
+    "intentionalHidden": [],
+    "podiumPlaceholders": [],
+    "svgJerseys": {
+      "selector": "svg[data-haxball-pitch=\"true\"] g[data-jersey] text",
+      "labels": [],
+      "minimumTvPx": null,
+      "minimumPhonePx": null,
+      "issues": []
+    },
+    "tvTypography": {
+      "body": [],
+      "timers": [],
+      "minimumBodyPx": null,
+      "minimumTimerPx": null,
+      "issues": []
+    },
+    "typographyIssues": [],
+    "summary": {
+      "controls": 9,
+      "controlIssues": 0,
+      "controlSpacingIssues": 0,
+      "offscreen": 0,
+      "textClipped": 0,
+      "scrollContainers": 0,
+      "intentionalHidden": 0,
+      "podiumPlaceholders": 0,
+      "svgJerseyIssues": 0,
+      "tvBodyFontIssues": 0,
+      "tvTimerFontIssues": 0,
+      "typographyIssues": 0
+    }
+  }
+}

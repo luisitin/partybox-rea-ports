@@ -12,7 +12,7 @@ and owned physics tuning, with no original code, branding artwork, audio or runt
 
 2–8 participants, seeded balanced team assignment and stable numbered jerseys within each team.
 For 3/5/7 participants, the smaller team receives one explicitly named normal-strength helper disc.
-Helpers are public, never SDK participants or result rows. Easy bots chase the ball with mistakes;
+Helpers are public, never SDK participants or result rows. Easy bots chase the ball with mistakes.
 All strengths move into a side lane when an opponent blocks a radial kick. Normal bots divide
 attack/defence and line up behind the ball; sharp bots predict further ahead and compare three
 goal-mouth lanes. Public disc identities distinguish approach angles without a fixed team bias.

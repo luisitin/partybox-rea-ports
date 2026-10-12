@@ -1,0 +1,413 @@
+{
+  "command": "C:\\Program Files\\nodejs\\node.exe C:\\dev\\rea-runs\\r3\\node_modules\\vitest\\vitest.mjs run games/haxball/__tests__/game.test.ts --maxWorkers=1 --no-file-parallelism --reporter=json",
+  "target": "games/haxball/__tests__/game.test.ts",
+  "baseline": {
+    "exit": 0,
+    "error": null,
+    "total": 34,
+    "failed": [],
+    "stderr": "[vitest-pool]: Timeout terminating forks worker for test files C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts.\n"
+  },
+  "sourceSha256": {
+    "games/haxball/server/world.ts": "8bafbf92850f47b3b08a4b91a7563a606f0c9cf1a94a3a8b3282a5e1d3a6802b",
+    "games/haxball/server/phases/goal.ts": "32eb793f4df0dbf119c349a98228b3a8ad0ea8d43717dba9fd60494445751071",
+    "games/haxball/server/phases/play.ts": "ba19d9c19c016a93913738faaea2830a0e10bee8cf9b3507ac060837feb66846",
+    "games/haxball/server/index.ts": "9eeeab28b9e04658edc075e86e7b5b2b503f3da1eaacd5453a6b90151c776aac"
+  },
+  "requiredKilled": 19,
+  "totalMutations": 20,
+  "killed": 20,
+  "survived": 0,
+  "invalid": 0,
+  "originalsRestored": true,
+  "reports": [
+    {
+      "id": 1,
+      "label": "Credit the wrong attacking team",
+      "file": "games/haxball/server/world.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "whole-ball goals and contact requires whole-ball crossing and uses crossing y rather than final y",
+          "message": "AssertionError: expected 'blue' to be 'red' // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:38:83\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "whole-ball goals and contact credits attacking team, records own goals, and reverses scoring ends in half two",
+          "message": "AssertionError: expected { team: 'blue', scorerId: 'p8', …(1) } to deeply equal { team: 'red', scorerId: 'p8', …(1) }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:49:17\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chu"
+        },
+        {
+          "name": "whole-ball goals and contact awards one goal, clears driving, centers the puck, and cannot score twice during the beat",
+          "message": "AssertionError: expected { red: +0, blue: 1 } to deeply equal { red: 1, blue: +0 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:63:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "two bounded halves and lifecycle caps goal beats at the half boundary and refuses a goal/input landing after the cap",
+          "message": "AssertionError: expected { red: +0, blue: 1 } to deeply equal { red: 1, blue: +0 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:247:27\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "two bounded halves and lifecycle VIP End during a long pause locks frozen positions and scores while unpaused End judges motion",
+          "message": "AssertionError: expected { red: 2, blue: 2 } to deeply equal { red: 3, blue: 1 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:308:27\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "fixed event-time catchup a delayed timer matches timely physics and goal/reset transitions exactly",
+          "message": "AssertionError: expected { red: +0, blue: 1 } to deeply equal { red: 1, blue: +0 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:557:27\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "fixed event-time catchup a goal on the final physics step counts and goes directly to halftime without an extra beat",
+          "message": "AssertionError: expected { red: +0, blue: 1 } to deeply equal { red: 1, blue: +0 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:582:25\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 2,
+      "label": "Count crossing before the whole ball clears the goal",
+      "file": "games/haxball/server/world.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "whole-ball goals and contact requires whole-ball crossing and uses crossing y rather than final y",
+          "message": "AssertionError: expected { team: 'red', scorerId: null, …(1) } to be null\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:37:73\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 3,
+      "label": "Score outside the mouth",
+      "file": "games/haxball/server/world.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "whole-ball goals and contact requires whole-ball crossing and uses crossing y rather than final y",
+          "message": "AssertionError: expected { team: 'red', scorerId: null, …(1) } to be null\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:40:66\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 4,
+      "label": "Judge goal from final y rather than crossing y",
+      "file": "games/haxball/server/world.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "whole-ball goals and contact requires whole-ball crossing and uses crossing y rather than final y",
+          "message": "AssertionError: expected { team: 'red', scorerId: null, …(1) } to be null\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:40:66\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 5,
+      "label": "Reverse own-goal attribution",
+      "file": "games/haxball/server/world.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "whole-ball goals and contact credits attacking team, records own goals, and reverses scoring ends in half two",
+          "message": "AssertionError: expected { team: 'red', scorerId: 'p8', …(1) } to deeply equal { team: 'red', scorerId: 'p8', …(1) }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:49:17\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chun"
+        },
+        {
+          "name": "whole-ball goals and contact awards one goal, clears driving, centers the puck, and cannot score twice during the beat",
+          "message": "AssertionError: expected { team: 'red', scorerId: 'p1', …(1) } to deeply equal { team: 'red', scorerId: 'p1', …(1) }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:64:29\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chun"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 6,
+      "label": "Award two goals for one crossing",
+      "file": "games/haxball/server/phases/goal.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "whole-ball goals and contact awards one goal, clears driving, centers the puck, and cannot score twice during the beat",
+          "message": "AssertionError: expected { red: 2, blue: +0 } to deeply equal { red: 1, blue: +0 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:63:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "two bounded halves and lifecycle caps goal beats at the half boundary and refuses a goal/input landing after the cap",
+          "message": "AssertionError: expected { red: 2, blue: +0 } to deeply equal { red: 1, blue: +0 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:247:27\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "two bounded halves and lifecycle VIP End during a long pause locks frozen positions and scores while unpaused End judges motion",
+          "message": "AssertionError: expected { red: 4, blue: 1 } to deeply equal { red: 3, blue: 1 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:308:27\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "two bounded halves and lifecycle VIP skip resumes a goal within the same half; skip half advances; early end records live team totals",
+          "message": "AssertionError: expected { red: +0, blue: 2 } to deeply equal { red: +0, blue: 1 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:375:24\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "fixed event-time catchup a delayed timer matches timely physics and goal/reset transitions exactly",
+          "message": "AssertionError: expected { red: 2, blue: +0 } to deeply equal { red: 1, blue: +0 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:557:27\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "fixed event-time catchup a goal on the final physics step counts and goes directly to halftime without an extra beat",
+          "message": "AssertionError: expected { red: 2, blue: +0 } to deeply equal { red: 1, blue: +0 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:582:25\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 7,
+      "label": "Leave the scored puck in the net after reset",
+      "file": "games/haxball/server/world.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "whole-ball goals and contact awards one goal, clears driving, centers the puck, and cannot score twice during the beat",
+          "message": "AssertionError: expected { Object (x, y, ...) } to deeply equal { x: 80, y: 50, vx: +0, vy: +0 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:65:25\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:6"
+        },
+        {
+          "name": "two bounded halves and lifecycle VIP End during a long pause locks frozen positions and scores while unpaused End judges motion",
+          "message": "AssertionError: expected { x: 162.491, y: 50, vx: +0, vy: +0 } to deeply equal { x: 80, y: 50, vx: +0, vy: +0 }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:310:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-ar"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 8,
+      "label": "Never expire held controls",
+      "file": "games/haxball/server/world.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "intent acceptance, lease and armed kick expires movement and a prepared kick at the exact lease boundary",
+          "message": "AssertionError: expected 1 to be +0 // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:164:37\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 9,
+      "label": "Give diagonal movement extra acceleration",
+      "file": "games/haxball/server/world.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "intent acceptance, lease and armed kick normalizes diagonal drive and applies less acceleration while kick is held",
+          "message": "AssertionError: expected 6.3639610306789285 to be close to 4.5, received difference is 1.8639610306789285, but expected 0.000005\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:114:50\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/run"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 10,
+      "label": "Allow kicking a distant ball",
+      "file": "games/haxball/server/world.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "intent acceptance, lease and armed kick keeps a distant kick armed, kicks radially on contact, and needs release to kick again",
+          "message": "AssertionError: expected false to be true // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:131:44\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "intent acceptance, lease and armed kick expires movement and a prepared kick at the exact lease boundary",
+          "message": "AssertionError: expected false to be true // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:159:43\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 11,
+      "label": "Keep a successful held kick armed",
+      "file": "games/haxball/server/world.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "intent acceptance, lease and armed kick keeps a distant kick armed, kicks radially on contact, and needs release to kick again",
+          "message": "AssertionError: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:137:42\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 12,
+      "label": "Remove the kick recovery interval",
+      "file": "games/haxball/server/world.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "intent acceptance, lease and armed kick keeps a distant kick armed, kicks radially on contact, and needs release to kick again",
+          "message": "AssertionError: expected 1700000000300 to be 1700000000100 // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:149:67\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 13,
+      "label": "Accept a duplicate sequence in applyControl",
+      "file": "games/haxball/server/world.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "intent acceptance, lease and armed kick guards old sequence, old play instance, spectators, malformed schema and backward time",
+          "message": "AssertionError: expected { phase: { id: 'play', …(2) }, …(17) } to be { phase: { id: 'play', …(2) }, …(17) } // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:182:94\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/r"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 14,
+      "label": "Let an old-instance input advance live physics",
+      "file": "games/haxball/server/phases/play.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "intent acceptance, lease and armed kick guards old sequence, old play instance, spectators, malformed schema and backward time",
+          "message": "AssertionError: expected [ …(8) ] to deeply equal [ …(8) ]\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:180:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 15,
+      "label": "Accept controls from disconnected players",
+      "file": "games/haxball/server/phases/play.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "two bounded halves and lifecycle drops stop a disc, reconnect keeps its seat, permanent leavers stay in watch mode",
+          "message": "AssertionError: expected { p3: { seq: -1, dx: +0, …(6) }, …(7) } to deeply equal { p3: { seq: -1, dx: +0, …(6) }, …(7) }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:322:65\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 16,
+      "label": "Let a permanent leaver drive after reconnect",
+      "file": "games/haxball/server/phases/play.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "two bounded halves and lifecycle drops stop a disc, reconnect keeps its seat, permanent leavers stay in watch mode",
+          "message": "AssertionError: expected 1 to be +0 // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:347:71\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 17,
+      "label": "Never swap goals at halftime",
+      "file": "games/haxball/server/index.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "two bounded halves and lifecycle defaults to two90-second halves, swaps ends once, retains teams and ends an idle0–0",
+          "message": "AssertionError: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:216:36\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "fixed event-time catchup one late receipt crosses both halves at their original deadlines",
+          "message": "AssertionError: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:568:37\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 18,
+      "label": "Double the second-half clock",
+      "file": "games/haxball/server/index.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "two bounded halves and lifecycle defaults to two90-second halves, swaps ends once, retains teams and ends an idle0–0",
+          "message": "AssertionError: expected 180000 to be 90000 // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:218:56\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "fixed event-time catchup one late receipt crosses both halves at their original deadlines",
+          "message": "AssertionError: expected 'play' to be 'done' // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:565:30\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        },
+        {
+          "name": "fixed event-time catchup late old-screen inputs and skips cannot apply to an automatic successor",
+          "message": "AssertionError: expected 1700000278000 to be 1700000188000 // Object.is equality\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:601:32\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 19,
+      "label": "Start delayed goal reset at receipt time",
+      "file": "games/haxball/server/phases/play.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "fixed event-time catchup a delayed timer matches timely physics and goal/reset transitions exactly",
+          "message": "AssertionError: expected { phase: { id: 'goal', …(2) }, …(17) } to deeply equal { phase: { id: 'play', …(2) }, …(17) }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:556:21\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/c"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "id": 20,
+      "label": "Leak every player’s intent in the public match view",
+      "file": "games/haxball/server/index.ts",
+      "status": "killed",
+      "exit": 1,
+      "error": null,
+      "total": 34,
+      "failed": [
+        {
+          "name": "team results, private controls and real bot choices all field views agree while another seat’s lease/seq/armed state stays private",
+          "message": "AssertionError: expected { gameId: 'haxball', …(15) } to deeply equal { gameId: 'haxball', …(15) }\n    at C:/dev/rea-runs/r3/games/haxball/__tests__/game.test.ts:424:34\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r3/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:295"
+        }
+      ],
+      "stderr": ""
+    }
+  ]
+}

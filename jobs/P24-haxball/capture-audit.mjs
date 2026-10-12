@@ -64,23 +64,22 @@ export function auditLayout(phone) {
     }
     return clippedBy;
   };
-  const controls = [
+  const controlElements = [
     ...document.querySelectorAll(
       'button,input,select,textarea,a[href],[role="button"],[role="radio"]',
     ),
-  ]
-    .filter((element) => !hiddenReason(element) && !accessibilityOnly(element))
-    .map((element) => {
-      const rect = element.getBoundingClientRect();
-      return {
-        ...describe(element),
-        disabled: element.matches(':disabled,[aria-disabled="true"]'),
-        insideViewport: inside(rect),
-        clippedBy: clipping(element, rect),
-        minimumTouchSize: phone ? 44 : null,
-        targetFits: !phone || (rect.width >= 44 - tolerance && rect.height >= 44 - tolerance),
-      };
-    });
+  ].filter((element) => !hiddenReason(element) && !accessibilityOnly(element));
+  const controls = controlElements.map((element) => {
+    const rect = element.getBoundingClientRect();
+    return {
+      ...describe(element),
+      disabled: element.matches(':disabled,[aria-disabled="true"]'),
+      insideViewport: inside(rect),
+      clippedBy: clipping(element, rect),
+      minimumTouchSize: phone ? 44 : null,
+      targetFits: !phone || (rect.width >= 44 - tolerance && rect.height >= 44 - tolerance),
+    };
+  });
   const headings = [...document.querySelectorAll('h1,h2,h3,h4,h5,h6')].map((element) => ({
     ...describe(element),
     hidden: hiddenReason(element),
@@ -160,7 +159,7 @@ export function auditLayout(phone) {
     hidden: hiddenReason(element),
     expectedPlaceholder: /Coming up/.test(text(element)),
   }));
-  const controlIssues = controls.filter(
+  const controlGeometryIssues = controls.filter(
     (control) => !control.insideViewport || !control.targetFits || control.clippedBy.length,
   );
   const visibleText = (element) => {
@@ -175,6 +174,72 @@ export function auditLayout(phone) {
       rect.top < height
     );
   };
+  // Measure border-box edge separation in the rendered page, independently of
+  // CSS gap declarations. A diagonal pair uses its nearest-corner distance.
+  const phoneControls = phone ? controlElements.filter(visibleText) : [];
+  const spacingPairs = [];
+  const nestedControlPairs = [];
+  const controlDescription = (element) => ({
+    ...describe(element),
+    control: element.getAttribute('data-hax-control'),
+  });
+  for (let i = 0; i < phoneControls.length; i++) {
+    const first = phoneControls[i];
+    const a = first.getBoundingClientRect();
+    for (let j = i + 1; j < phoneControls.length; j++) {
+      const second = phoneControls[j];
+      // The selector union returns each node once. An ancestor control and its
+      // nested control represent one containing hit region, not adjacent targets.
+      if (first.contains(second) || second.contains(first)) {
+        nestedControlPairs.push({
+          first: controlDescription(first),
+          second: controlDescription(second),
+          reason: 'nested hit regions; not adjacent controls',
+        });
+        continue;
+      }
+      const b = second.getBoundingClientRect();
+      const horizontalGapPx = Math.max(0, a.left - b.right, b.left - a.right);
+      const verticalGapPx = Math.max(0, a.top - b.bottom, b.top - a.bottom);
+      const edgeSeparationPx = Math.hypot(horizontalGapPx, verticalGapPx);
+      spacingPairs.push({
+        first: controlDescription(first),
+        second: controlDescription(second),
+        geometry:
+          horizontalGapPx > 0 && verticalGapPx > 0
+            ? 'diagonal'
+            : horizontalGapPx > 0
+              ? 'horizontal'
+              : verticalGapPx > 0
+                ? 'vertical'
+                : 'overlapping or touching',
+        horizontalGapPx,
+        verticalGapPx,
+        edgeSeparationPx,
+        requiredMinimumPx: 8,
+        // Preserve full precision so rounded metadata cannot hide a short gap.
+        meetsMinimum: edgeSeparationPx >= 8,
+      });
+    }
+  }
+  const controlSpacingIssues = spacingPairs
+    .filter((pair) => !pair.meetsMinimum)
+    .map((pair) => ({
+      classification: 'phone-control-spacing',
+      reason: 'visible phone controls less than 8 px apart',
+      ...pair,
+    }));
+  const controlSpacing = {
+    requiredMinimumPx: phone ? 8 : null,
+    visibleControls: phoneControls.length,
+    pairs: spacingPairs,
+    minimumSpacingPx: spacingPairs.length
+      ? Math.min(...spacingPairs.map((pair) => pair.edgeSeparationPx))
+      : null,
+    nestedPairsExcluded: nestedControlPairs,
+    issues: controlSpacingIssues,
+  };
+  const controlIssues = [...controlGeometryIssues, ...controlSpacingIssues];
   // The smallest singular value of the CTM's 2x2 linear part handles rotation,
   // anisotropic scaling and shear. Column lengths alone overstate sheared text.
   const minimumLinearScale = (matrix) => {
@@ -285,6 +350,7 @@ export function auditLayout(phone) {
     headings,
     controls,
     controlIssues,
+    controlSpacing,
     offscreen,
     textClipped,
     scrollContainers,
@@ -296,6 +362,7 @@ export function auditLayout(phone) {
     summary: {
       controls: controls.length,
       controlIssues: controlIssues.length,
+      controlSpacingIssues: controlSpacingIssues.length,
       offscreen: offscreen.length,
       textClipped: textClipped.length,
       scrollContainers: scrollContainers.length,

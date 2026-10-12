@@ -176,6 +176,7 @@ async function captureFile(name, sessionId) {
     {
       expression: `(async () => {
         await document.fonts.ready;
+        await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         return document.readyState;
       })()`,
       awaitPromise: true,
@@ -184,6 +185,8 @@ async function captureFile(name, sessionId) {
     sessionId,
   );
   if (ready.exceptionDetails) throw new Error(JSON.stringify(ready.exceptionDetails));
+  // Layout readiness can precede raster paint after a cross-renderer file navigation.
+  await sleep(100);
   const audit = await cdp.send(
     'Runtime.evaluate',
     { expression: `(${auditLayout.toString()})(${phone})`, returnByValue: true },
