@@ -34,6 +34,7 @@ describe('Bonk.io seeded bot matches', () => {
       const skillCounts = { easy: 0, normal: 0, sharp: 0 };
       const roundOutcomes = { 'last-standing': 0, draw: 0, timeout: 0 };
       const decisionSpacing = new Set<number>();
+      let minAliveY = Infinity;
       let sharedMatchWins = 0;
 
       for (let seed = 1; seed <= requestedGames; seed++) {
@@ -52,6 +53,8 @@ describe('Bonk.io seeded bot matches', () => {
         let lastDecision: number | undefined;
 
         while (state.phase.id !== 'done') {
+          for (const ball of state.world.balls)
+            if (ball.alive) minAliveY = Math.min(minAliveY, ball.y);
           if (++turns > 5000 || eventTime - kit.t0 > matchLimit)
             throw new Error(`non-terminating match: n=${players} seed=${seed} ${state.phase.id}`);
 
@@ -138,6 +141,7 @@ describe('Bonk.io seeded bot matches', () => {
         botDecisionMs: BOT_DECISION_MS,
         snapshotMs: TICK_MS,
         botDecisionSpacingMs: [...decisionSpacing].sort((a, b) => a - b),
+        minAliveY,
         shuffledSeatInputs: true,
         medianRoundMs: median(roundLengths),
         maxRoundMs: Math.max(...roundLengths),

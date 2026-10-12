@@ -39,6 +39,7 @@ for (const n of [2, 3, 4, 5, 6, 7, 8])
     metrics[n]?.maxMatchMs > 480000 ||
     metrics[n]?.botDecisionMs !== 200 ||
     // Historical R1/R2 reports predate the separately recorded snapshot cadence.
+    (metrics[n]?.minAliveY !== undefined && !Number.isFinite(metrics[n]?.minAliveY)) ||
     (metrics[n]?.snapshotMs !== undefined &&
       (metrics[n]?.snapshotMs !== 80 ||
         JSON.stringify(metrics[n]?.botDecisionSpacingMs) !== '[160,240]'))

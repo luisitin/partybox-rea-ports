@@ -42,6 +42,8 @@ Physics uses fixed 40 ms steps with 10 ms contact substeps, deterministic shared
 
 A temporary disconnect releases movement, Heavy and queued jump but keeps the ball in the judged arena. Gravity and rivals still affect it; reconnect restores its current position or out status, with no mid-round revival. Permanent leave/kick removes the ball and excludes it from later rounds; stable slot numbers and final results retain the seat. Pause releases controls and freezes physics/clocks; resume shifts absolute clocks by exactly the held duration. Lifecycle releases record active-time input barriers, including between physics steps; paused drops use the frozen instant so fresh controls work immediately after resume. A disconnected room still finishes on timers. Stale timers and inputs cannot change a frozen verdict.
 
+Alive balls above the arena keep a numbered upward edge marker, including Heavy and own-ball cues. The marker identifies an offstage position without predicting movement or changing the verdict; dead balls never gain one.
+
 ## Settings
 
 None. Every match uses the same five-round format and timing rules.

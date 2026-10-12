@@ -71,6 +71,21 @@
   stroke-width: 3;
   stroke-dasharray: 4 6;
 }
+.edgeBox {
+  fill: var(--pb-surface);
+  stroke: var(--ball-color);
+  stroke-width: 3;
+}
+.edge[data-heavy='true'] .edgeBox {
+  stroke-width: 6;
+}
+.edgeArrow {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .number {
   fill: var(--pb-text);
   font-family: var(--pb-font-family);

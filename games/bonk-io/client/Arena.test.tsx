@@ -17,6 +17,52 @@ const ball = (id: string, slot: number, x: number): Ball =>
   }) as Ball;
 
 describe('original arena art', () => {
+  it.each([-80, -10])('an alive ball at y=%i keeps its number in an upward edge indicator', (y) => {
+    const above = { ...ball('a', 0, -80), y };
+    const deadAbove = { ...ball('b', 1, 400), y: -80, alive: false, cause: 'fall' as const };
+    const html = renderToStaticMarkup(
+      <Arena
+        balls={[above, deadAbove]}
+        platforms={[]}
+        width={960}
+        height={540}
+        hazard={false}
+        me="a"
+        animate={true}
+      />,
+    );
+    expect(html).toContain('data-above-seat="1"');
+    expect(html).toContain('Ball 1: above the arena · Heavy · Your ball');
+    expect(html).toContain('Above the arena: balls 1');
+    expect(html.match(/data-seat-number="1"/g)).toHaveLength(1);
+    expect(html).toContain('data-offscreen="above"');
+    expect(html).not.toContain('data-above-seat="2"');
+    expect(html).not.toContain('data-pose-seat="1"');
+    expect(html).toContain('1 balls still in');
+  });
+
+  it('keeps all eight crowded above-arena numbers distinct and inside the stage edge', () => {
+    const above = Array.from({ length: 8 }, (_, slot) => ({
+      ...ball(`p${slot}`, slot, 0),
+      y: -80,
+    }));
+    const html = renderToStaticMarkup(
+      <Arena balls={above} platforms={[]} width={960} height={540} hazard={false} />,
+    );
+    const labels = [
+      ...html.matchAll(/<text\b[^>]*x="([^"]+)"[^>]*data-offscreen="above"[^>]*>/g),
+    ].map((match) => Number(match[1]));
+    expect(labels).toHaveLength(8);
+    expect(html.indexOf('<text')).toBeGreaterThan(html.lastIndexOf('<rect'));
+    for (let index = 0; index < labels.length; index++) {
+      expect(labels[index]).toBeGreaterThan(28);
+      expect(labels[index]).toBeLessThan(960 - 28);
+      if (index > 0) expect(labels[index]! - labels[index - 1]!).toBeGreaterThan(44);
+    }
+    for (let seat = 1; seat <= 8; seat++)
+      expect(html.match(new RegExp(`data-seat-number="${seat}"`, 'g'))).toHaveLength(1);
+  });
+
   it('keeps each numbered identity at the same received position as its body and heavy outline', () => {
     const html = renderToStaticMarkup(
       <Arena

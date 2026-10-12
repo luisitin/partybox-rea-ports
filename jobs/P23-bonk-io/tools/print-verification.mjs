@@ -10,7 +10,8 @@ for (const n of [2, 3, 4, 5, 6, 7, 8]) {
     report.maxMatchMs > report.matchLimitMs ||
     report.botDecisionMs !== 200 ||
     report.snapshotMs !== 80 ||
-    JSON.stringify(report.botDecisionSpacingMs) !== '[160,240]'
+    JSON.stringify(report.botDecisionSpacingMs) !== '[160,240]' ||
+    !Number.isFinite(report.minAliveY)
   )
     throw new Error(`Incomplete ${n}-player batch`);
   console.log(`P23 SIM n=${n}: ${JSON.stringify(report)}`);

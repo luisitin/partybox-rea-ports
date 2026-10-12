@@ -197,6 +197,19 @@ it('renders all phases and room roles with the real public views', async () => {
   };
   render(crowded, 'tv', 'play-crowded');
   render(crowded, 'phone-only-spectator', 'play-crowded');
+  const above: State = {
+    ...opening,
+    world: {
+      ...opening.world,
+      balls: opening.world.balls.map((ball, index) =>
+        index < 2
+          ? { ...ball, x: 480 + index * 80, y: index === 0 ? -80 : -10, heavy: index === 1 }
+          : ball,
+      ),
+    },
+  };
+  render(above, 'tv', 'play-above-arena');
+  render(above, 'phone-only-spectator', 'play-above-arena');
   const skipped = kit.vip(opening, 'skip', opening.began + 40);
   expect(skipped.phase.id).toBe('score');
   expect(skipped.world.balls.filter((ball) => ball.alive)).toHaveLength(8);
