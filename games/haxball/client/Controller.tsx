@@ -82,7 +82,7 @@ export function Controller({
           </p>
           <Controls sources={controls.sources} update={controls.update} identity={identity} />
           <p className={styles.hint}>
-            Hold arrows to move, including diagonals. Release Kick after it fires.
+            Get behind the ball. Kick sends it away. Release to rearm.
             <br />
             <span>Keyboard: arrows or WASD · Space or X kicks</span>
           </p>

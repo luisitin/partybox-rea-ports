@@ -3,7 +3,8 @@
 ## Overview
 
 Two teams move numbered discs around one public pitch and kick a small ball into the opposing goal.
-Phones provide an eight-direction D-pad and a separate held Kick button. Hold Kick to arm one
+Phones provide an eight-direction D-pad and a separate held Kick button. Get behind the ball;
+kicks send it away from your disc. Hold Kick to arm one
 radial strike when close enough; after firing, release and press again. Holding Kick slows your
 acceleration. Most team goals after two halves wins. This port uses original SVG/CSS pitch art
 and owned physics tuning, with no original code, branding artwork, audio or runtime requests.
@@ -46,7 +47,7 @@ duplicate updates and pause/resume do not replay goals; phones with a TV leave t
 The shell supplies playback and mute settings. A player's own confirmed kick uses `thud`.
 The latest scorer or own-goal credit remains visible after the short reset, through play,
 halftime and the final view. Compact active phones show the scorer's jersey with the full name
-in accessible text; halftime still explains the change of attacking ends.
+in accessible text; halftime explains that goals switch when play restarts; team names and jersey numbers stay fixed.
 
 ## Inputs
 

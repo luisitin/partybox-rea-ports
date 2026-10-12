@@ -62,7 +62,13 @@ export function ScoreLine({ view, now }: { view: MatchView; now: number }): JSX.
         className={styles.clock}
         role="timer"
         aria-label={
-          view.paused ? 'Match paused' : `${view.half === 1 ? 'First' : 'Second'} half time left`
+          view.paused
+            ? 'Match paused'
+            : view.phaseId === 'done'
+              ? 'Match finished'
+              : view.phaseId === 'halftime'
+                ? 'Next half starts in'
+                : `${view.half === 1 ? 'First' : 'Second'} half time left`
         }
       >
         <span>
@@ -117,7 +123,7 @@ export function MatchStage({
           {compactCredit || matchHeadline(view)}
         </h2>
         {view.phaseId === 'halftime' ? (
-          <p>Keep your team and number. Change the goal you attack.</p>
+          <p>Teams keep their jerseys. Goals switch when play restarts.</p>
         ) : null}
         {credit && !compactCredit ? (
           <p data-hax-goal-credit="true" aria-label={accessibleCredit} title={accessibleCredit}>

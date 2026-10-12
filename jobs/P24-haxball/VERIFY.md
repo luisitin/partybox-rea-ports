@@ -125,3 +125,22 @@ Round 3 test-first evidence:
   00:22:15 local / 05:22:15 UTC. Added mirrored legal bank goals and overlap-recovery cases.
   `pnpm.cmd typecheck` also PASS on this source. Full simulation and refreshed mutations remain
   pending at this milestone; the older 7,000-match report is not claimed for the new physics.
+
+Physics milestone CI [38207797194](https://github.com/luisitin/partybox-rea-ports/actions/runs/38207797194)
+failed on `87135fa`: 131 of 132 tests passed, 322.74 s. All 7,000 matches terminated at
+188,000 virtual ms, but 333 two-player sharp matches had zero goals despite 2,484 accepted
+kicks. The positive-goal check is retained. Correcting bot tactics is required before a final
+local full run or readiness; earlier bot measurements do not establish current sharp activity.
+
+Round 4 copy: with `PB_WRITE_EVIDENCE=1`, the focused client/SSR command above PASS:
+46 tests / 3 files, 9.35 s, start 00:28:49 local / 05:28:49 UTC. Phone and TV instructions now
+explain getting behind the ball and radial kicks. Halftime explicitly says goals switch when
+play restarts, matching the retained old arrows during the interval. The completed-match timer
+is labelled 'Match finished'. New browser fit capture is pending at this checkpoint.
+Round 4 capture: `P24_CPU_CAPTURE=1 node jobs/P24-haxball/capture.mjs` PASS, captured
+2026-10-12T05:33:06.395Z. All 75 static layouts and 67/64/12 mounted control/goal-cue/retained-credit
+checks pass. The native browser/process records and exact CDP endpoint verify closure; the
+temporary profile was removed. Root inspected revised phone-only and TV halftime PNGs by hand.
+
+Round 4 canonical media: 167 files, 8,606,409 bytes; `hash-media.mjs` completed and independent
+PowerShell `Get-FileHash -Algorithm SHA256` recomputed all 167 files with zero mismatches.

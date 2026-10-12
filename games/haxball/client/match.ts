@@ -37,7 +37,7 @@ export function clockText(deadline: number | null, now: number): string {
 export function matchHeadline(view: MatchView): string {
   if (view.paused) return 'Match paused';
   if (view.phaseId === 'goal' && view.lastGoal) return `${teamName(view.lastGoal.team)} goal!`;
-  if (view.phaseId === 'halftime') return 'Half-time · switch ends';
+  if (view.phaseId === 'halftime') return 'Half-time';
   if (view.phaseId === 'done') {
     if (view.goals.red === view.goals.blue) return 'A draw!';
     return `${view.goals.red > view.goals.blue ? 'Red' : 'Blue'} wins!`;

@@ -40,6 +40,7 @@ describe('Haxball actual phone and TV screens', () => {
     expect(html).toContain('data-haxball-pitch="true"');
     expect(html).toContain('role="timer"');
     expect(html).toContain('Half 1 / 2');
+    expect(html).toContain('Get behind the ball · Kick sends it away from you · release to rearm');
     for (const disc of state.discs)
       expect(html).toContain(`data-jersey="${jersey(disc.team, disc.number)}"`);
     expect(html).not.toMatch(/acceptedSeq|kickArmed|phaseAt=|<button/);
@@ -151,7 +152,7 @@ describe('Haxball actual phone and TV screens', () => {
         }
       }
       for (const html of [renderTv(halftime), renderPhone(halftime, 'p1', true)]) {
-        expect(html).toContain('Keep your team and number. Change the goal you attack.');
+        expect(html).toContain('Teams keep their jerseys. Goals switch when play restarts.');
         expect(html).toContain(credit);
       }
     },
@@ -197,10 +198,24 @@ describe('Haxball actual phone and TV screens', () => {
     }
   });
 
-  it('half-time explains changing goals while retaining team and number', () => {
+  it('half-time explains the next restart honestly to players and spectators', () => {
     const half = kit.vip(kit.start(), 'skip', kit.t0 + 1000);
     expect(half.phase.id).toBe('halftime');
-    expect(renderPhone(half, 'p1', true)).toContain('Keep your team and number');
+    for (const mode of [false, true]) {
+      for (const id of ['p1', 'spectator']) {
+        const html = renderPhone(half, id, mode);
+        expect(html).toContain('>Half-time</h2>');
+        expect(html).toContain('aria-label="Next half starts in"');
+        expect(html).toContain('Teams keep their jerseys. Goals switch when play restarts.');
+        expect(html).not.toMatch(
+          /Keep your team|Change the goal you attack|<button|data-hax-control=/,
+        );
+      }
+    }
+    const tv = renderTv(half);
+    expect(tv).toContain('>Half-time</h2>');
+    expect(tv).toContain('aria-label="Next half starts in"');
+    expect(tv).toContain('Teams keep their jerseys. Goals switch when play restarts.');
     expect(renderPhone(half, 'p1', true)).toContain('Controls return when play begins.');
     const second = kit.vip(half, 'skip', kit.t0 + 2000);
     const html = renderPhone(second);

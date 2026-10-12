@@ -24,3 +24,17 @@ before a later goal, and allow valid rebounds; final full scope and mutation che
 
 Original live practice and a human eight-stranger network playtest remain unavailable; these
 reviews use the real reducer, public views, mounted components and retained screenshots.
+
+Round 4: reviewed unexplained radial aim, halftime arrows that still show the old direction,
+spectator copy addressing a player, crowded goalmouth identification and worst-case long
+scorer names. Instructions now say to get behind the ball and that kicks send it away from
+your disc. Halftime says goals switch when play restarts, matching the actual phase timing.
+Gain: two rules fit the 90-character contract at 79/76 characters; phone/TV helper copy is
+58/68 characters, shorter than before. All 46 focused client/SSR tests, 75 static layouts,
+67 mounted controls, 64 goal-cue checks and 12 retained-credit checks pass. Manual phone/TV
+halftime review confirms the restart instruction fits and remains distinct from retained credit.
+
+A subsequent full CI check exposed a two-player sharp-bot corner trap: 333 matches scored
+zero goals despite 2,484 accepted kicks. This is a remaining player-visible weakness, not a
+zero-gain review; root tracing reproduces a ball stranded in the corner for most of each half.
+Bot tactics must recover without changing solid posts or relaxing the positive-goal check.

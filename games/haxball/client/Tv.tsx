@@ -16,7 +16,7 @@ export function Tv({ view }: GameTvProps<HaxballTvView>): JSX.Element {
         {view.phaseId === 'done'
           ? 'Final team scores · every jersey stays with its team'
           : view.phaseId === 'play'
-            ? 'Hold arrows to move · hold Kick near the ball · release to kick again'
+            ? 'Get behind the ball · Kick sends it away from you · release to rearm'
             : 'Controls rest between plays · watch the pitch'}
       </p>
     </Stage>
