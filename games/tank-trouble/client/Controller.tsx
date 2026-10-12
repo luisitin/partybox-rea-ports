@@ -202,7 +202,12 @@ export function Controller({
         </header>
         {stage ? (
           <div className={styles.liveArena}>
-            <Arena arena={view.arena} players={view.players} me={view.me.id} />
+            <Arena
+              arena={view.arena}
+              players={view.players}
+              me={view.me.id}
+              animated={phase === 'play' && !view.paused}
+            />
           </div>
         ) : null}
         <div className={styles.weapon} role="status">
@@ -282,7 +287,12 @@ export function Controller({
       </header>
       {stage ? (
         <div className={styles.stageArena}>
-          <Arena arena={view.arena} players={view.players} me={player ? view.me.id : undefined} />
+          <Arena
+            arena={view.arena}
+            players={view.players}
+            me={player ? view.me.id : undefined}
+            animated={phase === 'play' && !view.paused}
+          />
         </div>
       ) : null}
       {phase === 'ready' ? (

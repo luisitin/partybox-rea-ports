@@ -315,6 +315,24 @@ ight is the :root default above) ────────
         outline: calc(var(--pb-space-1) / 2) solid var(--pb-text);
       }
 
+      /* Match the 200 ms snapshot cadence; stopped phases paint their exact server pose. */
+      ._scene_f62b00[data-animated='true'] ._tank_f62b00,
+      ._scene_f62b00[data-animated='true'] ._projectile_f62b00 {
+        transition: transform calc(var(--pb-motion-base) * 2 / 3) linear;
+      }
+      ._scene_f62b00[data-animated='true'] ._number_f62b00 {
+        transition:
+          left calc(var(--pb-motion-base) * 2 / 3) linear,
+          top calc(var(--pb-motion-base) * 2 / 3) linear;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        ._scene_f62b00[data-animated='true'] ._tank_f62b00,
+        ._scene_f62b00[data-animated='true'] ._projectile_f62b00,
+        ._scene_f62b00[data-animated='true'] ._number_f62b00 {
+          transition: none;
+        }
+      }
+
       /* games/tank-trouble/client/Standings.module.css */
       ._rows_866f43 {
         display: grid;
@@ -1360,7 +1378,7 @@ ight is the :root default above) ────────
                     <path d="M-2 1Q-2-2 1-1M0-2 2-1 0 0" class="_mark_f62b00"></path>
                   </g>
                   <g
-                    transform="translate(8 8) rotate(90)"
+                    transform="matrix(6.123233995736766e-17 1 -1 6.123233995736766e-17 8 8)"
                     class="_tank_f62b00"
                     style="color: var(--pb-player-2)"
                   >
@@ -1400,7 +1418,7 @@ ight is the :root default above) ────────
                     <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
                   </g>
                   <g
-                    transform="translate(40 24) rotate(-90)"
+                    transform="matrix(6.123233995736766e-17 -1 1 6.123233995736766e-17 40 24)"
                     class="_tank_f62b00"
                     style="color: var(--pb-player-3)"
                   >
@@ -1440,7 +1458,7 @@ ight is the :root default above) ────────
                     <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
                   </g>
                   <g
-                    transform="translate(120 88) rotate(0)"
+                    transform="matrix(1 0 0 1 120 88)"
                     class="_tank_f62b00"
                     style="color: var(--pb-player-4)"
                   >
@@ -1480,7 +1498,7 @@ ight is the :root default above) ────────
                     <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
                   </g>
                   <g
-                    transform="translate(8 40) rotate(90)"
+                    transform="matrix(6.123233995736766e-17 1 -1 6.123233995736766e-17 8 40)"
                     class="_tank_f62b00"
                     style="color: var(--pb-player-5)"
                   >
@@ -1520,7 +1538,7 @@ ight is the :root default above) ────────
                     <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
                   </g>
                   <g
-                    transform="translate(104 88) rotate(180)"
+                    transform="matrix(-1 1.2246467991473532e-16 -1.2246467991473532e-16 -1 104 88)"
                     class="_tank_f62b00"
                     style="color: var(--pb-player-6)"
                   >
@@ -1560,7 +1578,7 @@ ight is the :root default above) ────────
                     <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
                   </g>
                   <g
-                    transform="translate(152 8) rotate(180)"
+                    transform="matrix(-1 1.2246467991473532e-16 -1.2246467991473532e-16 -1 152 8)"
                     class="_tank_f62b00"
                     style="color: var(--pb-player-7)"
                   >
@@ -1600,7 +1618,7 @@ ight is the :root default above) ────────
                     <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
                   </g>
                   <g
-                    transform="translate(104 56) rotate(0)"
+                    transform="matrix(1 0 0 1 104 56)"
                     class="_tank_f62b00"
                     style="color: var(--pb-player-8)"
                   >

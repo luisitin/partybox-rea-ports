@@ -315,6 +315,24 @@ ight is the :root default above) ────────
         outline: calc(var(--pb-space-1) / 2) solid var(--pb-text);
       }
 
+      /* Match the 200 ms snapshot cadence; stopped phases paint their exact server pose. */
+      ._scene_f62b00[data-animated='true'] ._tank_f62b00,
+      ._scene_f62b00[data-animated='true'] ._projectile_f62b00 {
+        transition: transform calc(var(--pb-motion-base) * 2 / 3) linear;
+      }
+      ._scene_f62b00[data-animated='true'] ._number_f62b00 {
+        transition:
+          left calc(var(--pb-motion-base) * 2 / 3) linear,
+          top calc(var(--pb-motion-base) * 2 / 3) linear;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        ._scene_f62b00[data-animated='true'] ._tank_f62b00,
+        ._scene_f62b00[data-animated='true'] ._projectile_f62b00,
+        ._scene_f62b00[data-animated='true'] ._number_f62b00 {
+          transition: none;
+        }
+      }
+
       /* games/tank-trouble/client/Standings.module.css */
       ._rows_866f43 {
         display: grid;
@@ -1287,7 +1305,7 @@ ight is the :root default above) ────────
           <div class="_board_06ce35">
             <div class="_main_06ce35">
               <div class="_arena_06ce35">
-                <div class="_scene_f62b00">
+                <div class="_scene_f62b00" data-animated="true">
                   <svg
                     class="_svg_f62b00"
                     viewBox="0 0 160 96"
@@ -1357,7 +1375,7 @@ ight is the :root default above) ────────
                       <path d="M-2 1 0-1H2M0-1 0 1" class="_mark_f62b00"></path>
                     </g>
                     <g
-                      transform="translate(83.871388 9.432939) rotate(170.99156202142825)"
+                      transform="matrix(-0.9876652917012505 0.15657992070723395 -0.15657992070723395 -0.9876652917012505 83.871388 9.432939)"
                       class="_projectile_f62b00"
                       style="color: var(--pb-player-1)"
                     >
@@ -1365,7 +1383,7 @@ ight is the :root default above) ────────
                       <path d="M-1.6-0.8 1.5 0-1.6 0.8Z" class="_shell_f62b00"></path>
                     </g>
                     <g
-                      transform="translate(125.345327 5.308836) rotate(-154.29757165840076)"
+                      transform="matrix(-0.9010586409322487 -0.4336972741456059 0.4336972741456059 -0.9010586409322487 125.345327 5.308836)"
                       class="_projectile_f62b00"
                       style="color: var(--pb-player-1)"
                     >
@@ -1373,7 +1391,7 @@ ight is the :root default above) ────────
                       <circle r="0.85" class="_shell_f62b00"></circle>
                     </g>
                     <g
-                      transform="translate(34.054123 39.146932) rotate(-100.79248034319487)"
+                      transform="matrix(-0.18725239487271128 -0.9823118347115819 0.9823118347115819 -0.18725239487271128 34.054123 39.146932)"
                       class="_projectile_f62b00"
                       style="color: var(--pb-player-6)"
                     >
@@ -1381,7 +1399,7 @@ ight is the :root default above) ────────
                       <circle r="0.85" class="_shell_f62b00"></circle>
                     </g>
                     <g
-                      transform="translate(50.780669 81.302653) rotate(-85.15073261312797)"
+                      transform="matrix(0.08453467469262292 -0.9964205381136081 0.9964205381136081 0.08453467469262292 50.780669 81.302653)"
                       class="_projectile_f62b00"
                       style="color: var(--pb-player-6)"
                     >
@@ -1389,7 +1407,7 @@ ight is the :root default above) ────────
                       <circle r="0.85" class="_shell_f62b00"></circle>
                     </g>
                     <g
-                      transform="translate(52.291636 53.77693) rotate(-100.59355009991158)"
+                      transform="matrix(-0.18384069845618412 -0.9829560506915568 0.9829560506915568 -0.18384069845618412 52.291636 53.77693)"
                       class="_projectile_f62b00"
                       style="color: var(--pb-player-4)"
                     >
@@ -1397,7 +1415,7 @@ ight is the :root default above) ────────
                       <circle r="0.85" class="_shell_f62b00"></circle>
                     </g>
                     <g
-                      transform="translate(104.363005 13.786149) rotate(-35.15667042481743)"
+                      transform="matrix(0.8175805879657685 -0.5758141906739953 0.5758141906739953 0.8175805879657685 104.363005 13.786149)"
                       class="_projectile_f62b00"
                       style="color: var(--pb-player-1)"
                     >
@@ -1405,7 +1423,7 @@ ight is the :root default above) ────────
                       <circle r="0.85" class="_shell_f62b00"></circle>
                     </g>
                     <g
-                      transform="translate(100.198979 29.143031) rotate(-12.632554152038114)"
+                      transform="matrix(0.9757926604175015 -0.2186976997486133 0.2186976997486133 0.9757926604175015 100.198979 29.143031)"
                       class="_projectile_f62b00"
                       style="color: var(--pb-player-1)"
                     >
@@ -1413,7 +1431,7 @@ ight is the :root default above) ────────
                       <circle r="0.85" class="_shell_f62b00"></circle>
                     </g>
                     <g
-                      transform="translate(107.166181 28.898909) rotate(-170.7758004166932)"
+                      transform="matrix(-0.9870686492242187 -0.1602981026671134 0.1602981026671134 -0.9870686492242187 107.166181 28.898909)"
                       class="_tank_f62b00"
                       data-out="true"
                       style="color: var(--pb-player-1)"
@@ -1446,7 +1464,7 @@ ight is the :root default above) ────────
                       <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
                     </g>
                     <g
-                      transform="translate(37.565476 73.091895) rotate(18.111654270321427)"
+                      transform="matrix(0.9504525187049879 0.3108697632246412 -0.3108697632246412 0.9504525187049879 37.565476 73.091895)"
                       class="_tank_f62b00"
                       data-out="true"
                       style="color: var(--pb-player-2)"
@@ -1479,7 +1497,7 @@ ight is the :root default above) ────────
                       <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
                     </g>
                     <g
-                      transform="translate(68.193884 11.918379) rotate(10.00361391986612)"
+                      transform="matrix(0.9847967982290455 0.17371029387408368 -0.17371029387408368 0.9847967982290455 68.193884 11.918379)"
                       class="_tank_f62b00"
                       style="color: var(--pb-player-3)"
                     >
@@ -1519,7 +1537,7 @@ ight is the :root default above) ────────
                       <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
                     </g>
                     <g
-                      transform="translate(51.039523 11.462519) rotate(82.24877904038382)"
+                      transform="matrix(0.13487204536285602 0.9908630235202238 -0.9908630235202238 0.13487204536285602 51.039523 11.462519)"
                       class="_tank_f62b00"
                       data-out="true"
                       style="color: var(--pb-player-4)"
@@ -1552,7 +1570,7 @@ ight is the :root default above) ────────
                       <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
                     </g>
                     <g
-                      transform="translate(149.565476 22.908105) rotate(-168.84292729481933)"
+                      transform="matrix(-0.9811004047857282 -0.19349934296860088 0.19349934296860088 -0.9811004047857282 149.565476 22.908105)"
                       class="_tank_f62b00"
                       data-out="true"
                       style="color: var(--pb-player-5)"
@@ -1585,7 +1603,7 @@ ight is the :root default above) ────────
                       <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
                     </g>
                     <g
-                      transform="translate(57.266447 38.873657) rotate(-103.9304187406064)"
+                      transform="matrix(-0.2407433689451918 -0.9705888059878495 0.9705888059878495 -0.2407433689451918 57.266447 38.873657)"
                       class="_tank_f62b00"
                       data-out="true"
                       style="color: var(--pb-player-6)"
@@ -1618,7 +1636,7 @@ ight is the :root default above) ────────
                       <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
                     </g>
                     <g
-                      transform="translate(55.945296 58.193395) rotate(-22.61418580757749)"
+                      transform="matrix(0.9231150415038236 -0.384523887618694 0.384523887618694 0.9231150415038236 55.945296 58.193395)"
                       class="_tank_f62b00"
                       data-out="true"
                       style="color: var(--pb-player-7)"
@@ -1651,7 +1669,7 @@ ight is the :root default above) ────────
                       <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
                     </g>
                     <g
-                      transform="translate(141.005307 25.017331) rotate(-6.147149592399576)"
+                      transform="matrix(0.9942501611001375 -0.10708229149747706 0.10708229149747706 0.9942501611001375 141.005307 25.017331)"
                       class="_tank_f62b00"
                       data-out="true"
                       style="color: var(--pb-player-8)"

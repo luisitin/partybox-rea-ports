@@ -10,15 +10,23 @@ interface ArenaProps {
   arena: ArenaState;
   players: readonly { id: string; name: string }[];
   me?: string;
+  animated?: boolean;
 }
 
-export function Arena({ arena, players, me }: ArenaProps): JSX.Element {
+// Matrix snapshots keep angle wrap out of the authored transform list.
+function pose(x: number, y: number, angle: number): string {
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+  return `matrix(${cos} ${sin} ${-sin} ${cos} ${x} ${y})`;
+}
+
+export function Arena({ arena, players, me, animated = false }: ArenaProps): JSX.Element {
   const L = useT(STRINGS);
   const names = new Map(players.map((player) => [player.id, player.name]));
   const alive = arena.tanks.filter((tank) => tank.alive).length;
   const label = L('Maze arena: {n} of {m} tanks still in', { n: alive, m: arena.tanks.length });
   return (
-    <div className={styles.scene}>
+    <div className={styles.scene} data-animated={animated || undefined}>
       <svg className={styles.svg} viewBox="0 0 160 96" role="img" aria-label={label}>
         <title>{label}</title>
         <rect x="0" y="0" width="160" height="96" className={styles.floor} />
@@ -43,12 +51,12 @@ export function Arena({ arena, players, me }: ArenaProps): JSX.Element {
           </g>
         ))}
         {arena.bullets.map((bullet) => {
-          const angle = (Math.atan2(bullet.vy, bullet.vx) * 180) / Math.PI;
+          const angle = Math.atan2(bullet.vy, bullet.vx);
           const owner = arena.tanks.find((tank) => tank.id === bullet.owner);
           return (
             <g
-              key={bullet.id}
-              transform={`translate(${bullet.x} ${bullet.y}) rotate(${angle})`}
+              key={`${bullet.id}:${bullet.bounces}`}
+              transform={pose(bullet.x, bullet.y, angle)}
               className={styles.projectile}
               style={{ color: playerColor(owner?.slot ?? 0) }}
             >
@@ -68,7 +76,7 @@ export function Arena({ arena, players, me }: ArenaProps): JSX.Element {
         {arena.tanks.map((tank) => (
           <g
             key={tank.id}
-            transform={`translate(${tank.x} ${tank.y}) rotate(${(tank.angle * 180) / Math.PI})`}
+            transform={pose(tank.x, tank.y, tank.angle)}
             className={styles.tank}
             data-out={!tank.alive || undefined}
             style={{ color: playerColor(tank.slot) }}

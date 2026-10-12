@@ -114,3 +114,21 @@
 .number[data-me='true'] {
   outline: calc(var(--pb-space-1) / 2) solid var(--pb-text);
 }
+
+/* Match the 200 ms snapshot cadence; stopped phases paint their exact server pose. */
+.scene[data-animated='true'] .tank,
+.scene[data-animated='true'] .projectile {
+  transition: transform calc(var(--pb-motion-base) * 2 / 3) linear;
+}
+.scene[data-animated='true'] .number {
+  transition:
+    left calc(var(--pb-motion-base) * 2 / 3) linear,
+    top calc(var(--pb-motion-base) * 2 / 3) linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene[data-animated='true'] .tank,
+  .scene[data-animated='true'] .projectile,
+  .scene[data-animated='true'] .number {
+    transition: none;
+  }
+}

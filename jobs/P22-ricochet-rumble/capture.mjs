@@ -15,6 +15,7 @@ import {
 } from 'node:fs';
 import { resolve } from 'node:path';
 import { runInputChecks } from './input-check.mjs';
+import { runFeedbackChecks } from './feedback-check.mjs';
 
 const job = import.meta.dirname;
 const media = resolve(job, 'media');
@@ -595,6 +596,16 @@ try {
       'utf8',
     );
     console.log(`Recorded ${probes.length} motion diagnostics in media/motion-results.json.`);
+  }
+  if (process.env.PB_FEEDBACK_CHECKS) {
+    const baseline = process.env.PB_FEEDBACK_CHECKS === 'baseline';
+    const feedback = await runFeedbackChecks(dev, frameTree.frame.id, media, {
+      assertExpected: !baseline,
+      label: baseline ? 'baseline' : 'fixed',
+    });
+    console.log(
+      `Feedback checks: ${feedback.cases.filter((test) => test.pass).length}/${feedback.cases.length} passed${baseline ? ' (pre-fix diagnostic)' : ''}.`,
+    );
   }
   if (process.env.PB_INPUT_CHECKS === '1') {
     const input = await runInputChecks(dev, frameTree.frame.id, media);

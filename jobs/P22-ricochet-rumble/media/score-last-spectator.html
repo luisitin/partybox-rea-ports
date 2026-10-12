@@ -315,6 +315,24 @@ ight is the :root default above) ────────
         outline: calc(var(--pb-space-1) / 2) solid var(--pb-text);
       }
 
+      /* Match the 200 ms snapshot cadence; stopped phases paint their exact server pose. */
+      ._scene_f62b00[data-animated='true'] ._tank_f62b00,
+      ._scene_f62b00[data-animated='true'] ._projectile_f62b00 {
+        transition: transform calc(var(--pb-motion-base) * 2 / 3) linear;
+      }
+      ._scene_f62b00[data-animated='true'] ._number_f62b00 {
+        transition:
+          left calc(var(--pb-motion-base) * 2 / 3) linear,
+          top calc(var(--pb-motion-base) * 2 / 3) linear;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        ._scene_f62b00[data-animated='true'] ._tank_f62b00,
+        ._scene_f62b00[data-animated='true'] ._projectile_f62b00,
+        ._scene_f62b00[data-animated='true'] ._number_f62b00 {
+          transition: none;
+        }
+      }
+
       /* games/tank-trouble/client/Standings.module.css */
       ._rows_866f43 {
         display: grid;

@@ -76,7 +76,11 @@ export function Tv({ view }: GameTvProps<TankTroubleTvView>): JSX.Element {
       <div className={styles.board}>
         <div className={styles.main}>
           <div className={styles.arena}>
-            <Arena arena={view.arena} players={view.players} />
+            <Arena
+              arena={view.arena}
+              players={view.players}
+              animated={phase === 'play' && !view.paused}
+            />
           </div>
           <p className={styles.line}>{line}</p>
           <p className={styles.legend}>
