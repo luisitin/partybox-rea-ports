@@ -1,6 +1,13 @@
 // Twenty independent, compiling behavioral bugs. Run only this game's short unit tests.
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -11,7 +18,7 @@ const server = resolve(root, 'games/agar-io/server');
 const resultFile = resolve(jobDir, 'mutation-current.json');
 const finalFile = resolve(jobDir, 'mutations.json');
 const command =
-  'pnpm.cmd vitest run games/agar-io/__tests__/mechanics.test.ts games/agar-io/__tests__/game.test.ts --maxWorkers=1 --reporter=json --outputFile=jobs/P05-blob-arena/mutation-current.json';
+  'pnpm.cmd vitest run games/agar-io/__tests__/mechanics.test.ts games/agar-io/__tests__/game.test.ts games/agar-io/__tests__/regressions.test.ts --maxWorkers=1 --reporter=json --outputFile=jobs/P05-blob-arena/mutation-current.json';
 
 const mutations = [
   [
@@ -171,6 +178,7 @@ function runTests() {
             'run',
             'games/agar-io/__tests__/mechanics.test.ts',
             'games/agar-io/__tests__/game.test.ts',
+            'games/agar-io/__tests__/regressions.test.ts',
             '--maxWorkers=1',
             '--reporter=json',
             '--outputFile=jobs/P05-blob-arena/mutation-current.json',
@@ -202,11 +210,28 @@ function runTests() {
     failedTests,
     brokenSuites,
     error: run.error?.message ?? null,
+    passedTests: json?.numPassedTests ?? 0,
+    totalTests: json?.numTotalTests ?? 0,
     outputTail: `${run.stdout ?? ''}\n${run.stderr ?? ''}`.slice(-4000),
   };
 }
 
 const originals = new Map();
+const gameFiles = new Map();
+function collect(directory) {
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const file = resolve(directory, entry.name);
+    if (entry.isDirectory()) collect(file);
+    else gameFiles.set(file, digest(readFileSync(file)));
+  }
+}
+collect(resolve(root, 'games/agar-io'));
+const historyDir = resolve(jobDir, 'r5-history');
+const historyFile = resolve(historyDir, 'mutations.json');
+if (existsSync(finalFile) && !existsSync(historyFile)) {
+  mkdirSync(historyDir, { recursive: true });
+  writeFileSync(historyFile, readFileSync(finalFile));
+}
 for (const mutation of mutations) {
   const file = resolve(server, mutation.file);
   if (!originals.has(file)) originals.set(file, readFileSync(file));
@@ -268,7 +293,7 @@ try {
 const killed = outcomes.filter((item) => item.killed).length;
 writeFileSync(
   finalFile,
-  `${JSON.stringify({ command, baseline, mutations: outcomes, killed, total: mutations.length, status: killed >= 19 ? 'passed' : 'failed', sourceRestored: [...originals].every(([file, original]) => digest(readFileSync(file)) === digest(original)) }, null, 2)}\n`,
+  `${JSON.stringify({ command, baseline, mutations: outcomes, killed, total: mutations.length, status: killed >= 19 ? 'passed' : 'failed', sourceFiles: gameFiles.size, sourceRestored: [...gameFiles].every(([file, hash]) => digest(readFileSync(file)) === hash) }, null, 2)}\n`,
   'utf8',
 );
 console.log(`Mutation score: ${killed}/${mutations.length}; sources restored`);

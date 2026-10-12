@@ -23,4 +23,5 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm format
-      - run: pnpm vitest run games/agar-io --maxWorkers=1
+      - run: node jobs/P05-blob-arena/record-source.mjs
+      - run: pnpm vitest run games/agar-io --maxWorkers=1 --disableConsoleIntercept

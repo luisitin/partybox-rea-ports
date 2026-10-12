@@ -10,7 +10,8 @@ const players = ['Ana', 'Ben', 'Cy', 'Dee', 'Eli', 'Fay', 'Gus', 'Hal'].map((nam
   canSeeTv: i !== 7,
 }));
 let state = game.init({ players, seed: 17, now: 1700000000000, settings: {} });
-const rng = createRng(771);
+const rngs = players.map((_, seat) => createRng(771 ^ (seat * 0x9e3779b9)));
+const orderRng = createRng(0x41c64e6d);
 const directory = new URL('../../games/agar-io/fixtures/', import.meta.url);
 mkdirSync(directory, { recursive: true });
 const save = (name, s) =>
@@ -20,13 +21,17 @@ while (state.phase.id !== 'done') {
   if (state.phase.id === 'play') {
     const now = state.phase.deadline;
     if (state.world.time % 1000 === 0) {
-      for (const p of players) {
-        const input = game.bot.sampleInput(state, p.id, rng, 'sharp');
+      const snapshot = state;
+      const decisions = players.map((p, seat) => ({
+        id: p.id,
+        input: game.bot.sampleInput(snapshot, p.id, rngs[seat], 'sharp'),
+      }));
+      for (const { id, input } of orderRng.shuffle(decisions)) {
         if (input)
           state = game.reduce(state, {
             type: 'input',
             now: state.began + state.world.time + 50,
-            playerId: p.id,
+            playerId: id,
             input,
           });
       }

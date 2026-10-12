@@ -29,6 +29,7 @@ export interface SimReport {
   minScore: number;
   maxScore: number;
   totalEvents: number;
+  maxEvents: number;
 }
 
 export function simulate(players: number, seed: number, skill: BotSkill = 'normal'): SimGame {
@@ -40,14 +41,17 @@ export function simulate(players: number, seed: number, skill: BotSkill = 'norma
     bot: true,
   }));
   let state: State = game.init({ players: roster, seed, settings: {}, now: T0 });
-  const rng = createRng(seed ^ 0x5a17beef);
+  // Each seat observes the same public snapshot. Its choices do not depend on
+  // how many random draws another bot makes, or on which input is applied first.
+  const botRngs = roster.map((_, seat) => createRng(seed ^ (0x5a17beef + seat * 0x9e3779b9)));
+  const orderRng = createRng(seed ^ 0x41c64e6d);
   let now = T0;
   let nextBot = T0 + BOT_BEAT_MS;
   const roundsMs: number[] = [];
   let events = 0;
   while (state.phase.id !== 'done') {
     const deadline = state.phase.deadline;
-    if (deadline === null || now - T0 > BUDGET_MS || events > 10000)
+    if (deadline === null || now - T0 > BUDGET_MS || events >= 5000)
       throw new Error(
         `seed=${seed} n=${players} skill=${skill}: stuck in ${state.phase.id} at ${now - T0} ms / ${events} events`,
       );
@@ -64,15 +68,20 @@ export function simulate(players: number, seed: number, skill: BotSkill = 'norma
     if (state.phase.id !== 'play') continue;
     if (before.phase.id !== 'play') nextBot = state.began + BOT_BEAT_MS;
     if (now < nextBot) continue;
-    for (const player of roster) {
-      const bot = game.bot.sampleInput(state, player.id, rng, skill);
+    const snapshot = state;
+    const decisions = roster.map((player, seat) => ({
+      playerId: player.id,
+      input: game.bot.sampleInput(snapshot, player.id, botRngs[seat]!, skill),
+    }));
+    for (const { playerId, input: bot } of orderRng.shuffle(decisions)) {
       if (bot === null) continue;
       const parsed = game.inputSchema.safeParse(bot);
       if (!parsed.success)
         throw new Error(
           `seed=${seed} n=${players} skill=${skill}: invalid bot input ${JSON.stringify(bot)}`,
         );
-      state = game.reduce(state, { type: 'input', now, playerId: player.id, input: parsed.data });
+      if (events >= 5000) throw new Error(`seed=${seed}: exceeded the 5,000-event SDK cap`);
+      state = game.reduce(state, { type: 'input', now, playerId, input: parsed.data });
       events++;
     }
     nextBot = now + BOT_BEAT_MS;
@@ -109,6 +118,7 @@ export function sweep(
   let minScore = Infinity;
   let maxScore = 0;
   let totalEvents = 0;
+  let maxEvents = 0;
   for (let seed = 1; seed <= runs; seed++) {
     const skill = skills[(seed - 1) % skills.length]!;
     const run = simulate(players, seed, skill);
@@ -118,6 +128,7 @@ export function sweep(
     minScore = Math.min(minScore, ...Object.values(run.totalScores));
     maxScore = Math.max(maxScore, ...Object.values(run.totalScores));
     totalEvents += run.events;
+    maxEvents = Math.max(maxEvents, run.events);
   }
   rounds.sort((a, b) => a - b);
   const middle = Math.floor(rounds.length / 2);
@@ -132,6 +143,7 @@ export function sweep(
     minScore,
     maxScore,
     totalEvents,
+    maxEvents,
   };
 }
 
