@@ -13,6 +13,8 @@ export interface TeamBarProps {
   grade: Grade;
   /** The screen reader's name for the number ("boxes"). */
   unit: string;
+  /** The singular of `unit` for a score of 1 ("1 point"); without it `unit` is used. */
+  unitOne?: string;
   big?: boolean;
   /** Print "Team score" beside (TV) or over (phone) the bar. */
   caption?: boolean;
@@ -20,8 +22,18 @@ export interface TeamBarProps {
 
 const pct = (v: number, max: number): number => (max <= 0 ? 0 : Math.min(100, (v / max) * 100));
 
-export function TeamBar({ team, max, cuts, grade, unit, big, caption }: TeamBarProps): JSX.Element {
+export function TeamBar({
+  team,
+  max,
+  cuts,
+  grade,
+  unit,
+  unitOne,
+  big,
+  caption,
+}: TeamBarProps): JSX.Element {
   const L = useT(STRINGS);
+  const word = team === 1 && unitOne ? unitOne : unit;
   const marks: [Grade, number][] = [
     ['B', cuts[2]],
     ['A', cuts[1]],
@@ -34,7 +46,7 @@ export function TeamBar({ team, max, cuts, grade, unit, big, caption }: TeamBarP
       data-caption={caption === true}
       data-grade={grade}
       role="img"
-      aria-label={`${L('Team score')}: ${L('{team} of {max}', { team, max })} ${unit}. ${L('Rating {grade}', { grade })}`}
+      aria-label={`${L('Team score')}: ${L('{team} of {max}', { team, max })} ${word}. ${L('Rating {grade}', { grade })}`}
     >
       {caption === true ? <span className={styles.caption}>{L('Team score')}</span> : null}
       <div className={styles.track}>
@@ -54,8 +66,9 @@ export function TeamBar({ team, max, cuts, grade, unit, big, caption }: TeamBarP
         {grade}
       </span>
       <span className={styles.num} aria-hidden="true">
+        {/* The team's total, named as one: a player's own points sit on the same screen (T-0911). */}
         <small>{L('Team:')}</small> {team}
-        <small> {unit}</small>
+        <small> {word}</small>
       </span>
     </div>
   );

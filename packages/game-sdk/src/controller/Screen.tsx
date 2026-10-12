@@ -19,7 +19,7 @@ export interface ScreenProps {
   footer?: ReactNode;
   title?: ReactNode;
   className?: string;
-  /** Inline style on the frame (TextAnswer pads it by the keyboard's height, I-795 I). */
+  /** Inline style on the frame. */
   style?: CSSProperties;
   /**
    * The title is drawn right down to its bottom edge (the results' award chips): once the body

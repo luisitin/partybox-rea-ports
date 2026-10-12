@@ -3,7 +3,7 @@ import { COLLIDE, H, SELF_SAFE, STEP_MS, W, inGap, posAt, segPos } from './world
 import type { Input, Seg, World } from './world';
 
 const CELL = 5;
-const LOOK_MS = 1800;
+const LOOK_MS = 2000;
 type Point = { x: number; y: number };
 const key = (x: number, y: number): number => x * 4096 + y;
 
@@ -27,6 +27,8 @@ export function botInput(world: World, id: string, t: number): Input | null {
   const me = world.worms.findIndex((w) => w.id === id);
   const worm = world.worms[me];
   if (!worm || worm.died !== null) return null;
+  // Reconsider after time advances, rather than oscillating twice at one checked instant.
+  if (worm.segs.length > 1 && worm.segs.at(-1)?.[0] === t) return null;
   const here = posAt(worm, t);
   const current = worm.segs.at(-1)?.[4] ?? 0;
   const grid = trails(world, t);
@@ -37,6 +39,7 @@ export function botInput(world: World, id: string, t: number): Input | null {
     for (let dt = STEP_MS; dt <= LOOK_MS; dt += STEP_MS) {
       const p = segPos(seg, t + dt);
       const margin = Math.min(p.x, W - p.x, p.y, H - p.y);
+      let space = Math.min(12, margin);
       let hit = margin < 2.5;
       const cx = Math.floor(p.x / CELL);
       const cy = Math.floor(p.y / CELL);
@@ -44,7 +47,9 @@ export function botInput(world: World, id: string, t: number): Input | null {
         for (let dy = -1; dy <= 1 && !hit; dy++) {
           for (const s of grid.get(key(cx + dx, cy + dy)) ?? []) {
             if (s.w === me && t + dt - s.t < SELF_SAFE * STEP_MS) continue;
-            if ((s.x - p.x) ** 2 + (s.y - p.y) ** 2 < (COLLIDE + 1.3) ** 2) {
+            const distance = Math.hypot(s.x - p.x, s.y - p.y);
+            space = Math.min(space, distance - COLLIDE);
+            if (distance < COLLIDE + 1.3) {
               hit = true;
               break;
             }
@@ -57,10 +62,10 @@ export function botInput(world: World, id: string, t: number): Input | null {
           return (o.x - p.x) ** 2 + (o.y - p.y) ** 2 < 16;
         });
       if (hit) return dt + clearance / 100;
-      clearance += Math.min(12, margin);
+      clearance += space;
     }
     // Prefer open straight routes over circling into our own newly laid trail.
-    return LOOK_MS + clearance / 100 + (dir === 0 ? 8 : 0);
+    return LOOK_MS + clearance / 100 + (dir === 0 ? 50 : 0);
   };
   let best = current;
   let bestScore = score(current);
@@ -71,6 +76,5 @@ export function botInput(world: World, id: string, t: number): Input | null {
       bestScore = candidate;
     }
   }
-  // Even a straight worm keeps asking: null would retire the sim's bot for the whole phase.
-  return { type: 'steer', dir: best };
+  return best === current ? null : { type: 'steer', dir: best };
 }

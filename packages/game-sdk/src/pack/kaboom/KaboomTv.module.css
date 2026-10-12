@@ -12,7 +12,8 @@
   position: relative;
   width: min(100%, 66rem);
   flex: 1 1 auto;
-  min-height: 44vh;
+  /* 416px is 38.5% of 1080: px scale with the TV like the stack, so 720p gets the same share (a vh floor did not bind there). The tally's 1.8rem avatars keep the stack above the host bar (T-0911). */
+  min-height: 416px;
   overflow: hidden;
   border-radius: var(--pb-radius-lg);
   background: linear-gradient(hsl(var(--hue) 30% 24%), hsl(var(--hue) 34% 14%));
