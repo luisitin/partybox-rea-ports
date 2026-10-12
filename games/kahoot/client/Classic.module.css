@@ -30,6 +30,14 @@
   line-height: 1.15;
   text-wrap: balance;
 }
+/* Compiled owner text may fill the legal limit without a word break. */
+.tvPrompt,
+.phonePrompt,
+.asked,
+.explanation {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 .headline {
   margin: 0;
   font-size: var(--pb-font-h2);

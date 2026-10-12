@@ -9,6 +9,16 @@ A speed quiz upgrading the existing Lightning Round engine. Wager remains the de
 Wager/Classic: 1–16; Teams/Room vote: 2–8. Late joiners spectate. Disconnections never hold the room; reconnect restores accepted input and the current beat. Permanent leavers retain their score and fixed team but cannot answer again. Spectators see a read-only stage.
 Bots have easy/normal/sharp strengths and seeded choices. Classic/group bots use separate public answer-text facts; exact custom prompts can reuse independent standard facts, with narrow word/digit equivalence for count prompts. Unknown/edited/conflicting prompts and multiple equivalent choices remain guesses; owner keys/explanations never teach the bot. Phones download no question library or answer keys.
 
+## Party format
+
+An accepted answer locks until the shared question reaches its reveal. Early answerers wait and watch the live shared stage; they cannot change that answer or start an individual retry. A failed or missed question does not eliminate anyone from later questions; its scoring follows the selected mode. A permanently departed player who refreshes sees the live public stage as a spectator, including leaders/standings when revealed, and cannot answer again.
+
+A trailing team can close a catchable gap with correct remaining answers, speed credit and the existing capped streak bonus while scoring questions remain. There is no score handicap or rubber-band bonus. When the lead exceeds the points still available, that team cannot win, but the remaining authored questions, shared discussion, guesses and reveals still give everyone something to play together. Room vote has no trailing rival: the whole room builds one shared score.
+
+Everyone shares the discussion, answer and reveal phase clocks. A question ends for all at its authoritative deadline or once all connected eligible players have locked answers and the reading hold is satisfied; VIP skip advances the shared phase, and VIP end closes the match with already banked scores. A finite selected question count, capped by the group pack, bounds the match. Individuals never race ahead into another question.
+
+The highest cumulative team points win. Equal totals share competition ranks and joint first-place winners; the team board names the teams and members, and occupied podium tiers reveal third → second → first, skipping empty tiers before complete final results. Room vote is one cooperative group whose final shared score is shown to everyone, with no rival or invented win threshold. Wager and individual Classic retain their existing scoring/results paths, including Wager’s final stake and Classic’s staged podium.
+
 ## Phases
 
 | Phase    | TV                                                                                     | Phone                                                                                    | Exit                                                                         |

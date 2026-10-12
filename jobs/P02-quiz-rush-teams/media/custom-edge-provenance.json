@@ -1,0 +1,67 @@
+{
+  "description": "Synthetic schema-valid owner packs, not the bundled sample. Each capture installs a questionById spy for these five existing custom IDs before init and retains it through the reducer trace, scoring, pacing and render. Replay requires the matching pack file; phase-fixtures.json alone resolves to different bundled sample text.",
+  "settings": {
+    "classicPack": "custom",
+    "questions": 5,
+    "answerSeconds": 10,
+    "teamCount": 2,
+    "talkSeconds": 5
+  },
+  "seats": 8,
+  "nameLength": 40,
+  "teams": "Two teams of four; room-vote mode has one room of eight",
+  "phases": ["talk", "question", "reveal"],
+  "surfaces": ["tv", "phone-only", "remote"],
+  "packs": [
+    {
+      "variant": "words",
+      "file": "custom-edge-words.json",
+      "sha256": "4ae9cd595f600ae80283102775192329eea4a3af70d8127a2acca61b8c43e98d",
+      "captures": [
+        "groups-custom-words-teams-talk-tv",
+        "groups-custom-words-teams-talk-phone-only",
+        "groups-custom-words-teams-talk-remote",
+        "groups-custom-words-teams-question-tv",
+        "groups-custom-words-teams-question-phone-only",
+        "groups-custom-words-teams-question-remote",
+        "groups-custom-words-teams-reveal-tv",
+        "groups-custom-words-teams-reveal-phone-only",
+        "groups-custom-words-teams-reveal-remote",
+        "groups-custom-words-tv-vote-talk-tv",
+        "groups-custom-words-tv-vote-talk-phone-only",
+        "groups-custom-words-tv-vote-talk-remote",
+        "groups-custom-words-tv-vote-question-tv",
+        "groups-custom-words-tv-vote-question-phone-only",
+        "groups-custom-words-tv-vote-question-remote",
+        "groups-custom-words-tv-vote-reveal-tv",
+        "groups-custom-words-tv-vote-reveal-phone-only",
+        "groups-custom-words-tv-vote-reveal-remote"
+      ]
+    },
+    {
+      "variant": "unbroken",
+      "file": "custom-edge-unbroken.json",
+      "sha256": "f5027630ab3bcdcdca6c8975b9f394ded2c1c0c37ba59def2fadf6cab06f9d40",
+      "captures": [
+        "groups-custom-unbroken-teams-talk-tv",
+        "groups-custom-unbroken-teams-talk-phone-only",
+        "groups-custom-unbroken-teams-talk-remote",
+        "groups-custom-unbroken-teams-question-tv",
+        "groups-custom-unbroken-teams-question-phone-only",
+        "groups-custom-unbroken-teams-question-remote",
+        "groups-custom-unbroken-teams-reveal-tv",
+        "groups-custom-unbroken-teams-reveal-phone-only",
+        "groups-custom-unbroken-teams-reveal-remote",
+        "groups-custom-unbroken-tv-vote-talk-tv",
+        "groups-custom-unbroken-tv-vote-talk-phone-only",
+        "groups-custom-unbroken-tv-vote-talk-remote",
+        "groups-custom-unbroken-tv-vote-question-tv",
+        "groups-custom-unbroken-tv-vote-question-phone-only",
+        "groups-custom-unbroken-tv-vote-question-remote",
+        "groups-custom-unbroken-tv-vote-reveal-tv",
+        "groups-custom-unbroken-tv-vote-reveal-phone-only",
+        "groups-custom-unbroken-tv-vote-reveal-remote"
+      ]
+    }
+  ]
+}

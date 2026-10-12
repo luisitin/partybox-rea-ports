@@ -1,0 +1,41 @@
+diff --git a/games/kahoot/client/Group.module.css b/games/kahoot/client/Group.module.css
+--- a/games/kahoot/client/Group.module.css
++++ b/games/kahoot/client/Group.module.css
+@@ -61,6 +61,8 @@
+ }
+ .questionPrompt {
+   margin: 0;
++  min-width: 0;
++  overflow-wrap: anywhere;
+   text-align: center;
+   font-size: var(--pb-font-h2);
+   line-height: 1.15;
+@@ -212,6 +214,10 @@
+   font-size: var(--pb-font-body);
+   line-height: 1.2;
+ }
++.decision > b {
++  min-width: 0;
++  overflow-wrap: anywhere;
++}
+ .decisionMark {
+   display: inline-flex;
+   flex: none;
+diff --git a/games/kahoot/client/Classic.module.css b/games/kahoot/client/Classic.module.css
+--- a/games/kahoot/client/Classic.module.css
++++ b/games/kahoot/client/Classic.module.css
+@@ -30,6 +30,14 @@
+   line-height: 1.15;
+   text-wrap: balance;
+ }
++/* Compiled owner text may fill the legal limit without a word break. */
++.tvPrompt,
++.phonePrompt,
++.asked,
++.explanation {
++  min-width: 0;
++  overflow-wrap: anywhere;
++}
+ .headline {
+   margin: 0;
+   font-size: var(--pb-font-h2);

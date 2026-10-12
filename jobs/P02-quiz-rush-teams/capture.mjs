@@ -118,6 +118,9 @@ function measure() {
   const named = (el) =>
     `${el.tagName.toLowerCase()}.${String(el.className).split(' ')[0]} ${(el.textContent ?? '').slice(0, 70)}`;
   const visible = (el) => {
+    const closedDetails = el.closest('details:not([open])');
+    if (closedDetails && !closedDetails.querySelector(':scope > summary')?.contains(el))
+      return false;
     const style = getComputedStyle(el);
     const rect = el.getBoundingClientRect();
     return (
@@ -602,6 +605,7 @@ try {
           code: 'Enter',
           windowsVirtualKeyCode: 13,
           nativeVirtualKeyCode: 13,
+          ...(type === 'keyDown' ? { text: '\r', unmodifiedText: '\r' } : {}),
         });
       const closed = await dev.call('Runtime.evaluate', {
         expression: `(${measure.toString()})()`,
@@ -612,7 +616,12 @@ try {
         closed.result.value.teamDiscovery?.open ||
         closed.result.value.teamDiscovery?.failures.length
       )
-        throw new Error('Native Enter did not restore the question pane: ' + frame.name);
+        throw new Error(
+          'Native Enter did not restore the question pane: ' +
+            frame.name +
+            ' ' +
+            JSON.stringify(closed.result.value),
+        );
       metrics.at(-1).closedAgain = closed.result.value.teamDiscovery;
     }
     if ((index + 1) % 9 === 0) console.log(`Captured ${index + 1}/${cases.length} screens.`);

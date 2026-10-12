@@ -61,6 +61,8 @@
 }
 .questionPrompt {
   margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
   text-align: center;
   font-size: var(--pb-font-h2);
   line-height: 1.15;
@@ -292,6 +294,10 @@
   margin: 0;
   font-size: var(--pb-font-body);
   line-height: 1.2;
+}
+.decision > b {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .decisionMark {
   display: inline-flex;

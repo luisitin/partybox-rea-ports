@@ -29,6 +29,13 @@
   line-height: 1.15;
   text-wrap: balance;
 }
+._tvPrompt_986a22,
+._phonePrompt_986a22,
+._asked_986a22,
+._explanation_986a22 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 ._headline_986a22 {
   margin: 0;
   font-size: var(--pb-font-h2);
@@ -3737,6 +3744,8 @@ button {
 }
 ._questionPrompt_3a8fe9 {
   margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
   text-align: center;
   font-size: var(--pb-font-h2);
   line-height: 1.15;
@@ -3879,6 +3888,87 @@ button {
   gap: var(--pb-space-3);
   justify-content: center;
 }
+/* Own-team discovery stays readable beside the question on staged phones. */
+._phone_3a8fe9 ._talk_3a8fe9 {
+  gap: var(--pb-space-2);
+}
+._phone_3a8fe9 ._talk_3a8fe9 ._members_3a8fe9 {
+  display: grid;
+  gap: var(--pb-space-1);
+}
+._phone_3a8fe9 ._talk_3a8fe9 ._members_3a8fe9 > span {
+  display: flex;
+  align-items: baseline;
+  gap: var(--pb-space-1);
+}
+._phone_3a8fe9 ._talk_3a8fe9 ._members_3a8fe9 > span::after {
+  content: none;
+}
+._memberName_3a8fe9 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+._memberPresence_3a8fe9 {
+  flex: none;
+  color: var(--pb-text-muted);
+  white-space: nowrap;
+}
+._teamDisclosure_3a8fe9 {
+  width: 100%;
+}
+._teamDisclosure_3a8fe9 summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--pb-touch);
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border: calc(var(--pb-space-1) / 4) solid var(--pb-border);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  color: var(--pb-text);
+  font-size: var(--pb-font-button);
+  line-height: 1.2;
+  font-weight: 800;
+  text-align: center;
+  list-style: none;
+  cursor: pointer;
+}
+._teamDisclosure_3a8fe9 summary::-webkit-details-marker {
+  display: none;
+}
+._teamDisclosure_3a8fe9 summary:focus-visible {
+  outline: var(--pb-space-1) solid var(--pb-focus);
+  outline-offset: calc(var(--pb-space-1) / 2);
+}
+._teamDisclosure_3a8fe9 ._disclosureOpen_3a8fe9,
+._teamDisclosure_3a8fe9[open] ._disclosureClosed_3a8fe9 {
+  display: none;
+}
+._teamDisclosure_3a8fe9[open] ._disclosureOpen_3a8fe9 {
+  display: inline;
+}
+._teamDisclosure_3a8fe9 ._roster_3a8fe9 {
+  margin-top: var(--pb-space-2);
+}
+/* A native disclosure keeps the two maximum-sized panes separate, with no play scrolling. */
+._talk_3a8fe9:has(._teamDisclosure_3a8fe9[open]) ._talkQuestion_3a8fe9 {
+  display: none;
+}
+._talkQuestion_3a8fe9 {
+  display: grid;
+  gap: var(--pb-space-2);
+}
+._phone_3a8fe9 ._talk_3a8fe9[data-stage] ._talkPrompt_3a8fe9 {
+  font-size: var(--pb-font-body);
+}
+._talkChoices_3a8fe9 ol {
+  gap: var(--pb-space-2);
+}
+._talkChoices_3a8fe9 li {
+  font-size: var(--pb-font-caption);
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+}
 ._decision_3a8fe9 {
   display: flex;
   flex-wrap: wrap;
@@ -3887,6 +3977,10 @@ button {
   margin: 0;
   font-size: var(--pb-font-body);
   line-height: 1.2;
+}
+._decision_3a8fe9 > b {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 ._decisionMark_3a8fe9 {
   display: inline-flex;
