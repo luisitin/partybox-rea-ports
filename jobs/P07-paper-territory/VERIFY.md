@@ -4,7 +4,7 @@ Install once: `corepack enable`; `pnpm.cmd install`, completed. Windows script p
 
 ## Tests and contracts
 
-Latest completed full check: `pnpm vitest run games/paper-territory --maxWorkers=1`, [CI 38192798653](https://github.com/luisitin/partybox-rea-ports/actions/runs/38192798653), head `5567b109f11301bfcf1a0eb565cfc8ccec5324c9`: **144/144 tests in 14 files**, 128.2 s; typecheck and format also passed. This includes real SDK contracts, 1,003 property traces and 7,000 simulations at every count 2–8. R12–R14 visual feedback changes require fresh CI. `tools/record-scoped-ci.mjs <run-id>` retains exact metadata, metrics and tested/local game-file SHA256 comparisons in latest-scoped-ci.json. Historical final-ci files retain their original head.
+Latest completed full check: `pnpm vitest run games/paper-territory --maxWorkers=1`, [CI 38193812748](https://github.com/luisitin/partybox-rea-ports/actions/runs/38193812748), head `4cfccbc75e04e5c00247cc73f091c0c9a6690536`: **147/147 tests in 14 files**, 122.41 s; typecheck and format also passed. This includes real SDK contracts, 1,003 property traces, 7,000 simulations at every count 2–8 and R12–R14 visual feedback changes. Every local game-file SHA256 matches the tested head. `tools/record-scoped-ci.mjs <run-id>` retains exact metadata, metrics and tested/local SHA256 comparisons in latest-scoped-ci.json. Historical final-ci files retain their original head.
 
 Resumed focused commands: `PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/paper-territory/client games/paper-territory/__tests__/artifacts.test.tsx --maxWorkers=1`: 60/60 passed in 10.25 s after displaced labels, visible trail gaps and public crash causes. `pnpm.cmd vitest run games/paper-territory/__tests__/presence.test.ts games/paper-territory/__tests__/contract.test.ts games/paper-territory/client/feedback.test.tsx --maxWorkers=1`: 51/51 passed in 9.43 s after permanent departure fix. Revised `pnpm.cmd vitest run games/paper-territory/__tests__/property.test.ts --maxWorkers=1`: all 1,003 traces passed (4 assertions, 35.14 s). No other game's tests or browser suite ran.
 
@@ -17,7 +17,7 @@ Historical local checks before KEEP GOING:
 
 ## Simulation and properties
 
-The latest CI executed 1,000 seeds at every supported player count, with 600 ms bot decisions and 200 ms physics. Each batch cycles easy/normal/sharp (334/333/333 games). All **7,000 terminated** within the manifest limit of 360,000 ms. This includes the specifically required 2/4/8 batches.
+The latest CI executed 1,000 seeds at every supported player count, with 600 ms bot decisions and 200 ms physics. Each batch cycles easy/normal/sharp (334/333/333 games). All **7,000 terminated** within the manifest limit of 360,000 ms. This includes the specifically required 2/4/8 batches. The table retains wall-time measurements from expanded CI 38192798653; latest timings and identical game-time outcomes are in latest-scoped-ci.json.
 
 | Players | Games | Median play | Maximum whole game | Wall time |
 | ------- | ----- | ----------- | ------------------ | --------- |
@@ -76,4 +76,4 @@ Resumed captures confirmed zero overflow/outside/internal-scroll failures, 58.65
 
 Initial full CI passed: [run 38177872218](https://github.com/luisitin/partybox-rea-ports/actions/runs/38177872218), 1m30s. PR #4 left draft after this result. R1 targeted command: `pnpm.cmd vitest run games/paper-territory/client/DirectionPad.test.tsx games/paper-territory/client/controls.test.ts games/paper-territory/__tests__/views.test.ts games/paper-territory/__tests__/contract.test.ts --maxWorkers=1`; 3 existing files, 27/27 assertions passed in 4.57 s. The views glob has no separate file; projections are checked by SDK contract and the real-game controller regression.
 
-LOOP.md records every measured iteration. Duplicate local simulation attempts were stopped to preserve desktop CPU; partial logs are explicitly non-final. Earlier failed screenshot timeout and successful 28-screen capture remain historical evidence. Resumed captures include all required/stress variants, and the tool exits only after its finally cleanup has closed the owned browser. Fresh CI after R12–R14 is required before convergence can be claimed.
+LOOP.md records every measured iteration. Duplicate local simulation attempts were stopped to preserve desktop CPU; partial logs are explicitly non-final. Earlier failed screenshot timeout and successful 28-screen capture remain historical evidence. Resumed captures include all required/stress variants, and the tool exits only after its finally cleanup has closed the owned browser. CI after R12–R14 passed; convergence requires three consecutive zero-gain audits.
