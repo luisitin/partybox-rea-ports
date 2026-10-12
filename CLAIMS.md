@@ -39,7 +39,7 @@ P20 r19-local 2026-10-11T22:31:04Z job/P20-fruit-slice
 
 P21 r20-local 2026-10-11T22:34:58Z job/P21-pong-party
 
-P22 r1-local 2026-10-12T04:44:12Z job/P22-ricochet-rumble
+P22 r1-local 2026-10-12T04:55:42Z job/P22-ricochet-rumble
 
 P23 r4-local 2026-10-12T04:54:52Z job/P23-bonk-io
 
