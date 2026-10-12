@@ -376,7 +376,21 @@ async function main() {
     } finally {
       await writeFile(
         join(media, interactionOnly ? 'interaction-capture.json' : 'layout.json'),
-        `${JSON.stringify(report, null, 2)}\n`,
+        `${JSON.stringify(
+          {
+            ...report,
+            interaction: report.interaction
+              ? {
+                  report: 'interaction.json',
+                  passed: report.interaction.passed,
+                  checks: report.interaction.checks.length,
+                  captures: report.interaction.captures.length,
+                }
+              : undefined,
+          },
+          null,
+          2,
+        )}\n`,
         'utf8',
       );
     }

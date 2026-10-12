@@ -85,7 +85,7 @@
         --pb-chip-size: 40px;
       }
 
-      /* ── Themes (src/theme.ts sets data-theme on <html>; 
+      /* ── Themes (src/theme.ts sets data-theme on <html>;
 ight is the :root default above) ────────
    Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
    colours stay bright in every theme — they are avatar discs, not text. */
@@ -388,6 +388,7 @@ ight is the :root default above) ────────
         text-align: center;
         font-size: var(--pb-font-caption);
         line-height: 1.2;
+        overflow-wrap: anywhere;
         color: var(--pb-text-muted);
       }
 
@@ -417,7 +418,7 @@ ight is the :root default above) ────────
       ._powerControls_d8f881 {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: var(--pb-space-2);
+        gap: var(--pb-space-1);
       }
 
       ._powerButton_d8f881,
@@ -450,13 +451,8 @@ ight is the :root default above) ────────
         line-height: 1.2;
       }
 
-      ._freezePower_d8f881 {
-        display: grid;
-        gap: var(--pb-space-1);
-        min-width: 0;
-      }
-
       ._target_d8f881 {
+        grid-column: 1 / -1;
         width: 100%;
         min-width: 0;
         padding: var(--pb-space-2);
@@ -593,8 +589,8 @@ ight is the :root default above) ────────
       ._lane_43f179 {
         display: grid;
         grid-template-columns:
-          calc(var(--pb-chip-size) * 0.7) minmax(0, 0.9fr) minmax(0, 1.15fr)
-          minmax(0, 3fr) minmax(0, 0.6fr);
+          calc(var(--pb-chip-size) * 0.7) minmax(0, 1.75fr) minmax(0, 1.15fr)
+          minmax(0, 2.15fr) minmax(0, 0.6fr);
         align-items: center;
         gap: var(--pb-space-3);
         padding: var(--pb-space-1) var(--pb-space-4);
@@ -731,7 +727,7 @@ ight is the :root default above) ────────
       }
 
       ._lanes_43f179[data-compact] ._lane_43f179 {
-        grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 0.4fr);
+        grid-template-columns: minmax(0, 1.8fr) minmax(0, 0.5fr) minmax(0, 0.4fr);
         gap: var(--pb-space-2);
         padding: 0 var(--pb-space-2);
       }
@@ -1111,24 +1107,26 @@ ight is the :root default above) ────────
         </div>
         <p class="_status_d8f881" role="status">Your pace. Your questions. Highest score wins.</p>
         <section class="_powers_d8f881" aria-label="Power-ups">
-          <p class="_energy_d8f881"><b>⚡ Earn a power every 3 correct</b></p>
+          <p class="_energy_d8f881" role="status"><b>⚡ Earn a power every 3 correct</b></p>
           <div class="_powerControls_d8f881">
             <button type="button" class="_powerButton_d8f881" disabled="">
-              <strong>×2 Points</strong><span>Double next correct</span>
-            </button>
-            <div class="_freezePower_d8f881">
-              <button type="button" class="_powerButton_d8f881" disabled="">
-                <strong>❄ Freeze 3s</strong></button
-              ><select class="_target_d8f881" aria-label="Rival to freeze" disabled="">
-                <option value="p2" selected="">Ben</option>
-                <option value="p3">Cy</option>
-                <option value="p4">Dee</option>
-                <option value="p5">Eli</option>
-                <option value="p6">Fay</option>
-                <option value="p7">Gus</option>
-                <option value="p8">Hal</option>
-              </select>
-            </div>
+              <strong>×2 Next correct</strong></button
+            ><button type="button" class="_powerButton_d8f881" disabled="">
+              <strong>❄ Freeze 3s</strong></button
+            ><select
+              class="_target_d8f881"
+              aria-label="Rival to freeze"
+              title="Ben · Place 1 · 0 points"
+              disabled=""
+            >
+              <option value="p2" selected="">1 · 0 pts · Ben</option>
+              <option value="p3">1 · 0 pts · Cy</option>
+              <option value="p4">1 · 0 pts · Dee</option>
+              <option value="p5">1 · 0 pts · Eli</option>
+              <option value="p6">1 · 0 pts · Fay</option>
+              <option value="p7">1 · 0 pts · Gus</option>
+              <option value="p8">1 · 0 pts · Hal</option>
+            </select>
           </div>
         </section>
       </div>

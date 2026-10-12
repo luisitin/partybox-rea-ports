@@ -1,229 +1,240 @@
 # P03 — Verification record
 
-Baseline checks below describe commit ad3add8. Post-green round 1 adds six screen regressions
-(19 screens plus SSR pass) and a maximum-text standings fixture: both active phones fit;
-24 name-clipping findings on the TV/spectator stages are being fixed in round 2. Current
-65-page media and hashes will be replaced with final verification before the PR leaves draft.
+Runner `r3-local`, branch `job/P03-trivia-lightning`, PR [#3](https://github.com/luisitin/partybox-rea-ports/pull/3).
+This record describes the final resumed implementation and evidence inspected on 2026-10-12 UTC.
+Command results attributed to the primary runner are reported results; JSON counts and coverage
+below were independently inspected. Earlier 110/119-test and 60/65-page baselines are superseded.
 
-This is the verification record for `job/P03-trivia-lightning`, runner `r3-local`, on
-2026-10-11. Recorded results below are either inspected files or the primary runner's reported
-command results. The final local game run passed all 110 tests across seven files. Typecheck,
-format and all 20 mutations passed; the final 60-page capture and recorded visual review passed.
-All 123 media hashes match the refreshed manifest, and final format passed. CI and
-KEEP GOING is in progress. This document does not yet claim that every RULES.md check passes.
+The final local game run passed **153 tests in seven files**, typecheck and format passed,
+all **20 planted faults were caught**, and all **21,000 seeded games / 105,000 seats finished**.
+The final combined capture has **82 static pages with zero geometry issues** and **61 passing
+mounted interaction checks / 14 additional PNGs**. All **183 media hashes match**. CI on the
+evidence push and three consecutive stable KEEP GOING audits remain completion gates below;
+this record does not claim those unfinished gates have passed.
 
-## Commands and current results
+## Commands and results
 
-Commands use `pnpm.cmd` on this Windows desktop because PowerShell blocks `pnpm.ps1`.
-CI uses the equivalent `pnpm` commands. The test filter is always this game; no whole-suite
-browser run is part of this verification.
+PowerShell blocks `pnpm.ps1`, so local commands use `pnpm.cmd`; CI uses `pnpm`.
+All Vitest commands are restricted to this game. No whole-suite browser run was performed.
 
-| Check                          | Exact reproduction command                                                                                                                                      | Current recorded result                                                                                                                                                                                                 |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Install once                   | `corepack enable` then `pnpm.cmd install`                                                                                                                       | Completed, recorded in NEXT.md. No new dependencies.                                                                                                                                                                    |
-| Types                          | `pnpm.cmd typecheck`                                                                                                                                            | PASS: exit 0, primary runner session 95850.                                                                                                                                                                             |
-| Format                         | `pnpm.cmd format`                                                                                                                                               | PASS: final post-documentation check exit 0, primary runner session 23650; earlier check session 32688 also exit 0.                                                                                                     |
-| Game, screens and SDK contract | `pnpm.cmd vitest run games/trivia-lightning --maxWorkers=1 --pool=threads`                                                                                      | PASS: 7 files, 110 tests, 119.74 s, exit 0; began 2026-10-11T21:19:46Z.                                                                                                                                                 |
-| Simulation and properties      | `pnpm.cmd vitest run games/trivia-lightning/__tests__/simulation.test.ts games/trivia-lightning/__tests__/property.test.ts --maxWorkers=1 --pool=threads`       | All 42 tests included in the successful complete 110-test run. Stable `media/simulation.json` confirms all 21 groups and 21,000 games.                                                                                  |
-| Mutation check                 | `node jobs/P03-trivia-lightning/mutate.mjs`                                                                                                                     | PASS: final 20 tested, 20 caught, exit 0, session 58641. Originals restored in `finally` after every fault.                                                                                                             |
-| Static SSR evidence            | Set `PB_WRITE_EVIDENCE=1`, then `pnpm.cmd vitest run games/trivia-lightning/__tests__/evidence.test.tsx --maxWorkers=1 --pool=threads`, then clear the variable | PASS: SSR test in complete 110-test run; 60 HTML files, 12 states x 5 surfaces, with matching final PNG capture.                                                                                                        |
-| Chrome capture and geometry    | `node jobs/P03-trivia-lightning/capture.mjs`                                                                                                                    | PASS: 2026-10-11T21:28:52.140Z, 60 pages, all issue counts zero. Hand review passed; cleanup recovery verified closed/profile removed/endpoint closed at 21:35:03.559Z.                                                 |
-| Media budget                   | `Get-ChildItem -LiteralPath jobs/P03-trivia-lightning/media -File \| Measure-Object Length -Sum`                                                                | PASS: 6,021,995 bytes across 123 media files, below 10 MB.                                                                                                                                                              |
-| Media integrity                | `Get-ChildItem -LiteralPath jobs/P03-trivia-lightning/media -File \| Sort-Object Name \| Get-FileHash -Algorithm SHA256`                                        | PASS: refreshed SHA256SUMS.txt has 123 records for all 123 media files; independently recomputed all hashes, zero mismatches.                                                                                           |
-| Job CI                         | `gh pr checks 3`                                                                                                                                                | PASS on ad3add879e9ecf1c6e39a362ad6660004320e06d: [run 38177187835](https://github.com/luisitin/partybox-rea-ports/actions/runs/38177187835), trivia-lightning, 34 seconds. Latest improvement commits must pass again. |
+| Check                               | Exact command                                                                                                                                                                                       | Recorded result                                                                                                                                                                                                                             |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Installation                        | `corepack enable`, then `pnpm.cmd install`                                                                                                                                                          | Completed once; recorded in NEXT.md. No new dependencies.                                                                                                                                                                                   |
+| Types                               | `pnpm.cmd typecheck`                                                                                                                                                                                | PASS, exit 0, final primary-runner check.                                                                                                                                                                                                   |
+| Complete game and SDK contract      | `pnpm.cmd vitest run games/trivia-lightning --maxWorkers=1 --pool=threads`                                                                                                                          | PASS, exit 0: 153 tests, seven files, 59.94 s; primary-runner result recorded at `2026-10-12T01:44:53Z`.                                                                                                                                    |
+| Focused rules, screens and SSR      | `pnpm.cmd vitest run games/trivia-lightning/__tests__/game.test.ts games/trivia-lightning/client/screens.test.tsx games/trivia-lightning/__tests__/evidence.test.tsx --maxWorkers=1 --pool=threads` | PASS: 75 tests in 1.66 s, before the final complete run.                                                                                                                                                                                    |
+| Simulation and properties           | `pnpm.cmd vitest run games/trivia-lightning/__tests__/simulation.test.ts games/trivia-lightning/__tests__/property.test.ts --maxWorkers=1 --pool=threads`                                           | Included in the final successful complete run; simulation JSON contains all 21 completed groups.                                                                                                                                            |
+| Mutation check                      | `node jobs/P03-trivia-lightning/mutate.mjs`                                                                                                                                                         | PASS, exit 0: final rerun caught 20/20 by rule assertions, primary-runner session 27138. Originals restored in `finally` after each fault.                                                                                                  |
+| SSR evidence generation             | `$env:PB_WRITE_EVIDENCE='1'; try { pnpm.cmd vitest run games/trivia-lightning/__tests__/evidence.test.tsx --maxWorkers=1 --pool=threads } finally { Remove-Item Env:PB_WRITE_EVIDENCE }`            | PASS; final evidence contains 82 HTML pages, reducer-derived public interaction views and phase fixtures. SSR also passed in the complete run.                                                                                              |
+| Combined static and mounted capture | `$env:P03_CPU_CAPTURE='1'; try { node jobs/P03-trivia-lightning/capture.mjs } finally { Remove-Item Env:P03_CPU_CAPTURE }`                                                                          | PASS: layout captured at `2026-10-12T01:43:18.280Z`; 82 static pages, zero fit findings. Mounted report at `2026-10-12T01:43:38.403Z`: 61/61 checks and 14 captures. Browser closure independently proven; profile deletion returned EBUSY. |
+| Formatting                          | `pnpm.cmd format`                                                                                                                                                                                   | PASS, exit 0, final whole-repository check, primary-runner session 56509. The three regenerated fixtures that failed latest CI were corrected locally.                                                                                      |
+| Media budget                        | `Get-ChildItem -LiteralPath jobs/P03-trivia-lightning/media -File \| Measure-Object Length -Sum`                                                                                                    | Inspected after lossless PNG optimization: 183 files / 9,919,608 bytes, below 10,000,000 bytes.                                                                                                                                             |
+| Media integrity                     | `Get-ChildItem -LiteralPath jobs/P03-trivia-lightning/media -File \| Sort-Object Name \| Get-FileHash -Algorithm SHA256`                                                                            | PASS: primary runner regenerated all 183 SHA256SUMS.txt records and independently recomputed all hashes; zero mismatches.                                                                                                                   |
+| PR CI                               | `gh pr checks 3`                                                                                                                                                                                    | Green final-head run pending evidence push. Head `b94ee1e` failed only formatting of three regenerated fixtures; that failure is not a green result.                                                                                        |
 
-The complete local test run began at `2026-10-11T21:19:46Z` and passed in 119.74 s, exit code 0
-(primary runner session 80776). Its 110 tests include the SDK contract, rule and screen tests,
-content validation, SSR generation, all simulation groups and all property sequences, including
-the hidden-key bot assertion. Replace the remaining pending cells with actual results before
-marking the job complete.
+## SDK contract, rules and regressions
 
-## Contract, rule and regression coverage
+The local wrapper selects only `trivia-lightning` with `PB_CONTRACT_SHARD` and imports the real
+SDK contract suite. Settings variants cover a short power-free race, a maximum-length Movies
+race and Science. Contract hooks forbid private answer keys, deck and runner internals in views.
 
-The local contract wrapper discovers the game list, sets `PB_CONTRACT_SHARD` to only
-`trivia-lightning`, and imports the real SDK contract suite. Settings variants include a short
-power-free race, the maximum-length Movies race, and Science. Hidden-field hooks forbid the
-deck, answer keys and other private runner state in public views.
+The complete run covers:
 
-The inspected game tests exercise:
+- Pure, deterministic transitions; private questions and own feedback; spectator/unknown IDs;
+  duplicate or stale question, answer, Next and earning-charge inputs.
+- 100-point base scoring, +20 streak steps capped at +60, miss reset, speed-independent points,
+  next-correct-only doubling, energy capped at one and replay protection after a refill.
+- Exactly three-second rival freeze; self, unknown, finished, departed, offline and already-frozen
+  targets refused without spending energy; no score theft or stacked active freeze.
+- Reconnect restoring cursor, verdict, score and power; pause shifting the shared cap and private
+  freeze deadlines; terminal roster preservation; idle cap and all-disconnected completion.
+- One finished seat leaving other connected racers active; exact-cap rejection; stale timers;
+  clocks never moving backward; accepted input overtaking a queued beat still reaching results.
+- Occupied competition-rank podium beats, shared first and delayed winner identity. Two distinct
+  players use steps [2,3] / 9 s; eight tied winners [3] / 4.5 s; tied winners plus third [1,3] / 9 s;
+  three distinct scores [1,2,3] / 13.5 s. Only empty ranks lose their wait.
+- Scored/place-labeled rival choices, eligible-leader fallback, manual choice retention and
+  original avatar colour slots surviving a standings reorder.
+- Permanent leavers returning to a public watching stage without controls; named freeze
+  attribution; stable accepted-answer cue identity across podium/results pushes; terminal own
+  explanation retention; semantic screen keys advancing with questions/verdicts/podium beats
+  while remaining stable across clock ticks.
 
-- 100-point base scoring, +20 streak steps capped at +60, miss reset, speed independence,
-  doubling only the next correct answer, and energy capped at one.
-- One cursor per seat, own feedback only, duplicates and stale question/answer/Next inputs,
-  spectators and unknown IDs, and private-key isolation.
-- Exactly three-second freeze; self, unknown, finished, offline and already-frozen targets
-  refused without consuming energy; no score theft or stacked freeze.
-- Reconnect restoring cursor/verdict/score/power, pause shifting the shared cap and private
-  freeze clock, terminal roster preservation, idle cap and all-disconnected exit.
-- Finishing one seat without ending another connected seat, exact-cap input rejection, stale
-  timer rejection, an old timer never moving the race clock backward, and completion after an
-  accepted input overtakes a queued beat.
-- Three podium beats, competition ranks and shared first, permanent-leaver bot targeting,
-  60 bounded original questions, and independently authored bot factual knowledge.
+Actual React screen assertions cover TV privacy, both phone modes, spectators, own feedback,
+power-free play, score-derived lead/tied-lead cues, all-player results and terminal explanations.
+Phone rank and score during podium appear at step 3, with the winner reveal.
 
-Screen tests use the actual React components, including spectators, TV privacy, phone-only
-wording, own feedback, final-answer feedback during podium, delayed winner identity, ties,
-all-player final standings and a powers-disabled game. The spec now correctly says that own
-rank/score during podium appear only at step 3, the winner reveal.
-
-Content tests cover the 100-character prompt, 40-character option and 150-character explanation
-limits; over-limit and blank strings; distinct trimmed/case-folded choices; unique IDs;
-exactly 20 questions; correct-index bounds; and rejection of unknown fields.
-
-Property verification exposed a scheduler regression: an accepted input could advance the clock
-past a queued beat, then the stale-timer guard would repeatedly refuse that expired deadline.
-Accepted inputs and resume now rearm the race beat when necessary. The direct unit regression
-drives this state to `done` with SDK `finishGame`; it and all property sequences passed in the
-complete 110-test run.
+The content suite validates 60 original questions in three 20-question packs: bounded prompt /
+option / explanation text (100 / 40 / 150 characters), nonblank strings, unique IDs, distinct
+trimmed/case-folded choices, exactly 20 questions per pack, correct-index bounds and unknown-field
+rejection. Bot factual knowledge is independently authored; hidden-key perturbation tests below
+check that strategy cannot read the answer key.
 
 ## Seeded simulation
 
-`simulation.test.ts` runs seeds 1–1,000 for each player count 2, 3, 4, 5, 6, 7, 8 and each
-easy/normal/sharp strength: **21,000 games and 105,000 player seats**. All groups use the default
-12 questions, 90-second cap and powers enabled. The virtual clock is injected; the reducer's
-500 ms beat and podium deadlines drive timers. Each bot schedules its own seeded decision:
-easy 1,000–2,200 ms, normal 900–1,800 ms, sharp 650–1,300 ms. A null response is rescheduled,
-so a frozen bot can recover. There is no real sleep or browser in the simulator.
+`simulation.test.ts` runs seeds 1–1,000 at **every count 2–8**, for easy/normal/sharp strengths:
+21 groups, **21,000 games and 105,000 seats**. Defaults are 12 questions, a 90-second race cap
+and powers enabled. Virtual time uses the reducer's 500 ms beat and podium deadlines; each
+bot schedules its own seeded decision. Delays are easy 1,000–2,200 ms, normal 900–1,800 ms,
+sharp 650–1,300 ms. A null response is rescheduled so frozen bots recover. No real sleep or
+browser is used by this simulator.
 
-Every game must reach `done`, include its complete original roster, have finite nonnegative
-scores, finish its race within its configured cap and complete its match within
-`estimatedMinutes × 2 = 360,000 ms`. Each group also requires over 95% of seats to complete
-the finite deck, use of doubling, and use of freeze by sharp bots.
+Every game must reach `done`, preserve its original roster, have finite nonnegative scores,
+respect its race cap and complete within `estimatedMinutes × 2 = 360,000 ms`. Each group must
+finish over 95% of seats, use doubling and, for sharp bots, use freezes. The final JSON records
+**all 21,000 games and all 105,000 seats finished**, longest race **47,313 ms** and longest match
+**60,813 ms**. Every group used doubles and every sharp group used freezes.
 
-The inspected JSON records all **21,000 games completed**, all **105,000 seats finished**,
-a longest race of **47,313 ms** and longest complete match of **60,813 ms**, both within budget.
-Every sharp group exercised freezes; every group exercised doubles. These are bot-scheduler
-measurements, not a measured human party duration.
+Required 2/4/8-player medians, in milliseconds:
 
-| Players | Easy median race ms | Normal median race ms | Sharp median race ms |
-| ------- | ------------------: | --------------------: | -------------------: |
-| 2       |            40,458.5 |              35,174.5 |             26,706.5 |
-| 3       |              41,047 |              35,663.5 |             28,226.5 |
-| 4       |            41,578.5 |              35,946.5 |             28,893.5 |
-| 5       |            41,697.5 |              36,133.5 |               29,155 |
-| 6       |            41,873.5 |              36,241.5 |               29,444 |
-| 7       |            42,075.5 |              36,414.5 |               29,654 |
-| 8       |            42,207.5 |                36,522 |               29,934 |
+| Players | Strength | Median race | Median complete match |
+| ------- | -------- | ----------: | --------------------: |
+| 2       | Easy     |    40,458.5 |                49,433 |
+| 2       | Normal   |    35,174.5 |                44,137 |
+| 2       | Sharp    |    26,706.5 |              35,428.5 |
+| 4       | Easy     |    41,578.5 |                54,957 |
+| 4       | Normal   |    35,946.5 |              49,308.5 |
+| 4       | Sharp    |    28,893.5 |                38,612 |
+| 8       | Easy     |    42,207.5 |              55,493.5 |
+| 8       | Normal   |      36,522 |              49,653.5 |
+| 8       | Sharp    |      29,934 |              35,417.5 |
 
-Complete per-group match medians, maxima, answer accuracy and power counts are retained in
-[media/simulation.json](media/simulation.json).
+All counts, maxima, accuracy and power-use totals are retained in
+[media/simulation.json](media/simulation.json). These are seeded bot-scheduler measurements,
+not measured human party durations or evidence that a power improves human win odds.
 
 ## Property sequences
 
-`property.test.ts` checks fixed seeds **1, 2, 3** plus **1,000** seeds sampled reproducibly with
-fast-check generator seed `0x503`. Each sequence contains 64 mixed events: **64,192 transitions**
-across random supported roster sizes, packs, question counts, caps and power settings.
-Inputs include stale IDs/cursors, invalid player IDs, powers, current and stale timers,
-disconnect/reconnect, pause/resume and irrelevant speech events.
+`property.test.ts` checks fixed seeds **1, 2, 3** plus **1,000 reproducibly sampled seeds** from
+fast-check generator seed `0x503`. Each has 64 mixed events: **64,192 transitions**, across
+supported roster sizes, packs, question counts, caps and power settings. Inputs include stale
+IDs/cursors, invalid player IDs/charges, powers, current/stale timers, disconnect/reconnect,
+pause/resume and irrelevant speech events.
 
-Every transition deep-freezes and serializes the previous state, replays the same event against
-a second state and checks byte-equal deterministic output. Invariants require a declared phase,
-bounded JSON round-trip, finite nonnegative counters, correct ≤ answered ≤ deck length,
-streak ≤ correct, energy ≤ one and scores in the declared 100–320 points-per-correct bounds.
-Views are checked for forbidden keys, spectator privacy and own-feedback identity. Every
-sequence is resumed, driven to results, then fuzzed in the terminal state for totality.
+Each transition deep-freezes and serializes the previous state, replays the event on a second
+state and requires byte-equal output. Invariants cover declared phases, bounded JSON round-trip,
+finite nonnegative counters, correct ≤ answered ≤ deck length, streak ≤ correct, energy ≤ one
+and 100–320 points per correct answer. Views forbid private keys, enforce spectator privacy and
+match only the receiving player's feedback. Every sequence resumes, reaches results and fuzzes
+the terminal reducer for totality.
 
-A separate hidden-key perturbation changes every `correctIndex` and explanation while leaving
-prompts/options fixed. TV and all phone views remain equal, and nine bot-input comparisons
-(three strengths × RNG seeds 1, 2, 3) remain equal. This verifies that bot factual recall does
-not read the private answer key. It is an invariance check, not a claim of human-like knowledge.
-
-Idle tests additionally cover **56 combinations**: counts 2–8 × questions 6/20 × caps 60/180 ×
-powers off/on. They require complete zero-score results within the manifest budget.
+A separate perturbation changes all private correct indices/explanations while keeping prompts
+and options fixed: TV and phone views remain equal, as do nine bot-input comparisons (three
+strengths × RNG seeds 1/2/3). This is an invariance check, not a claim of human-like knowledge.
+Idle completion also covers **56 setting extremes**: counts 2–8 × questions 6/20 × caps 60/180 ×
+powers off/on, requiring a complete zero-score roster within the manifest budget.
 
 ## Twenty planted faults
 
-Each mutation runs only `game.test.ts` in a fresh single-worker subprocess. A syntax/import
-failure does not count as catching a rule bug. The JSON records assertion failures for all 20:
+Each mutation runs only `game.test.ts` in a fresh single-worker subprocess. Syntax/import
+failures do not count. [media/mutations.json](media/mutations.json) records a rule assertion
+failure and exit code 1 for each of these **20/20 caught faults**, exceeding the required 19/20:
 
-| #   | Planted fault                 | Result |
-| --- | ----------------------------- | ------ |
-| 1   | Base score +10                | Caught |
-| 2   | Uncapped streak               | Caught |
-| 3   | Wrong answers score           | Caught |
-| 4   | Triple instead of double      | Caught |
-| 5   | Invert correct verdict        | Caught |
-| 6   | Miss keeps streak             | Caught |
-| 7   | Energy every two correct      | Caught |
-| 8   | Double costs no energy        | Caught |
-| 9   | Accept answer before Next     | Caught |
-| 10  | Accept stale question ID      | Caught |
-| 11  | Accept stale answer cursor    | Caught |
-| 12  | Accept stale Next cursor      | Caught |
-| 13  | Answer at exact cap accepted  | Caught |
-| 14  | Shorten freeze to two seconds | Caught |
-| 15  | Answer while frozen           | Caught |
-| 16  | Allow self freeze             | Caught |
-| 17  | Stack active freezes          | Caught |
-| 18  | End when only one finishes    | Caught |
-| 19  | Skip winner podium beat       | Caught |
-| 20  | Leak answer key on phones     | Caught |
+1. Base score +10.
+2. Uncapped streak.
+3. Wrong answers score.
+4. Triple instead of double.
+5. Invert correct verdict.
+6. Miss keeps streak.
+7. Energy every two correct.
+8. Double costs no energy.
+9. Accept answer before Next.
+10. Accept stale question ID.
+11. Accept stale answer cursor.
+12. Accept stale Next cursor.
+13. Accept answer at the exact cap.
+14. Shorten freeze to two seconds.
+15. Answer while frozen.
+16. Allow self freeze.
+17. Stack active freezes.
+18. End when only one seat finishes.
+19. Skip the winner podium beat.
+20. Leak the answer key on phones.
 
-The final rerun against the scheduler change is 20/20, exceeding the required 19/20, exit code 0
-(primary runner session 58641). Exact files and exit codes are in
-[media/mutations.json](media/mutations.json). It verifies these faults, not every possible fault.
+The final rerun passed against the final implementation and restored unmutated sources.
+This verifies these planted faults, not every possible fault.
 
-## Screens, geometry and hand review
+## Screens, mounted interactions and cleanup
 
-`evidence.test.tsx` generates real SSR with actual CSS module mappings, design tokens and
-representative shell header/footer space. Fixtures cover `race`, `podium`, `podium-2`,
-`podium-3`, `done`, `feedback`, `finished`, `tie`, `tie-podium`, `long`, `stress` and
-`stress-feedback`. Each has a TV at 1920×1080 plus 390×844 phones for player/spectator, both
-with TV and phone-only: **60 HTML and 60 PNG** in the current inspected capture. Race, podium
-and done JSON states are also retained in the game fixtures folder.
+SSR uses actual components, mapped CSS modules, design tokens and representative shell
+header/footer space. Sixteen fixtures cover race, podium steps 1/2/3, done, feedback, finished,
+ties, tie podium, longest authored question, maximum-text question/feedback, adversarial ranking,
+departed return, freeze and terminal feedback. Each has TV 1920×1080 plus player/spectator phones
+390×844 in TV-room and phone-only modes: 80 pages. Two extra active-phone pages exercise an
+unbroken 64-character freeze-source name: **82 HTML and 82 matching static PNGs**. Phase JSON
+fixtures retain race, podium and done states.
 
-The stress question uses the schema's 100/40/150 text limits. The tie podium includes eight
-full-length player names. Captures use one installed Chrome process and one page, with closure
-and private temporary-profile cleanup in `finally`; no browser dependency was installed.
+The final [media/layout.json](media/layout.json) records zero capture errors, undersized controls,
+offscreen elements, horizontal/vertical document overflow, clipped text and scroll containers
+across all 82 pages. The 15 reported podium placeholders are intentional staged reveal markup,
+not clipping or fit findings. Maximum question/option/explanation text and eight distinguishable
+long names are included. Earlier label overlap and 24 clipped names were fixed before this run.
 
-The final report at `2026-10-11T21:28:52.140Z` has zero capture errors, control issues,
-offscreen elements, horizontal/vertical document overflow, textClipped entries and scroll
-containers across all 60 pages. The primary runner replaced finish-flag Unicode glyphs with
-original inline SVG after their metrics produced clipping findings. The earlier 45-page capture
-also exposed eight-lane TV label overlap and prompted a layout refit.
+The same Chrome process and page then mounted real React controls with reducer-derived public
+views. [media/interaction.json](media/interaction.json) stores the full report once; layout.json
+contains only its report path, passed status and counts. **All 61 checks and 14 capture layouts
+pass**, including:
 
-The initial capture cleanup verification timed out. Recovery verified cleanup at
-`2026-10-11T21:35:03.559Z`; `layout.json` retains the previous error and the actual recovery
-result: `browser.verifiedClosed: true`, zero observed capture processes,
-`profileRemoved: true`, and `endpoint.reachable: false`. The runner confirmed no active or
-retained capture Chrome processes. Capture closure is verified rather than inferred from PNGs.
+- Eligible scored targets, explicit choice surviving reorder, disconnect fallback and invalidated
+  choices remaining cleared after a rival returns.
+- Exact answer/Next/power inputs; zero extra requests on repeat taps; disabled pending controls;
+  authoritative acceptance; four-second unconfirmed retries; unrelated standings pushes unable
+  to acknowledge a request; energy-charge identity retained across replacement-target retries.
+- Energy spending feedback avoiding attribution to the last requested power when another action
+  won the same charge; accepted double/freeze facts derived from public state.
+- Retained own feedback while Next is pending, accepted next question and score, departed watching
+  mode, maximum-length freeze attribution, terminal explanation retention and answer-identity
+  deduplication across race/podium/done plus direct podium mounting.
 
-The primary runner hand-inspected the following final PNGs and reported all readable and fitting:
+The primary runner's visual review covers race, full named final standings, staged medals,
+eight-way ties, frozen and departed phones, maximum question/feedback text, terminal explanations,
+pending/retry states and both spectator modes. Geometry supports fit; it does not measure how
+quickly a human understands the screen. Mounted cue checks observe semantic sound/haptic calls,
+not speaker audio quality or physical-device vibration.
 
-- TV race, complete final standings, podium steps 1/2/3, and the eight-way podium tie.
-- Phone frozen race, own private feedback, maximum 100/40/150-character question/options/
-  explanation, finished and done screens, podium steps 1/2, spectator podium, and ties.
+The initial GPU-enabled final capture hung and was recovered by exact private-profile cleanup
+before opening the fallback browser; it is not counted as a pass. The completed run sets
+`P03_CPU_CAPTURE=1`, disables GPU rendering and limits renderer processes. Its `finally` cleanup
+uses CDP membership plus native PID/creation/exit checks: all **eight observed Chrome members**
+and the launcher are exited, `verifiedClosed: true`, and the exact debugging endpoint is checked
+and closed. Four owned processes needed forced closure. No active owned Chrome remains.
+Windows retained the exited process records and locked the temporary profile; `profileRemoved`
+is **false**, with the recorded EBUSY warning. Profile deletion is not claimed.
 
-The 60-page geometry audit covers both phone modes and spectators: no control-size issues,
-offscreen elements, scrolling, overflow or unresolved clipping. SSR assertions enforce no
-spectator controls and no phone-only TV directions. Reduced-motion and text/symbol state cues
-are covered by inspected styling and markup. Keyboard interaction, live audio playback and a
-human party session were not tested; static review does not claim those observations.
+PNG files were optimized losslessly using the existing Pillow installation; no new dependency
+was installed. Duplicate interaction-capture.json was removed. Inspected inventory is **82 HTML,
+96 PNG and five JSON files**, **183 files / 9,919,608 bytes**. The primary runner refreshed
+SHA256SUMS.txt for every media file and independently recomputed all 183 hashes: zero mismatches.
 
-Final capture inventory: **60 HTML, 60 PNG, three JSON files; 6,021,995 bytes**, below 10 MB.
-All 123 media hashes were refreshed and independently recomputed against SHA256SUMS.txt; zero mismatches.
+## CI and KEEP GOING completion gates
 
-## CI and KEEP GOING
+Inspected `.github/workflows/P03.yml` has the required pull-request filters for the game/job/
+workflow, Ubuntu latest, a 30-minute timeout, read-only contents permission, only `actions/*`,
+Node 24, Corepack, frozen-lockfile installation, typecheck, format and game-only single-worker
+tests. Earlier implementation heads passed CI, but the latest `b94ee1e` run failed format only
+on three regenerated fixtures. The corrected fixtures passed local `pnpm.cmd format`. The final
+evidence push must receive a green PR check before the PR leaves draft.
 
-`.github/workflows/P03.yml` is inspected: pull-request paths cover this game, job folder and
-workflow; Ubuntu latest; 30-minute timeout; `contents: read`; only `actions/*` actions;
-Node 24, Corepack, frozen-lockfile install, typecheck, format and this game's single-worker tests.
-Actual GitHub run URL and green conclusion remain pending.
-
-The independent eight-stranger review identified live rival context on active phones, track
-position versus scoring clarity, blind roster-order freeze selection, empty-rank podium dead
-air and power-request acknowledgement. Root owns fixes, measurement and LOOP.md. Required
-three consecutive rounds with no player-visible gain remain pending, then queue work resumes.
+[LOOP.md](LOOP.md) records eight player-visible improvement passes: phone standings, readable
+named lanes, occupied podium beats, informed rival choice, score-derived lead cues, request
+acknowledgement, return/verdict identity and readable completion/stable identity. Their measured
+gains are regression behavior, removed waits, fit or explicit information; no human comprehension
+or network latency gain is asserted. Three consecutive audits with no player-visible gain are
+still pending the primary runner's final KEEP GOING passes. Completion requires their actual
+records plus green CI; no earlier baseline substitutes for them.
 
 ## Research and practical limits
 
-Sources and independent corroboration are in RESEARCH.md/SOURCES.md. A full live original
-multiplayer session was not played: Blooket direct HTTP returned 403 and this runner's
-connected computer-use surface had no available browser. Official documentation, firsthand
-published recordings and transient Quizizz/Wayground public-client inspection provided the
-fallback. Exact current Gold Quest reward odds, audio and timing constants are unverified.
+[RESEARCH.md](RESEARCH.md), [SOURCES.md](SOURCES.md) and [ASSUMPTIONS.md](ASSUMPTIONS.md) document
+vendor documentation paired with independent firsthand published reports, and transient public
+Wayground/Quizizz client inspection. Direct Blooket HTTP returned 403; the connected computer-use
+surface had no available browser. No complete live original multiplayer game was played, no
+stranger's room was joined, and exact current reward odds, music and timing constants remain
+unverified. Those source limits are retained rather than treated as passed live research.
 
-Original question text, art and sound assets were not copied. Port scoring, energy and rival
-freeze rules are explicit PartyBox adaptations. P01 had not merged, so the local compatible
-pack schema is documented. Bot simulation, SSR and code review do not replace a live eight-person
-PartyBox play session; no such human play session is claimed in this record.
+Question wording, art and styling are original. No vendor code/assets, external fonts, tracking
+or runtime network dependencies were copied. Scoring, energy, rival freeze and finite shared-seed
+race rules are explicit PartyBox adaptations. P01's absent schema was handled with the documented
+compatible local pack boundary. The public snapshot exposes SDK primitives rather than a full
+LAN host: SSR, mounted controls and bot/property tests do not constitute a networked human game
+or an eight-stranger living-room playtest. No such session or audio-acoustics test is claimed.

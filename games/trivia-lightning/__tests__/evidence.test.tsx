@@ -231,7 +231,7 @@ function render(node: ReactNode, s: State, phoneOnly = false): string {
   );
 }
 function html(body: string, surface: 'tv' | 'controller', title: string, name: string): string {
-  return `<!doctype html><html lang="en" data-surface="${surface}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>${css()}</style></head><body><div class="chrome"><span>PB · R3</span><span>${name}</span></div><div class="mount">${body}</div><div class="bottom">${surface === 'tv' ? 'Trivia Lightning · PartyBox stage' : 'Trivia Lightning · Phone controller'}</div></body></html>`;
+  return `<!doctype html><html lang="en" data-surface="${surface}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>${css().replace(/[ \t]+$/gm, '')}</style></head><body><div class="chrome"><span>PB · R3</span><span>${name}</span></div><div class="mount">${body}</div><div class="bottom">${surface === 'tv' ? 'Trivia Lightning · PartyBox stage' : 'Trivia Lightning · Phone controller'}</div></body></html>`;
 }
 it('renders every phase and input substate, spectators, phone-only and ties', () => {
   const states = fixtures();

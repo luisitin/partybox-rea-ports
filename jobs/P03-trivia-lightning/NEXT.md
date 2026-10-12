@@ -24,10 +24,15 @@
   power/Next retries, duplicate suppression and target disconnect; Chrome closure proven in finally.
 - Resume pass: permanent-leaver watching mode, named freeze attribution and stable own-answer
   cue identity implemented. Focused rules/screens/SSR: 65 tests pass (3 files, 1.96 s).
-- Current: 143 full-game tests and types passed before round 8; 20/20 mutation faults caught.
-  Round 8 focused rules/screens/SSR: 75 tests pass (1.66 s).
-- Capture session 71042 stopped responding in Chrome; exact private profile closure is being
-  recovered by session 9686. Do not open another browser until closure is verified.
-- Remaining: final game/type check, one GPU-disabled combined capture, media formatting/hashes,
-  VERIFY refresh, milestone push/CLAIMS refresh, green CI and three stable audit passes.
+- Current: final typecheck passed; all 153 game tests passed (7 files, 59.94 s).
+  Focused rules/screens/SSR: 75 tests passed (1.66 s). Whole-repo format passed.
+- Capture: GPU-disabled retry completed 82 static layouts with zero issues and 61 mounted checks
+  across 14 captures, all passing. Native browser exit and endpoint closure verified in finally.
+  Initial GPU-hung capture recovered via exact-profile native cleanup and endpoint closure;
+  its worker was stopped only after recovery. No private browser remains running.
+- Code milestone b94ee1e pushed; claim refreshed on main in 96a5080. That CI failed only fixture
+  formatting, now corrected. Final evidence push follows the final mutation rerun.
+- Final mutation rerun: 20/20 caught, exit0, session27138. All183 media hashes verified,
+  zero mismatches; media9,919,608 bytes. Three regenerated JSON fixtures are formatted.
+- Remaining: green CI on final evidence push, three stable audit records and PR ready.
 - Install completed using corepack enable and pnpm.cmd install (PowerShell blocks pnpm.ps1).
