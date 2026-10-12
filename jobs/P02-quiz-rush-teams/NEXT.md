@@ -13,10 +13,12 @@ teams/tv-vote under the existing card (UPGRADE.md being authored).
 
 Server/client team/talk/vote logic, injected upgrade adapters/tests and
 40paired-source sports/music facts are drafted.13parserchecks pass and CLI
-sample validates5questions. Initial typecheck found one test narrowing error,
-now fixed; full rerun is pending. New-mode simulations/properties/content
-verification files are still being authored. Root owns all commands/browser/
-CI/git and remaining screens/validator CLI checks/mutation evidence.
+sample validates5questions. Typecheck is green after two fixture corrections.
+The full scoped run passes all21,000matches/properties but fails21checks due to
+toy minigame metadata, manual word counts and missing talk.json. Corrected
+adapter/reading rerun passes25checks. Fresh SSR generation will supplytalk.json.
+Root owns commands/browser/CI/git; native, SSR/capture and20-mutant tools are
+being prepared by separate agents. No complete green full suite is claimed yet.
 Custom packs compile from validated text to content/custom.json; no runtime
 SDK content-injection API is assumed. Rebuild/restart and select Custom.
 

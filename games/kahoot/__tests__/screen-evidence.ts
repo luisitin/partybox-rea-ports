@@ -25,9 +25,9 @@ const ROOT = resolve(import.meta.dirname, '../../..');
 export const JOB = resolve(ROOT, 'jobs/P01-quiz-rush');
 export const MEDIA = resolve(JOB, 'media');
 const modules: [string, Record<string, string>][] = [
-  ['games/quiz-rush/client/Tv.module.css', tvStyles],
-  ['games/quiz-rush/client/Controller.module.css', phoneStyles],
-  ['games/quiz-rush/client/QuestionParts.module.css', partStyles],
+  ['games/kahoot/client/Tv.module.css', tvStyles],
+  ['games/kahoot/client/Controller.module.css', phoneStyles],
+  ['games/kahoot/client/QuestionParts.module.css', partStyles],
   ['packages/game-sdk/src/tv/Stage.module.css', stageStyles],
   ['packages/game-sdk/src/tv/Timer.module.css', timerStyles],
   ['packages/game-sdk/src/tv/Scoreboard.module.css', boardStyles],
@@ -85,7 +85,7 @@ h1,h2,h3,p{margin:0} h2{font-size:var(--pb-font-h1);line-height:1.2;font-weight:
 
 export function standalone(screen: EvidenceCase): string {
   const surface = screen.surface === 'tv' ? 'tv' : 'phone';
-  return `<!doctype html><html lang="en" data-surface="${surface}" data-motion="off"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Quiz Rush · ${screen.name}</title><style>${evidenceCss()}\n${SHELL_CSS}</style></head><body><div class="evidence-shell"><header class="evidence-header"><b>PartyBox</b><span class="evidence-code">QUIZ</span></header><main class="evidence-main" aria-label="Game stage">${screen.html}</main><footer class="evidence-footer"><span>Quiz Rush · ${screen.surface}</span><span>${screen.width} × ${screen.height}</span></footer></div></body></html>`;
+  return `<!doctype html><html lang="en" data-surface="${surface}" data-motion="off"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kahoot! · ${screen.name}</title><style>${evidenceCss()}\n${SHELL_CSS}</style></head><body><div class="evidence-shell"><header class="evidence-header"><b>PartyBox</b><span class="evidence-code">QUIZ</span></header><main class="evidence-main" aria-label="Game stage">${screen.html}</main><footer class="evidence-footer"><span>Kahoot! · ${screen.surface}</span><span>${screen.width} × ${screen.height}</span></footer></div></body></html>`;
 }
 
 export function writeEvidence(cases: EvidenceCase[]): void {

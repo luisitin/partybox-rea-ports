@@ -79,7 +79,7 @@ describe('1000 seeded matches per player count', () => {
       lengths.sort((a, b) => a - b);
       const median = lengths[Math.floor(lengths.length / 2)]!;
       console.log(
-        `Quiz Rush ${n} players: 1000/1000 done, median round ${median} ms, maximum match ${max} ms`,
+        `Kahoot! ${n} players: 1000/1000 done, median round ${median} ms, maximum match ${max} ms`,
       );
       if (process.env.PB_WRITE_EVIDENCE === '1')
         writeFileSync(

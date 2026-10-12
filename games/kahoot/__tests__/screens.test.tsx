@@ -280,7 +280,7 @@ describe.each([
 
 it('reconstructs every used CSS module instead of pretending the source class names are emitted', () => {
   const css = evidenceCss();
-  expect(css).toContain('games/quiz-rush/client/Controller.module.css');
+  expect(css).toContain('games/kahoot/client/Controller.module.css');
   expect(css).toContain('packages/game-sdk/src/tv/Scoreboard.module.css');
   expect(css).not.toContain(':global(');
   expect(css).not.toContain('global(');

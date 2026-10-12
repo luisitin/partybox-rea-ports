@@ -3,6 +3,6 @@ import { vi } from 'vitest';
 
 vi.mock('../../../packages/game-sdk/src/contract-tests/load', async (importOriginal) => {
   const actual = await importOriginal<object>();
-  return { ...actual, listGameIds: () => ['quiz-rush'] };
+  return { ...actual, listGameIds: () => ['kahoot'] };
 });
 await import('../../../packages/game-sdk/src/contract-tests/contract.test');

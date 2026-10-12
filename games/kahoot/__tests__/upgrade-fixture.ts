@@ -100,7 +100,7 @@ export function makeClassic() {
       seconds: 100,
       settings: { questions: 4, answerSeconds: 5 },
       controls: ['Pick an answer'],
-      howTo: ['Read, then pick.'],
+      howTo: ['Read the question.', 'Pick your answer.'],
       practice: false,
     },
   });

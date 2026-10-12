@@ -10,12 +10,12 @@ it.skipIf(process.env.PB_WRITE_EVIDENCE !== '1')(
   'generates every phase fixture from a played match',
   () => {
     const kit = testKit(game, { players: testPlayers(8), settings: { rounds: 5 }, seed: 19 });
-    mkdirSync('games/quiz-rush/fixtures', { recursive: true });
+    mkdirSync('games/kahoot/fixtures', { recursive: true });
     let s = kit.start();
     const saved = new Set<string>();
     const save = (state: State, name = state.phase.id): void => {
       if (saved.has(name)) return;
-      writeFileSync(`games/quiz-rush/fixtures/${name}.json`, JSON.stringify(state, null, 2) + '\n');
+      writeFileSync(`games/kahoot/fixtures/${name}.json`, JSON.stringify(state, null, 2) + '\n');
       saved.add(name);
     };
     for (let step = 0; step < 60 && s.phase.id !== 'done'; step++) {
