@@ -28,23 +28,36 @@ function segmentDistance(p: Point, a: Point, b: Point): number {
   return Math.hypot(p.x - a.x - u * dx, p.y - a.y - u * dy);
 }
 
-/** Shortest reachable route, instead of driving at a rival through maze walls. */
-export function route(world: World, from: Point, goal: Point): number[] {
+export interface RouteTree {
+  start: number;
+  previous: ReadonlyMap<number, number>;
+}
+
+/** Every target shares one first-seen BFS tree. Parent ties match an independent BFS exactly. */
+export function routeTree(world: World, from: Point): RouteTree {
   const start = mazeCell(world.maze, from);
-  const target = mazeCell(world.maze, goal);
   const queue = [start];
   const previous = new Map<number, number>([[start, -1]]);
-  for (let i = 0; i < queue.length && !previous.has(target); i++) {
+  for (let i = 0; i < queue.length; i++) {
     for (const n of mazeNeighbors(world.maze, queue[i]!)) {
       if (previous.has(n)) continue;
       previous.set(n, queue[i]!);
       queue.push(n);
     }
   }
-  if (!previous.has(target)) return [];
+  return { start, previous };
+}
+
+export function routeFromTree(tree: RouteTree, target: number): number[] {
+  if (!tree.previous.has(target)) return [];
   const out = [target];
-  while (out[0] !== start) out.unshift(previous.get(out[0]!)!);
+  while (out[0] !== tree.start) out.unshift(tree.previous.get(out[0]!)!);
   return out;
+}
+
+/** Public route helper retains its original shape for callers outside a bot decision. */
+export function route(world: World, from: Point, goal: Point): number[] {
+  return routeFromTree(routeTree(world, from), mazeCell(world.maze, goal));
 }
 
 /** Check the first body along each ricochet. A return to the owner is unsafe, even if it misses now. */
@@ -89,8 +102,9 @@ export function botInput(
   if (!me?.alive || checked - me.controlAt < BOT_BEAT_MS) return null;
   const opponents = world.tanks.filter((tank) => tank.alive && tank.id !== id);
   if (!opponents.length) return null;
+  const tree = routeTree(world, me);
   const routes = opponents
-    .map((tank) => ({ tank, path: route(world, me, tank) }))
+    .map((tank) => ({ tank, path: routeFromTree(tree, mazeCell(world.maze, tank)) }))
     .filter(({ path }) => path.length > 0)
     .sort((a, b) => a.path.length - b.path.length || distance(me, a.tank) - distance(me, b.tank));
   const target = routes[0];
@@ -99,7 +113,7 @@ export function botInput(
   let goal: Point = target.tank;
   if (me.weapon === 'shell' && skill !== 'easy') {
     const pickup = world.pickups
-      .map((p) => ({ p, path: route(world, me, p) }))
+      .map((p) => ({ p, path: routeFromTree(tree, mazeCell(world.maze, p)) }))
       .filter(({ path: p }) => p.length > 0)
       .sort((a, b) => a.path.length - b.path.length)[0];
     if (pickup && pickup.path.length + 1 < path.length) {
