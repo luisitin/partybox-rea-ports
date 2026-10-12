@@ -7,6 +7,7 @@ import type { Input } from '../server/types';
 import { Arena } from './Arena';
 import { ControlSession, emptyHeld, keyEventControl, shortcutModified } from './controls';
 import type { Control } from './controls';
+import { finalRoundText } from './roundContext';
 import { clockText, playerStyle, secondsLeft, standingsRows } from './standings';
 import { STRINGS } from './strings';
 import styles from './Controller.module.css';
@@ -30,21 +31,26 @@ export function Controller({
   if (sessionRef.current === null)
     sessionRef.current = new ControlSession((input) => latest.current.send(input));
   const session = sessionRef.current;
-  const [paint, setPaint] = useState({ key, held: emptyHeld() });
+  const [paint, setPaint] = useState({ key, held: emptyHeld(), jumping: false });
   const held = paint.key === key ? paint.held : emptyHeld();
+  const jumping = paint.key === key && paint.jumping;
   const actions = useRef({
     press: (_control: Control, _source: string, _down: boolean): void => undefined,
     reset: (): void => undefined,
   });
 
-  const repaint = (): void => setPaint({ key: latest.current.key, held: session.held });
+  const repaint = (): void =>
+    setPaint({
+      key: latest.current.key,
+      held: session.held,
+      jumping: session.jumpSources.length > 0,
+    });
   actions.current = {
     press: (control, source, down) => {
       // Read the current view even when a listener was installed in an earlier server snapshot.
       session.context(latest.current.key, latest.current.active);
       if (control === 'jump') {
-        if (down && latest.current.active) {
-          session.jump();
+        if (session.pressJump(source, down)) {
           if (latest.current.grounded) {
             buzz(12);
             latest.current.sound('clack', { quiet: true, gain: 0.3 });
@@ -65,7 +71,7 @@ export function Controller({
 
   useEffect(() => {
     session.context(key, active);
-    setPaint({ key, held: session.held });
+    setPaint({ key, held: session.held, jumping: session.jumpSources.length > 0 });
   }, [session, key, active]);
 
   useEffect(() => {
@@ -201,11 +207,20 @@ export function Controller({
           {title}
         </h2>
         <p className={styles.hint}>{hint}</p>
+        {phase === 'done' ? (
+          <p className={styles.hint}>{finalRoundText(winners, view.roundOutcome, L)}</p>
+        ) : null}
       </header>
       {phase !== 'done' ? (
         <div className={styles.meta}>
           <span>
-            {phase === 'play' ? hazard : phase === 'ready' ? L('Get ready') : L('Next in')}
+            {phase === 'play'
+              ? hazard
+              : phase === 'ready'
+                ? L('Get ready')
+                : view.round >= view.rounds
+                  ? L('Final results in')
+                  : L('Next round in')}
           </span>
           <b role="timer">{clockText(seconds)}</b>
         </div>
@@ -250,7 +265,9 @@ export function Controller({
                     : L('Hold {control}', { control: labels[control] })
                 }
                 aria-pressed={control !== 'jump' ? held[control].length > 0 : undefined}
-                data-held={control !== 'jump' && held[control].length > 0 ? 'true' : undefined}
+                data-held={
+                  (control === 'jump' ? jumping : held[control].length > 0) ? 'true' : undefined
+                }
                 onPointerDown={(event) => {
                   if (!latest.current.active) return;
                   event.preventDefault();
@@ -268,8 +285,10 @@ export function Controller({
                 onClick={(event) => {
                   // Synthetic activation from assistive technology has no pointer or native key event.
                   if (event.detail !== 0) return;
-                  if (control === 'jump') actions.current.press('jump', 'assistive', true);
-                  else
+                  if (control === 'jump') {
+                    actions.current.press('jump', 'assistive', true);
+                    actions.current.press('jump', 'assistive', false);
+                  } else
                     actions.current.press(
                       control,
                       'assistive',
@@ -290,48 +309,61 @@ export function Controller({
           <p className={styles.footer}>{L('Heavy = stronger bumps, slower moves')}</p>
         </>
       ) : (
-        <ul className={styles.rows} aria-label={ranked ? L('Standings') : L('Players')}>
-          {rows.map((row) => (
-            <li
-              key={row.id}
-              style={playerStyle(row.slot) as CSSProperties}
-              data-me={row.me ? 'true' : undefined}
-              data-out={phase === 'play' && !row.alive ? 'true' : undefined}
-            >
-              <span className={styles.rowBadge}>{row.slot + 1}</span>
-              {ranked ? (
-                <span
-                  className={styles.rank}
-                  aria-label={L('Place {n}{tie}', {
-                    n: row.rank,
-                    tie: row.tied ? L(', tied') : '',
-                  })}
-                >
-                  {row.rank}
-                  {row.tied ? '=' : ''}
-                </span>
-              ) : null}
-              <b className={styles.name}>{row.name}</b>
-              {phase === 'play' ? (
-                <span className={styles.rowStatus}>
-                  {row.departed
-                    ? L('Left')
-                    : !row.connected
-                      ? L('Offline')
-                      : !row.alive
-                        ? L('Out')
-                        : row.heavy
-                          ? L('Heavy')
-                          : L('In')}
-                </span>
-              ) : null}
-              {phase === 'score' && row.gained > 0 ? (
-                <span className={styles.gain}>+{row.gained}</span>
-              ) : null}
-              <b className={styles.points}>{row.total}</b>
-            </li>
-          ))}
-        </ul>
+        <>
+          {ranked ? (
+            <div className={styles.columns}>
+              <span>{rows.some((row) => row.tied) ? L('Place · = tied') : L('Place')}</span>
+              <span>{L('Wins')}</span>
+            </div>
+          ) : null}
+          <ul className={styles.rows} aria-label={ranked ? L('Standings') : L('Players')}>
+            {rows.map((row) => (
+              <li
+                key={row.id}
+                style={playerStyle(row.slot) as CSSProperties}
+                data-me={row.me ? 'true' : undefined}
+                data-out={phase === 'play' && !row.alive ? 'true' : undefined}
+              >
+                <span className={styles.rowBadge}>{row.slot + 1}</span>
+                {ranked ? (
+                  <span
+                    className={styles.rank}
+                    aria-label={L('Place {n}{tie}', {
+                      n: row.rank,
+                      tie: row.tied ? L(', tied') : '',
+                    })}
+                  >
+                    {row.rank}
+                    {row.tied ? '=' : ''}
+                  </span>
+                ) : null}
+                <b className={styles.name} title={row.name}>
+                  {row.name}
+                </b>
+                {phase === 'play' ? (
+                  <span className={styles.rowStatus}>
+                    {row.departed
+                      ? L('Left')
+                      : !row.connected
+                        ? L('Offline')
+                        : !row.alive
+                          ? L('Out')
+                          : row.heavy
+                            ? L('Heavy')
+                            : L('In')}
+                  </span>
+                ) : null}
+                {phase === 'score' && row.gained > 0 ? (
+                  <span className={styles.gain}>+{row.gained}</span>
+                ) : null}
+                <b className={styles.points}>
+                  {row.total}
+                  <span className={styles.srOnly}> {L('wins')}</span>
+                </b>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );

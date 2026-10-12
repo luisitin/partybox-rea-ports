@@ -71,6 +71,7 @@ export function sameCommand(a: Input, b: Input): boolean {
 /** The actual controller's hold lifecycle, independent of React and browser timing. */
 export class ControlSession {
   held = emptyHeld();
+  jumpSources: readonly string[] = [];
   private key = '';
   private active = false;
   private last = command(this.held);
@@ -96,8 +97,19 @@ export class ControlSession {
     if (this.active) this.send(command(this.held, true));
   }
 
+  pressJump(source: string, down: boolean): boolean {
+    if (down && !this.active) return false;
+    if (this.jumpSources.includes(source) === down) return false;
+    this.jumpSources = down
+      ? [...this.jumpSources, source]
+      : this.jumpSources.filter((item) => item !== source);
+    if (down) this.jump();
+    return down;
+  }
+
   reset(): void {
     this.held = emptyHeld();
+    this.jumpSources = [];
     const next = command(this.held);
     if (sameCommand(this.last, next)) return;
     this.last = next;

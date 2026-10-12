@@ -124,6 +124,26 @@ describe('hold controls', () => {
     },
   );
 
+  it('jump press feedback lasts until release, with one pulse per press and reset on context changes', () => {
+    const sent: Input[] = [];
+    const session = new ControlSession((input) => sent.push(input));
+    session.context('play:1', true);
+    expect(session.pressJump('pointer:4', true)).toBe(true);
+    expect(session.pressJump('pointer:4', true)).toBe(false);
+    expect(sent).toHaveLength(1);
+    expect(session.jumpSources).toEqual(['pointer:4']);
+    session.pressJump('key:w', true);
+    session.pressJump('pointer:4', false);
+    expect(session.jumpSources).toEqual(['key:w']);
+    session.pressJump('key:w', false);
+    expect(session.jumpSources).toEqual([]);
+    session.pressJump('pointer:4', true);
+    session.context('paused', false);
+    expect(session.jumpSources).toEqual([]);
+    expect(session.pressJump('pointer:4', true)).toBe(false);
+    expect(sent).toHaveLength(3);
+  });
+
   it('a fresh jump preserves the currently held direction and weight', () => {
     const sent: Input[] = [];
     const session = new ControlSession((input) => sent.push(input));

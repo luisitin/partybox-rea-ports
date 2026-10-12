@@ -440,6 +440,16 @@ ight is the :root default above) ────────
       background: var(--pb-surface-2);
       outline: calc(var(--pb-space-1) / 2) solid var(--ball-color);
     }
+    ._screen_c9689e[data-phase='score'] ._rows_c9689e li,
+    ._screen_c9689e[data-phase='done'] ._rows_c9689e li {
+      min-height: calc(var(--pb-space-6) + var(--pb-space-2));
+      font-size: var(--pb-font-body);
+    }
+    ._screen_c9689e[data-phase='score'] ._rowBadge_c9689e,
+    ._screen_c9689e[data-phase='done'] ._rowBadge_c9689e {
+      width: var(--pb-space-6);
+      height: var(--pb-space-6);
+    }
     ._rowBadge_c9689e {
       display: grid;
       place-items: center;
@@ -481,6 +491,24 @@ ight is the :root default above) ────────
       font-size: var(--pb-font-body);
       font-weight: 900;
       font-variant-numeric: tabular-nums;
+    }
+    ._columns_c9689e {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 var(--pb-space-1) 0 calc(var(--pb-space-6) + var(--pb-space-2));
+      font-size: var(--pb-font-caption);
+      font-weight: 800;
+      color: var(--pb-text-muted);
+    }
+    ._srOnly_c9689e {
+      position: absolute;
+      width: calc(var(--pb-space-1) / 4);
+      height: calc(var(--pb-space-1) / 4);
+      padding: 0;
+      margin: calc(var(--pb-space-1) / -4);
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
 
     @media (prefers-reduced-motion: reduce) {

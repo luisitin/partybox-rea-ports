@@ -440,6 +440,16 @@ ight is the :root default above) ────────
       background: var(--pb-surface-2);
       outline: calc(var(--pb-space-1) / 2) solid var(--ball-color);
     }
+    ._screen_c9689e[data-phase='score'] ._rows_c9689e li,
+    ._screen_c9689e[data-phase='done'] ._rows_c9689e li {
+      min-height: calc(var(--pb-space-6) + var(--pb-space-2));
+      font-size: var(--pb-font-body);
+    }
+    ._screen_c9689e[data-phase='score'] ._rowBadge_c9689e,
+    ._screen_c9689e[data-phase='done'] ._rowBadge_c9689e {
+      width: var(--pb-space-6);
+      height: var(--pb-space-6);
+    }
     ._rowBadge_c9689e {
       display: grid;
       place-items: center;
@@ -481,6 +491,24 @@ ight is the :root default above) ────────
       font-size: var(--pb-font-body);
       font-weight: 900;
       font-variant-numeric: tabular-nums;
+    }
+    ._columns_c9689e {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 var(--pb-space-1) 0 calc(var(--pb-space-6) + var(--pb-space-2));
+      font-size: var(--pb-font-caption);
+      font-weight: 800;
+      color: var(--pb-text-muted);
+    }
+    ._srOnly_c9689e {
+      position: absolute;
+      width: calc(var(--pb-space-1) / 4);
+      height: calc(var(--pb-space-1) / 4);
+      padding: 0;
+      margin: calc(var(--pb-space-1) / -4);
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -977,6 +1005,7 @@ ight is the :root default above) ────────
         <header class="_header_c9689e">
           <h2 class="_title_c9689e" title="Dee wins!">Dee wins!</h2>
           <p class="_hint_c9689e">Place 2 · tied · 1 wins</p>
+          <p class="_hint_c9689e">Final round: ball 7 · Gus wins +1</p>
         </header>
         <div class="_arena_c9689e">
           <svg
@@ -1056,46 +1085,55 @@ ight is the :root default above) ────────
             </text>
           </svg>
         </div>
+        <div class="_columns_c9689e"><span>Place · = tied</span><span>Wins</span></div>
         <ul class="_rows_c9689e" aria-label="Standings">
           <li style="--ball-color: var(--pb-player-4)">
             <span class="_rowBadge_c9689e">4</span
-            ><span class="_rank_c9689e" aria-label="Place 1">1</span><b class="_name_c9689e">Dee</b
-            ><b class="_points_c9689e">2</b>
+            ><span class="_rank_c9689e" aria-label="Place 1">1</span
+            ><b class="_name_c9689e" title="Dee">Dee</b
+            ><b class="_points_c9689e">2<span class="_srOnly_c9689e"> wins</span></b>
           </li>
           <li style="--ball-color: var(--pb-player-2)">
             <span class="_rowBadge_c9689e">2</span
             ><span class="_rank_c9689e" aria-label="Place 2, tied">2=</span
-            ><b class="_name_c9689e">Ben</b><b class="_points_c9689e">1</b>
+            ><b class="_name_c9689e" title="Ben">Ben</b
+            ><b class="_points_c9689e">1<span class="_srOnly_c9689e"> wins</span></b>
           </li>
           <li style="--ball-color: var(--pb-player-6)">
             <span class="_rowBadge_c9689e">6</span
             ><span class="_rank_c9689e" aria-label="Place 2, tied">2=</span
-            ><b class="_name_c9689e">Fay</b><b class="_points_c9689e">1</b>
+            ><b class="_name_c9689e" title="Fay">Fay</b
+            ><b class="_points_c9689e">1<span class="_srOnly_c9689e"> wins</span></b>
           </li>
           <li style="--ball-color: var(--pb-player-7)" data-me="true">
             <span class="_rowBadge_c9689e">7</span
             ><span class="_rank_c9689e" aria-label="Place 2, tied">2=</span
-            ><b class="_name_c9689e">Gus</b><b class="_points_c9689e">1</b>
+            ><b class="_name_c9689e" title="Gus">Gus</b
+            ><b class="_points_c9689e">1<span class="_srOnly_c9689e"> wins</span></b>
           </li>
           <li style="--ball-color: var(--pb-player-1)">
             <span class="_rowBadge_c9689e">1</span
             ><span class="_rank_c9689e" aria-label="Place 5, tied">5=</span
-            ><b class="_name_c9689e">Ana</b><b class="_points_c9689e">0</b>
+            ><b class="_name_c9689e" title="Ana">Ana</b
+            ><b class="_points_c9689e">0<span class="_srOnly_c9689e"> wins</span></b>
           </li>
           <li style="--ball-color: var(--pb-player-3)">
             <span class="_rowBadge_c9689e">3</span
             ><span class="_rank_c9689e" aria-label="Place 5, tied">5=</span
-            ><b class="_name_c9689e">Cy</b><b class="_points_c9689e">0</b>
+            ><b class="_name_c9689e" title="Cy">Cy</b
+            ><b class="_points_c9689e">0<span class="_srOnly_c9689e"> wins</span></b>
           </li>
           <li style="--ball-color: var(--pb-player-5)">
             <span class="_rowBadge_c9689e">5</span
             ><span class="_rank_c9689e" aria-label="Place 5, tied">5=</span
-            ><b class="_name_c9689e">Eli</b><b class="_points_c9689e">0</b>
+            ><b class="_name_c9689e" title="Eli">Eli</b
+            ><b class="_points_c9689e">0<span class="_srOnly_c9689e"> wins</span></b>
           </li>
           <li style="--ball-color: var(--pb-player-8)">
             <span class="_rowBadge_c9689e">8</span
             ><span class="_rank_c9689e" aria-label="Place 5, tied">5=</span
-            ><b class="_name_c9689e">Hal</b><b class="_points_c9689e">0</b>
+            ><b class="_name_c9689e" title="Hal">Hal</b
+            ><b class="_points_c9689e">0<span class="_srOnly_c9689e"> wins</span></b>
           </li>
         </ul>
       </div>

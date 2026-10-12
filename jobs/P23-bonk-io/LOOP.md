@@ -1,3 +1,5 @@
 # KEEP GOING
 
-No convergence claimed. Post-green eight-stranger audits begin after the complete implementation and scoped CI pass. Each round lists five candidates, changes the worst justified issue, measures the gain and is pushed. Any player-visible improvement resets the consecutive zero-gain count.
+Each round lists five candidates, changes the worst justified issue, measures the gain and is pushed. Any player-visible improvement resets the consecutive zero-gain count. These are source, captured-screen and eight-stranger mental-play audits; original live play was unavailable as recorded in ASSUMPTIONS.md.
+
+- R1: The initial visual audit began while baseline CI ran; these fixes were completed after baseline CI 38199152567 passed. Five weaknesses: final score phone said “Next in” before final results; last-round survivor conflicted with the match winner; small ranked names; unlabeled rank/win totals; Jump lacked immediate pressed feedback. Fixed all five: truthful final countdown, explicit final-round arena caption, 18 px names/40 px rows, Place/Wins and tie labels, transient Jump feedback with lifecycle release. Measured gains: text +28.6%, row height +42.9%, five targeted regressions added, 46/46 focused tests, 39/39 fresh screen fits, controls at least 88 px. Player-visible gain positive; zero-gain streak 0. Fresh full CI pending.

@@ -4,6 +4,7 @@ import { Stage, useServerNow, useSound, useT } from '@partybox/game-sdk/ui';
 import type { GameTvProps } from '@partybox/game-sdk/ui';
 import type { BonkTvView } from '../server/index';
 import { Arena } from './Arena';
+import { finalRoundText } from './roundContext';
 import { clockText, playerStyle, secondsLeft, standingsRows } from './standings';
 import { STRINGS } from './strings';
 import styles from './Tv.module.css';
@@ -63,11 +64,13 @@ export function Tv({ view }: GameTvProps<BonkTvView>): JSX.Element {
   }
   const untilShrink = Math.max(0, Math.ceil((view.began + 15_000 - now) / 1000));
   const hazardText =
-    phase !== 'play'
-      ? L('Last standing wins a point')
-      : view.hazard
-        ? L('Platforms shrinking — keep moving!')
-        : L('Platforms shrink in {n}s', { n: untilShrink });
+    phase === 'done'
+      ? finalRoundText(lastWinners, view.roundOutcome, L)
+      : phase !== 'play'
+        ? L('Last standing wins a point')
+        : view.hazard
+          ? L('Platforms shrinking — keep moving!')
+          : L('Platforms shrink in {n}s', { n: untilShrink });
 
   return (
     <Stage className={styles.stage}>

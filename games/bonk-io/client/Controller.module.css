@@ -161,6 +161,16 @@
   background: var(--pb-surface-2);
   outline: calc(var(--pb-space-1) / 2) solid var(--ball-color);
 }
+.screen[data-phase='score'] .rows li,
+.screen[data-phase='done'] .rows li {
+  min-height: calc(var(--pb-space-6) + var(--pb-space-2));
+  font-size: var(--pb-font-body);
+}
+.screen[data-phase='score'] .rowBadge,
+.screen[data-phase='done'] .rowBadge {
+  width: var(--pb-space-6);
+  height: var(--pb-space-6);
+}
 .rowBadge {
   display: grid;
   place-items: center;
@@ -202,6 +212,24 @@
   font-size: var(--pb-font-body);
   font-weight: 900;
   font-variant-numeric: tabular-nums;
+}
+.columns {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 var(--pb-space-1) 0 calc(var(--pb-space-6) + var(--pb-space-2));
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+  color: var(--pb-text-muted);
+}
+.srOnly {
+  position: absolute;
+  width: calc(var(--pb-space-1) / 4);
+  height: calc(var(--pb-space-1) / 4);
+  padding: 0;
+  margin: calc(var(--pb-space-1) / -4);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 @media (prefers-reduced-motion: reduce) {

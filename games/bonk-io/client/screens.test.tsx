@@ -137,6 +137,22 @@ describe('phone stage', () => {
     expect(html).toContain('Place 1 · tied · 2 wins');
     expect(html).toContain('Place 1, tied');
     expect(html.match(/>1=</g)).toHaveLength(2);
+    expect(html).toContain('Place · = tied');
+    expect(html).toContain('Wins');
+  });
+
+  it('final-round score spectators are told results are coming rather than another round', () => {
+    const html = phone({
+      ...cv('score'),
+      round: 5,
+      me: { id: 'spectator', role: 'spectator' },
+      alive: false,
+    });
+    expect(html).toContain('Final results in');
+    expect(html).not.toContain('Next round in');
+    expect(html).not.toContain('Next in');
+    for (const player of players) expect(html).toContain(player.name);
+    expect(html).not.toContain('<button');
   });
 
   it('local play keeps a large identity and four controls without sending players away to a TV', () => {
@@ -149,6 +165,58 @@ describe('phone stage', () => {
 });
 
 describe('TV stage', () => {
+  it('labels the frozen final round when its winner differs from the overall match winner', () => {
+    const finalBalls = balls.map((ball) => ({
+      ...ball,
+      alive: ball.id === 'p7',
+      y: ball.id === 'p7' ? 300 : 600,
+      cause: ball.id === 'p7' ? null : ('fall' as const),
+    }));
+    const common = {
+      phaseId: 'done',
+      round: 5,
+      scores: { p4: 3, p7: 1 },
+      lastPoints: { p7: 1 },
+      lastWinners: ['p7'],
+      roundOutcome: 'last-standing' as const,
+      balls: finalBalls,
+      aliveCount: 1,
+    };
+    const tvView: BonkTvView = { ...base, ...common };
+    const tvHtml = renderToStaticMarkup(<Tv view={{ ...tvView, vip: null }} />);
+    const phoneHtml = phone({
+      ...cv('done'),
+      ...common,
+      me: { id: 'p4', role: 'player' },
+      slot: 3,
+      rank: 1,
+      tied: false,
+    });
+    for (const html of [tvHtml, phoneHtml]) {
+      expect(html).toContain('Player 4 wins!');
+      expect(html).toContain('Final round: ball 7 · Player 7 wins +1');
+      expect(html).toContain('data-seat-number="7"');
+      expect(html).not.toContain('data-seat-number="4"');
+    }
+    expect(phoneHtml).toContain('Place 1 · 3 wins');
+    expect(phoneHtml).toContain('title="Player 4"');
+  });
+
+  it.each([
+    ['draw', [], 'Final round: drawn — no points'],
+    ['timeout', ['p7', 'p2'], 'Final round: balls 2, 7 share +1'],
+  ] as const)(
+    'labels a final %s without inventing a lone round winner',
+    (outcome, winners, label) => {
+      const common = { phaseId: 'done', roundOutcome: outcome, lastWinners: [...winners] };
+      const tvView: BonkTvView = { ...base, balls, ...common };
+      const tvHtml = renderToStaticMarkup(<Tv view={{ ...tvView, vip: null }} />);
+      const phoneHtml = phone({ ...cv('done'), ...common });
+      for (const html of [tvHtml, phoneHtml]) expect(html).toContain(label);
+      expect(phoneHtml).toContain('Place 1 · tied · 2 wins');
+    },
+  );
+
   it.each(['ready', 'play', 'score', 'done'])(
     '%s keeps the arena and every seat inspectable',
     (phaseId) => {

@@ -12,7 +12,7 @@ const run = JSON.parse(
 );
 if (run.status !== 'completed' || run.conclusion !== 'success') throw new Error('CI is not green');
 const raw = execute('gh', ['run', 'view', id, '--log']);
-const log = raw.replace(/\x1b\[[0-9;]*m/g, '');
+const log = raw.replace(/\x1b\[[0-9;]*m/g, '').replace(/\^\[\[[0-9;]*m/g, '');
 const tests = log.match(/Tests\s+(\d+) passed\s*\((\d+)\)/);
 const files = log.match(/Test Files\s+(\d+) passed\s*\((\d+)\)/);
 const duration = log.match(/Duration\s+([\d.]+)s/);
