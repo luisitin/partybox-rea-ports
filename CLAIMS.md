@@ -41,4 +41,6 @@ P21 r20-local 2026-10-11T22:34:58Z job/P21-pong-party
 
 P22 r1-local 2026-10-12T02:00:55Z job/P22-ricochet-rumble
 
+P23 r4-local 2026-10-12T02:27:28Z job/P23-bonk-io
+
 <!-- prettier-ignore-end -->
