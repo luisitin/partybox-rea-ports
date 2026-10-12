@@ -5,7 +5,8 @@ import type { Input, Point, Stroke } from '../server/types';
 import { canvasContentRect, drawingPoint, finishDrawingPoints } from './drawingGeometry';
 import { gestureCount, nextGesture, pendingInkOperation, previewInk } from './ink';
 import type { InkOperation, PendingInk } from './ink';
-import { restoreInkDraft, saveInkDraft } from './inkDraft';
+import { DEFAULT_INK_BRUSH, restoreInkDraft, saveInkDraft } from './inkDraft';
+import type { InkBrush } from './inkDraft';
 import {
   activeInkTail,
   boundInkPoints,
@@ -56,6 +57,7 @@ export function DrawingPad({
   const L = useT(STRINGS);
   const slot = useDraft(draftKey);
   const loadedSlot = useRef<typeof slot | undefined>(undefined);
+  const brush = useRef<InkBrush>({ ...DEFAULT_INK_BRUSH });
   const canvas = useRef<HTMLCanvasElement>(null);
   const [color, setColor] = useState(0);
   const [width, setWidth] = useState<4 | 9 | 18>(9);
@@ -89,7 +91,15 @@ export function DrawingPad({
   });
   const full = localFragments >= 240;
   const save = (): void =>
-    slot.write(saveInkDraft(outgoing.current, activeInkTail(active.current), inkRevision));
+    slot.write(
+      saveInkDraft(outgoing.current, activeInkTail(active.current), inkRevision, brush.current),
+    );
+  const selectBrush = (selection: Partial<InkBrush>): void => {
+    brush.current = { ...brush.current, ...selection };
+    setColor(brush.current.color);
+    setWidth(brush.current.width);
+    save();
+  };
 
   const repaint = (): void => {
     const ctx = canvas.current?.getContext('2d');
@@ -112,6 +122,9 @@ export function DrawingPad({
       outgoing.current = restored.queue;
       pending.current = restored.pending;
       sentRevision.current = restored.nextRevision;
+      brush.current = restored.brush;
+      setColor(brush.current.color);
+      setWidth(brush.current.width);
       previousRevision.current = inkRevision;
       wasPaused.current = disabled;
       drag.id = -1;
@@ -240,9 +253,9 @@ export function DrawingPad({
     active.current = {
       id: event.pointerId,
       points: [drawingPoint(event.clientX, event.clientY, paperBounds())],
-      color,
+      color: brush.current.color,
       gesture: serial.current,
-      width,
+      width: brush.current.width,
       dirty: true,
     };
     save();
@@ -306,7 +319,7 @@ export function DrawingPad({
             aria-label={L(item.name)}
             title={L(item.name)}
             disabled={disabled}
-            onClick={() => setColor(index)}
+            onClick={() => selectBrush({ color: index })}
           >
             <i style={{ background: `var(${item.token})` }} aria-hidden="true" />
             <span className={styles.colorName}>
@@ -330,7 +343,7 @@ export function DrawingPad({
             type="button"
             aria-pressed={width === item.width}
             disabled={disabled}
-            onClick={() => setWidth(item.width)}
+            onClick={() => selectBrush({ width: item.width })}
           >
             {L(item.name)}
             {width === item.width ? ' ✓' : ''}

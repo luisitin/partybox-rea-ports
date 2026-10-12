@@ -7,6 +7,9 @@ import type { InkPacketQueue } from './inkPackets';
 
 export const INK_DRAFT_MAX_CHARS = 64_000;
 export const INK_DRAFT_MAX_OPERATIONS = 256;
+export type InkBrush = Pick<Stroke, 'color' | 'width'>;
+export const DEFAULT_INK_BRUSH: InkBrush = { color: 0, width: 9 };
+const brushSchema = strokeSchema.pick({ color: true, width: true }).strict();
 
 const inkInput = z.discriminatedUnion('type', [
   z.object({ type: z.literal('stroke'), stroke: strokeSchema.strict() }).strict(),
@@ -34,15 +37,18 @@ const snapshot = z
   .object({
     version: z.literal(1),
     inkRevision: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER),
-    operations: z.array(operation).min(1).max(INK_DRAFT_MAX_OPERATIONS),
+    operations: z.array(operation).max(INK_DRAFT_MAX_OPERATIONS),
+    brush: brushSchema.optional(),
   })
-  .strict();
+  .strict()
+  .refine((value) => value.operations.length > 0 || value.brush !== undefined);
 
 /** Save only packets still in the FIFO, plus one dirty tail; sent pending ink never belongs here. */
 export function saveInkDraft(
   queue: InkPacketQueue,
   tail: Stroke | undefined,
   inkRevision: number,
+  brush?: InkBrush,
 ): string {
   if (queue.operations.length + (tail ? 1 : 0) > INK_DRAFT_MAX_OPERATIONS) return '';
   const operations = queue.operations.map(({ input, undoTarget }) => ({
@@ -50,8 +56,8 @@ export function saveInkDraft(
     ...(undoTarget === undefined ? {} : { undoTarget }),
   }));
   if (tail) operations.push({ input: { type: 'stroke', stroke: tail } });
-  if (!operations.length) return '';
-  const valid = snapshot.safeParse({ version: 1, inkRevision, operations });
+  if (!operations.length && brush === undefined) return '';
+  const valid = snapshot.safeParse({ version: 1, inkRevision, operations, brush });
   if (!valid.success) return '';
   const saved = JSON.stringify(valid.data);
   return saved.length <= INK_DRAFT_MAX_CHARS ? saved : '';
@@ -61,6 +67,7 @@ export interface RestoredInkDraft {
   queue: InkPacketQueue;
   pending: PendingInk[];
   nextRevision: number;
+  brush: InkBrush;
 }
 
 /** The scoped slot/key selects this artist turn; the first send waits a full local mount interval. */
@@ -75,6 +82,7 @@ export function restoreInkDraft(
     queue: { operations: [], sentAt: mountedAt },
     pending: [],
     nextRevision: inkRevision,
+    brush: { ...DEFAULT_INK_BRUSH },
   };
   if (!saved || saved.length > INK_DRAFT_MAX_CHARS) return empty;
   try {
@@ -89,6 +97,7 @@ export function restoreInkDraft(
       queue: { operations: pending, sentAt: mountedAt },
       pending,
       nextRevision: inkRevision + pending.length,
+      brush: parsed.data.brush ?? { ...DEFAULT_INK_BRUSH },
     };
   } catch {
     return empty;

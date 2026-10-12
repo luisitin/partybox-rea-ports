@@ -99,17 +99,15 @@ export function Controller({
       : {
           maxHeight: `calc(${visibleHeight}px - var(--pb-space-8) - var(--pb-space-6) - var(--pb-space-1))`,
         };
-  const celebrated = useRef('');
+  const celebrated = useRef(view.solved ? `${view.turn}:${view.me.id}` : '');
   useEffect(() => {
     const key = `${view.turn}:${view.me.id}`;
-    if (
-      !player ||
-      view.isDrawer ||
-      !view.solved ||
-      view.myPoints <= 0 ||
-      celebrated.current === key
-    )
+    // A restored solved screen is already celebrated; a later unsolved turn can earn a new cue.
+    if (!view.solved) {
+      celebrated.current = '';
       return;
+    }
+    if (!player || view.isDrawer || view.myPoints <= 0 || celebrated.current === key) return;
     celebrated.current = key;
     play('correct');
     buzz(40);

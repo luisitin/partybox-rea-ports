@@ -85,6 +85,9 @@ A correct guess earns `300 + floor(700 × remaining / duration)`, clamped to 300
   Artist refresh also restores a bounded never-sent ink queue and dirty tail;
   packets leave the saved snapshot before transport send. Sent pending ink
   never replays, and a new role/phase/turn clears the artist slot.
+  Color and thickness selections also survive that refresh without queued ink.
+  A restored solved phone shows its points without repeating the success cue;
+  a new correct guess can still celebrate.
 - Words avoid repeats while the selected deck has enough unused choices.
 
 ## Settings

@@ -7,25 +7,22 @@ The public game and injected Broken Pencil live-mode upgrade are complete.
 UPGRADE.md records core installation boundaries; no private deployment is claimed.
 Telephone remains the injected default under the existing card.
 
-R30 is the latest gain: strictly known-unsent artist queue/tails now survive
-same-turn refresh via the SDK draft scope. Saved packets are removed before send;
-restore rebases and gates80ms, while role/phase/key changes clear stale work.
-32focused ink checks and local typecheck pass.51native checks pass, including
-exact-once recovered dots/tail, complete Undo and zero replay after another
-remount. Initial navigation timeout is recorded; successful retry closes the
-only browser in finally. No active harness process remains.68media files are
-hashed,2,157,072bytes; rendered markup/CSS and33SSR captures remain current.
+R32 preserves brush-only Gray/Thick selections; R33 prevents a restored solved
+phone from replaying success while a new match still celebrates.36focused ink
+checks and final local typecheck pass.56native checks pass, exit0: cue total1
+survives solved remount, a fresh match advances it to2 once, and all ink/draft/
+pause/Undo/fit/audio checks remain green. Known-unsent recovery sends each dot
+and tail once, with0replay; brush next-stroke color5/width18 and0recovery taps.
+Single browser closes in finally; no concurrent browsers were launched.
 
-R25 protects paused ink/Undo targets and guess retry; R26 retains private guess
-drafts/receipts; R28 enlarges compact drawing3.42x with full labels/46px controls.
-Previous source0dec027 passed CI38201146096 (318checks/31files, all7,000matches
-and SDK/properties). R29 docs CI38201397620 is green. Server sources still match
-the fresh20/20R23mutation campaign; no mutation rerun is needed for these client fixes.
+R25/R26/R28/R30 gains remain intact. Prior full CI38202484673 passed327checks/
+32files and7,000matches/contracts/properties. Server sources still match the
+fresh20/20R23mutation campaign. Rendering markup/CSS and33SSR captures are
+unchanged;68media files total2,157,072bytes and are rehashed after final reports.
 
-Latest source2b12e79 passes CI38202484673:327checks/32files in24.55s, full workflow54s.
-Final format/diff checks pass. R31 is the first fresh no-gain review; streak1/3.
-Two independent reviews are pending. Rank/log five residuals each and
-push/refresh per round. Refresh PR body from this job README,
-ready only on latest green CI, then mark P04 DONE before the next eligible job.
+Push the R32/R33 milestone and refresh CLAIMS, then wait for current complete CI.
+Three fresh no-gain rounds are required (streak0/3). Rank/log five residuals per
+round, push/refresh each. Refresh PR body from this job README and ready only on
+latest green CI, then mark P04 DONE before taking the next lowest eligible job.
 
 Original interactive play was unavailable through CUA; see RESEARCH.md.

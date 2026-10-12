@@ -27,6 +27,41 @@ export async function inkDraftChecks({ rpc, socket, evaluate, settle, button, ch
     evaluate(
       `document.querySelector('canvas').getContext('2d').getImageData(${point[0]},${point[1]},1,1).data[3]>0`,
     );
+  const selection = () =>
+    evaluate(`({
+    color:document.querySelector('[aria-label="Ink color"] [aria-pressed="true"]').textContent.trim(),
+    width:document.querySelector('[aria-label="Line thickness"] [aria-pressed="true"]').textContent.trim()
+  })`);
+  await button('Gray');
+  await button('Thick');
+  await remount();
+  const toolsRestored = await selection();
+  check(
+    toolsRestored.color === 'Gray ✓' && toolsRestored.width === 'Thick ✓',
+    `An empty artist FIFO must still restore selected tools: ${JSON.stringify(toolsRestored)}`,
+  );
+  await batch(dot([500, 300]));
+  await settle();
+  const styled = await info();
+  const stylePacket = styled.sent.at(-1);
+  check(
+    stylePacket.type === 'stroke' &&
+      stylePacket.stroke.color === 5 &&
+      stylePacket.stroke.width === 18,
+    `The next native stroke must use restored Gray/Thick: ${JSON.stringify(stylePacket)}`,
+  );
+  await remount();
+  const toolsAfterSend = await selection();
+  check(
+    (await info()).sent.length === styled.sent.length &&
+      toolsAfterSend.color === 'Gray ✓' &&
+      toolsAfterSend.width === 'Thick ✓',
+    'Sent ink must not replay and selected tools must survive after the FIFO empties',
+  );
+  await button('Ink');
+  await button('Medium');
+  await button('Clear');
+  await button('Tap again to clear');
   const first = [250, 180],
     second = [750, 420];
   const before = (await info()).sent.length;
@@ -93,6 +128,12 @@ export async function inkDraftChecks({ rpc, socket, evaluate, settle, button, ch
       'One Undo must remove a recovered dirty-tail gesture',
     );
     return {
+      tools: {
+        toolsRestored,
+        toolsAfterSend,
+        nextColor: stylePacket.stroke.color,
+        nextWidth: stylePacket.stroke.width,
+      },
       dots: {
         sentPackets: 2,
         points: delivered.strokes.map((s) => s.points[0]),

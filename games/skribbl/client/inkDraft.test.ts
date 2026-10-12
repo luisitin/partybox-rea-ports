@@ -5,6 +5,7 @@ import type { PendingInk } from './ink';
 import {
   INK_DRAFT_MAX_CHARS,
   INK_DRAFT_MAX_OPERATIONS,
+  DEFAULT_INK_BRUSH,
   restoreInkDraft,
   saveInkDraft,
 } from './inkDraft';
@@ -18,6 +19,64 @@ const line = (gesture: number): Stroke => ({
     [gesture * 10, 20],
     [gesture * 10 + 1, 30],
   ],
+});
+
+describe('same-turn selected brush refresh', () => {
+  const grayThick = { color: 5, width: 18 as const };
+  const emptyQueue = { operations: [], sentAt: 1_000 };
+
+  it('retains a brush-only selection without inventing pending or sent ink', () => {
+    const saved = saveInkDraft(emptyQueue, undefined, 10, grayThick);
+    expect(saved).not.toBe('');
+    const restored = restoreInkDraft(saved, [line(1)], 10, 2_000);
+    expect(restored.brush).toEqual(grayThick);
+    expect(restored.pending).toEqual([]);
+    expect(restored.queue.operations).toEqual([]);
+    expect(restored.nextRevision).toBe(10);
+    expect(takeInkPacket(restored.queue, 2_080).operation).toBeUndefined();
+  });
+
+  it('keeps hydrated selections through the immediate save and removal-before-send', () => {
+    const queued = [draw(11, 2)];
+    const saved = saveInkDraft({ ...emptyQueue, operations: queued }, undefined, 10, grayThick);
+    const restored = restoreInkDraft(saved, [line(1)], 10, 2_000);
+    const reSaved = saveInkDraft(restored.queue, undefined, 10, restored.brush);
+    expect(restoreInkDraft(reSaved, [line(1)], 10, 2_000).brush).toEqual(grayThick);
+    const packet = takeInkPacket(restored.queue, 2_080);
+    const beforeSend = saveInkDraft(packet.queue, undefined, 10, restored.brush);
+    const nextMount = restoreInkDraft(beforeSend, [line(1), line(2)], 11, 3_000);
+    expect(nextMount.brush).toEqual(grayThick);
+    expect(nextMount.pending).toEqual([]);
+    // Existing queued ink retains its own style; the restored selection governs only new ink.
+    expect(packet.operation?.input).toEqual(queued[0]!.input);
+  });
+
+  it('supports old snapshots and old helper calls with Ink/Medium defaults', () => {
+    expect(saveInkDraft(emptyQueue, undefined, 10)).toBe('');
+    const legacySaved = save([draw(11, 2)]);
+    expect(JSON.parse(legacySaved)).not.toHaveProperty('brush');
+    expect(restoreInkDraft(legacySaved, [line(1)], 10, 2_000).brush).toEqual(DEFAULT_INK_BRUSH);
+    expect(restoreInkDraft('', [], 0, 2_000).brush).toEqual(DEFAULT_INK_BRUSH);
+  });
+
+  it('rejects invalid brush fields and discards brush-only snapshots after a backward reset', () => {
+    const valid = JSON.parse(saveInkDraft(emptyQueue, undefined, 10, grayThick));
+    for (const brush of [
+      { color: -1, width: 9 },
+      { color: 6, width: 9 },
+      { color: 1.5, width: 9 },
+      { color: 5, width: 1 },
+      { color: 5 },
+      { color: 5, width: 18, extra: true },
+      null,
+    ]) {
+      const restored = restoreInkDraft(JSON.stringify({ ...valid, brush }), [], 10, 2_000);
+      expect(restored.brush).toEqual(DEFAULT_INK_BRUSH);
+      expect(restored.pending).toEqual([]);
+    }
+    expect(restoreInkDraft(JSON.stringify(valid), [], 9, 2_000).brush).toEqual(DEFAULT_INK_BRUSH);
+    expect(restoreInkDraft(JSON.stringify(valid), [], 11, 2_000).brush).toEqual(grayThick);
+  });
 });
 const draw = (revision: number, gesture: number): PendingInk => ({
   revision,

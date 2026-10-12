@@ -35,6 +35,7 @@ let id = state.drawer;
 let held = false;
 let tv = false;
 let phoneMount = 0;
+let gameRun = 1;
 let clocksHeld = false;
 let afterStroke: 'pause' | 'holdClock' | undefined;
 let deferGuessToPause = false;
@@ -60,7 +61,7 @@ function publish() {
     <ServerClockProvider offsetMs={state.clock - Date.now()}>
       <PhoneOnlyProvider value={true}>
         <SoundProvider play={play}>
-          <DraftScopeProvider value={`p04-native:${id}:${state.turn}:${state.phase.id}`}>
+          <DraftScopeProvider value={`p04-native:${gameRun}:${id}:${state.turn}:${state.phase.id}`}>
             {tv ? (
               <Tv view={{ ...game.tvView(state), vip: null }} />
             ) : (
@@ -143,6 +144,19 @@ function send(input: Input) {
   },
   remountPhone() {
     phoneMount++;
+    publish();
+  },
+  restart() {
+    now += 1000;
+    state = game.init({ players, settings: state.settings, seed: 44, now });
+    state = game.reduce(state, {
+      type: 'input',
+      playerId: state.drawer,
+      input: { type: 'choose', index: 0 },
+      now: ++now,
+    });
+    gameRun++;
+    tv = false;
     publish();
   },
   guesser() {

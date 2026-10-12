@@ -1,3 +1,4 @@
+import { NATIVE_CHECKS } from './native-checks.mjs';
 import { canvasProjection } from './pointer-check.mjs';
 import { drawGesture, pausedGuessChecks, pausedInkChecks } from './pause-check.mjs';
 import { createCDP } from './cdp.mjs';
@@ -268,6 +269,22 @@ try {
   );
   const solved = await fit();
   check(solved.overflow.length === 0, 'Keyboard-height solved layout must fit');
+  const solvedPhoneCues = await evaluate('p04.cues().length');
+  await evaluate('p04.remountPhone()');
+  await settle();
+  check(
+    (await evaluate('p04.cues().length')) === solvedPhoneCues,
+    `Solved phone refresh must not replay earned-point cues (before=${solvedPhoneCues}, after=${await evaluate('p04.cues().length')})`,
+  );
+  await evaluate('p04.restart()');
+  await settle();
+  await evaluate('p04.solve()');
+  await settle();
+  const nextMatchPhoneCues = await evaluate('p04.cues().length');
+  check(
+    nextMatchPhoneCues === solvedPhoneCues + 1,
+    'A new correct guess in the next match must still celebrate once',
+  );
   await evaluate('p04.tv()');
   await settle();
   const initialCues = await evaluate('p04.cues().length');
@@ -298,65 +315,15 @@ try {
   await settle();
   check((await evaluate('p04.cues().length')) === pausedCues, 'Paused views must remain quiet');
   const report = {
-    checks: [
-      'normal artist 5:3 bitmap',
-      'compact artist 5:3 bitmap',
-      'compact six-color palette full labels and touch targets',
-      'normal pointer border projection',
-      'compact pointer border projection',
-      'normal release-only endpoint',
-      'compact release-only endpoint',
-      'pointer chunk merge',
-      'one Undo per gesture',
-      'accidental Clear preserves ink',
-      'second Clear confirms deletion',
-      'delayed Clear/Undo acknowledgements',
-      'real canvas paint',
-      'known-unsent ink preview survives pause',
-      'known-unsent dot resumes exactly once',
-      'paused ink preserves FIFO and 80ms spacing',
-      'cancelled Undo preserves older dot preview',
-      'cancelled Undo never sends against older dot',
-      'active dirty tail preview survives pause',
-      'resumed active tail preserves endpoints',
-      'one Undo for resumed gesture',
-      'unmounted drawing queue never replays',
-      'never-sent dots survive artist remount',
-      'restored dots deliver once in FIFO order',
-      'sent ink never replays after remount',
-      'active dirty tail survives artist remount',
-      'restored dirty tail keeps endpoints once',
-      'one Undo for a restored tail gesture',
-      'pause restores guess without a receipt',
-      'paused guess stops awaiting feedback',
-      'paused guess fits keyboard viewport',
-      'paused draft survives phone remount',
-      'resume never automatically resends a guess',
-      'manual retry after pause accepted and cleared',
-      'unsent guess survives phone remount',
-      'draft restore never submits automatically',
-      'accepted guess stays cleared after remount',
-      'hydrated receipt preserves newer typing',
-      'remount never duplicates in-flight submission',
-      'accepted guess clears draft',
-      'refused guess retained',
-      'same-text retry receipt',
-      'new draft survives old refusal',
-      'phone-only guess fit',
-      'Safari visual-viewport-only keyboard fit',
-      'keyboard-height guess fit',
-      'immediate point receipt',
-      'keyboard-height solved fit',
-      'public solve sound once',
-      'five final-second ticks',
-      'paused sound silence',
-    ],
+    checks: NATIVE_CHECKS,
     firstGestureChunks: gesture.revision - gestureBaseRevision,
     finalRevision: restored.revision,
     normal,
     safariKeyboard,
     keyboard,
     solved,
+    solvedPhoneCues,
+    nextMatchPhoneCues,
     normalArtist,
     compactArtist,
     pausedInk,

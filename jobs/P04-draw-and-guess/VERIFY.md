@@ -33,6 +33,13 @@ R30 artist refresh:
 - The successful browser reaches finally and has no active process. Rendered markup/CSS is unchanged from R28, so33SSR captures remain current; native pause PNGs are regenerated. Scoped report formatting and `node jobs/P04-draw-and-guess/tools/hash-media.mjs` update all68hashes,2,157,072bytes. Server sources/mutation evidence remain unchanged.
 - Final `pnpm.cmd format` and `git diff --check`:pass, exit0. CI38202484673 passes54s for2b12e79: install/typecheck/format and complete scoped suite327checks/32files in24.55s, with all7,000simulations, SDK contracts and seeded properties. R31 is a read-only gameplay review.
 
+R32/R33 tool and personal-cue refresh:
+
+- `pnpm.cmd vitest run games/skribbl/client/inkDraft.test.ts games/skribbl/client/inkPackets.test.ts games/skribbl/client/inkPause.test.ts games/skribbl/client/inkUndoTarget.test.ts --maxWorkers=1 --pool=threads`:36checks pass, exit0,3.63s; four new cases cover validated brush-only snapshots, safe hydrate/send removal, legacy defaults and malformed/backward metadata. `pnpm.cmd typecheck`:pass, exit0 before the later cue change.
+- `node jobs/P04-draw-and-guess/tools/playcheck.mjs`:54checks pass, exit0. Gray/Thick survive an empty-FIFO remount; the next native stroke uses color5/width18; tools remain selected after send with0replayed packets. All existing ink/draft/pause/fit/audio checks pass.
+- The added solved-phone cue assertion then fails as intended on the prior source: before1cue, after2cues, exit1 through finally. Controller seeds its marker from restored solved state and clears it on unsolved state. First verification attempt times out during Page.navigate before game checks, closes its profile and exits1. Retry passes55native checks, exit0; solvedPhoneCues=1 and remount adds0. All prior fields remain green, including191.1ms paused dot spacing. A further next-match success assertion is in progress; no final result is claimed yet.
+- Final `node jobs/P04-draw-and-guess/tools/playcheck.mjs`:56checks pass, exit0. A fresh SDK match scope reuses the same Controller instance; a new correct answer advances private cue total1→2 exactly once. Restored solved screen remains at1. All earlier probes pass:24chunks need one Undo, both endpoint errors0px, paused spacing178ms, unchanged compact/full-label geometry, exact-once ink/brush/draft recovery, zero automatic guesses and zero viewport overflow. Browser reaches finally and closes. Final local `pnpm.cmd typecheck`:pass, exit0. Markup/CSS remain unchanged, so existing SSR/native images remain current; format/hash checks follow the final report.
+
 Windows11, Node24.19.0, pnpm12.4.2. `pnpm.cmd` is the Windows launcher for the
 documented pnpm commands; PowerShell blocks pnpm.ps1. Only this game was tested.
 

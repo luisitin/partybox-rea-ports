@@ -23,6 +23,9 @@
     "one Undo for resumed gesture",
     "unmounted drawing queue never replays",
     "never-sent dots survive artist remount",
+    "brush-only draft restores Gray and Thick",
+    "next stroke uses restored color and width",
+    "tools survive empty FIFO without ink replay",
     "restored dots deliver once in FIFO order",
     "sent ink never replays after remount",
     "active dirty tail survives artist remount",
@@ -48,12 +51,14 @@
     "keyboard-height guess fit",
     "immediate point receipt",
     "keyboard-height solved fit",
+    "solved phone refresh does not replay success",
+    "next match correct guess celebrates once",
     "public solve sound once",
     "five final-second ticks",
     "paused sound silence"
   ],
-  "firstGestureChunks": 18,
-  "finalRevision": 61,
+  "firstGestureChunks": 24,
+  "finalRevision": 76,
   "normal": {
     "height": 844,
     "layoutHeight": 844,
@@ -78,6 +83,8 @@
     "compact": "true",
     "overflow": []
   },
+  "solvedPhoneCues": 1,
+  "nextMatchPhoneCues": 2,
   "normalArtist": {
     "left": 16,
     "top": 190.1874977558046,
@@ -110,7 +117,7 @@
       "pausedDotPreview": true,
       "sentBeforeResume": 1,
       "sentAfterResume": 2,
-      "dotSpacingMs": 189.10000002384186,
+      "dotSpacingMs": 178,
       "gestures": [6, 7]
     },
     "activeTail": {
@@ -133,6 +140,18 @@
     }
   },
   "refreshedInk": {
+    "tools": {
+      "toolsRestored": {
+        "color": "Gray ✓",
+        "width": "Thick ✓"
+      },
+      "toolsAfterSend": {
+        "color": "Gray ✓",
+        "width": "Thick ✓"
+      },
+      "nextColor": 5,
+      "nextWidth": 18
+    },
     "dots": {
       "sentPackets": 2,
       "points": [
