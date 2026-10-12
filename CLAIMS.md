@@ -12,7 +12,7 @@ P06 r2-local 2026-10-12T07:03:29Z job/P06-snake-royale
 
 P07 r4-local 2026-10-12T02:27:12Z job/P07-paper-territory DONE
 
-P08 r7-local 2026-10-11T22:25:22Z job/P08-hole-swallow
+P08 r3-local 2026-10-12T07:15:38Z job/P08-hole-swallow
 
 P09 r8-local 2026-10-11T22:34:47Z job/P09-2048-race
 
