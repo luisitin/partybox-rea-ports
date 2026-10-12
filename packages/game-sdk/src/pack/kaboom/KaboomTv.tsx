@@ -70,6 +70,7 @@ export function KaboomTv<W>({ view, skin, Scene }: KaboomTvProps<W>): JSX.Elemen
           cuts={view.cuts}
           grade={view.grade}
           unit={skin.unit}
+          unitOne={skin.unitOne}
           big
           caption={skin.scoreCaption === true}
         />
@@ -77,7 +78,7 @@ export function KaboomTv<W>({ view, skin, Scene }: KaboomTvProps<W>): JSX.Elemen
       <ul className={styles.tally} aria-label={L('Points')}>
         {rows.map((r) => (
           <li key={r.id} data-lead={r.pts === best && best > 0} data-away={!r.connected}>
-            <Avatar avatarId={r.avatarId} size="2.6rem" />
+            <Avatar avatarId={r.avatarId} size="1.8rem" />
             <b>{r.name}</b>
             <span>{r.pts}</span>
           </li>

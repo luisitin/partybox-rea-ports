@@ -11,6 +11,8 @@ export interface KaboomSkin {
   hue: number;
   /** What the team's score counts, translated ("boxes", "points", "Chomps", "seconds"). */
   unit: string;
+  /** The singular of `unit`, for a team score of 1 ("1 point"); without it `unit` is used. */
+  unitOne?: string;
   /** Print "Team score" with the bar (beside it on the TV, over it on a phone), so its number is named (T-0902). */
   scoreCaption?: boolean;
 }

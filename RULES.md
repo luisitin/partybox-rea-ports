@@ -4,7 +4,7 @@ Be extremely aggressive about quality and verification: research the original de
 
 ## Public repo hygiene
 
-- Public repo. Never commit ripped assets (sprites, sounds, music, fonts, logos) from the original game or any trademarked art. Rules and mechanics are not copyrightable; a real product name is never used as the game name. Art is yours (inline SVG, canvas drawing, CSS) or CC0 with the licence recorded in SOURCES.md.
+- Public repo. Never commit ripped assets (sprites, sounds, music, fonts, logos) from the original game or any trademarked art. Owner 10-11 (personal use): the game uses the ORIGINAL's official name (manifest name and id, e.g. "Kahoot!" / `kahoot`, "Agar.io" / `agar-io`); see the name table at the top of JOBS.md. Art is yours (inline SVG, canvas drawing, CSS) or CC0 with the licence recorded in SOURCES.md.
 - Zero secrets, zero tracking, zero network calls at runtime. No new dependencies unless the job names one.
 
 ## What a job delivers (games/<id>/)
@@ -20,6 +20,14 @@ Exactly the shape of `games/curve-fever/` (read all of it before you start): `ma
 - Bots (`supportsBots`): a real strategy, three strengths; 1,000 seeded bot games at every player count must terminate.
 - Reconnect: a player who refreshes mid-game is back where they were; the game never waits on a disconnected player.
 - Design system: only `--pb-*` tokens from `design/tokens.css` for colour, size and motion; `prefers-reduced-motion` honoured; never colour alone for a state; the TV reveals, the phone never spoils.
+
+## Fidelity (owner 2026-10-12, binding)
+
+A port is NEAR-IDENTICAL to the original game: same look, same camera and zoom (follow the player the way the original does, never a zoomed-out whole-world view unless the original has one), same models/sprites/3D where the original has them, same HUD placement (a name sits where the original puts it, e.g. inside your blob), same animations, timings and feel. The ONLY allowed differences: the PartyBox colour palette, the party plumbing (phones as controllers, the TV as the shared view) and the official name. Those games are already tested and improved: do not make them worse. Every job ships games/<id>/fidelity/ with original and ours screenshots of the same moments, a ranked GAPS.md and a side-by-side.png; reviewers treat a visible difference as a must.
+
+## Party format (owner 2026-10-12, binding)
+
+The multiplayer layer is the ONE thing a port designs itself, so design it, do not bolt it on. Every port's README answers, and the code matches: (a) what happens when a player loses or finishes early: they spectate the live leaders, never a retry that cannot catch the leader; (b) can a trailing player still catch up, and if not, why that is fine; (c) when the round ends: everyone out, or one shared clock ends it for all; (d) who wins and how clearly it is shown. "Here is the game, here is a multiplayer version" fails review. Example: Stack with a BUILD AGAIN button during a shared 45 s race was wrong; one tower each, lose -> spectate, the clock ends it for everyone.
 
 ## Research first (the REA part)
 
