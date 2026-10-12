@@ -12,12 +12,15 @@ import {
   H,
   HALFTIME_MS,
   KICK_COOLDOWN_MS,
+  KICK_RANGE,
   LEASE_MS,
+  PLAYER_R,
   PLAYER_SPEED,
+  POST_R,
   STEP_MS,
   W,
 } from '../server/types';
-import type { State } from '../server/types';
+import type { Body, State } from '../server/types';
 import {
   body,
   control,
@@ -102,6 +105,329 @@ describe('whole-ball goals and contact', () => {
     expect(Math.hypot(result.ball.vx, result.ball.vy)).toBeLessThanOrEqual(BALL_SPEED + 0.00001);
     expect(copy(result)).toEqual(result);
   });
+});
+
+describe('solid posts and goal-crossing priority', () => {
+  it.each([
+    ['left upper', 0, H / 2 - GOAL_HALF, -1, 1],
+    ['left lower', 0, H / 2 + GOAL_HALF, -1, -1],
+    ['right upper', W, H / 2 - GOAL_HALF, 1, 1],
+    ['right lower', W, H / 2 + GOAL_HALF, 1, -1],
+  ] as const)(
+    'held player drive respects the %s post and can slide away',
+    (_name, postX, postY, dx, dy) => {
+      const base = isolated();
+      const id = base.discs[0]!.id;
+      const separation = PLAYER_R + POST_R;
+      const x = postX === 0 ? separation + 0.25 : W - separation - 0.25;
+      let state = control(
+        {
+          ...base,
+          discs: base.discs.map((disc) =>
+            disc.id === id ? { ...disc, x, y: postY, vx: 0, vy: 0 } : disc,
+          ),
+        },
+        id,
+        { dx },
+      );
+      for (let beat = 1; beat <= 10; beat++) {
+        const at = T0 + beat * 100;
+        state = timer(state, at);
+        if (beat % 3 === 0) state = control(state, id, { dx }, at);
+        const disc = state.discs.find((candidate) => candidate.id === id)!;
+        expect(Math.hypot(disc.x - postX, disc.y - postY)).toBeGreaterThanOrEqual(
+          separation - 0.00001,
+        );
+        expect([disc.x, disc.y, disc.vx, disc.vy].every(Number.isFinite)).toBe(true);
+        expect(Math.hypot(disc.vx, disc.vy)).toBeLessThanOrEqual(PLAYER_SPEED + 0.00001);
+      }
+      const pressed = state.discs.find((disc) => disc.id === id)!;
+      state = control(state, id, { dx: 0, dy }, T0 + 1000);
+      for (let beat = 11; beat <= 16; beat++) {
+        const at = T0 + beat * 100;
+        state = timer(state, at);
+        if (beat % 3 === 0) state = control(state, id, { dx: 0, dy }, at);
+        const disc = state.discs.find((candidate) => candidate.id === id)!;
+        expect(Math.hypot(disc.x - postX, disc.y - postY)).toBeGreaterThanOrEqual(
+          separation - 0.00001,
+        );
+      }
+      const escaped = state.discs.find((disc) => disc.id === id)!;
+      expect((escaped.y - pressed.y) * dy).toBeGreaterThan(5);
+      expect(Math.hypot(escaped.vx, escaped.vy)).toBeLessThanOrEqual(PLAYER_SPEED + 0.00001);
+    },
+  );
+
+  it.each([
+    ['right', 1],
+    ['left', 1],
+    ['right', 2],
+    ['left', 2],
+  ] as const)('a %s crossing in half%i precedes an opposite keeper late kick', (end, half) => {
+    const base = isolated();
+    const redAttacksRight = half === 1;
+    const right = end === 'right';
+    const scoringTeam = right === redAttacksRight ? 'red' : 'blue';
+    const scorer = base.discs.find((disc) => disc.team === scoringTeam)!;
+    const keeper = base.discs.find((disc) => disc.team !== scoringTeam)!;
+    const prepared = {
+      ...base,
+      half,
+      redAttacksRight,
+      lastTouch: scorer.id,
+      ball: body(right ? W + 1 : -1, H / 2, right ? 30 : -30),
+      discs: base.discs.map((disc) =>
+        disc.id === keeper.id
+          ? { ...disc, x: right ? W - PLAYER_R : PLAYER_R, y: H / 2, vx: 0, vy: 0 }
+          : disc,
+      ),
+    };
+    const armed = deepFreeze(
+      applyControl(prepared, keeper.id, input(prepared, keeper.id, { kick: true }), T0),
+    );
+    const original = JSON.stringify(armed);
+    const judged = step(armed, T0 + STEP_MS);
+    const keeperAfter = judged.state.discs.find((disc) => disc.id === keeper.id)!;
+    // Incoming motion crosses the whole-ball line before the keeper's armed kick
+    // would be considered; the contact range remains real, so this is not a far-away guard.
+    expect(right ? judged.state.ball.x > W + BALL_R : judged.state.ball.x < -BALL_R).toBe(true);
+    expect(
+      Math.hypot(judged.state.ball.x - keeperAfter.x, judged.state.ball.y - keeperAfter.y),
+    ).toBeLessThanOrEqual(KICK_RANGE);
+    expect(judged.goal).toEqual({ team: scoringTeam, scorerId: scorer.id, ownGoal: false });
+    expect(judged.state.lastTouch).toBe(scorer.id);
+    expect(judged.state.intents[keeper.id]?.lastKickAt).toBeNull();
+    expect(judged.state.intents[keeper.id]?.kickReadyAt).toBe(0);
+    expect(JSON.stringify(armed)).toBe(original);
+  });
+});
+
+describe('swept goal crossings before endpoint walls', () => {
+  const corners = [
+    ['right upper', W, H / 2 - GOAL_HALF, 1, -1],
+    ['right lower', W, H / 2 + GOAL_HALF, 1, 1],
+    ['left upper', 0, H / 2 - GOAL_HALF, -1, -1],
+    ['left lower', 0, H / 2 + GOAL_HALF, -1, 1],
+  ] as const;
+  // Geometric preconditions describe these particular shots; the assertions
+  // below exercise step itself, including walls, posts and scorer attribution.
+  const rawAfter = (before: Body): Body =>
+    body(
+      before.x + before.vx * 0.994 * (STEP_MS / 1000),
+      before.y + before.vy * 0.994 * (STEP_MS / 1000),
+    );
+  const nearestBeforeCross = (
+    before: Body,
+    after: Body,
+    postX: number,
+    postY: number,
+    fraction: number,
+  ): number => {
+    const dx = after.x - before.x;
+    const dy = after.y - before.y;
+    const nearest = Math.max(
+      0,
+      Math.min(
+        fraction,
+        -((before.x - postX) * dx + (before.y - postY) * dy) / (dx * dx + dy * dy),
+      ),
+    );
+    return Math.hypot(before.x + dx * nearest - postX, before.y + dy * nearest - postY);
+  };
+
+  it.each(corners)(
+    'keeps a clean %s early crossing when the endpoint leaves the final mouth',
+    (_name, postX, postY, horizontal, vertical) => {
+      const base = isolated();
+      const team = horizontal === 1 ? 'red' : 'blue';
+      const scorer = base.discs.find((disc) => disc.team === team)!;
+      const prepared = deepFreeze({
+        ...base,
+        lastTouch: scorer.id,
+        ball: body(
+          postX + horizontal * (BALL_R - 0.002),
+          postY - vertical * 3.6,
+          horizontal * 0.6,
+          vertical * 47,
+        ),
+      });
+      const raw = rawAfter(prepared.ball);
+      const line = postX + horizontal * BALL_R;
+      const fraction = (line - prepared.ball.x) / (raw.x - prepared.ball.x);
+      const crossingY = prepared.ball.y + (raw.y - prepared.ball.y) * fraction;
+      expect(fraction).toBeGreaterThan(0);
+      expect(fraction).toBeLessThan(1);
+      expect(Math.abs(crossingY - H / 2)).toBeLessThan(GOAL_HALF - BALL_R);
+      expect(Math.abs(raw.y - H / 2)).toBeGreaterThan(GOAL_HALF - BALL_R);
+      expect(nearestBeforeCross(prepared.ball, raw, postX, postY, fraction)).toBeGreaterThan(
+        BALL_R + POST_R,
+      );
+      expect(crossedGoal(prepared.ball, raw, prepared)).toEqual({
+        team,
+        scorerId: scorer.id,
+        ownGoal: false,
+      });
+      const original = JSON.stringify(prepared);
+      const judged = step(prepared, T0 + STEP_MS);
+      expect(judged.goal).toEqual({ team, scorerId: scorer.id, ownGoal: false });
+      expect(judged.state.lastTouch).toBe(scorer.id);
+      expect(
+        [
+          judged.state.ball.x,
+          judged.state.ball.y,
+          judged.state.ball.vx,
+          judged.state.ball.vy,
+        ].every(Number.isFinite),
+      ).toBe(true);
+      expect(Math.hypot(judged.state.ball.vx, judged.state.ball.vy)).toBeLessThanOrEqual(
+        BALL_SPEED + 0.00001,
+      );
+      expect(JSON.stringify(prepared)).toBe(original);
+    },
+  );
+
+  it.each(corners)(
+    'blocks a %s raw crossing whose segment clips a solid post before the line',
+    (_name, postX, postY, horizontal, vertical) => {
+      const base = isolated();
+      const team = horizontal === 1 ? 'red' : 'blue';
+      const scorer = base.discs.find((disc) => disc.team === team)!;
+      const prepared = deepFreeze({
+        ...base,
+        lastTouch: scorer.id,
+        ball: body(
+          postX - horizontal * 0.36,
+          postY - vertical * 3.49,
+          horizontal * 47.9,
+          vertical * 3.08,
+        ),
+      });
+      const raw = rawAfter(prepared.ball);
+      const line = postX + horizontal * BALL_R;
+      const fraction = (line - prepared.ball.x) / (raw.x - prepared.ball.x);
+      const crossingY = prepared.ball.y + (raw.y - prepared.ball.y) * fraction;
+      // Both endpoints and the raw crossing clear the post. The intervening
+      // path does not: a contact-aware step must not score its unreflected ray.
+      expect(Math.hypot(prepared.ball.x - postX, prepared.ball.y - postY)).toBeGreaterThan(
+        BALL_R + POST_R,
+      );
+      expect(Math.hypot(raw.x - postX, raw.y - postY)).toBeGreaterThan(BALL_R + POST_R);
+      expect(Math.hypot(line - postX, crossingY - postY)).toBeGreaterThan(BALL_R + POST_R);
+      expect(nearestBeforeCross(prepared.ball, raw, postX, postY, fraction)).toBeLessThan(
+        BALL_R + POST_R,
+      );
+      expect(fraction).toBeGreaterThan(0);
+      expect(fraction).toBeLessThan(1);
+      expect(crossedGoal(prepared.ball, raw, prepared)).toEqual({
+        team,
+        scorerId: scorer.id,
+        ownGoal: false,
+      });
+      const original = JSON.stringify(prepared);
+      const judged = step(prepared, T0 + STEP_MS);
+      expect(judged.goal).toBeNull();
+      expect((judged.state.ball.x - postX) * horizontal).toBeLessThanOrEqual(BALL_R);
+      expect(judged.state.lastTouch).toBe(scorer.id);
+      expect(
+        [
+          judged.state.ball.x,
+          judged.state.ball.y,
+          judged.state.ball.vx,
+          judged.state.ball.vy,
+        ].every(Number.isFinite),
+      ).toBe(true);
+      expect(Math.hypot(judged.state.ball.vx, judged.state.ball.vy)).toBeLessThanOrEqual(
+        BALL_SPEED + 0.00001,
+      );
+      expect(JSON.stringify(prepared)).toBe(original);
+    },
+  );
+  it.each(corners)(
+    'allows a legal %s same-step bank goal only after resolving its earlier post contact',
+    (_name, postX, postY, horizontal, vertical) => {
+      const base = isolated();
+      const team = horizontal === 1 ? 'red' : 'blue';
+      const scorer = base.discs.find((disc) => disc.team === team)!;
+      const prepared = deepFreeze({
+        ...base,
+        lastTouch: scorer.id,
+        ball: body(
+          postX + horizontal * 0.8,
+          postY - vertical * 3.42,
+          horizontal * 30.181087,
+          vertical * 15.090543,
+        ),
+      });
+      const raw = rawAfter(prepared.ball);
+      const line = postX + horizontal * BALL_R;
+      const fraction = (line - prepared.ball.x) / (raw.x - prepared.ball.x);
+      const rawCrossingY = prepared.ball.y + (raw.y - prepared.ball.y) * fraction;
+      expect(Math.hypot(prepared.ball.x - postX, prepared.ball.y - postY)).toBeGreaterThan(
+        BALL_R + POST_R,
+      );
+      expect(Math.hypot(raw.x - postX, raw.y - postY)).toBeGreaterThan(BALL_R + POST_R);
+      expect(nearestBeforeCross(prepared.ball, raw, postX, postY, fraction)).toBeLessThan(
+        BALL_R + POST_R,
+      );
+      const original = JSON.stringify(prepared);
+      const judged = step(prepared, T0 + STEP_MS);
+      expect(judged.goal).toEqual({ team, scorerId: scorer.id, ownGoal: false });
+      // The post pushes this outgoing-side strike further into the goal and away
+      // from its corner. An unreflected raw ray or blanket obstruction veto fails.
+      expect(judged.state.ball.vx * horizontal).toBeGreaterThan(
+        prepared.ball.vx * 0.994 * horizontal + 1,
+      );
+      expect((judged.state.ball.vy - prepared.ball.vy * 0.994) * -vertical).toBeGreaterThan(1);
+      expect((judged.state.ball.y - rawCrossingY) * -vertical).toBeGreaterThan(0.2);
+      expect((judged.state.ball.x - postX) * horizontal).toBeCloseTo(BALL_R + 0.000001, 6);
+      expect(
+        Math.hypot(judged.state.ball.x - postX, judged.state.ball.y - postY),
+      ).toBeGreaterThanOrEqual(BALL_R + POST_R - 0.00001);
+      expect(judged.state.lastTouch).toBe(scorer.id);
+      expect(Math.hypot(judged.state.ball.vx, judged.state.ball.vy)).toBeLessThanOrEqual(
+        BALL_SPEED + 0.00001,
+      );
+      expect(JSON.stringify(prepared)).toBe(original);
+    },
+  );
+  it.each(corners)(
+    'does not invent a %s goal from the chord before post-overlap recovery',
+    (_name, postX, postY, horizontal, vertical) => {
+      const base = isolated();
+      const team = horizontal === 1 ? 'red' : 'blue';
+      const scorer = base.discs.find((disc) => disc.team === team)!;
+      // Deliberate overlap exercises total recovery. The position repair passes
+      // the whole-ball line outside the mouth; later flight enters the mouth
+      // while already beyond that line, so there has been no legal crossing.
+      const prepared = deepFreeze({
+        ...base,
+        lastTouch: scorer.id,
+        ball: body(postX + horizontal * 1.9, postY - vertical, -horizontal * 20, -vertical * 40),
+      });
+      expect(Math.hypot(prepared.ball.x - postX, prepared.ball.y - postY)).toBeLessThan(
+        BALL_R + POST_R,
+      );
+      const judged = step(prepared, T0 + STEP_MS);
+      expect((judged.state.ball.x - postX) * horizontal).toBeGreaterThan(BALL_R);
+      expect(Math.abs(judged.state.ball.y - H / 2)).toBeLessThan(GOAL_HALF - BALL_R);
+      // A false straight chord from the pre-flight state would award this goal.
+      expect(crossedGoal(prepared.ball, judged.state.ball, prepared)).toEqual({
+        team,
+        scorerId: scorer.id,
+        ownGoal: false,
+      });
+      expect(judged.goal).toBeNull();
+      expect(judged.state.lastTouch).toBe(scorer.id);
+      expect(
+        [
+          judged.state.ball.x,
+          judged.state.ball.y,
+          judged.state.ball.vx,
+          judged.state.ball.vy,
+        ].every(Number.isFinite),
+      ).toBe(true);
+    },
+  );
 });
 
 describe('intent acceptance, lease and armed kick', () => {

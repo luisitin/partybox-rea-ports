@@ -110,3 +110,18 @@ limit. Round-1 CI also passed on `823d36e`, run
 
 Original live practice and a human eight-stranger network playtest were unavailable.
 Research, simulation, SSR and mounted evidence are not original live play.
+
+Round 3 test-first evidence:
+
+- `pnpm.cmd vitest run games/haxball/__tests__/game.test.ts -t 'solid posts and goal-crossing priority' --maxWorkers=1 --pool=threads`
+  failed all 8 new cases on the unchanged server (34 skipped), 655 ms, start 23:51:00 local /
+  04:51:00 UTC. Four post drives reached separation 5.10425 instead of at least 5.49999; four
+  late keeper kicks overwrote scorer/own-goal credit. The initial fixes then passed all 42 rules.
+- `pnpm.cmd vitest run games/haxball/__tests__/game.test.ts -t 'swept goal crossings before endpoint walls' --maxWorkers=1 --pool=threads`
+  failed all 8 further cases (42 skipped), 885 ms, start 00:11:32 local / 05:11:32 UTC. Four valid
+  early crossings were erased by later endpoint walls; four earlier post grazes falsely scored.
+  These are real `step` regressions, not only direct `crossedGoal` unit calls.
+- Final swept-post rule command (without `-t`) PASS: 58 tests / 1 file, 778 ms, start
+  00:22:15 local / 05:22:15 UTC. Added mirrored legal bank goals and overlap-recovery cases.
+  `pnpm.cmd typecheck` also PASS on this source. Full simulation and refreshed mutations remain
+  pending at this milestone; the older 7,000-match report is not claimed for the new physics.

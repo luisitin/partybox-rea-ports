@@ -73,6 +73,9 @@ share first place; a draw shares first place across both teams. Helpers receive 
   crossings; 100 ms outer beats limit network/CPU work. Delayed events judge through the cap and
   consume elapsed goal resets/halftime at their actual deadlines, without extending the match.
   Physics state and random assignment are deterministic for the same seed/events.
+- Posts are solid for players and the ball. Ball flight resolves the first post contact before
+  a later goal and continues the remaining step after a rebound. A clean whole-ball crossing
+  locks scorer credit before later walls or kicks; valid same-step post rebounds can still score.
 - Temporary disconnect clears held input and velocity, preserves the seat/position/team and
   allows return. Offline/departed discs are excluded from collisions; overlaps settle on return.
 - Permanent leavers retain their team result, return to watching and cannot input again.

@@ -15,5 +15,12 @@ own-goal name remains accessible, with a one-line jersey credit on compact phone
 client/SSR tests, 75 static layouts, 12 mounted retained-credit checks, 67 controls and 64 goal-cue
 checks pass. The 704 px phone mount fits; TV jerseys remain at least 34.613 px.
 
+Round 3 (in progress): reviewed player/post overlap, late keeper credit overwrite, goals erased
+by final-y walls, goals falsely passing a grazed post and odd-helper parity. The first eight new
+regressions failed on the old server; post separation and crossing-before-kick fixes pass all
+42 rules. Eight further real-step crossing/post regressions also fail on that intermediate
+source, proving both lost valid goals and false grazed-post goals. Resolve swept post contacts
+before a later goal, and allow valid rebounds; final full scope and mutation checks remain.
+
 Original live practice and a human eight-stranger network playtest remain unavailable; these
 reviews use the real reducer, public views, mounted components and retained screenshots.
