@@ -36,6 +36,45 @@ const cell = (patch: Partial<Cell> = {}): Cell => ({
 });
 const viewport = { width: 390, height: 500 };
 
+describe('painted contact outline lifecycle', () => {
+  it('refreshes a stationary body when its neighbour moves, rebases its public contour, and cancels on pause', () => {
+    const session = new PoseMotionSession();
+    const start: CameraPose[] = [
+      { id: 1, x: 10, y: 10, radius: 4, outlinePath: 'M4 0 L0 4 Z' },
+      { id: 2, x: 18, y: 10, radius: 4 },
+    ];
+    const next = [start[0]!, { ...start[1]!, x: 16 }];
+    const contours: CameraPose[] = [];
+    let cancelled = 0;
+    const nothing = () => ({ cancel() {} });
+    const surface: PoseSurface = {
+      animatePose: nothing,
+      animateRadius: nothing,
+      animateOutlineRadius: nothing,
+      animateNameFont: nothing,
+      animateOutlinePath: (_id, from) => {
+        contours.push(from);
+        return {
+          cancel: () => {
+            cancelled++;
+          },
+        };
+      },
+    };
+    session.update(surface, 'phone:p1', [], start, false);
+    expect(contours).toHaveLength(0);
+    session.update(surface, 'phone:p1', start, next, false);
+    expect(contours).toHaveLength(2);
+    expect(contours[0]!.outlinePath).toBe('M4 0 L0 4 Z');
+    session.update(surface, 'phone:p1', next, next, false);
+    expect(contours).toHaveLength(2);
+    session.update(surface, 'phone:p1', next, next, true);
+    expect(cancelled).toBe(2);
+    session.update(surface, 'phone:p2', next, start, false);
+    expect(contours).toHaveLength(2);
+  });
+});
+
 describe('classic player camera', () => {
   it('places the arithmetic mean of owned pieces at the viewport centre, regardless of mass or rivals', () => {
     const cells = [

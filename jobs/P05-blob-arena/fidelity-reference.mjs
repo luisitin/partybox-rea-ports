@@ -144,6 +144,7 @@ function installEnvironment() {
           bottom: Math.max(...ys),
         },
         vertexCount: points.length - 1,
+        vertices: points.map(({ x, y }) => ({ x, y })),
       };
     });
     forward('drawImage', ([image, x, y]) => {
@@ -325,7 +326,9 @@ function replayScene(scene) {
               y: body.labelCenter.y / units,
             },
             vertexCount: body.vertexCount,
-            geometrySource: 'forwarded original filled polygon bounds, excluding stroke',
+            vertices: body.vertices.map(({ x, y }) => ({ x: x / units, y: y / units })),
+            geometrySource:
+              'forwarded original filled polygon vertices and bounds, excluding stroke',
           };
         }),
     };

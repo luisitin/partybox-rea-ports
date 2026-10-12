@@ -25,6 +25,7 @@ export interface CameraPose {
   outlineRadius?: number;
   fontSize?: number;
   baseline?: number;
+  outlinePath?: string;
 }
 
 export function ownedCameraPoses(cells: readonly Cell[], owner: string | undefined): CameraPose[] {
@@ -203,6 +204,12 @@ export class CameraMotionSession {
 }
 
 export interface PoseSurface {
+  animateOutlinePath?(
+    id: number,
+    from: CameraPose,
+    to: CameraPose,
+    options: KeyframeAnimationOptions,
+  ): { cancel(): void };
   animatePose(
     id: number,
     from: CameraPose,
@@ -305,6 +312,14 @@ export class PoseMotionSession {
       for (const target of targets) {
         const origin = origins.get(target.id);
         if (!origin) continue;
+        if (surface.animateOutlinePath)
+          this.animations.push(
+            surface.animateOutlinePath(target.id, origin, target, {
+              duration: CAMERA_MOTION_MS,
+              fill: 'both',
+              easing: 'linear',
+            }),
+          );
         if (Math.hypot(origin.x - target.x, origin.y - target.y) > 0.0001)
           this.animations.push(surface.animatePose(target.id, origin, target, options));
         if (Math.abs(origin.radius - target.radius) > 0.0001)

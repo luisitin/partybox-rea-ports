@@ -14,10 +14,20 @@ import {
   cellNameBaseline,
   foodPoints,
   ownedCameraPoses,
+  outlineMotionFrames,
   playerCamera,
 } from './camera';
 import type { CameraSnapshot } from './camera';
 import { playerStyle } from './display';
+import { outlineFrames, outlinePath } from './outline';
+import type { OutlineContact } from './outline';
+import {
+  animateSvgPath,
+  animateSvgTransform,
+  readSvgPath,
+  readSvgTransform,
+  setSvgTransform,
+} from './svgMotion';
 import { STRINGS } from './strings';
 import styles from './Arena.module.css';
 
@@ -90,20 +100,40 @@ export function Arena({
     return () => observer.disconnect();
   }, []);
   const camera = follow ? playerCamera(cells, mine, viewport) : null;
+  const contacts: OutlineContact[] = [
+    ...cells.map((cell) => ({
+      kind: 'cell' as const,
+      id: cell.id,
+      x: cell.x,
+      y: cell.y,
+      radius: radius(cell.mass),
+    })),
+    ...pellets.map((pellet) => ({
+      kind: 'food' as const,
+      id: pellet.id,
+      x: pellet.x,
+      y: pellet.y,
+      radius: 0.6,
+    })),
+  ];
   const readSnapshot = (): CameraSnapshot | null => {
     const element = world.current;
-    if (!element) return null;
+    const svg = arena.current;
+    if (!element || !svg) return null;
     const poses = [...element.querySelectorAll<SVGGElement>('[data-cell-id]')].flatMap((group) => {
-      const body = group.querySelector<SVGCircleElement>('[data-cell-body]');
+      const body = group.querySelector<SVGPathElement>('[data-cell-body]');
+      const envelope = group.querySelector<SVGCircleElement>('[data-cell-outline-radius]');
       const logical = group.querySelector<SVGCircleElement>('[data-cell-logical-radius]');
       const label = group.querySelector<SVGTextElement>('[data-name-inside]');
-      if (!body || !logical) return [];
-      const matrix = new DOMMatrixReadOnly(getComputedStyle(group).transform);
+      if (!body || !logical || !envelope) return [];
+      const transform = readSvgTransform(group, element);
+      if (!transform) return [];
+      const matrix = new DOMMatrixReadOnly(transform);
       const currentRadius = Number.parseFloat(getComputedStyle(logical).getPropertyValue('r'));
-      const outlineRadius = Number.parseFloat(getComputedStyle(body).getPropertyValue('r'));
+      const outlineRadius = Number.parseFloat(getComputedStyle(envelope).getPropertyValue('r'));
       const fontSize = label ? Number.parseFloat(getComputedStyle(label).fontSize) : undefined;
-      const labelTransform = label ? getComputedStyle(label).transform : 'none';
-      const baseline = labelTransform === 'none' ? 0 : new DOMMatrixReadOnly(labelTransform).f;
+      const labelTransform = label ? readSvgTransform(label, group) : null;
+      const baseline = labelTransform ? new DOMMatrixReadOnly(labelTransform).f : 0;
       if (
         ![matrix.e, matrix.f, currentRadius, outlineRadius].every(Number.isFinite) ||
         currentRadius <= 0
@@ -118,12 +148,13 @@ export function Arena({
           outlineRadius,
           fontSize,
           baseline,
+          outlinePath: readSvgPath(body) ?? undefined,
         },
       ];
     });
-    return { camera: cameraFromTransform(getComputedStyle(element).transform, viewport), poses };
+    return { camera: cameraFromTransform(readSvgTransform(element, svg) ?? '', viewport), poses };
   };
-  // React keeps this base style stable. The layout effect owns subsequent transforms,
+  // React keeps this base attribute stable. The layout effect owns subsequent transforms,
   // so receipt sampling reads the visible animation rather than a newly committed target.
   const [initialTransform] = useState(() => (camera ? cameraTransform(camera) : ''));
   useLayoutEffect(() => {
@@ -147,7 +178,8 @@ export function Arena({
   }, [motion, poseMotion]);
   useLayoutEffect(() => {
     const element = world.current;
-    if (!element) return;
+    const svg = arena.current;
+    if (!element || !svg) return;
     const poses = ownedCameraPoses(cells, mine);
     const context = `${follow ? 'follow' : 'overview'}:${mine ?? ''}:${viewport.width}:${viewport.height}`;
     const snapshot = captured.current;
@@ -160,22 +192,22 @@ export function Arena({
       document.documentElement.dataset.motion === 'off';
     motion.update(
       {
-        readCamera: (target) => cameraFromTransform(getComputedStyle(element).transform, target),
+        readCamera: (target) => cameraFromTransform(readSvgTransform(element, svg) ?? '', target),
         readPoses: (targets) =>
           targets.flatMap((pose) => {
             const group = element.querySelector<SVGGElement>(`[data-cell-id="${pose.id}"]`);
             const body = group?.querySelector<SVGCircleElement>('[data-cell-logical-radius]');
             if (!group || !body) return [];
-            const matrix = new DOMMatrixReadOnly(getComputedStyle(group).transform);
+            const transform = readSvgTransform(group, element);
+            if (!transform) return [];
+            const matrix = new DOMMatrixReadOnly(transform);
             const currentRadius = Number.parseFloat(getComputedStyle(body).getPropertyValue('r'));
             if (![matrix.e, matrix.f, currentRadius].every(Number.isFinite) || currentRadius <= 0)
               return [];
             return [{ id: pose.id, x: matrix.e, y: matrix.f, radius: currentRadius }];
           }),
-        setTransform: (transform) => {
-          element.style.transform = transform;
-        },
-        animate: (frames, options) => element.animate(frames, options),
+        setTransform: (transform) => setSvgTransform(element, transform),
+        animate: (frames, options) => animateSvgTransform(element, frames, options),
       },
       context,
       camera,
@@ -187,6 +219,32 @@ export function Arena({
     );
     poseMotion.update(
       {
+        animateOutlinePath: (id, from, to, options) => {
+          const body = element.querySelector<SVGPathElement>(
+            `[data-cell-id="${id}"] [data-cell-body]`,
+          );
+          if (!body) return { cancel() {} };
+          // Dense during the received 120ms pose; the slowly settling tail uses
+          // six extra samples instead of allocating 121 paths for every cell.
+          const tail = new Set([18, 24, 36, 54, 90, 120]);
+          const samples = outlineMotionFrames(from, to).flatMap(({ offset, r }, index) => {
+            if (index > 12 && !tail.has(index)) return [];
+            const t = Math.min(1, Math.floor(offset * 2000) / 120);
+            const progress = t * t * (3 - 2 * t);
+            return [
+              {
+                offset,
+                id,
+                x: from.x + (to.x - from.x) * progress,
+                y: from.y + (to.y - from.y) * progress,
+                radius: Number.parseFloat(r),
+              },
+            ];
+          });
+          const frames = outlineFrames(samples, contacts, checked);
+          if (from.outlinePath) frames[0]!.d = from.outlinePath;
+          return animateSvgPath(body, frames, options);
+        },
         animatePose: (id, from, to, options) => {
           const group = element.querySelector<SVGGElement>(`[data-cell-id="${id}"]`);
           return (
@@ -211,7 +269,7 @@ export function Arena({
         },
         animateOutlineRadius: (id, frames, options) => {
           const circles = element.querySelectorAll<SVGCircleElement>(
-            `[data-cell-id="${id}"] [data-cell-body], [data-cell-id="${id}"] [data-cell-shield]`,
+            `[data-cell-id="${id}"] [data-cell-outline-radius], [data-cell-id="${id}"] [data-cell-shield]`,
           );
           const animations = [...circles].map((circle) => {
             const extra = circle.hasAttribute('data-cell-shield') ? 0.9 : 0;
@@ -291,7 +349,7 @@ export function Arena({
         <g
           ref={world}
           className={styles.world}
-          style={{ transform: initialTransform }}
+          transform={initialTransform || undefined}
           data-world-layer="true"
           data-intentional-clipping={camera ? 'player-camera' : undefined}
         >
@@ -355,10 +413,21 @@ export function Arena({
                     style={{ ['r' as string]: `${cellRadius}px` }}
                   />
                   <circle
-                    className={styles.body}
-                    data-cell-body="true"
+                    className={styles.logicalRadius}
+                    data-cell-outline-radius="true"
+                    aria-hidden="true"
                     r={cellRadius}
                     style={{ ['r' as string]: `${cellRadius}px` }}
+                  />
+                  <path
+                    className={styles.body}
+                    data-cell-body="true"
+                    data-cell-outline="bounded-contact-path"
+                    d={outlinePath(
+                      { id: cell.id, x: cell.x, y: cell.y, radius: cellRadius },
+                      contacts,
+                      checked,
+                    )}
                   />
                   {/* Each name travels with its body, allowing larger foreground cells to occlude both. */}
                   <text

@@ -11,6 +11,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Cdp, devToolsEndpoint, closeProfileProcesses } from './fidelity-cdp.mjs';
 import { originalHtml as buildOriginalHtml, referenceMetadata } from './fidelity-reference.mjs';
 import { files, hashes, dependencySources, sameSources } from './provenance.mjs';
+import { contourDistance, sampleOurs } from './fidelity-geometry.mjs';
 
 const job = fileURLToPath(new URL('.', import.meta.url));
 const root = resolve(job, '../..');
@@ -31,6 +32,7 @@ const source = () => ({
     'jobs/P05-blob-arena/fidelity-reference.mjs',
     'jobs/P05-blob-arena/fidelity-r1.mjs',
     'jobs/P05-blob-arena/fidelity-cdp.mjs',
+    'jobs/P05-blob-arena/fidelity-geometry.mjs',
     'jobs/P05-blob-arena/provenance.mjs',
     'design/tokens.css',
   ]),
@@ -205,9 +207,7 @@ try {
     report.stage = `ours-${scene.id}`;
     console.log(JSON.stringify({ stage: report.stage }));
     await navigate(`http://127.0.0.1:${port}/jobs/P05-blob-arena/fidelity.html?scene=${scene.id}`);
-    const ours = await evaluate(
-      `(()=>{const svg=document.querySelector('[data-camera="personal"]');const r=svg.getBoundingClientRect();const world=svg.querySelector('[data-world-layer]');const m=new DOMMatrix(getComputedStyle(world).transform);const name=svg.querySelector('[data-name-inside]');const ownedBaselines=[...svg.querySelectorAll('[data-mine="true"][data-cell-id]')].map(g=>{const n=g.querySelector('[data-name-inside]');const p=new DOMMatrix(getComputedStyle(g).transform);const a=world.getCTM().inverse().multiply(n.getCTM());return{name:n.textContent,x:p.e,baselineY:a.f+n.y.animVal.getItem(0).value*a.d};});return {center:[(r.width/2-m.e)/m.a,(r.height/2-m.f)/m.d].join(' '),zoom:m.a,targetCenter:svg.dataset.cameraCenter,targetZoom:Number(svg.dataset.cameraZoom),matrix:{a:m.a,e:m.e,f:m.f},viewBox:svg.getAttribute('viewBox'),width:r.width,height:r.height,names:[...svg.querySelectorAll('[data-name-inside]')].map(n=>n.textContent),ownedBaselines,font:name?getComputedStyle(name).fontFamily:null};})()`,
-    );
+    const ours = await evaluate(`(${sampleOurs.toString()})()`);
     const oursPng = await send('Page.captureScreenshot', {
       format: 'png',
       captureBeyondViewport: false,
@@ -232,6 +232,20 @@ try {
       baselines.length === originalMetrics.ownPieces &&
       baselines.length > 0 &&
       baselines.every((baseline) => baseline.errorPx < 0.5);
+    const contours = ours.poses.map((pose) => {
+      const original = originalMetrics.ownedBodies
+        .filter((body) => body.name === pose.name)
+        .sort((a, b) => Math.abs(a.labelCenter.x - pose.x) - Math.abs(b.labelCenter.x - pose.x))[0];
+      if (!original) throw new Error(`Original static contour missing for ${pose.name}`);
+      return {
+        name: pose.name,
+        ...contourDistance(pose.vertices, original.vertices, originalMetrics.zoom),
+      };
+    });
+    const contoursPassed =
+      contours.length === originalMetrics.ownPieces &&
+      contours.length > 0 &&
+      contours.every((contour) => contour.maximumPx < 2);
     report.pairs.push({
       id: scene.id,
       description: scene.description,
@@ -240,10 +254,20 @@ try {
       cameraMatches,
       baselines,
       baselinesPassed,
+      contours,
+      contoursPassed,
       originalPngSha256: digest(Buffer.from(originalPng.data, 'base64')),
       oursPngSha256: digest(Buffer.from(oursPng.data, 'base64')),
     });
-    console.log(JSON.stringify({ stage: 'fidelity', scene: scene.id, cameraMatches }));
+    console.log(
+      JSON.stringify({
+        stage: 'fidelity',
+        scene: scene.id,
+        cameraMatches,
+        contoursPassed,
+        maximumContourPx: Math.max(...contours.map((contour) => contour.maximumPx)),
+      }),
+    );
   }
   // One received movement/growth update, sampled through both actual renderers.
   const motionScene = scenes[0];
@@ -277,13 +301,13 @@ try {
     `http://127.0.0.1:${port}/jobs/P05-blob-arena/fidelity.html?scene=${motionScene.id}`,
   );
   await evaluate(
-    `window.__oursMove(${JSON.stringify(nextCells)});document.getAnimations().forEach(a=>a.pause());true`,
+    `(()=>{const svg=document.querySelector('[data-camera="personal"]');svg.pauseAnimations();window.__oursTimelineBase=svg.getCurrentTime();window.__oursMove(${JSON.stringify(nextCells)});document.getAnimations().forEach(a=>a.pause());return true;})()`,
   );
   report.motion = [];
   for (const [index, reference] of referenceMotion.entries()) {
     const ms = sampleTimes[index];
     const ours = await evaluate(
-      `(()=>{document.getAnimations().forEach(a=>{a.pause();a.currentTime=${ms};});const svg=document.querySelector('[data-camera="personal"]');const world=svg.querySelector('[data-world-layer]');const m=new DOMMatrix(getComputedStyle(world).transform);const box=svg.getBoundingClientRect();const poses=[...svg.querySelectorAll('[data-mine="true"][data-cell-id]')].map(g=>{const b=g.querySelector('[data-cell-body]');const n=g.querySelector('[data-name-inside]');const p=new DOMMatrix(getComputedStyle(g).transform);const a=world.getCTM().inverse().multiply(n.getCTM());return{id:Number(g.dataset.cellId),name:n.textContent,x:p.e,y:p.f,radius:parseFloat(getComputedStyle(b).r),fontSize:parseFloat(getComputedStyle(n).fontSize),baselineY:a.f+n.y.animVal.getItem(0).value*a.d,font:getComputedStyle(n).fontFamily};});return{x:(box.width/2-m.e)/m.a,y:(box.height/2-m.f)/m.d,zoom:m.a,poses,animations:document.getAnimations().length,matrix:{a:m.a,e:m.e,f:m.f}};})()`,
+      `(()=>{const svg=document.querySelector('[data-camera="personal"]');svg.pauseAnimations();svg.setCurrentTime(window.__oursTimelineBase+${ms}/1000);document.getAnimations().forEach(a=>{a.pause();a.currentTime=${ms};});return (${sampleOurs.toString()})();})()`,
     );
     const centerErrorPx = Math.hypot(ours.x - reference.x, ours.y - reference.y) * reference.zoom;
     const zoomError = Math.abs(ours.zoom - reference.zoom);
@@ -306,6 +330,7 @@ try {
       const fontErrorPx =
         Math.abs(pose.fontSize * (10 / 0.55) - originalFontPx) * reference.worldMatrix.a;
       const baselineErrorPx = Math.abs(pose.baselineY - original.nameBaselineY) * reference.zoom;
+      const contour = contourDistance(pose.vertices, original.vertices, reference.zoom);
       return {
         ours: pose,
         original,
@@ -313,7 +338,13 @@ try {
         radiusErrorPx,
         fontErrorPx,
         baselineErrorPx,
-        matched: centerErrorPx < 1 && radiusErrorPx < 2 && fontErrorPx < 1 && baselineErrorPx < 0.5,
+        contour,
+        matched:
+          centerErrorPx < 1 &&
+          radiusErrorPx < 2 &&
+          fontErrorPx < 1 &&
+          baselineErrorPx < 0.5 &&
+          contour.maximumPx < 2,
       };
     });
     // One-pixel label rounding and up-to-two-pixel original edge wobble are observed
@@ -340,10 +371,13 @@ try {
   report.afterSources = source();
   report.sourcesStable = sameSources(before, report.afterSources);
   report.passed =
-    report.pairs.every((pair) => pair.cameraMatches && pair.baselinesPassed) &&
+    report.pairs.every(
+      (pair) => pair.cameraMatches && pair.baselinesPassed && pair.contoursPassed,
+    ) &&
     report.motionPassed &&
     report.sourcesStable;
-  if (!report.passed) throw new Error('Fidelity camera or source guard failed');
+  if (!report.passed)
+    throw new Error('Fidelity rendered camera, body contour, name or source guard failed');
 } catch (error) {
   report.error = error.stack;
   process.exitCode = 1;

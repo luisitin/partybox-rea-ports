@@ -46,8 +46,8 @@ and native controls checked separately. They do not establish a live original ma
 
 Five reference scenes and five motion samples pass; camera error is below0.001pixel,
 painted growth error below0.3pixel, and name sizing matches. Browsers leave zero owned processes.
-Final verification is pending SDK merge alignment, fresh mutations/native captures and CI.
-Fresh full tests, source-bound captures, CI and the required post-green reviews must agree.
+SDK alignment,213 tests,20 semantic mutants and72 native captures pass. Manual review
+found transient split blur and a contour gap; their repairs and final-head CI remain pending.
 `VERIFY.md` records commands/results; `NEXT.md` is the handoff; `RESEARCH.md` and `SOURCES.md`
 identify the original evidence and party adaptations. Inspect every final PNG and ranked
 `games/agar-io/fidelity/GAPS.md`; `SHA256SUMS.txt` binds the media, kept below 10 MB.

@@ -43,7 +43,7 @@ export function Controller({
       : phase === 'score'
         ? L('Round {n} over', { n: view.round })
         : L('Round {n} of {m}', { n: view.round, m: view.rounds });
-  let status = L('Watching the arena');
+  let status = phase === 'done' ? L('Watching the results') : L('Watching the arena');
   if (playing) {
     if (view.departed) status = L('You left this match — watching the arena.');
     else if (player && !connected)

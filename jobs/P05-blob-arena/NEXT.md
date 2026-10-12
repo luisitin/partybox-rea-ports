@@ -5,8 +5,8 @@ Branch job/P05-blob-arena, draftPR9; owner checkout remains read-only.
 Fresh ownerHEAD0a97701d7 scan found one existing Agar.io among126 manifests,
 so this upgrades that existing game and preserves newer owner input lifecycle fixes.
 
-Milestones c4983d5/a189d8e/936fb63/123cc8e are pushed. Last claim refresh e74d211
-at2026-10-12T17:14:53Z. Local b7b0881 merged origin/main without rebasing or force.
+Milestones c4983d5/a189d8e/936fb63/123cc8e/5ce0b9c are pushed. Last claim refresh
+f744197 at2026-10-12T17:47:55Z. b7b0881 merged origin/main without rebasing or force.
 The newer SDK matches the actual CI checkout, not merely the PR API head.
 Refresh CLAIMS after every push; pull --rebase in the claims worktree first.
 
@@ -17,7 +17,7 @@ Final client81/81focused checks pass in1.77s, one threads worker; typecheck pass
 Original personal follow camera, full inside names, floating controls, continuous
 edge grid,120ms logical motion and separate painted-outline growth are repaired.
 
-Postmerge final native fidelity passes all five settled scenes and five50/100/150/
+Postmerge native fidelity passes all five settled scenes and five50/100/150/
 300/600ms motion samples. Max camera error0.000650px, outline radius0.280px,
 alphabetic baseline0.000000098px. Source/harness/SDK guards match; browser closed
 in finally with zero owned PIDs. Current2026 original remains403/opaqueWASM;
@@ -31,14 +31,22 @@ Fresh merged-SDK mutation run RESTORED:91/91baseline,20/20semantic assertion kil
 3404max events. Verified CI import audited414committed blobs; six later client/UI
 changes are explicit. Do not duplicate7000locally while behavior/SDK/driver match.
 
-Completed: verification's full scoped baseline session48905 uses
+Completed: verification's full scoped baseline session48905 used
 PB_MUTATION_BASELINE_ONLY=1,PB_SIM_RUNS=1 plus that independently audited7000proof.
 It passed213/213 in216360ms with stable runtime/test/fixture/SDK bytes. The later phone heading CSS change will be closed by strict final-head CI proof.
-All72 mounted captures passed fit/native input/motion with zero owned browser PIDs. Verification is canonicalizing generated HTML/CSS then repeating exact-byte proof after regenerating
-63SSR inputs. No other browser/test worker/source edit may start until coordination.
+Both diagnostic and canonical72 captures pass actual fit/native input/motion with
+zero owned browser PIDs. Generated63SSR inputs are canonical Prettier bytes.
+The canonical report independently matches1735 source/harness/media hash entries.
+Manual review coveredALL72 native PNGs plusALL20 fidelity PNGs and side-by-side.
+It found material transient split raster blur and an original growth shoulder dent
+missing from our circle; both must be repaired before DONE. Spectator-done status
+also incorrectly says watching the arena. Verification now owns the sole browser
+for isolated public-DOM raster/SMIL probes; client and server agents design repairs
+read-only. Do not edit game or captured inputs until the prototype/source coordination.
+Interim5ce0b9c CI failed only three proof JSON formatting files; they are formatted.
 
-Remaining: final canonical capture and fidelity source refresh, manual review of every final
-PNG, media/fidelity SHA and git-byte audit, complete format, final-headgreenCI,
+Remaining: proven raster/contour/copy repairs, renewed exact-source captures,
+media/fidelity SHA and git-byte audit, complete format, final-headgreenCI,
 exact jobREADME PRbody, then three post-green five-candidate zero-gain rounds.
 No convergence/DONE is claimed. Preserve negative probes and the rejected legacy
 .git browser profile; never delete that target by another route.

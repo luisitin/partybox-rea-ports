@@ -284,6 +284,19 @@ describe('stable identity and results', () => {
     expect(phone(state, otherId, false)).toContain('Place');
   });
 
+  it('describes the summary-only finished spectator view without promising an arena', () => {
+    for (const phoneOnly of [false, true]) {
+      const html = phone(withTv(fixtures.done!), 'spectator', phoneOnly);
+      expect(html).toMatch(/role="status">Watching the results<\/p>/);
+      expectArena(html, fixtures.done!);
+      expect(buttons(html)).toHaveLength(0);
+      expect((roster(html).match(/<li\b/g) ?? []).length).toBe(8);
+      const playing = phone(withTv(fixtures.play!), 'spectator', phoneOnly);
+      expect(playing).toMatch(/role="status">Watching the arena<\/p>/);
+      expectArena(playing, fixtures.play!);
+    }
+  });
+
   it('promises final results after round three instead of another round', () => {
     const last = withTv(fixtures['score-last']!);
     expect(last.round).toBe(3);
@@ -511,15 +524,30 @@ describe('public pose and identity layers', () => {
       shieldUntil: view.checked + 1000,
     }));
     for (const compact of [false, true]) {
-      const html = renderToStaticMarkup(<Arena {...view} cells={cells} phone compact={compact} />);
+      const html = renderToStaticMarkup(
+        <Arena {...view} cells={cells} pellets={[]} phone compact={compact} />,
+      );
       for (const cell of cells) {
-        const body = html.match(
-          new RegExp(
-            `<g[^>]*data-cell-id="${cell.id}"[^>]*>[\\s\\S]*?<circle[^>]*data-cell-body="true"[^>]*r="([^"]+)"`,
-          ),
-        );
+        const group = html.match(
+          new RegExp(`<g[^>]*data-cell-id="${cell.id}"[^>]*>([\\s\\S]*?)<\\/g>`),
+        )?.[1];
+        expect(group).toBeDefined();
+        for (const carrier of ['logical', 'outline']) {
+          const sampled = group!.match(
+            new RegExp(`<circle[^>]*data-cell-${carrier}-radius="true"[^>]*r="([^"]+)"`),
+          );
+          expect(sampled).not.toBeNull();
+          expect(Number(sampled![1])).toBeCloseTo(radius(cell.mass));
+        }
+        const body = group!.match(/<path[^>]*data-cell-body="true"[^>]*d="([^"]+)"/);
         expect(body).not.toBeNull();
-        expect(Number(body![1])).toBeCloseTo(radius(cell.mass));
+        const vertices = [...body![1]!.matchAll(/[ML](-?[\d.]+) (-?[\d.]+)/g)];
+        expect(vertices).toHaveLength(48);
+        for (const point of vertices)
+          expect(
+            Math.abs(Math.hypot(Number(point[1]), Number(point[2])) - radius(cell.mass)),
+          ).toBeLessThan(0.05);
+        expect(group).not.toMatch(/<circle[^>]*data-cell-body=/);
         expect(html).toMatch(
           new RegExp(
             `<text[^>]*data-cell-label-id="${cell.id}"[^>]*data-name-inside="true"[^>]*x="0"[^>]*y="0"`,
