@@ -21,7 +21,7 @@ const fixtures: Record<string, State> = {};
 afterEach(() => vi.useRealTimers());
 const seats: PlayerInfo[] = Array.from({ length: 8 }, (_, i) => ({
   id: `seat-${i + 1}`,
-  name: `${String(i + 1).padStart(2, '0')} Maximiliana Guadalupe Washington`.slice(0, 40),
+  name: `${String(i + 1).padStart(2, '0')} Maximiliana Guadalupe Washington XIII`,
   avatarId: 'fox',
   connected: true,
   canSeeTv: true,
@@ -196,6 +196,7 @@ function paint(
 }
 it('renders every canonical group phase and role, plus paused/locked/long-name flows', async () => {
   frames.length = 0;
+  expect(seats.every((player) => player.name.length === 40)).toBe(true);
   for (const mode of ['teams', 'tv-vote'] as const) {
     const states = played(start(mode, 4));
     for (const phase of ['intro', 'talk', 'question', 'reveal', 'done']) {
@@ -246,6 +247,7 @@ it('renders every canonical group phase and role, plus paused/locked/long-name f
       });
     }
     const final = states.filter((s) => s.phase.id === 'reveal').at(-1)!;
+    expect((tv(final).nextAt ?? final.phase.startedAt) + 100).toBeLessThan(final.phase.deadline!);
     paint(`${mode}-last-reveal`, final);
     const readyAt = phone(final, 'seat-1').nextAt;
     if (readyAt === undefined) throw new Error('Final reveal needs its authored podium-ready beat');

@@ -11,6 +11,9 @@
 - Original interactive team play was not performed without a live room PIN or captain account. Paired published guides, screenshots and firsthand reports reconstruct the original flow.
 - Owner files compile to content/classic-custom.json before bundling. Custom packs have 5–20 questions with explicit custom-prefixed IDs, and require a host rebuild/restart. The reducer performs no runtime filesystem/network calls or content injection. Unknown custom facts use seeded guesses rather than hidden keys.
 
+- KEEP GOING round 2 changes only group reveal reading budgets and adds a final phone VIP interaction window of SDK `readMs` for the largest actual EN/ES Show podium label: unchanged Spanish `Mostrar el podio` is three words, yielding 3,249 ms. No standings are displayed during this final window; unrevealed team ranks/scores remain withheld. This is allowed PartyBox phone/VIP plumbing for fixed groups, alongside the fixed-membership presence/reconnect adaptation, not a claim of native Kahoot timing or automatic team rebalancing. Existing Classic/Wager phase budgets remain unchanged.
+- The matched round-2 baseline and current SSR use eight exact 40-character names ending in ` XIII`. Saved round-1 PNGs/layout/comparison images use 35-character names and must be replaced by the final capture before claiming exact-maximum-name visual evidence. Initial CI and full simulation/property/mutation campaigns remain explicitly pre-KEEP-GOING baselines until current-source verification finishes.
+
 ## Historical standalone implementation
 
 The first P02 implementation stacked on P01 public branch 1c8d264, which had

@@ -1,0 +1,97 @@
+{
+  "runId": "r2-local",
+  "date": "2026-10-12",
+  "scope": "KEEP GOING round 2: group-only result reading budgets and final phone VIP window",
+  "baseline": {
+    "headAtMeasurement": "7d6bdab",
+    "source": "Root-recorded matched renderer pass before applying group pacing changes",
+    "fixtureNameCharacters": 40,
+    "fixtureNameSuffix": " XIII",
+    "rendererFiles": 1,
+    "rendererTestsPassed": 1,
+    "rendererDurationSeconds": 2.35
+  },
+  "current": {
+    "fixtureNameCharacters": 40,
+    "focusedFiles": 6,
+    "focusedTestsPassed": 71,
+    "focusedTestsTotal": 71,
+    "focusedDurationSeconds": 34.81,
+    "typecheckExitCode": 0,
+    "finalVipWindowMs": 3249,
+    "finalVipWindowCopy": {
+      "en": "Show podium",
+      "es": "Mostrar el podio"
+    },
+    "windowBudget": "SDK readMs(maximum EN/ES visible word count); Spanish label has three words",
+    "classicAndWagerBudgetsUnchanged": true
+  },
+  "comparisons": [
+    {
+      "mode": "teams",
+      "moment": "first-reveal",
+      "fixture": "group-teams-reveal",
+      "questionId": "sports-09",
+      "questionIndex": 0,
+      "baselineHoldMs": 61043,
+      "currentHoldMs": 61043,
+      "reductionMs": 0,
+      "currentPhaseStartedAt": 2000000076846,
+      "currentPhaseDeadline": 2000000137889
+    },
+    {
+      "mode": "teams",
+      "moment": "final-reveal",
+      "fixture": "group-teams-last-reveal",
+      "questionId": "sports-15",
+      "questionIndex": 4,
+      "baselineHoldMs": 32686,
+      "currentHoldMs": 22515,
+      "reductionMs": 10171,
+      "currentPhaseStartedAt": 2000000524932,
+      "currentPhaseDeadline": 2000000547447,
+      "finalVipWindowMs": 3249,
+      "currentChartMs": 19266,
+      "nextAt": 2000000544198,
+      "readyCaptureAt": 2000000544298,
+      "readyCaptureBeforeDeadline": true,
+      "remainingAtReadyCaptureMs": 3149
+    },
+    {
+      "mode": "tv-vote",
+      "moment": "first-reveal",
+      "fixture": "group-tv-vote-reveal",
+      "questionId": "sports-09",
+      "questionIndex": 0,
+      "baselineHoldMs": 54982,
+      "currentHoldMs": 54116,
+      "reductionMs": 866,
+      "currentPhaseStartedAt": 2000000075114,
+      "currentPhaseDeadline": 2000000129230
+    },
+    {
+      "mode": "tv-vote",
+      "moment": "final-reveal",
+      "fixture": "group-tv-vote-last-reveal",
+      "questionId": "sports-15",
+      "questionIndex": 4,
+      "baselineHoldMs": 33119,
+      "currentHoldMs": 26844,
+      "reductionMs": 6275,
+      "currentPhaseStartedAt": 2000000499821,
+      "currentPhaseDeadline": 2000000526665,
+      "finalVipWindowMs": 3249,
+      "currentChartMs": 23595,
+      "nextAt": 2000000523416,
+      "readyCaptureAt": 2000000523516,
+      "readyCaptureBeforeDeadline": true,
+      "remainingAtReadyCaptureMs": 3149
+    }
+  ],
+  "limits": [
+    "Saved 120 PNGs, layout metrics and comparison images still depict the round-1 35-character-name capture; final exact-40 browser capture and image/hash refresh are pending.",
+    "Current phase-fixtures and SSR HTML use exact 40-character names and the applied pacing.",
+    "The required simulation/property/mutation tables remain the pre-KEEP-GOING baseline pending the final current-source campaign and CI.",
+    "Adaptive PartyBox reading and final phone VIP interaction windows do not establish native Kahoot timing identity."
+  ]
+}

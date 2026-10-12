@@ -1,7 +1,15 @@
 // Classic reading budgets mirror the separate chart, standings and podium layouts.
 import { categoryLabel, drawLabel, questionById } from './content';
 import { classicPackLabel } from './classic';
-import { readMs, wordCount, isFinalIndex, isLastIndex, quizModeOf, groupModeOf } from './types';
+import {
+  readMs,
+  wordCount,
+  isFinalIndex,
+  isLastIndex,
+  quizModeOf,
+  groupModeOf,
+  isParticipating,
+} from './types';
 import type { State } from './types';
 import { revealedPodiumEntries } from './standings';
 import { labelOf } from '../content/schema';
@@ -252,7 +260,157 @@ export interface ClassicRevealBeats {
   chartMs: number;
   standingsMs: number;
 }
+
+/** Group results use their actual TV/staged/near-TV surfaces, including both UI languages. */
+function groupRevealBeats(state: State): ClassicRevealBeats {
+  const vote = groupModeOf(state) === 'tv-vote';
+  const last = isLastIndex(state, state.index);
+  const q = current(state);
+  const teams = state.teams ?? [];
+  const ids = Object.keys(state.players).filter((id) => isParticipating(state, id));
+  const longestName = Math.max(0, ...Object.values(state.players).map((p) => wordCount(p.name)));
+  const explanation = q && 'explanation' in q ? wordCount(q.explanation) : 0;
+  const missed = Object.keys(state.players).length - Object.keys(state.picks).length;
+  const copies = (lang: 'en' | 'es') => {
+    const words = (en: string, es = en) => wordCount(lang === 'es' ? es : en);
+    const ordinal = words('Question 1 of 20', 'Pregunta 1 de 20');
+    const decision = !vote
+      ? 0
+      : state.roomDecision === undefined
+        ? words('No room answer — nobody voted', 'La sala no respondió — nadie votó')
+        : words('Room answer:', 'Respuesta de la sala:') +
+          1 +
+          wordCount(q?.choices[state.roomDecision] ?? '') +
+          words(
+            state.roomDecision === q?.answerIndex ? '✓ Correct' : 'Wrong',
+            state.roomDecision === q?.answerIndex ? '✓ Correcta' : 'Incorrecto',
+          );
+    // Four shape marks plus four counts; choices appear once in ClassicChart.
+    const chart =
+      ordinal +
+      questionWords(state) +
+      8 +
+      words('✓ Correct', '✓ Correcta') +
+      explanation +
+      decision +
+      (missed > 0
+        ? words(
+            vote ? '8 did not vote' : '8 did not answer',
+            vote ? '8 no votaron' : '8 no respondieron',
+          )
+        : 0);
+    const receipt = (id: string, besideTv: boolean): number => {
+      const team = teams.find((candidate) => candidate.members.includes(id));
+      const pick = state.picks[id];
+      const correct =
+        !!q && (vote ? state.roomDecision === q.answerIndex : pick?.index === q.answerIndex);
+      const verdict = vote
+        ? correct
+          ? words('The room got it right!', '¡La sala acertó!')
+          : state.roomDecision === undefined
+            ? words('No room answer', 'La sala no respondió')
+            : words('The room got it wrong', 'La sala se equivocó')
+        : correct
+          ? words('Correct!', '¡Correcto!')
+          : pick
+            ? words('Wrong', 'Incorrecto')
+            : words('Too slow', 'Muy tarde');
+      let total =
+        1 +
+        verdict +
+        (vote
+          ? pick
+            ? words('Your vote: Diamond', 'Tu voto: Rombo')
+            : words('You did not vote', 'No votaste')
+          : words('+1300 personal points', '+1300 puntos personales'));
+      if (last) total += words('The podium is next', 'Ahora viene el podio');
+      // The final envelope withholds the complete team receipt, gauge and rank.
+      if (!last && team) {
+        total += wordCount(team.name) + words('+1300 points', '+1300 puntos');
+        if (!vote)
+          total +=
+            words('Correct 100%', 'Correcto 100%') +
+            words(
+              'Team points average players who stayed or answered',
+              'Los puntos del equipo promedian a quienes siguieron o respondieron',
+            );
+        if (besideTv)
+          total += words(
+            vote ? 'Room results' : 'Team results',
+            vote ? 'Resultados de la sala' : 'Resultados del equipo',
+          );
+        else total += words('99999 total', '99999 en total');
+      }
+      if (besideTv) {
+        const identity =
+          last || !team
+            ? words(vote ? 'The room' : 'Your team', vote ? 'La sala' : 'Tu equipo')
+            : wordCount(team.name);
+        // The footer shows a bare shared number, or an em dash and the hidden-score cue.
+        total +=
+          wordCount(state.players[id]?.name ?? '') +
+          identity +
+          (last
+            ? 1 +
+              words(
+                vote ? 'Room score after the podium' : 'Team score after the podium',
+                vote
+                  ? 'Puntuación de la sala después del podio'
+                  : 'Puntuación del equipo después del podio',
+              )
+            : 1);
+        if (!last && team)
+          total += words(
+            vote ? 'The room is in place 4' : 'Your team is in place 4',
+            vote ? 'La sala está en el puesto 4' : 'Tu equipo está en el puesto 4',
+          );
+      }
+      return total;
+    };
+    const ownStage = Math.max(0, ...ids.map((id) => receipt(id, false)));
+    const ownBeside = Math.max(0, ...ids.map((id) => receipt(id, true)));
+    const chartWords = Math.max(chart + ownStage, ordinal + ownBeside);
+    const rows = (members: boolean) =>
+      teams.reduce(
+        (n, team) =>
+          n +
+          wordCount(team.name) +
+          2 +
+          ((state.teamGains?.[team.id] ?? 0) > 0 ? 1 : 0) +
+          (members
+            ? team.members.reduce((m, id) => m + wordCount(state.players[id]?.name ?? id), 0)
+            : 0),
+        0,
+      );
+    const heading = words(
+      vote ? 'Room score' : 'Team scoreboard',
+      vote ? 'Puntuación de la sala' : 'Marcador de equipos',
+    );
+    const next = words('Next question', 'Siguiente pregunta');
+    const tvNext = Math.max(
+      words("Next on the VIP's phone", 'El VIP toca Siguiente'),
+      longestName + (lang === 'es' ? 2 : 3),
+    );
+    const boardWords = Math.max(
+      ordinal + heading + rows(true) + tvNext,
+      ordinal + heading + rows(false) + ownStage + next,
+      ordinal + ownBeside + next,
+    );
+    return { chartWords, boardWords };
+  };
+  const en = copies('en');
+  const es = copies('es');
+  return {
+    chartMs: readMs(Math.max(en.chartWords, es.chartWords)),
+    // Final groups keep a short button-reading window; no standings are revealed there.
+    standingsMs: last
+      ? readMs(uiWords('Show podium', 'Mostrar el podio'))
+      : readMs(Math.max(en.boardWords, es.boardWords)),
+  };
+}
+
 export function classicRevealBeats(state: State): ClassicRevealBeats {
+  if (groupModeOf(state)) return groupRevealBeats(state);
   const q = current(state);
   const explanation = q && 'explanation' in q ? wordCount(q.explanation) : 0;
   const missed = Object.keys(state.players).length - Object.keys(state.picks).length;
