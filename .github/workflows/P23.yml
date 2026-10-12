@@ -1,0 +1,26 @@
+name: P23 Bonk.io
+on:
+  pull_request:
+    paths:
+      - 'games/bonk-io/**'
+      - 'jobs/P23-bonk-io/**'
+      - '.github/workflows/P23.yml'
+permissions:
+  contents: read
+concurrency:
+  group: P23-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm format
+      - run: pnpm vitest run games/bonk-io --maxWorkers=1
