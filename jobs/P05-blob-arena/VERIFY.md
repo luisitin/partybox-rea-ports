@@ -1,5 +1,15 @@
 # P05 verification
 
+## r4-local recovery status
+
+Inherited [CI 38180746625](https://github.com/luisitin/partybox-rea-ports/actions/runs/38180746625) is green for r5-local head `4f9e6aaf9cecca87d53aafd2952ab74fbab2a072`. It passed the former Blob Arena port; the results below are historical and do not establish current official-name source, newly identified lifecycle gaps or required bottom-shell fit.
+
+Official naming now uses Agar.io / agar-io. `PB_SIM_RUNS=1 pnpm.cmd vitest run games/agar-io --maxWorkers=1`: **105/105 tests in seven files**, **54.99 s**, seven complete pilot matches (one at every 2-8 seats), existing properties and all real SDK contracts. `pnpm.cmd typecheck` passed. Changed files were formatted with `pnpm.cmd exec prettier --write`; final whole-format CI remains required. This pilot verifies the rename, not resolution of the source defects found in the audit.
+
+Current work targets event-time release/no-op barriers, disconnected/departed state, public spectator stage, source-aware controls, readable crowded identities and consistent joystick reach. Existing nine phone captures reserved bottom zero and do not count as current 80/80 shell-fit evidence. Fresh full scoped CI, current-source serial mutations and new role/stress captures are required after source stabilizes. Root runs only this game's tests with one worker; no new browser or whole-suite run.
+
+## Historical r5-local verification
+
 The fresh current-code full run passed **105/105 tests and 7,000 complete matches**, exit 0. Typecheck, formatting, 20/20 mutations, property tests and nine measured screens also pass. PR CI and the post-green KEEP GOING loop remain pending. Historical failed-run evidence is retained separately.
 
 ## Setup and static checks

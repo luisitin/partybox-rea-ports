@@ -1,4 +1,4 @@
-// Blob Arena's match lifecycle and deliberately small, public views.
+// Agar.io's match lifecycle and deliberately small, public views.
 import {
   composeReduce,
   controllerEnvelope,

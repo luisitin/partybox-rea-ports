@@ -1,4 +1,4 @@
-# P05 Blob Arena
+# P05 Agar.io
 
 Three 90-second rounds of snack collecting and risky split attacks for 2–8 players.
 One TV arena, each phone a joystick and SPLIT; phone-only rooms show the stage above the controls.
@@ -6,8 +6,8 @@ Original SVG art, pure deterministic server, three bot strengths, three-second r
 
 ## Run
 
-`corepack enable` then `pnpm install` (Windows PowerShell: `pnpm.cmd`).
-The port exports `game` from `games/blob-arena/server/index.ts` and TV/phone entry modules.
+Install once completed by r4-local during P07: `corepack enable`, `pnpm install` (Windows PowerShell: `pnpm.cmd`).
+The port exports `game` from `games/agar-io/server/index.ts` and TV/phone entry modules.
 This workshop has no room host; integrate these entries in the PartyBox shell.
 For a local mounted-controller preview: `node jobs/P05-blob-arena/preview.mjs`.
 It reports an ephemeral loopback URL; inputs are captured, not reduced into a live match.
@@ -16,7 +16,7 @@ It reports an ephemeral loopback URL; inputs are captured, not reduced into a li
 
 - `pnpm typecheck`
 - `pnpm format`
-- `pnpm vitest run games/blob-arena --maxWorkers=1`
+- `pnpm vitest run games/agar-io --maxWorkers=1`
 - `node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/generate.mjs`
 - `node jobs/P05-blob-arena/mutations.mjs`
 - `node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/screens.mjs`

@@ -3,14 +3,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
-import { Controller } from '../../games/blob-arena/client/Controller';
-import { game } from '../../games/blob-arena/server/index';
-import type { BlobArenaControllerView } from '../../games/blob-arena/server/index';
-import type { Input, State } from '../../games/blob-arena/server/types';
-import play from '../../games/blob-arena/fixtures/play.json';
-import score from '../../games/blob-arena/fixtures/score.json';
-import scoreLast from '../../games/blob-arena/fixtures/score-last.json';
-import done from '../../games/blob-arena/fixtures/done.json';
+import { Controller } from '../../games/agar-io/client/Controller';
+import { game } from '../../games/agar-io/server/index';
+import type { BlobArenaControllerView } from '../../games/agar-io/server/index';
+import type { Input, State } from '../../games/agar-io/server/types';
+import play from '../../games/agar-io/fixtures/play.json';
+import score from '../../games/agar-io/fixtures/score.json';
+import scoreLast from '../../games/agar-io/fixtures/score-last.json';
+import done from '../../games/agar-io/fixtures/done.json';
 import '../../design/tokens.css';
 
 type PreviewView = BlobArenaControllerView & { vip: null };

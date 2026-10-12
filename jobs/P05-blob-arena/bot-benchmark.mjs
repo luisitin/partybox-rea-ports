@@ -6,10 +6,10 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { performance } from 'node:perf_hooks';
 import ts from 'typescript';
 import { createRng } from '../../packages/game-sdk/src/index.ts';
-import { botInput as cachedBot } from '../../games/blob-arena/server/bot.ts';
-import { game } from '../../games/blob-arena/server/index.ts';
+import { botInput as cachedBot } from '../../games/agar-io/server/bot.ts';
+import { game } from '../../games/agar-io/server/index.ts';
 
-const botUrl = new URL('../../games/blob-arena/server/bot.ts', import.meta.url);
+const botUrl = new URL('../../games/agar-io/server/bot.ts', import.meta.url);
 const cachedSource = readFileSync(botUrl, 'utf8');
 const cachedBlock = `      const pellets = state.world.pellets
         .map((pellet) => ({ pellet, distance: distance(me, pellet) }))

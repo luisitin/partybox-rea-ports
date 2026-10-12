@@ -1,9 +1,9 @@
 // One process, no browser. Drive the actual reducer with its 200 ms engine clock and 1 s bot decisions.
 import { createRng } from '../../packages/game-sdk/src/index';
 import type { BotSkill } from '@partybox/game-sdk';
-import { game } from '../../games/blob-arena/server/index';
-import { ROUND_MS } from '../../games/blob-arena/server/types';
-import type { State } from '../../games/blob-arena/server/types';
+import { game } from '../../games/agar-io/server/index';
+import { ROUND_MS } from '../../games/agar-io/server/types';
+import type { State } from '../../games/agar-io/server/types';
 
 export const SKILLS: BotSkill[] = ['easy', 'normal', 'sharp'];
 const T0 = 1_000_000;

@@ -7,11 +7,11 @@ import { fileURLToPath } from 'node:url';
 
 const jobDir = dirname(fileURLToPath(import.meta.url));
 const root = resolve(jobDir, '../..');
-const server = resolve(root, 'games/blob-arena/server');
+const server = resolve(root, 'games/agar-io/server');
 const resultFile = resolve(jobDir, 'mutation-current.json');
 const finalFile = resolve(jobDir, 'mutations.json');
 const command =
-  'pnpm.cmd vitest run games/blob-arena/__tests__/mechanics.test.ts games/blob-arena/__tests__/game.test.ts --maxWorkers=1 --reporter=json --outputFile=jobs/P05-blob-arena/mutation-current.json';
+  'pnpm.cmd vitest run games/agar-io/__tests__/mechanics.test.ts games/agar-io/__tests__/game.test.ts --maxWorkers=1 --reporter=json --outputFile=jobs/P05-blob-arena/mutation-current.json';
 
 const mutations = [
   [
@@ -169,8 +169,8 @@ function runTests() {
           [
             'vitest',
             'run',
-            'games/blob-arena/__tests__/mechanics.test.ts',
-            'games/blob-arena/__tests__/game.test.ts',
+            'games/agar-io/__tests__/mechanics.test.ts',
+            'games/agar-io/__tests__/game.test.ts',
             '--maxWorkers=1',
             '--reporter=json',
             '--outputFile=jobs/P05-blob-arena/mutation-current.json',

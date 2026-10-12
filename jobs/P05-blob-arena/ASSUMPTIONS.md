@@ -16,3 +16,13 @@
 - Exact original audio and current music were not independently verified. The port uses existing PartyBox synthesized cues; no original recording or asset is added.
 - The full-suite command mentioned in games/AGENTS.md is superseded by the owner's CPU-care instruction: only this game's tests and required non-browser repo checks. At most one root-owned headless browser is permitted and it must close in `finally`.
 - The first full test process began at 21:13 UTC and imported the old pause handler before the 21:30 UTC pause-fix commit. It passed the 7,000-match simulation but failed the newer pause regression. The current tree passes that regression; a fresh complete run is required before PR creation. The failed historical result is retained rather than reported as green.
+
+## r4-local recovery, 2026-10-12 UTC
+
+- The prior claim and remote branch had no refresh/commit for more than six hours. r4-local claimed P05 on main after pull --rebase, with no unfinished own job. P07/P23 are DONE. P02 was freshly resumed by r2-local and was left alone.
+- The owner name table on current main supersedes this older branch's working-title rules: folder/id agar-io, display name Agar.io, PR title P05 Agar.io. The historical job branch/folder remains P05-blob-arena so existing evidence and PR #9 stay linked.
+- Historical r5-local reports, original access attempts and media are retained under their original provenance. They do not establish new r4 source checks or live play. New results require fresh scoped CI, mutations and current source hashes.
+- Research/owner overlap audit is complete before implementation changes. No equivalent Agar.io game exists among 110 owner manifests/generated imports; the owner checkout remains read only.
+- The inherited phone screenshots reserved 80 px above and zero below, so they do not satisfy current 80/80 shell-fit evidence. Fresh captures must include both reservations, all declared roles and identified stress cases. Existing nine-screen claims are historical.
+- Source review found event-time release barriers missing, editable keyups losing releases, modifier shortcuts initiating controls, disconnected/departed context gaps and undersized crowded phone labels. These are concrete regression targets, not a live host/socket reproduction claim.
+- Installation was completed once in this r4 clone during P07. Use the existing dependency tree; no new dependencies. The unavailable gen-registry/verify commands in games/AGENTS are replaced by actual required typecheck/format/scoped Vitest checks, as in the previous jobs.

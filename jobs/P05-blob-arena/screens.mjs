@@ -3,9 +3,9 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { PhoneOnlyProvider } from '@partybox/game-sdk/ui';
-import { game } from '../../games/blob-arena/server/index.ts';
-import { Tv } from '../../games/blob-arena/client/Tv.tsx';
-import { Controller } from '../../games/blob-arena/client/Controller.tsx';
+import { game } from '../../games/agar-io/server/index.ts';
+import { Tv } from '../../games/agar-io/client/Tv.tsx';
+import { Controller } from '../../games/agar-io/client/Controller.tsx';
 
 const media = new URL('./media/', import.meta.url);
 mkdirSync(media, { recursive: true });
@@ -14,7 +14,7 @@ const css = [...globalThis.blobCaptureCss.values()].join('\n');
 const pages = [];
 for (const phase of ['play', 'score', 'done']) {
   const fixture = JSON.parse(
-    readFileSync(new URL(`../../games/blob-arena/fixtures/${phase}.json`, import.meta.url), 'utf8'),
+    readFileSync(new URL(`../../games/agar-io/fixtures/${phase}.json`, import.meta.url), 'utf8'),
   );
   const shift = Date.now() - (fixture.began + fixture.world.time);
   const state = {

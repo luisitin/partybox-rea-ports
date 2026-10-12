@@ -1,31 +1,9 @@
-# P05 handoff
+# P05 r4-local recovery
 
-Branch: job/P05-blob-arena. Runner: r5-local. Claim on main.
-Installed with corepack enable + pnpm.cmd install (PowerShell blocks pnpm.ps1).
+Owner r4-local; branch job/P05-blob-arena; existing draft PR #9 https://github.com/luisitin/partybox-rea-ports/pull/9. P07/P23 are DONE. P05 claim taken after prior line/remote commit were older than six hours; main commit 51fda8d. Installation in this clone already completed once during P07.
 
-Research, server, client, fixtures and job-specific workflow are implemented.
-Current-tree quick validation: 105/105 passed with PB_SIM_RUNS=1; typecheck green.
-Mutation validation: 20/20 behavioral bugs caught, original bytes restored.
-Nine phase/surface screens fit TV1920x1080 and phone390x844, with zero measured
-clipping or TV score-text overlaps. Eighteen media hashes verified.
-Eight native input sequences verify drag/release, two-finger split and keyboard
-across both room modes. The owned browser closed in finally; no browser is active.
-The loopback mounted-controller preview remains available on port60366, PID20084.
+Read current main README/RULES/JOBS, inherited NEXT/research/spec and local game rules. Research revalidated qualitative mechanics with independent first-hand sources; owner scan110 finds no equivalent Agar.io game. Official naming recovery moves games/blob-arena to games/agar-io with Agar.io display/id; historical job slug stays linked. Old r5-local reports/media remain history, not current-source evidence. No new original live play/audio claim.
 
-The first full sweep passed 7,000 games but its pre-fix imported pause handler
-failed the new regression. Historical evidence is retained. Cached bot distances
-preserve every input/RNG state across 37,380 comparisons and halve bot-call CPU.
-Fresh full suite finished: 105/105 passed in seven files, exit0, 1645.83seconds.
-PB_SIM_RUNS was unset, one worker, verbose + JSON, console interception disabled.
-All 7,000 complete matches at every count2–8 passed: median round90000ms,
-maximum match289500ms (bound600000ms), 17,959,654 reducer events.
-full-tests.json and sim-report.json retain the exact current-code results.
-No heavy test worker or owned browser is active.
+Concrete audit gaps to fix before final checks: server release/no-op timestamps; spectator/departed public stage and explicit member/departed/connection status; source-aware joystick lifecycle including editable keyups/modifier guards/mixed pointer-key holds/identity+network resets; readable numbered label backplates and crowded tags; consistent44px joystick reach; fresh390x844 captures with80px shell at both ends (oldbottom0 invalid for current fit).
 
-Remaining: final format/checks, draft PR + green CI,
-then KEEP GOING. KEEP cannot begin until that PR is green.
-Post-green audit: joystick reach; long winner/tie headings; crowded name tags;
-shield/merge guidance; final-five-second and between-round countdown guidance.
-
-Original live play/audio were unavailable; access limits are documented.
-No original source code or assets are committed.
+Official rename is complete. Renamed-source pilot passed 105/105 in seven files, seven matches, 54.99 s; typecheck passed. Inherited draft PR #9 CI 38180746625 was green. Root owns execution, docs, git and browser; server/client agents finished read-only audits and await implementation assignments. No current r4 browser or heavy test runs. Historical r5 preview PID/port may be stale: do not kill/use without ownership verification. Preserve old105/7000 results as history; require own-game small pilot and fresh full scoped CI,20serial mutations and all exact media hashes. KeepPRdraft until allchecks green; then KEEP GOING until3zero-gain rounds. RefreshCLAIMS afterpull--rebase everypush. Never run whole-suite browser/tests.

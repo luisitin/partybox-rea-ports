@@ -1,4 +1,4 @@
-# Blob Arena
+# Agar.io
 
 A PartyBox cell arena for 2–8 players. Everyone steers a hungry blob around the same field, eats snacks to grow, and swallows smaller rivals. Tap SPLIT for a fast lunge that leaves smaller, more vulnerable pieces. If every piece is swallowed, return in three seconds. Each player's mass at the end of a 90-second round becomes points; the largest total after three rounds wins.
 

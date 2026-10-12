@@ -1,8 +1,8 @@
-name: P05 Blob Arena
+name: P05 Agar.io
 on:
   pull_request:
     paths:
-      - 'games/blob-arena/**'
+      - 'games/agar-io/**'
       - 'jobs/P05-blob-arena/**'
       - '.github/workflows/P05.yml'
 permissions:
@@ -23,4 +23,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm format
-      - run: pnpm vitest run games/blob-arena --maxWorkers=1
+      - run: pnpm vitest run games/agar-io --maxWorkers=1

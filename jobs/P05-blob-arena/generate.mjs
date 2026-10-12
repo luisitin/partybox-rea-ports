@@ -1,6 +1,6 @@
 // Rebuild phase fixtures from one reproducible eight-seat match.
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { game } from '../../games/blob-arena/server/index.ts';
+import { game } from '../../games/agar-io/server/index.ts';
 import { createRng } from '@partybox/game-sdk';
 const players = ['Ana', 'Ben', 'Cy', 'Dee', 'Eli', 'Fay', 'Gus', 'Hal'].map((name, i) => ({
   id: `p${i + 1}`,
@@ -11,7 +11,7 @@ const players = ['Ana', 'Ben', 'Cy', 'Dee', 'Eli', 'Fay', 'Gus', 'Hal'].map((nam
 }));
 let state = game.init({ players, seed: 17, now: 1700000000000, settings: {} });
 const rng = createRng(771);
-const directory = new URL('../../games/blob-arena/fixtures/', import.meta.url);
+const directory = new URL('../../games/agar-io/fixtures/', import.meta.url);
 mkdirSync(directory, { recursive: true });
 const save = (name, s) =>
   writeFileSync(new URL(`${name}.json`, directory), JSON.stringify(s, null, 2) + '\n');

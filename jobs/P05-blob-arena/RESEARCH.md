@@ -1,4 +1,6 @@
-# P05 Blob Arena research
+# P05 Agar.io research
+
+Recovery audit, 2026-10-12 UTC: r4-local took the expired claim and rechecked qualitative mechanics with independent first-hand sources. The earlier access attempts and tuning study below belong to r5-local; they are retained as historical evidence. The owner now requires official display name Agar.io and id agar-io. Art and implementation remain authored. No new live play or audio observation is claimed.
 
 Research date: 2026-10-11. Runner: `r5-local`. Original studied: Agar.io. This is a mechanics study; no original code, visual assets, branding, audio, or fonts are included in the port.
 
@@ -66,3 +68,9 @@ Blob Arena uses PartyBox's own muted-by-shell synthesized phase and reveal cues.
 | Three bot strengths                                                                                    | Empty seats make credible opponents without private information.                                        |
 
 All numerical choices in this table are our own tuning. The implementation and game's README are the final authority for exact collision, control, and phase behavior; verification measurements go in VERIFY.md, not this research log.
+
+## Recovery research check (r4-local, 2026-10-12 UTC)
+
+Miniclip's instructions and Android Authority's named hands-on review independently corroborate food/smaller-cell consumption. Pocket Gamer and Android Authority independently report growth slowing movement. Miniclip and Pocket Gamer establish mobile joystick plus a separate Split. The publisher's archived tips were available only as indexed text today; Phandroid's first-hand review corroborates a half-mass forward launch and vulnerability. Deferred reunion is independently described in [GIGAZINE's played review](https://gigazine.net/gsc_news/en/20150828-agar-io-review) and the re-fetched [2015 first-hand measurement notebook](https://windfis.ch/git/agario-bot/plain/reversing_game_mechanics/game_mechanics.txt?h=pathfinding). The notebook is historical and explicitly uncertain about radius versus mass eating thresholds. These sources support qualitative design; no exact current formula, timing or audio is established.
+
+The owner checkout was read only: 110 actual manifests and 110 generated server imports contain no Agar.io name/id or matching food/grow/split consumption loop. This port adds the official id rather than duplicating an existing owner game. Original Agar.io returned 403 in this audit; fallback sources remain available. No asset or bundle was saved or executed.

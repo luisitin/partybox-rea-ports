@@ -1,6 +1,6 @@
 # P05 sources and provenance
 
-Accessed 2026-10-11. The source game name is used only for research attribution. Blob Arena contains original rendering and original game code. No source asset, trademark artwork, recording, font, client bundle, or copied implementation is shipped.
+Initial research by r5-local on 2026-10-11; recovery source audit by r4-local on 2026-10-12 UTC. The owner naming override now uses Agar.io / agar-io for this authored PartyBox adaptation. Rendering and game code remain original. No source asset, trademark artwork, recording, font, client bundle, or copied implementation is shipped.
 
 | Source                                                                                                                                                                                                                                                            | Use                                                                                              | Access and confidence                                                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
@@ -21,3 +21,7 @@ Accessed 2026-10-11. The source game name is used only for research attribution.
 The fact-by-fact two-source matrix is in [RESEARCH.md](RESEARCH.md). A mirror is not counted as a second authored source. Exact current original audio and numerical constants are unverified; house tuning is logged in [ASSUMPTIONS.md](ASSUMPTIONS.md).
 
 Asset provenance: the arena, pellets, cell outlines, labels, and joystick are code-drawn. Palette, typography, spacing, motion, and synthesized cues come from the repository's PartyBox design system. No external asset licence is needed because no external asset is added.
+
+Recovery first-hand sources: [Phandroid, Joe Fedewa, 2015-07-15](https://phandroid.com/2015/07/15/agar-io-for-android-review/) for larger/slower cells, half-mass directional launch and split risk; [GIGAZINE, 2015-08-28](https://gigazine.net/gsc_news/en/20150828-agar-io-review) for split launch, delayed reunion and nonlethal bounds. Rechecked official Miniclip, Pocket Gamer, Android Authority and the windfis.ch historical notebook. The full RSSing article was inaccessible today; its indexed publisher excerpt is qualified as such. No source is treated as an exact current physics/audio measurement.
+
+Owner overlap audit: read-only C:/dev/partybox/games/*/manifest.json and packages/server/src/games.generated.ts, 110 matching game entries; no same Agar.io food/grow/split game. No owner files changed.
