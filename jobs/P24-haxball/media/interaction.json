@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-12T06:44:40.176Z",
+  "capturedAt": "2026-10-12T06:54:05.302Z",
   "source": "media/interaction-views.json: public controller views only",
   "viewport": {
     "width": 390,
@@ -75,13 +75,9 @@
       "observed": {
         "expectedPointer": 2,
         "type": "touchEnd",
-        "ids": [
-          11
-        ],
+        "ids": [11],
         "releasedId": 11,
-        "remainingIds": [
-          12
-        ],
+        "remainingIds": [12],
         "method": "explicit released point",
         "observed": {
           "pointers": [
@@ -108,9 +104,7 @@
             "dy": 0,
             "kick": true
           },
-          "heldControls": [
-            "kick"
-          ]
+          "heldControls": ["kick"]
         }
       }
     },
@@ -244,13 +238,9 @@
       "observed": {
         "expectedPointer": 5,
         "type": "touchEnd",
-        "ids": [
-          22
-        ],
+        "ids": [22],
         "releasedId": 22,
-        "remainingIds": [
-          21
-        ],
+        "remainingIds": [21],
         "method": "explicit released point",
         "observed": {
           "pointers": [
@@ -277,9 +267,7 @@
             "dy": 0,
             "kick": false
           },
-          "heldControls": [
-            "left"
-          ]
+          "heldControls": ["left"]
         }
       }
     },
@@ -438,7 +426,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 5,
+          "seq": 4,
           "dx": 0,
           "dy": 0,
           "kick": true
@@ -451,13 +439,9 @@
       "observed": {
         "expectedPointer": 7,
         "type": "touchEnd",
-        "ids": [
-          32
-        ],
+        "ids": [32],
         "releasedId": 32,
-        "remainingIds": [
-          31
-        ],
+        "remainingIds": [31],
         "method": "explicit released point",
         "observed": {
           "pointers": [
@@ -479,7 +463,7 @@
           "last": {
             "type": "control",
             "phaseAt": 1700000000000,
-            "seq": 6,
+            "seq": 5,
             "dx": 0,
             "dy": 0,
             "kick": false
@@ -500,7 +484,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 6,
+          "seq": 5,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -509,14 +493,10 @@
     },
     {
       "name": "held controls renew on roughly 300ms heartbeat",
-      "passed": false,
+      "passed": true,
       "observed": {
         "configuredMs": 300,
-        "observedDeltasMs": [
-          151,
-          294,
-          849
-        ],
+        "observedDeltasMs": [192, 311, 295],
         "packets": [
           {
             "type": "control",
@@ -559,13 +539,7 @@
       "passed": true,
       "observed": {
         "acceptedSeq": 90,
-        "emittedSeq": [
-          91,
-          92,
-          93,
-          94,
-          95
-        ]
+        "emittedSeq": [91, 92, 93, 94, 95]
       }
     },
     {
@@ -573,13 +547,7 @@
       "passed": true,
       "observed": {
         "expected": 1700000000000,
-        "stamps": [
-          1700000000000,
-          1700000000000,
-          1700000000000,
-          1700000000000,
-          1700000000000
-        ]
+        "stamps": [1700000000000, 1700000000000, 1700000000000, 1700000000000, 1700000000000]
       }
     },
     {
@@ -588,13 +556,9 @@
       "observed": {
         "expectedPointer": 8,
         "type": "touchEnd",
-        "ids": [
-          41
-        ],
+        "ids": [41],
         "releasedId": 41,
-        "remainingIds": [
-          42
-        ],
+        "remainingIds": [42],
         "method": "explicit released point",
         "observed": {
           "pointers": [
@@ -616,14 +580,12 @@
           "last": {
             "type": "control",
             "phaseAt": 1700000000000,
-            "seq": 97,
+            "seq": 96,
             "dx": 0,
             "dy": 0,
             "kick": true
           },
-          "heldControls": [
-            "kick"
-          ]
+          "heldControls": ["kick"]
         }
       }
     },
@@ -631,12 +593,12 @@
       "name": "heartbeat stops after independent releases",
       "passed": true,
       "observed": {
-        "before": 8,
-        "after": 8,
+        "before": 7,
+        "after": 7,
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 98,
+          "seq": 97,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -760,12 +722,8 @@
       "observed": {
         "contactId": 101,
         "pointerId": 13,
-        "captureBefore": [
-          "left"
-        ],
-        "captureAfter": [
-          "left"
-        ],
+        "captureBefore": ["left"],
+        "captureAfter": ["left"],
         "movement": [
           {
             "type": "pointermove",
@@ -792,12 +750,8 @@
           "kick": false
         },
         "heldControls": [],
-        "captureBefore": [
-          "left"
-        ],
-        "captureAfter": [
-          "left"
-        ]
+        "captureBefore": ["left"],
+        "captureAfter": ["left"]
       }
     },
     {
@@ -917,12 +871,8 @@
       "observed": {
         "contactId": 111,
         "pointerId": 15,
-        "captureBefore": [
-          "left"
-        ],
-        "captureAfter": [
-          "left"
-        ],
+        "captureBefore": ["left"],
+        "captureAfter": ["left"],
         "movement": [
           {
             "type": "pointermove",
@@ -949,12 +899,8 @@
           "kick": false
         },
         "heldControls": [],
-        "captureBefore": [
-          "left"
-        ],
-        "captureAfter": [
-          "left"
-        ]
+        "captureBefore": ["left"],
+        "captureAfter": ["left"]
       }
     },
     {
@@ -1277,34 +1223,9 @@
       "passed": true,
       "observed": {
         "repeatedKeydowns": 5,
-        "packets": [
-          {
-            "type": "control",
-            "phaseAt": 1700000000000,
-            "seq": 2,
-            "dx": 1,
-            "dy": -1,
-            "kick": false
-          },
-          {
-            "type": "control",
-            "phaseAt": 1700000000000,
-            "seq": 3,
-            "dx": 1,
-            "dy": -1,
-            "kick": false
-          },
-          {
-            "type": "control",
-            "phaseAt": 1700000000000,
-            "seq": 4,
-            "dx": 1,
-            "dy": -1,
-            "kick": false
-          }
-        ],
-        "elapsedMs": 928,
-        "heartbeatAllowance": 4,
+        "packets": [],
+        "elapsedMs": 155,
+        "heartbeatAllowance": 1,
         "note": "Scheduled heartbeats may occur during the repeated keydown window."
       }
     },
@@ -1320,7 +1241,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 5,
+          "seq": 2,
           "dx": 1,
           "dy": -1,
           "kick": true
@@ -1339,7 +1260,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 6,
+          "seq": 4,
           "dx": 0,
           "dy": -1,
           "kick": true
@@ -1358,7 +1279,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 7,
+          "seq": 5,
           "dx": 0,
           "dy": -1,
           "kick": false
@@ -1377,7 +1298,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 8,
+          "seq": 6,
           "dx": 0,
           "dy": -1,
           "kick": true
@@ -1396,7 +1317,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 11,
+          "seq": 8,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -1415,7 +1336,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 13,
+          "seq": 10,
           "dx": 1,
           "dy": -1,
           "kick": false
@@ -1434,7 +1355,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 17,
+          "seq": 13,
           "dx": -1,
           "dy": -1,
           "kick": false
@@ -1567,12 +1488,12 @@
       "name": "keyboard release stops heartbeats",
       "passed": true,
       "observed": {
-        "before": 17,
-        "after": 17,
+        "before": 14,
+        "after": 14,
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 18,
+          "seq": 15,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -2157,28 +2078,21 @@
       "name": "new authoritative lastKickAt cues one thud",
       "passed": true,
       "observed": {
-        "cues": [
-          "thud"
-        ]
+        "cues": ["thud"]
       }
     },
     {
       "name": "duplicate public push cannot replay kick cue",
       "passed": true,
       "observed": {
-        "cues": [
-          "thud"
-        ]
+        "cues": ["thud"]
       }
     },
     {
       "name": "a later authoritative kick stamp cues exactly once more",
       "passed": true,
       "observed": {
-        "cues": [
-          "thud",
-          "thud"
-        ]
+        "cues": ["thud", "thud"]
       }
     },
     {
@@ -2261,7 +2175,7 @@
       "name": "job media stays below 10 MB",
       "passed": true,
       "observed": {
-        "bytes": 9075714,
+        "bytes": 9069567,
         "limitBytes": 10000000
       }
     }
@@ -4489,7 +4403,7 @@
       }
     }
   ],
-  "passed": false,
+  "passed": true,
   "browserVersion": {
     "protocolVersion": "1.3",
     "product": "Chrome/154.0.8037.99",
@@ -4500,9 +4414,7 @@
   "touchProtocol": [
     {
       "type": "touchStart",
-      "ids": [
-        11
-      ],
+      "ids": [11],
       "observed": {
         "pointers": [
           {
@@ -4521,17 +4433,12 @@
           "dy": -1,
           "kick": false
         },
-        "heldControls": [
-          "up-right"
-        ]
+        "heldControls": ["up-right"]
       }
     },
     {
       "type": "touchStart",
-      "ids": [
-        11,
-        12
-      ],
+      "ids": [11, 12],
       "observed": {
         "pointers": [
           {
@@ -4550,21 +4457,14 @@
           "dy": -1,
           "kick": true
         },
-        "heldControls": [
-          "up-right",
-          "kick"
-        ]
+        "heldControls": ["up-right", "kick"]
       }
     },
     {
       "type": "touchEnd",
-      "ids": [
-        11
-      ],
+      "ids": [11],
       "releasedId": 11,
-      "remainingIds": [
-        12
-      ],
+      "remainingIds": [12],
       "method": "explicit released point",
       "observed": {
         "pointers": [
@@ -4591,9 +4491,7 @@
           "dy": 0,
           "kick": true
         },
-        "heldControls": [
-          "kick"
-        ]
+        "heldControls": ["kick"]
       }
     },
     {
@@ -4632,9 +4530,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        21
-      ],
+      "ids": [21],
       "observed": {
         "pointers": [
           {
@@ -4653,17 +4549,12 @@
           "dy": 0,
           "kick": false
         },
-        "heldControls": [
-          "left"
-        ]
+        "heldControls": ["left"]
       }
     },
     {
       "type": "touchStart",
-      "ids": [
-        21,
-        22
-      ],
+      "ids": [21, 22],
       "observed": {
         "pointers": [
           {
@@ -4682,21 +4573,14 @@
           "dy": 0,
           "kick": false
         },
-        "heldControls": [
-          "left",
-          "right"
-        ]
+        "heldControls": ["left", "right"]
       }
     },
     {
       "type": "touchEnd",
-      "ids": [
-        22
-      ],
+      "ids": [22],
       "releasedId": 22,
-      "remainingIds": [
-        21
-      ],
+      "remainingIds": [21],
       "method": "explicit released point",
       "observed": {
         "pointers": [
@@ -4723,9 +4607,7 @@
           "dy": 0,
           "kick": false
         },
-        "heldControls": [
-          "left"
-        ]
+        "heldControls": ["left"]
       }
     },
     {
@@ -4761,9 +4643,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        31
-      ],
+      "ids": [31],
       "observed": {
         "pointers": [
           {
@@ -4782,17 +4662,12 @@
           "dy": 0,
           "kick": false
         },
-        "heldControls": [
-          "left"
-        ]
+        "heldControls": ["left"]
       }
     },
     {
       "type": "touchStart",
-      "ids": [
-        31,
-        32
-      ],
+      "ids": [31, 32],
       "observed": {
         "pointers": [
           {
@@ -4811,18 +4686,12 @@
           "dy": 0,
           "kick": true
         },
-        "heldControls": [
-          "left",
-          "kick"
-        ]
+        "heldControls": ["left", "kick"]
       }
     },
     {
       "type": "touchMove",
-      "ids": [
-        31,
-        32
-      ],
+      "ids": [31, 32],
       "observed": {
         "pointers": [
           {
@@ -4841,17 +4710,12 @@
           "dy": 0,
           "kick": true
         },
-        "heldControls": [
-          "kick"
-        ]
+        "heldControls": ["kick"]
       }
     },
     {
       "type": "touchMove",
-      "ids": [
-        31,
-        32
-      ],
+      "ids": [31, 32],
       "observed": {
         "pointers": [
           {
@@ -4870,18 +4734,12 @@
           "dy": 1,
           "kick": true
         },
-        "heldControls": [
-          "down-left",
-          "kick"
-        ]
+        "heldControls": ["down-left", "kick"]
       }
     },
     {
       "type": "touchMove",
-      "ids": [
-        31,
-        32
-      ],
+      "ids": [31, 32],
       "observed": {
         "pointers": [
           {
@@ -4895,25 +4753,19 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 5,
+          "seq": 4,
           "dx": 0,
           "dy": 0,
           "kick": true
         },
-        "heldControls": [
-          "kick"
-        ]
+        "heldControls": ["kick"]
       }
     },
     {
       "type": "touchEnd",
-      "ids": [
-        32
-      ],
+      "ids": [32],
       "releasedId": 32,
-      "remainingIds": [
-        31
-      ],
+      "remainingIds": [31],
       "method": "explicit released point",
       "observed": {
         "pointers": [
@@ -4935,7 +4787,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 6,
+          "seq": 5,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -4969,7 +4821,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 6,
+          "seq": 5,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -4979,9 +4831,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        41
-      ],
+      "ids": [41],
       "observed": {
         "pointers": [
           {
@@ -5000,17 +4850,12 @@
           "dy": 1,
           "kick": false
         },
-        "heldControls": [
-          "down-right"
-        ]
+        "heldControls": ["down-right"]
       }
     },
     {
       "type": "touchStart",
-      "ids": [
-        41,
-        42
-      ],
+      "ids": [41, 42],
       "observed": {
         "pointers": [
           {
@@ -5029,21 +4874,14 @@
           "dy": 1,
           "kick": true
         },
-        "heldControls": [
-          "down-right",
-          "kick"
-        ]
+        "heldControls": ["down-right", "kick"]
       }
     },
     {
       "type": "touchEnd",
-      "ids": [
-        41
-      ],
+      "ids": [41],
       "releasedId": 41,
-      "remainingIds": [
-        42
-      ],
+      "remainingIds": [42],
       "method": "explicit released point",
       "observed": {
         "pointers": [
@@ -5065,14 +4903,12 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 97,
+          "seq": 96,
           "dx": 0,
           "dy": 0,
           "kick": true
         },
-        "heldControls": [
-          "kick"
-        ]
+        "heldControls": ["kick"]
       }
     },
     {
@@ -5101,7 +4937,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 98,
+          "seq": 97,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -5111,9 +4947,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        51
-      ],
+      "ids": [51],
       "observed": {
         "pointers": [
           {
@@ -5132,17 +4966,12 @@
           "dy": -1,
           "kick": false
         },
-        "heldControls": [
-          "up"
-        ]
+        "heldControls": ["up"]
       }
     },
     {
       "type": "touchStart",
-      "ids": [
-        51,
-        52
-      ],
+      "ids": [51, 52],
       "observed": {
         "pointers": [
           {
@@ -5161,10 +4990,7 @@
           "dy": -1,
           "kick": true
         },
-        "heldControls": [
-          "up",
-          "kick"
-        ]
+        "heldControls": ["up", "kick"]
       }
     },
     {
@@ -5214,9 +5040,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        61
-      ],
+      "ids": [61],
       "observed": {
         "pointers": [
           {
@@ -5235,9 +5059,7 @@
           "dy": 0,
           "kick": false
         },
-        "heldControls": [
-          "right"
-        ]
+        "heldControls": ["right"]
       }
     },
     {
@@ -5273,9 +5095,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        101
-      ],
+      "ids": [101],
       "observed": {
         "pointers": [
           {
@@ -5294,16 +5114,12 @@
           "dy": 0,
           "kick": false
         },
-        "heldControls": [
-          "left"
-        ]
+        "heldControls": ["left"]
       }
     },
     {
       "type": "touchMove",
-      "ids": [
-        101
-      ],
+      "ids": [101],
       "observed": {
         "pointers": [
           {
@@ -5361,9 +5177,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        102
-      ],
+      "ids": [102],
       "observed": {
         "pointers": [
           {
@@ -5382,9 +5196,7 @@
           "dy": 1,
           "kick": false
         },
-        "heldControls": [
-          "down-right"
-        ]
+        "heldControls": ["down-right"]
       }
     },
     {
@@ -5423,9 +5235,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        111
-      ],
+      "ids": [111],
       "observed": {
         "pointers": [
           {
@@ -5444,16 +5254,12 @@
           "dy": 0,
           "kick": false
         },
-        "heldControls": [
-          "left"
-        ]
+        "heldControls": ["left"]
       }
     },
     {
       "type": "touchMove",
-      "ids": [
-        111
-      ],
+      "ids": [111],
       "observed": {
         "pointers": [
           {
@@ -5511,9 +5317,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        112
-      ],
+      "ids": [112],
       "observed": {
         "pointers": [
           {
@@ -5532,9 +5336,7 @@
           "dy": 1,
           "kick": false
         },
-        "heldControls": [
-          "down-right"
-        ]
+        "heldControls": ["down-right"]
       }
     },
     {
@@ -5573,9 +5375,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        71
-      ],
+      "ids": [71],
       "observed": {
         "pointers": [
           {
@@ -5594,17 +5394,12 @@
           "dy": 1,
           "kick": false
         },
-        "heldControls": [
-          "down-left"
-        ]
+        "heldControls": ["down-left"]
       }
     },
     {
       "type": "touchStart",
-      "ids": [
-        71,
-        72
-      ],
+      "ids": [71, 72],
       "observed": {
         "pointers": [
           {
@@ -5623,10 +5418,7 @@
           "dy": 1,
           "kick": true
         },
-        "heldControls": [
-          "down-left",
-          "kick"
-        ]
+        "heldControls": ["down-left", "kick"]
       }
     },
     {
@@ -5662,9 +5454,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        71
-      ],
+      "ids": [71],
       "observed": {
         "pointers": [
           {
@@ -5683,17 +5473,12 @@
           "dy": 1,
           "kick": false
         },
-        "heldControls": [
-          "down-left"
-        ]
+        "heldControls": ["down-left"]
       }
     },
     {
       "type": "touchStart",
-      "ids": [
-        71,
-        72
-      ],
+      "ids": [71, 72],
       "observed": {
         "pointers": [
           {
@@ -5712,10 +5497,7 @@
           "dy": 1,
           "kick": true
         },
-        "heldControls": [
-          "down-left",
-          "kick"
-        ]
+        "heldControls": ["down-left", "kick"]
       }
     },
     {
@@ -5751,9 +5533,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        71
-      ],
+      "ids": [71],
       "observed": {
         "pointers": [
           {
@@ -5772,17 +5552,12 @@
           "dy": 1,
           "kick": false
         },
-        "heldControls": [
-          "down-left"
-        ]
+        "heldControls": ["down-left"]
       }
     },
     {
       "type": "touchStart",
-      "ids": [
-        71,
-        72
-      ],
+      "ids": [71, 72],
       "observed": {
         "pointers": [
           {
@@ -5801,10 +5576,7 @@
           "dy": 1,
           "kick": true
         },
-        "heldControls": [
-          "down-left",
-          "kick"
-        ]
+        "heldControls": ["down-left", "kick"]
       }
     },
     {
@@ -5840,9 +5612,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        71
-      ],
+      "ids": [71],
       "observed": {
         "pointers": [
           {
@@ -5861,17 +5631,12 @@
           "dy": 1,
           "kick": false
         },
-        "heldControls": [
-          "down-left"
-        ]
+        "heldControls": ["down-left"]
       }
     },
     {
       "type": "touchStart",
-      "ids": [
-        71,
-        72
-      ],
+      "ids": [71, 72],
       "observed": {
         "pointers": [
           {
@@ -5890,10 +5655,7 @@
           "dy": 1,
           "kick": true
         },
-        "heldControls": [
-          "down-left",
-          "kick"
-        ]
+        "heldControls": ["down-left", "kick"]
       }
     },
     {
@@ -5929,9 +5691,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        81
-      ],
+      "ids": [81],
       "observed": {
         "pointers": [
           {
@@ -5950,9 +5710,7 @@
           "dy": 0,
           "kick": false
         },
-        "heldControls": [
-          "left"
-        ]
+        "heldControls": ["left"]
       }
     },
     {
@@ -5981,9 +5739,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        82
-      ],
+      "ids": [82],
       "observed": {
         "pointers": [
           {
@@ -6002,9 +5758,7 @@
           "dy": 0,
           "kick": false
         },
-        "heldControls": [
-          "right"
-        ]
+        "heldControls": ["right"]
       }
     },
     {
@@ -6040,9 +5794,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        88
-      ],
+      "ids": [88],
       "observed": {
         "pointers": [
           {
@@ -6061,17 +5813,12 @@
           "dy": -1,
           "kick": false
         },
-        "heldControls": [
-          "up"
-        ]
+        "heldControls": ["up"]
       }
     },
     {
       "type": "touchStart",
-      "ids": [
-        88,
-        89
-      ],
+      "ids": [88, 89],
       "observed": {
         "pointers": [
           {
@@ -6090,10 +5837,7 @@
           "dy": -1,
           "kick": true
         },
-        "heldControls": [
-          "up",
-          "kick"
-        ]
+        "heldControls": ["up", "kick"]
       }
     },
     {
@@ -6129,9 +5873,7 @@
     },
     {
       "type": "touchStart",
-      "ids": [
-        91
-      ],
+      "ids": [91],
       "observed": {
         "pointers": [
           {
@@ -6150,9 +5892,7 @@
           "dy": 0,
           "kick": true
         },
-        "heldControls": [
-          "kick"
-        ]
+        "heldControls": ["kick"]
       }
     },
     {

@@ -228,3 +228,34 @@ including the original heartbeat timing bound and an unrelated late CDP Input.di
 timeout, setup and cleanup failures. No JS runtime errors were reported. The closed native
 browser/endpoint evidence and partial failure report are retained as pointer-replay-before files.
 No claim of 104 successful baseline checks is made; the final rerun must pass the unchanged set.
+
+Round 7 final client/SSR command `PB_WRITE_EVIDENCE=1 pnpm.cmd vitest run
+games/haxball/client games/haxball/__tests__/evidence.test.tsx --maxWorkers=1 --pool=threads`
+PASS: 46 tests / 3 files, 4.74 s, start 01:38:26 local / 06:38:26 UTC. A live seat/phase
+gesture token plus a global cancellation epoch rejects an old captured contact after release.
+Real centre/outside drags can still return; independent thumbs keep their own registered contact.
+
+Two completed mounted reruns each passed 103/104 controls, all 64 goal cues and all 12 credit
+checks, including every new touch regression. Their only failure was the original unchanged
+220–450 ms steady heartbeat bound: a 472 ms gap, then an 849 ms gap. The latter exceeds the
+650 ms server lease. These measurements are retained in `media/heartbeat-variance.json`;
+they do not establish that active controllers on other devices have the same scheduling.
+
+The final unchanged checks PASS with `P24_INTERACTION_ONLY=1 node
+jobs/P24-haxball/capture.mjs`, captured 2026-10-12T06:54:04.963Z: 104/104 controls,
+64/64 goal cues and 12/12 retained-credit checks. The first heartbeat gap is excluded by the
+existing assertion; its final steady gaps are 311 and 295 ms. Chromium uses GPU rendering and
+the foreground automation settings from the [official Puppeteer Chrome launcher](https://github.com/puppeteer/puppeteer/blob/main/packages/puppeteer-core/src/node/ChromeLauncher.ts).
+No runtime lease, heartbeat, input or assertion tolerance changed. The report records launch
+settings. Native owned process/creation/exit checks and the exact CDP endpoint verify closure,
+with zero forced processes; the temporary profile was removed. Root inspected final two-thumb
+phone and goal TV PNGs by hand. Canonical static markup remains unchanged.
+
+CI 38214800973 on touch milestone `a278579` failed only formatting of two generated JSON
+reports. Both are formatted before the final verification commit; no test failure is hidden.
+
+Round 7 canonical media: `node jobs/P24-haxball/hash-media.mjs` reports 175 files,
+9,065,886 bytes, below 10,000,000. Independent SHA-256 verification and final typecheck/format
+verification PASS: PowerShell `Get-FileHash -Algorithm SHA256` recomputes every one of the
+175 media digests with zero mismatches; all 75 canonical HTML hashes match the retained static
+capture. `pnpm.cmd typecheck` and `pnpm.cmd format` both exit 0 after final report formatting.

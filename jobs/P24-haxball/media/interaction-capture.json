@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-12T06:44:39.260Z",
+  "capturedAt": "2026-10-12T06:54:04.963Z",
   "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
   "pages": [],
   "browserVersion": {
@@ -10,9 +10,17 @@
     "jsVersion": "15.4.80.20"
   },
   "touchDispatchFeatureFlag": "--disable-features=SyntheticPointerActions",
+  "foregroundScheduling": {
+    "timerThrottlingDisabled": true,
+    "occludedWindowBackgroundingDisabled": true,
+    "rendererBackgroundingDisabled": true,
+    "rendererProcessLimit": 1,
+    "gpuDisabled": false,
+    "reference": "https://github.com/puppeteer/puppeteer/blob/main/packages/puppeteer-core/src/node/ChromeLauncher.ts"
+  },
   "interaction": {
     "report": "interaction.json",
-    "passed": false,
+    "passed": true,
     "checks": 104,
     "captures": 3
   },
@@ -32,54 +40,54 @@
     "browser": {
       "verifiedClosed": true,
       "verification": "CDP process membership plus native PID/creation/exit checks",
-      "browserPid": 71412,
+      "browserPid": 82508,
       "observedProcesses": 7,
       "forcedProcesses": 0,
       "exitedRecords": [
         {
-          "pid": 21304,
+          "pid": 94912,
           "type": "launcher",
           "nativeState": "not-found"
         },
         {
-          "pid": 71412,
-          "created": "2026-10-12T06:44:39.7238458Z",
+          "pid": 82508,
+          "created": "2026-10-12T06:54:05.0447827Z",
           "type": "browser",
           "nativeState": "not-found"
         },
         {
-          "pid": 47868,
-          "created": "2026-10-12T06:44:40.1451347Z",
+          "pid": 71836,
+          "created": "2026-10-12T06:54:05.3363300Z",
           "type": "renderer",
           "nativeState": "not-found"
         },
         {
-          "pid": 18692,
-          "created": "2026-10-12T06:44:40.0398094Z",
+          "pid": 87452,
+          "created": "2026-10-12T06:54:05.2188350Z",
           "type": "renderer",
           "nativeState": "not-found"
         },
         {
-          "pid": 122812,
-          "created": "2026-10-12T06:44:39.9726085Z",
+          "pid": 28384,
+          "created": "2026-10-12T06:54:05.2005203Z",
           "type": "renderer",
           "nativeState": "not-found"
         },
         {
-          "pid": 70932,
-          "created": "2026-10-12T06:44:39.8751334Z",
+          "pid": 94584,
+          "created": "2026-10-12T06:54:05.1353986Z",
           "type": "GPU",
           "nativeState": "not-found"
         },
         {
-          "pid": 13592,
-          "created": "2026-10-12T06:44:39.8802376Z",
+          "pid": 53372,
+          "created": "2026-10-12T06:54:05.1389311Z",
           "type": "network.mojom.NetworkService",
           "nativeState": "not-found"
         },
         {
-          "pid": 107144,
-          "created": "2026-10-12T06:44:39.9187170Z",
+          "pid": 89684,
+          "created": "2026-10-12T06:54:05.1548486Z",
           "type": "storage.mojom.StorageService",
           "nativeState": "not-found"
         }

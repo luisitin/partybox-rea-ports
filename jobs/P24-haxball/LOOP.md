@@ -57,3 +57,12 @@ on the old hook became zero failures, with all 88 controls, 64 goal cues and 12 
 passing. All 46 focused client/SSR tests pass; 75 canonical static pages remain byte-identical.
 Server source is unchanged from the green 141-test / 7,000-match run. The other reviewed aspects
 are documented policy/physics tradeoffs or require real-play evidence for tuning.
+
+Round 7: reviewed captured touches reviving after blur/hidden, neutral-centre drag recovery,
+independent-thumb cancellation, compact jersey identification and 100 ms pose updates.
+Global cancellation now invalidates the gesture token; an old captured contact cannot register
+movement until lifted and pressed again. Measured gain: four replay/heartbeat failures across
+blur and hidden transitions become zero, with all 104 mounted controls, 64 goal cues and
+12 retained-credit checks passing. All 46 focused client/SSR tests pass. Existing real centre
+drags, two-thumb releases and repeat-key regressions remain green. Two intermediate heartbeat
+timing failures and the foreground automation rerun are retained honestly in VERIFY.md.

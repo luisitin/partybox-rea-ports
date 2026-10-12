@@ -1,9 +1,6 @@
 {
-  "capturedAt": "2026-10-12T06:45:08.630Z",
-  "source": [
-    "interaction-views.json",
-    "interaction-tv-views.json"
-  ],
+  "capturedAt": "2026-10-12T06:54:26.644Z",
+  "source": ["interaction-views.json", "interaction-tv-views.json"],
   "browserOwnership": "Same capture.mjs browser and page; no new instance or tab.",
   "method": "Real Tv/Controller in SoundProvider; observed cheer callbacks, without microphone/audio-output claims.",
   "checks": [
@@ -26,12 +23,8 @@
       "name": "TV red goal cues exactly once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-red",
         "phoneOnly": false,
@@ -69,12 +62,8 @@
       "name": "TV audio-red cannot replay red goal",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-red",
         "phoneOnly": false,
@@ -88,12 +77,8 @@
       "name": "TV audio-red-paused cannot replay red goal",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-red-paused",
         "phoneOnly": false,
@@ -107,12 +92,8 @@
       "name": "TV audio-red-resumed cannot replay red goal",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-red-resumed",
         "phoneOnly": false,
@@ -126,14 +107,8 @@
       "name": "TV blue goal adds one cue when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer",
-          "cheer"
-        ],
-        "cues": [
-          "cheer",
-          "cheer"
-        ],
+        "expected": ["cheer", "cheer"],
+        "cues": ["cheer", "cheer"],
         "surface": "tv",
         "kind": "audio-blue",
         "phoneOnly": false,
@@ -162,12 +137,8 @@
       "name": "TV later blue rise after remount cues once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-blue",
         "phoneOnly": false,
@@ -181,12 +152,8 @@
       "name": "TV decrease/reset/historical restore audio-red stays silent",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-red",
         "phoneOnly": false,
@@ -200,12 +167,8 @@
       "name": "TV decrease/reset/historical restore audio-reset stays silent",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-reset",
         "phoneOnly": false,
@@ -219,12 +182,8 @@
       "name": "TV decrease/reset/historical restore audio-red stays silent",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-red",
         "phoneOnly": false,
@@ -238,12 +197,8 @@
       "name": "TV decrease/reset/historical restore audio-blue stays silent",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-blue",
         "phoneOnly": false,
@@ -257,14 +212,8 @@
       "name": "TV genuinely higher red score cues once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer",
-          "cheer"
-        ],
-        "cues": [
-          "cheer",
-          "cheer"
-        ],
+        "expected": ["cheer", "cheer"],
+        "cues": ["cheer", "cheer"],
         "surface": "tv",
         "kind": "audio-red-new",
         "phoneOnly": false,
@@ -278,12 +227,8 @@
       "name": "TV direct audio-red-cap score projection cues once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-red-cap",
         "phoneOnly": false,
@@ -297,12 +242,8 @@
       "name": "TV direct audio-red-done score projection cues once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-red-done",
         "phoneOnly": false,
@@ -316,12 +257,8 @@
       "name": "TV direct audio-red-delayed score projection cues once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-red-delayed",
         "phoneOnly": false,
@@ -365,12 +302,8 @@
       "name": "TV next fresh unpaused blue score cues once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "tv",
         "kind": "audio-blue",
         "phoneOnly": false,
@@ -399,12 +332,8 @@
       "name": "phone-only Controller red goal cues exactly once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-red",
         "phoneOnly": true,
@@ -442,12 +371,8 @@
       "name": "phone-only Controller audio-red cannot replay red goal",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-red",
         "phoneOnly": true,
@@ -461,12 +386,8 @@
       "name": "phone-only Controller audio-red-paused cannot replay red goal",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-red-paused",
         "phoneOnly": true,
@@ -480,12 +401,8 @@
       "name": "phone-only Controller audio-red-resumed cannot replay red goal",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-red-resumed",
         "phoneOnly": true,
@@ -499,14 +416,8 @@
       "name": "phone-only Controller blue goal adds one cue when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer",
-          "cheer"
-        ],
-        "cues": [
-          "cheer",
-          "cheer"
-        ],
+        "expected": ["cheer", "cheer"],
+        "cues": ["cheer", "cheer"],
         "surface": "controller",
         "kind": "audio-blue",
         "phoneOnly": true,
@@ -535,12 +446,8 @@
       "name": "phone-only Controller later blue rise after remount cues once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-blue",
         "phoneOnly": true,
@@ -554,12 +461,8 @@
       "name": "phone-only Controller decrease/reset/historical restore audio-red stays silent",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-red",
         "phoneOnly": true,
@@ -573,12 +476,8 @@
       "name": "phone-only Controller decrease/reset/historical restore audio-reset stays silent",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-reset",
         "phoneOnly": true,
@@ -592,12 +491,8 @@
       "name": "phone-only Controller decrease/reset/historical restore audio-red stays silent",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-red",
         "phoneOnly": true,
@@ -611,12 +506,8 @@
       "name": "phone-only Controller decrease/reset/historical restore audio-blue stays silent",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-blue",
         "phoneOnly": true,
@@ -630,14 +521,8 @@
       "name": "phone-only Controller genuinely higher red score cues once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer",
-          "cheer"
-        ],
-        "cues": [
-          "cheer",
-          "cheer"
-        ],
+        "expected": ["cheer", "cheer"],
+        "cues": ["cheer", "cheer"],
         "surface": "controller",
         "kind": "audio-red-new",
         "phoneOnly": true,
@@ -651,12 +536,8 @@
       "name": "phone-only Controller direct audio-red-cap score projection cues once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-red-cap",
         "phoneOnly": true,
@@ -670,12 +551,8 @@
       "name": "phone-only Controller direct audio-red-done score projection cues once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-red-done",
         "phoneOnly": true,
@@ -689,12 +566,8 @@
       "name": "phone-only Controller direct audio-red-delayed score projection cues once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-red-delayed",
         "phoneOnly": true,
@@ -738,12 +611,8 @@
       "name": "phone-only Controller next fresh unpaused blue score cues once when enabled",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-blue",
         "phoneOnly": true,
@@ -1072,12 +941,8 @@
       "name": "enabled phone-only next blue goal cheers exactly once",
       "passed": true,
       "observed": {
-        "expected": [
-          "cheer"
-        ],
-        "cues": [
-          "cheer"
-        ],
+        "expected": ["cheer"],
+        "cues": ["cheer"],
         "surface": "controller",
         "kind": "audio-blue",
         "phoneOnly": true,
@@ -1098,7 +963,7 @@
       "name": "job media after goal audio stays below10 MB",
       "passed": true,
       "observed": {
-        "bytes": 9076196,
+        "bytes": 9068874,
         "limitBytes": 10000000
       }
     }

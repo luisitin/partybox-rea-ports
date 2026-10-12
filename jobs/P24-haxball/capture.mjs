@@ -684,12 +684,15 @@ async function main() {
         '--no-default-browser-check',
         '--disable-background-networking',
         '--disable-component-update',
+        // Standard foreground automation flags used by Puppeteer's Chrome launcher.
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-renderer-backgrounding',
+        '--renderer-process-limit=1',
         // Pin Chromium's default WebTouch path, which supports named individual
         // touchEnd releases. The optional synthetic path uses different semantics.
         '--disable-features=SyntheticPointerActions',
-        ...(process.env.P24_CPU_CAPTURE === '1'
-          ? ['--disable-gpu', '--renderer-process-limit=1']
-          : []),
+        ...(process.env.P24_CPU_CAPTURE === '1' ? ['--disable-gpu'] : []),
         'about:blank',
       ],
       { windowsHide: true, stdio: 'ignore' },
@@ -704,6 +707,15 @@ async function main() {
     cdp = await Cdp.connect(debuggingUrl);
     report.browserVersion = await cdp.send('Browser.getVersion');
     report.touchDispatchFeatureFlag = '--disable-features=SyntheticPointerActions';
+    report.foregroundScheduling = {
+      timerThrottlingDisabled: true,
+      occludedWindowBackgroundingDisabled: true,
+      rendererBackgroundingDisabled: true,
+      rendererProcessLimit: 1,
+      gpuDisabled: process.env.P24_CPU_CAPTURE === '1',
+      reference:
+        'https://github.com/puppeteer/puppeteer/blob/main/packages/puppeteer-core/src/node/ChromeLauncher.ts',
+    };
     const { targetInfos } = await cdp.send('Target.getTargets');
     const pageTarget = targetInfos.find((target) => target.type === 'page');
     const { targetId } =

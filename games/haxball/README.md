@@ -60,6 +60,8 @@ Heartbeat packets renew a 650 ms lease; release/cancel sends neutral movement. L
 temporary drops and phase changes clear movement and held/armed kick. Keyboard auto-repeat
 cannot revive a source cleared by a phase/pause/blur; release and press again. Kick arms on a false→true
 edge, fires once near contact after a 250 ms cooldown, and cannot rearm from a held heartbeat.
+Captured touches cleared by blur, hiding or a phase change must be lifted and pressed again;
+an ordinary centre/outside drag can still return while the same play remains active.
 
 ## Scoring
 

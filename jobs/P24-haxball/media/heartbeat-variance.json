@@ -120,5 +120,53 @@
       }
     },
     "profileRemoved": true
+  },
+  "secondRun": {
+    "failed": [
+      {
+        "name": "held controls renew on roughly 300ms heartbeat",
+        "passed": false,
+        "observed": {
+          "configuredMs": 300,
+          "observedDeltasMs": [151, 294, 849],
+          "packets": [
+            {
+              "type": "control",
+              "phaseAt": 1700000000000,
+              "seq": 92,
+              "dx": 1,
+              "dy": 1,
+              "kick": true
+            },
+            {
+              "type": "control",
+              "phaseAt": 1700000000000,
+              "seq": 93,
+              "dx": 1,
+              "dy": 1,
+              "kick": true
+            },
+            {
+              "type": "control",
+              "phaseAt": 1700000000000,
+              "seq": 94,
+              "dx": 1,
+              "dy": 1,
+              "kick": true
+            },
+            {
+              "type": "control",
+              "phaseAt": 1700000000000,
+              "seq": 95,
+              "dx": 1,
+              "dy": 1,
+              "kick": true
+            }
+          ],
+          "note": "First interval is anchored to component mount, so steady heartbeat intervals exclude it."
+        }
+      }
+    ],
+    "capturedAt": "2026-10-12T06:44:40.176Z"
   }
 }
