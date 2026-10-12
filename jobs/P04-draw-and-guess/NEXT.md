@@ -19,8 +19,8 @@ bots331/345 become0/0. Explicit choices, other decks, hint RNG and8s timing stay
 intact.35focused choice/game checks and typecheck pass; refreshed20/20mutants
 are caught and restored baseline passes. No fixture or screen change is needed.
 
-PR remains draft until refreshed CI and three consecutive no-gain KEEP GOING
-rounds pass. No-gain count:0. Log each review's five ranked remaining weaknesses,
+CI38198077870 passes47s on R23. PR remains draft until three consecutive no-gain
+KEEP GOING rounds pass. R24 is the first; no-gain count:1/3. Log two further reviews' five ranked remaining weaknesses,
 push and refresh the claim. Then refresh PR body from this job README, mark ready
 on green CI and mark CLAIMS DONE. Current candidates: extended disconnect
 forfeits, exact synonym policy, general bot vision, extra tools and cosmetic labels.
