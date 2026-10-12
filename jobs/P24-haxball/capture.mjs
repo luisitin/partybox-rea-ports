@@ -2,6 +2,7 @@
 // Uses the installed Chrome, one browser and one page; no downloaded browser or dependency.
 import { auditLayout } from './capture-audit.mjs';
 import { closePrivateChrome } from './capture-processes.mjs';
+import { runInteraction } from './interaction.mjs';
 import { spawn } from 'node:child_process';
 import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -310,6 +311,9 @@ async function main() {
         '--no-default-browser-check',
         '--disable-background-networking',
         '--disable-component-update',
+        // Pin Chromium's default WebTouch path, which supports named individual
+        // touchEnd releases. The optional synthetic path uses different semantics.
+        '--disable-features=SyntheticPointerActions',
         ...(process.env.P24_CPU_CAPTURE === '1'
           ? ['--disable-gpu', '--renderer-process-limit=1']
           : []),
@@ -325,6 +329,8 @@ async function main() {
     });
     debuggingUrl = await chromeEndpoint();
     cdp = await Cdp.connect(debuggingUrl);
+    report.browserVersion = await cdp.send('Browser.getVersion');
+    report.touchDispatchFeatureFlag = '--disable-features=SyntheticPointerActions';
     const { targetInfos } = await cdp.send('Target.getTargets');
     const pageTarget = targetInfos.find((target) => target.type === 'page');
     const { targetId } =
@@ -345,7 +351,8 @@ async function main() {
           page.summary.controlIssues ||
           page.summary.offscreen ||
           page.summary.textClipped ||
-          page.summary.scrollContainers
+          page.summary.scrollContainers ||
+          page.summary.typographyIssues
         )
           process.exitCode = 1;
         console.log(
@@ -362,6 +369,8 @@ async function main() {
       }
     }
     if (stopping) throw new Error('Capture interrupted.');
+    report.interaction = await runInteraction(cdp, sessionId, () => stopping);
+    if (!report.interaction.passed) process.exitCode = 1;
   } finally {
     try {
       report.cleanup = await stopBrowser();

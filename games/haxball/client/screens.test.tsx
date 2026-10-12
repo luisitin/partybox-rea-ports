@@ -71,7 +71,25 @@ describe('Haxball actual phone and TV screens', () => {
       const html = renderPhone(kit.start(), 'spectator', mode);
       expect(html).toContain('Watching Haxball');
       expect(html).toContain('data-haxball-pitch="true"');
+      expect(html).toContain('You are watching the match.');
+      expect(html).not.toContain('Controls return');
       expect(html).not.toMatch(/<button|data-hax-control=/);
+    },
+  );
+
+  it.each([false, true])(
+    'spectators never promise controls between phases (phone-only=%s)',
+    (mode) => {
+      const start = kit.start();
+      const goal: State = { ...start, phase: { ...start.phase, id: 'goal' } };
+      const halftime = kit.vip(start, 'skip', kit.t0 + 1000);
+      const paused = kit.vip(start, 'pause', kit.t0 + 1000);
+      const done = kit.vip(start, 'end', kit.t0 + 1000);
+      for (const state of [goal, halftime, paused, done]) {
+        const html = renderPhone(state, 'spectator', mode);
+        expect(html).toContain('You are watching the match.');
+        expect(html).not.toMatch(/Controls return|Controls are released|<button|data-hax-control=/);
+      }
     },
   );
 
@@ -89,6 +107,7 @@ describe('Haxball actual phone and TV screens', () => {
     const returned = kit.player(left, 'p1', true, undefined, kit.t0 + 200);
     const html = renderPhone(returned, 'p1', true);
     expect(html).toContain('you left the match');
+    expect(html).toContain('Your team keeps its number. You are watching.');
     expect(html).toContain('data-haxball-pitch="true"');
     expect(html).not.toMatch(/<button|data-hax-control=/);
   });
@@ -107,12 +126,14 @@ describe('Haxball actual phone and TV screens', () => {
       `Own goal by ${jersey('blue', scorer.number)}`,
     );
     expect(renderPhone(goal)).not.toMatch(/<button|data-hax-control=/);
+    expect(renderPhone(goal)).toContain('Controls return when play begins.');
   });
 
   it('half-time explains changing goals while retaining team and number', () => {
     const half = kit.vip(kit.start(), 'skip', kit.t0 + 1000);
     expect(half.phase.id).toBe('halftime');
     expect(renderPhone(half, 'p1', true)).toContain('Keep your team and number');
+    expect(renderPhone(half, 'p1', true)).toContain('Controls return when play begins.');
     const second = kit.vip(half, 'skip', kit.t0 + 2000);
     const html = renderPhone(second);
     expect(html).toContain('Half 2 / 2');
@@ -129,6 +150,7 @@ describe('Haxball actual phone and TV screens', () => {
     const done = kit.vip({ ...start, goals }, 'end', kit.t0 + 1000);
     const headline =
       goals.red === goals.blue ? 'A draw!' : goals.red > goals.blue ? 'Red wins!' : 'Blue wins!';
+    expect(renderPhone(done, 'p1', true)).toContain('The final team scores are above.');
     for (const html of [
       renderTv(done),
       renderPhone(done, 'p1', true),

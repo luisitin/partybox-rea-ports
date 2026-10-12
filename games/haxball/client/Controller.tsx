@@ -48,7 +48,7 @@ export function Controller({
   else if (view.kickArmed)
     kickStatus =
       view.kickReadyAt > now ? 'Kick armed · recovering' : 'Kick armed · get close to the ball';
-  else if (held.kick) kickStatus = 'Holding Kick · waiting for the match';
+  else if (held.kick) kickStatus = 'Kick held · get close to the ball';
 
   return (
     <section
@@ -89,13 +89,15 @@ export function Controller({
         <div className={styles.watching}>
           <MatchStage view={view} now={now} mine={player ? view.me.id : undefined} />
           <p className={styles.hint}>
-            {view.departed
-              ? 'Your team keeps its number. You are watching.'
-              : view.paused
-                ? 'Controls are released while the match is paused.'
-                : view.phaseId === 'done'
-                  ? 'The final team scores are above.'
-                  : 'Watch the pitch. Controls return when play begins.'}
+            {!player
+              ? 'You are watching the match.'
+              : view.departed
+                ? 'Your team keeps its number. You are watching.'
+                : view.paused
+                  ? 'Controls are released while the match is paused.'
+                  : view.phaseId === 'done'
+                    ? 'The final team scores are above.'
+                    : 'Watch the pitch. Controls return when play begins.'}
           </p>
         </div>
       )}

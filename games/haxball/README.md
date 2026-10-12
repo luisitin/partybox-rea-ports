@@ -13,7 +13,9 @@ and owned physics tuning, with no original code, branding artwork, audio or runt
 2–8 participants, seeded balanced team assignment and stable numbered jerseys within each team.
 For 3/5/7 participants, the smaller team receives one explicitly named normal-strength helper disc.
 Helpers are public, never SDK participants or result rows. Easy bots chase the ball with mistakes;
-normal bots divide attack/defence and approach behind the ball; sharp bots predict further ahead.
+All strengths move into a side lane when an opponent blocks a radial kick. Normal bots divide
+attack/defence and line up behind the ball; sharp bots predict further ahead and compare three
+goal-mouth lanes. Public disc identities distinguish approach angles without a fixed team bias.
 Spectators watch the whole public pitch without controls.
 
 ## Phases
@@ -70,7 +72,8 @@ share first place; a draw shares first place across both teams. Helpers receive 
 - Pause settles movement and cancels held input before holding. Resume shifts motion time,
   half/phase deadlines and kick cooldowns; historical kick stamps stay unchanged.
 - Play VIP skip ends the current half; goal skip resumes the same half without more clock;
-  halftime skip starts half two; VIP end locks the current result from every phase.
+  halftime skip starts half two; VIP end locks the current result from every phase. Ending while
+  paused preserves the frozen goals and positions without integrating the pause duration.
 - Unknown/spectator inputs, decreasing times, old phase stamps, duplicate sequences, stale/early
   timers and paused input are ignored. The finite half clock also ends idle or all-bot games.
 - The entire pitch is public. Other intent, sequence, lease and kick-arm metadata never enter
@@ -90,7 +93,7 @@ one named helper when required. `content/schema.ts` exports an empty `packs` reg
 ## Sources
 
 Studied the [official Haxball site](https://www.haxball.com/),
-[official controls](https://www.haxball.com/about), and the
+[official input update](https://blog.haxball.com/2010/12/21/fix.html), and the
 [official headless API](https://github.com/haxball/haxball-issues/wiki/Headless-Host).
 Independent observations, original-client inspection and full source notes are recorded in
 `jobs/P24-haxball/RESEARCH.md` and `SOURCES.md`. Retained mechanics are team discs, radial contact

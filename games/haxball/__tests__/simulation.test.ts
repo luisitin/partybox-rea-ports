@@ -8,8 +8,10 @@ import { STEP_MS } from '../server/types';
 import { start, timer, T0 } from './helpers';
 
 const SKILLS: BotSkill[] = ['easy', 'normal', 'sharp'];
-const REACTION_MS = 400; // Below the650ms lease; every underlying50ms physics step still runs.
+const REACTION_MS = 400; // Below the 650 ms lease; every underlying 50 ms physics step still runs.
 interface Run {
+  terminated: boolean;
+  error: string | null;
   virtualMs: number;
   physicsSteps: number;
   kicks: number;
@@ -22,11 +24,16 @@ interface Run {
 interface Summary {
   players: number;
   games: number;
+  attempted: number;
+  status: 'running' | 'passed' | 'failed';
+  failures: string[];
+  failedRunCount: number;
+  failedRunSamples: { seed: number; skill: BotSkill; error: string; virtualMs: number }[];
   settings: { halfSeconds: number };
   reactionMs: number;
-  medianMs: number;
-  maxMs: number;
-  minMs: number;
+  medianMs: number | null;
+  maxMs: number | null;
+  minMs: number | null;
   terminated: number;
   physicsSteps: number;
   kicks: number;
@@ -34,9 +41,55 @@ interface Summary {
   movement: number;
   release: number;
   kickAttempts: number;
-  strengths: Record<string, { games: number; kicks: number; goals: number }>;
+  strengths: Record<string, { games: number; terminated: number; kicks: number; goals: number }>;
 }
 const summaries: Summary[] = [];
+const plannedGames = 7000;
+const writingEvidence = process.env['PB_WRITE_EVIDENCE'] === '1';
+const folder = fileURLToPath(new URL('../../../jobs/P24-haxball/media/', import.meta.url));
+
+function writeEvidence(): void {
+  if (!writingEvidence) return;
+  mkdirSync(folder, { recursive: true });
+  const gameCount = summaries.reduce((total, item) => total + item.attempted, 0);
+  const complete =
+    gameCount === plannedGames &&
+    summaries.length === 7 &&
+    summaries.every((item) => item.status !== 'running');
+  const status = complete
+    ? summaries.every((item) => item.status === 'passed')
+      ? 'passed'
+      : 'failed'
+    : 'running';
+  writeFileSync(
+    `${folder}/simulation.json`,
+    `${JSON.stringify(
+      {
+        status,
+        complete,
+        plannedGames,
+        gameCount,
+        hasFailures: summaries.some((item) => item.status === 'failed' || item.failedRunCount > 0),
+        terminated: summaries.reduce((total, item) => total + item.terminated, 0),
+        failedRunCount: summaries.reduce((total, item) => total + item.failedRunCount, 0),
+        seedScheme: '(i+1)*2654435761 + players*1009, uint32',
+        defaultHalves: '2 x90 seconds',
+        physicsStepMs: STEP_MS,
+        reactionMs: REACTION_MS,
+        medianPopulation: 'Successfully terminated, complete default matches only; null when none',
+        strategyCoverage:
+          'Movement/directions, accepted kicks, releases, and positive goal activity for every strength at every count; game.test pins striker/defender/support decisions',
+        counts: [...summaries].sort((a, b) => a.players - b.players),
+      },
+      null,
+      2,
+    )}\n`,
+    'utf8',
+  );
+}
+// Clear a previous successful report before this run starts. Interrupted runs
+// leave an honest running/partial record, never stale green measurements.
+writeEvidence();
 
 function run(count: number, seed: number, skill: BotSkill): Run {
   const rng = createRng(seed ^ 0x483be971);
@@ -49,6 +102,8 @@ function run(count: number, seed: number, skill: BotSkill): Run {
     ),
   };
   const metrics: Run = {
+    terminated: false,
+    error: null,
     virtualMs: 0,
     physicsSteps: 0,
     kicks: 0,
@@ -80,38 +135,43 @@ function run(count: number, seed: number, skill: BotSkill): Run {
       state = game.reduce(state, { type: 'input', now: state.clock, playerId: id, input: choice });
     }
   };
-  react();
-  while (
-    state.phase.id !== 'done' &&
-    batches < 2000 &&
-    state.clock - T0 <= game.manifest.estimatedMinutes * 2 * 60_000
-  ) {
-    const before = state;
-    const now =
-      state.phase.id === 'play'
-        ? Math.min(state.clock + REACTION_MS, state.halfEndsAt)
-        : state.phase.deadline;
-    if (now === null || now <= state.clock)
-      throw new Error(`Nonadvancing clock count=${count} seed=${seed} phase=${state.phase.id}`);
-    state = timer(state, now);
-    if (before.phase.id === 'play')
-      metrics.physicsSteps += Math.max(0, state.simAt - before.simAt) / STEP_MS;
-    else if (state.phase.id === 'play')
-      metrics.physicsSteps += Math.max(0, state.simAt - state.phase.startedAt) / STEP_MS;
-    for (const [id, intent] of Object.entries(state.intents))
-      if (intent.lastKickAt !== null && intent.lastKickAt !== before.intents[id]?.lastKickAt)
-        metrics.kicks++;
-    metrics.goals += state.goals.red + state.goals.blue - before.goals.red - before.goals.blue;
-    batches++;
-    if (state.phase.id === 'play') react();
+  try {
+    react();
+    while (
+      state.phase.id !== 'done' &&
+      batches < 2000 &&
+      state.clock - T0 <= game.manifest.estimatedMinutes * 2 * 60_000
+    ) {
+      const before = state;
+      const now =
+        state.phase.id === 'play'
+          ? Math.min(state.clock + REACTION_MS, state.halfEndsAt)
+          : state.phase.deadline;
+      if (now === null || now <= state.clock)
+        throw new Error(`Nonadvancing clock count=${count} seed=${seed} phase=${state.phase.id}`);
+      state = timer(state, now);
+      if (before.phase.id === 'play')
+        metrics.physicsSteps += Math.max(0, state.simAt - before.simAt) / STEP_MS;
+      else if (state.phase.id === 'play')
+        metrics.physicsSteps += Math.max(0, state.simAt - state.phase.startedAt) / STEP_MS;
+      for (const [id, intent] of Object.entries(state.intents))
+        if (intent.lastKickAt !== null && intent.lastKickAt !== before.intents[id]?.lastKickAt)
+          metrics.kicks++;
+      metrics.goals += state.goals.red + state.goals.blue - before.goals.red - before.goals.blue;
+      batches++;
+      if (state.phase.id === 'play') react();
+    }
+    if (state.phase.id !== 'done' || game.results(state) === null)
+      throw new Error(`Unterminated count=${count} seed=${seed} ${skill}`);
+    if (state.half !== 2 || state.halfSeconds !== 90)
+      throw new Error('Simulation did not play the default two90-second halves');
+    const scores = game.results(state)!.scores;
+    if (Object.keys(scores).length !== count || !Object.values(scores).every(Number.isFinite))
+      throw new Error('Incomplete simulation result');
+    metrics.terminated = true;
+  } catch (error) {
+    metrics.error = error instanceof Error ? error.message : String(error);
   }
-  if (state.phase.id !== 'done' || game.results(state) === null)
-    throw new Error(`Unterminated count=${count} seed=${seed} ${skill}`);
-  if (state.half !== 2 || state.halfSeconds !== 90)
-    throw new Error('Simulation did not play the default two90-second halves');
-  const scores = game.results(state)!.scores;
-  if (Object.keys(scores).length !== count || !Object.values(scores).every(Number.isFinite))
-    throw new Error('Incomplete simulation result');
   metrics.virtualMs = state.clock - T0;
   metrics.directions = [...directions];
   return metrics;
@@ -125,11 +185,16 @@ describe('default-length one-worker seeded bot simulation', () => {
       const summary: Summary = {
         players,
         games: 1000,
+        attempted: 0,
+        status: 'running',
+        failures: [],
+        failedRunCount: 0,
+        failedRunSamples: [],
         settings: { halfSeconds: 90 },
         reactionMs: REACTION_MS,
-        medianMs: 0,
-        maxMs: 0,
-        minMs: 0,
+        medianMs: null,
+        maxMs: null,
+        minMs: null,
         terminated: 0,
         physicsSteps: 0,
         kicks: 0,
@@ -138,16 +203,30 @@ describe('default-length one-worker seeded bot simulation', () => {
         release: 0,
         kickAttempts: 0,
         strengths: Object.fromEntries(
-          SKILLS.map((skill) => [skill, { games: 0, kicks: 0, goals: 0 }]),
+          SKILLS.map((skill) => [skill, { games: 0, terminated: 0, kicks: 0, goals: 0 }]),
         ),
       };
+      summaries.push(summary);
+      writeEvidence();
       const directions = new Set<string>();
       for (let i = 0; i < 1000; i++) {
         const skill = SKILLS[i % SKILLS.length]!;
         const seed = (Math.imul(i + 1, 2654435761) + players * 1009) >>> 0;
         const result = run(players, seed, skill);
-        times.push(result.virtualMs);
-        summary.terminated++;
+        summary.attempted++;
+        if (result.terminated) {
+          times.push(result.virtualMs);
+          summary.terminated++;
+        } else {
+          summary.failedRunCount++;
+          if (summary.failedRunSamples.length < 10)
+            summary.failedRunSamples.push({
+              seed,
+              skill,
+              error: result.error ?? 'Did not terminate',
+              virtualMs: result.virtualMs,
+            });
+        }
         for (const key of [
           'physicsSteps',
           'kicks',
@@ -158,50 +237,48 @@ describe('default-length one-worker seeded bot simulation', () => {
         ] as const)
           summary[key] += result[key];
         summary.strengths[skill]!.games++;
+        summary.strengths[skill]!.terminated += Number(result.terminated);
         summary.strengths[skill]!.kicks += result.kicks;
         summary.strengths[skill]!.goals += result.goals;
         result.directions.forEach((direction) => directions.add(direction));
+        if (summary.attempted % 100 === 0) writeEvidence();
       }
       times.sort((a, b) => a - b);
-      summary.medianMs = (times[499]! + times[500]!) / 2;
-      summary.minMs = times[0]!;
-      summary.maxMs = times.at(-1)!;
-      expect(summary.terminated).toBe(1000);
-      expect(summary.minMs).toBe(188_000);
-      expect(summary.maxMs).toBe(188_000);
-      expect(summary.maxMs).toBeLessThan(game.manifest.estimatedMinutes * 2 * 60_000);
-      expect(summary.physicsSteps).toBeGreaterThan(1000);
-      expect(summary.kicks).toBeGreaterThan(0);
-      expect(summary.goals).toBeGreaterThan(0);
-      expect(summary.release).toBeGreaterThan(0);
-      expect(directions.size).toBeGreaterThan(3);
-      for (const value of Object.values(summary.strengths)) {
-        expect(value.games).toBeGreaterThanOrEqual(333);
-        expect(value.kicks).toBeGreaterThan(0);
+      if (times.length > 0) {
+        summary.medianMs =
+          (times[Math.floor((times.length - 1) / 2)]! + times[Math.floor(times.length / 2)]!) / 2;
+        summary.minMs = times[0]!;
+        summary.maxMs = times.at(-1)!;
       }
-      summaries.push(summary);
+      const require = (condition: boolean, reason: string): void => {
+        if (!condition) summary.failures.push(reason);
+      };
+      require(summary.attempted === 1000 &&
+        summary.terminated === 1000, 'Every one of 1000 attempted games must terminate');
+      require(summary.failedRunCount === 0, 'Runtime/default-match/result failures must be zero');
+      require(summary.minMs === 188_000 &&
+        summary.maxMs === 188_000, 'Complete default match must take 188000 virtual milliseconds');
+      require(summary.maxMs !== null &&
+        summary.maxMs < game.manifest.estimatedMinutes * 2 * 60_000, 'Estimate ×2 budget');
+      require(summary.physicsSteps > 1000, 'Real fixed-step physics must run');
+      require(summary.kicks > 0 &&
+        summary.goals > 0 &&
+        summary.release > 0, 'Accepted kicks, goals and releases must occur');
+      require(directions.size > 3, 'Bots must produce varied movement');
+      for (const [skill, value] of Object.entries(summary.strengths)) {
+        require(value.games >= 333 &&
+          value.terminated === value.games, `${skill}: coverage/termination`);
+        require(value.kicks > 0, `${skill}: no accepted kick activity`);
+        require(value.goals > 0, `${skill}: no actual goal activity`);
+      }
+      summary.status = summary.failures.length === 0 ? 'passed' : 'failed';
+      // Retain all metrics even when the following activity assertion fails.
+      writeEvidence();
       console.log(JSON.stringify(summary));
-      if (process.env['PB_WRITE_EVIDENCE'] === '1') {
-        const folder = fileURLToPath(new URL('../../../jobs/P24-haxball/media/', import.meta.url));
-        mkdirSync(folder, { recursive: true });
-        writeFileSync(
-          `${folder}/simulation.json`,
-          `${JSON.stringify(
-            {
-              seedScheme: '(i+1)*2654435761 + players*1009, uint32',
-              gameCount: summaries.reduce((total, item) => total + item.games, 0),
-              defaultHalves: '2 x90 seconds',
-              physicsStepMs: STEP_MS,
-              strategyCoverage:
-                'Movement/directions, accepted kick and release metrics; game.test pins striker/defender/support decisions',
-              counts: [...summaries].sort((a, b) => a.players - b.players),
-            },
-            null,
-            2,
-          )}\n`,
-          'utf8',
-        );
-      }
+      expect(
+        summary.failures,
+        `players=${players}, full metrics preserved in simulation.json`,
+      ).toEqual([]);
     },
     300_000,
   );

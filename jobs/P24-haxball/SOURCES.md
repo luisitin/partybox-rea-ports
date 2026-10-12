@@ -68,3 +68,18 @@ primitives or original synthesis. Original HaxBall maps, client code, graphics,
 logo, font downloads, recorded sounds and crowd audio are not reused. If later
 implementation introduces any external asset, append its exact source and license
 here before committing it.
+
+## Local verification protocol
+
+The mounted QA uses installed Chrome 154.0.8037.99, as returned by
+`Browser.getVersion`, and the real public-view Controller. Chromium's
+[Input handler](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/content/browser/devtools/protocol/input_handler.cc)
+and [feature definitions](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/content/public/common/content_features.cc)
+explain the current WebTouch contact lifecycle. The private capture pins
+`--disable-features=SyntheticPointerActions` and sends an explicit named
+`touchEnd` for an individual contact. Its per-dispatch trusted-pointer telemetry
+proves the other thumb remains down; omitting a contact from `touchMove` alone
+does not release it on this path. The older
+[protocol description](https://github.com/ChromeDevTools/devtools-protocol/blob/master/json/browser_protocol.json)
+does not accurately describe that behavior. These sources inform the harness,
+not the game's controls or rules. No Chromium code or browser assets are copied.

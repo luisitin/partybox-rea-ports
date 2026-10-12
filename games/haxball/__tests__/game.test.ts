@@ -446,13 +446,15 @@ describe('team results, private controls and real bot choices', () => {
       ...state,
       ball: body(95, 50),
       discs: state.discs.map((disc) =>
-        disc.id === striker.id
-          ? { ...disc, x: 89, y: 50 }
-          : disc.id === defender.id
-            ? { ...disc, x: 35, y: 50 }
-            : disc.id === support.id
-              ? { ...disc, x: 75, y: 50 }
-              : disc,
+        disc.team !== 'red'
+          ? { ...disc, y: 90 }
+          : disc.id === striker.id
+            ? { ...disc, x: 89, y: 50 }
+            : disc.id === defender.id
+              ? { ...disc, x: 35, y: 50 }
+              : disc.id === support.id
+                ? { ...disc, x: 75, y: 50 }
+                : disc,
       ),
     };
     const ownStriker = prepared.discs.find((disc) => disc.id === striker.id)!;
@@ -474,6 +476,50 @@ describe('team results, private controls and real bot choices', () => {
       ).dx,
     ).toBe(-1);
   });
+  it.each(['easy', 'normal', 'sharp'] as const)(
+    '%s bots escape opposing centre contact through real controls and physics',
+    (skill) => {
+      const base = start(2, 5);
+      const initial = deepFreeze({
+        ...base,
+        discs: base.discs.map((disc) => ({
+          ...disc,
+          x: W / 2 + (disc.team === 'red' ? -6.5 : 6.5),
+          y: H / 2,
+          vx: 0,
+          vy: 0,
+        })),
+      });
+      const original = JSON.stringify(initial);
+      for (const disc of initial.discs) {
+        const choice = decision(initial, disc, skill);
+        // Facing an opposing disc across the ball is not an open shooting lane.
+        expect(choice.kick).toBe(false);
+        expect(choice.dy).not.toBe(0);
+      }
+      let state: State = initial;
+      const rng = createRng(73);
+      let lateralTravel = 0;
+      const acceptedKicks = new Set<string>();
+      // The actual reducer accepts atomic bot packets and judges every 50 ms step.
+      // No ball impulse or score is supplied by this regression fixture.
+      for (let beat = 0; beat < 150 && state.phase.id === 'play'; beat++) {
+        const at = T0 + beat * 100;
+        if (beat > 0) state = timer(state, at);
+        lateralTravel = Math.max(lateralTravel, Math.abs(state.ball.y - H / 2));
+        if (state.phase.id !== 'play') break;
+        for (const disc of state.discs) {
+          const choice = game.bot.sampleInput(state, disc.id, rng, skill);
+          if (choice) state = control(state, disc.id, choice, at);
+          const firedAt = state.intents[disc.id]?.lastKickAt;
+          if (firedAt !== null && firedAt !== undefined) acceptedKicks.add(`${disc.id}:${firedAt}`);
+        }
+      }
+      expect(acceptedKicks.size).toBeGreaterThan(0);
+      expect(lateralTravel).toBeGreaterThan(8);
+      expect(JSON.stringify(initial)).toBe(original);
+    },
+  );
   it('bot returns valid varied inputs in play and sits out spectators, paused, finished and departed seats', () => {
     const base = start();
     const rng = createRng(12);

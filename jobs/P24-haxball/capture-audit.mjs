@@ -163,6 +163,118 @@ export function auditLayout(phone) {
   const controlIssues = controls.filter(
     (control) => !control.insideViewport || !control.targetFits || control.clippedBy.length,
   );
+  const visibleText = (element) => {
+    if (hiddenReason(element) || accessibilityOnly(element)) return false;
+    const rect = element.getBoundingClientRect();
+    return (
+      rect.width > 0 &&
+      rect.height > 0 &&
+      rect.right > 0 &&
+      rect.bottom > 0 &&
+      rect.left < width &&
+      rect.top < height
+    );
+  };
+  // The smallest singular value of the CTM's 2x2 linear part handles rotation,
+  // anisotropic scaling and shear. Column lengths alone overstate sheared text.
+  const minimumLinearScale = (matrix) => {
+    const { a, b, c, d } = matrix;
+    if (![a, b, c, d].every(Number.isFinite)) return null;
+    const xx = a * a + b * b;
+    const yy = c * c + d * d;
+    const xy = a * c + b * d;
+    const maximumSquared = (xx + yy + Math.hypot(xx - yy, 2 * xy)) / 2;
+    if (maximumSquared === 0) return 0;
+    return Math.abs(a * d - b * c) / Math.sqrt(maximumSquared);
+  };
+  const jerseySelector = 'svg[data-haxball-pitch="true"] g[data-jersey] text';
+  const jerseyLabels = [...document.querySelectorAll(jerseySelector)]
+    .filter(visibleText)
+    .map((element) => {
+      const ctm = element.getScreenCTM();
+      const scale = ctm ? minimumLinearScale(ctm) : null;
+      const fontSizePx = Number.parseFloat(getComputedStyle(element).fontSize);
+      const effectiveFontPx =
+        scale !== null && Number.isFinite(fontSizePx) ? fontSizePx * scale : null;
+      return {
+        ...describe(element),
+        jersey: element.closest('g[data-jersey]')?.getAttribute('data-jersey') ?? null,
+        team: element.closest('g[data-team]')?.getAttribute('data-team') ?? null,
+        fontSizePx: Number.isFinite(fontSizePx) ? fontSizePx : null,
+        screenCtm: ctm ? { a: ctm.a, b: ctm.b, c: ctm.c, d: ctm.d } : null,
+        minimumLinearScale: scale,
+        effectiveFontPx,
+        requiredMinimumPx: phone ? null : 32,
+        // Compare full precision; rounded display metadata cannot turn a failure into a pass.
+        meetsMinimum: phone ? null : effectiveFontPx !== null && effectiveFontPx >= 32,
+      };
+    });
+  const svgJerseyIssues = jerseyLabels
+    .filter((entry) => entry.effectiveFontPx === null || (!phone && !entry.meetsMinimum))
+    .map((entry) => ({
+      classification: 'svg-jersey',
+      reason:
+        entry.effectiveFontPx === null
+          ? 'font/CTM measurement unavailable'
+          : 'TV jersey below 32 px',
+      ...entry,
+    }));
+  const minimumMeasured = (entries, field) => {
+    const values = entries.map((entry) => entry[field]).filter((value) => Number.isFinite(value));
+    return values.length ? Math.min(...values) : null;
+  };
+  const jerseyMinimum = minimumMeasured(jerseyLabels, 'effectiveFontPx');
+  const svgJerseys = {
+    selector: jerseySelector,
+    labels: jerseyLabels,
+    minimumTvPx: phone ? null : jerseyMinimum,
+    minimumPhonePx: phone ? jerseyMinimum : null,
+    issues: svgJerseyIssues,
+  };
+  // MatchStage's parent is this game's own Stage, including its instructions.
+  // Shell header/footer/copyright captions are outside it and are excluded explicitly too.
+  const gameRoots = [...document.querySelectorAll('[data-haxball-stage="true"]')].map(
+    (stage) => stage.parentElement ?? stage,
+  );
+  const gameElements = new Set(gameRoots.flatMap((root) => [...root.querySelectorAll('*')]));
+  const tvText = phone
+    ? []
+    : [...gameElements]
+        .filter(
+          (element) =>
+            visibleText(element) &&
+            !element.closest('svg,.chrome,.bottom,[data-shell-caption],[data-shell-copyright]') &&
+            !element.matches('script,style,link,meta,title,desc') &&
+            [...element.childNodes].some(
+              (node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim(),
+            ),
+        )
+        .map((element) => {
+          const timer =
+            element.closest('[role="timer"]') !== null &&
+            (element.matches('b,[data-timer-digits]') ||
+              /(?:^|[_ -])digits(?:[_ -]|$)/.test(String(element.className)));
+          const fontSizePx = Number.parseFloat(getComputedStyle(element).fontSize);
+          const minimumPx = timer ? 96 : 32;
+          return {
+            ...describe(element),
+            classification: timer ? 'tv-timer' : 'tv-body',
+            fontSizePx: Number.isFinite(fontSizePx) ? fontSizePx : null,
+            requiredMinimumPx: minimumPx,
+            meetsMinimum: Number.isFinite(fontSizePx) && fontSizePx >= minimumPx,
+          };
+        });
+  const tvBody = tvText.filter((entry) => entry.classification === 'tv-body');
+  const tvTimers = tvText.filter((entry) => entry.classification === 'tv-timer');
+  const tvTextIssues = tvText.filter((entry) => !entry.meetsMinimum);
+  const tvTypography = {
+    body: tvBody,
+    timers: tvTimers,
+    minimumBodyPx: minimumMeasured(tvBody, 'fontSizePx'),
+    minimumTimerPx: minimumMeasured(tvTimers, 'fontSizePx'),
+    issues: tvTextIssues,
+  };
+  const typographyIssues = [...svgJerseyIssues, ...tvTextIssues];
   return {
     viewport: { width, height, surface: phone ? 'phone' : 'tv' },
     document: documentMetrics,
@@ -178,6 +290,9 @@ export function auditLayout(phone) {
     scrollContainers,
     intentionalHidden: hidden,
     podiumPlaceholders,
+    svgJerseys,
+    tvTypography,
+    typographyIssues,
     summary: {
       controls: controls.length,
       controlIssues: controlIssues.length,
@@ -186,6 +301,10 @@ export function auditLayout(phone) {
       scrollContainers: scrollContainers.length,
       intentionalHidden: hidden.length,
       podiumPlaceholders: podiumPlaceholders.length,
+      svgJerseyIssues: svgJerseyIssues.length,
+      tvBodyFontIssues: tvTextIssues.filter((entry) => entry.classification === 'tv-body').length,
+      tvTimerFontIssues: tvTextIssues.filter((entry) => entry.classification === 'tv-timer').length,
+      typographyIssues: typographyIssues.length,
     },
   };
 }
