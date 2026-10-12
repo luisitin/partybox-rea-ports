@@ -225,6 +225,20 @@ describe('controls, lifecycle and view contract', () => {
     expect(returned.players.a?.connected).toBe(true);
   });
 
+  it('a drop within a physics interval prevents an older hold restarting after reconnect', () => {
+    let state = play();
+    state = kit.input(state, 'a', control(1), state.began + 100);
+    state = kit.timer(state);
+    expect(state.checked).toBe(200);
+    const dropped = kit.player(state, 'a', false, undefined, state.began + 235);
+    expect(dropped.checked).toBe(200);
+    expect(dropped.world.balls[0]).toMatchObject({ move: 0, controlAt: 235 });
+    const returned = kit.player(dropped, 'a', true, undefined, state.began + 236);
+    expect(kit.input(returned, 'a', control(1, true), state.began + 230)).toBe(returned);
+    const fresh = kit.input(returned, 'a', control(-1), state.began + 236);
+    expect(fresh.world.balls[0]).toMatchObject({ move: -1, controlAt: 236 });
+  });
+
   it('a fallen ball stays fallen through reconnect and waits until the next round', () => {
     const state = {
       ...play(),
@@ -285,6 +299,50 @@ describe('controls, lifecycle and view contract', () => {
     expect(returned.world).toEqual(paused.world);
     expect(returned.phase.deadline).toBe(paused.phase.deadline! + 5000);
   });
+
+  it('a non-grid pause records its active release time and rejects an older hold after resume', () => {
+    let state = play();
+    state = kit.input(state, 'a', control(1), state.began + 100);
+    const paused = kit.vip(state, 'pause', state.began + 235);
+    expect(paused.checked).toBe(200);
+    expect(paused.world.balls[0]).toMatchObject({ move: 0, controlAt: 235 });
+    const resumed = kit.vip(paused, 'resume', state.began + 5235);
+    expect(resumed.world).toEqual(paused.world);
+    expect(kit.input(resumed, 'a', control(1), resumed.began + 230)).toBe(resumed);
+    expect(kit.input(resumed, 'a', control(-1), resumed.began + 235).world.balls[0]!.move).toBe(-1);
+  });
+
+  it('a long paused drop uses frozen active time so fresh controls work immediately on resume', () => {
+    let state = play();
+    state = kit.input(state, 'a', control(1, true), state.began + 100);
+    const paused = kit.vip(state, 'pause', state.began + 235);
+    const dropped = kit.player(paused, 'a', false, undefined, state.began + 20_235);
+    const returned = kit.player(dropped, 'a', true, undefined, state.began + 25_235);
+    expect(returned.world.balls[0]).toMatchObject({ move: 0, heavy: false, controlAt: 235 });
+    const resumed = kit.vip(returned, 'resume', state.began + 30_235);
+    expect(resumed.world).toEqual(returned.world);
+    expect(resumed.began).toBe(state.began + 30_000);
+    expect(kit.input(resumed, 'a', control(-1), state.began + 30_235).world.balls[0]).toMatchObject(
+      { move: -1, controlAt: 235 },
+    );
+  });
+
+  it.each(['left', 'kicked'] as const)(
+    'a %s release retains a bounded event-time barrier between physics steps',
+    (gone) => {
+      const state = play();
+      const retired = kit.player(state, 'a', false, gone, state.began + 235);
+      expect(retired.checked).toBe(200);
+      expect(retired.world.balls[0]).toMatchObject({
+        alive: false,
+        move: 0,
+        heavy: false,
+        controlAt: 235,
+        cause: 'left',
+      });
+      expect(kit.input(retired, 'a', control(1), state.began + 230)).toBe(retired);
+    },
+  );
 
   it('departures during pause remain inert until resume closes the last-survivor round', () => {
     let state = kit.vip(play(), 'pause', T0 + READY_MS + 40);

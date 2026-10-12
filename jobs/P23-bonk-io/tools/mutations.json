@@ -92,13 +92,13 @@
   {
     "name": "Temporary disconnect keeps movement and Heavy held",
     "file": "games/bonk-io/server/index.ts",
-    "from": "release(changed.world, event.playerId)",
+    "from": "release(changed.world, event.playerId, releaseTime(changed, event.now))",
     "to": "changed.world"
   },
   {
     "name": "Pause retains held movement and Heavy after the room resumes",
     "file": "games/bonk-io/server/index.ts",
-    "from": "world: release(next.world)",
+    "from": "world: release(next.world, undefined, releaseTime(next, event.now))",
     "to": "world: next.world"
   },
   {

@@ -113,6 +113,7 @@ export function Controller({
   }, [session]);
 
   const phase = view.phaseId;
+  const finalRound = view.round >= view.rounds;
   const ranked = phase === 'score' || phase === 'done';
   const stage = phoneOnly || view.balls !== undefined || !player || view.departed;
   const seconds = secondsLeft(view.deadline, now);
@@ -131,12 +132,16 @@ export function Controller({
     title = player
       ? view.alive
         ? L('Ball {n} · {name}', { n: view.slot + 1, name: myName })
-        : L('Out until next round')
+        : finalRound
+          ? L('Out of the final round')
+          : L('Out until next round')
       : L('Watching the arena');
     hint = view.paused
       ? L('Paused — release your holds')
       : player && !view.alive
-        ? L('Keep watching. You return next round.')
+        ? finalRound
+          ? L('Keep watching. Final results are next.')
+          : L('Keep watching. You return next round.')
         : L('{n} of {m} still in', { n: view.aliveCount, m: view.total });
   } else if (phase === 'score') {
     title =

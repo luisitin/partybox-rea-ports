@@ -90,12 +90,18 @@ export const aliveCount = (world: World): number => world.balls.filter((b) => b.
 export const finished = (world: World): boolean => aliveCount(world) <= 1;
 
 /** Release retained holds on disconnect, pause and phase changes. It never revives a ball. */
-export function release(world: World, id?: string): World {
+export function release(world: World, id?: string, at?: number): World {
   let changed = false;
+  const barrier =
+    at !== undefined && Number.isFinite(at)
+      ? Math.max(world.stepped * STEP_MS, Math.min(ROUND_MS, Math.max(0, at)))
+      : null;
   const balls = world.balls.map((b) => {
-    if ((id !== undefined && b.id !== id) || (!b.move && !b.heavy && !b.jumpQueued)) return b;
+    if (id !== undefined && b.id !== id) return b;
+    const controlAt = barrier === null ? b.controlAt : Math.max(b.controlAt, barrier);
+    if (!b.move && !b.heavy && !b.jumpQueued && controlAt === b.controlAt) return b;
     changed = true;
-    return { ...b, move: 0 as const, heavy: false, jumpQueued: false };
+    return { ...b, move: 0 as const, heavy: false, jumpQueued: false, controlAt };
   });
   return changed ? { ...world, balls } : world;
 }

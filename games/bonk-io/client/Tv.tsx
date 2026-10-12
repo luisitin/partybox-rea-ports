@@ -147,7 +147,9 @@ export function Tv({ view }: GameTvProps<BonkTvView>): JSX.Element {
                         : !row.connected
                           ? L('Disconnected')
                           : !row.alive
-                            ? L('Out · next round')
+                            ? view.round >= view.rounds
+                              ? L('Out · final round')
+                              : L('Out · next round')
                             : row.heavy
                               ? L('Heavy ▰')
                               : L('Rolling')}

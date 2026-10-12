@@ -36,6 +36,7 @@ it('renders all phases and room roles with the real public views', async () => {
   let state = kit.timer(ready);
   const opening = state;
   let play = state;
+  let finalOut: State | undefined;
   let score: State | undefined;
   let nextDecision = state.phase.startedAt;
   for (let events = 0; game.results(state) === null; events++) {
@@ -52,6 +53,12 @@ it('renders all phases and room roles with the real public views', async () => {
     }
     state = kit.timer(state, at);
     if (state.phase.id === 'play' && state.round === 1 && state.checked <= 8_000) play = state;
+    if (
+      state.phase.id === 'play' &&
+      state.round === state.rounds &&
+      state.world.balls.some((ball) => !ball.alive)
+    )
+      finalOut = state;
     if (state.phase.id === 'score') score = state;
   }
   if (!score) throw new Error('No scored round in artifact match');
@@ -157,6 +164,10 @@ it('renders all phases and room roles with the real public views', async () => {
   };
   render(out, 'phone-out', 'play');
   render(out, 'phone-only-out', 'play');
+  if (!finalOut) throw new Error('No final-round eliminated player in artifact match');
+  render(finalOut, 'tv', 'play-final-out');
+  render(finalOut, 'phone-out', 'play-final-out');
+  render(finalOut, 'phone-only-out', 'play-final-out');
   const long = (fixture: State): State => ({
     ...fixture,
     players: Object.fromEntries(

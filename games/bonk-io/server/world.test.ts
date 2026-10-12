@@ -182,6 +182,16 @@ describe('deterministic platform physics', () => {
     expect(makeWorld(['a', 'b'], ['a'], 3, 0).balls[0]!.alive).toBe(false);
   });
 
+  it('a timed release blocks older holds even if already neutral and bounds its active timestamp', () => {
+    const start = world(ball('a', 0), ball('b', 1));
+    const neutral = release(start, 'a', 235);
+    expect(neutral.balls[0]).toMatchObject({ move: 0, heavy: false, controlAt: 235 });
+    expect(apply(neutral, 'a', control(1, true), 230)).toBe(neutral);
+    expect(apply(neutral, 'a', control(1), 236).balls[0]!.move).toBe(1);
+    expect(release(start, 'a', 100_000).balls[0]!.controlAt).toBe(30_000);
+    expect(release(start, 'a', -100).balls[0]!.controlAt).toBe(0);
+  });
+
   it('ignores unknown, dead and stale controls and bounds every last coordinate', () => {
     const start = world(ball('a', 0, { controlAt: 100 }), ball('b', 1, { alive: false }));
     expect(apply(start, 'x', control(1), 200)).toBe(start);

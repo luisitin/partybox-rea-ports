@@ -115,6 +115,63 @@ describe('phone stage', () => {
     expect(html.match(/disabled=""/g)).toHaveLength(4);
   });
 
+  it.each([4, 5])(
+    'round %i eliminated phone and TV copy only promise a return when a round remains',
+    (round) => {
+      const outBalls = balls.map((ball) =>
+        ball.id === 'p1'
+          ? {
+              ...ball,
+              alive: false,
+              heavy: false,
+              cause: 'fall' as const,
+            }
+          : ball,
+      );
+      const common = { round, balls: outBalls, aliveCount: 7 };
+      const phoneHtml = phone({ ...cv(), ...common, alive: false, cause: 'fall' });
+      const tvView: BonkTvView = { ...base, ...common };
+      const tvHtml = renderToStaticMarkup(<Tv view={{ ...tvView, vip: null }} />);
+      if (round === 5) {
+        expect(phoneHtml).toContain('Out of the final round');
+        expect(phoneHtml).toContain('Final results are next');
+        expect(tvHtml).toContain('Out · final round');
+        for (const html of [phoneHtml, tvHtml]) expect(html).not.toContain('next round');
+      } else {
+        expect(phoneHtml).toContain('Out until next round');
+        expect(phoneHtml).toContain('You return next round');
+        expect(tvHtml).toContain('Out · next round');
+      }
+      expect(phoneHtml.match(/disabled=""/g)).toHaveLength(4);
+    },
+  );
+
+  it('a retired final-round seat watches without any promise of a return', () => {
+    const leftBalls = balls.map((ball) =>
+      ball.id === 'p1'
+        ? {
+            ...ball,
+            alive: false,
+            heavy: false,
+            cause: 'left' as const,
+          }
+        : ball,
+    );
+    const html = phone({
+      ...cv(),
+      round: 5,
+      balls: leftBalls,
+      aliveCount: 7,
+      alive: false,
+      departed: true,
+      cause: 'left',
+    });
+    expect(html).toContain('You left the match');
+    expect(html).toContain('this seat will not return');
+    expect(html).not.toContain('next round');
+    expect(html).not.toContain('<button');
+  });
+
   it('spectators and permanent departures watch the stage and all eight standings without controls', () => {
     for (const view of [
       { ...cv(), me: { id: 'spectator', role: 'spectator' as const }, alive: false },

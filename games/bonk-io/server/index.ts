@@ -27,7 +27,17 @@ import { enterScore, reduceScore } from './phases/score';
 import { results } from './scoring';
 import { PHASES, ROUNDS } from './types';
 import type { Ball, Input, Platform, RoundOutcome, State } from './types';
-import { H, SHRINK_MS, W, aliveCount, depart, inputSchema, platformsAt, release } from './world';
+import {
+  H,
+  ROUND_MS,
+  SHRINK_MS,
+  W,
+  aliveCount,
+  depart,
+  inputSchema,
+  platformsAt,
+  release,
+} from './world';
 
 export type { Ball, Input, Platform, State } from './types';
 const manifest = gameManifestSchema.parse(manifestJson);
@@ -110,6 +120,12 @@ const advance = (state: State, now: number): State => {
   }
 };
 
+/** A lifecycle release uses active time, never wall time accumulated during a pause. */
+const releaseTime = (state: State, now: number): number | undefined =>
+  state.phase.id === 'play'
+    ? Math.max(0, Math.min(ROUND_MS, (state.phase.paused?.at ?? now) - state.began))
+    : undefined;
+
 /** Judge the old controls first. A departure is permanent even after misleading reconnect/drop churn. */
 function onPlayer(state: State, event: PlayerEvent): State {
   if (!hasPlayer(state, event.playerId)) return state;
@@ -127,9 +143,13 @@ function onPlayer(state: State, event: PlayerEvent): State {
       },
     };
   const world = permanent
-    ? depart(changed.world, event.playerId, changed.checked)
+    ? release(
+        depart(changed.world, event.playerId, changed.checked),
+        event.playerId,
+        releaseTime(changed, event.now),
+      )
     : !event.connected
-      ? release(changed.world, event.playerId)
+      ? release(changed.world, event.playerId, releaseTime(changed, event.now))
       : changed.world;
   if (world !== changed.world) changed = { ...changed, world };
   return changed.phase.id === 'play' && !changed.phase.paused && over(changed)
@@ -156,7 +176,7 @@ const composed = composeReduce<State, Input>({
       const judged = settle(state, event.now);
       const next =
         judged.phase.id === 'play' && over(judged) ? enterScore(judged, event.now) : judged;
-      return { ...next, world: release(next.world) };
+      return { ...next, world: release(next.world, undefined, releaseTime(next, event.now)) };
     }
     return state;
   },

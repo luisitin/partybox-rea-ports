@@ -1,15 +1,15 @@
 {
-  "recordedAtUtc": "2026-10-12T03:23:40.734Z",
+  "recordedAtUtc": "2026-10-12T03:33:12.496Z",
   "conclusion": "success",
-  "createdAt": "2026-10-12T03:17:13Z",
-  "headSha": "5ecd63010ce0b37a390e17760e0e97f132df1056",
+  "createdAt": "2026-10-12T03:30:40Z",
+  "headSha": "ef6012e041319257014a393214e350d415149dfb",
   "status": "completed",
-  "updatedAt": "2026-10-12T03:20:55Z",
-  "url": "https://github.com/luisitin/partybox-rea-ports/actions/runs/38199152567",
+  "updatedAt": "2026-10-12T03:32:51Z",
+  "url": "https://github.com/luisitin/partybox-rea-ports/actions/runs/38200031558",
   "command": "pnpm vitest run games/bonk-io --maxWorkers=1",
-  "tests": 105,
+  "tests": 110,
   "files": 10,
-  "durationSeconds": 190.79,
+  "durationSeconds": 107.28,
   "botMatches": 7000,
   "metrics": {
     "2": {
@@ -301,8 +301,8 @@
     {
       "file": "games/bonk-io/__tests__/artifacts.test.tsx",
       "testedSha256Lf": "db9b14999b7608cf1aba25cb1524316fe9286bcadf3ea6fbf352b9d23c3f09d3",
-      "currentSha256Lf": "db9b14999b7608cf1aba25cb1524316fe9286bcadf3ea6fbf352b9d23c3f09d3",
-      "matchesTestedHead": true
+      "currentSha256Lf": "53d9924e78ef9b26a1f11ae97d88833df9ee9c29dfa3676d8c5f9f581f4ec0f5",
+      "matchesTestedHead": false
     },
     {
       "file": "games/bonk-io/__tests__/contract.config.ts",
@@ -354,14 +354,14 @@
     },
     {
       "file": "games/bonk-io/client/Controller.module.css",
-      "testedSha256Lf": "b0cb9f1b5c77fc6a309874472b374f2dc14a8742eb0c29681214c496e4f3abca",
-      "currentSha256Lf": "e274eab2a13f8ca3676c018894e24c24b14f309ee118b0736ae55a51059e5a2b",
-      "matchesTestedHead": false
+      "testedSha256Lf": "c6960dcc0590d9b82ae83d2b2de5f6f3fe3b24800e80d8c4c322288469020f32",
+      "currentSha256Lf": "c6960dcc0590d9b82ae83d2b2de5f6f3fe3b24800e80d8c4c322288469020f32",
+      "matchesTestedHead": true
     },
     {
       "file": "games/bonk-io/client/Controller.tsx",
-      "testedSha256Lf": "919c76bbef461b4f68d3a2656233b058e52f65ac7b1c9da8793c4fc9072529a9",
-      "currentSha256Lf": "2c6cb4863a37aacfec11bbe51250dccbd9ca12221f2e1a7a616b731315d031ee",
+      "testedSha256Lf": "398e664e04021695bd56d7fd00bcbc25b0f8cd4a9a13c4af909055b7c1003050",
+      "currentSha256Lf": "4c127224c07145d9f33e61ce84fe4ba4a886053c8ee8f6e9c18cf3eb36d1044d",
       "matchesTestedHead": false
     },
     {
@@ -372,20 +372,20 @@
     },
     {
       "file": "games/bonk-io/client/Tv.tsx",
-      "testedSha256Lf": "15bbd1ab5569c8c8bbff37cdc2056cbd03542ab25218848fd1e5cb31f6bebf2b",
-      "currentSha256Lf": "e2658b7ba30e0e8bce9c2fa19f787ba90db8d38b4922872815e03cceae6745b4",
+      "testedSha256Lf": "bbe42690f2e6b4c9fb24859c7da2324205d656ae5f5c72ab3ee95c6e93be18b5",
+      "currentSha256Lf": "de3326886e9c779bed696bc1b86e795163ca48fc28a7367b1cf73e799377868e",
       "matchesTestedHead": false
     },
     {
       "file": "games/bonk-io/client/controls.test.ts",
-      "testedSha256Lf": "b2842bde08ecfaf57b2974ff69c555fcf1e06b37b4752cb33c31a12419dc19cd",
-      "currentSha256Lf": "b2842bde08ecfaf57b2974ff69c555fcf1e06b37b4752cb33c31a12419dc19cd",
+      "testedSha256Lf": "98d3d1db30b6c853666557cf5ef43f041090def3512ca410b1d27c22cc4def2a",
+      "currentSha256Lf": "98d3d1db30b6c853666557cf5ef43f041090def3512ca410b1d27c22cc4def2a",
       "matchesTestedHead": true
     },
     {
       "file": "games/bonk-io/client/controls.ts",
-      "testedSha256Lf": "25a2fe63bf94170e43975956febc8edf45224de3ed6f10aee198d72574387662",
-      "currentSha256Lf": "25a2fe63bf94170e43975956febc8edf45224de3ed6f10aee198d72574387662",
+      "testedSha256Lf": "daf0ea086f9192a5d5992cb5f4a0bf45913db82ae9acde9d29e37c63848d5433",
+      "currentSha256Lf": "daf0ea086f9192a5d5992cb5f4a0bf45913db82ae9acde9d29e37c63848d5433",
       "matchesTestedHead": true
     },
     {
@@ -395,9 +395,15 @@
       "matchesTestedHead": true
     },
     {
+      "file": "games/bonk-io/client/roundContext.ts",
+      "testedSha256Lf": "662ff9055f67afe1b078ac154f87cc6ce23bf5e688956b6435de8ce6f30d410c",
+      "currentSha256Lf": "662ff9055f67afe1b078ac154f87cc6ce23bf5e688956b6435de8ce6f30d410c",
+      "matchesTestedHead": true
+    },
+    {
       "file": "games/bonk-io/client/screens.test.tsx",
-      "testedSha256Lf": "5bfdd367288604784c2c57d1c2224fa8a5818347206e568a7d0e1ebcccc37088",
-      "currentSha256Lf": "782ea9e70cf9200bc41d6f768483459c79a9a0e7ce0ce8267f39784f863eea65",
+      "testedSha256Lf": "25a1f7c286072e34f031ad15153ed26f5161f2ef353d3a3a33ac56df8365b44a",
+      "currentSha256Lf": "5255a7e6e13f461b3770944ac53a06632cd2714eeec74263e7c7d8fbb85b8c57",
       "matchesTestedHead": false
     },
     {
