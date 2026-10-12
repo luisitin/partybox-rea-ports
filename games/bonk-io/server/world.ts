@@ -7,7 +7,8 @@ export { BALL_RADIUS } from './types';
 export const W = 960;
 export const H = 540;
 export const STEP_MS = 40;
-export const TICK_MS = 200;
+/** Publish every two judged steps: smoother sustained holds with a bounded timer/event cost. */
+export const TICK_MS = STEP_MS * 2;
 export const ROUND_MS = 30_000;
 export const SHRINK_MS = 15_000;
 export const VANISH_MS = 28_000;

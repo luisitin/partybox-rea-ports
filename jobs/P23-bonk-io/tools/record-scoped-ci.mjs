@@ -37,7 +37,11 @@ for (const n of [2, 3, 4, 5, 6, 7, 8])
   if (
     metrics[n]?.games !== 1000 ||
     metrics[n]?.maxMatchMs > 480000 ||
-    metrics[n]?.botDecisionMs !== 200
+    metrics[n]?.botDecisionMs !== 200 ||
+    // Historical R1/R2 reports predate the separately recorded snapshot cadence.
+    (metrics[n]?.snapshotMs !== undefined &&
+      (metrics[n]?.snapshotMs !== 80 ||
+        JSON.stringify(metrics[n]?.botDecisionSpacingMs) !== '[160,240]'))
   )
     throw new Error(`Incomplete ${n}-player metrics`);
 if (property?.traces !== 1003) throw new Error('Property evidence missing');

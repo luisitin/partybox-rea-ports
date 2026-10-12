@@ -101,6 +101,41 @@ describe('phone stage', () => {
     expect(phone(cv('ready')).match(/disabled=""/g)).toHaveLength(4);
   });
 
+  it.each([
+    ['active', {}],
+    ['spectator', { me: { id: 'spectator', role: 'spectator' as const }, alive: false }],
+    ['out', { alive: false, cause: 'fall' as const }],
+    ['left', { alive: false, departed: true, cause: 'left' as const }],
+    ['paused', { paused: true, clockHeldAt: 11_000 }],
+  ] as const)('the %s play phone identifies the current round after a refresh', (mode, changes) => {
+    const html = phone({ ...cv(), round: 3, ...changes });
+    expect(html).toContain('Round 3 of 5 · Platforms');
+    expect(html.match(/Round 3 of 5/g)).toHaveLength(1);
+    if (mode === 'out') expect(html).toContain('You return next round');
+    if (mode === 'left') expect(html).toContain('this seat will not return');
+    if (mode === 'paused') {
+      expect(html).toContain('Paused — release your holds');
+      expect(html).toContain('0:20');
+    }
+    if (mode === 'spectator' || mode === 'left') expect(html).not.toContain('<button');
+  });
+
+  it('ready phones identify the round once without repeating it in the get-ready clock', () => {
+    const html = phone({ ...cv('ready'), round: 3 });
+    const text = html.replace(/<[^>]*>/g, '');
+    expect(text.match(/Round 3 of 5/g)).toHaveLength(1);
+    expect(html).toContain('Get ready');
+  });
+
+  it('a retired ready phone still identifies the round while keeping its permanent-departure message', () => {
+    const html = phone({ ...cv('ready'), round: 3, alive: false, departed: true, cause: 'left' });
+    expect(html).toContain('You left the match');
+    expect(html).toContain('this seat will not return');
+    expect(html).toContain('Round 3 of 5 · Get ready');
+    expect(html.match(/Round 3 of 5/g)).toHaveLength(1);
+    expect(html).not.toContain('<button');
+  });
+
   it('holds clocks and disables controls during a pause', () => {
     const html = phone({ ...cv(), paused: true, clockHeldAt: 11_000 });
     expect(html).toContain('Paused — release your holds');

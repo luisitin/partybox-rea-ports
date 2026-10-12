@@ -14,10 +14,24 @@ export interface ArenaProps {
   height: number;
   hazard: boolean;
   me?: string;
+  /** Tween between received snapshots only while the round is playing and unpaused. */
+  animate?: boolean;
 }
 
+const pose = (ball: Pick<Ball, 'x' | 'y'>): CSSProperties => ({
+  transform: `translate(${ball.x}px, ${ball.y}px)`,
+});
+
 /** Snapshot art only: the server supplies every position and every platform edge. */
-export function Arena({ balls, platforms, width, height, hazard, me }: ArenaProps): JSX.Element {
+export function Arena({
+  balls,
+  platforms,
+  width,
+  height,
+  hazard,
+  me,
+  animate = false,
+}: ArenaProps): JSX.Element {
   const L = useT(STRINGS);
   const stripeId = useId().replaceAll(':', '');
   const visible = balls.filter(
@@ -36,6 +50,7 @@ export function Arena({ balls, platforms, width, height, hazard, me }: ArenaProp
         n: balls.filter((ball) => ball.alive).length,
       })}
       data-hazard={hazard ? 'true' : undefined}
+      data-animate={animate ? 'true' : undefined}
     >
       <defs>
         <pattern
@@ -77,10 +92,12 @@ export function Arena({ balls, platforms, width, height, hazard, me }: ArenaProp
       {visible.map((ball) => (
         <g
           key={ball.id}
-          style={playerStyle(ball.slot) as CSSProperties}
+          style={{ ...playerStyle(ball.slot), ...pose(ball) } as CSSProperties}
           data-heavy={ball.heavy && ball.alive ? 'true' : undefined}
           data-out={!ball.alive ? 'true' : undefined}
-          className={styles.ball}
+          className={`${styles.ball} ${styles.position}`}
+          data-pose-seat={ball.slot + 1}
+          data-pose-layer="body"
         >
           <title>
             {L('Ball {n}: {status}', {
@@ -96,14 +113,14 @@ export function Arena({ balls, platforms, width, height, hazard, me }: ArenaProp
             })}
           </title>
           {ball.id === me && ball.alive ? (
-            <circle cx={ball.x} cy={ball.y} r={BALL_RADIUS + 12} className={styles.myRing} />
+            <circle cx={0} cy={0} r={BALL_RADIUS + 12} className={styles.myRing} />
           ) : null}
-          <circle cx={ball.x} cy={ball.y} r={BALL_RADIUS} className={styles.body} />
+          <circle cx={0} cy={0} r={BALL_RADIUS} className={styles.body} />
           {ball.heavy && ball.alive ? (
             <>
-              <circle cx={ball.x} cy={ball.y} r={BALL_RADIUS + 6} className={styles.heavyRing} />
+              <circle cx={0} cy={0} r={BALL_RADIUS + 6} className={styles.heavyRing} />
               <path
-                d={`M${ball.x - BALL_RADIUS - 9} ${ball.y - 8} v16 M${ball.x + BALL_RADIUS + 9} ${ball.y - 8} v16`}
+                d={`M${-BALL_RADIUS - 9} -8 v16 M${BALL_RADIUS + 9} -8 v16`}
                 className={styles.weight}
               />
             </>
@@ -112,18 +129,25 @@ export function Arena({ balls, platforms, width, height, hazard, me }: ArenaProp
       ))}
       {/* Numbers are the final layer, so nearby heavy rings never cover another seat's identity. */}
       {visible.map((ball) => (
-        <text
+        <g
           key={`number-${ball.id}`}
-          x={ball.x}
-          y={ball.y}
-          className={styles.number}
-          textAnchor="middle"
-          dominantBaseline="central"
-          data-seat-number={ball.slot + 1}
-          data-marker="ball"
+          style={pose(ball)}
+          className={styles.position}
+          data-pose-seat={ball.slot + 1}
+          data-pose-layer="number"
         >
-          {ball.slot + 1}
-        </text>
+          <text
+            x={0}
+            y={0}
+            className={styles.number}
+            textAnchor="middle"
+            dominantBaseline="central"
+            data-seat-number={ball.slot + 1}
+            data-marker="ball"
+          >
+            {ball.slot + 1}
+          </text>
+        </g>
       ))}
     </svg>
   );

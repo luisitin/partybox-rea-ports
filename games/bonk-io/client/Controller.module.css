@@ -152,31 +152,21 @@
   align-items: center;
   gap: var(--pb-space-1);
   min-width: 0;
-  min-height: calc(var(--pb-space-5) + var(--pb-space-1));
+  min-height: calc(var(--pb-space-6) + var(--pb-space-2));
   padding: 0 var(--pb-space-1);
   border-radius: var(--pb-radius);
-  font-size: var(--pb-font-caption);
+  font-size: var(--pb-font-body);
 }
 .rows li[data-me='true'] {
   background: var(--pb-surface-2);
   outline: calc(var(--pb-space-1) / 2) solid var(--ball-color);
 }
-.screen[data-phase='score'] .rows li,
-.screen[data-phase='done'] .rows li {
-  min-height: calc(var(--pb-space-6) + var(--pb-space-2));
-  font-size: var(--pb-font-body);
-}
-.screen[data-phase='score'] .rowBadge,
-.screen[data-phase='done'] .rowBadge {
-  width: var(--pb-space-6);
-  height: var(--pb-space-6);
-}
 .rowBadge {
   display: grid;
   place-items: center;
   flex: none;
-  width: var(--pb-space-5);
-  height: var(--pb-space-5);
+  width: var(--pb-space-6);
+  height: var(--pb-space-6);
   box-sizing: border-box;
   border: calc(var(--pb-space-1) / 2) solid var(--ball-color);
   border-radius: 50%;

@@ -241,6 +241,14 @@ ight is the :root default above) ────────
       stroke: var(--ball-color);
       stroke-width: 6;
     }
+    ._position_b4ec48 {
+      transform-box: view-box;
+      transform-origin: 0 0;
+      transition: none;
+    }
+    ._arena_b4ec48[data-animate='true'] ._position_b4ec48 {
+      transition: transform calc(var(--pb-motion-fast) * 0.5333333333) linear;
+    }
     ._ball_b4ec48[data-out='true'] ._body_b4ec48 {
       stroke: var(--pb-text-muted);
       stroke-dasharray: 8 5;
@@ -271,6 +279,9 @@ ight is the :root default above) ────────
     }
 
     @media (prefers-reduced-motion: reduce) {
+      ._arena_b4ec48[data-animate='true'] ._position_b4ec48 {
+        transition: none;
+      }
       ._arena_b4ec48 * {
         animation: none;
         transition: none;
@@ -431,31 +442,21 @@ ight is the :root default above) ────────
       align-items: center;
       gap: var(--pb-space-1);
       min-width: 0;
-      min-height: calc(var(--pb-space-5) + var(--pb-space-1));
+      min-height: calc(var(--pb-space-6) + var(--pb-space-2));
       padding: 0 var(--pb-space-1);
       border-radius: var(--pb-radius);
-      font-size: var(--pb-font-caption);
+      font-size: var(--pb-font-body);
     }
     ._rows_c9689e li[data-me='true'] {
       background: var(--pb-surface-2);
       outline: calc(var(--pb-space-1) / 2) solid var(--ball-color);
     }
-    ._screen_c9689e[data-phase='score'] ._rows_c9689e li,
-    ._screen_c9689e[data-phase='done'] ._rows_c9689e li {
-      min-height: calc(var(--pb-space-6) + var(--pb-space-2));
-      font-size: var(--pb-font-body);
-    }
-    ._screen_c9689e[data-phase='score'] ._rowBadge_c9689e,
-    ._screen_c9689e[data-phase='done'] ._rowBadge_c9689e {
-      width: var(--pb-space-6);
-      height: var(--pb-space-6);
-    }
     ._rowBadge_c9689e {
       display: grid;
       place-items: center;
       flex: none;
-      width: var(--pb-space-5);
-      height: var(--pb-space-5);
+      width: var(--pb-space-6);
+      height: var(--pb-space-6);
       box-sizing: border-box;
       border: calc(var(--pb-space-1) / 2) solid var(--ball-color);
       border-radius: 50%;
@@ -998,7 +999,7 @@ ight is the :root default above) ────────
       <div class="_stage_262f13 _stage_99fa4f">
         <header class="_header_99fa4f">
           <p class="_round_99fa4f">Round 5 of 5</p>
-          <h1 class="_headline_99fa4f">Gus wins the round! +1</h1>
+          <h1 class="_headline_99fa4f">Ana wins the round! +1</h1>
         </header>
         <div class="_board_99fa4f">
           <div class="_playfield_99fa4f">
@@ -1025,58 +1026,36 @@ ight is the :root default above) ────────
                 <rect width="960" height="540" class="_sky_b4ec48"></rect>
                 <path d="M0 522 H960" class="_fallLine_b4ec48"></path>
                 <rect y="522" width="960" height="18" fill="url(#_R_2m_)"></rect>
-                <g>
-                  <rect
-                    x="432.64"
-                    y="400"
-                    width="94.72"
-                    height="32"
-                    rx="4"
-                    class="_platform_b4ec48"
-                  ></rect>
-                  <path d="M432.64 400 h94.72" class="_platformTop_b4ec48"></path>
-                  <path
-                    d="M436.64 403 l9 5 -9 5 M523.36 403 l-9 5 9 5"
-                    class="_shrinkMarks_b4ec48"
-                  ></path>
-                </g>
-                <g>
-                  <rect
-                    x="78.8923"
-                    y="450"
-                    width="18.2154"
-                    height="24"
-                    rx="4"
-                    class="_platform_b4ec48"
-                  ></rect>
-                  <path d="M78.8923 450 h18.2154" class="_platformTop_b4ec48"></path>
-                </g>
-                <g>
-                  <rect
-                    x="862.8923"
-                    y="450"
-                    width="18.2154"
-                    height="24"
-                    rx="4"
-                    class="_platform_b4ec48"
-                  ></rect>
-                  <path d="M862.8923 450 h18.2154" class="_platformTop_b4ec48"></path>
-                </g>
-                <g style="--ball-color: var(--pb-player-7)" class="_ball_b4ec48">
-                  <title>Ball 7: Rolling</title>
-                  <circle cx="508.3182" cy="372" r="28" class="_body_b4ec48"></circle>
-                </g>
-                <text
-                  x="508.3182"
-                  y="372"
-                  class="_number_b4ec48"
-                  text-anchor="middle"
-                  dominant-baseline="central"
-                  data-seat-number="7"
-                  data-marker="ball"
+                <g
+                  style="
+                    --ball-color: var(--pb-player-1);
+                    transform: translate(551.4723px, 417.9494px);
+                  "
+                  class="_ball_b4ec48 _position_b4ec48"
+                  data-pose-seat="1"
+                  data-pose-layer="body"
                 >
-                  7
-                </text>
+                  <title>Ball 1: Rolling</title>
+                  <circle cx="0" cy="0" r="28" class="_body_b4ec48"></circle>
+                </g>
+                <g
+                  style="transform: translate(551.4723px, 417.9494px)"
+                  class="_position_b4ec48"
+                  data-pose-seat="1"
+                  data-pose-layer="number"
+                >
+                  <text
+                    x="0"
+                    y="0"
+                    class="_number_b4ec48"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-seat-number="1"
+                    data-marker="ball"
+                  >
+                    1
+                  </text>
+                </g>
               </svg>
             </div>
             <p class="_rule_99fa4f">Last standing wins a point</p>
@@ -1084,45 +1063,45 @@ ight is the :root default above) ────────
           <aside class="_side_99fa4f">
             <div class="_clock_99fa4f" role="timer"><span>Final results in</span><b>0:04</b></div>
             <ul class="_rows_99fa4f" aria-label="Standings">
-              <li style="--ball-color: var(--pb-player-4)">
-                <span class="_badge_99fa4f" aria-label="Ball 4">4</span>
+              <li style="--ball-color: var(--pb-player-8)">
+                <span class="_badge_99fa4f" aria-label="Ball 8">8</span>
                 <div class="_identity_99fa4f">
-                  <b class="_name_99fa4f">Dee</b><span class="_status_99fa4f">Place 1</span>
+                  <b class="_name_99fa4f">Hal</b><span class="_status_99fa4f">Place 1</span>
                 </div>
                 <b class="_points_99fa4f">2</b>
               </li>
-              <li style="--ball-color: var(--pb-player-2)">
-                <span class="_badge_99fa4f" aria-label="Ball 2">2</span>
-                <div class="_identity_99fa4f">
-                  <b class="_name_99fa4f">Ben</b><span class="_status_99fa4f">Place 2 · tied</span>
-                </div>
-                <b class="_points_99fa4f">1</b>
-              </li>
-              <li style="--ball-color: var(--pb-player-6)">
-                <span class="_badge_99fa4f" aria-label="Ball 6">6</span>
-                <div class="_identity_99fa4f">
-                  <b class="_name_99fa4f">Fay</b><span class="_status_99fa4f">Place 2 · tied</span>
-                </div>
-                <b class="_points_99fa4f">1</b>
-              </li>
-              <li style="--ball-color: var(--pb-player-7)" data-winner="true">
-                <span class="_badge_99fa4f" aria-label="Ball 7">7</span>
-                <div class="_identity_99fa4f">
-                  <b class="_name_99fa4f">Gus</b><span class="_status_99fa4f">Place 2 · tied</span>
-                </div>
-                <span class="_gain_99fa4f">+1</span><b class="_points_99fa4f">1</b>
-              </li>
-              <li style="--ball-color: var(--pb-player-1)">
+              <li style="--ball-color: var(--pb-player-1)" data-winner="true">
                 <span class="_badge_99fa4f" aria-label="Ball 1">1</span>
                 <div class="_identity_99fa4f">
-                  <b class="_name_99fa4f">Ana</b><span class="_status_99fa4f">Place 5 · tied</span>
+                  <b class="_name_99fa4f">Ana</b><span class="_status_99fa4f">Place 2 · tied</span>
                 </div>
-                <b class="_points_99fa4f">0</b>
+                <span class="_gain_99fa4f">+1</span><b class="_points_99fa4f">1</b>
               </li>
               <li style="--ball-color: var(--pb-player-3)">
                 <span class="_badge_99fa4f" aria-label="Ball 3">3</span>
                 <div class="_identity_99fa4f">
-                  <b class="_name_99fa4f">Cy</b><span class="_status_99fa4f">Place 5 · tied</span>
+                  <b class="_name_99fa4f">Cy</b><span class="_status_99fa4f">Place 2 · tied</span>
+                </div>
+                <b class="_points_99fa4f">1</b>
+              </li>
+              <li style="--ball-color: var(--pb-player-7)">
+                <span class="_badge_99fa4f" aria-label="Ball 7">7</span>
+                <div class="_identity_99fa4f">
+                  <b class="_name_99fa4f">Gus</b><span class="_status_99fa4f">Place 2 · tied</span>
+                </div>
+                <b class="_points_99fa4f">1</b>
+              </li>
+              <li style="--ball-color: var(--pb-player-2)">
+                <span class="_badge_99fa4f" aria-label="Ball 2">2</span>
+                <div class="_identity_99fa4f">
+                  <b class="_name_99fa4f">Ben</b><span class="_status_99fa4f">Place 5 · tied</span>
+                </div>
+                <b class="_points_99fa4f">0</b>
+              </li>
+              <li style="--ball-color: var(--pb-player-4)">
+                <span class="_badge_99fa4f" aria-label="Ball 4">4</span>
+                <div class="_identity_99fa4f">
+                  <b class="_name_99fa4f">Dee</b><span class="_status_99fa4f">Place 5 · tied</span>
                 </div>
                 <b class="_points_99fa4f">0</b>
               </li>
@@ -1133,10 +1112,10 @@ ight is the :root default above) ────────
                 </div>
                 <b class="_points_99fa4f">0</b>
               </li>
-              <li style="--ball-color: var(--pb-player-8)">
-                <span class="_badge_99fa4f" aria-label="Ball 8">8</span>
+              <li style="--ball-color: var(--pb-player-6)">
+                <span class="_badge_99fa4f" aria-label="Ball 6">6</span>
                 <div class="_identity_99fa4f">
-                  <b class="_name_99fa4f">Hal</b><span class="_status_99fa4f">Place 5 · tied</span>
+                  <b class="_name_99fa4f">Fay</b><span class="_status_99fa4f">Place 5 · tied</span>
                 </div>
                 <b class="_points_99fa4f">0</b>
               </li>

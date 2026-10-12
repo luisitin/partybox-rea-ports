@@ -7,6 +7,7 @@ import { ROUNDS } from '../server/types';
 import { ROUND_MS, TICK_MS } from '../server/world';
 
 const requestedGames = Number(process.env.PB_SIM_GAMES ?? 1000);
+const BOT_DECISION_MS = 200;
 if (!Number.isInteger(requestedGames) || requestedGames < 1 || requestedGames > 1000)
   throw new Error('PB_SIM_GAMES must be an integer from 1 to 1000');
 
@@ -32,6 +33,7 @@ describe('Bonk.io seeded bot matches', () => {
       const roundWins = Object.fromEntries(ids.map((id) => [id, 0]));
       const skillCounts = { easy: 0, normal: 0, sharp: 0 };
       const roundOutcomes = { 'last-standing': 0, draw: 0, timeout: 0 };
+      const decisionSpacing = new Set<number>();
       let sharedMatchWins = 0;
 
       for (let seed = 1; seed <= requestedGames; seed++) {
@@ -45,9 +47,12 @@ describe('Bonk.io seeded bot matches', () => {
         const scoredRounds = new Set<number>();
         let eventTime = kit.t0;
         let turns = 0;
+        let decisionRound = 0;
+        let nextDecision = 0;
+        let lastDecision: number | undefined;
 
         while (state.phase.id !== 'done') {
-          if (++turns > 2000 || eventTime - kit.t0 > matchLimit)
+          if (++turns > 5000 || eventTime - kit.t0 > matchLimit)
             throw new Error(`non-terminating match: n=${players} seed=${seed} ${state.phase.id}`);
 
           if (state.phase.id === 'score' && !scoredRounds.has(state.round)) {
@@ -61,6 +66,15 @@ describe('Bonk.io seeded bot matches', () => {
           }
 
           if (state.phase.id === 'play') {
+            if (decisionRound !== state.round) {
+              decisionRound = state.round;
+              nextDecision = 0;
+              lastDecision = undefined;
+            }
+          }
+          if (state.phase.id === 'play' && state.checked >= nextDecision) {
+            if (lastDecision !== undefined) decisionSpacing.add(state.checked - lastDecision);
+            lastDecision = state.checked;
             // Everyone decides from one public snapshot, before any seat receives a new hold.
             // Bot RNGs are per seat; the separate ordering RNG cannot influence decisions.
             const snapshot = state;
@@ -74,6 +88,7 @@ describe('Bonk.io seeded bot matches', () => {
             });
             for (const { id, input } of orderRng.shuffle(decisions))
               state = kit.input(state, id, input, now);
+            nextDecision += BOT_DECISION_MS;
             // There is deliberately no timer or time advance between seat inputs.
           }
 
@@ -114,14 +129,15 @@ describe('Bonk.io seeded bot matches', () => {
         matchLengths.push(eventTime - kit.t0);
       }
 
-      expect(TICK_MS).toBe(200);
       expect(roundLengths).toHaveLength(requestedGames * ROUNDS);
       const report = {
         players,
         games: requestedGames,
         seedRange: [1, requestedGames],
         skillCounts,
-        botDecisionMs: TICK_MS,
+        botDecisionMs: BOT_DECISION_MS,
+        snapshotMs: TICK_MS,
+        botDecisionSpacingMs: [...decisionSpacing].sort((a, b) => a - b),
         shuffledSeatInputs: true,
         medianRoundMs: median(roundLengths),
         maxRoundMs: Math.max(...roundLengths),

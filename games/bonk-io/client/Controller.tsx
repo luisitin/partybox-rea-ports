@@ -220,9 +220,11 @@ export function Controller({
         <div className={styles.meta}>
           <span>
             {phase === 'play'
-              ? hazard
+              ? L('Round {n} of {m} · {hazard}', { n: view.round, m: view.rounds, hazard })
               : phase === 'ready'
-                ? L('Get ready')
+                ? view.departed
+                  ? L('Round {n} of {m} · Get ready', { n: view.round, m: view.rounds })
+                  : L('Get ready')
                 : view.round >= view.rounds
                   ? L('Final results in')
                   : L('Next round in')}
@@ -238,6 +240,7 @@ export function Controller({
             width={view.arenaWidth}
             height={view.arenaHeight}
             hazard={view.hazard}
+            animate={phase === 'play' && !view.paused}
             me={player ? view.me.id : undefined}
           />
         </div>

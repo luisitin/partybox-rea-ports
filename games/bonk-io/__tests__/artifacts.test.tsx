@@ -38,18 +38,24 @@ it('renders all phases and room roles with the real public views', async () => {
   let play = state;
   let finalOut: State | undefined;
   let score: State | undefined;
-  let nextDecision = state.phase.startedAt;
+  let decisionRound = 0;
+  let nextDecision = 0;
   for (let events = 0; game.results(state) === null; events++) {
     if (events > 10_000) throw new Error('Artifact match did not terminate');
     const at = state.phase.deadline;
     if (at === null) throw new Error('Untimed nonterminal fixture');
-    if (state.phase.id === 'play' && at >= nextDecision) {
+    if (state.phase.id === 'play' && decisionRound !== state.round) {
+      decisionRound = state.round;
+      nextDecision = 0;
+    }
+    if (state.phase.id === 'play' && state.checked >= nextDecision) {
       const snapshot = state;
+      const now = state.began + state.checked;
       const decisions = rng
         .shuffle(players)
         .map((p) => ({ id: p.id, input: game.bot.sampleInput(snapshot, p.id, rng, 'normal') }));
-      for (const { id, input } of decisions) if (input) state = kit.input(state, id, input, at - 1);
-      nextDecision = at + 200;
+      for (const { id, input } of decisions) if (input) state = kit.input(state, id, input, now);
+      nextDecision += 200;
     }
     state = kit.timer(state, at);
     if (state.phase.id === 'play' && state.round === 1 && state.checked <= 8_000) play = state;

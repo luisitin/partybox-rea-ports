@@ -241,6 +241,14 @@ ight is the :root default above) ────────
       stroke: var(--ball-color);
       stroke-width: 6;
     }
+    ._position_b4ec48 {
+      transform-box: view-box;
+      transform-origin: 0 0;
+      transition: none;
+    }
+    ._arena_b4ec48[data-animate='true'] ._position_b4ec48 {
+      transition: transform calc(var(--pb-motion-fast) * 0.5333333333) linear;
+    }
     ._ball_b4ec48[data-out='true'] ._body_b4ec48 {
       stroke: var(--pb-text-muted);
       stroke-dasharray: 8 5;
@@ -271,6 +279,9 @@ ight is the :root default above) ────────
     }
 
     @media (prefers-reduced-motion: reduce) {
+      ._arena_b4ec48[data-animate='true'] ._position_b4ec48 {
+        transition: none;
+      }
       ._arena_b4ec48 * {
         animation: none;
         transition: none;
@@ -431,31 +442,21 @@ ight is the :root default above) ────────
       align-items: center;
       gap: var(--pb-space-1);
       min-width: 0;
-      min-height: calc(var(--pb-space-5) + var(--pb-space-1));
+      min-height: calc(var(--pb-space-6) + var(--pb-space-2));
       padding: 0 var(--pb-space-1);
       border-radius: var(--pb-radius);
-      font-size: var(--pb-font-caption);
+      font-size: var(--pb-font-body);
     }
     ._rows_c9689e li[data-me='true'] {
       background: var(--pb-surface-2);
       outline: calc(var(--pb-space-1) / 2) solid var(--ball-color);
     }
-    ._screen_c9689e[data-phase='score'] ._rows_c9689e li,
-    ._screen_c9689e[data-phase='done'] ._rows_c9689e li {
-      min-height: calc(var(--pb-space-6) + var(--pb-space-2));
-      font-size: var(--pb-font-body);
-    }
-    ._screen_c9689e[data-phase='score'] ._rowBadge_c9689e,
-    ._screen_c9689e[data-phase='done'] ._rowBadge_c9689e {
-      width: var(--pb-space-6);
-      height: var(--pb-space-6);
-    }
     ._rowBadge_c9689e {
       display: grid;
       place-items: center;
       flex: none;
-      width: var(--pb-space-5);
-      height: var(--pb-space-5);
+      width: var(--pb-space-6);
+      height: var(--pb-space-6);
       box-sizing: border-box;
       border: calc(var(--pb-space-1) / 2) solid var(--ball-color);
       border-radius: 50%;
@@ -1007,13 +1008,16 @@ ight is the :root default above) ────────
           <h2 class="_title_c9689e" title="Ball 1 · Ana">Ball 1 · Ana</h2>
           <p class="_hint_c9689e">8 of 8 still in</p>
         </header>
-        <div class="_meta_c9689e"><span>Platforms shrink in 7s</span><b role="timer">0:22</b></div>
+        <div class="_meta_c9689e">
+          <span>Round 1 of 5 · Platforms shrink in 7s</span><b role="timer">0:22</b>
+        </div>
         <div class="_arena_c9689e">
           <svg
             class="_arena_b4ec48"
             viewBox="0 0 960 540"
             role="img"
             aria-label="Arena: 8 balls still in. Falling off means out."
+            data-animate="true"
           >
             <defs>
               <pattern
@@ -1034,139 +1038,232 @@ ight is the :root default above) ────────
               <rect x="64" y="400" width="832" height="32" rx="4" class="_platform_b4ec48"></rect>
               <path d="M64 400 h832" class="_platformTop_b4ec48"></path>
             </g>
-            <g style="--ball-color: var(--pb-player-1)" data-heavy="true" class="_ball_b4ec48">
+            <g
+              style="--ball-color: var(--pb-player-1); transform: translate(499.5651px, 372px)"
+              data-heavy="true"
+              class="_ball_b4ec48 _position_b4ec48"
+              data-pose-seat="1"
+              data-pose-layer="body"
+            >
               <title>Ball 1: Heavy</title>
-              <circle cx="683.7485" cy="372" r="40" class="_myRing_b4ec48"></circle>
-              <circle cx="683.7485" cy="372" r="28" class="_body_b4ec48"></circle>
-              <circle cx="683.7485" cy="372" r="34" class="_heavyRing_b4ec48"></circle>
-              <path d="M646.7485 364 v16 M720.7485 364 v16" class="_weight_b4ec48"></path>
+              <circle cx="0" cy="0" r="40" class="_myRing_b4ec48"></circle>
+              <circle cx="0" cy="0" r="28" class="_body_b4ec48"></circle>
+              <circle cx="0" cy="0" r="34" class="_heavyRing_b4ec48"></circle>
+              <path d="M-37 -8 v16 M37 -8 v16" class="_weight_b4ec48"></path>
             </g>
-            <g style="--ball-color: var(--pb-player-2)" data-heavy="true" class="_ball_b4ec48">
-              <title>Ball 2: Heavy</title>
-              <circle cx="603.8176" cy="372" r="28" class="_body_b4ec48"></circle>
-              <circle cx="603.8176" cy="372" r="34" class="_heavyRing_b4ec48"></circle>
-              <path d="M566.8176 364 v16 M640.8176 364 v16" class="_weight_b4ec48"></path>
+            <g
+              style="--ball-color: var(--pb-player-2); transform: translate(847.3981px, 372px)"
+              class="_ball_b4ec48 _position_b4ec48"
+              data-pose-seat="2"
+              data-pose-layer="body"
+            >
+              <title>Ball 2: Rolling</title>
+              <circle cx="0" cy="0" r="28" class="_body_b4ec48"></circle>
             </g>
-            <g style="--ball-color: var(--pb-player-3)" class="_ball_b4ec48">
+            <g
+              style="--ball-color: var(--pb-player-3); transform: translate(903.7716px, 373.1001px)"
+              class="_ball_b4ec48 _position_b4ec48"
+              data-pose-seat="3"
+              data-pose-layer="body"
+            >
               <title>Ball 3: Rolling</title>
-              <circle cx="932.2336" cy="340.0623" r="28" class="_body_b4ec48"></circle>
+              <circle cx="0" cy="0" r="28" class="_body_b4ec48"></circle>
             </g>
-            <g style="--ball-color: var(--pb-player-4)" data-heavy="true" class="_ball_b4ec48">
-              <title>Ball 4: Heavy</title>
-              <circle cx="844.2783" cy="372" r="28" class="_body_b4ec48"></circle>
-              <circle cx="844.2783" cy="372" r="34" class="_heavyRing_b4ec48"></circle>
-              <path d="M807.2783 364 v16 M881.2783 364 v16" class="_weight_b4ec48"></path>
+            <g
+              style="--ball-color: var(--pb-player-4); transform: translate(667.5286px, 372px)"
+              class="_ball_b4ec48 _position_b4ec48"
+              data-pose-seat="4"
+              data-pose-layer="body"
+            >
+              <title>Ball 4: Rolling</title>
+              <circle cx="0" cy="0" r="28" class="_body_b4ec48"></circle>
             </g>
-            <g style="--ball-color: var(--pb-player-5)" class="_ball_b4ec48">
-              <title>Ball 5: Rolling</title>
-              <circle cx="877.1023" cy="310.8536" r="28" class="_body_b4ec48"></circle>
+            <g
+              style="--ball-color: var(--pb-player-5); transform: translate(791.3981px, 372px)"
+              data-heavy="true"
+              class="_ball_b4ec48 _position_b4ec48"
+              data-pose-seat="5"
+              data-pose-layer="body"
+            >
+              <title>Ball 5: Heavy</title>
+              <circle cx="0" cy="0" r="28" class="_body_b4ec48"></circle>
+              <circle cx="0" cy="0" r="34" class="_heavyRing_b4ec48"></circle>
+              <path d="M-37 -8 v16 M37 -8 v16" class="_weight_b4ec48"></path>
             </g>
-            <g style="--ball-color: var(--pb-player-6)" data-heavy="true" class="_ball_b4ec48">
-              <title>Ball 6: Heavy</title>
-              <circle cx="181.5781" cy="372" r="28" class="_body_b4ec48"></circle>
-              <circle cx="181.5781" cy="372" r="34" class="_heavyRing_b4ec48"></circle>
-              <path d="M144.5781 364 v16 M218.5781 364 v16" class="_weight_b4ec48"></path>
+            <g
+              style="--ball-color: var(--pb-player-6); transform: translate(102.8384px, 305.9px)"
+              class="_ball_b4ec48 _position_b4ec48"
+              data-pose-seat="6"
+              data-pose-layer="body"
+            >
+              <title>Ball 6: Rolling</title>
+              <circle cx="0" cy="0" r="28" class="_body_b4ec48"></circle>
             </g>
-            <g style="--ball-color: var(--pb-player-7)" data-heavy="true" class="_ball_b4ec48">
-              <title>Ball 7: Heavy</title>
-              <circle cx="568.1041" cy="314.1" r="28" class="_body_b4ec48"></circle>
-              <circle cx="568.1041" cy="314.1" r="34" class="_heavyRing_b4ec48"></circle>
-              <path d="M531.1041 306.1 v16 M605.1041 306.1 v16" class="_weight_b4ec48"></path>
+            <g
+              style="--ball-color: var(--pb-player-7); transform: translate(335.9864px, 372px)"
+              class="_ball_b4ec48 _position_b4ec48"
+              data-pose-seat="7"
+              data-pose-layer="body"
+            >
+              <title>Ball 7: Rolling</title>
+              <circle cx="0" cy="0" r="28" class="_body_b4ec48"></circle>
             </g>
-            <g style="--ball-color: var(--pb-player-8)" data-heavy="true" class="_ball_b4ec48">
+            <g
+              style="--ball-color: var(--pb-player-8); transform: translate(563.2655px, 372px)"
+              data-heavy="true"
+              class="_ball_b4ec48 _position_b4ec48"
+              data-pose-seat="8"
+              data-pose-layer="body"
+            >
               <title>Ball 8: Heavy</title>
-              <circle cx="262.9722" cy="372" r="28" class="_body_b4ec48"></circle>
-              <circle cx="262.9722" cy="372" r="34" class="_heavyRing_b4ec48"></circle>
-              <path d="M225.9722 364 v16 M299.9722 364 v16" class="_weight_b4ec48"></path>
+              <circle cx="0" cy="0" r="28" class="_body_b4ec48"></circle>
+              <circle cx="0" cy="0" r="34" class="_heavyRing_b4ec48"></circle>
+              <path d="M-37 -8 v16 M37 -8 v16" class="_weight_b4ec48"></path>
             </g>
-            <text
-              x="683.7485"
-              y="372"
-              class="_number_b4ec48"
-              text-anchor="middle"
-              dominant-baseline="central"
-              data-seat-number="1"
-              data-marker="ball"
+            <g
+              style="transform: translate(499.5651px, 372px)"
+              class="_position_b4ec48"
+              data-pose-seat="1"
+              data-pose-layer="number"
             >
-              1
-            </text>
-            <text
-              x="603.8176"
-              y="372"
-              class="_number_b4ec48"
-              text-anchor="middle"
-              dominant-baseline="central"
-              data-seat-number="2"
-              data-marker="ball"
+              <text
+                x="0"
+                y="0"
+                class="_number_b4ec48"
+                text-anchor="middle"
+                dominant-baseline="central"
+                data-seat-number="1"
+                data-marker="ball"
+              >
+                1
+              </text>
+            </g>
+            <g
+              style="transform: translate(847.3981px, 372px)"
+              class="_position_b4ec48"
+              data-pose-seat="2"
+              data-pose-layer="number"
             >
-              2
-            </text>
-            <text
-              x="932.2336"
-              y="340.0623"
-              class="_number_b4ec48"
-              text-anchor="middle"
-              dominant-baseline="central"
-              data-seat-number="3"
-              data-marker="ball"
+              <text
+                x="0"
+                y="0"
+                class="_number_b4ec48"
+                text-anchor="middle"
+                dominant-baseline="central"
+                data-seat-number="2"
+                data-marker="ball"
+              >
+                2
+              </text>
+            </g>
+            <g
+              style="transform: translate(903.7716px, 373.1001px)"
+              class="_position_b4ec48"
+              data-pose-seat="3"
+              data-pose-layer="number"
             >
-              3
-            </text>
-            <text
-              x="844.2783"
-              y="372"
-              class="_number_b4ec48"
-              text-anchor="middle"
-              dominant-baseline="central"
-              data-seat-number="4"
-              data-marker="ball"
+              <text
+                x="0"
+                y="0"
+                class="_number_b4ec48"
+                text-anchor="middle"
+                dominant-baseline="central"
+                data-seat-number="3"
+                data-marker="ball"
+              >
+                3
+              </text>
+            </g>
+            <g
+              style="transform: translate(667.5286px, 372px)"
+              class="_position_b4ec48"
+              data-pose-seat="4"
+              data-pose-layer="number"
             >
-              4
-            </text>
-            <text
-              x="877.1023"
-              y="310.8536"
-              class="_number_b4ec48"
-              text-anchor="middle"
-              dominant-baseline="central"
-              data-seat-number="5"
-              data-marker="ball"
+              <text
+                x="0"
+                y="0"
+                class="_number_b4ec48"
+                text-anchor="middle"
+                dominant-baseline="central"
+                data-seat-number="4"
+                data-marker="ball"
+              >
+                4
+              </text>
+            </g>
+            <g
+              style="transform: translate(791.3981px, 372px)"
+              class="_position_b4ec48"
+              data-pose-seat="5"
+              data-pose-layer="number"
             >
-              5
-            </text>
-            <text
-              x="181.5781"
-              y="372"
-              class="_number_b4ec48"
-              text-anchor="middle"
-              dominant-baseline="central"
-              data-seat-number="6"
-              data-marker="ball"
+              <text
+                x="0"
+                y="0"
+                class="_number_b4ec48"
+                text-anchor="middle"
+                dominant-baseline="central"
+                data-seat-number="5"
+                data-marker="ball"
+              >
+                5
+              </text>
+            </g>
+            <g
+              style="transform: translate(102.8384px, 305.9px)"
+              class="_position_b4ec48"
+              data-pose-seat="6"
+              data-pose-layer="number"
             >
-              6
-            </text>
-            <text
-              x="568.1041"
-              y="314.1"
-              class="_number_b4ec48"
-              text-anchor="middle"
-              dominant-baseline="central"
-              data-seat-number="7"
-              data-marker="ball"
+              <text
+                x="0"
+                y="0"
+                class="_number_b4ec48"
+                text-anchor="middle"
+                dominant-baseline="central"
+                data-seat-number="6"
+                data-marker="ball"
+              >
+                6
+              </text>
+            </g>
+            <g
+              style="transform: translate(335.9864px, 372px)"
+              class="_position_b4ec48"
+              data-pose-seat="7"
+              data-pose-layer="number"
             >
-              7
-            </text>
-            <text
-              x="262.9722"
-              y="372"
-              class="_number_b4ec48"
-              text-anchor="middle"
-              dominant-baseline="central"
-              data-seat-number="8"
-              data-marker="ball"
+              <text
+                x="0"
+                y="0"
+                class="_number_b4ec48"
+                text-anchor="middle"
+                dominant-baseline="central"
+                data-seat-number="7"
+                data-marker="ball"
+              >
+                7
+              </text>
+            </g>
+            <g
+              style="transform: translate(563.2655px, 372px)"
+              class="_position_b4ec48"
+              data-pose-seat="8"
+              data-pose-layer="number"
             >
-              8
-            </text>
+              <text
+                x="0"
+                y="0"
+                class="_number_b4ec48"
+                text-anchor="middle"
+                dominant-baseline="central"
+                data-seat-number="8"
+                data-marker="ball"
+              >
+                8
+              </text>
+            </g>
           </svg>
         </div>
         <div class="_controls_c9689e" role="group" aria-label="Ball controls">

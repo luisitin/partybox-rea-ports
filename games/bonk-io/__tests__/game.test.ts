@@ -54,6 +54,33 @@ describe('Bonk.io match and fair scoring', () => {
     expect(game.tvView(state).deadline).toBe(state.endsAt);
   });
 
+  it('publishes 15 distinct sustained-hold poses in 1.2 seconds without changing the judged physics', () => {
+    let state = play();
+    state = {
+      ...state,
+      world: {
+        ...state.world,
+        balls: state.world.balls.map((b, i) => ({ ...b, x: [200, 700, 820][i]! })),
+      },
+    };
+    state = kit.input(state, 'a', control(1), state.began);
+    const continuous = tick(state.world, 1200);
+    const positions: number[] = [];
+    for (let frame = 1; frame <= 15; frame++) {
+      const at = state.phase.deadline;
+      expect(at).toBe(state.began + frame * 80);
+      state = kit.timer(state);
+      expect(state.phase.id).toBe('play');
+      expect(state.checked).toBe(frame * 80);
+      const pose = game.tvView(state).balls.find((b) => b.id === 'a')!.x;
+      if (positions.length) expect(pose).toBeGreaterThan(positions[positions.length - 1]!);
+      positions.push(pose);
+    }
+    expect(new Set(positions).size).toBe(15);
+    expect(state.world).toEqual(continuous);
+    expect(state.scores).toEqual({ a: 0, b: 0, c: 0 });
+  });
+
   it('the last survivor alone receives one win, added only once', () => {
     const state = single(play());
     expect(roundPoints(state.world)).toEqual({ a: 1, b: 0, c: 0 });
@@ -140,7 +167,7 @@ describe('Bonk.io match and fair scoring', () => {
   it('an idle disconnected room finishes five rounds on its clocks', () => {
     let state = kit.start();
     for (const p of players) state = kit.player(state, p.id, false, undefined, T0);
-    const done = kit.until(state, 'done', 1200);
+    const done = kit.until(state, 'done', 4000);
     expect(done.phase.id).toBe('done');
     expect(done.phase.startedAt - T0).toBeLessThanOrEqual(5 * (READY_MS + ROUND_MS + SCORE_MS));
     expect(game.results(done)?.ranking).toHaveLength(3);
@@ -181,7 +208,7 @@ describe('controls, lifecycle and view contract', () => {
       game.reduce(state, { type: 'timer', phaseId, startedAt, now });
     expect(stale('ready', T0, state.began + 1000)).toBe(state);
     expect(stale('play', state.phase.startedAt - 1, state.began + 1000)).toBe(state);
-    expect(stale('play', state.phase.startedAt, state.began + 100)).toBe(state);
+    expect(stale('play', state.phase.startedAt, state.began + TICK_MS - 1)).toBe(state);
     const moved = kit.timer(state);
     expect(
       game.reduce(moved, {
@@ -228,7 +255,7 @@ describe('controls, lifecycle and view contract', () => {
   it('a drop within a physics interval prevents an older hold restarting after reconnect', () => {
     let state = play();
     state = kit.input(state, 'a', control(1), state.began + 100);
-    state = kit.timer(state);
+    state = kit.timer(state, state.began + 200);
     expect(state.checked).toBe(200);
     const dropped = kit.player(state, 'a', false, undefined, state.began + 235);
     expect(dropped.checked).toBe(200);
@@ -398,6 +425,40 @@ describe('controls, lifecycle and view contract', () => {
       if (later) expect(game.inputSchema.safeParse(later).success).toBe(true);
       const gone = { ...judged, left: ['a'] };
       expect(game.bot.sampleInput(gone, 'a', rng, skill)).toBeNull();
+    }
+  });
+
+  it('bot decision buckets suppress intermediate retries and permit asynchronous 240/400 ms samples', () => {
+    for (const skill of ['easy', 'normal', 'sharp'] as const) {
+      let state = play();
+      // Record a neutral control in the initial bucket. An ungated strategy would roll toward a rival.
+      state = kit.input(state, 'a', control(0), state.began);
+      const rng = createRng(123);
+      const before = rng.state();
+      for (const checked of [40, 80, 120, 160]) {
+        const snapshot = { ...state, world: tick(state.world, checked), checked };
+        expect(snapshot.world.balls[0]).toMatchObject({ move: 0, controlAt: 0 });
+        expect(game.bot.sampleInput(snapshot, 'a', rng, skill)).toBeNull();
+        expect(rng.state()).toEqual(before);
+      }
+      for (const checked of [240, 400]) {
+        const decision = { ...state, world: tick(state.world, checked), checked };
+        const input = game.bot.sampleInput(decision, 'a', rng, skill);
+        expect(input).not.toBeNull();
+        expect(game.inputSchema.safeParse(input).success).toBe(true);
+        if (!input) continue;
+        const acted = kit.input(decision, 'a', input, decision.began + checked);
+        const afterDecision = rng.state();
+        expect(game.bot.sampleInput(acted, 'a', rng, skill)).toBeNull();
+        expect(rng.state()).toEqual(afterDecision);
+        // Release immediately, so a retry would again request a real change rather than merely
+        // return null for an unchanged held action. The accepted timestamp still names this bucket.
+        state = kit.input(acted, 'a', control(0), decision.began + checked);
+        const next = checked + 80;
+        const intermediate = { ...state, world: tick(state.world, next), checked: next };
+        expect(game.bot.sampleInput(intermediate, 'a', rng, skill)).toBeNull();
+        expect(rng.state()).toEqual(afterDecision);
+      }
     }
   });
 });

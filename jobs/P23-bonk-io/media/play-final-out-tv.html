@@ -241,6 +241,14 @@ ight is the :root default above) ────────
       stroke: var(--ball-color);
       stroke-width: 6;
     }
+    ._position_b4ec48 {
+      transform-box: view-box;
+      transform-origin: 0 0;
+      transition: none;
+    }
+    ._arena_b4ec48[data-animate='true'] ._position_b4ec48 {
+      transition: transform calc(var(--pb-motion-fast) * 0.5333333333) linear;
+    }
     ._ball_b4ec48[data-out='true'] ._body_b4ec48 {
       stroke: var(--pb-text-muted);
       stroke-dasharray: 8 5;
@@ -271,6 +279,9 @@ ight is the :root default above) ────────
     }
 
     @media (prefers-reduced-motion: reduce) {
+      ._arena_b4ec48[data-animate='true'] ._position_b4ec48 {
+        transition: none;
+      }
       ._arena_b4ec48 * {
         animation: none;
         transition: none;
@@ -431,31 +442,21 @@ ight is the :root default above) ────────
       align-items: center;
       gap: var(--pb-space-1);
       min-width: 0;
-      min-height: calc(var(--pb-space-5) + var(--pb-space-1));
+      min-height: calc(var(--pb-space-6) + var(--pb-space-2));
       padding: 0 var(--pb-space-1);
       border-radius: var(--pb-radius);
-      font-size: var(--pb-font-caption);
+      font-size: var(--pb-font-body);
     }
     ._rows_c9689e li[data-me='true'] {
       background: var(--pb-surface-2);
       outline: calc(var(--pb-space-1) / 2) solid var(--ball-color);
     }
-    ._screen_c9689e[data-phase='score'] ._rows_c9689e li,
-    ._screen_c9689e[data-phase='done'] ._rows_c9689e li {
-      min-height: calc(var(--pb-space-6) + var(--pb-space-2));
-      font-size: var(--pb-font-body);
-    }
-    ._screen_c9689e[data-phase='score'] ._rowBadge_c9689e,
-    ._screen_c9689e[data-phase='done'] ._rowBadge_c9689e {
-      width: var(--pb-space-6);
-      height: var(--pb-space-6);
-    }
     ._rowBadge_c9689e {
       display: grid;
       place-items: center;
       flex: none;
-      width: var(--pb-space-5);
-      height: var(--pb-space-5);
+      width: var(--pb-space-6);
+      height: var(--pb-space-6);
       box-sizing: border-box;
       border: calc(var(--pb-space-1) / 2) solid var(--ball-color);
       border-radius: 50%;
@@ -1009,6 +1010,7 @@ ight is the :root default above) ────────
                 role="img"
                 aria-label="Arena: 2 balls still in. Falling off means out."
                 data-hazard="true"
+                data-animate="true"
               >
                 <defs>
                   <pattern
@@ -1025,87 +1027,79 @@ ight is the :root default above) ────────
                 <rect width="960" height="540" class="_sky_b4ec48"></rect>
                 <path d="M0 522 H960" class="_fallLine_b4ec48"></path>
                 <rect y="522" width="960" height="18" fill="url(#_R_2m_)"></rect>
-                <g>
-                  <rect
-                    x="428.8"
-                    y="400"
-                    width="102.4"
-                    height="32"
-                    rx="4"
-                    class="_platform_b4ec48"
-                  ></rect>
-                  <path d="M428.8 400 h102.4" class="_platformTop_b4ec48"></path>
-                  <path
-                    d="M432.8 403 l9 5 -9 5 M527.2 403 l-9 5 9 5"
-                    class="_shrinkMarks_b4ec48"
-                  ></path>
+                <g
+                  style="
+                    --ball-color: var(--pb-player-1);
+                    transform: translate(543.4883px, 401.6102px);
+                  "
+                  class="_ball_b4ec48 _position_b4ec48"
+                  data-pose-seat="1"
+                  data-pose-layer="body"
+                >
+                  <title>Ball 1: Rolling</title>
+                  <circle cx="0" cy="0" r="28" class="_body_b4ec48"></circle>
                 </g>
-                <g>
-                  <rect
-                    x="78.1538"
-                    y="450"
-                    width="19.6923"
-                    height="24"
-                    rx="4"
-                    class="_platform_b4ec48"
-                  ></rect>
-                  <path d="M78.1538 450 h19.6923" class="_platformTop_b4ec48"></path>
-                </g>
-                <g>
-                  <rect
-                    x="862.1538"
-                    y="450"
-                    width="19.6923"
-                    height="24"
-                    rx="4"
-                    class="_platform_b4ec48"
-                  ></rect>
-                  <path d="M862.1538 450 h19.6923" class="_platformTop_b4ec48"></path>
-                </g>
-                <g style="--ball-color: var(--pb-player-6)" class="_ball_b4ec48">
+                <g
+                  style="
+                    --ball-color: var(--pb-player-6);
+                    transform: translate(346.5899px, 551.5002px);
+                  "
+                  class="_ball_b4ec48 _position_b4ec48"
+                  data-pose-seat="6"
+                  data-pose-layer="body"
+                >
                   <title>Ball 6: Rolling</title>
-                  <circle cx="570.6841" cy="517.0588" r="28" class="_body_b4ec48"></circle>
+                  <circle cx="0" cy="0" r="28" class="_body_b4ec48"></circle>
                 </g>
-                <g style="--ball-color: var(--pb-player-7)" class="_ball_b4ec48">
-                  <title>Ball 7: Rolling</title>
-                  <circle cx="521.211" cy="372" r="28" class="_body_b4ec48"></circle>
+                <g
+                  style="transform: translate(543.4883px, 401.6102px)"
+                  class="_position_b4ec48"
+                  data-pose-seat="1"
+                  data-pose-layer="number"
+                >
+                  <text
+                    x="0"
+                    y="0"
+                    class="_number_b4ec48"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-seat-number="1"
+                    data-marker="ball"
+                  >
+                    1
+                  </text>
                 </g>
-                <text
-                  x="570.6841"
-                  y="517.0588"
-                  class="_number_b4ec48"
-                  text-anchor="middle"
-                  dominant-baseline="central"
-                  data-seat-number="6"
-                  data-marker="ball"
+                <g
+                  style="transform: translate(346.5899px, 551.5002px)"
+                  class="_position_b4ec48"
+                  data-pose-seat="6"
+                  data-pose-layer="number"
                 >
-                  6
-                </text>
-                <text
-                  x="521.211"
-                  y="372"
-                  class="_number_b4ec48"
-                  text-anchor="middle"
-                  dominant-baseline="central"
-                  data-seat-number="7"
-                  data-marker="ball"
-                >
-                  7
-                </text>
+                  <text
+                    x="0"
+                    y="0"
+                    class="_number_b4ec48"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-seat-number="6"
+                    data-marker="ball"
+                  >
+                    6
+                  </text>
+                </g>
               </svg>
             </div>
             <p class="_rule_99fa4f" data-danger="true">Platforms shrinking — keep moving!</p>
           </div>
           <aside class="_side_99fa4f">
             <div class="_clock_99fa4f" role="timer" data-low="true">
-              <span>Time left</span><b>0:04</b>
+              <span>Time left</span><b>0:02</b>
             </div>
             <ul class="_rows_99fa4f" aria-label="Players">
-              <li style="--ball-color: var(--pb-player-1)" data-out="true">
+              <li style="--ball-color: var(--pb-player-1)">
                 <span class="_badge_99fa4f" aria-label="Ball 1">1</span>
                 <div class="_identity_99fa4f">
-                  <b class="_name_99fa4f">Ana</b
-                  ><span class="_status_99fa4f">Out · final round</span>
+                  <b class="_name_99fa4f">Ana</b><span class="_status_99fa4f">Rolling</span>
                 </div>
                 <b class="_points_99fa4f">0</b>
               </li>
@@ -1115,7 +1109,7 @@ ight is the :root default above) ────────
                   <b class="_name_99fa4f">Ben</b
                   ><span class="_status_99fa4f">Out · final round</span>
                 </div>
-                <b class="_points_99fa4f">1</b>
+                <b class="_points_99fa4f">0</b>
               </li>
               <li style="--ball-color: var(--pb-player-3)" data-out="true">
                 <span class="_badge_99fa4f" aria-label="Ball 3">3</span>
@@ -1123,7 +1117,7 @@ ight is the :root default above) ────────
                   <b class="_name_99fa4f">Cy</b
                   ><span class="_status_99fa4f">Out · final round</span>
                 </div>
-                <b class="_points_99fa4f">0</b>
+                <b class="_points_99fa4f">1</b>
               </li>
               <li style="--ball-color: var(--pb-player-4)" data-out="true">
                 <span class="_badge_99fa4f" aria-label="Ball 4">4</span>
@@ -1131,7 +1125,7 @@ ight is the :root default above) ────────
                   <b class="_name_99fa4f">Dee</b
                   ><span class="_status_99fa4f">Out · final round</span>
                 </div>
-                <b class="_points_99fa4f">2</b>
+                <b class="_points_99fa4f">0</b>
               </li>
               <li style="--ball-color: var(--pb-player-5)" data-out="true">
                 <span class="_badge_99fa4f" aria-label="Ball 5">5</span>
@@ -1146,14 +1140,15 @@ ight is the :root default above) ────────
                 <div class="_identity_99fa4f">
                   <b class="_name_99fa4f">Fay</b><span class="_status_99fa4f">Rolling</span>
                 </div>
-                <b class="_points_99fa4f">1</b>
+                <b class="_points_99fa4f">0</b>
               </li>
-              <li style="--ball-color: var(--pb-player-7)">
+              <li style="--ball-color: var(--pb-player-7)" data-out="true">
                 <span class="_badge_99fa4f" aria-label="Ball 7">7</span>
                 <div class="_identity_99fa4f">
-                  <b class="_name_99fa4f">Gus</b><span class="_status_99fa4f">Rolling</span>
+                  <b class="_name_99fa4f">Gus</b
+                  ><span class="_status_99fa4f">Out · final round</span>
                 </div>
-                <b class="_points_99fa4f">0</b>
+                <b class="_points_99fa4f">1</b>
               </li>
               <li style="--ball-color: var(--pb-player-8)" data-out="true">
                 <span class="_badge_99fa4f" aria-label="Ball 8">8</span>
@@ -1161,7 +1156,7 @@ ight is the :root default above) ────────
                   <b class="_name_99fa4f">Hal</b
                   ><span class="_status_99fa4f">Out · final round</span>
                 </div>
-                <b class="_points_99fa4f">0</b>
+                <b class="_points_99fa4f">2</b>
               </li>
             </ul>
             <p class="_remaining_99fa4f">2 of 8 still in</p>

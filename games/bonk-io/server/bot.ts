@@ -2,6 +2,9 @@ import type { BotSkill, Rng } from '@partybox/game-sdk';
 import type { Input, State } from './types';
 import { BALL_RADIUS, SHRINK_MS, W, platformsAt } from './world';
 
+/** Strategy decisions stay on their own absolute cadence when the public board updates faster. */
+export const BOT_DECISION_MS = 200;
+
 /** Honest public-board strategy: attack nearby balls, brake at edges and jump back to a safe platform. */
 export function botInput(
   state: State,
@@ -19,6 +22,10 @@ export function botInput(
   const me = state.world.balls.find((b) => b.id === id);
   if (!me?.alive) return null;
   if (me.controlAt >= state.checked) return null;
+  // A scheduler can sample after a target mark. Buckets preserve its opportunity without
+  // retrying a changed action on intermediate visual snapshots or requiring exact alignment.
+  if (Math.floor(me.controlAt / BOT_DECISION_MS) >= Math.floor(state.checked / BOT_DECISION_MS))
+    return null;
   const rivals = state.world.balls.filter((b) => b.alive && b.id !== id);
   let nearest = rivals[0];
   let distance = Infinity;

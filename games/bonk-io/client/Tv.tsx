@@ -87,6 +87,7 @@ export function Tv({ view }: GameTvProps<BonkTvView>): JSX.Element {
               width={view.arenaWidth}
               height={view.arenaHeight}
               hazard={view.hazard}
+              animate={phase === 'play' && !view.paused}
             />
             {phase === 'ready' ? (
               <div className={styles.readyCount} aria-live="polite">

@@ -2,7 +2,7 @@
 
 Install once completed during P07: `corepack.cmd enable`; `pnpm.cmd install`. Windows script policy requires cmd shims. P23 adds no dependency.
 
-Root ran only `games/bonk-io` tests with one worker. No whole-suite tests/browser run. Expanded all-size simulations run in scoped CI after local pilots to preserve desktop CPU. The full baseline batch is green; the R1 client changes require a fresh green head before readiness or convergence.
+Root ran only `games/bonk-io` tests with one worker. No whole-suite tests/browser run. Expanded all-size simulations run in scoped CI after local pilots to preserve desktop CPU. Baseline, R1 and R2 full batches are green; R3 requires fresh full CI and current-source mutations before readiness or convergence.
 
 ## Checks and contracts
 
@@ -14,6 +14,9 @@ Root ran only `games/bonk-io` tests with one worker. No whole-suite tests/browse
 - R1: `PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/bonk-io/client games/bonk-io/__tests__/artifacts.test.tsx --maxWorkers=1`: **46/46 in 5 files**, 2.21 s; `pnpm.cmd typecheck` passed. Five new regressions cover the final-round countdown, differing round/match winners, draw/shared verdict context and immediate Jump feedback/release.
 - R1 full [CI 38200031558](https://github.com/luisitin/partybox-rea-ports/actions/runs/38200031558), head `ef6012e041319257014a393214e350d415149dfb`: **110/110 in 10 files**, 107.28 s, all 7,000 matches and 1,003 traces passed. `tools/r1-scoped-ci.json` retains exact evidence; subsequent R2 sources differ as its hashes correctly report.
 - R2 focused artifact/server/client/game/contract command above: **111/111 in 8 files**, 11.39 s; `pnpm.cmd typecheck` passed. Six new server regressions cover nongrid release barriers, bounded neutral releases, long paused drops and permanent departure; three SSR regressions distinguish final/earlier-round elimination and retired seats. Mutation definitions 16/17 follow the changed call signatures; fresh mutation/full-CI results remain pending.
+- R2 full [CI 38200726369](https://github.com/luisitin/partybox-rea-ports/actions/runs/38200726369), head `5ef7f1bb90127051f965cd34f411a8c1b8a2f0f5`: **119/119 in 10 files**, 148.37 s, all 7,000 matches and 1,003 traces passed. `tools/r2-scoped-ci.json` retains historical source-hashed evidence.
+- R3 rejected 40 ms snapshot candidate: own-game one-match-per-size/property pilot **123/127 passed**, 46.94 s. Three real SDK schedulers exceeded the unchanged 5,000-event budget; one SSR assertion incorrectly counted an accessibility label as visible text. Exact 200 ms bot marks still exceeded the eight-seat event budget and risked missing asynchronous host samples. Final code uses 80 ms snapshots and decision buckets; no SDK contract, deadline cap or event limit was changed.
+- R3 final local command: `PB_SIM_GAMES=1 PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/bonk-io/server games/bonk-io/client games/bonk-io/__tests__/game.test.ts games/bonk-io/__tests__/contract.test.ts games/bonk-io/__tests__/artifacts.test.tsx games/bonk-io/__tests__/simulation.test.ts --maxWorkers=1`: **128/128 in 9 files**, 17.26 s. Includes all 20 real SDK contracts and seven full pilot matches at 2–8 seats. `pnpm.cmd typecheck` passed. Full R3 properties/simulations will run in scoped CI.
 
 ## Simulations and properties
 
@@ -40,6 +43,8 @@ All maximum whole matches are below 480,000 ms. Every match produces finite reta
 `node jobs/P23-bonk-io/tools/capture.mjs`: **42 PNG screens**, TV 1920×1080 and phones 390×844 with 80 px shell reservations at both ends. Every phase includes local/stage/remote/spectators; stress variants cover out, pause, permanent departure, adjacent heavy balls, long names, a real host-skipped draw with eight survivors and a true idle round at 20 seconds with shrinking platforms. R2 adds three true fifth-round out screens collected from the same seeded match, rather than changing a first-round fixture's number. One isolated cached Chromium, closed in finally; no browser installed, no server remains.
 
 R2 fresh fit report: **zero overflow, outside elements or internal scrolling**; smallest active control **88 px**, smallest captured ball digit **16.775 px**. Initial independent review covered all 39 captures through 28 unique groups and three contact sheets. Root manually reviewed the larger long-name final standings, final TV context and three added fifth-round out screens; a second independent review checked the recaptured groups and identified the final-out correction. Ranked phone text increased 14 to 18 px and rows 28 to 40 px. SHA256SUMS covers every final media byte; media remains below 10 MB.
+
+R3 recaptured **42/42 fits**, controls at least **88 px**; live/ready roster text also now 18 px/40 px rows. Root reviewed the phone-only spectator and shrinking-platform controls with their new round context. `motion-report.json` comes from the same single finally-closed browser: the CSS transition is exactly **0.08 s**, both layers move from x=499.565 through the 40 ms midpoint x=519.565 to x=539.565, with identical y=372. Pause, app motion-off and OS reduced motion each report **0 s**. This verifies browser interpolation, not original live gameplay or a device frame-rate measurement. 92 media files are about 4.57 MB; all final bytes are hashed after formatting.
 
 ## Mutation check
 
@@ -68,4 +73,4 @@ R2 fresh fit report: **zero overflow, outside elements or internal scrolling**; 
 
 ## CI and convergence
 
-P23 workflow uses read-only permissions, Ubuntu, 30-minute limit and actions/* only. It installs, typechecks, formats and runs only this game, then prints exact generated simulation/property evidence. Draft [PR #16](https://github.com/luisitin/partybox-rea-ports/pull/16) triggered the successful baseline. It remains draft until fresh R1 CI passes. Post-green iterations go in LOOP.md; no convergence claimed yet.
+P23 workflow uses read-only permissions, Ubuntu, 30-minute limit and actions/* only. It installs, typechecks, formats and runs only this game, then prints exact generated simulation/property evidence. Draft [PR #16](https://github.com/luisitin/partybox-rea-ports/pull/16) triggered successful baseline/R1/R2 CI. It remains draft until final R3 CI and current-source mutations pass. Post-green iterations go in LOOP.md; no convergence claimed yet.

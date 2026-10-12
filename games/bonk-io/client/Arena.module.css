@@ -42,6 +42,14 @@
   stroke: var(--ball-color);
   stroke-width: 6;
 }
+.position {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transition: none;
+}
+.arena[data-animate='true'] .position {
+  transition: transform calc(var(--pb-motion-fast) * 0.5333333333) linear;
+}
 .ball[data-out='true'] .body {
   stroke: var(--pb-text-muted);
   stroke-dasharray: 8 5;
@@ -72,6 +80,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .arena[data-animate='true'] .position {
+    transition: none;
+  }
   .arena * {
     animation: none;
     transition: none;

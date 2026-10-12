@@ -241,6 +241,14 @@ ight is the :root default above) ────────
       stroke: var(--ball-color);
       stroke-width: 6;
     }
+    ._position_b4ec48 {
+      transform-box: view-box;
+      transform-origin: 0 0;
+      transition: none;
+    }
+    ._arena_b4ec48[data-animate='true'] ._position_b4ec48 {
+      transition: transform calc(var(--pb-motion-fast) * 0.5333333333) linear;
+    }
     ._ball_b4ec48[data-out='true'] ._body_b4ec48 {
       stroke: var(--pb-text-muted);
       stroke-dasharray: 8 5;
@@ -271,6 +279,9 @@ ight is the :root default above) ────────
     }
 
     @media (prefers-reduced-motion: reduce) {
+      ._arena_b4ec48[data-animate='true'] ._position_b4ec48 {
+        transition: none;
+      }
       ._arena_b4ec48 * {
         animation: none;
         transition: none;
@@ -431,31 +442,21 @@ ight is the :root default above) ────────
       align-items: center;
       gap: var(--pb-space-1);
       min-width: 0;
-      min-height: calc(var(--pb-space-5) + var(--pb-space-1));
+      min-height: calc(var(--pb-space-6) + var(--pb-space-2));
       padding: 0 var(--pb-space-1);
       border-radius: var(--pb-radius);
-      font-size: var(--pb-font-caption);
+      font-size: var(--pb-font-body);
     }
     ._rows_c9689e li[data-me='true'] {
       background: var(--pb-surface-2);
       outline: calc(var(--pb-space-1) / 2) solid var(--ball-color);
     }
-    ._screen_c9689e[data-phase='score'] ._rows_c9689e li,
-    ._screen_c9689e[data-phase='done'] ._rows_c9689e li {
-      min-height: calc(var(--pb-space-6) + var(--pb-space-2));
-      font-size: var(--pb-font-body);
-    }
-    ._screen_c9689e[data-phase='score'] ._rowBadge_c9689e,
-    ._screen_c9689e[data-phase='done'] ._rowBadge_c9689e {
-      width: var(--pb-space-6);
-      height: var(--pb-space-6);
-    }
     ._rowBadge_c9689e {
       display: grid;
       place-items: center;
       flex: none;
-      width: var(--pb-space-5);
-      height: var(--pb-space-5);
+      width: var(--pb-space-6);
+      height: var(--pb-space-6);
       box-sizing: border-box;
       border: calc(var(--pb-space-1) / 2) solid var(--ball-color);
       border-radius: 50%;
@@ -998,7 +999,7 @@ ight is the :root default above) ────────
     <main>
       <div
         class="_screen_c9689e"
-        style="--ball-color: var(--pb-player-1)"
+        style="--ball-color: var(--pb-player-2)"
         data-phase="play"
         data-controls="true"
       >
@@ -1006,8 +1007,10 @@ ight is the :root default above) ────────
           <h2 class="_title_c9689e" title="Out of the final round">Out of the final round</h2>
           <p class="_hint_c9689e">Keep watching. Final results are next.</p>
         </header>
-        <div class="_meta_c9689e"><span>Platforms shrinking!</span><b role="timer">0:04</b></div>
-        <div class="_identity_c9689e"><span class="_myBall_c9689e">1</span><b>Out</b></div>
+        <div class="_meta_c9689e">
+          <span>Round 5 of 5 · Platforms shrinking!</span><b role="timer">0:02</b>
+        </div>
+        <div class="_identity_c9689e"><span class="_myBall_c9689e">2</span><b>Out</b></div>
         <div class="_controls_c9689e" role="group" aria-label="Ball controls">
           <button
             type="button"

@@ -150,6 +150,71 @@ try {
       captureBeyondViewport: false,
     });
     await writeFile(join(media, name.replace('.html', '.png')), Buffer.from(shot.data, 'base64'));
+    if (name === 'play-tv.html') {
+      const { result: motion } = await page('Runtime.evaluate', {
+        expression: `(async () => {
+          const body=document.querySelector('[data-pose-layer="body"]:not([data-out="true"])');
+          const number=body&&document.querySelector('[data-pose-seat="'+body.dataset.poseSeat+'"][data-pose-layer="number"]');
+          if(!body||!number)throw Error('Pose layers missing');
+          const pair=[body,number];
+          const read=e=>{const m=new DOMMatrix(getComputedStyle(e).transform);return {x:m.e,y:m.f};};
+          const start=pair.map(read);
+          const duration=getComputedStyle(body).transitionDuration;
+          pair.forEach((e,i)=>e.style.transform='translate('+(start[i].x+40)+'px, '+start[i].y+'px)');
+          pair.forEach(e=>getComputedStyle(e).transform);
+          const animations=pair.map(e=>e.getAnimations()[0]);
+          if(animations.some(a=>!a))throw Error('No pose transition');
+          animations.forEach(a=>{a.pause();a.currentTime=40;});
+          const midpoint=pair.map(read);
+          animations.forEach(a=>a.finish());
+          const finish=pair.map(read);
+          const arena=body.ownerSVGElement;
+          arena.removeAttribute('data-animate');
+          const paused=getComputedStyle(body).transitionDuration;
+          arena.setAttribute('data-animate','true');
+          document.documentElement.dataset.motion='off';
+          const appOff=getComputedStyle(body).transitionDuration;
+          return {duration,start,midpoint,finish,paused,appOff};
+        })()`,
+        awaitPromise: true,
+        returnByValue: true,
+      });
+      if (motion.exceptionDetails) throw new Error('Browser pose probe threw');
+      const report = motion.value;
+      if (
+        !report ||
+        Math.abs(parseFloat(report.duration) - 0.08) > 0.001 ||
+        parseFloat(report.appOff) !== 0 ||
+        parseFloat(report.paused) !== 0 ||
+        report.midpoint.some((p, i) => Math.abs(p.x - report.start[i].x - 20) > 0.1) ||
+        report.finish.some((p, i) => Math.abs(p.x - report.start[i].x - 40) > 0.1) ||
+        Math.abs(report.midpoint[0].x - report.midpoint[1].x) > 0.1 ||
+        Math.abs(report.midpoint[0].y - report.midpoint[1].y) > 0.1
+      )
+        throw new Error('Pose interpolation/alignment failed');
+      await page('Emulation.setEmulatedMedia', {
+        features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
+      });
+      const { result: reduced } = await page('Runtime.evaluate', {
+        expression: `(() => {delete document.documentElement.dataset.motion;return getComputedStyle(document.querySelector('[data-pose-layer="body"]')).transitionDuration;})()`,
+        returnByValue: true,
+      });
+      if (parseFloat(reduced.value) !== 0)
+        throw new Error('Reduced motion did not disable interpolation');
+      await page('Emulation.setEmulatedMedia', { features: [] });
+      await writeFile(
+        join(media, 'motion-report.json'),
+        JSON.stringify(
+          {
+            ...report,
+            reduced: reduced.value,
+            method: 'Browser CSS transition paused at its 40 ms midpoint; no live gameplay claim',
+          },
+          null,
+          2,
+        ) + '\n',
+      );
+    }
     if (records.length % 6 === 0) console.log(`Captured ${records.length}/${files.length} screens`);
   }
   await writeFile(join(media, 'fit-report.json'), JSON.stringify(records, null, 2) + '\n');
