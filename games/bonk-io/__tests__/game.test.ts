@@ -428,6 +428,68 @@ describe('controls, lifecycle and view contract', () => {
     }
   });
 
+  it('a middle bot chooses either equal-distance rival reproducibly, including rounding-sized ties', () => {
+    for (const skill of ['easy', 'normal', 'sharp'] as const) {
+      for (const right of [856, 856.0004]) {
+        const initial = play();
+        const state = {
+          ...initial,
+          world: {
+            ...initial.world,
+            balls: initial.world.balls.map((b) => ({
+              ...b,
+              x: b.id === 'a' ? 104 : b.id === 'b' ? 480 : right,
+            })),
+          },
+        };
+        // Ana is both the first stored rival and the lower ID; neither should force a left turn.
+        for (const balls of [state.world.balls, [...state.world.balls].reverse()]) {
+          const snapshot = { ...state, world: { ...state.world, balls } };
+          const directions = new Set<number>();
+          for (let seed = 1; seed <= 64; seed++) {
+            const first = game.bot.sampleInput(snapshot, 'b', createRng(seed), skill);
+            expect(first).not.toBeNull();
+            expect(game.bot.sampleInput(snapshot, 'b', createRng(seed), skill)).toEqual(first);
+            if (first) directions.add(first.move);
+          }
+          expect([...directions].sort()).toEqual([-1, 1]);
+        }
+      }
+    }
+  });
+
+  it('a genuinely nearer target needs no tie RNG, and an ineligible tie consumes no RNG', () => {
+    const initial = play();
+    const state = {
+      ...initial,
+      world: {
+        ...initial.world,
+        balls: initial.world.balls.map((b) => ({
+          ...b,
+          x: b.id === 'a' ? 104 : b.id === 'b' ? 480 : 856.002,
+        })),
+      },
+    };
+    for (let seed = 1; seed <= 16; seed++) {
+      const rng = createRng(seed);
+      const before = rng.state();
+      expect(game.bot.sampleInput(state, 'b', rng, 'normal')).toEqual(control(-1));
+      expect(rng.state()).toEqual(before);
+      const gated = {
+        ...state,
+        checked: 80,
+        world: {
+          ...state.world,
+          balls: state.world.balls.map((b) =>
+            b.id === 'b' ? { ...b, controlAt: 0 } : b.id === 'c' ? { ...b, x: 856 } : b,
+          ),
+        },
+      };
+      expect(game.bot.sampleInput(gated, 'b', rng, 'normal')).toBeNull();
+      expect(rng.state()).toEqual(before);
+    }
+  });
+
   it('bot decision buckets suppress intermediate retries and permit asynchronous 240/400 ms samples', () => {
     for (const skill of ['easy', 'normal', 'sharp'] as const) {
       let state = play();
