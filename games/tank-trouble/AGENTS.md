@@ -6,7 +6,7 @@
 - Shells can hurt their owner; simultaneous impacts and a locked survivor cannot depend on roster order.
 - All combat information is public. Every controller carries the current arena for immediate stage/reconnect use.
 - Phone-only, remote and spectator phones show the public stage; spectators have no controls.
-- Colors, sizes and motion use --pb-* tokens; tank numbers and weapon letters supplement color.
+- Colors, sizes and motion use --pb-* tokens; tank numbers and weapon symbols supplement color.
 - Use only SDK imports (React allowed in client), no new dependencies or runtime network requests.
 - Run only this game's tests with one worker. Do not start a browser; root owns sequential static capture.
 - Evidence belongs in jobs/P22-ricochet-rumble; regenerate fixtures after state changes.

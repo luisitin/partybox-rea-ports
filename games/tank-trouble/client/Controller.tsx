@@ -51,6 +51,10 @@ export function Controller({
   const playing = phase === 'play' && participating && view.alive;
   const mine = view.scores[view.me.id] ?? 0;
   const ownTank = view.arena.tanks.find((tank) => tank.id === view.me.id);
+  const waitingForShellSlots =
+    view.weapon === 'scatter' &&
+    view.ammo > 0 &&
+    view.arena.bullets.filter((bullet) => bullet.owner === view.me.id).length > 2;
   const tint: CSSProperties = { ['--tank-color' as string]: playerColor(Math.max(0, view.slot)) };
   const left = view.deadline === null ? 0 : Math.max(0, view.deadline - now);
   const rounds = L('Round {n} of {m}', { n: view.round, m: view.rounds });
@@ -178,6 +182,15 @@ export function Controller({
     const specialLeft = ownTank
       ? Math.max(0, Math.ceil((view.began + ownTank.weaponUntil - now) / 1000))
       : 0;
+    const ammunition =
+      view.weapon === 'shell'
+        ? L('{n}/5 shell slots', { n: view.ammo })
+        : view.weapon === 'scatter'
+          ? L(view.ammo === 1 ? '{n} volley · {s}s' : '{n} volleys · {s}s', {
+              n: view.ammo,
+              s: specialLeft,
+            })
+          : L('{n} shots · {s}s', { n: view.ammo, s: specialLeft });
     return (
       <div className={styles.play} data-stage={stage || undefined} style={tint}>
         <header className={styles.header}>
@@ -194,18 +207,16 @@ export function Controller({
         ) : null}
         <div className={styles.weapon} role="status">
           <b>{weaponName(view.weapon, L)}</b>
-          <span>
-            {view.weapon === 'shell'
-              ? L('{n}/5 shell slots', { n: view.ammo })
-              : L('{n} shots · {s}s', { n: view.ammo, s: specialLeft })}
-          </span>
+          <span>{ammunition}</span>
         </div>
         <p className={styles.status} aria-live="polite">
           {view.paused
             ? L('Paused')
             : !connected
               ? L('Reconnecting — controls released')
-              : aliveLine}
+              : waitingForShellSlots
+                ? L('Waiting for shell slots')
+                : aliveLine}
         </p>
         {stage ? <Standings view={view} me={view.me.id} compact /> : null}
         {controls}

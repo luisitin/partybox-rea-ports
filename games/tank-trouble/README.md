@@ -56,6 +56,8 @@ ranks, including a match in which no round had a winner. Results retain every in
 
 - Physics advances on a fixed judging grid, not rendering frames. Ricochets preserve speed;
   owner damage begins after muzzle clearance. Every active shell has a bounded life/count.
+- Burst has two three-shell volleys. Its next volley waits until three of your five shell
+  slots are free; the phone explains the wait and holding Fire shoots when capacity opens.
 - The sole survivor locks when the final rival is eliminated; later shells cannot erase a win.
   All hits on a judging sample resolve before a winner is chosen.
 - A drop releases held movement/fire. A permanent leave eliminates the tank and removes it

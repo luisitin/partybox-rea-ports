@@ -46,6 +46,8 @@ const play = fixtures.find((fixture) => fixture.name === 'play')?.state;
 const done = fixtures.find((fixture) => fixture.name === 'done')?.state;
 const score = fixtures.find((fixture) => fixture.name === 'score')?.state;
 let skipPending: State | undefined;
+let burstReady: State | undefined;
+let burstCapacity: State | undefined;
 if (play) {
   const fresh = game.init({
     players: Object.values(play.players),
@@ -54,6 +56,32 @@ if (play) {
     now: play.began,
     presence: { mode: 'together', phoneOnly: false },
   });
+  // A pre-equipped eight-seat hand with its spawn shield lifted uses the real first physics sample.
+  burstReady = {
+    ...fresh,
+    world: {
+      ...fresh.world,
+      safeUntil: 0,
+      tanks: fresh.world.tanks.map((tank) =>
+        tank.id === 'p1'
+          ? { ...tank, weapon: 'scatter' as const, weaponAmmo: 2, ammo: 2, weaponUntil: 12000 }
+          : tank,
+      ),
+    },
+  };
+  const burstHeld = game.reduce(burstReady, {
+    type: 'input',
+    now: burstReady.began,
+    playerId: 'p1',
+    input: { type: 'control', drive: 0, turn: 0, fire: true },
+  });
+  burstCapacity = game.reduce(burstHeld, {
+    type: 'input',
+    now: burstHeld.began + 20,
+    playerId: 'p1',
+    input: { type: 'control', drive: 0, turn: 0, fire: true },
+  });
+  fixtures.push({ name: 'play-burst-capacity', state: burstCapacity });
   let departed = game.reduce(fresh, {
     type: 'player',
     now: play.began,
@@ -348,6 +376,99 @@ it('remote phones render the same public stage and connected living players get 
     const blocked = render(state, 'phone-only').match(/<button\b[^>]*>/g) ?? [];
     expect(blocked).toHaveLength(5);
     expect(blocked.every((pad) => pad.includes('disabled'))).toBe(true);
+  }
+});
+
+it('Burst labels volleys and explains owner capacity without disabling held Fire', () => {
+  expect(burstReady).toBeDefined();
+  expect(burstCapacity).toBeDefined();
+  if (!burstReady || !burstCapacity) return;
+  const state = burstCapacity;
+  expect(Object.keys(state.players)).toHaveLength(8);
+  expect(state.phase.id).toBe('play');
+  expect(state.checked).toBe(20);
+  const shells = state.world.bullets.filter((bullet) => bullet.owner === 'p1');
+  expect(shells).toHaveLength(3);
+  expect(shells.every((bullet) => bullet.kind === 'scatter' && bullet.born === 20)).toBe(true);
+  expect(state.world.tanks.find((tank) => tank.id === 'p1')).toMatchObject({
+    ammo: 1,
+    weaponAmmo: 1,
+    reloadAt: 720,
+    fire: true,
+  });
+  expect(game.controllerView(state, 'p1').ammo).toBe(1);
+  const surfaces = [
+    ['phone-tv', false],
+    ['phone-only', false],
+    ['phone-tv', true],
+  ] as const;
+  for (const [surface, remote] of surfaces) {
+    const before = render(burstReady, surface, remote);
+    expect(before).toContain('2 volleys · 12s');
+    expect(before).not.toContain('Waiting for shell slots');
+    const html = render(state, surface, remote);
+    expect(html).toContain('1 volley · 12s');
+    expect(html).toContain('Waiting for shell slots');
+    const fire = html.match(/<button\b[^>]*aria-label="Hold to fire"[^>]*>/)?.[0];
+    expect(fire).toBeDefined();
+    expect(fire).not.toContain('disabled');
+  }
+
+  const freeSlot: State = {
+    ...state,
+    world: {
+      ...state.world,
+      bullets: state.world.bullets.filter((bullet) => bullet.id !== shells[0]!.id),
+    },
+  };
+  expect(freeSlot.world.bullets.filter((bullet) => bullet.owner === 'p1')).toHaveLength(2);
+  const enemyShells: State = {
+    ...state,
+    world: {
+      ...state.world,
+      bullets: state.world.bullets.map((bullet) => ({ ...bullet, owner: 'p2' })),
+    },
+  };
+  expect(enemyShells.world.bullets).toHaveLength(3);
+  expect(enemyShells.world.bullets.filter((bullet) => bullet.owner === 'p1')).toHaveLength(0);
+  for (const [surface, remote] of surfaces) {
+    for (const unblocked of [freeSlot, enemyShells]) {
+      const html = render(unblocked, surface, remote);
+      expect(html).toContain('1 volley · 12s');
+      expect(html).not.toContain('Waiting for shell slots');
+    }
+  }
+
+  const paused = game.reduce(state, {
+    type: 'vip',
+    action: 'pause',
+    now: state.began + state.checked,
+  });
+  const offline = game.reduce(state, {
+    type: 'player',
+    now: state.began + state.checked,
+    playerId: 'p1',
+    connected: false,
+  });
+  const pausedOffline = game.reduce(paused, {
+    type: 'player',
+    now: state.began + state.checked,
+    playerId: 'p1',
+    connected: false,
+  });
+  for (const [blocked, message] of [
+    [paused, 'Paused'],
+    [offline, 'Reconnecting — controls released'],
+    [pausedOffline, 'Paused'],
+  ] as const) {
+    for (const [surface, remote] of surfaces) {
+      const html = render(blocked, surface, remote);
+      expect(html).toContain(message);
+      expect(html).not.toContain('Waiting for shell slots');
+      const fire = html.match(/<button\b[^>]*aria-label="Hold to fire"[^>]*>/)?.[0];
+      expect(fire).toBeDefined();
+      expect(fire).toContain('disabled');
+    }
   }
 });
 
