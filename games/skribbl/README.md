@@ -79,6 +79,9 @@ A correct guess earns `300 + floor(700 × remaining / duration)`, clamped to 300
   retains its intended gesture. Already-sent ink reconciles to the server's
   pause cutoff without replaying ambiguous edits. A guess caught by pause
   returns for manual retry; later receipts cannot overwrite newer typing.
+  The SDK's private scoped draft slot retains unsent/retry text and correlated
+  pending requests through a same-turn phone refresh. Solve or a new phase
+  clears it; restoration never submits a guess automatically.
 - Words avoid repeats while the selected deck has enough unused choices.
 
 ## Settings

@@ -6,6 +6,16 @@ in1.56s. Commands use `pnpm.cmd vitest run games/skribbl/client/<file>` with
 `--maxWorkers=1 --pool=threads`. Full client and enhanced native checks are
 running; this milestone does not claim their results. Source formatting passes.
 
+Final R25/R26 verification:
+
+- `pnpm.cmd vitest run games/skribbl/client/inkPackets.test.ts games/skribbl/client/inkPause.test.ts games/skribbl/client/inkUndoTarget.test.ts --maxWorkers=1 --pool=threads`:23checks pass, exit0,1.41s.
+- `pnpm.cmd vitest run games/skribbl/client/guessDraft.test.ts games/skribbl/client/draft-recovery.test.tsx --maxWorkers=1 --pool=threads`:24checks pass, exit0,1.56s.
+- `pnpm.cmd vitest run games/skribbl/client --maxWorkers=1 --pool=threads`:107checks in9files pass, exit0,17.55s. `pnpm.cmd typecheck`:pass, exit0.
+- The first enhanced native run sampled the compact endpoint before queued delivery drained and exited1 through finally. A bounded endpoint observation replaces that timing assumption; the game assertion and endpoint are unchanged. Its unique profile has no running processes.
+- `node jobs/P04-draw-and-guess/tools/playcheck.mjs`:44native checks pass, exit0. Ordinary/compact endpoint error remains0px;18chunks need one Undo. Known-unsent dots retain their preview and deliver exactly two packets195.3ms apart. Dirty paused tail resumes as [100,120]→[500,300]→[900,480], one Undo; unmounted queues send0packets. Undo aimed at a rejected new dot sends0Undo and preserves the older authoritative dot. Paused guesses retain their field without a receipt, remount safely and retry manually; automatic retries0. Unsent/newer text survives real Controller remount using the real SDK draft scope; accepted text stays cleared. All normal/Safari/keyboard/paused layouts have zero overflow and audio retains one success/five ticks/no paused extras.
+- CI38200206897 passes31s for270eb72: install, typecheck, format and complete scoped suite (318checks,31files,14.35s), including7,000terminating simulations, SDK contracts and seeded properties. Server sources are unchanged from the fresh20/20mutation campaign.
+- Manual review of the two new native pause screenshots confirms preserved dots, disabled tools and a readable retry field at390×500. Browser closes in finally; no active harness browser remains. Existing33SSR HTML/PNG captures remain unchanged; the two live PNGs bring media to68files/2,110,941bytes. Prettier runs after report generation and `node jobs/P04-draw-and-guess/tools/hash-media.mjs` updates all hashes.
+
 Windows11, Node24.19.0, pnpm12.4.2. `pnpm.cmd` is the Windows launcher for the
 documented pnpm commands; PowerShell blocks pnpm.ps1. Only this game was tested.
 

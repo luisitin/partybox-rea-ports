@@ -5,38 +5,26 @@ Game: games/skribbl (Skribbl.io). PR: https://github.com/luisitin/partybox-rea-p
 
 The complete public game and injected Broken Pencil live-mode upgrade are built.
 UPGRADE.md records the core installation handoff; no private deployment is claimed.
-The original telephone mode remains the injected default under the existing card.
+Telephone remains the injected default under the existing card.
 
-CI38196617993 passed276tests in27files, including7,000seeded matches,
-SDK contracts and properties. Local typecheck and format pass.24native browser
-checks,33captures and66media hashes (2,076,820bytes) are current; no browsers
-remain running. The old dense geometry benchmark deadline was fixed; its3
-functional checks pass locally without removing any geometric assertion.
+Latest source milestone270eb72 passes CI38200206897 in31s:318checks in31files,
+including all7,000seeded matches, SDK contracts and properties. Local typecheck
+and107client checks pass. Server sources remain identical to the fresh20/20
+R23mutation campaign.44native checks pass and the single browser closes in
+finally.33SSR captures plus two native pause PNGs total68media files,
+2,110,941bytes, all hashed. Manual pause screenshot review passes.
 
-R23 is the latest gameplay improvement: mixed timeout chooses the offered easy
-word. Human medium/hard automatic choices340/338 become0/0 across1,000seeds;
-bots331/345 become0/0. Explicit choices, other decks, hint RNG and8s timing stay
-intact.35focused choice/game checks and typecheck pass; refreshed20/20mutants
-are caught and restored baseline passes. No fixture or screen change is needed.
+R25 preserves known-unsent ink/tails through pause and prevents a queued Undo
+from erasing an older gesture when its target lost the server pause cutoff.
+R26 retains private scoped drafts/receipt correlations across refresh without
+resending, stale turn revival or overwriting newer typing. Native checks measure
+two paused dot packets195.3ms apart, complete resumed-tail Undo, zero cancelled
+Undo sends, zero automatic guess retries and zero normal/Safari/keyboard overflow.
 
-CI38198077870 passes47s on R23; the R24 documentation CI is also green.
-R25 found two real pause defects, so the no-gain count resets to0/3. Unsent ink
-and an active dirty tail now survive pause for resume; a guess caught before its
-receipt returns for manual retry.32focused client checks and typecheck pass
-locally, exit0; Vitest records a Vite shutdown warning. Browser verification is
-pending. Its first retry failed an old endpoint check because it sampled before
-queued packets drained; the bounded observation now waits for that endpoint.
-The failed browser reached finally and exited1; no active profile remains.
-
-Independent ink review also found that a queued Undo could erase an older
-authoritative stroke after its intended new gesture was rejected at pause.
-Target-aware Undo and its six regressions are complete;23focused ink checks
-pass, exit0. R26 also preserves private drafts through the SDK scoped store;
-24focused guess/refresh checks pass, exit0. Final local typecheck passes.
-The enhanced44-check native harness and full client checks are running.
-Regenerate format/hash evidence after browser completion and run scoped CI.
-Server sources are unchanged since the fresh20/20R23mutation campaign.
-Keep the PR draft until all checks and three genuine no-gain rounds
-pass; refresh PR body from this job README before ready/DONE.
+The PR remains draft until three consecutive no-gain KEEP GOING rounds pass.
+R27 is the first after final green verification; streak1/3. Perform two more
+fresh reviews, rank/log five residuals each, push and refresh CLAIMS per round.
+Refresh the PR body from the job README, mark ready only after latest CI green,
+then mark the P04 claim DONE before taking the next lowest eligible job.
 
 Original interactive play was unavailable through CUA; see RESEARCH.md.

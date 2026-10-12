@@ -12,6 +12,26 @@
     "second Clear confirms deletion",
     "delayed Clear/Undo acknowledgements",
     "real canvas paint",
+    "known-unsent ink preview survives pause",
+    "known-unsent dot resumes exactly once",
+    "paused ink preserves FIFO and 80ms spacing",
+    "cancelled Undo preserves older dot preview",
+    "cancelled Undo never sends against older dot",
+    "active dirty tail preview survives pause",
+    "resumed active tail preserves endpoints",
+    "one Undo for resumed gesture",
+    "unmounted drawing queue never replays",
+    "pause restores guess without a receipt",
+    "paused guess stops awaiting feedback",
+    "paused guess fits keyboard viewport",
+    "paused draft survives phone remount",
+    "resume never automatically resends a guess",
+    "manual retry after pause accepted and cleared",
+    "unsent guess survives phone remount",
+    "draft restore never submits automatically",
+    "accepted guess stays cleared after remount",
+    "hydrated receipt preserves newer typing",
+    "remount never duplicates in-flight submission",
     "accepted guess clears draft",
     "refused guess retained",
     "same-text retry receipt",
@@ -25,8 +45,8 @@
     "five final-second ticks",
     "paused sound silence"
   ],
-  "firstGestureChunks": 37,
-  "finalRevision": 101,
+  "firstGestureChunks": 18,
+  "finalRevision": 60,
   "normal": {
     "height": 844,
     "layoutHeight": 844,
@@ -68,6 +88,48 @@
     "first": [50, 30],
     "last": [950, 570],
     "projectionErrorPx": 0
+  },
+  "pausedInk": {
+    "pausedDots": {
+      "pausedDotPreview": true,
+      "sentBeforeResume": 1,
+      "sentAfterResume": 2,
+      "dotSpacingMs": 195.30000001192093,
+      "gestures": [6, 7]
+    },
+    "activeTail": {
+      "pausedTailPreview": true,
+      "points": [
+        [100, 120],
+        [500, 300],
+        [900, 480]
+      ],
+      "sentPackets": 2,
+      "undoStrokes": 0
+    },
+    "unmountedQueue": {
+      "sentPackets": 0,
+      "strokes": 0
+    },
+    "cancelledUndo": {
+      "oldGesturePreserved": true,
+      "sentPackets": 1
+    }
+  },
+  "pausedGuess": {
+    "pausedDraft": "kept during pause",
+    "resumedDraft": "kept during pause",
+    "retryDraft": "",
+    "pausedReceiptRevision": 0,
+    "acceptedReceiptRevision": 1,
+    "automaticRetries": 0,
+    "pausedOverflow": []
+  },
+  "refreshedDraft": {
+    "unsent": "my unsent drawing guess",
+    "accepted": "",
+    "newer": "new typing during acknowledgement",
+    "automaticallySent": 0
   },
   "refusedDrafts": {
     "firstRefusal": "retry this guess",
