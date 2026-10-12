@@ -10,7 +10,7 @@ import {
   useT,
 } from '@partybox/game-sdk/ui';
 import type { GameControllerProps } from '@partybox/game-sdk/ui';
-import type { RicochetRumbleControllerView } from '../server/index';
+import type { TankTroubleControllerView } from '../server/index';
 import type { Input } from '../server/world';
 import { Arena } from './Arena';
 import { Standings } from './Standings';
@@ -31,7 +31,7 @@ const ACTIONS: readonly { action: ControlAction; mark: string; label: string }[]
 export function Controller({
   view,
   send,
-}: GameControllerProps<RicochetRumbleControllerView, Input>): JSX.Element {
+}: GameControllerProps<TankTroubleControllerView, Input>): JSX.Element {
   const L = useT(STRINGS);
   const phoneOnly = usePhoneOnly();
   const sound = useSound();

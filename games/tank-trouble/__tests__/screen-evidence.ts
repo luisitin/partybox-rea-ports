@@ -34,7 +34,7 @@ const SDK_MODULES: [string, Record<string, string>][] = [
 ];
 
 function scoped(name: string, mapping: Record<string, string>): string {
-  const path = `games/ricochet-rumble/client/${name}.module.css`;
+  const path = `games/tank-trouble/client/${name}.module.css`;
   let css = readFileSync(resolve(ROOT, path), 'utf8');
   css = css.replace(/:global\(([^)]+)\)/g, '$1');
   for (const local of new Set(
@@ -78,7 +78,7 @@ export function standalone(frame: Frame): string {
     SDK_MODULES.map(([name, mapping]) => sdkCss(name, mapping)).join('\n') +
     '\n' +
     SHELL;
-  return `<!doctype html><html lang="en" data-surface="${frame.surface === 'tv' ? 'tv' : 'phone'}" data-motion="off"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ricochet Rumble · ${frame.name}</title><style>${css}</style></head><body><div class="evidence-shell"><header class="evidence-header"><b>PartyBox</b><span>RUMB</span></header><main class="evidence-main" aria-label="Game stage">${frame.html}</main><footer class="evidence-footer"><span>Ricochet Rumble · ${frame.surface}</span><span>${frame.width} × ${frame.height}</span></footer></div></body></html>`;
+  return `<!doctype html><html lang="en" data-surface="${frame.surface === 'tv' ? 'tv' : 'phone'}" data-motion="off"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tank Trouble · ${frame.name}</title><style>${css}</style></head><body><div class="evidence-shell"><header class="evidence-header"><b>PartyBox</b><span>RUMB</span></header><main class="evidence-main" aria-label="Game stage">${frame.html}</main><footer class="evidence-footer"><span>Tank Trouble · ${frame.surface}</span><span>${frame.width} × ${frame.height}</span></footer></div></body></html>`;
 }
 
 export function hashMedia(): void {

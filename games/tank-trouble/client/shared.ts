@@ -3,7 +3,7 @@ import type { GameShared } from '@partybox/game-sdk/ui';
 import { STRINGS } from './strings';
 
 export const shared: GameShared = {
-  id: 'ricochet-rumble',
+  id: 'tank-trouble',
   strings: STRINGS,
   sounds: { ready: 'countdown', play: 'start', score: 'tally', done: 'reveal' },
   beds: { play: 'pulse', score: 'warm' },

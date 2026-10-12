@@ -1,4 +1,4 @@
-# P22 Ricochet Rumble research
+# P22 Tank Trouble research
 
 Research completed before implementation on 2026-10-11. IDs resolve in SOURCES.md. Evidence is
 original public client data plus independent authors' descriptions. CUA had no enabled browser;

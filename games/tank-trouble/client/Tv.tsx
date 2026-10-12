@@ -3,14 +3,14 @@ import { useEffect, useRef } from 'react';
 import type { JSX } from 'react';
 import { Stage, useServerNow, useSound, useT } from '@partybox/game-sdk/ui';
 import type { GameTvProps } from '@partybox/game-sdk/ui';
-import type { RicochetRumbleTvView } from '../server/index';
+import type { TankTroubleTvView } from '../server/index';
 import { Arena } from './Arena';
 import { Standings } from './Standings';
 import { STRINGS } from './strings';
 import { clockText } from './timing';
 import styles from './Tv.module.css';
 
-export function Tv({ view }: GameTvProps<RicochetRumbleTvView>): JSX.Element {
+export function Tv({ view }: GameTvProps<TankTroubleTvView>): JSX.Element {
   const L = useT(STRINGS);
   const sound = useSound();
   const now = useServerNow(250, view.paused, view.clockHeldAt);

@@ -1,6 +1,6 @@
-# P22 Ricochet Rumble
+# P22 Tank Trouble
 
-Ricochet Rumble is a five-round maze-tank game for 2-8 players. Hold phone controls to
+Tank Trouble is a five-round maze-tank game for 2-8 players. Hold phone controls to
 drive, reverse and turn; hold Fire for bouncing shells. Your own ricochets can hit you.
 The TV shows the shared maze. Phone-only and remote phones carry that same public stage.
 
@@ -19,10 +19,10 @@ Run only this game's tests:
 ```powershell
 pnpm.cmd typecheck
 pnpm.cmd format
-pnpm.cmd vitest run games/ricochet-rumble --maxWorkers=1 --pool=threads
+pnpm.cmd vitest run games/tank-trouble --maxWorkers=1 --pool=threads
 ```
 
-The [game spec](../../games/ricochet-rumble/README.md) describes the mechanics and screens.
+The [game spec](../../games/tank-trouble/README.md) describes the mechanics and screens.
 [RESEARCH.md](RESEARCH.md) and [SOURCES.md](SOURCES.md) record the original flow.
 [VERIFY.md](VERIFY.md) records checks; [NEXT.md](NEXT.md) is the resume point.
 [LOOP.md](LOOP.md) records the required player-focused improvement loop.

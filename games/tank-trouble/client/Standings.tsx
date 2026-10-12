@@ -1,13 +1,13 @@
 // One public seat list on both surfaces; tank numbers, OUT and disconnected words never rely on colour.
 import type { CSSProperties, JSX } from 'react';
 import { useT } from '@partybox/game-sdk/ui';
-import type { RicochetRumbleTvView } from '../server/index';
+import type { TankTroubleTvView } from '../server/index';
 import { STRINGS } from './strings';
 import { playerColor } from './timing';
 import styles from './Standings.module.css';
 
 interface StandingsProps {
-  view: RicochetRumbleTvView;
+  view: TankTroubleTvView;
   me?: string;
   compact?: boolean;
 }

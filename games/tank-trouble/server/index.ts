@@ -44,8 +44,8 @@ interface MatchView {
   arena: Arena;
   slots: Record<string, number>;
 }
-export interface RicochetRumbleTvView extends TvView, MatchView {}
-export interface RicochetRumbleControllerView extends ControllerView, MatchView {
+export interface TankTroubleTvView extends TvView, MatchView {}
+export interface TankTroubleControllerView extends ControllerView, MatchView {
   slot: number;
   alive: boolean;
   drive: number;
@@ -188,7 +188,7 @@ function matchView(state: State): MatchView {
     },
   };
 }
-function tvView(state: State): RicochetRumbleTvView {
+function tvView(state: State): TankTroubleTvView {
   return {
     ...envelope(state, manifest.id, {
       statusOf: statusOf(state),
@@ -199,7 +199,7 @@ function tvView(state: State): RicochetRumbleTvView {
     ...matchView(state),
   };
 }
-function controllerView(state: State, id: string): RicochetRumbleControllerView {
+function controllerView(state: State, id: string): TankTroubleControllerView {
   const tank = state.world.tanks.find((t) => t.id === id);
   const over = state.phase.id === 'done' && hasPlayer(state, id);
   const points = state.scores[id] ?? 0;
@@ -223,12 +223,7 @@ function controllerView(state: State, id: string): RicochetRumbleControllerView 
       Object.entries(state.scores).some(([other, score]) => other !== id && score === points),
   };
 }
-export const game: GameDefinition<
-  State,
-  Input,
-  RicochetRumbleTvView,
-  RicochetRumbleControllerView
-> = {
+export const game: GameDefinition<State, Input, TankTroubleTvView, TankTroubleControllerView> = {
   manifest,
   phases: PHASES,
   inputSchema,

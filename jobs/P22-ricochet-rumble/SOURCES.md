@@ -1,7 +1,7 @@
 # P22 sources
 
 Accessed 2026-10-11 by r1-local. Sources are read as evidence only; no original code, art,
-audio, fonts or questions are copied into Ricochet Rumble.
+audio, fonts or questions are copied into Tank Trouble.
 
 | ID  | Primary source                                                                                                              | What was checked                                                                                                                                                                                                                                      |
 | --- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

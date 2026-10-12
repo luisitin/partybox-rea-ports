@@ -1,14 +1,14 @@
-name: P22 Ricochet Rumble
+name: P22 Tank Trouble
 on:
   pull_request:
     paths:
-      - 'games/ricochet-rumble/**'
+      - 'games/tank-trouble/**'
       - 'jobs/P22-ricochet-rumble/**'
       - '.github/workflows/P22.yml'
 permissions:
   contents: read
 jobs:
-  ricochet-rumble:
+  tank-trouble:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -20,4 +20,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm format
-      - run: pnpm vitest run games/ricochet-rumble --maxWorkers=1
+      - run: pnpm vitest run games/tank-trouble --maxWorkers=1

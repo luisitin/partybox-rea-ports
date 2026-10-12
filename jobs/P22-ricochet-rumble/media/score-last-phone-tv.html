@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Ricochet Rumble · score-last-phone-tv</title>
+    <title>Tank Trouble · score-last-phone-tv</title>
     <style>
       /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
    Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
@@ -197,8 +197,8 @@ ight is the :root default above) ────────
         --pb-motion-confetti: 0ms;
       }
 
-      /* games/ricochet-rumble/client/Arena.module.css */
-      ._scene_e47835 {
+      /* games/tank-trouble/client/Arena.module.css */
+      ._scene_f62b00 {
         position: relative;
         width: 100%;
         aspect-ratio: 5 / 3;
@@ -208,91 +208,91 @@ ight is the :root default above) ────────
         background: var(--pb-bg);
       }
 
-      ._svg_e47835 {
+      ._svg_f62b00 {
         display: block;
         width: 100%;
         height: 100%;
       }
-      ._floor_e47835 {
+      ._floor_f62b00 {
         fill: var(--pb-surface);
       }
-      ._grid_e47835 {
+      ._grid_f62b00 {
         fill: none;
         stroke: var(--pb-surface-2);
         stroke-width: 0.15;
       }
-      ._walls_e47835 {
+      ._walls_f62b00 {
         stroke: var(--pb-text-muted);
         stroke-width: 0.9;
         stroke-linecap: square;
       }
-      ._crate_e47835 {
+      ._crate_f62b00 {
         fill: var(--pb-accent-2-fill);
         stroke: var(--pb-on-accent-2-fill);
         stroke-width: 0.35;
       }
-      ._mark_e47835 {
+      ._mark_f62b00 {
         fill: none;
         stroke: var(--pb-on-accent-2-fill);
         stroke-width: 0.65;
         stroke-linecap: round;
         stroke-linejoin: round;
       }
-      ._pickup_e47835 {
+      ._pickup_f62b00 {
         stroke-linejoin: round;
       }
-      ._projectile_e47835 {
+      ._projectile_f62b00 {
         stroke-linecap: round;
       }
-      ._shell_e47835 {
+      ._shell_f62b00 {
         fill: var(--pb-accent-2-fill);
         stroke: currentColor;
         stroke-width: 0.5;
       }
-      ._beam_e47835 {
+      ._beam_f62b00 {
         stroke: var(--pb-accent-2-fill);
         stroke-width: 0.8;
         stroke-linecap: round;
       }
-      ._track_e47835 {
+      ._track_f62b00 {
         fill: var(--pb-bg);
         stroke: currentColor;
         stroke-width: 0.4;
       }
-      ._chassis_e47835 {
+      ._chassis_f62b00 {
         fill: currentColor;
         stroke: var(--pb-bg);
         stroke-width: 0.35;
       }
-      ._barrel_e47835 {
+      ._barrel_f62b00 {
         fill: var(--pb-text);
         stroke: var(--pb-bg);
         stroke-width: 0.25;
       }
-      ._heading_e47835 {
+      ._heading_f62b00 {
         fill: var(--pb-text);
       }
-      ._mine_e47835 {
+      ._mine_f62b00 {
         fill: none;
         stroke: var(--pb-text);
         stroke-width: 0.35;
         stroke-dasharray: 1.3 1;
       }
-      ._tank_e47835[data-out='true'] ._chassis_e47835 {
+      ._tank_f62b00[data-out='true'] ._chassis_f62b00 {
         fill: var(--pb-surface-2);
         stroke: var(--pb-text-muted);
       }
-      ._tank_e47835[data-out='true'] ._track_e47835 {
+      ._tank_f62b00[data-out='true'] ._track_f62b00 {
         stroke: var(--pb-text-muted);
       }
-      ._wreck_e47835 {
+      ._wreck_f62b00 {
         fill: none;
         stroke: var(--pb-text-muted);
         stroke-width: 0.8;
       }
 
       /* Real CSS font sizes survive SVG fitting: the tank identities never shrink below the device's body scale. */
-      ._number_e47835 {
+      ._number_f62b00 {
         position: absolute;
         display: grid;
         place-items: center;
@@ -306,17 +306,17 @@ ight is the :root default above) ────────
         transform: translate(-50%, -50%);
         pointer-events: none;
       }
-      ._number_e47835[data-out='true'] {
+      ._number_f62b00[data-out='true'] {
         color: var(--pb-text-muted);
         background: var(--pb-surface-2);
         text-decoration: line-through;
       }
-      ._number_e47835[data-me='true'] {
+      ._number_f62b00[data-me='true'] {
         outline: calc(var(--pb-space-1) / 2) solid var(--pb-text);
       }
 
-      /* games/ricochet-rumble/client/Standings.module.css */
-      ._rows_506bd8 {
+      /* games/tank-trouble/client/Standings.module.css */
+      ._rows_866f43 {
         display: grid;
         gap: var(--pb-space-2);
         margin: 0;
@@ -325,7 +325,7 @@ ight is the :root default above) ────────
         font-size: var(--pb-font-body);
         line-height: 1.15;
       }
-      ._rows_506bd8 li {
+      ._rows_866f43 li {
         display: grid;
         grid-template-columns: auto minmax(0, 1fr) auto;
         align-items: center;
@@ -336,13 +336,13 @@ ight is the :root default above) ────────
         background: var(--pb-surface);
         border: calc(var(--pb-space-1) / 4) solid var(--pb-border);
       }
-      ._rows_506bd8 li[data-me='true'] {
+      ._rows_866f43 li[data-me='true'] {
         outline: calc(var(--pb-space-1) / 2) solid var(--pb-accent-2);
       }
-      ._rows_506bd8 li[data-winner='true'] ._badge_506bd8 {
+      ._rows_866f43 li[data-winner='true'] ._badge_866f43 {
         outline: calc(var(--pb-space-1) / 2) solid var(--pb-text);
       }
-      ._badge_506bd8 {
+      ._badge_866f43 {
         display: grid;
         place-items: center;
         width: 1.4em;
@@ -353,54 +353,54 @@ ight is the :root default above) ────────
         color: var(--pb-on-accent-2-fill);
         font-weight: 1000;
       }
-      ._identity_506bd8 {
+      ._identity_866f43 {
         display: flex;
         flex-direction: column;
         gap: calc(var(--pb-space-1) / 2);
         min-width: 0;
       }
-      ._name_506bd8 {
+      ._name_866f43 {
         overflow-wrap: anywhere;
       }
-      ._state_506bd8 {
+      ._state_866f43 {
         color: var(--pb-text-muted);
         font-size: var(--pb-font-caption);
       }
-      ._score_506bd8 {
+      ._score_866f43 {
         display: flex;
         align-items: center;
         gap: var(--pb-space-2);
         font-variant-numeric: tabular-nums;
         white-space: nowrap;
       }
-      ._rank_506bd8 {
+      ._rank_866f43 {
         font-size: var(--pb-font-caption);
         color: var(--pb-text-muted);
       }
-      ._gain_506bd8 {
+      ._gain_866f43 {
         color: var(--pb-accent-3);
         font-size: var(--pb-font-caption);
         font-weight: 900;
       }
 
       /* During phone-only combat the same eight seats occupy four short rows above the thumb pad. */
-      ._rows_506bd8[data-compact='true'] {
+      ._rows_866f43[data-compact='true'] {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: var(--pb-space-1);
         font-size: var(--pb-font-caption);
         flex: none;
       }
-      ._rows_506bd8[data-compact='true'] li {
+      ._rows_866f43[data-compact='true'] li {
         min-height: calc(var(--pb-touch) * 0.7);
         gap: var(--pb-space-1);
         padding: calc(var(--pb-space-1) / 2) var(--pb-space-1);
       }
-      ._rows_506bd8[data-compact='true'] ._name_506bd8 {
+      ._rows_866f43[data-compact='true'] ._name_866f43 {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      ._rows_506bd8[data-compact='true'] ._state_506bd8 {
+      ._rows_866f43[data-compact='true'] ._state_866f43 {
         position: absolute;
         width: calc(var(--pb-space-1) / 4);
         height: calc(var(--pb-space-1) / 4);
@@ -408,64 +408,64 @@ ight is the :root default above) ────────
         clip-path: inset(50%);
         white-space: nowrap;
       }
-      ._rows_506bd8 li[data-out='true'] ._badge_506bd8 {
+      ._rows_866f43 li[data-out='true'] ._badge_866f43 {
         text-decoration: line-through;
       }
-      ._rows_506bd8[data-compact='true'] ._score_506bd8 {
+      ._rows_866f43[data-compact='true'] ._score_866f43 {
         gap: var(--pb-space-1);
       }
-      ._rows_506bd8[data-compact='true'] ._identity_506bd8 {
+      ._rows_866f43[data-compact='true'] ._identity_866f43 {
         min-width: 0;
       }
 
-      [data-surface='tv'] ._rows_506bd8 {
+      [data-surface='tv'] ._rows_866f43 {
         gap: var(--pb-space-2);
       }
-      [data-surface='tv'] ._rows_506bd8 li {
+      [data-surface='tv'] ._rows_866f43 li {
         min-height: calc(var(--pb-font-body) * 1.6);
       }
-      [data-surface='tv'] ._identity_506bd8 {
+      [data-surface='tv'] ._identity_866f43 {
         flex-direction: row;
         align-items: center;
       }
-      [data-surface='tv'] ._state_506bd8 {
+      [data-surface='tv'] ._state_866f43 {
         flex: none;
       }
-      [data-surface='tv'] ._name_506bd8 {
+      [data-surface='tv'] ._name_866f43 {
         display: block;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      [data-surface='tv'] ._state_506bd8,
-      [data-surface='tv'] ._rank_506bd8,
-      [data-surface='tv'] ._gain_506bd8 {
+      [data-surface='tv'] ._state_866f43,
+      [data-surface='tv'] ._rank_866f43,
+      [data-surface='tv'] ._gain_866f43 {
         font-size: calc(var(--pb-font-body) * 0.9);
       }
 
       /* Four result rows give every original name its full space at the TV body size. */
-      [data-surface='tv'] ._rows_506bd8[data-ranked='true'] {
+      [data-surface='tv'] ._rows_866f43[data-ranked='true'] {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: var(--pb-space-3);
       }
-      [data-surface='tv'] ._rows_506bd8[data-ranked='true'] ._identity_506bd8 {
+      [data-surface='tv'] ._rows_866f43[data-ranked='true'] ._identity_866f43 {
         flex-direction: column;
         align-items: flex-start;
       }
-      [data-surface='tv'] ._rows_506bd8[data-ranked='true'] ._name_506bd8 {
+      [data-surface='tv'] ._rows_866f43[data-ranked='true'] ._name_866f43 {
         overflow: visible;
         text-overflow: clip;
         white-space: normal;
       }
 
-      /* games/ricochet-rumble/client/Tv.module.css */
-      ._stage_b99d9f {
+      /* games/tank-trouble/client/Tv.module.css */
+      ._stage_06ce35 {
         flex: 1;
         height: 100%;
         min-height: 0;
         padding: var(--pb-space-4) var(--pb-space-6);
       }
-      ._board_b99d9f {
+      ._board_06ce35 {
         flex: 1;
         min-height: 0;
         display: grid;
@@ -474,7 +474,7 @@ ight is the :root default above) ────────
         align-items: center;
         container-type: size;
       }
-      ._main_b99d9f {
+      ._main_06ce35 {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -482,18 +482,18 @@ ight is the :root default above) ────────
         gap: var(--pb-space-3);
         min-width: 0;
       }
-      ._arena_b99d9f {
+      ._arena_06ce35 {
         position: relative;
         width: min(100%, calc((100cqh - var(--pb-font-body) * 4) * 5 / 3));
       }
-      ._line_b99d9f {
+      ._line_06ce35 {
         margin: 0;
         text-align: center;
         font-size: var(--pb-font-body);
         line-height: 1.2;
         text-wrap: balance;
       }
-      ._legend_b99d9f {
+      ._legend_06ce35 {
         display: flex;
         justify-content: center;
         gap: var(--pb-space-5);
@@ -504,21 +504,21 @@ ight is the :root default above) ────────
         line-height: 1.1;
         color: var(--pb-accent-2);
       }
-      ._rail_b99d9f {
+      ._rail_06ce35 {
         display: flex;
         flex-direction: column;
         justify-content: center;
         gap: var(--pb-space-3);
         min-width: 0;
       }
-      ._headline_b99d9f {
+      ._headline_06ce35 {
         margin: 0;
         font-size: var(--pb-font-h2);
         font-weight: 1000;
         line-height: 1.1;
         text-wrap: balance;
       }
-      ._clock_b99d9f {
+      ._clock_06ce35 {
         display: flex;
         flex-direction: column;
         gap: var(--pb-space-1);
@@ -530,23 +530,23 @@ ight is the :root default above) ────────
         font-size: var(--pb-font-body);
         font-weight: 800;
       }
-      ._clock_b99d9f b {
+      ._clock_06ce35 b {
         font-size: calc(var(--pb-font-display) * 0.75);
         line-height: 1;
         font-weight: 1000;
         font-variant-numeric: tabular-nums;
       }
-      ._clock_b99d9f[data-low='true'] b {
+      ._clock_06ce35[data-low='true'] b {
         color: var(--pb-accent-2);
       }
-      ._alive_b99d9f,
-      ._next_b99d9f {
+      ._alive_06ce35,
+      ._next_06ce35 {
         margin: 0;
         font-size: var(--pb-font-body);
         line-height: 1.15;
         font-variant-numeric: tabular-nums;
       }
-      ._countdown_b99d9f {
+      ._countdown_06ce35 {
         position: absolute;
         inset: 0;
         display: grid;
@@ -558,14 +558,14 @@ ight is the :root default above) ────────
       }
 
       /* Between fights, the result is the focal point and the maze remains as round context. */
-      ._board_b99d9f:has([data-ranked='true']) {
+      ._board_06ce35:has([data-ranked='true']) {
         grid-template-columns: minmax(0, 1fr) calc(var(--pb-font-body) * 25);
       }
 
-      /* games/ricochet-rumble/client/Controller.module.css */
-      ._play_9588be,
-      ._ready_9588be,
-      ._stage_9588be {
+      /* games/tank-trouble/client/Controller.module.css */
+      ._play_fc2e17,
+      ._ready_fc2e17,
+      ._stage_fc2e17 {
         height: 100%;
         min-height: 0;
         padding: var(--pb-space-3);
@@ -573,7 +573,7 @@ ight is the :root default above) ────────
         font-size: var(--pb-font-body);
         overscroll-behavior: none;
       }
-      ._play_9588be {
+      ._play_fc2e17 {
         display: flex;
         flex-direction: column;
         gap: var(--pb-space-2);
@@ -583,22 +583,22 @@ ight is the :root default above) ────────
         -webkit-user-select: none;
         -webkit-touch-callout: none;
       }
-      ._header_9588be {
+      ._header_fc2e17 {
         flex: none;
         text-align: center;
       }
-      ._header_9588be h2 {
+      ._header_fc2e17 h2 {
         margin: 0;
         font-size: var(--pb-font-h2);
         font-weight: 1000;
         line-height: 1.15;
       }
-      ._header_9588be p {
+      ._header_fc2e17 p {
         margin: var(--pb-space-1) 0 0;
         font-size: var(--pb-font-body);
         line-height: 1.2;
       }
-      ._meta_9588be {
+      ._meta_fc2e17 {
         display: flex;
         justify-content: center;
         gap: var(--pb-space-4);
@@ -606,19 +606,19 @@ ight is the :root default above) ────────
         font-size: var(--pb-font-caption);
         font-variant-numeric: tabular-nums;
       }
-      ._meta_9588be [role='timer'] {
+      ._meta_fc2e17 [role='timer'] {
         color: var(--pb-accent-2);
         font-weight: 900;
       }
-      ._liveArena_9588be {
+      ._liveArena_fc2e17 {
         flex: none;
         width: 100%;
       }
-      ._play_9588be[data-stage='true'] ._liveArena_9588be {
+      ._play_fc2e17[data-stage='true'] ._liveArena_fc2e17 {
         width: min(100%, calc(var(--pb-touch) * 7.5));
         align-self: center;
       }
-      ._weapon_9588be {
+      ._weapon_fc2e17 {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -630,10 +630,10 @@ ight is the :root default above) ────────
         font-size: var(--pb-font-caption);
         line-height: 1.25;
       }
-      ._weapon_9588be b {
+      ._weapon_fc2e17 b {
         color: var(--pb-accent-2);
       }
-      ._status_9588be {
+      ._status_fc2e17 {
         margin: 0;
         flex: none;
         text-align: center;
@@ -641,7 +641,7 @@ ight is the :root default above) ────────
         line-height: 1.25;
         font-variant-numeric: tabular-nums;
       }
-      ._controls_9588be {
+      ._controls_fc2e17 {
         flex: 1;
         min-height: calc(var(--pb-touch) * 4);
         display: grid;
@@ -649,7 +649,7 @@ ight is the :root default above) ────────
         grid-template-rows: repeat(3, minmax(var(--pb-touch), 1fr));
         gap: var(--pb-space-2);
       }
-      ._pad_9588be {
+      ._pad_fc2e17 {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -670,48 +670,48 @@ ight is the :root default above) ────────
         -webkit-user-select: none;
         -webkit-tap-highlight-color: transparent;
       }
-      ._pad_9588be:focus-visible {
+      ._pad_fc2e17:focus-visible {
         outline: var(--pb-space-1) solid var(--pb-focus);
         outline-offset: calc(var(--pb-space-1) / 2);
       }
-      ._pad_9588be[data-held='true'] {
+      ._pad_fc2e17[data-held='true'] {
         background: var(--pb-accent);
         color: var(--pb-on-accent);
       }
-      ._pad_9588be:disabled {
+      ._pad_fc2e17:disabled {
         color: var(--pb-text-muted);
         border-style: dashed;
       }
-      ._arrow_9588be {
+      ._arrow_fc2e17 {
         font-size: calc(var(--pb-font-body) * 1.7);
         line-height: 1;
       }
-      ._forward_9588be {
+      ._forward_fc2e17 {
         grid-area: 1 / 2;
       }
-      ._left_9588be {
+      ._left_fc2e17 {
         grid-area: 2 / 1;
       }
-      ._right_9588be {
+      ._right_fc2e17 {
         grid-area: 2 / 3;
       }
-      ._reverse_9588be {
+      ._reverse_fc2e17 {
         grid-area: 3 / 2;
       }
-      ._fire_9588be {
+      ._fire_fc2e17 {
         grid-area: 1 / 4 / 4 / 5;
         background: var(--pb-accent);
         color: var(--pb-on-accent);
         font-size: var(--pb-font-button);
       }
-      ._fire_9588be[data-held='true'] {
+      ._fire_fc2e17[data-held='true'] {
         background: var(--pb-accent-2-fill);
         color: var(--pb-on-accent-2-fill);
       }
-      ._fire_9588be ._arrow_9588be {
+      ._fire_fc2e17 ._arrow_fc2e17 {
         font-size: var(--pb-font-display);
       }
-      ._help_9588be {
+      ._help_fc2e17 {
         flex: none;
         margin: 0;
         text-align: center;
@@ -719,22 +719,22 @@ ight is the :root default above) ────────
         font-size: var(--pb-font-caption);
         line-height: 1.25;
       }
-      ._ready_9588be {
+      ._ready_fc2e17 {
         display: grid;
         align-content: center;
         justify-items: center;
         gap: var(--pb-space-4);
         text-align: center;
       }
-      ._ready_9588be h2 {
+      ._ready_fc2e17 h2 {
         margin: 0;
         font-size: var(--pb-font-h2);
       }
-      ._ready_9588be p {
+      ._ready_fc2e17 p {
         margin: 0;
         line-height: 1.35;
       }
-      ._identity_9588be {
+      ._identity_fc2e17 {
         display: grid;
         place-items: center;
         width: calc(var(--pb-font-display) * 2);
@@ -745,67 +745,67 @@ ight is the :root default above) ────────
         font-size: calc(var(--pb-font-display) * 1.5);
         font-weight: 1000;
       }
-      ._mainLine_9588be {
+      ._mainLine_fc2e17 {
         font-size: var(--pb-font-h1);
         font-weight: 900;
       }
-      ._countdown_9588be {
+      ._countdown_fc2e17 {
         font-size: var(--pb-font-display);
         font-weight: 1000;
         font-variant-numeric: tabular-nums;
       }
-      ._stage_9588be {
+      ._stage_fc2e17 {
         display: flex;
         flex-direction: column;
         gap: var(--pb-space-2);
         overflow-y: auto;
       }
-      ._stageArena_9588be {
+      ._stageArena_fc2e17 {
         flex: none;
         width: 100%;
       }
-      ._stage_9588be[data-phase='ready'] ._stageArena_9588be,
-      ._stage_9588be[data-phase='score'] ._stageArena_9588be,
-      ._stage_9588be[data-phase='done'] ._stageArena_9588be {
+      ._stage_fc2e17[data-phase='ready'] ._stageArena_fc2e17,
+      ._stage_fc2e17[data-phase='score'] ._stageArena_fc2e17,
+      ._stage_fc2e17[data-phase='done'] ._stageArena_fc2e17 {
         width: calc(var(--pb-touch) * 4);
         align-self: center;
       }
-      ._stage_9588be > ol {
+      ._stage_fc2e17 > ol {
         gap: var(--pb-space-1);
       }
-      ._stage_9588be > ol > li {
+      ._stage_fc2e17 > ol > li {
         padding: var(--pb-space-1) var(--pb-space-2);
         font-size: var(--pb-font-body);
       }
 
       @media (orientation: landscape) and (max-height: 500px) {
-        ._play_9588be[data-stage='true'] {
+        ._play_fc2e17[data-stage='true'] {
           display: grid;
           grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
           grid-template-rows: auto auto minmax(0, 1fr);
         }
-        ._play_9588be[data-stage='true'] ._header_9588be {
+        ._play_fc2e17[data-stage='true'] ._header_fc2e17 {
           grid-column: 1 / 3;
         }
-        ._play_9588be[data-stage='true'] ._liveArena_9588be {
+        ._play_fc2e17[data-stage='true'] ._liveArena_fc2e17 {
           grid-column: 1;
           grid-row: 2 / 4;
           align-self: center;
         }
-        ._play_9588be[data-stage='true'] ._weapon_9588be {
+        ._play_fc2e17[data-stage='true'] ._weapon_fc2e17 {
           grid-column: 2;
           grid-row: 2;
         }
-        ._play_9588be[data-stage='true'] ._controls_9588be {
+        ._play_fc2e17[data-stage='true'] ._controls_fc2e17 {
           grid-column: 2;
           grid-row: 3;
           min-height: 0;
         }
-        ._play_9588be[data-stage='true'] ._status_9588be,
-        ._play_9588be[data-stage='true'] ._help_9588be {
+        ._play_fc2e17[data-stage='true'] ._status_fc2e17,
+        ._play_fc2e17[data-stage='true'] ._help_fc2e17 {
           display: none;
         }
-        ._play_9588be[data-stage='true'] > ol {
+        ._play_fc2e17[data-stage='true'] > ol {
           display: none;
         }
       }
@@ -1181,62 +1181,62 @@ ight is the :root default above) ────────
     <div class="evidence-shell">
       <header class="evidence-header"><b>PartyBox</b><span>RUMB</span></header>
       <main class="evidence-main" aria-label="Game stage">
-        <div class="_stage_9588be" data-phase="score" style="--tank-color: var(--pb-player-1)">
-          <header class="_header_9588be">
+        <div class="_stage_fc2e17" data-phase="score" style="--tank-color: var(--pb-player-1)">
+          <header class="_header_fc2e17">
             <h2>Round 5 complete</h2>
             <p>Last tank wins one point</p>
           </header>
-          <p class="_status_9588be">+0 this round · 0 wins so far</p>
-          <ol class="_rows_506bd8" aria-label="Standings" data-ranked="true">
+          <p class="_status_fc2e17">+0 this round · 0 wins so far</p>
+          <ol class="_rows_866f43" aria-label="Standings" data-ranked="true">
             <li style="--tank-color: var(--pb-player-3)" data-winner="true">
-              <span class="_badge_506bd8" aria-label="Tank 3">3</span
-              ><span class="_identity_506bd8"><b class="_name_506bd8">Cy</b></span
-              ><span class="_score_506bd8"
-                ><span class="_rank_506bd8">#1</span><b>2</b
-                ><span class="_gain_506bd8">+1</span></span
+              <span class="_badge_866f43" aria-label="Tank 3">3</span
+              ><span class="_identity_866f43"><b class="_name_866f43">Cy</b></span
+              ><span class="_score_866f43"
+                ><span class="_rank_866f43">#1</span><b>2</b
+                ><span class="_gain_866f43">+1</span></span
               >
             </li>
             <li style="--tank-color: var(--pb-player-4)">
-              <span class="_badge_506bd8" aria-label="Tank 4">4</span
-              ><span class="_identity_506bd8"><b class="_name_506bd8">Dee</b></span
-              ><span class="_score_506bd8"><span class="_rank_506bd8">#1</span><b>2</b></span>
+              <span class="_badge_866f43" aria-label="Tank 4">4</span
+              ><span class="_identity_866f43"><b class="_name_866f43">Dee</b></span
+              ><span class="_score_866f43"><span class="_rank_866f43">#1</span><b>2</b></span>
             </li>
             <li style="--tank-color: var(--pb-player-2)">
-              <span class="_badge_506bd8" aria-label="Tank 2">2</span
-              ><span class="_identity_506bd8"><b class="_name_506bd8">Ben</b></span
-              ><span class="_score_506bd8"><span class="_rank_506bd8">#3</span><b>1</b></span>
+              <span class="_badge_866f43" aria-label="Tank 2">2</span
+              ><span class="_identity_866f43"><b class="_name_866f43">Ben</b></span
+              ><span class="_score_866f43"><span class="_rank_866f43">#3</span><b>1</b></span>
             </li>
             <li style="--tank-color: var(--pb-player-1)" data-me="true">
-              <span class="_badge_506bd8" aria-label="Tank 1">1</span
-              ><span class="_identity_506bd8"><b class="_name_506bd8">Ana</b></span
-              ><span class="_score_506bd8"><span class="_rank_506bd8">#4</span><b>0</b></span>
+              <span class="_badge_866f43" aria-label="Tank 1">1</span
+              ><span class="_identity_866f43"><b class="_name_866f43">Ana</b></span
+              ><span class="_score_866f43"><span class="_rank_866f43">#4</span><b>0</b></span>
             </li>
             <li style="--tank-color: var(--pb-player-5)">
-              <span class="_badge_506bd8" aria-label="Tank 5">5</span
-              ><span class="_identity_506bd8"><b class="_name_506bd8">Eli</b></span
-              ><span class="_score_506bd8"><span class="_rank_506bd8">#4</span><b>0</b></span>
+              <span class="_badge_866f43" aria-label="Tank 5">5</span
+              ><span class="_identity_866f43"><b class="_name_866f43">Eli</b></span
+              ><span class="_score_866f43"><span class="_rank_866f43">#4</span><b>0</b></span>
             </li>
             <li style="--tank-color: var(--pb-player-6)">
-              <span class="_badge_506bd8" aria-label="Tank 6">6</span
-              ><span class="_identity_506bd8"><b class="_name_506bd8">Fay</b></span
-              ><span class="_score_506bd8"><span class="_rank_506bd8">#4</span><b>0</b></span>
+              <span class="_badge_866f43" aria-label="Tank 6">6</span
+              ><span class="_identity_866f43"><b class="_name_866f43">Fay</b></span
+              ><span class="_score_866f43"><span class="_rank_866f43">#4</span><b>0</b></span>
             </li>
             <li style="--tank-color: var(--pb-player-7)">
-              <span class="_badge_506bd8" aria-label="Tank 7">7</span
-              ><span class="_identity_506bd8"><b class="_name_506bd8">Gus</b></span
-              ><span class="_score_506bd8"><span class="_rank_506bd8">#4</span><b>0</b></span>
+              <span class="_badge_866f43" aria-label="Tank 7">7</span
+              ><span class="_identity_866f43"><b class="_name_866f43">Gus</b></span
+              ><span class="_score_866f43"><span class="_rank_866f43">#4</span><b>0</b></span>
             </li>
             <li style="--tank-color: var(--pb-player-8)">
-              <span class="_badge_506bd8" aria-label="Tank 8">8</span
-              ><span class="_identity_506bd8"><b class="_name_506bd8">Hal</b></span
-              ><span class="_score_506bd8"><span class="_rank_506bd8">#4</span><b>0</b></span>
+              <span class="_badge_866f43" aria-label="Tank 8">8</span
+              ><span class="_identity_866f43"><b class="_name_866f43">Hal</b></span
+              ><span class="_score_866f43"><span class="_rank_866f43">#4</span><b>0</b></span>
             </li>
           </ol>
-          <p class="_status_9588be">Final standings in 28s</p>
+          <p class="_status_fc2e17">Final standings in 28s</p>
         </div>
       </main>
       <footer class="evidence-footer">
-        <span>Ricochet Rumble · phone-tv</span><span>390 × 844</span>
+        <span>Tank Trouble · phone-tv</span><span>390 × 844</span>
       </footer>
     </div>
   </body>

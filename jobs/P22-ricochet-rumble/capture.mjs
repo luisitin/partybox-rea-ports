@@ -17,7 +17,7 @@ import { resolve } from 'node:path';
 
 const job = import.meta.dirname;
 const media = resolve(job, 'media');
-const temp = mkdtempSync(resolve(tmpdir(), 'pb-ricochet-rumble-capture-'));
+const temp = mkdtempSync(resolve(tmpdir(), 'pb-tank-trouble-capture-'));
 const profile = resolve(temp, 'capture-profile');
 let port;
 const browserPath = [
@@ -341,8 +341,8 @@ try {
   }
   const osTemp = resolve(tmpdir());
   if (
-    !temp.startsWith(`${osTemp}\\pb-ricochet-rumble-capture-`) &&
-    !temp.startsWith(`${osTemp}/pb-ricochet-rumble-capture-`)
+    !temp.startsWith(`${osTemp}\\pb-tank-trouble-capture-`) &&
+    !temp.startsWith(`${osTemp}/pb-tank-trouble-capture-`)
   )
     throw new Error('Refusing cleanup outside owned OS capture temp.');
   if (browserClosed) {

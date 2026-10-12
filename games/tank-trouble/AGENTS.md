@@ -1,4 +1,4 @@
-# ricochet-rumble — local rules
+# tank-trouble — local rules
 
 - README.md is the spec; keep it true when mechanics change.
 - Pure server, time only from events, randomness only from state.rng. One file per phase.

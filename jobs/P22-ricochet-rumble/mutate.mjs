@@ -15,9 +15,9 @@ import { fileURLToPath } from 'node:url';
 
 const job = dirname(fileURLToPath(import.meta.url));
 const root = resolve(job, '../..');
-const prefix = 'games/ricochet-rumble/server/';
-const physics = 'games/ricochet-rumble/__tests__/physics.test.ts';
-const lifecycle = 'games/ricochet-rumble/__tests__/game.test.ts';
+const prefix = 'games/tank-trouble/server/';
+const physics = 'games/tank-trouble/__tests__/physics.test.ts';
+const lifecycle = 'games/tank-trouble/__tests__/game.test.ts';
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 // Semantic anchors are exact after whitespace normalization, so Prettier does not break them.
@@ -178,7 +178,7 @@ const mutants = [
     'M20',
     'Public views leak internal projectile and spawn counters',
     'index.ts',
-    'arena: { maze: state.world.maze, tanks: state.world.tanks, bullets: state.world.bullets, pickups: state.world.pickups, stepped: state.world.stepped }',
+    'arena: { maze: state.world.maze, tanks: state.world.tanks, bullets: state.world.bullets, pickups: state.world.pickups, stepped: state.world.stepped, }',
     'arena: state.world',
     lifecycle,
   ],
@@ -213,7 +213,7 @@ for (const [id, , file, from, to] of mutants)
 if (process.argv.includes('--check')) {
   console.log('20 unique semantic sites validated; no mutations planted and no tests started');
 } else {
-  const temp = mkdtempSync(join(tmpdir(), 'ricochet-rumble-mutations-'));
+  const temp = mkdtempSync(join(tmpdir(), 'tank-trouble-mutations-'));
   const reportPath = join(temp, 'vitest.json');
   const results = [];
   let baseline;
@@ -315,7 +315,7 @@ if (process.argv.includes('--check')) {
     const evidence = {
       command: 'node jobs/P22-ricochet-rumble/mutate.mjs',
       baselineCommand:
-        'pnpm vitest run games/ricochet-rumble/__tests__/game.test.ts games/ricochet-rumble/__tests__/physics.test.ts --maxWorkers=1 --pool=threads',
+        'pnpm vitest run games/tank-trouble/__tests__/game.test.ts games/tank-trouble/__tests__/physics.test.ts --maxWorkers=1 --pool=threads',
       mutationTestCommand:
         'node node_modules/vitest/vitest.mjs run <listed target> --maxWorkers=1 --pool=threads --reporter=json --outputFile=<temporary report>',
       baselineTests: baseline.tests,

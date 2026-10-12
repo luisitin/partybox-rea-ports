@@ -3,6 +3,6 @@ import { vi } from 'vitest';
 
 vi.mock('../../../packages/game-sdk/src/contract-tests/load', async (importOriginal) => {
   const actual = await importOriginal<object>();
-  return { ...actual, listGameIds: () => ['ricochet-rumble'] };
+  return { ...actual, listGameIds: () => ['tank-trouble'] };
 });
 await import('../../../packages/game-sdk/src/contract-tests/contract.test');

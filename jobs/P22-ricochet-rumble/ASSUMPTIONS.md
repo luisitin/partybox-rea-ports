@@ -14,7 +14,7 @@
 - The source implementations disagree on lifetime and weapon inventory. Use only paired common
   mechanics; Burst (spread shot), Beam (fast laser family), Seeker (homing family), five rounds and
   a default forty-five-second cap are explicit PartyBox adaptations.
-- Ricochet Rumble is the original port name. Product names occur only in research/source references.
+- The owner naming update on main (RULES/JOBS, fetched2026-10-12) supersedes the initial working title. The official name Tank Trouble and id tank-trouble are used; all art remains authored. The existing job folder and branch slug remain stable for handoff.
 - Eight players need a wider, connected maze, visible tank numbers/heading arrows and bounded
   projectile counts. Exact grid dimensions, movement speed, reload, powerup cadence and cap are
   authored balance parameters to validate with simulations and captures, not copied measurements.
@@ -25,3 +25,5 @@
   Bot fairness and useful match duration must be measured rather than inferred from an algorithm.
 - Sound uses existing SDK cues/bed facilities only. Suggested shot, bounce and explosion contrasts
   express design intent; no original recording or unmeasured loudness claim is shipped.
+
+- Owner-required overlap check inspected C:/dev/partybox game manifests and docs/games. No Tank Trouble/tank-trouble counterpart exists, so P22 remains a new game. Existing Lightning Round and Big-Top Quiz are separate quiz games; P01 follow-up needs the owner naming/overlap instruction applied on its next push.
