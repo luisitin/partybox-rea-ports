@@ -1,0 +1,53 @@
+{
+  "id": "quizizz",
+  "name": "Quizizz",
+  "icon": "⚡",
+  "tagline": "Your pace. Your answers. One finish line.",
+  "description": "Race through questions on your phone while the room follows every runner on the stage. Correct answers build a streak and earn energy: double your next correct answer or freeze a rival for three seconds. Most points wins.",
+  "howToPlay": [
+    "Answer on your phone, then tap Next. Everyone races at their own pace.",
+    "Correct answers score 100 plus a streak bonus. Three correct answers earn one energy.",
+    "Use energy to double your next correct score or freeze a rival for 3 s. Most points wins."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 3,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-10-11",
+  "supportsBots": true,
+  "settings": [
+    {
+      "key": "pack",
+      "label": "Question pack",
+      "type": "select",
+      "default": "general",
+      "options": [
+        { "value": "general", "label": "General knowledge" },
+        { "value": "movies", "label": "Movies" },
+        { "value": "science", "label": "Science" }
+      ]
+    },
+    {
+      "key": "questions",
+      "label": "Questions",
+      "type": "number",
+      "default": 12,
+      "min": 6,
+      "max": 20,
+      "step": 1
+    },
+    {
+      "key": "seconds",
+      "label": "Race seconds",
+      "type": "number",
+      "default": 90,
+      "min": 60,
+      "max": 180,
+      "step": 30
+    },
+    { "key": "powers", "label": "Power-ups", "type": "boolean", "default": true }
+  ]
+}

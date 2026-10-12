@@ -1,0 +1,249 @@
+{
+  "phase": {
+    "id": "race",
+    "startedAt": 1700000000000,
+    "deadline": 1700000004050
+  },
+  "rng": {
+    "seed": 23,
+    "step": 19
+  },
+  "players": {
+    "p1": {
+      "id": "p1",
+      "name": "Ana",
+      "avatarId": "fox",
+      "connected": true
+    },
+    "p2": {
+      "id": "p2",
+      "name": "Ben",
+      "avatarId": "owl",
+      "connected": true
+    },
+    "p3": {
+      "id": "p3",
+      "name": "Cy",
+      "avatarId": "frog",
+      "connected": true
+    },
+    "p4": {
+      "id": "p4",
+      "name": "Dee",
+      "avatarId": "cat",
+      "connected": true
+    },
+    "p5": {
+      "id": "p5",
+      "name": "Eli",
+      "avatarId": "panda",
+      "connected": true
+    },
+    "p6": {
+      "id": "p6",
+      "name": "Fay",
+      "avatarId": "koala",
+      "connected": true
+    },
+    "p7": {
+      "id": "p7",
+      "name": "Gus",
+      "avatarId": "penguin",
+      "connected": true
+    },
+    "p8": {
+      "id": "p8",
+      "name": "Hal",
+      "avatarId": "octopus",
+      "connected": true
+    }
+  },
+  "runners": {
+    "p1": {
+      "answered": 1,
+      "correct": 1,
+      "score": 100,
+      "streak": 1,
+      "energy": 0,
+      "double": false,
+      "freezeUntil": 1700000006650,
+      "frozenBy": "p8",
+      "feedback": null
+    },
+    "p2": {
+      "answered": 2,
+      "correct": 2,
+      "score": 220,
+      "streak": 2,
+      "energy": 0,
+      "double": false,
+      "freezeUntil": 0,
+      "frozenBy": null,
+      "feedback": null
+    },
+    "p3": {
+      "answered": 3,
+      "correct": 3,
+      "score": 360,
+      "streak": 3,
+      "energy": 1,
+      "double": false,
+      "freezeUntil": 0,
+      "frozenBy": null,
+      "feedback": null
+    },
+    "p4": {
+      "answered": 4,
+      "correct": 4,
+      "score": 520,
+      "streak": 4,
+      "energy": 1,
+      "double": false,
+      "freezeUntil": 0,
+      "frozenBy": null,
+      "feedback": null
+    },
+    "p5": {
+      "answered": 5,
+      "correct": 5,
+      "score": 680,
+      "streak": 5,
+      "energy": 1,
+      "double": false,
+      "freezeUntil": 0,
+      "frozenBy": null,
+      "feedback": null
+    },
+    "p6": {
+      "answered": 6,
+      "correct": 6,
+      "score": 840,
+      "streak": 6,
+      "energy": 1,
+      "double": false,
+      "freezeUntil": 0,
+      "frozenBy": null,
+      "feedback": null
+    },
+    "p7": {
+      "answered": 7,
+      "correct": 7,
+      "score": 1000,
+      "streak": 7,
+      "energy": 1,
+      "double": false,
+      "freezeUntil": 0,
+      "frozenBy": null,
+      "feedback": null
+    },
+    "p8": {
+      "answered": 8,
+      "correct": 8,
+      "score": 1160,
+      "streak": 8,
+      "energy": 0,
+      "double": false,
+      "freezeUntil": 0,
+      "frozenBy": null,
+      "feedback": null
+    }
+  },
+  "deck": [
+    {
+      "id": "general-soccer",
+      "prompt": "In which sport do players mainly kick a ball into a goal?",
+      "options": ["Soccer", "Tennis", "Baseball", "Volleyball"],
+      "correctIndex": 0,
+      "explanation": "Soccer players mainly use their feet to move the ball and score."
+    },
+    {
+      "id": "general-paris",
+      "prompt": "What is the capital of France?",
+      "options": ["Rome", "Paris", "Madrid", "Berlin"],
+      "correctIndex": 1,
+      "explanation": "Paris is the capital city of France."
+    },
+    {
+      "id": "general-roman",
+      "prompt": "What number does the Roman numeral X represent?",
+      "options": ["10", "5", "50", "100"],
+      "correctIndex": 0,
+      "explanation": "X is the Roman numeral for ten."
+    },
+    {
+      "id": "general-honey",
+      "prompt": "Which insect makes honey?",
+      "options": ["Honeybee", "Butterfly", "Dragonfly", "Grasshopper"],
+      "correctIndex": 0,
+      "explanation": "Honeybees turn collected nectar into honey."
+    },
+    {
+      "id": "general-triangle",
+      "prompt": "How many corners does a triangle have?",
+      "options": ["One", "Two", "Three", "Four"],
+      "correctIndex": 2,
+      "explanation": "A triangle has three sides and three corners."
+    },
+    {
+      "id": "general-chess",
+      "prompt": "Which chess piece moves only diagonally?",
+      "options": ["Rook", "Knight", "Bishop", "King"],
+      "correctIndex": 2,
+      "explanation": "Bishops travel along diagonals and stay on one square colour."
+    },
+    {
+      "id": "general-violin",
+      "prompt": "How many strings does a standard violin have?",
+      "options": ["Two", "Three", "Six", "Four"],
+      "correctIndex": 3,
+      "explanation": "A standard violin has four strings, tuned G, D, A and E."
+    },
+    {
+      "id": "general-elephant",
+      "prompt": "Which is the largest living land animal?",
+      "options": ["Giraffe", "African elephant", "Hippopotamus", "Polar bear"],
+      "correctIndex": 1,
+      "explanation": "The African bush elephant is the largest living land animal."
+    },
+    {
+      "id": "general-hexagon",
+      "prompt": "How many sides does a hexagon have?",
+      "options": ["Six", "Five", "Seven", "Eight"],
+      "correctIndex": 0,
+      "explanation": "A hexagon is a polygon with six sides."
+    },
+    {
+      "id": "general-direction",
+      "prompt": "Which direction is opposite northeast?",
+      "options": ["Northwest", "Southeast", "Southwest", "East"],
+      "correctIndex": 2,
+      "explanation": "Southwest is halfway between south and west, opposite northeast."
+    },
+    {
+      "id": "general-brazil",
+      "prompt": "On which continent is Brazil?",
+      "options": ["Asia", "South America", "Europe", "Africa"],
+      "correctIndex": 1,
+      "explanation": "Brazil occupies a large part of South America."
+    },
+    {
+      "id": "general-ocean",
+      "prompt": "Which ocean is the largest?",
+      "options": ["Atlantic", "Pacific", "Indian", "Arctic"],
+      "correctIndex": 1,
+      "explanation": "The Pacific covers more area than any other ocean."
+    }
+  ],
+  "cfg": {
+    "pack": "general",
+    "questions": 12,
+    "seconds": 90,
+    "powers": true
+  },
+  "began": 1700000000000,
+  "endsAt": 1700000090000,
+  "clock": 1700000003650,
+  "podiumStep": 0,
+  "phoneOnly": false,
+  "left": []
+}

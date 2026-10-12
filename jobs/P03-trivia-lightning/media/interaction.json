@@ -1,0 +1,2990 @@
+{
+  "capturedAt": "2026-10-12T02:20:51.455Z",
+  "checks": [
+    {
+      "name": "highest-scoring eligible rival is the initial target",
+      "passed": true,
+      "observed": {
+        "value": "p7",
+        "disabled": false,
+        "options": [
+          {
+            "value": "p7",
+            "text": "1 · 840 pts · Alexandria Challenger p7"
+          },
+          {
+            "value": "p3",
+            "text": "2 · 360 pts · Alexandria Challenger p3"
+          },
+          {
+            "value": "p4",
+            "text": "4 · 0 pts · Alexandria Challenger p4"
+          },
+          {
+            "value": "p5",
+            "text": "4 · 0 pts · Alexandria Challenger p5"
+          },
+          {
+            "value": "p6",
+            "text": "4 · 0 pts · Alexandria Challenger p6"
+          },
+          {
+            "value": "p8",
+            "text": "4 · 0 pts · Alexandria Challenger p8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "target choices exclude self and finished seats",
+      "passed": true,
+      "observed": [
+        {
+          "value": "p7",
+          "text": "1 · 840 pts · Alexandria Challenger p7"
+        },
+        {
+          "value": "p3",
+          "text": "2 · 360 pts · Alexandria Challenger p3"
+        },
+        {
+          "value": "p4",
+          "text": "4 · 0 pts · Alexandria Challenger p4"
+        },
+        {
+          "value": "p5",
+          "text": "4 · 0 pts · Alexandria Challenger p5"
+        },
+        {
+          "value": "p6",
+          "text": "4 · 0 pts · Alexandria Challenger p6"
+        },
+        {
+          "value": "p8",
+          "text": "4 · 0 pts · Alexandria Challenger p8"
+        }
+      ]
+    },
+    {
+      "name": "leader choice shows full identity, score and place",
+      "passed": true,
+      "observed": {
+        "value": "p7",
+        "text": "1 · 840 pts · Alexandria Challenger p7"
+      }
+    },
+    {
+      "name": "explicit target survives a leaderboard reorder",
+      "passed": true,
+      "observed": {
+        "value": "p7",
+        "disabled": false,
+        "options": [
+          {
+            "value": "p3",
+            "text": "1 · 1000 pts · Alexandria Challenger p3"
+          },
+          {
+            "value": "p7",
+            "text": "2 · 840 pts · Alexandria Challenger p7"
+          },
+          {
+            "value": "p4",
+            "text": "4 · 0 pts · Alexandria Challenger p4"
+          },
+          {
+            "value": "p5",
+            "text": "4 · 0 pts · Alexandria Challenger p5"
+          },
+          {
+            "value": "p6",
+            "text": "4 · 0 pts · Alexandria Challenger p6"
+          },
+          {
+            "value": "p8",
+            "text": "4 · 0 pts · Alexandria Challenger p8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "picker changes do not send a power",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "selection: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 7,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "offline selected rival is removed and eligible leader becomes fallback",
+      "passed": true,
+      "observed": {
+        "value": "p3",
+        "disabled": false,
+        "options": [
+          {
+            "value": "p3",
+            "text": "2 · 360 pts · Alexandria Challenger p3"
+          },
+          {
+            "value": "p4",
+            "text": "4 · 0 pts · Alexandria Challenger p4"
+          },
+          {
+            "value": "p5",
+            "text": "4 · 0 pts · Alexandria Challenger p5"
+          },
+          {
+            "value": "p6",
+            "text": "4 · 0 pts · Alexandria Challenger p6"
+          },
+          {
+            "value": "p8",
+            "text": "4 · 0 pts · Alexandria Challenger p8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "returning rival does not resurrect an invalidated explicit selection",
+      "passed": true,
+      "observed": {
+        "value": "p3",
+        "disabled": false,
+        "options": [
+          {
+            "value": "p3",
+            "text": "1 · 1000 pts · Alexandria Challenger p3"
+          },
+          {
+            "value": "p7",
+            "text": "2 · 840 pts · Alexandria Challenger p7"
+          },
+          {
+            "value": "p4",
+            "text": "4 · 0 pts · Alexandria Challenger p4"
+          },
+          {
+            "value": "p5",
+            "text": "4 · 0 pts · Alexandria Challenger p5"
+          },
+          {
+            "value": "p6",
+            "text": "4 · 0 pts · Alexandria Challenger p6"
+          },
+          {
+            "value": "p8",
+            "text": "4 · 0 pts · Alexandria Challenger p8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "double sends the exact server input",
+      "passed": true,
+      "observed": [
+        {
+          "type": "power",
+          "power": "double",
+          "charge": 1
+        }
+      ]
+    },
+    {
+      "name": "pending double disables both powers and announces sending",
+      "passed": true,
+      "observed": {
+        "powers": [
+          {
+            "text": "×2 Next correct",
+            "disabled": true
+          },
+          {
+            "text": "❄ Freeze 3s",
+            "disabled": true
+          }
+        ],
+        "statuses": ["🔥 3 correct in a row", "Sending power…"]
+      }
+    },
+    {
+      "name": "double is not armed before authoritative acceptance",
+      "passed": true,
+      "observed": ["🔥 3 correct in a row", "Sending power…"]
+    },
+    {
+      "name": "repeated power taps send no duplicate while pending",
+      "passed": true,
+      "observed": [
+        {
+          "type": "power",
+          "power": "double",
+          "charge": 1
+        }
+      ]
+    },
+    {
+      "name": "double-pending: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 7,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "unrelated score push does not confirm a pending double",
+      "passed": true,
+      "observed": ["🔥 3 correct in a row", "Sending power…"]
+    },
+    {
+      "name": "unconfirmed double allows explicit retry after four seconds",
+      "passed": true,
+      "observed": ["🔥 3 correct in a row", "Power not confirmed — tap again"]
+    },
+    {
+      "name": "double-retry: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 7,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "retry sends one additional double request",
+      "passed": true,
+      "observed": [
+        {
+          "type": "power",
+          "power": "double",
+          "charge": 1
+        },
+        {
+          "type": "power",
+          "power": "double",
+          "charge": 1
+        }
+      ]
+    },
+    {
+      "name": "accepted double is armed and cannot spend energy twice",
+      "passed": true,
+      "observed": {
+        "powers": [
+          {
+            "text": "×2 Next correct",
+            "disabled": true
+          },
+          {
+            "text": "❄ Freeze 3s",
+            "disabled": true
+          }
+        ],
+        "statuses": ["🔥 3 correct in a row", "Power used×2 armed"]
+      }
+    },
+    {
+      "name": "double-accepted: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 7,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "freeze sends the explicitly selected rival",
+      "passed": true,
+      "observed": [
+        {
+          "type": "power",
+          "power": "freeze",
+          "charge": 1,
+          "target": "p7"
+        }
+      ]
+    },
+    {
+      "name": "pending freeze disables powers and rival selection",
+      "passed": true,
+      "observed": {
+        "target": {
+          "value": "p7",
+          "disabled": true,
+          "options": [
+            {
+              "value": "p7",
+              "text": "1 · 840 pts · Alexandria Challenger p7"
+            },
+            {
+              "value": "p3",
+              "text": "2 · 360 pts · Alexandria Challenger p3"
+            },
+            {
+              "value": "p4",
+              "text": "4 · 0 pts · Alexandria Challenger p4"
+            },
+            {
+              "value": "p5",
+              "text": "4 · 0 pts · Alexandria Challenger p5"
+            },
+            {
+              "value": "p6",
+              "text": "4 · 0 pts · Alexandria Challenger p6"
+            },
+            {
+              "value": "p8",
+              "text": "4 · 0 pts · Alexandria Challenger p8"
+            }
+          ]
+        },
+        "powers": [
+          {
+            "text": "×2 Next correct",
+            "disabled": true
+          },
+          {
+            "text": "❄ Freeze 3s",
+            "disabled": true
+          }
+        ],
+        "statuses": ["🔥 3 correct in a row", "Sending power…"]
+      }
+    },
+    {
+      "name": "repeated freeze tap sends no duplicate",
+      "passed": true,
+      "observed": [
+        {
+          "type": "power",
+          "power": "freeze",
+          "charge": 1,
+          "target": "p7"
+        }
+      ]
+    },
+    {
+      "name": "freeze-pending: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 7,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "unrelated standings push retains pending freeze and target",
+      "passed": true,
+      "observed": {
+        "value": "p7",
+        "disabled": true,
+        "options": [
+          {
+            "value": "p3",
+            "text": "1 · 1000 pts · Alexandria Challenger p3"
+          },
+          {
+            "value": "p7",
+            "text": "2 · 840 pts · Alexandria Challenger p7"
+          },
+          {
+            "value": "p4",
+            "text": "4 · 0 pts · Alexandria Challenger p4"
+          },
+          {
+            "value": "p5",
+            "text": "4 · 0 pts · Alexandria Challenger p5"
+          },
+          {
+            "value": "p6",
+            "text": "4 · 0 pts · Alexandria Challenger p6"
+          },
+          {
+            "value": "p8",
+            "text": "4 · 0 pts · Alexandria Challenger p8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unconfirmed freeze allows an explicit retry",
+      "passed": true,
+      "observed": ["🔥 3 correct in a row", "Power not confirmed — tap again"]
+    },
+    {
+      "name": "freeze retry preserves rival and energy charge",
+      "passed": true,
+      "observed": [
+        {
+          "type": "power",
+          "power": "freeze",
+          "charge": 1,
+          "target": "p7"
+        },
+        {
+          "type": "power",
+          "power": "freeze",
+          "charge": 1,
+          "target": "p7"
+        }
+      ]
+    },
+    {
+      "name": "accepted freeze removes the frozen rival from targets",
+      "passed": true,
+      "observed": {
+        "value": "p3",
+        "disabled": true,
+        "options": [
+          {
+            "value": "p3",
+            "text": "2 · 360 pts · Alexandria Challenger p3"
+          },
+          {
+            "value": "p4",
+            "text": "4 · 0 pts · Alexandria Challenger p4"
+          },
+          {
+            "value": "p5",
+            "text": "4 · 0 pts · Alexandria Challenger p5"
+          },
+          {
+            "value": "p6",
+            "text": "4 · 0 pts · Alexandria Challenger p6"
+          },
+          {
+            "value": "p8",
+            "text": "4 · 0 pts · Alexandria Challenger p8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "accepted freeze announces confirmation from public state",
+      "passed": true,
+      "observed": ["🔥 3 correct in a row", "Power used❄ Rival frozen"]
+    },
+    {
+      "name": "authoritative freeze does not send another request",
+      "passed": true,
+      "observed": [
+        {
+          "type": "power",
+          "power": "freeze",
+          "charge": 1,
+          "target": "p7"
+        },
+        {
+          "type": "power",
+          "power": "freeze",
+          "charge": 1,
+          "target": "p7"
+        }
+      ]
+    },
+    {
+      "name": "freeze-accepted: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 7,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "energy decline confirms spending without attributing the last request kind",
+      "passed": true,
+      "observed": {
+        "statuses": ["🔥 3 correct in a row", "Power used×2 armed"],
+        "sent": [
+          {
+            "type": "power",
+            "power": "freeze",
+            "charge": 1,
+            "target": "p7"
+          }
+        ]
+      }
+    },
+    {
+      "name": "rival disconnect without energy change does not confirm pending freeze",
+      "passed": true,
+      "observed": ["🔥 3 correct in a row", "Sending power…"]
+    },
+    {
+      "name": "rejected freeze allows another eligible rival after timeout",
+      "passed": true,
+      "observed": {
+        "target": {
+          "value": "p3",
+          "disabled": false,
+          "options": [
+            {
+              "value": "p3",
+              "text": "2 · 360 pts · Alexandria Challenger p3"
+            },
+            {
+              "value": "p4",
+              "text": "4 · 0 pts · Alexandria Challenger p4"
+            },
+            {
+              "value": "p5",
+              "text": "4 · 0 pts · Alexandria Challenger p5"
+            },
+            {
+              "value": "p6",
+              "text": "4 · 0 pts · Alexandria Challenger p6"
+            },
+            {
+              "value": "p8",
+              "text": "4 · 0 pts · Alexandria Challenger p8"
+            }
+          ]
+        },
+        "statuses": ["🔥 3 correct in a row", "Power not confirmed — tap again"]
+      }
+    },
+    {
+      "name": "replacement freeze retains the same authoritative energy charge",
+      "passed": true,
+      "observed": [
+        {
+          "type": "power",
+          "power": "freeze",
+          "charge": 1,
+          "target": "p7"
+        },
+        {
+          "type": "power",
+          "power": "freeze",
+          "charge": 1,
+          "target": "p3"
+        }
+      ]
+    },
+    {
+      "name": "freeze-disconnected-retry: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 7,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "answer submits the public question id/cursor and selected option",
+      "passed": true,
+      "observed": [
+        {
+          "type": "answer",
+          "questionId": "general-soccer",
+          "index": 3,
+          "choice": 0
+        }
+      ]
+    },
+    {
+      "name": "pending answer selects one option and disables duplicate answers",
+      "passed": true,
+      "observed": [
+        {
+          "text": "AA carefully described scientific object✓",
+          "disabled": true,
+          "selected": true
+        },
+        {
+          "text": "BA completely different scientific object",
+          "disabled": true,
+          "selected": false
+        },
+        {
+          "text": "CAn unrelated natural object or substance",
+          "disabled": true,
+          "selected": false
+        },
+        {
+          "text": "DAnother plausible scientific explanation",
+          "disabled": true,
+          "selected": false
+        }
+      ]
+    },
+    {
+      "name": "repeat answer tap sends no duplicate",
+      "passed": true,
+      "observed": [
+        {
+          "type": "answer",
+          "questionId": "general-soccer",
+          "index": 3,
+          "choice": 0
+        }
+      ]
+    },
+    {
+      "name": "answer-pending: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 7,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "unconfirmed answer exposes retry without advancing cursor",
+      "passed": true,
+      "observed": ["Answer not confirmed — tap again", "⚡ Power ready"]
+    },
+    {
+      "name": "accepted answer replaces choices with actual public feedback",
+      "passed": true,
+      "observed": [
+        "✓ Correct!+160 pointsA carefully described scientific objectThis deliberately long explanation checks that readable answer feedback fits with the score, progress, next control and earned powers on a tiny phone.Next question →",
+        "🔥 4 correct in a row",
+        "⚡ Power ready"
+      ]
+    },
+    {
+      "name": "answer-accepted: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 4,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "Next sends the authoritative answered cursor",
+      "passed": true,
+      "observed": [
+        {
+          "type": "next",
+          "index": 4
+        }
+      ]
+    },
+    {
+      "name": "pending Next keeps feedback, disables its button and announces sending",
+      "passed": true,
+      "observed": {
+        "next": {
+          "text": "Sending…",
+          "disabled": true
+        },
+        "statuses": [
+          "✓ Correct!+160 pointsA carefully described scientific objectThis deliberately long explanation checks that readable answer feedback fits with the score, progress, next control and earned powers on a tiny phone.Sending…",
+          "Sending Next…",
+          "⚡ Power ready"
+        ]
+      }
+    },
+    {
+      "name": "repeat Next tap sends no duplicate",
+      "passed": true,
+      "observed": [
+        {
+          "type": "next",
+          "index": 4
+        }
+      ]
+    },
+    {
+      "name": "next-pending: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 4,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "unconfirmed Next allows explicit retry while keeping feedback",
+      "passed": true,
+      "observed": [
+        "✓ Correct!+160 pointsA carefully described scientific objectThis deliberately long explanation checks that readable answer feedback fits with the score, progress, next control and earned powers on a tiny phone.Next question →",
+        "Next not confirmed — tap again",
+        "⚡ Power ready"
+      ]
+    },
+    {
+      "name": "accepted Next reveals the actual public next question and keeps score",
+      "passed": true,
+      "observed": {
+        "statuses": ["🔥 4 correct in a row", "⚡ Power ready"],
+        "sent": [
+          {
+            "type": "next",
+            "index": 4
+          },
+          {
+            "type": "next",
+            "index": 4
+          }
+        ]
+      }
+    },
+    {
+      "name": "next-accepted: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 7,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "returned permanent leaver watches retained score without input controls",
+      "passed": true,
+      "observed": {
+        "header": "Everyday Brainwaves\n\nYou left this race\n\n520 points · 90s left",
+        "sent": [],
+        "cues": []
+      }
+    },
+    {
+      "name": "departed: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 0,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "victim sees the named rival and cannot answer while frozen",
+      "passed": true,
+      "observed": [
+        "❄ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW froze you · 4s",
+        "⚡ Power ready"
+      ]
+    },
+    {
+      "name": "freeze-victim: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 7,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "one accepted correct answer cues once",
+      "passed": true,
+      "observed": ["correct"]
+    },
+    {
+      "name": "answerAccepted: retained verdict does not replay sound or haptics",
+      "passed": true,
+      "observed": {
+        "cues": ["correct"],
+        "vibrations": [15, 15, [30, 40, 30], [30, 40, 30], 15, [30, 40, 30]]
+      }
+    },
+    {
+      "name": "podiumAccepted: retained verdict does not replay sound or haptics",
+      "passed": true,
+      "observed": {
+        "cues": ["correct"],
+        "vibrations": [15, 15, [30, 40, 30], [30, 40, 30], 15, [30, 40, 30]]
+      }
+    },
+    {
+      "name": "doneAccepted: retained verdict does not replay sound or haptics",
+      "passed": true,
+      "observed": {
+        "cues": ["correct"],
+        "vibrations": [15, 15, [30, 40, 30], [30, 40, 30], 15, [30, 40, 30]]
+      }
+    },
+    {
+      "name": "terminal stage keeps the last answer and explanation available",
+      "passed": true,
+      "observed": "PB · R3 · Public-view interaction QA\n\nEveryday Brainwaves\n\nAlexandria Challenger p7 wins!\n\nPlace 2 · 520 points\n\nAlexandria Challenger p7\nPlace 1 · 6 correct\n840\npts\nAlexandria Challenger p2\nPlace 2 · 4 correct\n520\npts\nAlexandria Challenger p3\nPlace 3 · 3 correct\n360\npts\nAlexandria Challenger p1\nTied 4 · 0 correct\n0\npts\nAlexandria Challenger p4\nTied 4 · 0 correct\n0\npts\nAlexandria Challenger p5\nTied 4 · 0 correct\n0\npts\nAlexandria Challenger p6\nTied 4 · 0 correct\n0\npts\nAlexandria Challenger p8\nTied 4 · 0 correct\n0\npts\n\n✓ Final answer correct · +160 pts · A carefully described scientific object. This deliberately long explanation checks that readable answer feedback fits with the score, progress, next control and earned powers on a tiny phone.\n\nSame score? Same place.\n\nQuizizz · Phone controller"
+    },
+    {
+      "name": "terminal-feedback: layout fits",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 0,
+          "controlIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "a verdict first received with podium still cues once",
+      "passed": true,
+      "observed": ["correct"]
+    },
+    {
+      "name": "direct podium verdict stays single on done",
+      "passed": true,
+      "observed": ["correct"]
+    }
+  ],
+  "captures": [
+    {
+      "file": "phone-interaction-selection.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Which carefully described scientific object matches the following detailed description most closely?",
+          "bounds": {
+            "x": 12,
+            "y": 175,
+            "width": 366,
+            "height": 110
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "AA carefully described scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 297,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "BA completely different scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 375.84,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "CAn unrelated natural object or substance",
+          "bounds": {
+            "x": 12,
+            "y": 454.7,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "DAnother plausible scientific explanation",
+          "bounds": {
+            "x": 12,
+            "y": 533.55,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "×2 Next correct",
+          "bounds": {
+            "x": 12,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "❄ Freeze 3s",
+          "bounds": {
+            "x": 197,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "select",
+          "class": "_target_1flq9_135",
+          "text": "Rival to freeze",
+          "bounds": {
+            "x": 12,
+            "y": 718,
+            "width": 366,
+            "height": 44
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 7,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-double-pending.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Which carefully described scientific object matches the following detailed description most closely?",
+          "bounds": {
+            "x": 12,
+            "y": 175,
+            "width": 366,
+            "height": 110
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "AA carefully described scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 297,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "BA completely different scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 375.84,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "CAn unrelated natural object or substance",
+          "bounds": {
+            "x": 12,
+            "y": 454.7,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "DAnother plausible scientific explanation",
+          "bounds": {
+            "x": 12,
+            "y": 533.55,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "×2 Next correct",
+          "bounds": {
+            "x": 12,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "❄ Freeze 3s",
+          "bounds": {
+            "x": 197,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "select",
+          "class": "_target_1flq9_135",
+          "text": "Rival to freeze",
+          "bounds": {
+            "x": 12,
+            "y": 718,
+            "width": 366,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 7,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-double-retry.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Which carefully described scientific object matches the following detailed description most closely?",
+          "bounds": {
+            "x": 12,
+            "y": 175,
+            "width": 366,
+            "height": 110
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "AA carefully described scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 297,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "BA completely different scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 375.84,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "CAn unrelated natural object or substance",
+          "bounds": {
+            "x": 12,
+            "y": 454.7,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "DAnother plausible scientific explanation",
+          "bounds": {
+            "x": 12,
+            "y": 533.55,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "×2 Next correct",
+          "bounds": {
+            "x": 12,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "❄ Freeze 3s",
+          "bounds": {
+            "x": 197,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "select",
+          "class": "_target_1flq9_135",
+          "text": "Rival to freeze",
+          "bounds": {
+            "x": 12,
+            "y": 718,
+            "width": 366,
+            "height": 44
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 7,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-double-accepted.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Which carefully described scientific object matches the following detailed description most closely?",
+          "bounds": {
+            "x": 12,
+            "y": 175,
+            "width": 366,
+            "height": 110
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "AA carefully described scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 297,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "BA completely different scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 375.84,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "CAn unrelated natural object or substance",
+          "bounds": {
+            "x": 12,
+            "y": 454.7,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "DAnother plausible scientific explanation",
+          "bounds": {
+            "x": 12,
+            "y": 533.55,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "×2 Next correct",
+          "bounds": {
+            "x": 12,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "❄ Freeze 3s",
+          "bounds": {
+            "x": 197,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "select",
+          "class": "_target_1flq9_135",
+          "text": "Rival to freeze",
+          "bounds": {
+            "x": 12,
+            "y": 718,
+            "width": 366,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 7,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-freeze-pending.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Which carefully described scientific object matches the following detailed description most closely?",
+          "bounds": {
+            "x": 12,
+            "y": 175,
+            "width": 366,
+            "height": 110
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "AA carefully described scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 297,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "BA completely different scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 375.84,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "CAn unrelated natural object or substance",
+          "bounds": {
+            "x": 12,
+            "y": 454.7,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "DAnother plausible scientific explanation",
+          "bounds": {
+            "x": 12,
+            "y": 533.55,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "×2 Next correct",
+          "bounds": {
+            "x": 12,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "❄ Freeze 3s",
+          "bounds": {
+            "x": 197,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "select",
+          "class": "_target_1flq9_135",
+          "text": "Rival to freeze",
+          "bounds": {
+            "x": 12,
+            "y": 718,
+            "width": 366,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 7,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-freeze-accepted.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Which carefully described scientific object matches the following detailed description most closely?",
+          "bounds": {
+            "x": 12,
+            "y": 175,
+            "width": 366,
+            "height": 110
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "AA carefully described scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 297,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "BA completely different scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 375.84,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "CAn unrelated natural object or substance",
+          "bounds": {
+            "x": 12,
+            "y": 454.7,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "DAnother plausible scientific explanation",
+          "bounds": {
+            "x": 12,
+            "y": 533.55,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "×2 Next correct",
+          "bounds": {
+            "x": 12,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "❄ Freeze 3s",
+          "bounds": {
+            "x": 197,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "select",
+          "class": "_target_1flq9_135",
+          "text": "Rival to freeze",
+          "bounds": {
+            "x": 12,
+            "y": 718,
+            "width": 366,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 7,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-freeze-disconnected-retry.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Which carefully described scientific object matches the following detailed description most closely?",
+          "bounds": {
+            "x": 12,
+            "y": 175,
+            "width": 366,
+            "height": 110
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "AA carefully described scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 297,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "BA completely different scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 375.84,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "CAn unrelated natural object or substance",
+          "bounds": {
+            "x": 12,
+            "y": 454.7,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "DAnother plausible scientific explanation",
+          "bounds": {
+            "x": 12,
+            "y": 533.55,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "×2 Next correct",
+          "bounds": {
+            "x": 12,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "❄ Freeze 3s",
+          "bounds": {
+            "x": 197,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "select",
+          "class": "_target_1flq9_135",
+          "text": "Rival to freeze",
+          "bounds": {
+            "x": 12,
+            "y": 718,
+            "width": 366,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 7,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-answer-pending.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Which carefully described scientific object matches the following detailed description most closely?",
+          "bounds": {
+            "x": 12,
+            "y": 175,
+            "width": 366,
+            "height": 110
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "AA carefully described scientific object✓",
+          "bounds": {
+            "x": 12,
+            "y": 297,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "BA completely different scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 375.84,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "CAn unrelated natural object or substance",
+          "bounds": {
+            "x": 12,
+            "y": 454.7,
+            "width": 366,
+            "height": 70.84
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "DAnother plausible scientific explanation",
+          "bounds": {
+            "x": 12,
+            "y": 533.55,
+            "width": 366,
+            "height": 70.86
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "×2 Next correct",
+          "bounds": {
+            "x": 12,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "❄ Freeze 3s",
+          "bounds": {
+            "x": 197,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "select",
+          "class": "_target_1flq9_135",
+          "text": "Rival to freeze",
+          "bounds": {
+            "x": 12,
+            "y": 718,
+            "width": 366,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 7,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-answer-accepted.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "A carefully described scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 273,
+            "width": 366,
+            "height": 55
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_next_1flq9_133",
+          "text": "Next question →",
+          "bounds": {
+            "x": 12,
+            "y": 551.41,
+            "width": 366,
+            "height": 53
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "×2 Next correct",
+          "bounds": {
+            "x": 12,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "❄ Freeze 3s",
+          "bounds": {
+            "x": 197,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "select",
+          "class": "_target_1flq9_135",
+          "text": "Rival to freeze",
+          "bounds": {
+            "x": 12,
+            "y": 718,
+            "width": 366,
+            "height": 44
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 4,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-next-pending.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "A carefully described scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 273,
+            "width": 366,
+            "height": 55
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_next_1flq9_133",
+          "text": "Sending…",
+          "bounds": {
+            "x": 12,
+            "y": 551.41,
+            "width": 366,
+            "height": 53
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "×2 Next correct",
+          "bounds": {
+            "x": 12,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "❄ Freeze 3s",
+          "bounds": {
+            "x": 197,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "select",
+          "class": "_target_1flq9_135",
+          "text": "Rival to freeze",
+          "bounds": {
+            "x": 12,
+            "y": 718,
+            "width": 366,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 4,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-next-accepted.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Which insect makes honey?",
+          "bounds": {
+            "x": 12,
+            "y": 175,
+            "width": 366,
+            "height": 27.5
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "AHoneybee",
+          "bounds": {
+            "x": 12,
+            "y": 214.5,
+            "width": 366,
+            "height": 91.47
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "BButterfly",
+          "bounds": {
+            "x": 12,
+            "y": 313.97,
+            "width": 366,
+            "height": 91.48
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "CDragonfly",
+          "bounds": {
+            "x": 12,
+            "y": 413.45,
+            "width": 366,
+            "height": 91.47
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "DGrasshopper",
+          "bounds": {
+            "x": 12,
+            "y": 512.92,
+            "width": 366,
+            "height": 91.48
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "×2 Next correct",
+          "bounds": {
+            "x": 12,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "❄ Freeze 3s",
+          "bounds": {
+            "x": 197,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "select",
+          "class": "_target_1flq9_135",
+          "text": "Rival to freeze",
+          "bounds": {
+            "x": 12,
+            "y": 718,
+            "width": 366,
+            "height": 44
+          },
+          "disabled": false,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 7,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-departed.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "You left this race",
+          "bounds": {
+            "x": 12,
+            "y": 108.19,
+            "width": 366,
+            "height": 27.5
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 0,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-freeze-victim.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Which carefully described scientific object matches the following detailed description most closely?",
+          "bounds": {
+            "x": 12,
+            "y": 175,
+            "width": 366,
+            "height": 110
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "AA carefully described scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 297,
+            "width": 366,
+            "height": 58.25
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "BA completely different scientific object",
+          "bounds": {
+            "x": 12,
+            "y": 363.25,
+            "width": 366,
+            "height": 58.25
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "CAn unrelated natural object or substance",
+          "bounds": {
+            "x": 12,
+            "y": 429.5,
+            "width": 366,
+            "height": 58.25
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_option_1flq9_83",
+          "text": "DAnother plausible scientific explanation",
+          "bounds": {
+            "x": 12,
+            "y": 495.75,
+            "width": 366,
+            "height": 58.27
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "×2 Next correct",
+          "bounds": {
+            "x": 12,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "button",
+          "class": "_powerButton_1flq9_134",
+          "text": "❄ Freeze 3s",
+          "bounds": {
+            "x": 197,
+            "y": 670,
+            "width": 181,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        },
+        {
+          "tag": "select",
+          "class": "_target_1flq9_135",
+          "text": "Rival to freeze",
+          "bounds": {
+            "x": 12,
+            "y": 718,
+            "width": 366,
+            "height": 44
+          },
+          "disabled": true,
+          "insideViewport": true,
+          "clippedBy": [],
+          "minimumTouchSize": 44,
+          "targetFits": true
+        }
+      ],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 7,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    },
+    {
+      "file": "phone-interaction-terminal-feedback.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Alexandria Challenger p7 wins!",
+          "bounds": {
+            "x": 12,
+            "y": 108.19,
+            "width": 366,
+            "height": 27.5
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "27.5px"
+        }
+      ],
+      "controls": [],
+      "controlIssues": [],
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "summary": {
+        "controls": 0,
+        "controlIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0
+      }
+    }
+  ],
+  "passed": true
+}

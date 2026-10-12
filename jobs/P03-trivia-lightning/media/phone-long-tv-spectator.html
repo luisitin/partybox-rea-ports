@@ -1,0 +1,1561 @@
+<!doctype html>
+<html lang="en" data-surface="controller">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Phone long</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>;
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+
+      ._stage_262f13 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+        min-height: 100%;
+        /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+        padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+          var(--pb-overscan-y, 54px);
+      }
+
+      ._center_262f13 {
+        /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+        justify-content: safe center;
+        align-items: safe center;
+        text-align: center;
+      }
+
+      /* The face's `size` as CSS, at no specificity: a caller's class or `._x_8c3e65 svg` rule still sizes it,
+   as it did over the old width/height attributes, which can't hold a CSS var (WebKit logged an
+   error for every face, T-0174). */
+      :where(._avatar_8c3e65) {
+        width: var(--pb-avatar-size);
+        height: var(--pb-avatar-size);
+      }
+
+      /* A height-bounded phone play screen: stats, question, four large answers and compact powers. */
+      ._screen_1b44e3 {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        padding: var(--pb-space-3);
+        gap: var(--pb-space-3);
+        box-sizing: border-box;
+        color: var(--pb-text);
+      }
+
+      ._stats_1b44e3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--pb-space-2);
+        padding-bottom: var(--pb-space-2);
+        border-bottom: 1px solid var(--pb-surface-2);
+      }
+
+      ._stats_1b44e3 > div {
+        display: grid;
+        text-align: center;
+        gap: var(--pb-space-1);
+      }
+
+      ._stats_1b44e3 b {
+        font-size: var(--pb-font-h2);
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._stats_1b44e3 span {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+
+      ._stats_1b44e3 ._scoreUnit_1b44e3 {
+        font-size: var(--pb-font-caption);
+        font-weight: 400;
+        color: var(--pb-text-muted);
+      }
+
+      ._stats_1b44e3 ._time_1b44e3 b {
+        color: var(--pb-accent-2);
+      }
+
+      ._questionArea_1b44e3 {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        gap: var(--pb-space-3);
+      }
+
+      ._prompt_1b44e3 {
+        flex: none;
+      }
+
+      ._kicker_1b44e3 {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: var(--pb-space-2);
+        margin: 0 0 var(--pb-space-2);
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+
+      ._kicker_1b44e3 b {
+        color: var(--pb-accent-2);
+      }
+
+      ._prompt_1b44e3 h2,
+      ._feedback_1b44e3 h2,
+      ._empty_1b44e3 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+      }
+
+      ._options_1b44e3 {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-rows: repeat(4, minmax(var(--pb-touch), 1fr));
+        gap: var(--pb-space-2);
+      }
+
+      ._option_1b44e3 {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-3);
+        width: 100%;
+        min-height: var(--pb-touch);
+        padding: var(--pb-space-2) var(--pb-space-3);
+        border-radius: var(--pb-radius);
+        border: 1px solid var(--pb-border);
+        background: var(--pb-surface);
+        color: var(--pb-text);
+        font: inherit;
+        font-size: var(--pb-font-body);
+        font-weight: 800;
+        line-height: 1.2;
+        text-align: left;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      ._letter_1b44e3 {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: var(--pb-space-6);
+        height: var(--pb-space-6);
+        border-radius: 50%;
+        background: var(--pb-surface-2);
+        color: var(--pb-accent-2);
+        font-size: var(--pb-font-caption);
+      }
+
+      ._option_1b44e3 > span:nth-child(2) {
+        flex: 1;
+        overflow-wrap: anywhere;
+      }
+
+      ._option_1b44e3[data-selected] {
+        outline: calc(var(--pb-space-1) / 2) solid var(--pb-accent-2);
+      }
+
+      ._option_1b44e3:focus-visible,
+      ._next_1b44e3:focus-visible,
+      ._powerButton_1b44e3:focus-visible,
+      ._target_1b44e3:focus-visible {
+        outline: var(--pb-space-1) solid var(--pb-focus);
+        outline-offset: calc(var(--pb-space-1) / 2);
+      }
+
+      ._option_1b44e3:disabled,
+      ._powerButton_1b44e3:disabled,
+      ._target_1b44e3:disabled,
+      ._next_1b44e3:disabled {
+        cursor: default;
+      }
+
+      ._powerButton_1b44e3:disabled,
+      ._target_1b44e3:disabled {
+        background: var(--pb-bg);
+        border-color: var(--pb-surface-2);
+        color: var(--pb-text-muted);
+      }
+
+      ._screen_1b44e3[data-frozen] ._option_1b44e3 {
+        border-color: var(--pb-info);
+      }
+
+      ._status_1b44e3 {
+        flex: none;
+        min-height: 1.2em;
+        margin: 0;
+        text-align: center;
+        font-size: var(--pb-font-caption);
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+        color: var(--pb-text-muted);
+      }
+
+      ._screen_1b44e3[data-frozen] ._status_1b44e3 {
+        color: var(--pb-info);
+        font-weight: 900;
+      }
+
+      ._powers_1b44e3 {
+        flex: none;
+      }
+
+      ._energy_1b44e3 {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--pb-space-2);
+        margin: 0 0 var(--pb-space-2);
+        font-size: var(--pb-font-caption);
+        line-height: 1.2;
+        color: var(--pb-text-muted);
+      }
+
+      ._energy_1b44e3 span {
+        color: var(--pb-accent-2);
+      }
+
+      ._powerControls_1b44e3 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-1);
+      }
+
+      ._powerButton_1b44e3,
+      ._target_1b44e3,
+      ._next_1b44e3 {
+        min-height: var(--pb-touch);
+        border-radius: var(--pb-radius);
+        border: 1px solid var(--pb-accent-2);
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        font: inherit;
+        touch-action: manipulation;
+      }
+
+      ._powerButton_1b44e3 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-1);
+        padding: var(--pb-space-2);
+      }
+
+      ._powerButton_1b44e3 strong {
+        font-size: var(--pb-font-body);
+      }
+
+      ._powerButton_1b44e3 span {
+        font-size: var(--pb-font-caption);
+        line-height: 1.2;
+      }
+
+      ._target_1b44e3 {
+        grid-column: 1 / -1;
+        width: 100%;
+        min-width: 0;
+        padding: var(--pb-space-2);
+        font-size: var(--pb-font-caption);
+      }
+
+      ._feedback_1b44e3 {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+        min-height: 0;
+        gap: var(--pb-space-3);
+        text-align: center;
+      }
+
+      ._verdict_1b44e3,
+      ._gain_1b44e3,
+      ._explanation_1b44e3 {
+        margin: 0;
+      }
+
+      ._verdict_1b44e3 {
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+        color: var(--pb-danger);
+      }
+
+      ._feedback_1b44e3[data-correct='true'] ._verdict_1b44e3 {
+        color: var(--pb-accent-3);
+      }
+
+      ._gain_1b44e3 {
+        font-size: var(--pb-font-display);
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._explanation_1b44e3 {
+        font-size: var(--pb-font-body);
+        line-height: 1.4;
+        color: var(--pb-text-muted);
+      }
+
+      ._next_1b44e3 {
+        margin-top: auto;
+        padding: var(--pb-space-3);
+        background: var(--pb-accent);
+        color: var(--pb-on-accent);
+        border-color: var(--pb-accent);
+        font-size: var(--pb-font-button);
+        font-weight: 900;
+      }
+
+      /* Reserve the remaining stage height for eight lanes; one 96px clock is always visible. */
+      ._stage_48cd69 {
+        height: 100%;
+        min-height: 0;
+        gap: var(--pb-space-5);
+        color: var(--pb-text);
+      }
+
+      ._header_48cd69 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--pb-space-6);
+      }
+
+      ._titles_48cd69 {
+        min-width: 0;
+      }
+
+      ._pack_48cd69 {
+        margin: 0 0 var(--pb-space-2);
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-body);
+        line-height: 1.1;
+      }
+
+      ._titles_48cd69 h1 {
+        margin: 0;
+        font-size: var(--pb-font-h1);
+        line-height: 1.05;
+        font-weight: 900;
+        overflow-wrap: anywhere;
+      }
+
+      ._clock_48cd69 {
+        flex: none;
+        display: grid;
+        justify-items: center;
+        line-height: 1;
+      }
+
+      ._clock_48cd69 span {
+        font-size: var(--pb-font-body);
+        color: var(--pb-text-muted);
+      }
+
+      ._clock_48cd69 strong {
+        font-size: calc(var(--pb-font-display) * 0.75);
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._clock_48cd69 strong[data-low] {
+        color: var(--pb-danger);
+      }
+
+      ._stage_48cd69 > ol {
+        flex: 1;
+      }
+
+      ._footer_48cd69 {
+        margin: 0;
+        font-size: var(--pb-font-body);
+        line-height: 1.2;
+        color: var(--pb-text-muted);
+        text-align: center;
+      }
+
+      /* Equal-height lanes keep all eight racers readable inside the TV overscan frame. */
+      ._lanes_dd177d {
+        display: grid;
+        grid-auto-rows: minmax(0, 1fr);
+        gap: var(--pb-space-2);
+        min-height: 0;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      ._lane_dd177d {
+        display: grid;
+        grid-template-columns:
+          calc(var(--pb-chip-size) * 0.7) minmax(0, 1.75fr) minmax(0, 1.15fr)
+          minmax(0, 2.15fr) minmax(0, 0.6fr);
+        align-items: center;
+        gap: var(--pb-space-3);
+        padding: var(--pb-space-1) var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        border: 1px solid var(--pb-border);
+      }
+
+      ._identity_dd177d {
+        display: contents;
+      }
+
+      ._avatar_dd177d {
+        width: calc(var(--pb-chip-size) * 0.7);
+        height: calc(var(--pb-chip-size) * 0.7);
+      }
+
+      ._nameBlock_dd177d {
+        display: contents;
+      }
+
+      ._name_dd177d {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: var(--pb-font-body);
+        line-height: 1.4;
+      }
+
+      ._state_dd177d {
+        color: var(--pb-text-muted);
+        font-size: calc(var(--pb-font-body) * 0.9);
+        line-height: 1.4;
+        white-space: nowrap;
+      }
+
+      ._track_dd177d {
+        position: relative;
+        height: calc(var(--pb-chip-size) * 0.7);
+        min-width: 0;
+        overflow: hidden;
+      }
+
+      ._rail_dd177d {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: var(--pb-space-2);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface-2);
+        background-image: repeating-linear-gradient(
+          90deg,
+          var(--pb-text-muted) 0,
+          var(--pb-text-muted) var(--pb-space-1),
+          var(--pb-surface-2) var(--pb-space-1),
+          var(--pb-surface-2) var(--pb-space-6)
+        );
+      }
+
+      ._path_dd177d {
+        position: absolute;
+        inset: 0 calc(var(--pb-chip-size) * 0.6) 0 0;
+      }
+
+      ._runner_dd177d {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        color: var(--pb-lane-color);
+        transform: translateX(calc(var(--pb-runner-progress) * 100%));
+        transition: transform var(--pb-motion-base) var(--pb-ease);
+      }
+
+      ._runner_dd177d svg {
+        width: calc(var(--pb-chip-size) * 0.6);
+        height: 100%;
+        fill: currentColor;
+        stroke: var(--pb-bg);
+        stroke-width: 2;
+        stroke-linejoin: round;
+      }
+
+      ._finish_dd177d {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: calc(var(--pb-chip-size) * 0.6);
+        height: 100%;
+        display: grid;
+        place-items: center;
+        color: var(--pb-text-muted);
+      }
+
+      ._finish_dd177d svg {
+        width: 100%;
+        height: 100%;
+        fill: currentColor;
+      }
+
+      ._score_dd177d {
+        display: flex;
+        align-items: baseline;
+        justify-content: end;
+        gap: var(--pb-space-1);
+        font-size: var(--pb-font-body);
+        line-height: 1.4;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      ._score_dd177d span {
+        font-size: calc(var(--pb-font-body) * 0.9);
+        color: var(--pb-text-muted);
+      }
+
+      ._lane_dd177d[data-frozen] ._state_dd177d,
+      ._lane_dd177d[data-frozen] ._runner_dd177d {
+        color: var(--pb-info);
+      }
+
+      ._lane_dd177d[data-me] {
+        outline: var(--pb-space-1) solid var(--pb-accent-2);
+        outline-offset: calc(-1 * var(--pb-space-1));
+      }
+
+      ._lanes_dd177d[data-compact] {
+        gap: var(--pb-space-1);
+        grid-auto-rows: minmax(var(--pb-touch), 1fr);
+      }
+
+      ._lanes_dd177d[data-compact] ._lane_dd177d {
+        grid-template-columns: minmax(0, 1.8fr) minmax(0, 0.5fr) minmax(0, 0.4fr);
+        gap: var(--pb-space-2);
+        padding: 0 var(--pb-space-2);
+      }
+
+      ._lanes_dd177d[data-compact] ._identity_dd177d {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        min-width: 0;
+      }
+
+      ._lanes_dd177d[data-compact] ._nameBlock_dd177d {
+        display: grid;
+        gap: calc(var(--pb-space-1) / 2);
+        min-width: 0;
+      }
+
+      ._lanes_dd177d[data-compact] ._avatar_dd177d {
+        width: calc(var(--pb-chip-size) * 0.7);
+        height: calc(var(--pb-chip-size) * 0.7);
+      }
+
+      ._lanes_dd177d[data-compact] ._name_dd177d,
+      ._lanes_dd177d[data-compact] ._score_dd177d {
+        font-size: var(--pb-font-caption);
+      }
+
+      ._lanes_dd177d[data-compact] ._state_dd177d {
+        font-size: calc(var(--pb-font-caption) * 0.9);
+      }
+
+      ._lanes_dd177d[data-compact] ._score_dd177d span {
+        font-size: var(--pb-font-caption);
+      }
+
+      ._lanes_dd177d[data-compact] ._score_dd177d {
+        display: grid;
+        justify-items: end;
+        gap: 0;
+      }
+
+      ._lanes_dd177d[data-compact] ._track_dd177d {
+        height: calc(var(--pb-chip-size) * 0.7);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        ._runner_dd177d {
+          transition: none;
+        }
+      }
+
+      :root[data-motion='off'] ._runner_dd177d {
+        transition: none;
+      }
+
+      /* The winning column is the single focal point. Names stay withheld until its server beat. */
+      ._podium_1b070c {
+        display: grid;
+        grid-template-columns: var(--pb-podium-columns);
+        gap: var(--pb-space-5);
+        align-items: center;
+        flex: 1;
+        min-height: 0;
+      }
+
+      ._place_1b070c {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--pb-space-3);
+        padding: var(--pb-space-5);
+        min-width: 0;
+        border-radius: var(--pb-radius-lg);
+        border: var(--pb-space-1) solid var(--pb-surface-2);
+        background: var(--pb-surface);
+      }
+
+      ._place_1b070c[data-rank='1'] {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      ._place_1b070c[data-rank='2'] {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      ._place_1b070c[data-rank='3'] {
+        grid-column: 3;
+        grid-row: 1;
+      }
+
+      ._place_1b070c[data-shown][data-rank='1'] {
+        border-color: var(--pb-accent-2);
+      }
+
+      ._medal_1b070c {
+        display: grid;
+        place-items: center;
+        width: var(--pb-space-8);
+        height: var(--pb-space-8);
+        border-radius: 50%;
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        font-size: var(--pb-font-h2);
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      ._place_1b070c[data-shown][data-rank='1'] ._medal_1b070c {
+        background: var(--pb-accent-2-fill);
+        color: var(--pb-on-accent-2-fill);
+      }
+
+      ._names_1b070c {
+        display: grid;
+        gap: var(--pb-space-2);
+        min-width: 0;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      ._names_1b070c li {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-3);
+        min-width: 0;
+        font-size: var(--pb-font-body);
+        line-height: 1.4;
+      }
+
+      ._place_1b070c[data-many] ._names_1b070c {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      ._names_1b070c b {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      ._avatar_1b070c {
+        width: calc(var(--pb-chip-size) * 0.65);
+        height: calc(var(--pb-chip-size) * 0.65);
+      }
+
+      ._points_1b070c,
+      ._unrevealed_1b070c {
+        font-size: var(--pb-font-body);
+        line-height: 1.4;
+        text-align: center;
+      }
+
+      ._points_1b070c strong {
+        font-size: var(--pb-font-h2);
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._points_1b070c span {
+        margin-left: var(--pb-space-2);
+        color: var(--pb-text-muted);
+      }
+
+      ._unrevealed_1b070c {
+        padding: var(--pb-space-6) 0;
+        color: var(--pb-text-muted);
+      }
+
+      ._podium_1b070c[data-compact] {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        gap: var(--pb-space-3);
+      }
+
+      ._podium_1b070c[data-compact] ._place_1b070c {
+        display: grid;
+        grid-template-columns: var(--pb-touch) minmax(0, 1fr) auto;
+        gap: var(--pb-space-3);
+        padding: var(--pb-space-3);
+        border-width: calc(var(--pb-space-1) / 2);
+        border-radius: var(--pb-radius);
+      }
+
+      ._podium_1b070c[data-compact] ._medal_1b070c {
+        width: var(--pb-touch);
+        height: var(--pb-touch);
+        font-size: var(--pb-font-h2);
+      }
+
+      ._podium_1b070c[data-compact] ._names_1b070c li {
+        justify-content: start;
+        font-size: var(--pb-font-body);
+      }
+
+      ._podium_1b070c[data-compact] ._points_1b070c,
+      ._podium_1b070c[data-compact] ._points_1b070c strong,
+      ._podium_1b070c[data-compact] ._unrevealed_1b070c {
+        font-size: var(--pb-font-body);
+      }
+
+      ._podium_1b070c[data-compact] ._unrevealed_1b070c {
+        grid-column: 2 / 4;
+        padding: 0;
+        text-align: left;
+      }
+
+      ._podium_1b070c[data-compact] ._points_1b070c span {
+        font-size: var(--pb-font-caption);
+      }
+
+      ._podium_1b070c[data-compact] ._place_1b070c[data-many] {
+        grid-template-columns: var(--pb-touch) minmax(0, 1fr);
+      }
+
+      ._podium_1b070c[data-compact] ._place_1b070c[data-many] ._names_1b070c {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+
+      ._podium_1b070c[data-compact] ._place_1b070c[data-many] ._points_1b070c {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+      }
+
+      /* Public eight-player standings and optional terminal feedback fit the phone shell together. */
+      ._stage_3e7825 {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        padding: var(--pb-space-3);
+        gap: var(--pb-space-3);
+        box-sizing: border-box;
+        color: var(--pb-text);
+      }
+
+      ._stageHeader_3e7825 {
+        display: grid;
+        gap: var(--pb-space-2);
+        text-align: center;
+      }
+
+      ._stageHeader_3e7825 h2 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+      }
+
+      ._pack_3e7825,
+      ._stageSummary_3e7825,
+      ._stageHint_3e7825,
+      ._lastAnswer_3e7825 {
+        margin: 0;
+        font-size: var(--pb-font-caption);
+        line-height: 1.3;
+        color: var(--pb-text-muted);
+      }
+
+      ._stageSummary_3e7825 {
+        font-size: var(--pb-font-body);
+        font-weight: 800;
+      }
+
+      ._stage_3e7825 > ol {
+        flex: 1;
+      }
+
+      ._lastAnswer_3e7825 {
+        padding: var(--pb-space-2);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+      }
+
+      ._lastAnswer_3e7825 b {
+        color: var(--pb-text);
+      }
+
+      ._stageHint_3e7825 {
+        text-align: center;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      .chrome {
+        flex: none;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--pb-space-3);
+        font-weight: 800;
+        border-bottom: 1px solid var(--pb-surface-2);
+      }
+      .mount {
+        flex: 1;
+        min-height: 0;
+      }
+      .bottom {
+        height: 70px;
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-caption);
+      }
+      [data-surface='tv'] .chrome {
+        height: 120px;
+        font-size: var(--pb-font-body);
+        padding: var(--pb-space-5) var(--pb-overscan-x);
+      }
+      [data-surface='tv'] .bottom {
+        height: 80px;
+      }
+      [data-surface='tv'] .mount {
+        --pb-stage-top: var(--pb-space-5);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chrome"><span>PB · R3</span><span>spectator</span></div>
+    <div class="mount">
+      <div class="_stage_3e7825">
+        <header class="_stageHeader_3e7825">
+          <p class="_pack_3e7825">Everyday Brainwaves</p>
+          <h2>The race is on</h2>
+          <p class="_stageSummary_3e7825">90s left</p>
+        </header>
+        <ol class="_lanes_dd177d" data-compact="true" aria-label="Race progress">
+          <li
+            class="_lane_dd177d"
+            style="--pb-lane-color: var(--pb-player-1); --pb-runner-progress: 0"
+          >
+            <div class="_identity_dd177d">
+              <svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65 _avatar_dd177d"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse>
+              </svg>
+              <div class="_nameBlock_dd177d">
+                <b class="_name_dd177d" title="Ana">Ana</b
+                ><span class="_state_dd177d">0 / 12 answered</span>
+              </div>
+            </div>
+            <div
+              class="_track_dd177d"
+              role="progressbar"
+              aria-label="Ana: questions answered"
+              aria-valuemin="0"
+              aria-valuemax="12"
+              aria-valuenow="0"
+            >
+              <div class="_rail_dd177d"></div>
+              <div class="_path_dd177d">
+                <span class="_runner_dd177d"
+                  ><svg viewBox="0 0 40 48" aria-hidden="true">
+                    <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
+                ></span>
+              </div>
+              <span class="_finish_dd177d" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
+            </div>
+            <div class="_score_dd177d"><b>0</b><span>pts</span></div>
+          </li>
+          <li
+            class="_lane_dd177d"
+            style="--pb-lane-color: var(--pb-player-2); --pb-runner-progress: 0"
+          >
+            <div class="_identity_dd177d">
+              <svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65 _avatar_dd177d"
+                role="img"
+                aria-label="avatar owl"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-2);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 0.2s;
+                  --pb-blink-name: pb-blink;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <circle cx="23" cy="30" r="9" fill="#fff7fb"></circle>
+                <circle cx="41" cy="30" r="9" fill="#fff7fb"></circle>
+                <g class="pb-eyes" style="transform-origin: 32px 30px">
+                  <circle cx="23" cy="30" r="4" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="30" r="4" fill="#1a0b12"></circle>
+                </g>
+                <path d="M32 36 l-4 6 h8 z" fill="#1a0b12"></path>
+              </svg>
+              <div class="_nameBlock_dd177d">
+                <b class="_name_dd177d" title="Ben">Ben</b
+                ><span class="_state_dd177d">0 / 12 answered</span>
+              </div>
+            </div>
+            <div
+              class="_track_dd177d"
+              role="progressbar"
+              aria-label="Ben: questions answered"
+              aria-valuemin="0"
+              aria-valuemax="12"
+              aria-valuenow="0"
+            >
+              <div class="_rail_dd177d"></div>
+              <div class="_path_dd177d">
+                <span class="_runner_dd177d"
+                  ><svg viewBox="0 0 40 48" aria-hidden="true">
+                    <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
+                ></span>
+              </div>
+              <span class="_finish_dd177d" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
+            </div>
+            <div class="_score_dd177d"><b>0</b><span>pts</span></div>
+          </li>
+          <li
+            class="_lane_dd177d"
+            style="--pb-lane-color: var(--pb-player-3); --pb-runner-progress: 0"
+          >
+            <div class="_identity_dd177d">
+              <svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65 _avatar_dd177d"
+                role="img"
+                aria-label="avatar frog"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-3);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 0.2s;
+                  --pb-blink-name: pb-blink;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <circle cx="22" cy="20" r="7" fill="#fff7fb"></circle>
+                <circle cx="42" cy="20" r="7" fill="#fff7fb"></circle>
+                <g class="pb-eyes" style="transform-origin: 32px 20px">
+                  <circle cx="22" cy="20" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="42" cy="20" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <path
+                  d="M21 38 q11 9.9 22 0"
+                  stroke="#1a0b12"
+                  stroke-width="3"
+                  fill="none"
+                  stroke-linecap="round"
+                ></path>
+              </svg>
+              <div class="_nameBlock_dd177d">
+                <b class="_name_dd177d" title="Cy">Cy</b
+                ><span class="_state_dd177d">0 / 12 answered</span>
+              </div>
+            </div>
+            <div
+              class="_track_dd177d"
+              role="progressbar"
+              aria-label="Cy: questions answered"
+              aria-valuemin="0"
+              aria-valuemax="12"
+              aria-valuenow="0"
+            >
+              <div class="_rail_dd177d"></div>
+              <div class="_path_dd177d">
+                <span class="_runner_dd177d"
+                  ><svg viewBox="0 0 40 48" aria-hidden="true">
+                    <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
+                ></span>
+              </div>
+              <span class="_finish_dd177d" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
+            </div>
+            <div class="_score_dd177d"><b>0</b><span>pts</span></div>
+          </li>
+          <li
+            class="_lane_dd177d"
+            style="--pb-lane-color: var(--pb-player-4); --pb-runner-progress: 0"
+          >
+            <div class="_identity_dd177d">
+              <svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65 _avatar_dd177d"
+                role="img"
+                aria-label="avatar cat"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-4);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 0s;
+                  --pb-blink-name: pb-blink;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M16 26 L18 10 L30 22 Z M48 26 L46 10 L34 22 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 31px">
+                  <circle cx="23" cy="31" r="3" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="31" r="3" fill="#1a0b12"></circle>
+                </g>
+                <path
+                  d="M26 42 q6 5 12 0"
+                  stroke="#1a0b12"
+                  stroke-width="3"
+                  fill="none"
+                  stroke-linecap="round"
+                ></path>
+                <path
+                  d="M12 38 h12 M40 38 h12"
+                  stroke="#1a0b12"
+                  stroke-width="2"
+                  opacity="0.6"
+                ></path>
+              </svg>
+              <div class="_nameBlock_dd177d">
+                <b class="_name_dd177d" title="Dee">Dee</b
+                ><span class="_state_dd177d">0 / 12 answered</span>
+              </div>
+            </div>
+            <div
+              class="_track_dd177d"
+              role="progressbar"
+              aria-label="Dee: questions answered"
+              aria-valuemin="0"
+              aria-valuemax="12"
+              aria-valuenow="0"
+            >
+              <div class="_rail_dd177d"></div>
+              <div class="_path_dd177d">
+                <span class="_runner_dd177d"
+                  ><svg viewBox="0 0 40 48" aria-hidden="true">
+                    <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
+                ></span>
+              </div>
+              <span class="_finish_dd177d" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
+            </div>
+            <div class="_score_dd177d"><b>0</b><span>pts</span></div>
+          </li>
+          <li
+            class="_lane_dd177d"
+            style="--pb-lane-color: var(--pb-player-5); --pb-runner-progress: 0"
+          >
+            <div class="_identity_dd177d">
+              <svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65 _avatar_dd177d"
+                role="img"
+                aria-label="avatar panda"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-5);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 2.3s;
+                  --pb-blink-name: pb-blink;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <circle cx="22" cy="30" r="8" fill="#1a0b12"></circle>
+                <circle cx="42" cy="30" r="8" fill="#1a0b12"></circle>
+                <g class="pb-eyes" style="transform-origin: 32px 30px">
+                  <circle cx="22" cy="30" r="2.5" fill="#1a0b12"></circle>
+                  <circle cx="42" cy="30" r="2.5" fill="#1a0b12"></circle>
+                </g>
+                <circle cx="22" cy="30" r="2.5" fill="#fff7fb"></circle>
+                <circle cx="42" cy="30" r="2.5" fill="#fff7fb"></circle>
+                <path
+                  d="M26 42 q6 5.4 12 0"
+                  stroke="#1a0b12"
+                  stroke-width="3"
+                  fill="none"
+                  stroke-linecap="round"
+                ></path>
+              </svg>
+              <div class="_nameBlock_dd177d">
+                <b class="_name_dd177d" title="Eli">Eli</b
+                ><span class="_state_dd177d">0 / 12 answered</span>
+              </div>
+            </div>
+            <div
+              class="_track_dd177d"
+              role="progressbar"
+              aria-label="Eli: questions answered"
+              aria-valuemin="0"
+              aria-valuemax="12"
+              aria-valuenow="0"
+            >
+              <div class="_rail_dd177d"></div>
+              <div class="_path_dd177d">
+                <span class="_runner_dd177d"
+                  ><svg viewBox="0 0 40 48" aria-hidden="true">
+                    <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
+                ></span>
+              </div>
+              <span class="_finish_dd177d" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
+            </div>
+            <div class="_score_dd177d"><b>0</b><span>pts</span></div>
+          </li>
+          <li
+            class="_lane_dd177d"
+            style="--pb-lane-color: var(--pb-player-6); --pb-runner-progress: 0"
+          >
+            <div class="_identity_dd177d">
+              <svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65 _avatar_dd177d"
+                role="img"
+                aria-label="avatar koala"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-6);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 2.9s;
+                  --pb-blink-name: pb-blink;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <circle cx="13" cy="26" r="9" fill="#1a0b12" opacity="0.35"></circle>
+                <circle cx="51" cy="26" r="9" fill="#1a0b12" opacity="0.35"></circle>
+                <g class="pb-eyes" style="transform-origin: 32px 29px">
+                  <circle cx="23" cy="29" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="29" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="41" rx="6" ry="4.5" fill="#1a0b12"></ellipse>
+              </svg>
+              <div class="_nameBlock_dd177d">
+                <b class="_name_dd177d" title="Fay">Fay</b
+                ><span class="_state_dd177d">0 / 12 answered</span>
+              </div>
+            </div>
+            <div
+              class="_track_dd177d"
+              role="progressbar"
+              aria-label="Fay: questions answered"
+              aria-valuemin="0"
+              aria-valuemax="12"
+              aria-valuenow="0"
+            >
+              <div class="_rail_dd177d"></div>
+              <div class="_path_dd177d">
+                <span class="_runner_dd177d"
+                  ><svg viewBox="0 0 40 48" aria-hidden="true">
+                    <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
+                ></span>
+              </div>
+              <span class="_finish_dd177d" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
+            </div>
+            <div class="_score_dd177d"><b>0</b><span>pts</span></div>
+          </li>
+          <li
+            class="_lane_dd177d"
+            style="--pb-lane-color: var(--pb-player-7); --pb-runner-progress: 0"
+          >
+            <div class="_identity_dd177d">
+              <svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65 _avatar_dd177d"
+                role="img"
+                aria-label="avatar penguin"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-7);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 3.7s;
+                  --pb-blink-name: pb-blink;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <ellipse cx="32" cy="38" rx="14" ry="17" fill="#fff7fb"></ellipse>
+                <g class="pb-eyes" style="transform-origin: 32px 27px">
+                  <circle cx="25" cy="27" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="39" cy="27" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <path d="M32 33 l-5 5 h10 z" fill="#1a0b12"></path>
+              </svg>
+              <div class="_nameBlock_dd177d">
+                <b class="_name_dd177d" title="Gus">Gus</b
+                ><span class="_state_dd177d">0 / 12 answered</span>
+              </div>
+            </div>
+            <div
+              class="_track_dd177d"
+              role="progressbar"
+              aria-label="Gus: questions answered"
+              aria-valuemin="0"
+              aria-valuemax="12"
+              aria-valuenow="0"
+            >
+              <div class="_rail_dd177d"></div>
+              <div class="_path_dd177d">
+                <span class="_runner_dd177d"
+                  ><svg viewBox="0 0 40 48" aria-hidden="true">
+                    <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
+                ></span>
+              </div>
+              <span class="_finish_dd177d" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
+            </div>
+            <div class="_score_dd177d"><b>0</b><span>pts</span></div>
+          </li>
+          <li
+            class="_lane_dd177d"
+            style="--pb-lane-color: var(--pb-player-8); --pb-runner-progress: 0"
+          >
+            <div class="_identity_dd177d">
+              <svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65 _avatar_dd177d"
+                role="img"
+                aria-label="avatar octopus"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-8);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 0.4s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <g class="pb-eyes" style="transform-origin: 32px 30px">
+                  <circle cx="23" cy="30" r="4" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="30" r="4" fill="#1a0b12"></circle>
+                </g>
+                <path
+                  d="M14 46 q4 8 9 0 q4 8 9 0 q4 8 9 0 q4 8 9 0"
+                  stroke="#1a0b12"
+                  stroke-width="3"
+                  fill="none"
+                  stroke-linecap="round"
+                ></path>
+              </svg>
+              <div class="_nameBlock_dd177d">
+                <b class="_name_dd177d" title="Hal">Hal</b
+                ><span class="_state_dd177d">0 / 12 answered</span>
+              </div>
+            </div>
+            <div
+              class="_track_dd177d"
+              role="progressbar"
+              aria-label="Hal: questions answered"
+              aria-valuemin="0"
+              aria-valuemax="12"
+              aria-valuenow="0"
+            >
+              <div class="_rail_dd177d"></div>
+              <div class="_path_dd177d">
+                <span class="_runner_dd177d"
+                  ><svg viewBox="0 0 40 48" aria-hidden="true">
+                    <path d="M23 2 5 27h13l-2 19 19-28H22z"></path></svg
+                ></span>
+              </div>
+              <span class="_finish_dd177d" aria-hidden="true"
+                ><svg viewBox="0 0 40 48" aria-hidden="true">
+                  <path d="M6 3h3v42H6z M9 6c9-6 18 6 27 0v22c-9 6-18-6-27 0z"></path></svg
+              ></span>
+            </div>
+            <div class="_score_dd177d"><b>0</b><span>pts</span></div>
+          </li>
+        </ol>
+        <p class="_stageHint_3e7825">Track = answered questions · Highest score wins</p>
+      </div>
+    </div>
+    <div class="bottom">Quizizz · Phone controller</div>
+  </body>
+</html>
