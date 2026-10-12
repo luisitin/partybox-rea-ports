@@ -65,15 +65,24 @@
   color: var(--pb-text-muted);
 }
 
-.racer > [role='grid'] {
-  width: min(100%, calc(100cqh - var(--pb-space-7)));
+.boardSlot {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 0;
+  container-type: size;
+}
+
+.boardSlot > [role='grid'] {
+  width: min(100%, 100cqh);
 }
 
 .racer p {
   margin: 0;
   font-size: var(--pb-font-caption);
   color: var(--pb-text-muted);
-  white-space: nowrap;
+  width: 100%;
+  text-align: center;
 }
 
 .racer p strong {

@@ -1,5 +1,26 @@
 # P09 verification
 
+## Latest r1-local checkpoint (2026-10-12 13:41 UTC)
+
+Current simulation PASS: `node --import tsx jobs/P09-2048-race/tools/simulation.ts`,
+exit 0; 21000/21000 games, all counts/skills, max total 275456 ms < 480000 ms.
+Every group's median play is 180000 ms; group total medians 202296–265067 ms.
+Recorded run: 13:31:06.002–13:36:19.124 UTC, stable source hashes.
+
+Current capture PASS: `node jobs/P09-2048-race/tools/capture.mjs`, exit 0;
+27 frames, all bounds/clipping/overlap/type/targets pass, owned browser closure verified.
+All 15 standard and 12 stress frames manually reviewed. Media about 8.3 MB.
+The receipt frame supplies labelled synthetic text to the SSR status slot; tests
+verify accepted-counter behavior. Static reconstructed host frame, no running-room claim.
+
+`node --import tsx jobs/P09-2048-race/tools/mutate.ts`: 20/20 behavior kills;
+source restoration true, but final baseline 101 pass/1 fail is under investigation.
+No overall mutation/tests PASS until that failure is fixed and baseline rerun green.
+Typecheck passed before mutation planting; final type/format/CI gates remain pending.
+Generated HTML's second embedded-CSS formatting pass is repaired; its check passes.
+
+Earlier checkpoints below are superseded; their PASS figures are historical only.
+
 ## Latest r1-local checkpoint (2026-10-12 12:27 UTC)
 
 Canonical `games/2048` is implemented; PR #12 remains draft. Typecheck PASS after

@@ -3,9 +3,13 @@
 ## Current resume evidence (2026-10-12, r1-local)
 
 The product is now canonically 2048; Merge Sprint is a superseded working name. Root checked
-117 core manifests with no overlap. Fresh access reopened the creator's hosted original page
+126 current core manifests at `e73c6a2fb776ae355769ffa8074a24ace996b6d6` with no overlap. Fresh access reopened the creator's hosted original page
 and confirmed the independent engine at its pinned raw URL. This confirms source/page access,
 not an interactive live playthrough; no live movement, audio or transition timing is claimed.
+
+The browser retry in this session again found no enabled apps/browsers; opening a visible
+in-app tab returned `Browser is not available: iab`. Engine play and targeted probes below
+remain the reproducible fallback, with UI timing observations attributed to authored source.
 The original and independent mechanics/probe evidence below is retained as historical research.
 Current work adds actual-host capture, correct spectator routing, feedback and reading-safe
 reveal pacing; old fake-chrome/spectator SSR evidence is not current fit proof.

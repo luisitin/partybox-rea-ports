@@ -70,4 +70,17 @@ describe('authoritative move feedback and single in-flight direction', () => {
     expect(first.state.gain).toBe(0);
     expect(observeMove(first.state, slid, 1050).accepted).toBe(false);
   });
+
+  it('reserves a local cooldown after resume so an immediate direction cannot be rejected', () => {
+    const accepted = { ...view, moves: 8, score: 36 };
+    const receipt = observeMove(initialFeedback(view), accepted, 1000).state;
+    const paused = observeMove(receipt, { ...accepted, active: false }, 1050).state;
+    const resumed = observeMove(paused, accepted, 6000);
+    expect(resumed.accepted).toBe(false);
+    expect(resumed.state.gain).toBe(4);
+    expect(reserveMove(resumed.state, accepted, board, 'left', 6149)).toBeNull();
+    const ready = observeMove(resumed.state, accepted, 6150).state;
+    expect(reserveMove(ready, accepted, board, 'left', 6150)?.pendingAt).toBe(6150);
+    expect(ready.failed).toBe(false);
+  });
 });

@@ -18,6 +18,7 @@ export interface MoveFeedback {
   readyAt: number;
   gain: number;
   failed: boolean;
+  active: boolean;
 }
 
 export function initialFeedback(view: MoveSnapshot): MoveFeedback {
@@ -29,6 +30,7 @@ export function initialFeedback(view: MoveSnapshot): MoveFeedback {
     readyAt: 0,
     gain: 0,
     failed: false,
+    active: view.active,
   };
 }
 
@@ -70,7 +72,17 @@ export function observeMove(
     };
   }
   if (!view.active)
-    return { state: { ...current, pendingAt: null, failed: false }, accepted: false };
+    return {
+      state: { ...current, active: false, pendingAt: null, failed: false },
+      accepted: false,
+    };
+  // A pause preserves the server's remaining cooldown. A full local interval
+  // on return also covers reconnects without exposing private server clocks.
+  if (!current.active)
+    return {
+      state: { ...current, active: true, pendingAt: null, readyAt: now + MOVE_COOLDOWN_MS },
+      accepted: false,
+    };
   if (current.pendingAt !== null && now - current.pendingAt >= MOVE_CONFIRM_MS)
     return { state: { ...current, pendingAt: null, failed: true }, accepted: false };
   if (current.readyAt > 0 && now >= current.readyAt)

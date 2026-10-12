@@ -362,6 +362,16 @@ function measure() {
   }
 
   const gameFrame = document.getElementById('game-frame');
+  const boardOverlaps = [...gameFrame.querySelectorAll('article')].flatMap((article) => {
+    const board = article.querySelector('[role="grid"]');
+    const caption = article.querySelector('p');
+    if (!board || !caption) return [];
+    const boardRect = board.getBoundingClientRect();
+    const captionRect = caption.getBoundingClientRect();
+    return boardRect.bottom > captionRect.top + 1
+      ? [{ board: box(boardRect), caption: box(captionRect), text: caption.textContent }]
+      : [];
+  });
   const gameHeader = gameFrame.querySelector('header');
   const firstCard = gameFrame.querySelector('article');
   const headerOverlap =
@@ -400,6 +410,7 @@ function measure() {
     textOverflow,
     textFonts,
     directionTargets,
+    boardOverlaps,
     tvTextBelow32px:
       document.documentElement.dataset.surface === 'tv'
         ? textFonts.filter((text) => text.gameText && text.fontPx < 32)
@@ -542,6 +553,7 @@ try {
     (a) =>
       a.outside.length ||
       a.clipping.length ||
+      a.boardOverlaps.length ||
       a.tvTextBelow32px.length ||
       a.headerOverlap > 1 ||
       a.directionTargets.some((t) => !t.passes44px),

@@ -79,6 +79,7 @@
 
 .racer {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--pb-space-2);
   min-width: 0;
   padding: var(--pb-space-3);
@@ -98,6 +99,7 @@
   gap: var(--pb-space-3);
   font-size: calc(var(--pb-font-body) * 8 / 9);
   line-height: 1.2;
+  min-width: 0;
 }
 
 .racerHeader h2 {
@@ -106,9 +108,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: inherit;
+  min-width: 0;
+  flex: 1;
 }
 
 .rank {
+  flex: none;
   color: var(--pb-text-muted);
   font-variant-numeric: tabular-nums;
 }

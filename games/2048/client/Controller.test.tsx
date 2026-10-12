@@ -38,6 +38,14 @@ function phone(s: State, id = 'racer-0', phoneOnly = false): string {
   );
 }
 
+function publicBoardLabels(html: string): string[] {
+  return [...html.matchAll(/role="grid" aria-label="([^"]+)"/g)].map((match) => match[1]!);
+}
+
+function publicCards(html: string): string[] {
+  return html.match(/<article\b[^>]*>[\s\S]*?<\/article>/g) ?? [];
+}
+
 describe('2048 phone surfaces', () => {
   it('renders one private control surface and four labelled native direction buttons', () => {
     const html = phone(state());
@@ -90,6 +98,65 @@ describe('2048 phone surfaces', () => {
     },
   );
 
+  it.each([false, true])(
+    'keeps spectator boards in their seats when the score lead changes (phoneOnly=%s)',
+    (mode) => {
+      const before = state();
+      before.racers['racer-0']!.score = 1000;
+      before.racers['racer-1']!.score = 900;
+      const after: State = {
+        ...before,
+        racers: {
+          ...before.racers,
+          'racer-1': { ...before.racers['racer-1']!, score: 1100 },
+        },
+      };
+      expect(game.controllerView(before, 'a-spectator').racers[0]!.rank).toBe(1);
+      expect(game.controllerView(after, 'a-spectator').racers[1]!.rank).toBe(1);
+      const seatOrder = PLAYERS.map((player) => `${player.name}’s board`);
+      for (const snapshot of [before, after]) {
+        const html = phone(snapshot, 'a-spectator', mode);
+        expect(publicBoardLabels(html)).toEqual(seatOrder);
+        expect(html).not.toContain('<button');
+      }
+    },
+  );
+
+  it.each([false, true])(
+    'identifies bots and away racers on the public phone stage (phoneOnly=%s)',
+    (mode) => {
+      const s = state();
+      s.players['racer-0']!.bot = true;
+      s.players['racer-1']!.connected = false;
+      s.players['racer-2']!.bot = true;
+      s.racers['racer-2']!.status = 'blocked';
+      const cards = publicCards(phone(s, 'a-spectator', mode));
+      expect(cards).toHaveLength(8);
+      expect(cards[0]).toContain('Bot');
+      expect(cards[1]).toContain('Away');
+      expect(cards[2]).toContain('Bot');
+      expect(cards[2]).toContain('No moves');
+      expect(cards[3]).not.toMatch(/Bot|Away/);
+    },
+  );
+
+  it.each(['reveal', 'done'])('keeps bot identity in the final phone ranking in %s', (phase) => {
+    const s = state();
+    s.players['racer-0']!.bot = true;
+    s.phase = { id: phase, startedAt: 180000, deadline: phase === 'done' ? null : 188000 };
+    s.reason = 'clock';
+    for (const mode of [false, true]) {
+      for (const viewer of ['racer-3', 'a-spectator']) {
+        const html = phone(s, viewer, mode);
+        const botRow = html
+          .match(/<li\b[^>]*>[\s\S]*?<\/li>/g)
+          ?.find((row) => row.includes('Racer 1</strong>'));
+        expect(botRow).toBeDefined();
+        expect(botRow).toContain('Best tile 2 · Bot');
+      }
+    }
+  });
+
   it.each(['reveal', 'done'])('shows the complete final ranking in %s on every phone', (phase) => {
     const s = state();
     s.phase = { id: phase, startedAt: 180000, deadline: phase === 'done' ? null : 188000 };
@@ -122,6 +189,22 @@ describe('2048 phone surfaces', () => {
 });
 
 describe('2048 TV', () => {
+  it('identifies bots, blocked bots and away racers beside their TV boards', () => {
+    const s = state();
+    s.players['racer-0']!.bot = true;
+    s.players['racer-1']!.connected = false;
+    s.players['racer-2']!.bot = true;
+    s.racers['racer-2']!.status = 'blocked';
+    const cards = publicCards(renderToStaticMarkup(<Tv view={{ ...game.tvView(s), vip: null }} />));
+    expect(cards).toHaveLength(8);
+    expect(cards[0]).toContain('Bot');
+    expect(cards[1]).toContain('Away');
+    expect(cards[2]).toContain('Bot');
+    expect(cards[2]).toContain('No moves');
+    expect(cards[3]).toContain('Racing');
+    expect(cards[3]).not.toMatch(/Bot|Away/);
+  });
+
   it.each(['play', 'reveal', 'done'])('shows every player board and best tile in %s', (phase) => {
     const s = state();
     s.phase = { id: phase, startedAt: 0, deadline: phase === 'done' ? null : 180000 };

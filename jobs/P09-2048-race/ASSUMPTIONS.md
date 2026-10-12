@@ -2,6 +2,11 @@
 
 ## Current canonical resume (2026-10-12, r1-local)
 
+- Fresh 13:35 UTC overlap scan: 126 owner-core manifests at `e73c6a2fb776ae355769ffa8074a24ace996b6d6`, no 2048/merge-sprint match. Read-only comparison found no changes to the capture's pinned host geometry/reset/font CSS since `6ce46e613d3705624a56647592979613c4d6e468`; owner checkout was not edited.
+- Browser research was retried in this session: inventory had no apps/browsers, and creating the in-app tab returned `Browser is not available: iab`. Original hosted page and independent engine were readable through web access. Preserve the prior reproducible engine play/probes; no live visual/audio play claim.
+- The current 27 static captures use the real SDK components with reconstructed pinned host chrome, not a running PartyBox room. Standard fixtures cover every phase/TV/phone/presence/spectator combination. Twelve stress frames cover long valid 16-code-point names, 2048, five-digit scores, blocked/pause/tie/receipt states and two/three TV seats. Receipt text is explicitly supplied to SSR's real status slot because effects do not run there; behavioral confirmation comes from feedback tests.
+- Internal spectator board/caption overlaps are now measured separately from frame clipping; intentional name ellipses and Nunito ink overhang remain recorded and manually reviewed.
+
 - Product/id is 2048 at `games/2048`; Merge Sprint was a superseded working name. Job/branch slug stays P09-2048-race. Root checked 117 core manifests and found no overlap.
 - Claim `206c2c0` belongs to r1-local. Current public-queue instructions govern main claim commits and the job branch; owner core remains read-only.
 - PR #12's old ready/green state is baseline. Reopen as draft until current name/source/capture/testing/CI gates pass; no fresh PASS or DONE is assumed.

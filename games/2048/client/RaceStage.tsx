@@ -16,7 +16,9 @@ export function RaceStage({
   const now = useServerNow(250, view.paused, view.clockHeldAt);
   const playing = view.phaseId === 'play';
   const names = Object.fromEntries(view.players.map((p) => [p.id, p.name]));
-  const rows = ranked(view.racers);
+  const away = new Set(view.players.filter((p) => !p.connected).map((p) => p.id));
+  // Keep each public board in its seat while the race runs; rank only the reveal.
+  const rows = playing ? view.racers : ranked(view.racers);
   const winner = view.winners[0];
   const headline = playing
     ? L('2048')
@@ -69,13 +71,16 @@ export function RaceStage({
               <h3>
                 <span>#{racer.rank}</span> {names[racer.id] ?? racer.id}
               </h3>
-              <Board
-                board={racer.board}
-                miniature
-                label={L('{name}’s board', { name: names[racer.id] ?? racer.id })}
-              />
+              <div className={styles.boardSlot}>
+                <Board
+                  board={racer.board}
+                  miniature
+                  label={L('{name}’s board', { name: names[racer.id] ?? racer.id })}
+                />
+              </div>
               <p>
                 <strong>{racer.best}</strong> · {L('{score} pts', { score: racer.score })}
+                {racer.bot ? ` · ${L('Bot')}` : away.has(racer.id) ? ` · ${L('Away')}` : ''}
                 {racer.status === 'blocked' ? ` · ${L('No moves')}` : ''}
               </p>
             </article>
@@ -93,7 +98,10 @@ export function RaceStage({
               <b className={styles.rank}>#{racer.rank}</b>
               <div className={styles.player}>
                 <strong>{names[racer.id] ?? racer.id}</strong>
-                <span>{L('Best tile {tile}', { tile: racer.best })}</span>
+                <span>
+                  {L('Best tile {tile}', { tile: racer.best })}
+                  {racer.bot ? ` · ${L('Bot')}` : ''}
+                </span>
               </div>
               <strong className={styles.score}>{racer.score}</strong>
               {view.winners.includes(racer.id) ? (

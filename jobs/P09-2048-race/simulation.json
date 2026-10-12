@@ -1,224 +1,388 @@
 {
+  "startedAt": "2026-10-12T13:31:06.002Z",
+  "finishedAt": "2026-10-12T13:36:19.124Z",
   "seedRange": [1, 1000],
   "counts": [2, 3, 4, 5, 6, 7, 8],
   "skills": ["easy", "normal", "sharp"],
+  "limitMs": 480000,
+  "expectedGames": 21000,
+  "completedGames": 21000,
+  "incomplete": false,
+  "elapsedMs": 313121,
+  "sources": {
+    "games/2048/manifest.json": "9bd97aff6a039389056bd9baa9ae08358339a5da305cb7fb05a1f3d49c145515",
+    "games/2048/server/board.ts": "5386d4d95af48afa71f5b5995f52714d541c99dcec8a4dda63bc18addb142ffb",
+    "games/2048/server/bot.ts": "2a79b9eb21a14a744b1dbe0bf41459438b8d506eac9894988e61f74d273c40d3",
+    "games/2048/server/content.ts": "ef76a220503916b90b768744c275a7fc8b48e389e164f891f07ba8a75783f529",
+    "games/2048/server/index.ts": "3808ae21d3e75d186369192bff4110fef5997b459805274202b7040c88f92f5e",
+    "games/2048/server/phases/done.ts": "82620e0d92c95584831f265f89fd68c536f52e705fe3c333e44b092100cffaf5",
+    "games/2048/server/phases/play.ts": "4bb3ae123d2153570ba6ff82ad8e96562771ff0f03e8bd06002544589179d76f",
+    "games/2048/server/phases/reveal.ts": "62920114fe326153c93b548da8f0d10a5316dedbcce778644f36e18ce68bb878",
+    "games/2048/server/reveal-reading.ts": "facf598e3224d22e2b67203d69df6be33addac9e36f721d06117330a97f8a235",
+    "games/2048/server/scoring.ts": "fb2c8d564637a61881d5cd88bc265971eb3dc03c6ae3c9dd9bc77ed3049ad0c0",
+    "games/2048/server/types.ts": "2cb5d2a80ffbad39f9cb96028c35b915e30277d84ee252d3044c3abf92f54bf5"
+  },
   "summaries": [
     {
       "players": 2,
       "skill": "easy",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 206625,
       "maxPlayMs": 180000,
-      "maxTotalMs": 209223,
+      "maxTotalMs": 210089,
       "medianScore": 700,
       "totalAcceptedMoves": 171431,
       "reasons": {
         "blocked": 70,
         "clock": 930
       },
-      "elapsedMs": 1330
+      "elapsedMs": 1783
     },
     {
       "players": 2,
       "skill": "normal",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 203162,
       "maxPlayMs": 180000,
-      "maxTotalMs": 206625,
+      "maxTotalMs": 207491,
       "medianScore": 936,
       "totalAcceptedMoves": 178000,
       "reasons": {
         "clock": 1000
       },
-      "elapsedMs": 2229
+      "elapsedMs": 3746
     },
     {
       "players": 2,
       "skill": "sharp",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 202296,
       "maxPlayMs": 180000,
-      "maxTotalMs": 204894,
+      "maxTotalMs": 205760,
       "medianScore": 940,
       "totalAcceptedMoves": 178000,
       "reasons": {
         "clock": 1000
       },
-      "elapsedMs": 17462
+      "elapsedMs": 11079
     },
     {
       "players": 3,
       "skill": "easy",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 216582,
       "maxPlayMs": 180000,
-      "maxTotalMs": 220045,
+      "maxTotalMs": 221344,
       "medianScore": 700,
       "totalAcceptedMoves": 256611,
       "reasons": {
         "clock": 976,
         "blocked": 24
       },
-      "elapsedMs": 6602
+      "elapsedMs": 3919
     },
     {
       "players": 3,
       "skill": "normal",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 210737.5,
       "maxPlayMs": 180000,
-      "maxTotalMs": 214850,
+      "maxTotalMs": 215283,
       "medianScore": 936,
       "totalAcceptedMoves": 267000,
       "reasons": {
         "clock": 1000
       },
-      "elapsedMs": 8954
+      "elapsedMs": 5627
     },
     {
       "players": 3,
       "skill": "sharp",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 209223,
       "maxPlayMs": 180000,
-      "maxTotalMs": 213119,
+      "maxTotalMs": 214418,
       "medianScore": 940,
       "totalAcceptedMoves": 267000,
       "reasons": {
         "clock": 1000
       },
-      "elapsedMs": 20958
+      "elapsedMs": 15592
     },
     {
       "players": 4,
       "skill": "easy",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 226539,
       "maxPlayMs": 180000,
-      "maxTotalMs": 230002,
+      "maxTotalMs": 231734,
       "medianScore": 704,
       "totalAcceptedMoves": 342213,
       "reasons": {
         "clock": 998,
         "blocked": 2
       },
-      "elapsedMs": 7232
+      "elapsedMs": 5372
     },
     {
       "players": 4,
       "skill": "normal",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 218314,
       "maxPlayMs": 180000,
-      "maxTotalMs": 223941,
+      "maxTotalMs": 224374,
       "medianScore": 936,
       "totalAcceptedMoves": 356000,
       "reasons": {
         "clock": 1000
       },
-      "elapsedMs": 8999
+      "elapsedMs": 7204
     },
     {
       "players": 4,
       "skill": "sharp",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 217015,
       "maxPlayMs": 180000,
-      "maxTotalMs": 220478,
+      "maxTotalMs": 221344,
       "medianScore": 940,
       "totalAcceptedMoves": 356000,
       "reasons": {
         "clock": 1000
       },
-      "elapsedMs": 32528
+      "elapsedMs": 20460
     },
     {
       "players": 5,
       "skill": "easy",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 236063,
       "maxPlayMs": 180000,
-      "maxTotalMs": 240824,
+      "maxTotalMs": 242989,
       "medianScore": 696,
       "totalAcceptedMoves": 426252,
       "reasons": {
         "clock": 998,
         "blocked": 2
       },
-      "elapsedMs": 10480
+      "elapsedMs": 6599
     },
     {
       "players": 5,
       "skill": "normal",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 226106,
       "maxPlayMs": 180000,
-      "maxTotalMs": 230435,
+      "maxTotalMs": 231301,
       "medianScore": 932,
       "totalAcceptedMoves": 445000,
       "reasons": {
         "clock": 1000
       },
-      "elapsedMs": 12711
+      "elapsedMs": 8210
     },
     {
       "players": 5,
       "skill": "sharp",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 224374,
       "maxPlayMs": 180000,
-      "maxTotalMs": 227405,
+      "maxTotalMs": 229569,
       "medianScore": 940,
       "totalAcceptedMoves": 445000,
       "reasons": {
         "clock": 1000
       },
-      "elapsedMs": 36062
+      "elapsedMs": 25203
     },
     {
       "players": 6,
       "skill": "easy",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 246019,
       "maxPlayMs": 180000,
-      "maxTotalMs": 251214,
+      "maxTotalMs": 253811,
       "medianScore": 700,
       "totalAcceptedMoves": 513217,
       "reasons": {
         "clock": 1000
       },
-      "elapsedMs": 10557
+      "elapsedMs": 8501
     },
     {
       "players": 6,
       "skill": "normal",
       "seeds": 1000,
       "beatMs": 2000,
+      "completedGames": 1000,
       "medianPlayMs": 180000,
+      "medianTotalMs": 233898,
       "maxPlayMs": 180000,
-      "maxTotalMs": 240824,
+      "maxTotalMs": 241690,
       "medianScore": 932,
       "totalAcceptedMoves": 533993,
       "reasons": {
         "clock": 1000
       },
-      "elapsedMs": 13962
+      "elapsedMs": 10665
+    },
+    {
+      "players": 6,
+      "skill": "sharp",
+      "seeds": 1000,
+      "beatMs": 2000,
+      "completedGames": 1000,
+      "medianPlayMs": 180000,
+      "medianTotalMs": 231301,
+      "maxPlayMs": 180000,
+      "maxTotalMs": 237794,
+      "medianScore": 940,
+      "totalAcceptedMoves": 534000,
+      "reasons": {
+        "clock": 1000
+      },
+      "elapsedMs": 31929
+    },
+    {
+      "players": 7,
+      "skill": "easy",
+      "seeds": 1000,
+      "beatMs": 2000,
+      "completedGames": 1000,
+      "medianPlayMs": 180000,
+      "medianTotalMs": 255976,
+      "maxPlayMs": 180000,
+      "maxTotalMs": 265933,
+      "medianScore": 700,
+      "totalAcceptedMoves": 599512,
+      "reasons": {
+        "clock": 1000
+      },
+      "elapsedMs": 9571
+    },
+    {
+      "players": 7,
+      "skill": "normal",
+      "seeds": 1000,
+      "beatMs": 2000,
+      "completedGames": 1000,
+      "medianPlayMs": 180000,
+      "medianTotalMs": 241690,
+      "maxPlayMs": 180000,
+      "maxTotalMs": 248617,
+      "medianScore": 932,
+      "totalAcceptedMoves": 623000,
+      "reasons": {
+        "clock": 1000
+      },
+      "elapsedMs": 12994
+    },
+    {
+      "players": 7,
+      "skill": "sharp",
+      "seeds": 1000,
+      "beatMs": 2000,
+      "completedGames": 1000,
+      "medianPlayMs": 180000,
+      "medianTotalMs": 238660,
+      "maxPlayMs": 180000,
+      "maxTotalMs": 246019,
+      "medianScore": 940,
+      "totalAcceptedMoves": 623000,
+      "reasons": {
+        "clock": 1000
+      },
+      "elapsedMs": 49660
+    },
+    {
+      "players": 8,
+      "skill": "easy",
+      "seeds": 1000,
+      "beatMs": 2000,
+      "completedGames": 1000,
+      "medianPlayMs": 180000,
+      "medianTotalMs": 265067,
+      "maxPlayMs": 180000,
+      "maxTotalMs": 275456,
+      "medianScore": 704,
+      "totalAcceptedMoves": 684403,
+      "reasons": {
+        "clock": 1000
+      },
+      "elapsedMs": 10814
+    },
+    {
+      "players": 8,
+      "skill": "normal",
+      "seeds": 1000,
+      "beatMs": 2000,
+      "completedGames": 1000,
+      "medianPlayMs": 180000,
+      "medianTotalMs": 249482,
+      "maxPlayMs": 180000,
+      "maxTotalMs": 258140,
+      "medianScore": 932,
+      "totalAcceptedMoves": 712000,
+      "reasons": {
+        "clock": 1000
+      },
+      "elapsedMs": 14451
+    },
+    {
+      "players": 8,
+      "skill": "sharp",
+      "seeds": 1000,
+      "beatMs": 2000,
+      "completedGames": 1000,
+      "medianPlayMs": 180000,
+      "medianTotalMs": 246019,
+      "maxPlayMs": 180000,
+      "maxTotalMs": 252080,
+      "medianScore": 940,
+      "totalAcceptedMoves": 712000,
+      "reasons": {
+        "clock": 1000
+      },
+      "elapsedMs": 49726
     }
-  ],
-  "incomplete": true,
-  "completedGames": 14000,
-  "note": "Stopped owned runner at the 2026-10-12 local session deadline. Complete groups only; remaining counts/strengths must run before DONE."
+  ]
 }

@@ -68,17 +68,43 @@ function clock(state: State, child: ReactNode): ReactNode {
   return <ServerClockProvider offsetMs={fixtureNow - Date.now()}>{child}</ServerClockProvider>;
 }
 
-async function capture(name: string, surface: 'tv' | 'phone', state: State, node: ReactNode) {
-  const markup = renderToStaticMarkup(clock(state, node));
+async function capture(
+  name: string,
+  surface: 'tv' | 'phone',
+  state: State,
+  node: ReactNode,
+  receipt = false,
+) {
+  let markup = renderToStaticMarkup(clock(state, node));
+  // SSR cannot run the accepted-counter effect. This labelled stress frame supplies its
+  // largest receipt text to the real status slot; behavior is tested by move-feedback.test.ts.
+  if (receipt) markup = markup.replace(/(role="status"[^>]*>)[^<]*/, '$1+2048 points');
+  const formatted = await format(html(surface, name, markup, Object.keys(state.players).length), {
+    ...formatOptions,
+    parser: 'html',
+  });
   await writeFile(
     resolve(media, `${name}.html`),
-    await format(html(surface, name, markup, Object.keys(state.players).length), {
+    // Prettier's embedded CSS pass normalizes once before the HTML pass stabilizes.
+    await format(formatted, {
       ...formatOptions,
       parser: 'html',
     }),
     'utf8',
   );
   outputs.push(`${name}.html`);
+}
+
+function phone(state: State, id: string, phoneOnly = true): ReactNode {
+  return (
+    <PhoneOnlyProvider value={phoneOnly}>
+      <Controller
+        view={{ ...game.controllerView(state, id), vip: null }}
+        me={{ id, name: state.players[id]?.name ?? 'Spectator', avatarId: 'fox' }}
+        send={() => undefined}
+      />
+    </PhoneOnlyProvider>
+  );
 }
 
 await mkdir(media, { recursive: true });
@@ -107,6 +133,92 @@ for (const phase of process.argv.includes('--hash-only') ? [] : game.phases) {
         </PhoneOnlyProvider>,
       );
     }
+  }
+}
+
+if (!process.argv.includes('--hash-only')) {
+  const play = JSON.parse(await readFile(resolve(fixtures, 'play.json'), 'utf8')) as State;
+  const long: State = {
+    ...play,
+    players: Object.fromEntries(
+      Object.entries(play.players).map(([id, p], index) => [
+        id,
+        { ...p, name: `${'W'.repeat(15)}${index + 1}` },
+      ]),
+    ),
+    racers: Object.fromEntries(
+      Object.entries(play.racers).map(([id, r], index) => [
+        id,
+        { ...r, score: 16384 + index * 4, board: [1024, 1024, ...r.board.slice(2)] },
+      ]),
+    ),
+  };
+  const target = game.reduce(long, {
+    type: 'input',
+    now: play.phase.startedAt + 60000,
+    playerId: 'p1',
+    input: { type: 'move', dir: 'left', move: long.racers.p1!.moves },
+  });
+  if (target.reason !== 'target') throw new Error('Target stress frame failed to reach 2048');
+  const paused = game.reduce(long, {
+    type: 'vip',
+    action: 'pause',
+    now: play.phase.startedAt + 40000,
+  });
+  const blocked: State = {
+    ...long,
+    racers: {
+      ...long.racers,
+      p1: {
+        ...long.racers.p1!,
+        board: [2, 4, 2, 4, 4, 2, 4, 2, 2, 4, 2, 4, 4, 2, 4, 2],
+        status: 'blocked',
+      },
+    },
+  };
+  const done = game.reduce(target, {
+    type: 'timer',
+    now: target.phase.deadline!,
+    phaseId: 'reveal',
+    startedAt: target.phase.startedAt,
+  });
+  const tied = { ...done, reason: 'clock' as const, racers: long.racers };
+  for (const [label, state] of [
+    ['long-play', long],
+    ['long-target', target],
+    ['long-done', done],
+  ] as const) {
+    await capture(
+      `stress-${label}-tv`,
+      'tv',
+      state,
+      <Tv view={{ ...game.tvView(state), vip: null }} />,
+    );
+    await capture(`stress-${label}-phone`, 'phone', state, phone(state, 'p1'));
+  }
+  await capture('stress-paused-phone', 'phone', paused, phone(paused, 'p1'));
+  await capture('stress-blocked-phone', 'phone', blocked, phone(blocked, 'p1'));
+  await capture('stress-receipt-phone', 'phone', long, phone(long, 'p1'), true);
+  const tie: State = {
+    ...tied,
+    racers: Object.fromEntries(
+      Object.entries(tied.racers).map(([id, r]) => [id, { ...r, score: 16384 }]),
+    ),
+  };
+  await capture('stress-tied-phone', 'phone', tie, phone(tie, 'p1'));
+  for (const count of [2, 3]) {
+    const ids = Object.keys(play.players).slice(0, count);
+    const small: State = {
+      ...play,
+      players: Object.fromEntries(ids.map((id) => [id, play.players[id]!])),
+      racers: Object.fromEntries(ids.map((id) => [id, play.racers[id]!])),
+    };
+    await capture(
+      `stress-${count}-players-tv`,
+      'tv',
+      small,
+      <Tv view={{ ...game.tvView(small), vip: null }} />,
+    );
   }
 }
 

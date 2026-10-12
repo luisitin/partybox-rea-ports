@@ -63,7 +63,12 @@ const reduce = composeReduce<State, Input>({
   phases: { play: reducePlay, reveal: reduceReveal },
   advance,
   end: enterDone,
-  onPlayer: (state, event) => onPlayerEvent(state, event, { closeIfDone }),
+  onPlayer: (state, event) => {
+    const next = onPlayerEvent(state, event, { closeIfDone });
+    // An empty room can resume before a blocked seat returns. Rejoining must
+    // recheck the race too, rather than waiting on disconnected racing boards.
+    return event.connected && hasPlayer(next, event.playerId) ? closeIfDone(next, event.now) : next;
+  },
   afterVip: (_before, after, event) => recheckOnResume(after, event, closeIfDone),
   prepare: (state, event) => {
     if (event.type !== 'vip' || event.action !== 'resume' || state.phase.id !== 'play')
@@ -81,7 +86,7 @@ const reduce = composeReduce<State, Input>({
 });
 
 function closeIfDone(state: State, now: number): State {
-  return state.phase.id === 'play' && raceFinished(state)
+  return state.phase.id === 'play' && !state.phase.paused && raceFinished(state)
     ? enterReveal({ ...state, reason: 'blocked' }, now)
     : state;
 }
@@ -94,6 +99,7 @@ function statusOf(state: State): (id: string) => PlayerStatus {
 function raceView(state: State): RaceView {
   const racers: RacerView[] = Object.entries(state.racers).map(([id, r]) => ({
     id,
+    bot: state.players[id]?.bot === true,
     board: r.board,
     score: r.score,
     best: Math.max(...r.board),

@@ -13,6 +13,7 @@ export function Tv({ view }: GameTvProps<TvMergeView>): JSX.Element {
   const playing = view.phaseId === 'play';
   const left = view.deadline === null ? null : Math.max(0, view.deadline - now);
   const names = Object.fromEntries(view.players.map((p) => [p.id, p.name]));
+  const away = new Set(view.players.filter((p) => !p.connected).map((p) => p.id));
   const rows = playing ? view.racers : ranked(view.racers);
   const winner = view.winners[0];
   const headline = playing
@@ -63,11 +64,22 @@ export function Tv({ view }: GameTvProps<TvMergeView>): JSX.Element {
                 <b className={styles.rank}>#{racer.rank}</b>
                 <h2 title={names[racer.id] ?? racer.id}>{names[racer.id] ?? racer.id}</h2>
                 {view.winners.includes(racer.id) ? (
-                  <span aria-label={L('Winner')}>★</span>
+                  <span aria-label={L('Winner')}>{racer.bot ? `${L('Bot')} ★` : '★'}</span>
                 ) : racer.status === 'blocked' ? (
-                  <span className={styles.status}>{L('No moves')}</span>
+                  <span className={styles.status}>
+                    {racer.bot ? `${L('Bot')} · ` : ''}
+                    {L('No moves')}
+                  </span>
                 ) : (
-                  <span className={styles.status}>{playing ? L('Racing') : L('Locked')}</span>
+                  <span className={styles.status}>
+                    {racer.bot
+                      ? L('Bot')
+                      : away.has(racer.id) && playing
+                        ? L('Away')
+                        : playing
+                          ? L('Racing')
+                          : L('Locked')}
+                  </span>
                 )}
               </header>
               <div className={styles.summary}>

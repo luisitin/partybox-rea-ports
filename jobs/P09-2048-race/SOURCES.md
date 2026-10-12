@@ -49,13 +49,21 @@ termination and the 180-second cap come directly from this repository's P09 job.
 
 No third-party asset license is required because no third-party asset is used.
 
-## Current capture provenance pending
+## Current capture provenance
 
-The old 15 captures use a fake host frame and incorrect spectator SSR routing; they are
-historical baseline only. Root's replacement capture will use pinned PartyBox TV/phone chrome
-and the correct public role/provider. Record any capture-only host CSS/font licence and fresh
-source/media hashes with that evidence. These styles are separate from original 2048 assets.
-The current canonical game, tools and workflow use games/2048; prior commands/names remain
-historical. PR #12's previous CI 38180992082 does not verify new repairs.
+The current 27 captures replace the old fake-host/spectator-misrouting baseline.
+They use published SDK components, correct public roles/providers and reconstructed pinned
+PartyBox host chrome/global rules at `6ce46e613d3705624a56647592979613c4d6e468`.
+TV Stage is 854.8 px (788.8 px inner); phone header/counter are 60/27.6 px.
+The owner core advanced to `e73c6a2fb776ae355769ffa8074a24ace996b6d6` with 126 manifests;
+fresh read-only checks found no 2048 overlap or relevant host geometry CSS changes.
 
-- Capture-only Nunito Variable5.3.0 bytes and full SIL OFL are reused from the pinned PartyBox host via the completed P01 evidence, independent of original2048 assets. Actual collapsed-strip and phone chrome/global rules are reconstructed from pinned core6ce46e613d3705624a56647592979613c4d6e468.
+Capture-only Nunito Variable 5.3.0 bytes and full SIL OFL in `media/NUNITO-LICENSE.txt`
+come from the pinned PartyBox host via completed P01 evidence. They are not original 2048 assets
+or a new runtime dependency. Source/media hashes are in `media/current-source.json` and
+`SHA256SUMS.txt`. The labelled receipt stress frame supplies text to the actual SSR status slot;
+effects are verified by behavioral tests. No running-room or interactive capture is claimed.
+
+Live-original research was retried: no enabled browser/app and in-app tab creation unavailable.
+The original hosted page and independent pinned engine were freshly readable through web access;
+prior VM play remains engine evidence, not browser/audio observation.

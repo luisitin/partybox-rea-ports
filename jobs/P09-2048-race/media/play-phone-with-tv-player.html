@@ -3352,15 +3352,24 @@ ight is the :root default above) ────────
         color: var(--pb-text-muted);
       }
 
-      .pb_RaceStage_612ac0c5_racer > [role='grid'] {
-        width: min(100%, calc(100cqh - var(--pb-space-7)));
+      .pb_RaceStage_612ac0c5_boardSlot {
+        display: grid;
+        place-items: center;
+        width: 100%;
+        min-height: 0;
+        container-type: size;
+      }
+
+      .pb_RaceStage_612ac0c5_boardSlot > [role='grid'] {
+        width: min(100%, 100cqh);
       }
 
       .pb_RaceStage_612ac0c5_racer p {
         margin: 0;
         font-size: var(--pb-font-caption);
         color: var(--pb-text-muted);
-        white-space: nowrap;
+        width: 100%;
+        text-align: center;
       }
 
       .pb_RaceStage_612ac0c5_racer p strong {
@@ -3731,6 +3740,7 @@ ight is the :root default above) ────────
 
       .pb_Tv_6d37bbeb_racer {
         display: grid;
+        grid-template-columns: minmax(0, 1fr);
         gap: var(--pb-space-2);
         min-width: 0;
         padding: var(--pb-space-3);
@@ -3750,6 +3760,7 @@ ight is the :root default above) ────────
         gap: var(--pb-space-3);
         font-size: calc(var(--pb-font-body) * 8 / 9);
         line-height: 1.2;
+        min-width: 0;
       }
 
       .pb_Tv_6d37bbeb_racerHeader h2 {
@@ -3758,9 +3769,12 @@ ight is the :root default above) ────────
         text-overflow: ellipsis;
         white-space: nowrap;
         font-size: inherit;
+        min-width: 0;
+        flex: 1;
       }
 
       .pb_Tv_6d37bbeb_rank {
+        flex: none;
         color: var(--pb-text-muted);
         font-variant-numeric: tabular-nums;
       }

@@ -40,6 +40,9 @@ export function revealReadingMs(state: State): number {
       wordCount(`Best tile ${Math.max(...racer.board)} Score ${racer.score}`) +
       racer.board.filter((value) => value !== 0).length;
     phone += 1 + name + wordCount(`Best tile ${Math.max(...racer.board)} ${racer.score}`);
+    // Phone final rows keep bot identity after the generic host strip is hidden.
+    if (state.players[id]?.bot) phone++;
+    if (state.players[id]?.bot && (winning.has(id) || racer.status === 'blocked')) tv++;
     if (winning.has(id)) phone++;
     personal = Math.max(
       personal,

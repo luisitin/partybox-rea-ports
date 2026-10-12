@@ -37,6 +37,7 @@ export interface State extends GameStateBase {
 }
 export interface RacerView {
   id: string;
+  bot: boolean;
   board: number[];
   score: number;
   best: number;

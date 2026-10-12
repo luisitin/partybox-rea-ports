@@ -1,5 +1,31 @@
 # P09 resume
 
+## Latest r1-local checkpoint (2026-10-12 13:41 UTC)
+
+This supersedes every checkpoint below. P09 is still draft PR #12.
+
+- Repaired blocked-seat reconnect completion, pause-resume phone cooldown,
+  live spectator seat stability, Bot/Away labels and long-name TV grid overflow.
+- All 27 current standard/stress frames manually reviewed. Fresh capture exit 0:
+  no frame clipping, outside elements, header/board-caption overlaps, small TV text
+  or sub-44 px controls. Capture browser closed in finally, remaining owned PIDs [].
+- Fresh simulation PASS: 21,000/21,000, counts 2–8 × all three strengths × seeds 1–1000,
+  max total 275456 ms < 480000 ms; median play 180000 ms. Source hashes verified stable.
+- All 20 mutants caught by actual failed rule assertions; planted sources restored.
+  The full restored baseline has 101 passing/one failing test; investigate the new
+  1003-seed event-sequence property before claiming current tests/mutations PASS.
+  Property-test performance is being reviewed; no game logic failure is assumed.
+- Typecheck passed before mutations. Format found generated HTML requiring a second
+  embedded-CSS pass; HTML now passes and renderer stabilizes it automatically.
+  Final whole-repo format/typecheck are still required after test repair/restoration.
+- Fresh read-only overlap scan found no 2048 among 126 owner-core manifests.
+  Browser retry was unavailable; prior original-engine research remains documented.
+
+Next: fix the restored-baseline failure, finalize mutation evidence/source/media hashes,
+push and require head CI green. Then KEEP GOING: improve the spectator/blocked-phone
+play footer's missing highest-score-at-buzzer rule, verify affected captures/tests,
+and perform three consecutive measured no-gain reviews before marking DONE.
+
 ## Latest r1-local checkpoint (2026-10-12 12:27 UTC)
 
 Canonical `games/2048` is implemented; PR #12 remains draft. Typecheck PASS after
