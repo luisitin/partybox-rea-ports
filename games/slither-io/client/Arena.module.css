@@ -1,0 +1,88 @@
+.arena {
+  /* One SVG unit is derived from the spacing token; geometry stays in the server's 160 × 100 arena. */
+  --arena-unit: calc(var(--pb-space-1) / 4);
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.floor {
+  fill: var(--pb-bg);
+}
+
+.grid {
+  fill: none;
+  stroke: var(--pb-surface-2);
+  stroke-width: calc(var(--arena-unit) * 0.15);
+}
+
+.wall {
+  fill: none;
+  stroke: var(--pb-text-muted);
+  stroke-width: calc(var(--arena-unit) * 0.6);
+}
+
+.food {
+  fill: var(--pb-accent-2);
+}
+
+.corpseFood {
+  fill: var(--pb-accent-3);
+  stroke: var(--pb-text);
+  stroke-width: calc(var(--arena-unit) * 0.15);
+}
+
+.body {
+  fill: none;
+  stroke: var(--snake-color);
+  stroke-width: calc(var(--arena-unit) * 3);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.marks {
+  fill: none;
+  stroke: var(--pb-bg);
+  stroke-width: calc(var(--arena-unit) * 0.65);
+  stroke-linecap: round;
+}
+
+.head {
+  fill: var(--snake-color);
+  stroke: var(--pb-text);
+  stroke-width: calc(var(--arena-unit) * 0.3);
+}
+
+.eye {
+  fill: var(--pb-on-accent-2-fill);
+}
+
+.number {
+  fill: var(--pb-text);
+  stroke: var(--pb-bg);
+  stroke-width: calc(var(--arena-unit) * 0.65);
+  paint-order: stroke;
+  text-anchor: middle;
+  font-family: var(--pb-font-family);
+  font-size: calc(var(--arena-unit) * 4.5);
+  font-weight: 900;
+}
+
+.shield {
+  fill: none;
+  stroke: var(--pb-info);
+  stroke-width: calc(var(--arena-unit) * 0.4);
+  stroke-dasharray: var(--arena-unit) var(--arena-unit);
+}
+
+.boost {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: calc(var(--arena-unit) * 0.6);
+  stroke-linecap: round;
+}
+
+[data-me='true'] .number {
+  fill: var(--pb-accent-2);
+}

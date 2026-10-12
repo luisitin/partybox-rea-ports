@@ -1,0 +1,94 @@
+.controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--pb-space-3);
+  height: calc(var(--pb-touch) * 4);
+  min-height: calc(var(--pb-touch) * 3);
+  color: var(--pb-text);
+}
+
+.pad,
+.boost {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-1);
+  padding: var(--pb-space-2);
+  min-width: var(--pb-touch);
+  min-height: var(--pb-touch);
+  border: calc(var(--pb-space-1) / 2) solid var(--snake-color);
+  border-radius: var(--pb-radius-lg);
+  background: var(--pb-surface-2);
+  color: var(--pb-text);
+  font-family: var(--pb-font-family);
+  font-size: var(--pb-font-button);
+  touch-action: none;
+  user-select: none;
+  -webkit-tap-highlight-color: var(--pb-border);
+  transition: background var(--pb-motion-fast) var(--pb-ease);
+}
+
+.pad:focus-visible,
+.boost:focus-visible {
+  outline: var(--pb-space-1) solid var(--pb-focus);
+  outline-offset: var(--pb-space-1);
+}
+
+.pad:disabled,
+.boost:disabled {
+  opacity: 0.5;
+}
+
+.direction {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-height: calc(var(--pb-touch) * 3);
+}
+
+.padRing {
+  fill: var(--pb-surface);
+  stroke: var(--snake-color);
+  stroke-width: calc(var(--pb-space-1) / 2);
+}
+
+.compass {
+  fill: var(--pb-text-muted);
+}
+
+.heading {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: var(--pb-space-1);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.label,
+.cost {
+  font-size: var(--pb-font-caption);
+  line-height: 1.2;
+}
+
+.label {
+  font-weight: 900;
+}
+
+.boost[data-held='true'] {
+  background: var(--snake-color);
+  color: var(--pb-on-accent-2-fill);
+}
+
+.bolt {
+  font-size: var(--pb-font-display);
+  line-height: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pad,
+  .boost {
+    transition: none;
+  }
+}

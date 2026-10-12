@@ -1,0 +1,152 @@
+{
+  "checks": [
+    {
+      "name": "production controls mounted",
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "east compass is exactly right, including initial dedupe",
+      "actual": null,
+      "passed": true
+    },
+    {
+      "name": "south compass is exactly down",
+      "actual": {
+        "type": "steer",
+        "angle": 1.57,
+        "boost": false
+      },
+      "passed": true
+    },
+    {
+      "name": "west compass is exactly left",
+      "actual": {
+        "type": "steer",
+        "angle": 3.14,
+        "boost": false
+      },
+      "passed": true
+    },
+    {
+      "name": "compass centre retains previous heading",
+      "actual": 2,
+      "passed": true
+    },
+    {
+      "name": "Space starts boost",
+      "actual": {
+        "type": "steer",
+        "angle": 0,
+        "boost": true
+      },
+      "passed": true
+    },
+    {
+      "name": "Space releases after text field receives focus",
+      "actual": {
+        "type": "steer",
+        "angle": 0,
+        "boost": false
+      },
+      "passed": true
+    },
+    {
+      "name": "typing does not begin a new steering input",
+      "actual": 2,
+      "passed": true
+    },
+    {
+      "name": "held Shift releases despite changed modifier",
+      "actual": {
+        "type": "steer",
+        "angle": 0,
+        "boost": false
+      },
+      "passed": true
+    },
+    {
+      "name": "tracked direction is removed on text-focus keyup",
+      "actual": {
+        "type": "steer",
+        "angle": 1.5707963267948966,
+        "boost": false
+      },
+      "passed": true
+    },
+    {
+      "name": "two thumbs can boost while steering",
+      "actual": {
+        "type": "steer",
+        "angle": 0,
+        "boost": true
+      },
+      "passed": true
+    },
+    {
+      "name": "steering thumb changes heading without releasing boost",
+      "actual": {
+        "type": "steer",
+        "angle": 1.57,
+        "boost": true
+      },
+      "passed": true
+    },
+    {
+      "name": "lifting boost thumb immediately releases with steering still held",
+      "actual": {
+        "type": "steer",
+        "angle": 1.57,
+        "boost": false
+      },
+      "passed": true
+    },
+    {
+      "name": "pointer cancellation releases boost",
+      "actual": {
+        "type": "steer",
+        "angle": 0,
+        "boost": false
+      },
+      "passed": true
+    },
+    {
+      "name": "pause or crash disable releases an active boost",
+      "actual": {
+        "type": "steer",
+        "angle": 0,
+        "boost": false
+      },
+      "passed": true
+    },
+    {
+      "name": "disabled controls do not retain a held boost indicator",
+      "actual": 2,
+      "passed": true
+    },
+    {
+      "name": "minimum mass releases boost",
+      "actual": {
+        "type": "steer",
+        "angle": 0,
+        "boost": false
+      },
+      "passed": true
+    },
+    {
+      "name": "minimum mass disables only boost",
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "name": "window blur releases boost",
+      "actual": {
+        "type": "steer",
+        "angle": 0,
+        "boost": false
+      },
+      "passed": true
+    }
+  ],
+  "passed": true
+}

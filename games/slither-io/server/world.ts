@@ -1,0 +1,293 @@
+// Fixed-step simultaneous arena, bounded bodies and edible wreckage. Self-crossing is safe.
+import type { RngState } from '@partybox/game-sdk';
+import { spark } from './content';
+import { angleDelta, pointSegment2, rounded, segmentDistance2 } from './geometry';
+import {
+  BOOST_COST,
+  BOOST_SPEED,
+  BODY_SPACING,
+  FOOD_COUNT,
+  GRACE_MS,
+  H,
+  MAX_FOOD,
+  MAX_MASS,
+  MIN_MASS,
+  RADIUS,
+  RESPAWN_MS,
+  SPEED,
+  START_MASS,
+  STEP_MS,
+  TURN_RATE,
+  W,
+} from './types';
+import type { Food, Point, Snake, World } from './types';
+
+export function spawn(
+  id: string,
+  slot: number,
+  count: number,
+  elapsed: number,
+  crashes = 0,
+): Snake {
+  const th = (slot * 2 * Math.PI) / Math.max(1, count) + crashes * 0.73;
+  const head: Point = [rounded(W / 2 + 50 * Math.cos(th)), rounded(H / 2 + 28 * Math.sin(th))];
+  const angle = Math.atan2(28 * Math.cos(th), -50 * Math.sin(th));
+  return {
+    id,
+    body: Array.from({ length: START_MASS }, (_, i): Point => [
+      rounded(head[0] - Math.cos(angle) * i * BODY_SPACING),
+      rounded(head[1] - Math.sin(angle) * i * BODY_SPACING),
+    ]),
+    angle,
+    target: angle,
+    boost: false,
+    mass: START_MASS,
+    respawnAt: null,
+    safeUntil: elapsed + GRACE_MS,
+    crashes,
+  };
+}
+
+export function makeWorld(ids: string[], rng: RngState): [World, RngState] {
+  const food: Food[] = [];
+  let r = rng;
+  for (let i = 0; i < FOOD_COUNT; i++) {
+    const [f, next] = spark(r);
+    food.push(f);
+    r = next;
+  }
+  return [{ snakes: ids.map((id, i) => spawn(id, i, ids.length, 0)), food, elapsed: 0 }, r];
+}
+
+export function move(snake: Snake): Snake {
+  const turn = Math.max(
+    (-TURN_RATE * STEP_MS) / 1000,
+    Math.min((TURN_RATE * STEP_MS) / 1000, angleDelta(snake.angle, snake.target)),
+  );
+  const angle = Math.atan2(Math.sin(snake.angle + turn), Math.cos(snake.angle + turn));
+  const boosting = snake.boost && snake.mass > MIN_MASS;
+  const mass = boosting ? rounded(Math.max(MIN_MASS, snake.mass - BOOST_COST)) : snake.mass;
+  const speed = boosting ? BOOST_SPEED : SPEED;
+  const head = snake.body[0]!;
+  const next: Point = [
+    rounded(head[0] + (Math.cos(angle) * speed * STEP_MS) / 1000),
+    rounded(head[1] + (Math.sin(angle) * speed * STEP_MS) / 1000),
+  ];
+  // Sample distance, not frames: sprinting must not stretch the collision body for free.
+  const path = [next, ...snake.body];
+  const body: Point[] = [next];
+  let remaining = BODY_SPACING;
+  for (let i = 1; i < path.length && body.length < Math.ceil(mass); i++) {
+    let a = path[i - 1]!;
+    const b = path[i]!;
+    let length = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    while (length + 0.000001 >= remaining && body.length < Math.ceil(mass)) {
+      const t = remaining / length;
+      const point: Point = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+      body.push([rounded(point[0]), rounded(point[1])]);
+      a = point;
+      length -= remaining;
+      remaining = BODY_SPACING;
+    }
+    remaining -= length;
+  }
+  return { ...snake, angle, mass, body };
+}
+
+interface Segment {
+  owner: number;
+  a: Point;
+  b: Point;
+}
+const CELL = 8;
+const key = (x: number, y: number): number => x * 512 + y;
+
+function bodyGrid(snakes: Snake[], elapsed: number): Map<number, Segment[]> {
+  const grid = new Map<number, Segment[]>();
+  snakes.forEach((s, owner) => {
+    if (s.respawnAt !== null || elapsed < s.safeUntil) return;
+    for (let i = 1; i < s.body.length; i++) {
+      const a = s.body[i - 1]!,
+        b = s.body[i]!;
+      const seg = { owner, a, b };
+      for (
+        let x = Math.floor(Math.min(a[0], b[0]) / CELL);
+        x <= Math.floor(Math.max(a[0], b[0]) / CELL);
+        x++
+      )
+        for (
+          let y = Math.floor(Math.min(a[1], b[1]) / CELL);
+          y <= Math.floor(Math.max(a[1], b[1]) / CELL);
+          y++
+        ) {
+          const k = key(x, y),
+            bucket = grid.get(k);
+          if (bucket) bucket.push(seg);
+          else grid.set(k, [seg]);
+        }
+    }
+  });
+  return grid;
+}
+
+function step(world: World, rng: RngState, connected: Record<string, boolean>): [World, RngState] {
+  const elapsed = world.elapsed + STEP_MS;
+  const old = [...world.snakes];
+  for (let i = 0; i < old.length; i++) {
+    const s = old[i]!;
+    if (s.respawnAt === null || s.respawnAt > elapsed || connected[s.id] === false) continue;
+    let best = spawn(s.id, i, old.length, elapsed, s.crashes);
+    let bestClearance = -Infinity;
+    // Bounded deterministic search includes earlier returns in this very step.
+    for (let attempt = 0; attempt < 31; attempt++) {
+      const candidate = {
+        ...spawn(s.id, i, old.length, elapsed, s.crashes + attempt),
+        crashes: s.crashes,
+        ...(s.steeredAt === undefined ? {} : { steeredAt: s.steeredAt }),
+      };
+      if (attempt >= 16) {
+        const position = attempt - 16;
+        const x = 32 + (position % 5) * 24;
+        const y = 25 + Math.floor(position / 5) * 25;
+        const head = candidate.body[0]!;
+        candidate.body = candidate.body.map((p): Point => [
+          rounded(p[0] + x - head[0]),
+          rounded(p[1] + y - head[1]),
+        ]);
+      }
+      let clearance = Infinity;
+      for (const other of old) {
+        if (other.id === s.id || other.respawnAt !== null) continue;
+        for (const point of candidate.body) {
+          for (let j = 0; j < other.body.length; j++) {
+            clearance = Math.min(
+              clearance,
+              pointSegment2(point, other.body[Math.max(0, j - 1)]!, other.body[j]!),
+            );
+          }
+        }
+      }
+      if (clearance > bestClearance) {
+        best = candidate;
+        bestClearance = clearance;
+      }
+      if (clearance > (RADIUS * 2 + 2) ** 2) break;
+    }
+    old[i] = best;
+  }
+  const moved = old.map((s) => (s.respawnAt === null ? move(s) : s));
+  const grid = bodyGrid(old, elapsed);
+  const dead = new Set<number>();
+  moved.forEach((s, i) => {
+    if (s.respawnAt !== null) return;
+    const h = s.body[0]!,
+      from = old[i]!.body[0]!;
+    if (h[0] < RADIUS || h[0] > W - RADIUS || h[1] < RADIUS || h[1] > H - RADIUS) {
+      dead.add(i);
+    }
+    if (elapsed < s.safeUntil) return;
+    const cx = Math.floor(h[0] / CELL),
+      cy = Math.floor(h[1] / CELL);
+    for (let dx = -1; dx <= 1; dx++)
+      for (let dy = -1; dy <= 1; dy++) {
+        for (const seg of grid.get(key(cx + dx, cy + dy)) ?? []) {
+          if (seg.owner !== i && segmentDistance2(from, h, seg.a, seg.b) <= (RADIUS * 2) ** 2)
+            dead.add(i);
+        }
+      }
+    moved.forEach((other, j) => {
+      if (j <= i || other.respawnAt !== null || elapsed < other.safeUntil) return;
+      // Relative head motion catches crossing trajectories, without size or seat-order advantage.
+      const p: Point = [from[0] - old[j]!.body[0]![0], from[1] - old[j]!.body[0]![1]];
+      const q: Point = [h[0] - other.body[0]![0], h[1] - other.body[0]![1]];
+      if (segmentDistance2(p, q, [0, 0], [0, 0]) <= (RADIUS * 2) ** 2) {
+        dead.add(i);
+        dead.add(j);
+      }
+    });
+  });
+  const extra: Food[] = [];
+  // Reserve equal capacity per simultaneous corpse before old food is retired.
+  const corpseLimit = Math.floor((MAX_FOOD - (moved.length - dead.size)) / Math.max(1, dead.size));
+  const snakes = moved.map((s, i) => {
+    if (dead.has(i)) {
+      const count = Math.min(Math.ceil(s.body.length / 2), corpseLimit);
+      let remainder = s.mass;
+      for (let j = 0; j < count; j++) {
+        const p = s.body[Math.floor((j * (s.body.length - 1)) / Math.max(1, count - 1))]!;
+        const value = j === count - 1 ? rounded(remainder) : rounded(s.mass / count);
+        extra.push({
+          x: Math.max(2, Math.min(W - 2, p[0])),
+          y: Math.max(2, Math.min(H - 2, p[1])),
+          value,
+        });
+        remainder -= value;
+      }
+      return {
+        ...s,
+        body: [],
+        mass: MIN_MASS,
+        boost: false,
+        respawnAt: elapsed + RESPAWN_MS,
+        crashes: s.crashes + 1,
+      };
+    }
+    if (old[i]!.boost && old[i]!.mass > MIN_MASS && s.respawnAt === null) {
+      const tail = old[i]!.body.at(-1)!;
+      extra.push({ x: tail[0], y: tail[1], value: rounded(old[i]!.mass - s.mass) });
+    }
+    return s;
+  });
+  const food: Food[] = [];
+  for (const f of world.food) {
+    let nearest = Infinity,
+      first = -1,
+      tied: number[] | undefined;
+    for (let i = 0; i < snakes.length; i++) {
+      const s = snakes[i]!;
+      if (s.respawnAt !== null) continue;
+      const h = s.body[0]!;
+      const d = (h[0] - f.x) ** 2 + (h[1] - f.y) ** 2;
+      if (d > (RADIUS + 1.2) ** 2) continue;
+      if (d < nearest - 0.000001) {
+        nearest = d;
+        first = i;
+        tied = undefined;
+      } else if (Math.abs(d - nearest) < 0.000001) {
+        if (tied) tied.push(i);
+        else tied = [first, i];
+      }
+    }
+    if (first === -1) food.push(f);
+    else if (tied) {
+      for (const i of tied) {
+        const s = snakes[i]!;
+        snakes[i] = { ...s, mass: rounded(Math.min(MAX_MASS, s.mass + f.value / tied.length)) };
+      }
+    } else {
+      const s = snakes[first]!;
+      snakes[first] = { ...s, mass: rounded(Math.min(MAX_MASS, s.mass + f.value)) };
+    }
+  }
+  food.push(...extra);
+  let r = rng;
+  while (food.length < FOOD_COUNT) {
+    const [f, next] = spark(r);
+    food.push(f);
+    r = next;
+  }
+  return [{ snakes, food: food.slice(-MAX_FOOD), elapsed }, r];
+}
+
+export function tick(
+  world: World,
+  rng: RngState,
+  to: number,
+  connected: Record<string, boolean>,
+): [World, RngState] {
+  let w = world,
+    r = rng;
+  const end = Math.floor(to / STEP_MS) * STEP_MS;
+  while (w.elapsed < end) [w, r] = step(w, r, connected);
+  return [w, r];
+}
