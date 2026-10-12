@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { JSX, PointerEvent } from 'react';
-import { useServerNow, useT, useThemeColor } from '@partybox/game-sdk/ui';
+import { useDraft, useServerNow, useT, useThemeColor } from '@partybox/game-sdk/ui';
 import type { Input, Point, Stroke } from '../server/types';
 import { canvasContentRect, drawingPoint, finishDrawingPoints } from './drawingGeometry';
 import { gestureCount, nextGesture, pendingInkOperation, previewInk } from './ink';
 import type { InkOperation, PendingInk } from './ink';
+import { restoreInkDraft, saveInkDraft } from './inkDraft';
 import {
   activeInkTail,
   boundInkPoints,
@@ -43,14 +44,18 @@ export function DrawingPad({
   strokes,
   inkRevision,
   disabled,
+  draftKey,
   send,
 }: {
   strokes: Stroke[];
   inkRevision: number;
   disabled: boolean;
+  draftKey?: string;
   send: (input: Input) => void;
 }): JSX.Element {
   const L = useT(STRINGS);
+  const slot = useDraft(draftKey);
+  const loadedSlot = useRef<typeof slot | undefined>(undefined);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [color, setColor] = useState(0);
   const [width, setWidth] = useState<4 | 9 | 18>(9);
@@ -83,6 +88,8 @@ export function DrawingPad({
     dirty: false,
   });
   const full = localFragments >= 240;
+  const save = (): void =>
+    slot.write(saveInkDraft(outgoing.current, activeInkTail(active.current), inkRevision));
 
   const repaint = (): void => {
     const ctx = canvas.current?.getContext('2d');
@@ -94,6 +101,24 @@ export function DrawingPad({
 
   useEffect(() => {
     const drag = active.current;
+    if (loadedSlot.current !== slot) {
+      const restored = restoreInkDraft(
+        slot.read(),
+        strokes,
+        inkRevision,
+        performance.now(),
+        disabled,
+      );
+      outgoing.current = restored.queue;
+      pending.current = restored.pending;
+      sentRevision.current = restored.nextRevision;
+      previousRevision.current = inkRevision;
+      wasPaused.current = disabled;
+      drag.id = -1;
+      drag.points = [];
+      drag.dirty = false;
+      loadedSlot.current = slot;
+    }
     const snapshot = reconcileInkPackets({
       queue: outgoing.current,
       pending: pending.current,
@@ -120,9 +145,10 @@ export function DrawingPad({
     const picture = previewInk(strokes, pending.current);
     setLocalCount(gestureCount(picture));
     setLocalFragments(picture.length);
+    save();
     repaint();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strokes, inkRevision, colors, disabled]);
+  }, [strokes, inkRevision, colors, disabled, slot]);
   useEffect(
     () => () => {
       outgoing.current = clearInkPackets(outgoing.current);
@@ -155,6 +181,7 @@ export function DrawingPad({
     queue({ type: 'stroke', stroke });
     drag.points = drag.points.slice(-1);
     drag.dirty = false;
+    save();
   };
   useEffect(() => {
     if (disabled) return;
@@ -165,7 +192,11 @@ export function DrawingPad({
     if (!outgoing.current.operations.length) flush();
     const packet = takeInkPacket(outgoing.current, at);
     outgoing.current = packet.queue;
-    if (packet.operation) send(packet.operation.input);
+    // Delete from the persistent never-sent snapshot before this packet can leave the phone.
+    if (packet.operation) {
+      save();
+      send(packet.operation.input);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tick, disabled]);
   const finish = (event: PointerEvent<HTMLCanvasElement>): void => {
@@ -186,6 +217,7 @@ export function DrawingPad({
     active.current.id = -1;
     active.current.points = [];
     active.current.dirty = false;
+    save();
     if (event.currentTarget.hasPointerCapture(event.pointerId))
       event.currentTarget.releasePointerCapture(event.pointerId);
     repaint();
@@ -213,6 +245,7 @@ export function DrawingPad({
       width,
       dirty: true,
     };
+    save();
     repaint();
   };
   const move = (event: PointerEvent<HTMLCanvasElement>): void => {
@@ -229,6 +262,7 @@ export function DrawingPad({
       drag.dirty = true;
     }
     drag.points = boundInkPoints(drag.points);
+    save();
     repaint();
   };
   const edit = (type: 'clear' | 'undo'): void => {
@@ -241,6 +275,7 @@ export function DrawingPad({
     active.current.dirty = false;
     if (canvas.current?.hasPointerCapture(id)) canvas.current.releasePointerCapture(id);
     queue({ type });
+    save();
     repaint();
   };
 

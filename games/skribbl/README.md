@@ -82,6 +82,9 @@ A correct guess earns `300 + floor(700 × remaining / duration)`, clamped to 300
   The SDK's private scoped draft slot retains unsent/retry text and correlated
   pending requests through a same-turn phone refresh. Solve or a new phase
   clears it; restoration never submits a guess automatically.
+  Artist refresh also restores a bounded never-sent ink queue and dirty tail;
+  packets leave the saved snapshot before transport send. Sent pending ink
+  never replays, and a new role/phase/turn clears the artist slot.
 - Words avoid repeats while the selected deck has enough unused choices.
 
 ## Settings

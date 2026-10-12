@@ -25,6 +25,13 @@ R28 compact palette:
 - The initial final-format check reports the33regenerated HTML files as unformatted and exits1. `pnpm.cmd exec prettier --write 'jobs/P04-draw-and-guess/media/*.html'` fixes them; hashing is rerun afterward. Final `pnpm.cmd format` and `git diff --check` pass, exit0.
 - CI38201146096 passes56s for0dec027: install/typecheck/format and complete scoped suite318checks in31files,26.92s, with all7,000matches and SDK/property checks. This is final gameplay source; subsequent no-gain reviews change documentation only.
 
+R30 artist refresh:
+
+- `pnpm.cmd vitest run games/skribbl/client/inkDraft.test.ts games/skribbl/client/inkPackets.test.ts games/skribbl/client/inkPause.test.ts games/skribbl/client/inkUndoTarget.test.ts --maxWorkers=1 --pool=threads`:32checks pass, exit0,2.18s. Nine new cases cover strict/bounded restore, queued strokes/tail, contiguous revision rebase,80ms mount gate, removal before send, no duplicate tail, targeted Undo/paused held ack, legacy metadata and malformed/backward/oversized snapshots. `pnpm.cmd typecheck`:pass, exit0.
+- First `node jobs/P04-draw-and-guess/tools/playcheck.mjs` attempt times out at Page.navigate before game checks and exits1 in finally. No active profile remains. Target activation now precedes navigation; that RPC alone has a bounded30s deadline.
+- Retried command passes51native checks, exit0. Two never-sent dots survive real same-turn Controller remount, drain exactly once in order, and a subsequent remount duplicates0packets. A dirty tail survives with [100,120]→[500,300]→[900,480], sends once and takes one Undo. The existing wrong-player unmount check sends0packets, and all pause/guess/draft/layout/audio checks remain green. Compact181.344×108.797px and46px full-label controls remain unchanged; projection/viewport errors0. Paused dot spacing189.1ms.
+- The successful browser reaches finally and has no active process. Rendered markup/CSS is unchanged from R28, so33SSR captures remain current; native pause PNGs are regenerated. Scoped report formatting and `node jobs/P04-draw-and-guess/tools/hash-media.mjs` update all68hashes,2,157,072bytes. Server sources/mutation evidence remain unchanged.
+
 Windows11, Node24.19.0, pnpm12.4.2. `pnpm.cmd` is the Windows launcher for the
 documented pnpm commands; PowerShell blocks pnpm.ps1. Only this game was tested.
 

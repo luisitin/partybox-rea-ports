@@ -31,6 +31,16 @@ export function Controller({
   const phase = view.phaseId;
   const player = view.me.role === 'player';
   const guessing = player && !view.isDrawer && phase === 'draw' && !view.solved;
+  const inkKey = `ink:${view.me.id}:${view.turn}`;
+  const inkSlot = useDraft(inkKey);
+  const previousInkSlot = useRef(inkSlot);
+  useEffect(() => {
+    if (previousInkSlot.current !== inkSlot) {
+      previousInkSlot.current.clear();
+      previousInkSlot.current = inkSlot;
+    }
+    if (!(player && view.isDrawer && phase === 'draw')) inkSlot.clear();
+  }, [inkSlot, player, view.isDrawer, phase]);
   const slotKey = `guess:${view.me.id}:${view.turn}`;
   const slot = useDraft(slotKey);
   const loadedSlot = useRef({ slot, slotKey });
@@ -197,6 +207,7 @@ export function Controller({
       ) : phase === 'draw' && view.isDrawer && player ? (
         <DrawingPad
           key={view.turn}
+          draftKey={inkKey}
           strokes={view.strokes}
           inkRevision={view.inkRevision}
           disabled={view.paused}

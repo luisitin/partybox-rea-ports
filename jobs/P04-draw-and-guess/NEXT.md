@@ -7,24 +7,24 @@ The public game and injected Broken Pencil live-mode upgrade are complete.
 UPGRADE.md records core installation boundaries; no private deployment is claimed.
 Telephone remains the injected default under the existing card.
 
-Latest gameplay source0dec027 passes CI38201146096 in56s:318checks in31files,
-including7,000seeded matches, SDK contracts and properties.45native checks,
-33refreshed SSR captures and manual normal/compact/pause image review pass.
-All68media files are hashed,2,157,072bytes. Both browser scripts close their
-single browser in finally and run sequentially; none remain active. Final
-local format/diff checks pass. Server sources remain identical to the fresh
-20/20R23mutation campaign.
+R30 is the latest gain: strictly known-unsent artist queue/tails now survive
+same-turn refresh via the SDK draft scope. Saved packets are removed before send;
+restore rebases and gates80ms, while role/phase/key changes clear stale work.
+32focused ink checks and local typecheck pass.51native checks pass, including
+exact-once recovered dots/tail, complete Undo and zero replay after another
+remount. Initial navigation timeout is recorded; successful retry closes the
+only browser in finally. No active harness process remains.68media files are
+hashed,2,157,072bytes; rendered markup/CSS and33SSR captures remain current.
 
-R25 preserves known-unsent ink/tails and prevents a cancelled Undo from erasing
-an older gesture. R26 retains private scoped drafts/receipt correlations through
-refresh, with no automatic resend or stale-turn revival. R28 enlarges the500px
-artist canvas98.0x58.8 to181.3x108.8px (3.42xarea); six full color names and
-selected checks retain46px targets against44px minimum. Normal canvas is unchanged.
+R25 protects paused ink/Undo targets and guess retry; R26 retains private guess
+drafts/receipts; R28 enlarges compact drawing3.42x with full labels/46px controls.
+Previous source0dec027 passed CI38201146096 (318checks/31files, all7,000matches
+and SDK/properties). R29 docs CI38201397620 is green. Server sources still match
+the fresh20/20R23mutation campaign; no mutation rerun is needed for these client fixes.
 
-The PR remains draft until three consecutive no-gain rounds finish. R29 is the
-first after final green gameplay CI; streak1/3. Two independent read-only reviews
-are pending. Rank/log each review's five residuals, push and refresh CLAIMS.
-Then refresh PR body from this job README, ready only after latest CI green,
-and mark P04 DONE before the next lowest eligible job.
+Push this final client milestone and refresh CLAIMS; wait for current full CI.
+Then three fresh no-gain rounds must pass (streak0/3 after R30). Rank/log five
+residuals each, push/refresh per round. Refresh PR body from this job README,
+ready only on latest green CI, then mark P04 DONE before the next eligible job.
 
 Original interactive play was unavailable through CUA; see RESEARCH.md.

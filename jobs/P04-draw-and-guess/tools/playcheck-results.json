@@ -22,6 +22,12 @@
     "resumed active tail preserves endpoints",
     "one Undo for resumed gesture",
     "unmounted drawing queue never replays",
+    "never-sent dots survive artist remount",
+    "restored dots deliver once in FIFO order",
+    "sent ink never replays after remount",
+    "active dirty tail survives artist remount",
+    "restored dirty tail keeps endpoints once",
+    "one Undo for a restored tail gesture",
     "pause restores guess without a receipt",
     "paused guess stops awaiting feedback",
     "paused guess fits keyboard viewport",
@@ -47,7 +53,7 @@
     "paused sound silence"
   ],
   "firstGestureChunks": 18,
-  "finalRevision": 63,
+  "finalRevision": 61,
   "normal": {
     "height": 844,
     "layoutHeight": 844,
@@ -104,7 +110,7 @@
       "pausedDotPreview": true,
       "sentBeforeResume": 1,
       "sentAfterResume": 2,
-      "dotSpacingMs": 245.5,
+      "dotSpacingMs": 189.10000002384186,
       "gestures": [6, 7]
     },
     "activeTail": {
@@ -124,6 +130,25 @@
     "cancelledUndo": {
       "oldGesturePreserved": true,
       "sentPackets": 1
+    }
+  },
+  "refreshedInk": {
+    "dots": {
+      "sentPackets": 2,
+      "points": [
+        [250, 180],
+        [750, 420]
+      ],
+      "duplicatePackets": 0
+    },
+    "activeTail": {
+      "points": [
+        [100, 120],
+        [500, 300],
+        [900, 480]
+      ],
+      "sentPackets": 1,
+      "undoStrokes": 0
     }
   },
   "pausedGuess": {

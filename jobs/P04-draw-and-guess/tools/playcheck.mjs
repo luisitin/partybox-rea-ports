@@ -2,9 +2,10 @@ import { canvasProjection } from './pointer-check.mjs';
 import { drawGesture, pausedGuessChecks, pausedInkChecks } from './pause-check.mjs';
 import { createCDP } from './cdp.mjs';
 import { draftChecks } from './draft-check.mjs';
+import { inkDraftChecks } from './ink-draft-check.mjs';
 // One local headless browser for real phone interaction checks, closed in finally.
 import { spawn, spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -34,7 +35,6 @@ const server = await createServer({
 await server.listen();
 const browser = process.env.P04_BROWSER ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const profile = mkdtempSync(join(tmpdir(), 'p04-r2-'));
-const dir = resolve('jobs/P04-draw-and-guess/media');
 const processHandle = spawn(
   browser,
   [
@@ -93,6 +93,7 @@ try {
   ).json();
   socket = await connect(targets.find((t) => t.id === targetId).webSocketDebuggerUrl);
   await rpc(socket, 'Page.enable');
+  await rpc(browserSocket, 'Target.activateTarget', { targetId });
   await rpc(socket, 'Emulation.setDeviceMetricsOverride', {
     width: 390,
     height: 844,
@@ -102,7 +103,6 @@ try {
   await rpc(socket, 'Page.navigate', {
     url: server.resolvedUrls.local[0] + 'jobs/P04-draw-and-guess/tools/live.html',
   });
-  await rpc(browserSocket, 'Target.activateTarget', { targetId });
   const evaluate = async (expression) => {
     const result = await rpc(socket, 'Runtime.evaluate', {
       expression,
@@ -182,6 +182,7 @@ try {
   check(pixels, 'Acknowledged canvas must paint actual ink');
   await evaluate('p04.hold(false)');
   const pausedInk = await pausedInkChecks({ rpc, socket, evaluate, settle, button, check });
+  const refreshedInk = await inkDraftChecks({ rpc, socket, evaluate, settle, button, check });
   await evaluate('p04.hold(false); p04.guesser()');
   await settle();
   const typeGuess = async (text) => {
@@ -320,6 +321,12 @@ try {
       'resumed active tail preserves endpoints',
       'one Undo for resumed gesture',
       'unmounted drawing queue never replays',
+      'never-sent dots survive artist remount',
+      'restored dots deliver once in FIFO order',
+      'sent ink never replays after remount',
+      'active dirty tail survives artist remount',
+      'restored dirty tail keeps endpoints once',
+      'one Undo for a restored tail gesture',
       'pause restores guess without a receipt',
       'paused guess stops awaiting feedback',
       'paused guess fits keyboard viewport',
@@ -353,6 +360,7 @@ try {
     normalArtist,
     compactArtist,
     pausedInk,
+    refreshedInk,
     pausedGuess,
     refreshedDraft,
     refusedDrafts: { firstRefusal, repeatedRefusal, newerDraft },

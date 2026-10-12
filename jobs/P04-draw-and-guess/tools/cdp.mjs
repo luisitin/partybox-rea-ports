@@ -5,10 +5,13 @@ export function createCDP() {
   function rpc(ws, method, params = {}) {
     const id = ++nextId;
     return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => {
-        pending.delete(id);
-        reject(new Error(`CDP timed out: ${method}`));
-      }, 15000);
+      const timer = setTimeout(
+        () => {
+          pending.delete(id);
+          reject(new Error(`CDP timed out: ${method}`));
+        },
+        method === 'Page.navigate' ? 30000 : 15000,
+      );
       pending.set(id, { ws, timer, resolve, reject });
       try {
         ws.send(JSON.stringify({ id, method, params }));

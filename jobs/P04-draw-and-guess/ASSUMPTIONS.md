@@ -64,3 +64,8 @@ The research proposal mentioned an eraser. The shipped small toolset uses comple
   not submit automatically. The native harness gates actual SDK interval
   callbacks only while delivering deterministic pointer batches, then releases
   them. Production scheduling and reducer clocks are unchanged.
+- R30 artist refresh preserves only known-unsent FIFO/tail work in the SDK's
+  private per-tab scope and artist/turn slot. Removal precedes transport send;
+  sent pending work is never stored for replay. Strict snapshots are bounded
+  to64,000characters/256operations; invalid/backward snapshots recover empty.
+  In-memory cleanup still discards work when its role/phase/key ends.
