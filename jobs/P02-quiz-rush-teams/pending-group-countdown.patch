@@ -1,0 +1,263 @@
+diff --git a/games/kahoot/client/GroupQuestion.tsx b/games/kahoot/client/GroupQuestion.tsx
+--- a/games/kahoot/client/GroupQuestion.tsx
++++ b/games/kahoot/client/GroupQuestion.tsx
+@@ -1,6 +1,7 @@
+ // Group play follows the source quiz geometry with our shared shape art and token styling.
++import { useCallback } from 'react';
+ import type { JSX } from 'react';
+-import { useT } from '@partybox/game-sdk/ui';
++import { Timer, useSound, useT } from '@partybox/game-sdk/ui';
+ import type { LightningTvView } from '../server/views';
+ import { QuestionOptions } from './ClassicParts';
+ import { groupTitle } from './GroupParts';
+@@ -20,6 +21,8 @@
+ 
+ function QuestionStage({ view, now }: { view: LightningTvView; now: number }): JSX.Element {
+   const L = useT(STRINGS);
++  const play = useSound();
++  const onTick = useCallback(() => play('countdown', { quiet: true }), [play]);
+   const group = view.group!;
+   const talk = view.phaseId === 'talk';
+   const vote = group.mode === 'tv-vote';
+@@ -34,6 +37,18 @@
+       : 'Tap the matching shape on your phone';
+   return (
+     <div className={styles.questionStage} data-group-question={view.phaseId}>
++      {/* The circular clock replaces shell digits, while the SDK retains its cue rules. */}
++      <span hidden aria-hidden="true" data-group-countdown-cue="true">
++        <Timer
++          key={`${view.phaseId}:${view.question!.id}`}
++          deadline={view.deadline}
++          phaseKey={view.phaseId}
++          phaseAt={view.phaseAt}
++          paused={view.paused}
++          clockHeldAt={view.clockHeldAt}
++          onTick={onTick}
++        />
++      </span>
+       <h2 className={styles.questionPrompt}>{view.question!.text}</h2>
+       <div className={styles.questionMiddle}>
+         <div className={styles.countdown} data-position="left">
+diff --git a/games/kahoot/__tests__/group-countdown-cues.test.tsx b/games/kahoot/__tests__/group-countdown-cues.test.tsx
+new file mode 100644
+--- /dev/null
++++ b/games/kahoot/__tests__/group-countdown-cues.test.tsx
+@@ -0,0 +1,218 @@
++// The custom group clock keeps the SDK's cue adapter without adding visible or phone timers.
++import type { JSX, Key } from 'react';
++import { renderToStaticMarkup } from 'react-dom/server';
++import {
++  PhoneOnlyProvider,
++  ServerClockProvider,
++  SoundProvider,
++} from '@partybox/game-sdk/ui';
++import type { TimerProps } from '@partybox/game-sdk/ui';
++import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
++import { GroupQuestion } from '../client/GroupQuestion';
++import { Controller } from '../client/Controller';
++import { Tv } from '../client/Tv';
++import type { LightningTvView } from '../server/views';
++import type { State } from '../server/types';
++import { phone, start, timer, tv, vip } from './helpers';
++
++const runtime = vi.hoisted(() => ({
++  timers: [] as TimerProps[],
++  keys: [] as (Key | undefined)[],
++  play: vi.fn(),
++}));
++
++vi.mock('@partybox/game-sdk/ui', async (importOriginal) => {
++  const actual = await importOriginal<typeof import('@partybox/game-sdk/ui')>();
++  return {
++    ...actual,
++    Timer: function CaptureSdkTimer(props: TimerProps): JSX.Element {
++      runtime.timers.push(props);
++      return (
++        <i data-sdk-timer-mock="" role="timer">
++          SDK clock
++        </i>
++      );
++    },
++  };
++});
++
++// React removes keys from component props. Capture the real JSX key at the adapter boundary.
++vi.mock('react/jsx-runtime', async (importOriginal) => {
++  const actual = await importOriginal<typeof import('react/jsx-runtime')>();
++  const jsx: typeof actual.jsx = (type, props, key) => {
++    if (typeof type === 'function' && type.name === 'CaptureSdkTimer') runtime.keys.push(key);
++    return actual.jsx(type, props, key);
++  };
++  const jsxs: typeof actual.jsxs = (type, props, key) => {
++    if (typeof type === 'function' && type.name === 'CaptureSdkTimer') runtime.keys.push(key);
++    return actual.jsxs(type, props, key);
++  };
++  return { ...actual, jsx, jsxs };
++});
++
++beforeEach(() => {
++  runtime.timers = [];
++  runtime.keys = [];
++  vi.clearAllMocks();
++});
++afterEach(() => vi.useRealTimers());
++
++function states(mode: 'teams' | 'tv-vote'): { talk: State; question: State } {
++  const talk = timer(start({ quizMode: mode, classicPack: 'sports', talkSeconds: 5 }));
++  expect(talk.phase.id).toBe('talk');
++  const question = timer(talk);
++  expect(question.phase.id).toBe('question');
++  return { talk, question };
++}
++
++function paint(view: LightningTvView, now = view.phaseAt + 100) {
++  runtime.timers = [];
++  runtime.keys = [];
++  const html = renderToStaticMarkup(
++    <SoundProvider play={runtime.play}>
++      <GroupQuestion view={view} now={now} />
++    </SoundProvider>,
++  );
++  expect(runtime.timers).toHaveLength(1);
++  expect(runtime.keys).toHaveLength(1);
++  return { html, clock: runtime.timers[0]!, key: runtime.keys[0] };
++}
++
++describe.each(['teams', 'tv-vote'] as const)('%s custom countdown cue adapter', (mode) => {
++  it.each(['talk', 'question'] as const)(
++    'forwards the authoritative %s clock and plays quiet public countdown cues',
++    (phase) => {
++      const state = states(mode)[phase];
++      const view = tv(state);
++      expect(view.timerMode).toBe('hidden');
++      const { html, clock, key } = paint(view);
++      expect(clock).toMatchObject({
++        deadline: view.deadline,
++        phaseKey: phase,
++        phaseAt: view.phaseAt,
++        paused: false,
++        clockHeldAt: view.clockHeldAt,
++      });
++      expect(key).toBe(`${phase}:${view.question!.id}`);
++      const cueClock = html.match(
++        /<span\b[^>]*data-group-countdown-cue="true"[^>]*>[\s\S]*?<\/span>/,
++      )?.[0];
++      expect(cueClock).toBeDefined();
++      expect(cueClock).toContain('hidden=""');
++      expect(cueClock).toContain('aria-hidden="true"');
++      expect(cueClock).toContain('data-sdk-timer-mock');
++      const visible = html.replace(cueClock!, '');
++      expect(visible.match(/role="timer"/g)).toHaveLength(1);
++      expect(visible).not.toContain('data-sdk-timer-mock');
++      expect(runtime.play).not.toHaveBeenCalled();
++      expect(clock.onTick).toBeTypeOf('function');
++      for (const seconds of [5, 4, 3, 2, 1]) clock.onTick!(seconds);
++      expect(runtime.play.mock.calls).toEqual(
++        Array.from({ length: 5 }, () => ['countdown', { quiet: true }]),
++      );
++    },
++  );
++
++  it.each(['talk', 'question'] as const)(
++    'keeps the %s timer key while forwarding pause/resume timestamps',
++    (phase) => {
++      const state = states(mode)[phase];
++      const view = tv(state);
++      const initial = paint(view);
++      const heldState = vip(state, 'pause', state.phase.startedAt + 1000);
++      const heldView = tv(heldState);
++      const held = paint(heldView, heldView.clockHeldAt);
++      expect(held.key).toBe(initial.key);
++      expect(held.clock).toMatchObject({
++        deadline: heldView.deadline,
++        phaseKey: heldView.phaseId,
++        phaseAt: heldView.phaseAt,
++        paused: true,
++        clockHeldAt: heldView.clockHeldAt,
++      });
++      const resumedState = vip(heldState, 'resume', state.phase.startedAt + 6000);
++      const resumedView = tv(resumedState);
++      const resumed = paint(resumedView);
++      expect(resumed.key).toBe(initial.key);
++      expect(resumed.clock).toMatchObject({
++        deadline: resumedView.deadline,
++        phaseKey: resumedView.phaseId,
++        phaseAt: resumedView.phaseAt,
++        paused: false,
++        clockHeldAt: resumedView.clockHeldAt,
++      });
++      expect(resumedView.deadline).toBe(view.deadline! + 5000);
++      // A host's moved phaseAt must reach the SDK without resetting the question's Timer refs.
++      const moved = paint({ ...resumedView, phaseAt: resumedView.phaseAt + 1234 });
++      expect(moved.clock.phaseAt).toBe(resumedView.phaseAt + 1234);
++      expect(moved.key).toBe(initial.key);
++    },
++  );
++
++  it('uses distinct Timer keys for discussion, answers and the next authored question', () => {
++    const { talk, question } = states(mode);
++    const discussionKey = paint(tv(talk)).key;
++    const answerKey = paint(tv(question)).key;
++    expect(answerKey).not.toBe(discussionKey);
++    let next = timer(question);
++    for (let step = 0; step < 3 && next.phase.id !== 'question'; step++) next = timer(next);
++    expect(next.phase.id).toBe('question');
++    const nextView = tv(next);
++    expect(nextView.question!.id).not.toBe(tv(question).question!.id);
++    expect(paint(nextView).key).not.toBe(answerKey);
++  });
++
++  it.each(['talk', 'question'] as const)(
++    'keeps the %s cue Timer out of phone-only and remote controller trees',
++    (phase) => {
++      const source = states(mode)[phase];
++      for (const phoneOnly of [false, true]) {
++        const state = {
++          ...source,
++          phoneOnly,
++          players: {
++            ...source.players,
++            a: { ...source.players.a!, canSeeTv: false },
++          },
++        };
++        const view = phone(state, 'a');
++        expect(view.showStage).toBe(true);
++        expect(view.timerMode).toBe('normal');
++        runtime.timers = [];
++        runtime.keys = [];
++        vi.useFakeTimers({ toFake: ['Date'] });
++        vi.setSystemTime(state.phase.startedAt + 100);
++        const html = renderToStaticMarkup(
++          <ServerClockProvider offsetMs={0}>
++            <SoundProvider play={runtime.play}>
++              <PhoneOnlyProvider value={phoneOnly}>
++                <Controller
++                  view={{ ...view, vip: null }}
++                  me={state.players.a!}
++                  send={() => undefined}
++                />
++              </PhoneOnlyProvider>
++            </SoundProvider>
++          </ServerClockProvider>,
++        );
++        expect(runtime.timers).toHaveLength(0);
++        expect(runtime.keys).toHaveLength(0);
++        expect(html).not.toContain('data-group-countdown-cue');
++      }
++    },
++  );
++});
++
++it.each(['wager', 'classic'] as const)(
++  'leaves the %s TV timer owned by the unchanged shell',
++  (quizMode) => {
++    const state = timer(start({ quizMode }));
++    expect(state.phase.id).toBe('question');
++    const view = tv(state);
++    expect(view.timerMode).toBe('normal');
++    const html = renderToStaticMarkup(<Tv view={{ ...view, vip: null }} />);
++    expect(runtime.timers).toHaveLength(0);
++    expect(runtime.keys).toHaveLength(0);
++    expect(html).not.toContain('data-group-countdown-cue');
++  },
++);

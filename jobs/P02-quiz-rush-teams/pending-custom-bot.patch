@@ -76,13 +76,20 @@ diff --git a/games/kahoot/__tests__/custom-bot-public-facts.test.ts b/games/kaho
 new file mode 100644
 --- /dev/null
 +++ b/games/kahoot/__tests__/custom-bot-public-facts.test.ts
-@@ -0,0 +1,144 @@
-+// Public bot knowledge must survive owner IDs without reading the owner's answer key.
+@@ -0,0 +1,295 @@
++// Public bot knowledge survives owner IDs without reading the owner's answer key.
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { resolve } from 'node:path';
 +import { describe, expect, it, vi } from 'vitest';
 +import { createRng } from '@partybox/game-sdk';
 +import type { BotSkill } from '@partybox/game-sdk';
-+import { sampleInput } from '../server/bot';
-+import { classicBotFact, classicQuestionById, publicClassicPromptFacts } from '../server/classic';
++import { BOT_CORRECT_PROBABILITY, sampleInput } from '../server/bot';
++import {
++  CLASSIC_PACKS,
++  classicBotFact,
++  classicQuestionById,
++  publicClassicPromptFacts,
++} from '../server/classic';
 +import type { ClassicQuestion } from '../server/classic';
 +import * as content from '../server/content';
 +import type { State } from '../server/types';
@@ -91,6 +98,7 @@ new file mode 100644
 +const skills = ['easy', 'normal', 'sharp'] as const;
 +const modes = ['classic', 'teams', 'tv-vote'] as const;
 +const publicParis = classicQuestionById('general-01')!;
++const SAMPLES = 1000;
 +
 +function open(mode: (typeof modes)[number]): State {
 +  let state = start({ quizMode: mode, classicPack: 'custom', questions: 5 });
@@ -115,7 +123,9 @@ new file mode 100644
 +  for (const key of ['answerIndex', 'correctIndex', 'correct', 'explanation'])
 +    Object.defineProperty(copy, key, {
 +      configurable: true,
-+      get() { throw new Error(`Bot read forbidden owner metadata: ${key}`); },
++      get() {
++        throw new Error(`Bot read forbidden owner metadata: ${key}`);
++      },
 +    });
 +  return copy;
 +}
@@ -128,9 +138,10 @@ new file mode 100644
 +  const state = open(mode);
 +  const lookup = vi.spyOn(content, 'questionById').mockReturnValue(question);
 +  try {
-+    return Array.from({ length: 1000 }, (_, index) => {
++    return Array.from({ length: SAMPLES }, (_, index) => {
 +      const input = sampleInput(state, 'a', createRng(index + 1), skill);
-+      if (input?.type !== 'answer') throw new Error('Custom quiz bot did not return a stamped answer');
++      if (input?.type !== 'answer')
++        throw new Error('Custom quiz bot did not return a stamped answer');
 +      return input.index;
 +    });
 +  } finally {
@@ -150,19 +161,148 @@ new file mode 100644
 +}
 +
 +describe('custom bots reuse independent public facts', () => {
-+  it.each(modes)('%s distinguishes all three strengths over 1,000 seeds on a renamed public prompt', (mode) => {
-+    const question = ownerQuestion();
-+    const counts = skills.map((skill) => seededChoices(question, skill, mode).filter((index) => index === 3).length);
-+    // Six-to-seven percentage-point bands tolerate sampling noise but reject a flat 25%.
-+    expect(counts[0]).toBeGreaterThanOrEqual(230);
-+    expect(counts[0]).toBeLessThanOrEqual(370);
-+    expect(counts[1]).toBeGreaterThanOrEqual(430);
-+    expect(counts[1]).toBeLessThanOrEqual(570);
-+    expect(counts[2]).toBeGreaterThanOrEqual(730);
-+    expect(counts[2]).toBeLessThanOrEqual(870);
-+    expect(counts[1]! - counts[0]!).toBeGreaterThan(100);
-+    expect(counts[2]! - counts[1]!).toBeGreaterThan(200);
-+  });
++  it.each(modes)(
++    '%s distinguishes three strengths over 1,000 seeds on a renamed public prompt',
++    (mode) => {
++      const question = ownerQuestion();
++      const counts = skills.map(
++        (skill) => seededChoices(question, skill, mode).filter((index) => index === 3).length,
++      );
++      // Seven percentage-point bands tolerate sampling noise but reject a flat 25%.
++      expect(counts[0]).toBeGreaterThanOrEqual(230);
++      expect(counts[0]).toBeLessThanOrEqual(370);
++      expect(counts[1]).toBeGreaterThanOrEqual(430);
++      expect(counts[1]).toBeLessThanOrEqual(570);
++      expect(counts[2]).toBeGreaterThanOrEqual(730);
++      expect(counts[2]).toBeLessThanOrEqual(870);
++      expect(counts[1]! - counts[0]!).toBeGreaterThan(100);
++      expect(counts[2]! - counts[1]!).toBeGreaterThan(200);
++    },
++  );
++
++  it.each(modes)(
++    '%s calibrates the actual five-question custom pack without mocking its lookup',
++    (mode) => {
++      const questions = CLASSIC_PACKS.custom.questions;
++      const ids = questions.map((question) => question.id);
++      const facts = questions.map((question) => classicBotFact(question.id, question.prompt));
++      expect(ids).toEqual([
++        'custom-general-01',
++        'custom-general-02',
++        'custom-general-03',
++        'custom-general-04',
++        'custom-general-05',
++      ]);
++      expect(facts).toEqual(['Paris', 'Tokyo', undefined, 'Leonardo da Vinci', 'India']);
++      const knownQuestions = facts.filter((fact) => fact !== undefined).length;
++      expect(knownQuestions).toBe(4);
++      const base = open(mode);
++      const strengths = skills.map((skill) => {
++        const perQuestion = questions.map((question, index) => {
++          const state = { ...base, questionIds: ids, index, picks: {} };
++          const choiceCounts = [0, 0, 0, 0];
++          const firstSeed = index * SAMPLES + 1;
++          const lastSeed = (index + 1) * SAMPLES;
++          // Real questionById and current imported custom pack; only the RNG is varied.
++          for (let seed = firstSeed; seed <= lastSeed; seed++) {
++            const input = sampleInput(state, 'a', createRng(seed), skill);
++            if (
++              input?.type !== 'answer' ||
++              input.questionId !== question.id ||
++              input.questionStartedAt !== state.phase.startedAt ||
++              !Number.isInteger(input.index) ||
++              input.index < 0 ||
++              input.index > 3
++            )
++              throw new Error(`Invalid ${skill} bundled custom answer at seed ${seed}`);
++            choiceCounts[input.index] = (choiceCounts[input.index] ?? 0) + 1;
++          }
++          const expectedCorrectProbability =
++            facts[index] === undefined ? 0.25 : BOT_CORRECT_PROBABILITY[skill];
++          // Assess correctness externally; the bot must not consult this owner key.
++          const correctAnswers = choiceCounts[question.correct]!;
++          const measuredCorrectProbability = correctAnswers / SAMPLES;
++          expect(choiceCounts.reduce((sum, count) => sum + count, 0)).toBe(SAMPLES);
++          expect(
++            Math.abs(measuredCorrectProbability - expectedCorrectProbability),
++          ).toBeLessThanOrEqual(0.07);
++          return {
++            questionId: question.id,
++            publicFact: facts[index] ?? null,
++            independentFactKnown: facts[index] !== undefined,
++            samples: SAMPLES,
++            seeds: `${firstSeed}..${lastSeed}`,
++            choiceCounts,
++            correctAnswers,
++            measuredCorrectProbability,
++            expectedCorrectProbability,
++            absoluteTolerance: 0.07,
++          };
++        });
++        const correctAnswers = perQuestion.reduce((sum, row) => sum + row.correctAnswers, 0);
++        const samples = SAMPLES * questions.length;
++        const expectedCorrectProbability =
++          (knownQuestions * BOT_CORRECT_PROBABILITY[skill] +
++            (questions.length - knownQuestions) * 0.25) /
++          questions.length;
++        const measuredCorrectProbability = correctAnswers / samples;
++        expect(
++          Math.abs(measuredCorrectProbability - expectedCorrectProbability),
++        ).toBeLessThanOrEqual(0.055);
++        return {
++          skill,
++          samples,
++          correctAnswers,
++          measuredCorrectProbability,
++          expectedCorrectProbability,
++          absoluteTolerance: 0.055,
++          perQuestion,
++        };
++      });
++      expect(
++        strengths[1]!.measuredCorrectProbability - strengths[0]!.measuredCorrectProbability,
++      ).toBeGreaterThan(0.1);
++      expect(
++        strengths[2]!.measuredCorrectProbability - strengths[1]!.measuredCorrectProbability,
++      ).toBeGreaterThan(0.15);
++      // The ambiguous violin prompt consumes exactly the same guesses at every strength.
++      expect(strengths[1]!.perQuestion[2]!.choiceCounts).toEqual(
++        strengths[0]!.perQuestion[2]!.choiceCounts,
++      );
++      expect(strengths[2]!.perQuestion[2]!.choiceCounts).toEqual(
++        strengths[0]!.perQuestion[2]!.choiceCounts,
++      );
++      if (process.env.P02_WRITE_EVIDENCE === '1') {
++        const media = resolve(import.meta.dirname, '../../../jobs/P02-quiz-rush-teams/media');
++        mkdirSync(media, { recursive: true });
++        writeFileSync(
++          resolve(media, `bot-custom-calibration-${mode}.json`),
++          JSON.stringify(
++            {
++              mode,
++              pack: 'custom',
++              questionCount: questions.length,
++              knownQuestions,
++              unknownQuestions: questions.length - knownQuestions,
++              seedsPerQuestionAndStrength: SAMPLES,
++              requiredSeedsPerQuestionAndStrength: 1000,
++              completeRequiredCampaign: SAMPLES === 1000 && questions.length === 5,
++              totalAnswerSamples: strengths.reduce((sum, row) => sum + row.samples, 0),
++              seeds: '1..5000; five disjoint ranges of 1,000, reused across strengths',
++              measurement:
++                'Real custom lookup and bot answer sampling; seed = questionIndex * 1000 + 1..1000. Correctness assessed externally from the authored pack.',
++              expectedBehavior:
++                'Four exact public facts follow the configured skill; ambiguous violin remains a uniform guess. No answer-key metadata is consulted by the bot.',
++              strengths,
++            },
++            null,
++            2,
++          ) + '\n',
++          'utf8',
++        );
++      }
++    },
++  );
 +
 +  it('never reads the owner answer key or explanation, even for an exact known prompt', () => {
 +    const answers = seededChoices(forbiddenKeys(ownerQuestion()), 'sharp');
@@ -174,9 +314,10 @@ new file mode 100644
 +    (question) => uniformAcrossSkills(ownerQuestion({ question })),
 +  );
 +
-+  it('does not reuse the fact after the owner changes the prompt or omits its answer text', () => {
++  it('guesses after a representable prompt edit or when independent answer text is absent', () => {
 +    uniformAcrossSkills(ownerQuestion({ question: 'What is the capital of Atlantis?' }));
-+    uniformAcrossSkills(ownerQuestion({ question: publicParis.question + ' ' }));
++    uniformAcrossSkills(ownerQuestion({ question: publicParis.question.toLowerCase() }));
++    uniformAcrossSkills(ownerQuestion({ question: publicParis.question.replace(/\?$/, '.') }));
 +    uniformAcrossSkills(ownerQuestion({ choices: ['Tokyo', 'Berlin', 'Madrid', 'Rome'] }));
 +  });
 +
@@ -194,24 +335,34 @@ new file mode 100644
 +    expect(classicBotFact('geo-000', publicParis.question)).toBeUndefined();
 +  });
 +
-+  it('indexes only standard independent facts and keeps a conflicting prompt omitted after later repeats', () => {
++  it('indexes only standard facts and keeps conflicting prompts omitted after later repeats', () => {
 +    const packs = [
-+      { id: 'general', questions: [
-+        { id: 'public-a', prompt: 'Repeated prompt' },
-+        { id: 'public-b', prompt: 'Repeated prompt' },
-+        { id: 'public-c', prompt: 'Repeated prompt' },
-+        { id: 'missing-fact', prompt: 'No independent fact' },
-+        { id: 'inherited-fact', prompt: 'Inherited fact' },
-+        { id: 'public-safe', prompt: 'Unambiguous prompt' },
-+      ] },
-+      { id: 'custom', questions: [
-+        { id: 'custom-poison', prompt: 'Unambiguous prompt' },
-+        { id: 'custom-only', prompt: 'Owner-only prompt' },
-+      ] },
++      {
++        id: 'general',
++        questions: [
++          { id: 'public-a', prompt: 'Repeated prompt' },
++          { id: 'public-b', prompt: 'Repeated prompt' },
++          { id: 'public-c', prompt: 'Repeated prompt' },
++          { id: 'missing-fact', prompt: 'No independent fact' },
++          { id: 'inherited-fact', prompt: 'Inherited fact' },
++          { id: 'public-safe', prompt: 'Unambiguous prompt' },
++        ],
++      },
++      {
++        id: 'custom',
++        questions: [
++          { id: 'custom-poison', prompt: 'Unambiguous prompt' },
++          { id: 'custom-only', prompt: 'Owner-only prompt' },
++        ],
++      },
 +    ];
 +    const facts = Object.assign(Object.create({ 'inherited-fact': 'Inherited' }), {
-+      'public-a': 'A', 'public-b': 'B', 'public-c': 'A', 'public-safe': 'Safe',
-+      'custom-poison': 'Wrong', 'custom-only': 'Owner key',
++      'public-a': 'A',
++      'public-b': 'B',
++      'public-c': 'A',
++      'public-safe': 'Safe',
++      'custom-poison': 'Wrong',
++      'custom-only': 'Owner key',
 +    }) as Record<string, string>;
 +    const index = publicClassicPromptFacts(packs, facts);
 +    expect(index.get('Repeated prompt')).toBeUndefined();

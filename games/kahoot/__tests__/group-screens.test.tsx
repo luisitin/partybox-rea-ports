@@ -46,6 +46,7 @@ function paint(
   surface: 'tv' | 'phone' | 'stage',
   id = PLAYERS[0]!.id,
   now = state.phase.startedAt + 1_000,
+  vipSkip = false,
 ): string {
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(now);
@@ -61,6 +62,7 @@ function paint(
             view={{ ...view, vip: null }}
             me={state.players[id] ?? { id, name: 'Audience', avatarId: 'owl' }}
             send={() => undefined}
+            skip={vipSkip ? () => undefined : undefined}
           />
         </PhoneOnlyProvider>
       )}
@@ -195,6 +197,51 @@ describe.each(['teams', 'tv-vote'] as const)('%s discussion and answer screens',
 });
 
 describe('group results preserve honest scoring', () => {
+  it('centers native-like team receipts with equal public footer scores for correct and incorrect teammates', () => {
+    let state = timer(timer(start('teams')));
+    const correct = question(state).answerIndex;
+    const initialTeam = phone(state, PLAYERS[0]!.id).group?.teams.find((team) =>
+      team.members.includes(PLAYERS[0]!.id),
+    );
+    const teammate = initialTeam?.members.find((id) => id !== PLAYERS[0]!.id);
+    if (!teammate) throw new Error('The team receipt needs two teammates');
+    state = answer(state, PLAYERS[0]!.id, correct, 300);
+    state = answer(state, teammate, (correct + 1) % 4, 400);
+    state = timer(state);
+    const boardAt = tv(state).leaderboardAt! + 1;
+    const team = phone(state, PLAYERS[0]!.id).group?.teams.find((row) =>
+      row.members.includes(PLAYERS[0]!.id),
+    );
+    if (!team) throw new Error('The public team receipt is missing');
+    const html = paint(state, 'phone', PLAYERS[0]!.id, boardAt, true);
+    const wrong = paint(state, 'phone', teammate, boardAt);
+    expect(html).toContain('data-beside-tv="true"');
+    expect(html).toContain('Team results');
+    expect(html).toContain('Your team is in place');
+    expect(html).toContain(escape(PLAYERS[0]!.name));
+    expect(html).toContain('Next question');
+    expect(wrong).toContain('Wrong');
+    const footerOf = (markup: string): string => {
+      const footer = markup.match(/<div[^>]*data-group-player-bar="true"[\s\S]*?<\/div>/)?.[0];
+      if (!footer) throw new Error('Participating beside-TV receipt needs an identity footer');
+      return footer;
+    };
+    for (const footer of [footerOf(html), footerOf(wrong)]) {
+      expect(footer).toContain(`aria-label="${team.score} team points"`);
+      expect(footer).not.toContain('Team score after the podium');
+    }
+    expect(phone(state, PLAYERS[0]!.id).outcome?.delta).toBeGreaterThan(
+      phone(state, teammate).outcome?.delta ?? 0,
+    );
+    for (const staged of [
+      paint(state, 'stage', PLAYERS[0]!.id, boardAt),
+      paint(state, 'phone', 'audience', boardAt),
+    ]) {
+      expect(staged).not.toContain('data-beside-tv="true"');
+      expect(staged).not.toContain('data-group-player-bar="true"');
+      expect(staged).not.toContain('Team results');
+    }
+  });
   it('shows a room success even when this player voted for a different answer', () => {
     let state = timer(timer(start('tv-vote')));
     const q = question(state);
@@ -271,6 +318,15 @@ describe('team podium only reveals occupied tiers', () => {
       const html = paint(lastReveal, surface);
       for (const team of roster) expect(html).not.toContain(escape(team.name));
       expect(html).not.toContain('<meter');
+      if (surface === 'phone') {
+        expect(html).toContain('Your team');
+        const footer = html.match(/<div[^>]*data-group-player-bar="true"[\s\S]*?<\/div>/)?.[0];
+        expect(footer).toBeDefined();
+        expect(footer).toContain('Team score after the podium');
+        expect(footer).toMatch(/aria-hidden="true"[^>]*>—<\/b>/);
+        expect(footer).not.toMatch(/aria-label="\d+ team points"/);
+        expect(footer).not.toContain('Your team is in place');
+      }
     }
     let beats = 0;
     while (state.phase.id === 'podium' && beats++ < 3) {

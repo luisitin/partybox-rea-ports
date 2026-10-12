@@ -4004,3 +4004,83 @@ button {
 ._phone_3a8fe9 ._roster_3a8fe9 span {
   font-size: var(--pb-font-caption);
 }
+
+/* Native-like receipts apply only to participating phones beside a visible TV. */
+._verdict_3a8fe9[data-beside-tv] {
+  margin-block: auto;
+  width: 100%;
+  gap: var(--pb-space-3);
+}
+._verdict_3a8fe9[data-beside-tv] h3 {
+  flex-direction: column-reverse;
+  gap: var(--pb-space-2);
+}
+._verdict_3a8fe9[data-beside-tv] ._outcomeMark_3a8fe9 {
+  width: var(--pb-font-display);
+  height: var(--pb-font-display);
+  font-size: var(--pb-font-h1);
+}
+._verdict_3a8fe9[data-beside-tv] ._receipt_3a8fe9 {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: calc(var(--pb-space-8) * 5);
+  padding: var(--pb-space-4);
+  gap: var(--pb-space-2);
+  text-align: center;
+}
+._receiptKind_3a8fe9 {
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+}
+._verdict_3a8fe9[data-beside-tv] ._accuracy_3a8fe9 {
+  width: 100%;
+  justify-self: stretch;
+  gap: var(--pb-space-2);
+}
+._verdict_3a8fe9[data-beside-tv] ._gained_3a8fe9 {
+  grid-column: 1;
+  grid-row: auto;
+  justify-self: center;
+  padding: var(--pb-space-3);
+}
+._verdict_3a8fe9[data-beside-tv] ._receiptRule_3a8fe9 {
+  color: var(--pb-text-muted);
+}
+._rankStatus_3a8fe9 {
+  font-size: var(--pb-font-body);
+}
+._phone_3a8fe9 ._pendingResult_3a8fe9 {
+  margin-block: auto;
+}
+._revealFooter_3a8fe9 {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-2);
+}
+._playerBar_3a8fe9 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+  background: var(--pb-surface);
+  border-radius: var(--pb-radius);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+._barName_3a8fe9 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+._barPending_3a8fe9 {
+  grid-column: 1 / -1;
+  text-align: right;
+  color: var(--pb-text-muted);
+  font-size: var(--pb-font-caption);
+}
+._barScore_3a8fe9 {
+  padding: var(--pb-space-1) var(--pb-space-2);
+  border-radius: calc(var(--pb-radius) / 2);
+  background: var(--pb-surface-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

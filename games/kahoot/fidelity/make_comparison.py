@@ -1,6 +1,6 @@
 """Render the three attributed semantic comparisons without cropping either source.
 
-Run only after root has refreshed the three captures under fidelity/ours/.
+Run only after root has refreshed the four captures under fidelity/ours/.
 Requires the already available Pillow package; launches no browser or game process.
 """
 
@@ -54,13 +54,13 @@ COMPARISONS = [
     {
         "moment": "3. Team Result - phone beside the TV",
         "original": "original/official-team-phone-receipts.png",
-        "ours": "groups-teams-standings-phone-tv.png",
+        "ours": ["groups-teams-standings-phone-tv.png", "groups-teams-incorrect-phone-tv.png"],
         "original_label": "Official support guide - two result phones, screenshot dated October 2021",
-        "ours_label": "P02 authored quiz - one result phone, TV-visible setting",
+        "ours_label": "P02 authored quiz - correct/incorrect teammates, TV-visible setting",
         "note": (
-            "Whole original correct/incorrect phone pair versus one complete port phone. "
-            "Both originals share the same team gain. Compare the personal verdict and team "
-            "percentage/gain panel; the original pair is not one phone viewport."
+            "Whole original correct/incorrect phone pair versus two complete port phones. "
+            "Each pair shares its team gain and footer total despite different personal verdicts. "
+            "Compare the percentage/gain panel and identity bar; the original pair is not one viewport."
         ),
         "image_height": 960,
     },
@@ -149,7 +149,10 @@ def main() -> None:
     paths = [
         path
         for row in COMPARISONS
-        for path in (ROOT / row["original"], ROOT / "ours" / row["ours"])
+        for path in [ROOT / row["original"]] + [
+            ROOT / "ours" / name
+            for name in (row["ours"] if isinstance(row["ours"], list) else [row["ours"]])
+        ]
     ]
     missing = [str(path.relative_to(ROOT)) for path in paths if not path.is_file()]
     if missing:
@@ -193,11 +196,12 @@ def main() -> None:
     for row in COMPARISONS:
         draw.text((MARGIN, y), row["moment"], font=heading_font, fill=INK)
         y += 52
-        sources = [ROOT / row["original"], ROOT / "ours" / row["ours"]]
+        ours = row["ours"] if isinstance(row["ours"], list) else [row["ours"]]
+        sources = [[ROOT / row["original"]], [ROOT / "ours" / name for name in ours]]
         labels = [row["original_label"], row["ours_label"]]
         record = {"moment": row["moment"], "note": row["note"], "images": []}
         panel_bottom = y + 138 + row["image_height"] + 68
-        for index, (path, label) in enumerate(zip(sources, labels)):
+        for index, (paths, label) in enumerate(zip(sources, labels)):
             x = MARGIN + index * (PANEL_WIDTH + GAP)
             draw.rounded_rectangle(
                 (x, y, x + PANEL_WIDTH, panel_bottom),
@@ -213,18 +217,24 @@ def main() -> None:
                 fill=INK,
             )
             text_block(draw, label, (x + 20, y + 58), small_font, PANEL_WIDTH - 40, 30, MUTED)
-            placement = place_complete_image(
-                canvas,
-                path,
-                (x + 16, y + 138, x + PANEL_WIDTH - 16, y + 138 + row["image_height"]),
-            )
-            record["images"].append(placement)
-            native = placement["native_pixels"]
-            display = placement["display_pixels"]
-            caption = (
-                f"Native {native[0]} x {native[1]} px; displayed {display[0]} x {display[1]} px "
-                f"({placement['scale_percent']:.1f}%). Whole image."
-            )
+            image_gap = 16
+            image_width = (PANEL_WIDTH - 32 - image_gap * (len(paths) - 1)) // len(paths)
+            captions = []
+            for offset, path in enumerate(paths):
+                image_x = x + 16 + offset * (image_width + image_gap)
+                placement = place_complete_image(
+                    canvas,
+                    path,
+                    (image_x, y + 138, image_x + image_width, y + 138 + row["image_height"]),
+                )
+                record["images"].append(placement)
+                native = placement["native_pixels"]
+                display = placement["display_pixels"]
+                captions.append(
+                    f"{native[0]} x {native[1]} → {display[0]} x {display[1]} px "
+                    f"({placement['scale_percent']:.1f}%)."
+                )
+            caption = "Native → displayed: " + " / ".join(captions) + " Whole images."
             text_block(
                 draw, caption, (x + 20, panel_bottom - 60), small_font, PANEL_WIDTH - 40, 29, MUTED
             )

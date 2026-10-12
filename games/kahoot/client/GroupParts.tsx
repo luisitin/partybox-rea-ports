@@ -52,6 +52,44 @@ export function GroupIdentity({ group }: { group: Group }): JSX.Element {
   return <p className={styles.identity}>{team?.name ?? L(groupTitle(group))}</p>;
 }
 
+/** Shared footer scores come only from a publicly revealed team; hidden finals show a placeholder. */
+export function GroupPlayerBar({ view }: { view: LightningControllerView }): JSX.Element | null {
+  const L = useT(STRINGS);
+  const group = view.group;
+  if (!group || !view.participating) return null;
+  const team = group.teams.find((candidate) => candidate.id === group.myTeamId);
+  const player = view.players.find((candidate) => candidate.id === view.me.id);
+  return (
+    <div
+      className={styles.playerBar}
+      data-group-player-bar="true"
+      role="status"
+      aria-label={L('Player and team score')}
+    >
+      <b className={styles.barName}>{player?.name ?? L('You')}</b>
+      <span>{team?.name ?? L(group.mode === 'tv-vote' ? 'The room' : 'Your team')}</span>
+      <b
+        className={styles.barScore}
+        aria-label={
+          team
+            ? L(group.mode === 'teams' ? '{n} team points' : '{n} room points', { n: team.score })
+            : undefined
+        }
+        aria-hidden={!team || undefined}
+      >
+        {team ? team.score : '—'}
+      </b>
+      {!team ? (
+        <span className={styles.barPending}>
+          {L(
+            group.mode === 'teams' ? 'Team score after the podium' : 'Room score after the podium',
+          )}
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
 export function GroupStandings({
   view,
   gains = false,
@@ -111,7 +149,13 @@ export function GroupDecision({ view }: { view: LightningTvView }): JSX.Element 
   );
 }
 
-export function GroupReceipt({ view }: { view: LightningControllerView }): JSX.Element | null {
+export function GroupReceipt({
+  view,
+  besideTv = false,
+}: {
+  view: LightningControllerView;
+  besideTv?: boolean;
+}): JSX.Element | null {
   const L = useT(STRINGS);
   const group = view.group;
   if (!group) return null;
@@ -120,6 +164,11 @@ export function GroupReceipt({ view }: { view: LightningControllerView }): JSX.E
   return (
     <div className={styles.receipt} role="status">
       <b>{team.name}</b>
+      {besideTv ? (
+        <p className={styles.receiptKind}>
+          {L(group.mode === 'teams' ? 'Team results' : 'Room results')}
+        </p>
+      ) : null}
       {team.correctPercent !== undefined ? (
         <div className={styles.accuracy}>
           <span>{L('Correct')}</span>
@@ -133,7 +182,9 @@ export function GroupReceipt({ view }: { view: LightningControllerView }): JSX.E
         </div>
       ) : null}
       <strong className={styles.gained}>{L('+{n} points', { n: team.gained })}</strong>
-      <p className={styles.receiptTotal}>{L('{n} total', { n: team.score })}</p>
+      {!besideTv ? (
+        <p className={styles.receiptTotal}>{L('{n} total', { n: team.score })}</p>
+      ) : null}
       {group.mode === 'teams' ? (
         <p className={styles.receiptRule}>
           {L('Team points average players who stayed or answered')}
@@ -143,7 +194,13 @@ export function GroupReceipt({ view }: { view: LightningControllerView }): JSX.E
   );
 }
 
-export function GroupVerdict({ view }: { view: LightningControllerView }): JSX.Element {
+export function GroupVerdict({
+  view,
+  besideTv = false,
+}: {
+  view: LightningControllerView;
+  besideTv?: boolean;
+}): JSX.Element {
   const L = useT(STRINGS);
   const vote = view.group?.mode === 'tv-vote';
   const outcome = view.outcome;
@@ -162,6 +219,7 @@ export function GroupVerdict({ view }: { view: LightningControllerView }): JSX.E
     <div
       className={styles.verdict}
       data-stage={view.showStage || view.phoneOnly || undefined}
+      data-beside-tv={besideTv || undefined}
       role="status"
     >
       <h3>
@@ -183,7 +241,14 @@ export function GroupVerdict({ view }: { view: LightningControllerView }): JSX.E
       ) : (
         <p>{L('+{n} personal points', { n: outcome?.delta ?? 0 })}</p>
       )}
-      <GroupReceipt view={view} />
+      <GroupReceipt view={view} besideTv={besideTv} />
+      {besideTv && view.myRank !== undefined ? (
+        <p className={styles.rankStatus}>
+          {L(vote ? 'The room is in place {rank}' : 'Your team is in place {rank}', {
+            rank: view.myRank,
+          })}
+        </p>
+      ) : null}
       {view.round?.last ? <p>{L('The podium is next')}</p> : null}
     </div>
   );

@@ -75,11 +75,21 @@ function played(initial: State): State[] {
   }
   throw new Error('Group fixture trace did not finish');
 }
-function paint(name: string, source: State, at = source.phase.startedAt + 100): void {
+interface PaintOptions {
+  playerId?: string;
+  vipSkip?: boolean;
+  surfaces?: readonly Surface[];
+}
+function paint(
+  name: string,
+  source: State,
+  at = source.phase.startedAt + 100,
+  options: PaintOptions = {},
+): void {
   fixtures[`group-${name}`] = source;
   if (source.phase.id === 'talk' && !fixtures.talk) fixtures.talk = source;
-  for (const surface of SURFACES) {
-    const id = surface === 'spectator' ? 'audience' : 'seat-1';
+  for (const surface of options.surfaces ?? SURFACES) {
+    const id = surface === 'spectator' ? 'audience' : (options.playerId ?? 'seat-1');
     const only = surface === 'phone-only' || surface === 'spectator';
     const state: State = {
       ...source,
@@ -105,11 +115,32 @@ function paint(name: string, source: State, at = source.phase.startedAt + 100): 
               view={{ ...controller, vip: null }}
               me={state.players[id] ?? { id, name: 'Spectator', avatarId: 'owl' }}
               send={(_input: Input) => undefined}
+              skip={options.vipSkip ? () => undefined : undefined}
             />
           </PhoneOnlyProvider>
         )}
       </ServerClockProvider>,
     );
+    if (options.surfaces && surface === 'phone-tv' && source.phase.id === 'reveal') {
+      const footer = html.match(/<div[^>]*data-group-player-bar="true"[\s\S]*?<\/div>/)?.[0];
+      expect(footer, name + ' identity footer').toBeDefined();
+      const team = controller.group?.teams.find((row) => row.id === controller.group?.myTeamId);
+      if (team) {
+        expect(footer).toContain(
+          'aria-label="' +
+            team.score +
+            (controller.group?.mode === 'teams' ? ' team points"' : ' room points"'),
+        );
+      } else {
+        expect(footer).toContain(
+          controller.group?.mode === 'teams'
+            ? 'Team score after the podium'
+            : 'Room score after the podium',
+        );
+        expect(footer).toMatch(/aria-hidden="true"[^>]*>—<\/b>/);
+        expect(footer).not.toMatch(/aria-label="\d+ (?:team|room) points"/);
+      }
+    }
     expect(html, `${name}-${surface}`).not.toMatch(/NaN|undefined|Infinity/);
     expect(html).toMatch(/<(?:h[123]|p)\b/);
     if (surface === 'spectator' || source.phase.id === 'talk')
@@ -190,13 +221,54 @@ it('renders every canonical group phase and role, plus paused/locked/long-name f
       vip(locked, 'pause', question.phase.startedAt + 500),
       question.phase.startedAt + 10000,
     );
+    const firstReveal = states.find((s) => s.phase.id === 'reveal')!;
+    const firstBoardAt = (tv(firstReveal).leaderboardAt ?? firstReveal.phase.startedAt) + 100;
+    paint(mode + '-standings-vip', firstReveal, firstBoardAt, {
+      vipSkip: true,
+      surfaces: ['phone-tv'],
+    });
+    if (mode === 'teams') {
+      // The same team has one correct and one wrong answer, so both receipts show 50%.
+      const incorrectTeammate = firstReveal.teams
+        ?.find((team) => team.members.includes('seat-1'))
+        ?.members.find((id) => phone(firstReveal, id).outcome?.correct === false);
+      if (!incorrectTeammate) throw new Error('The first team needs an incorrect teammate receipt');
+      expect(phone(firstReveal, 'seat-1').outcome?.correct).toBe(true);
+      expect(phone(firstReveal, incorrectTeammate).outcome?.correct).toBe(false);
+      expect(
+        phone(firstReveal, incorrectTeammate).group?.teams.find((team) =>
+          team.members.includes(incorrectTeammate),
+        )?.correctPercent,
+      ).toBe(50);
+      paint('teams-standings-wrong', firstReveal, firstBoardAt, {
+        playerId: incorrectTeammate,
+        surfaces: ['phone-tv'],
+      });
+    }
     const final = states.filter((s) => s.phase.id === 'reveal').at(-1)!;
     paint(`${mode}-last-reveal`, final);
+    const readyAt = phone(final, 'seat-1').nextAt;
+    if (readyAt === undefined) throw new Error('Final reveal needs its authored podium-ready beat');
+    expect(phone(final, 'seat-1').group?.teams).toHaveLength(0);
+    expect(phone(final, 'seat-1').myRank).toBeUndefined();
+    paint(mode + '-last-reveal-ready', final, readyAt + 100, {
+      vipSkip: true,
+      surfaces: ['phone-tv'],
+    });
   }
   paint(
     'two-teams-talk',
     played(start('teams', 2)).find((s) => s.phase.id === 'talk')!,
   );
   expect(frames.length).toBeGreaterThanOrEqual(90);
+  for (const name of [
+    'groups-teams-standings-vip-phone-tv',
+    'groups-tv-vote-standings-vip-phone-tv',
+    'groups-teams-standings-wrong-phone-tv',
+    'groups-teams-last-reveal-ready-phone-tv',
+    'groups-tv-vote-last-reveal-ready-phone-tv',
+  ]) {
+    expect(frames.filter((frame) => frame.name === name)).toHaveLength(1);
+  }
   if (process.env.P02_WRITE_EVIDENCE === '1') await writeGroupEvidence(frames, fixtures);
 });

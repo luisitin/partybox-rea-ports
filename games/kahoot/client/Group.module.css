@@ -328,3 +328,83 @@
 .phone .roster span {
   font-size: var(--pb-font-caption);
 }
+
+/* Native-like receipts apply only to participating phones beside a visible TV. */
+.verdict[data-beside-tv] {
+  margin-block: auto;
+  width: 100%;
+  gap: var(--pb-space-3);
+}
+.verdict[data-beside-tv] h3 {
+  flex-direction: column-reverse;
+  gap: var(--pb-space-2);
+}
+.verdict[data-beside-tv] .outcomeMark {
+  width: var(--pb-font-display);
+  height: var(--pb-font-display);
+  font-size: var(--pb-font-h1);
+}
+.verdict[data-beside-tv] .receipt {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: calc(var(--pb-space-8) * 5);
+  padding: var(--pb-space-4);
+  gap: var(--pb-space-2);
+  text-align: center;
+}
+.receiptKind {
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+}
+.verdict[data-beside-tv] .accuracy {
+  width: 100%;
+  justify-self: stretch;
+  gap: var(--pb-space-2);
+}
+.verdict[data-beside-tv] .gained {
+  grid-column: 1;
+  grid-row: auto;
+  justify-self: center;
+  padding: var(--pb-space-3);
+}
+.verdict[data-beside-tv] .receiptRule {
+  color: var(--pb-text-muted);
+}
+.rankStatus {
+  font-size: var(--pb-font-body);
+}
+.phone .pendingResult {
+  margin-block: auto;
+}
+.revealFooter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-2);
+}
+.playerBar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+  background: var(--pb-surface);
+  border-radius: var(--pb-radius);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.barName {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.barPending {
+  grid-column: 1 / -1;
+  text-align: right;
+  color: var(--pb-text-muted);
+  font-size: var(--pb-font-caption);
+}
+.barScore {
+  padding: var(--pb-space-1) var(--pb-space-2);
+  border-radius: calc(var(--pb-radius) / 2);
+  background: var(--pb-surface-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

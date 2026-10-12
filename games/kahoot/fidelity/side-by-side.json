@@ -54,7 +54,7 @@
     },
     {
       "moment": "3. Team Result - phone beside the TV",
-      "note": "Whole original correct/incorrect phone pair versus one complete port phone. Both originals share the same team gain. Compare the personal verdict and team percentage/gain panel; the original pair is not one phone viewport.",
+      "note": "Whole original correct/incorrect phone pair versus two complete port phones. Each pair shares its team gain and footer total despite different personal verdicts. Compare the percentage/gain panel and identity bar; the original pair is not one viewport.",
       "images": [
         {
           "file": "original/official-team-phone-receipts.png",
@@ -67,10 +67,19 @@
         },
         {
           "file": "ours/groups-teams-standings-phone-tv.png",
-          "sha256": "e53ec4f39847bac25912f37afec670bfdfa8ac290c8f836bb9d21dd70909d84a",
+          "sha256": "135425c9421abb5fb99c77c50f852910328ac1c5e897d9e0cfd6b61f45419ca7",
           "native_pixels": [390, 844],
           "display_pixels": [444, 960],
-          "display_origin": [1438, 2352],
+          "display_origin": [1184, 2352],
+          "crop": null,
+          "scale_percent": 113.744
+        },
+        {
+          "file": "ours/groups-teams-incorrect-phone-tv.png",
+          "sha256": "f4a6cdb600f4a8c3ad9d4e60a142e143f8196327fa2949ca03b965769da8125a",
+          "native_pixels": [390, 844],
+          "display_pixels": [444, 960],
+          "display_origin": [1692, 2352],
           "crop": null,
           "scale_percent": 113.744
         }
@@ -78,5 +87,5 @@
     }
   ],
   "output_pixels": [2240, 3500],
-  "output_sha256": "d63031ef7e67acbd6c07e331cb48bb2e52594ca3819190ecadc250836e649f71"
+  "output_sha256": "907cda7e77db1800005fb5f6244ed0c8b548ee7991491c7a68c974f38bcec545"
 }

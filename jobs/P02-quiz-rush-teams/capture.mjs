@@ -171,7 +171,177 @@ function measure() {
   const unstyled = [...localClasses].filter(
     (name) => !rules.some((rule) => rule.includes(`.${name}`)),
   );
+
+  // Only the participating beside-TV result path carries these markers.
+  function receiptPlacement() {
+    const verdict = main.querySelector('[data-beside-tv="true"]');
+    const playerBar = main.querySelector('[data-group-player-bar="true"]');
+    if (!verdict && !playerBar) return null;
+    const failures = [];
+    const rect = (el) => {
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return {
+        top: r.top,
+        bottom: r.bottom,
+        left: r.left,
+        right: r.right,
+        width: r.width,
+        height: r.height,
+        centerX: (r.left + r.right) / 2,
+        centerY: (r.top + r.bottom) / 2,
+      };
+    };
+    const inside = (r, limit) =>
+      r &&
+      limit &&
+      r.top >= limit.top - 1 &&
+      r.bottom <= limit.bottom + 1 &&
+      r.left >= limit.left - 1 &&
+      r.right <= limit.right + 1;
+    const screen = (verdict ?? playerBar).closest('section');
+    const body = screen?.querySelector(':scope > div');
+    const bodyBounds = rect(body);
+    const verdictBounds = rect(verdict);
+    const singleVerdict =
+      !!verdict &&
+      [...(body?.children ?? [])].filter(visible).length === 1 &&
+      body.firstElementChild === verdict;
+    const centerOffsetY = singleVerdict ? verdictBounds.centerY - bodyBounds.centerY : null;
+    if (singleVerdict && Math.abs(centerOffsetY) > 1)
+      failures.push('Personal result is not vertically centered in its SDK body');
+
+    const heading = verdict?.querySelector('h3');
+    const glyph = heading?.querySelector('[aria-hidden="true"]');
+    const glyphBounds = rect(glyph);
+    const textRects = [...(heading?.childNodes ?? [])]
+      .filter((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim())
+      .map((node) => {
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        return range.getBoundingClientRect();
+      })
+      .filter((r) => r.width > 0 && r.height > 0);
+    const labelBounds = textRects.length
+      ? {
+          top: Math.min(...textRects.map((r) => r.top)),
+          bottom: Math.max(...textRects.map((r) => r.bottom)),
+          left: Math.min(...textRects.map((r) => r.left)),
+          right: Math.max(...textRects.map((r) => r.right)),
+        }
+      : null;
+    const glyphBelowLabel =
+      !!glyphBounds && !!labelBounds && glyphBounds.top >= labelBounds.bottom - 1;
+    if (verdict && !glyphBelowLabel) failures.push('Personal glyph is not below its verdict label');
+
+    const gain = verdict?.querySelector('strong');
+    const card = gain?.closest('[role="status"]');
+    const cardBounds = rect(card);
+    const gainBounds = rect(gain);
+    const meter = card?.querySelector('meter');
+    const gaugeBounds = rect(meter);
+    const accuracyBounds = rect(meter?.parentElement);
+    const gaugeBeforeGain = !!meter && !!gainBounds && gainBounds.top >= accuracyBounds.bottom - 1;
+    if (meter && !gaugeBeforeGain) failures.push('Accuracy gauge is not above the team gain');
+    const rank = verdict?.querySelector('[class*="_rankStatus_"]');
+    const rankBounds = rect(rank);
+    const rankAfterCard = !!rank && !!cardBounds && rankBounds.top >= cardBounds.bottom - 1;
+    if (rank && !rankAfterCard) failures.push('Current rank is not below its revealed result card');
+
+    let nativeFooter = playerBar?.parentElement;
+    while (nativeFooter && nativeFooter.parentElement !== screen)
+      nativeFooter = nativeFooter.parentElement;
+    const footerBounds = rect(nativeFooter);
+    const footerStyle = nativeFooter ? getComputedStyle(nativeFooter) : null;
+    const footerSafeBounds = footerBounds
+      ? {
+          top: footerBounds.top + parseFloat(footerStyle.paddingTop || '0'),
+          bottom: footerBounds.bottom - parseFloat(footerStyle.paddingBottom || '0'),
+          left: footerBounds.left + parseFloat(footerStyle.paddingLeft || '0'),
+          right: footerBounds.right - parseFloat(footerStyle.paddingRight || '0'),
+        }
+      : null;
+    const playerBarBounds = rect(playerBar);
+    const footerWithinSafeBounds =
+      !!playerBar &&
+      inside(playerBarBounds, footerSafeBounds) &&
+      inside(playerBarBounds, mainBounds);
+    if (playerBar && !footerWithinSafeBounds)
+      failures.push('Identity and score footer escapes its safe bounds');
+    const playerName = playerBar?.querySelector('b:first-child');
+    const playerNameBounds = rect(playerName);
+    const fullNameFits =
+      !!playerName &&
+      inside(playerNameBounds, playerBarBounds) &&
+      playerName.scrollWidth <= playerName.clientWidth + 1 &&
+      playerName.scrollHeight <= playerName.clientHeight + 1;
+    if (playerBar && !fullNameFits) failures.push('Full player name overflows its identity footer');
+    const scoreElement = playerBar?.querySelector('[class*="_barScore_"]');
+    const pendingScore = playerBar?.querySelector('[class*="_barPending_"]');
+    const placeholderValid =
+      !!pendingScore &&
+      scoreElement?.textContent.trim() === '—' &&
+      !scoreElement?.getAttribute('aria-label');
+    if (pendingScore && !placeholderValid)
+      failures.push('Hidden final shared score is not a placeholder');
+    const nextTargets = [...main.querySelectorAll('button')].filter(visible).map((button) => {
+      const r = button.getBoundingClientRect();
+      const label = (button.getAttribute('aria-label') ?? button.textContent).trim();
+      const fits = r.width >= 44 && r.height >= 44;
+      if (!fits) failures.push('Result touch target is below 44 px: ' + label);
+      return { label, width: r.width, height: r.height, fits };
+    });
+    return {
+      applicable: {
+        verticalCenter: singleVerdict,
+        glyph: !!verdict,
+        gauge: !!meter,
+        currentRank: !!rank,
+        identityFooter: !!playerBar,
+        nextTargets: nextTargets.length > 0,
+      },
+      body: bodyBounds,
+      verdict: verdictBounds,
+      centerOffsetY,
+      label: labelBounds,
+      glyph: glyphBounds,
+      glyphBelowLabel,
+      card: cardBounds,
+      gauge: gaugeBounds,
+      gain: gainBounds,
+      gaugeBeforeGain,
+      rank: rankBounds,
+      rankAfterCard,
+      playerBar: playerBarBounds,
+      footerSafeBounds,
+      footerWithinSafeBounds,
+      playerName: playerName
+        ? {
+            text: playerName.textContent.trim(),
+            characters: playerName.textContent.trim().length,
+            availableWidth: playerName.clientWidth,
+            requiredWidth: playerName.scrollWidth,
+            availableHeight: playerName.clientHeight,
+            requiredHeight: playerName.scrollHeight,
+            bounds: playerNameBounds,
+            fullNameFits,
+          }
+        : null,
+      sharedScore: scoreElement
+        ? {
+            text: scoreElement.textContent.trim(),
+            ariaLabel: scoreElement.getAttribute('aria-label'),
+            hidden: !!pendingScore,
+            pendingText: pendingScore?.textContent.trim() ?? null,
+            placeholderValid,
+          }
+        : null,
+      nextTargets,
+      failures,
+    };
+  }
   return {
+    receiptGeometry: receiptPlacement(),
     horizontalOverflow: document.documentElement.scrollWidth - innerWidth,
     verticalOverflow: document.documentElement.scrollHeight - innerHeight,
     main: {
@@ -380,7 +550,7 @@ try {
         const timeout = setTimeout(() => {
           verifier.unref();
           done(null);
-        }, 15000);
+        }, 45000);
         verifier.once('exit', (code) => {
           clearTimeout(timeout);
           done(code);
@@ -440,6 +610,38 @@ writeFileSync(
     .join('\n') + '\n',
   'utf8',
 );
+const receiptCases = [
+  'groups-teams-standings-vip-phone-tv',
+  'groups-tv-vote-standings-vip-phone-tv',
+  'groups-teams-standings-wrong-phone-tv',
+  'groups-teams-last-reveal-ready-phone-tv',
+  'groups-tv-vote-last-reveal-ready-phone-tv',
+];
+for (const name of receiptCases) {
+  const frame = metrics.find((row) => row.name === name);
+  if (!frame?.receiptGeometry)
+    throw new Error('Missing applicable result geometry for evidence frame: ' + name);
+  if (!name.includes('-wrong-') && frame.receiptGeometry.nextTargets.length === 0)
+    throw new Error('The VIP result frame has no Next target: ' + name);
+  if (name.includes('-last-reveal-ready-')) {
+    if (!frame.receiptGeometry.sharedScore?.placeholderValid)
+      throw new Error('Final-ready shared score is not hidden: ' + name);
+  } else if (
+    !/^\d+ (?:team|room) points$/.test(frame.receiptGeometry.sharedScore?.ariaLabel ?? '')
+  ) {
+    throw new Error('Public result footer has no shared-score label: ' + name);
+  }
+}
+const correctTeamScore = metrics.find((row) => row.name === 'groups-teams-standings-vip-phone-tv')
+  ?.receiptGeometry.sharedScore;
+const incorrectTeamScore = metrics.find(
+  (row) => row.name === 'groups-teams-standings-wrong-phone-tv',
+)?.receiptGeometry.sharedScore;
+if (
+  correctTeamScore?.text !== incorrectTeamScore?.text ||
+  correctTeamScore?.ariaLabel !== incorrectTeamScore?.ariaLabel
+)
+  throw new Error('Correct and incorrect teammates show different public team footer scores');
 const failed = metrics.filter(
   (m) =>
     !m.baseline &&
@@ -448,6 +650,7 @@ const failed = metrics.filter(
       m.clipped.length ||
       m.unstyled.length ||
       !m.nunitoLoaded ||
+      m.receiptGeometry?.failures.length ||
       m.scrollers.some((s) => s.overflow > 1)),
 );
 console.log(
@@ -464,6 +667,7 @@ console.log(
         clipped: m.clipped,
         unstyled: m.unstyled,
         scrollers: m.scrollers,
+        receiptGeometry: m.receiptGeometry,
       })),
     },
     null,

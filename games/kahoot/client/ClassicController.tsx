@@ -29,7 +29,14 @@ import { REVEAL_BEAT_MS } from './timing';
 import { STRINGS } from './strings';
 import styles from './Classic.module.css';
 import { PhoneNext } from './NextStep';
-import { GroupIdentity, GroupRoster, GroupVerdict, GroupDecision, groupTitle } from './GroupParts';
+import {
+  GroupIdentity,
+  GroupRoster,
+  GroupVerdict,
+  GroupDecision,
+  GroupPlayerBar,
+  groupTitle,
+} from './GroupParts';
 import { GroupTalk } from './GroupTalk';
 import groups from './Group.module.css';
 
@@ -54,6 +61,8 @@ export function ClassicController({
   const group = view.group;
   const vote = group?.mode === 'tv-vote';
   const showStage = view.showStage || phoneOnly || !view.participating;
+  const besideGroupReveal =
+    group !== undefined && view.participating && !showStage && view.phaseId === 'reveal';
   const stamp = view.answerStamp;
   const key = stamp ? `${stamp.questionId}:${stamp.questionStartedAt}` : '';
   const mine = pending?.key === key ? pending : null;
@@ -223,6 +232,19 @@ export function ClassicController({
       </Screen>
     );
   }
+  const revealNext =
+    view.participating && view.next && skip ? (
+      <PhoneNext
+        next={view.next}
+        skip={skip}
+        phaseKey={view.deadline}
+        revealAt={view.revealAt}
+        paused={view.paused}
+        clockHeldAt={view.clockHeldAt}
+        leaderboardAt={view.leaderboardAt}
+        nextAt={view.nextAt}
+      />
+    ) : undefined;
   if (view.phaseId === 'reveal')
     return (
       <Screen
@@ -230,23 +252,19 @@ export function ClassicController({
         className={`${styles.phoneScreen} ${groups.phone}`}
         title={round}
         footer={
-          view.participating && view.next && skip ? (
-            <PhoneNext
-              next={view.next}
-              skip={skip}
-              phaseKey={view.deadline}
-              revealAt={view.revealAt}
-              paused={view.paused}
-              clockHeldAt={view.clockHeldAt}
-              leaderboardAt={view.leaderboardAt}
-              nextAt={view.nextAt}
-            />
-          ) : undefined
+          besideGroupReveal ? (
+            <div className={groups.revealFooter}>
+              {revealNext}
+              <GroupPlayerBar view={view} />
+            </div>
+          ) : (
+            revealNext
+          )
         }
       >
         {view.participating && shown && view.outcome ? (
           group ? (
-            <GroupVerdict view={view} />
+            <GroupVerdict view={view} besideTv={besideGroupReveal} />
           ) : (
             <div className={styles.verdict} role="status">
               <h3>
@@ -274,7 +292,9 @@ export function ClassicController({
             </div>
           )
         ) : view.participating ? (
-          <p className={styles.status}>{L('Your result is coming…')}</p>
+          <p className={`${styles.status} ${besideGroupReveal ? groups.pendingResult : ''}`}>
+            {L('Your result is coming…')}
+          </p>
         ) : null}
         {view.paused ? <p className={styles.status}>{L('Paused')}</p> : null}
         {showStage && stage ? (

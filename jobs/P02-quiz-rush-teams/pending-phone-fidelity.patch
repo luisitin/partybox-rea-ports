@@ -80,13 +80,13 @@ diff --git a/games/kahoot/client/ClassicController.tsx b/games/kahoot/client/Cla
 diff --git a/games/kahoot/client/GroupParts.tsx b/games/kahoot/client/GroupParts.tsx
 --- a/games/kahoot/client/GroupParts.tsx
 +++ b/games/kahoot/client/GroupParts.tsx
-@@ -50,6 +50,22 @@
+@@ -50,6 +50,27 @@
    const L = useT(STRINGS);
    const team = group.teams.find((candidate) => candidate.id === group.myTeamId);
    return <p className={styles.identity}>{team?.name ?? L(groupTitle(group))}</p>;
 +}
 +
-+/** Footer scores use the already filtered personal bank, including the hidden final reveal. */
++/** Shared footer scores come only from a publicly revealed team; hidden finals show a placeholder. */
 +export function GroupPlayerBar({ view }: { view: LightningControllerView }): JSX.Element | null {
 +  const L = useT(STRINGS);
 +  const group = view.group;
@@ -97,13 +97,18 @@ diff --git a/games/kahoot/client/GroupParts.tsx b/games/kahoot/client/GroupParts
 +    <div className={styles.playerBar} data-group-player-bar="true" role="status" aria-label={L('Player and team score')}>
 +      <b className={styles.barName}>{player?.name ?? L('You')}</b>
 +      <span>{team?.name ?? L(group.mode === 'tv-vote' ? 'The room' : 'Your team')}</span>
-+      <b className={styles.barScore} aria-label={L('{n} points', { n: view.myScore })}>{view.myScore}</b>
++      <b
++        className={styles.barScore}
++        aria-label={team ? L(group.mode === 'teams' ? '{n} team points' : '{n} room points', { n: team.score }) : undefined}
++        aria-hidden={!team || undefined}
++      >{team ? team.score : '—'}</b>
++      {!team ? <span className={styles.barPending}>{L(group.mode === 'teams' ? 'Team score after the podium' : 'Room score after the podium')}</span> : null}
 +    </div>
 +  );
  }
  
  export function GroupStandings({
-@@ -111,7 +127,7 @@
+@@ -111,7 +132,7 @@
    );
  }
  
@@ -112,7 +117,7 @@ diff --git a/games/kahoot/client/GroupParts.tsx b/games/kahoot/client/GroupParts
    const L = useT(STRINGS);
    const group = view.group;
    if (!group) return null;
-@@ -120,6 +136,7 @@
+@@ -120,6 +141,7 @@
    return (
      <div className={styles.receipt} role="status">
        <b>{team.name}</b>
@@ -120,7 +125,7 @@ diff --git a/games/kahoot/client/GroupParts.tsx b/games/kahoot/client/GroupParts
        {team.correctPercent !== undefined ? (
          <div className={styles.accuracy}>
            <span>{L('Correct')}</span>
-@@ -133,7 +150,7 @@
+@@ -133,7 +155,7 @@
          </div>
        ) : null}
        <strong className={styles.gained}>{L('+{n} points', { n: team.gained })}</strong>
@@ -129,7 +134,7 @@ diff --git a/games/kahoot/client/GroupParts.tsx b/games/kahoot/client/GroupParts
        {group.mode === 'teams' ? (
          <p className={styles.receiptRule}>
            {L('Team points average players who stayed or answered')}
-@@ -143,7 +160,7 @@
+@@ -143,7 +165,7 @@
    );
  }
  
@@ -138,7 +143,7 @@ diff --git a/games/kahoot/client/GroupParts.tsx b/games/kahoot/client/GroupParts
    const L = useT(STRINGS);
    const vote = view.group?.mode === 'tv-vote';
    const outcome = view.outcome;
-@@ -162,6 +179,7 @@
+@@ -162,6 +184,7 @@
      <div
        className={styles.verdict}
        data-stage={view.showStage || view.phoneOnly || undefined}
@@ -146,7 +151,7 @@ diff --git a/games/kahoot/client/GroupParts.tsx b/games/kahoot/client/GroupParts
        role="status"
      >
        <h3>
-@@ -183,7 +201,10 @@
+@@ -183,7 +206,10 @@
        ) : (
          <p>{L('+{n} personal points', { n: outcome?.delta ?? 0 })}</p>
        )}
@@ -161,7 +166,7 @@ diff --git a/games/kahoot/client/GroupParts.tsx b/games/kahoot/client/GroupParts
 diff --git a/games/kahoot/client/Group.module.css b/games/kahoot/client/Group.module.css
 --- a/games/kahoot/client/Group.module.css
 +++ b/games/kahoot/client/Group.module.css
-@@ -328,3 +328,77 @@
+@@ -328,3 +328,83 @@
  .phone .roster span {
    font-size: var(--pb-font-caption);
  }
@@ -232,6 +237,12 @@ diff --git a/games/kahoot/client/Group.module.css b/games/kahoot/client/Group.mo
 +  min-width: 0;
 +  overflow-wrap: anywhere;
 +}
++.barPending {
++  grid-column: 1 / -1;
++  text-align: right;
++  color: var(--pb-text-muted);
++  font-size: var(--pb-font-caption);
++}
 +.barScore {
 +  padding: var(--pb-space-1) var(--pb-space-2);
 +  border-radius: calc(var(--pb-radius) / 2);
@@ -242,7 +253,7 @@ diff --git a/games/kahoot/client/Group.module.css b/games/kahoot/client/Group.mo
 diff --git a/games/kahoot/client/strings-es.ts b/games/kahoot/client/strings-es.ts
 --- a/games/kahoot/client/strings-es.ts
 +++ b/games/kahoot/client/strings-es.ts
-@@ -215,4 +215,12 @@
+@@ -215,4 +215,16 @@
    'Vote distribution': 'Distribución de votos',
    '{n} votes': '{n} votos',
    '{n} did not vote': '{n} no votaron',
@@ -254,6 +265,10 @@ diff --git a/games/kahoot/client/strings-es.ts b/games/kahoot/client/strings-es.
 +  'Player and team score': 'Jugador y puntuación del equipo',
 +  'Your team is in place {rank}': 'Tu equipo está en el puesto {rank}',
 +  'The room is in place {rank}': 'La sala está en el puesto {rank}',
++  '{n} team points': '{n} puntos del equipo',
++  '{n} room points': '{n} puntos de la sala',
++  'Team score after the podium': 'Puntuación del equipo después del podio',
++  'Room score after the podium': 'Puntuación de la sala después del podio',
  };
 diff --git a/games/kahoot/__tests__/group-screens.test.tsx b/games/kahoot/__tests__/group-screens.test.tsx
 --- a/games/kahoot/__tests__/group-screens.test.tsx
@@ -274,23 +289,46 @@ diff --git a/games/kahoot/__tests__/group-screens.test.tsx b/games/kahoot/__test
            />
          </PhoneOnlyProvider>
        )}
-@@ -195,6 +197,25 @@
+@@ -195,6 +197,48 @@
  });
  
  describe('group results preserve honest scoring', () => {
-+  it('centers native-like team receipts beside the TV while preserving staged screens and the VIP Next footer', () => {
++  it('centers native-like team receipts with equal public footer scores for correct and incorrect teammates', () => {
 +    let state = timer(timer(start('teams')));
-+    state = answer(state, PLAYERS[0]!.id, question(state).answerIndex, 300);
++    const correct = question(state).answerIndex;
++    const initialTeam = phone(state, PLAYERS[0]!.id).group?.teams.find((team) =>
++      team.members.includes(PLAYERS[0]!.id),
++    );
++    const teammate = initialTeam?.members.find((id) => id !== PLAYERS[0]!.id);
++    if (!teammate) throw new Error('The team receipt needs two teammates');
++    state = answer(state, PLAYERS[0]!.id, correct, 300);
++    state = answer(state, teammate, (correct + 1) % 4, 400);
 +    state = timer(state);
 +    const boardAt = tv(state).leaderboardAt! + 1;
++    const team = phone(state, PLAYERS[0]!.id).group?.teams.find((row) =>
++      row.members.includes(PLAYERS[0]!.id),
++    );
++    if (!team) throw new Error('The public team receipt is missing');
 +    const html = paint(state, 'phone', PLAYERS[0]!.id, boardAt, true);
++    const wrong = paint(state, 'phone', teammate, boardAt);
 +    expect(html).toContain('data-beside-tv="true"');
 +    expect(html).toContain('Team results');
 +    expect(html).toContain('Your team is in place');
-+    expect(html).toContain('data-group-player-bar="true"');
 +    expect(html).toContain(escape(PLAYERS[0]!.name));
 +    expect(html).toContain('Next question');
-+    expect(html).toContain(`aria-label="${phone(state, PLAYERS[0]!.id).myScore} points"`);
++    expect(wrong).toContain('Wrong');
++    const footerOf = (markup: string): string => {
++      const footer = markup.match(/<div[^>]*data-group-player-bar="true"[\s\S]*?<\/div>/)?.[0];
++      if (!footer) throw new Error('Participating beside-TV receipt needs an identity footer');
++      return footer;
++    };
++    for (const footer of [footerOf(html), footerOf(wrong)]) {
++      expect(footer).toContain(`aria-label="${team.score} team points"`);
++      expect(footer).not.toContain('Team score after the podium');
++    }
++    expect(phone(state, PLAYERS[0]!.id).outcome?.delta).toBeGreaterThan(
++      phone(state, teammate).outcome?.delta ?? 0,
++    );
 +    for (const staged of [paint(state, 'stage', PLAYERS[0]!.id, boardAt), paint(state, 'phone', 'audience', boardAt)]) {
 +      expect(staged).not.toContain('data-beside-tv="true"');
 +      expect(staged).not.toContain('data-group-player-bar="true"');
@@ -300,7 +338,7 @@ diff --git a/games/kahoot/__tests__/group-screens.test.tsx b/games/kahoot/__test
    it('shows a room success even when this player voted for a different answer', () => {
      let state = timer(timer(start('tv-vote')));
      const q = question(state);
-@@ -271,6 +292,13 @@
+@@ -271,6 +315,15 @@
        const html = paint(lastReveal, surface);
        for (const team of roster) expect(html).not.toContain(escape(team.name));
        expect(html).not.toContain('<meter');
@@ -308,7 +346,9 @@ diff --git a/games/kahoot/__tests__/group-screens.test.tsx b/games/kahoot/__test
 +        expect(html).toContain('Your team');
 +        const footer = html.match(/<div[^>]*data-group-player-bar="true"[\s\S]*?<\/div>/)?.[0];
 +        expect(footer).toBeDefined();
-+        expect(footer).toContain(`aria-label="${phone(lastReveal, PLAYERS[0]!.id).myScore} points"`);
++        expect(footer).toContain('Team score after the podium');
++        expect(footer).toMatch(/aria-hidden="true"[^>]*>—<\/b>/);
++        expect(footer).not.toMatch(/aria-label="\d+ team points"/);
 +        expect(footer).not.toContain('Your team is in place');
 +      }
      }
