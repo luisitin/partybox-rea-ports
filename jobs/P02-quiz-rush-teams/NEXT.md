@@ -29,3 +29,5 @@ The completed required group campaign left `P02_SIM_RUNS` unset: 1,000 seeded ma
 Root owns executions, browser, git/claims/PR/CI and final verification. At most one isolated headless browser, closed in `finally`. Docs-only updates leave runtime source unchanged.
 
 Read UPGRADE.md: core T-1146 already has wager teams; discussion, Room vote and donor packs remain the upgrade scope. This public work performs no private checkout edit or owner-core deployment.
+
+Round 3 is now applied: GroupQuestion uses a hidden SDK Timer to map public quiet countdown cues while retaining one visible circle. The actual group-countdown-cues.test.tsx passed 16/16 in 2.01 s; prior development-JSX-key harness failures were corrected. Existing group/stage screen and SSR checks passed 32/32, and typecheck exited 0. The cue does not add phone timers or change Classic/Wager timer ownership. Custom-bot numeric facts, own-roster/presence discovery, room tie explanation and maximum legal custom text are still under review. The final browser capture/full-game CI/mutations/convergence remain pending.

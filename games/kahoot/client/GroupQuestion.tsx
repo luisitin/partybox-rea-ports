@@ -1,6 +1,7 @@
 // Group play follows the source quiz geometry with our shared shape art and token styling.
+import { useCallback } from 'react';
 import type { JSX } from 'react';
-import { useT } from '@partybox/game-sdk/ui';
+import { Timer, useSound, useT } from '@partybox/game-sdk/ui';
 import type { LightningTvView } from '../server/views';
 import { QuestionOptions } from './ClassicParts';
 import { groupTitle } from './GroupParts';
@@ -20,6 +21,8 @@ export function GroupQuestion({
 
 function QuestionStage({ view, now }: { view: LightningTvView; now: number }): JSX.Element {
   const L = useT(STRINGS);
+  const play = useSound();
+  const onTick = useCallback(() => play('countdown', { quiet: true }), [play]);
   const group = view.group!;
   const talk = view.phaseId === 'talk';
   const vote = group.mode === 'tv-vote';
@@ -34,6 +37,18 @@ function QuestionStage({ view, now }: { view: LightningTvView; now: number }): J
       : 'Tap the matching shape on your phone';
   return (
     <div className={styles.questionStage} data-group-question={view.phaseId}>
+      {/* The circular clock replaces shell digits, while the SDK retains its cue rules. */}
+      <div hidden aria-hidden="true" data-group-countdown-cue="true">
+        <Timer
+          key={`${view.phaseId}:${view.question!.id}`}
+          deadline={view.deadline}
+          phaseKey={view.phaseId}
+          phaseAt={view.phaseAt}
+          paused={view.paused}
+          clockHeldAt={view.clockHeldAt}
+          onTick={onTick}
+        />
+      </div>
       <h2 className={styles.questionPrompt}>{view.question!.text}</h2>
       <div className={styles.questionMiddle}>
         <div className={styles.countdown} data-position="left">

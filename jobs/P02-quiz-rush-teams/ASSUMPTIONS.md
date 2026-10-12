@@ -26,3 +26,5 @@ The earlier implementation used an injected classic adapter and a 15-minute
 manifest estimate. It and its verification are historical in git b254dd4 and
 HISTORICAL_VERIFY.md. Current production source uses the canonical engine
 directly; no old adapter, metadata wrapper or duplicate picker card is shipped.
+
+- KEEP GOING round 3 restores the group TV countdown via the exported SDK Timer and public quiet countdown sound option. Timer phase keys persist through pause/resume and reset for each discussion/answer/question. The host's private rising-semitone option is outside the SDK contract; no private pitch or original audio identity is claimed. The adapter is hidden from layout/accessibility, leaving the single custom circular timer visible.
