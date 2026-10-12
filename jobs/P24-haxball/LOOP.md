@@ -76,3 +76,13 @@ names and button-free spectator stage already cover those tasks. Existing measur
 104/64/12 mounted checks and 75 fitting static layouts. Larger compact labels or different name
 truncation are presentation polish; no measured player-visible failure warrants another change.
 This is a source/render review, not a human eight-stranger playtest. No game code changed.
+
+Round 9 — zero player-visible gain (2/3): walked the same eight-player room through a refresh,
+pause/resume, halftime, temporary drop and permanent departure. Root inspected the paused
+phone PNG and the player/VIP reducer paths plus their existing behavioral regressions. Seats,
+jerseys and positions survive refresh; stale keys/touches remain cancelled; halftime tells
+players when ends switch; drops clear movement without waiting; departed players watch and
+retain their team result. The final 104 mounted controls cover fresh-press recovery and the
+green 141-test source covers these reducer outcomes. Mid-match rebalancing would change the
+documented team policy without human fairness evidence. No actionable defect or measured
+player-visible gain emerged; no game code or verification tolerance changed.

@@ -20,8 +20,8 @@ Runner r3-local, branch job/P24-haxball. Draft [PR 17](https://github.com/luisit
   browser automation flags/GPU resolve the final capture; game timing and assertions stay fixed.
   Browser/native endpoint closure passes, zero forced processes; the profile is removed.
   Touch milestone a278579 CI failed only two generated JSON formatting checks, now corrected.
-- Exact touch source c8def78 has green CI 38215249699. Round 8 is the first actual
-  five-weakness review with zero player-visible gain; two consecutive zero-gain rounds remain.
+- Exact touch source c8def78 has green CI 38215249699. Rounds 8–9 are actual
+  five-weakness reviews with zero player-visible gain; one consecutive zero-gain round remains.
   Log/push each review and refresh
   CLAIMS.md on main after pulling --rebase. Final latest-head CI must be green before PR ready.
 - After that, mark P24 r3-local DONE on main, with pull --rebase before its claim commit.
