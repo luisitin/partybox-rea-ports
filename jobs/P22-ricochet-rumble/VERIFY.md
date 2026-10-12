@@ -157,3 +157,7 @@ Read-only calculations from design/tokens.css (opacity 1) for before→after Fir
 ## KEEP GOING R8 verification
 
 `PB_WRITE_EVIDENCE=1 pnpm.cmd vitest run games/tank-trouble/__tests__/screens.test.tsx --maxWorkers=1 --pool=threads --reporter=dot` passed 33 tests, exit 0, 1.87 s. `pnpm.cmd typecheck` passed. `node jobs/P22-ricochet-rumble/capture.mjs` passed 52 fits, exit 0; PID 62156 closed in finally, temp cleanup deferred after EPERM. Root inspected the TV maze/legend image; all three authored marks are shared, and weapon names remain body-sized alongside them.
+
+## KEEP GOING R9 verification
+
+`pnpm.cmd vitest run games/tank-trouble/__tests__/lifecycle-order.test.ts games/tank-trouble/__tests__/game.test.ts games/tank-trouble/__tests__/physics.test.ts games/tank-trouble/__tests__/sdk.test.ts games/tank-trouble/__tests__/screens.test.tsx --maxWorkers=1 --pool=threads --reporter=dot` passed 112 tests, exit 0, 60.89 s. `pnpm.cmd typecheck` passed. Five new regressions pin actual pending-hit physics, expired-cap draws, scoring before presence, completion before pause, retained scores and future exclusions, and ongoing-pause two-departure deferral. Existing input state remains byte-identical. No client rendering changed.

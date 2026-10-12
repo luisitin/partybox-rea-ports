@@ -60,6 +60,8 @@ ranks, including a match in which no round had a winner. Results retain every in
   slots are free; the phone explains the wait and holding Fire shoots when capacity opens.
 - The sole survivor locks when the final rival is eliminated; later shells cannot erase a win.
   All hits on a judging sample resolve before a winner is chosen.
+- A completed fight is scored before a late departure or pause can change its survivors.
+  Presence still updates for reconnect and the next maze; pausing holds the result beat.
 - A drop releases held movement/fire. A permanent leave eliminates the tank and removes it
   from later rounds; returning after leaving is a spectator. A temporary reconnect continues
   the same tank if it survived. No disconnected player blocks a phase.

@@ -114,7 +114,11 @@ const composed = composeReduce<State, Input>({
     if (!hasPlayer(state, event.playerId)) return state;
     const settled =
       state.phase.id === 'play' && !state.phase.paused ? settle(state, event.now) : state;
-    const after = onPlayerEvent(settled, event);
+    const judged =
+      settled.phase.id === 'play' && !settled.phase.paused && isOver(settled)
+        ? enterScore(settled, event.now)
+        : settled;
+    const after = onPlayerEvent(judged, event);
     const world =
       !event.connected || event.gone
         ? stopTank(after.world, event.playerId, !!event.gone)
@@ -128,7 +132,7 @@ const composed = composeReduce<State, Input>({
     if (event.type !== 'vip') return state;
     if (event.action === 'pause' && state.phase.id === 'play' && !state.phase.paused) {
       const stopped = settle(state, event.now);
-      return {
+      const neutralized = {
         ...stopped,
         world: {
           ...stopped.world,
@@ -141,6 +145,7 @@ const composed = composeReduce<State, Input>({
           })),
         },
       };
+      return isOver(neutralized) ? enterScore(neutralized, event.now) : neutralized;
     }
     if (event.action !== 'resume' || state.phase.id !== 'play') return state;
     const ms = pausedFor(state, event.now);
