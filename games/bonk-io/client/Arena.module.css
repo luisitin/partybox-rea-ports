@@ -1,0 +1,79 @@
+.arena {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: calc(var(--pb-space-1) / 2) solid var(--pb-text-muted);
+  border-radius: var(--pb-radius);
+  background: var(--pb-bg);
+}
+
+.sky {
+  fill: var(--pb-bg);
+}
+.lava {
+  fill: var(--pb-danger);
+}
+.lavaStripe {
+  fill: var(--pb-bg);
+}
+.fallLine {
+  stroke: var(--pb-danger);
+  stroke-width: 3;
+  stroke-dasharray: 12 8;
+}
+.platform {
+  fill: var(--pb-surface-2);
+  stroke: var(--pb-text-muted);
+  stroke-width: 2;
+}
+.platformTop {
+  stroke: var(--pb-text);
+  stroke-width: 5;
+}
+.shrinkMarks {
+  fill: none;
+  stroke: var(--pb-accent-2);
+  stroke-width: 3;
+}
+.body {
+  fill: var(--pb-surface);
+  stroke: var(--ball-color);
+  stroke-width: 6;
+}
+.ball[data-out='true'] .body {
+  stroke: var(--pb-text-muted);
+  stroke-dasharray: 8 5;
+}
+.heavyRing {
+  fill: none;
+  stroke: var(--ball-color);
+  stroke-width: 5;
+}
+.weight {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: 5;
+  stroke-linecap: square;
+}
+.myRing {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: 3;
+  stroke-dasharray: 4 6;
+}
+.number {
+  fill: var(--pb-text);
+  font-family: var(--pb-font-family);
+  font-size: 44px;
+  font-weight: 900;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arena * {
+    animation: none;
+    transition: none;
+  }
+}
