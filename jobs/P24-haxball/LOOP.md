@@ -38,3 +38,12 @@ A subsequent full CI check exposed a two-player sharp-bot corner trap: 333 match
 zero goals despite 2,484 accepted kicks. This is a remaining player-visible weakness, not a
 zero-gain review; root tracing reproduces a ball stranded in the corner for most of each half.
 Bot tactics must recover without changing solid posts or relaxing the positive-goal check.
+
+Round 5 (final full checks pending): reviewed unreachable bot corner contacts, a repeated favorable
+kickoff route for the same ID, crowded compact jerseys, direct 100 ms pose updates and unmeasured
+odd-helper parity. Actual radial contact bounds now permit an outward bank clear; near-contact
+movement uses the real ball. Public goals/halftime rotate the existing distinct dribble styles.
+Measured gain: eight old corner cases never kicked within 8 s; all now clear. A known two-sharp
+fixture changed from 0–0 trapped to 0–24 repeated and then 12–12 after rotation. A real three-kickoff
+regression failed with only p2 first kicks and now includes both seats. All 67 rules pass. These
+measurements establish recovery and route variation, not human play or competitive win-rate parity.

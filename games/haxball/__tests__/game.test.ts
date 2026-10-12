@@ -34,6 +34,129 @@ import {
   T0,
 } from './helpers';
 
+describe('sharp bot corner recovery', () => {
+  const cases = [false, true].flatMap((rightWall) =>
+    [false, true].flatMap((bottomWall) =>
+      (['red', 'blue'] as const).map((team) => ({ rightWall, bottomWall, team })),
+    ),
+  );
+  it.each(cases)(
+    'clears the corner $rightWall/$bottomWall for $team',
+    ({ rightWall, bottomWall, team }) => {
+      let state = start(2, 73);
+      const me = state.discs.find((disc) => disc.team === team)!;
+      const x = rightWall ? W - BALL_R : BALL_R;
+      const y = bottomWall ? H - BALL_R : BALL_R;
+      const inwardX = rightWall ? -1 : 1;
+      const inwardY = bottomWall ? -1 : 1;
+      state = {
+        ...state,
+        ball: body(x, y),
+        discs: state.discs.map((disc) => ({
+          ...disc,
+          ...body(
+            disc.id === me.id ? x + inwardX * 5 : W / 2,
+            disc.id === me.id ? y + inwardY * 5 : H / 2,
+          ),
+        })),
+      };
+      const rng = createRng(73);
+      let kicked = false;
+      let escaped = false;
+      for (let elapsed = 0; elapsed < 8_000 && state.phase.id === 'play'; elapsed += 400) {
+        const choice = game.bot.sampleInput(state, me.id, rng, 'sharp');
+        if (choice)
+          state = game.reduce(state, {
+            type: 'input',
+            now: state.clock,
+            playerId: me.id,
+            input: choice,
+          });
+        state = timer(state, state.clock + 400);
+        kicked ||= state.intents[me.id]!.lastKickAt !== null;
+        escaped ||=
+          state.goals.red + state.goals.blue > 0 ||
+          (state.phase.id === 'play' &&
+            (state.ball.x - x) * inwardX > 8 &&
+            (state.ball.y - y) * inwardY > 8);
+        if (kicked && escaped) break;
+      }
+      expect(
+        kicked,
+        'a trapped ball needs an authoritative kick, not an unreachable alignment loop',
+      ).toBe(true);
+      expect(escaped, 'bank-clear into the interior or score within eight seconds').toBe(true);
+      expect(state.clock - T0).toBeLessThanOrEqual(8_000);
+      expect(state.halfEndsAt).toBe(T0 + 90_000);
+    },
+  );
+});
+
+describe('sharp bot repeated kickoffs', () => {
+  it('offers both seats a first confirmed kick across three real kickoffs', () => {
+    const seed = 3668342005;
+    const rng = createRng(seed ^ 0x483be971);
+    let state = start(2, seed);
+    const firstKickers = new Map<number, string>();
+    let batches = 0;
+    const react = (): void => {
+      const ids = Object.keys(state.players);
+      const offset = batches % ids.length;
+      const order = [...ids.slice(offset), ...ids.slice(0, offset)];
+      const choices = order.map((id) => ({
+        id,
+        choice: game.bot.sampleInput(state, id, rng, 'sharp'),
+      }));
+      for (const { id, choice } of choices) {
+        if (!choice) continue;
+        expect(game.inputSchema.safeParse(choice).success).toBe(true);
+        state = game.reduce(state, {
+          type: 'input',
+          now: state.clock,
+          playerId: id,
+          input: choice,
+        });
+      }
+    };
+    react();
+    while (
+      firstKickers.size < 3 &&
+      state.half === 1 &&
+      state.phase.id !== 'done' &&
+      batches < 300
+    ) {
+      const before = state;
+      const now =
+        state.phase.id === 'play'
+          ? Math.min(state.clock + 400, state.halfEndsAt)
+          : state.phase.deadline!;
+      state = timer(state, now);
+      if (before.phase.id === 'play' && !firstKickers.has(before.phase.startedAt)) {
+        const fired = Object.keys(state.players)
+          .filter(
+            (id) =>
+              state.intents[id]!.lastKickAt !== null &&
+              state.intents[id]!.lastKickAt !== before.intents[id]!.lastKickAt,
+          )
+          .sort((a, b) => state.intents[a]!.lastKickAt! - state.intents[b]!.lastKickAt!);
+        if (fired[0]) firstKickers.set(before.phase.startedAt, fired[0]);
+      }
+      batches++;
+      if (state.phase.id === 'play') react();
+    }
+    expect(firstKickers.size, 'three actual kickoffs must be active inside the first half').toBe(3);
+    expect(
+      new Set(firstKickers.values()),
+      'one seat must not own the first contact after every reset',
+    ).toEqual(new Set(Object.keys(state.players)));
+    expect(state.halfEndsAt).toBe(T0 + 90_000);
+    expect(state.clock - T0).toBeLessThan(90_000);
+    expect(state.discs.map(({ id, team, number }) => ({ id, team, number }))).toEqual(
+      start(2, seed).discs.map(({ id, team, number }) => ({ id, team, number })),
+    );
+  });
+});
+
 describe('whole-ball goals and contact', () => {
   it('requires whole-ball crossing and uses crossing y rather than final y', () => {
     const state = start(2);

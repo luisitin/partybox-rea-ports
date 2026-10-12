@@ -26,3 +26,8 @@
   is retained. Mounted checks measure cue requests, not speaker acoustics or subjective feel.
 - The odd-roster helper uses the normal strategy and 200 ms decision cadence. It does not draw
   the external normal bot's 4% kick-miss sample; competitive human/helper parity is unmeasured.
+
+The bot bank clear uses actual contact geometry and public body positions. It does not guarantee
+against own goals; those remain valid game behavior. Goals/half rotate blocked-lane styles so an
+identity does not retain the same preferred angle after every reset. The retained 12–12 known-seed
+trace is a route-variation diagnostic, not a competitive parity or mixed-skill win-rate measurement.

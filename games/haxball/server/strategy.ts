@@ -1,6 +1,6 @@
 // Strategy reads only public bodies and team membership. Intent bookkeeping is added by bot.ts.
 import { attacksRight } from './content';
-import { BALL_R, H, KICK_RANGE, PLAYER_R, W } from './types';
+import { BALL_R, GOAL_HALF, H, KICK_RANGE, PLAYER_R, POST_R, W } from './types';
 import type { Disc, State } from './types';
 
 export interface Decision {
@@ -53,10 +53,12 @@ function attackDirection(state: State, me: Disc, skill: 'easy' | 'normal' | 'sha
   if (laneClearance(state, me, shot, 20) >= PLAYER_R + BALL_R + 2) return shot;
 
   // A head-on opponent can cancel every radial kick. Dribble into a side lane first.
-  // Public roster order gives distinct approach angles without granting either team
-  // a fixed kickoff advantage or reading another seat's intent/RNG.
+  // Public roster order gives distinct approach angles. Rotate them after each
+  // goal and half so one identity cannot retain the favorable kickoff style.
   const identities = state.discs.map((disc) => disc.id).sort();
-  const style = identities.indexOf(me.id) / Math.max(1, identities.length - 1);
+  const rotation = state.goals.red + state.goals.blue + state.half - 1;
+  const styleIndex = (identities.indexOf(me.id) + rotation) % identities.length;
+  const style = styleIndex / Math.max(1, identities.length - 1);
   const forward = 0.25 + style * 0.45;
   const lateral = Math.sqrt(1 - forward * forward);
   const preferred = state.ball.y >= H / 2 ? -1 : 1;
@@ -69,6 +71,27 @@ function attackDirection(state: State, me: Disc, skill: 'easy' | 'normal' | 'sha
   return score(options[1]!) > score(options[0]!) + 0.5 ? options[1]! : options[0]!;
 }
 
+/** A wall-bound ball needs an outward bank when the intended contact side is unreachable. */
+function reachableAim(state: State, aim: Vector): Vector {
+  const behindX = state.ball.x - aim.x * KICK_RANGE;
+  const behindY = state.ball.y - aim.y * KICK_RANGE;
+  let { x, y } = aim;
+  // Outside the goal/post region the side wall can return an outward strike.
+  // Never deliberately bank into an open goal when a horizontal side is blocked.
+  const sideBank = Math.abs(state.ball.y - H / 2) > GOAL_HALF + BALL_R + POST_R;
+  if (sideBank && ((behindX < PLAYER_R && x > 0) || (behindX > W - PLAYER_R && x < 0))) x = -x;
+  if ((behindY < PLAYER_R && y > 0) || (behindY > H - PLAYER_R && y < 0)) y = -y;
+  const bank = unit(x, y);
+  // A shallow outward angle may still ask for an inaccessible contact centre.
+  // Project that centre onto actual player bounds, retaining its outward sign.
+  const contactX = state.ball.x - bank.x * KICK_RANGE;
+  const contactY = state.ball.y - bank.y * KICK_RANGE;
+  return unit(
+    state.ball.x - (sideBank ? Math.max(PLAYER_R, Math.min(W - PLAYER_R, contactX)) : contactX),
+    state.ball.y - Math.max(PLAYER_R, Math.min(H - PLAYER_R, contactY)),
+  );
+}
+
 export function decision(state: State, me: Disc, skill: 'easy' | 'normal' | 'sharp'): Decision {
   const right = attacksRight(state, me.team);
   const sign = right ? 1 : -1;
@@ -79,13 +102,16 @@ export function decision(state: State, me: Disc, skill: 'easy' | 'normal' | 'sha
         Math.hypot(b.x - state.ball.x, b.y - state.ball.y) || a.number - b.number,
   );
   const striker = near[0]?.id === me.id;
-  const look = skill === 'easy' ? 0 : skill === 'normal' ? 0.15 : 0.3;
-  const ballX = Math.max(6, Math.min(W - 6, state.ball.x + state.ball.vx * look));
-  const ballY = Math.max(6, Math.min(H - 6, state.ball.y + state.ball.vy * look));
+  const distance = Math.hypot(me.x - state.ball.x, me.y - state.ball.y);
+  // Predict distant interception; contact positioning must use the real ball,
+  // including corners rather than an invented point six units inside the pitch.
+  const look =
+    distance <= KICK_RANGE + 10 ? 0 : skill === 'easy' ? 0 : skill === 'normal' ? 0.15 : 0.3;
+  const ballX = Math.max(BALL_R, Math.min(W - BALL_R, state.ball.x + state.ball.vx * look));
+  const ballY = Math.max(BALL_R, Math.min(H - BALL_R, state.ball.y + state.ball.vy * look));
   let x = ballX;
   let y = ballY;
-  const aim = attackDirection(state, me, skill);
-  const distance = Math.hypot(me.x - state.ball.x, me.y - state.ball.y);
+  const aim = reachableAim(state, attackDirection(state, me, skill));
   const alignment =
     distance > 0 ? ((state.ball.x - me.x) * aim.x + (state.ball.y - me.y) * aim.y) / distance : 1;
   const aligned = alignment >= (skill === 'sharp' ? 0.93 : skill === 'normal' ? 0.88 : 0.78);

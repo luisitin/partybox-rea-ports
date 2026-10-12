@@ -17,7 +17,9 @@ strategy and 200 ms decision cadence.
 Helpers are public, never SDK participants or result rows. Easy bots chase the ball with mistakes.
 All strengths move into a side lane when an opponent blocks a radial kick. Normal bots divide
 attack/defence and line up behind the ball; sharp bots predict further ahead and compare three
-goal-mouth lanes. Public disc identities distinguish approach angles without a fixed team bias.
+goal-mouth lanes. Public disc identities distinguish approach angles; public goals and halftime rotate those styles.
+Near contact, bots use the actual ball position and feasible wall banks to clear trapped corners.
+This is activity/behavior design, not a measured competitive parity guarantee.
 Spectators watch the whole public pitch without controls.
 
 ## Phases

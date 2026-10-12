@@ -2,22 +2,24 @@
 
 Runner r3-local, branch job/P24-haxball. Draft [PR 17](https://github.com/luisitin/partybox-rea-ports/pull/17).
 
-- Physics milestone `87135fa` passed all 58 focused rules, but full CI `38207797194` failed
-  one of 132 tests: two-player sharp bots produced no goals in 333 default matches. Every
-  one of 7,000 matches terminated at 188,000 ms. Do not describe this head as green.
-- Root trace `.git/p24-sharp-trace.json`, seed 3668342005, reproduces a ball trapped at
-  (158,98) in half one and (2,98) in half two. Freeze attribution owns the public-geometry
-  strategy fix; preserve solid posts, judged crossings, scoring and positive-goal assertions.
-- Round 4 copy is verified: 46 client/SSR tests, 75 static layouts, 67 controls, 64 goal cues
-  and 12 retained-credit checks pass. Capture timestamp 2026-10-12T05:33:06.395Z. Browser,
-  exact endpoint and temporary profile are closed/removed. Copy explains radial aim and when
-  goals switch. Full local final verification has not run after these physics/tactics changes.
-- After tactics pass, run all Haxball tests with one worker and PB_WRITE_EVIDENCE=1, then
-  the 20 mutation checks sequentially. Keep source immutable during each run and verify source
-  restoration plus every media SHA-256 independently. Media must stay strictly below 10 MB.
-- Update VERIFY.md and LOOP.md with actual measurements, push and refresh CLAIMS.md on main
-  after pulling --rebase. Keep the PR draft until its final exact-head P24 CI is green, then
-  finish three actual five-weakness reviews in a row with no player-visible gain.
-- Install is complete. Use pnpm.cmd. Root owns tests and at most one headless browser,
-  closed in finally. Test only games/haxball. No original live, human LAN, acoustic or
-  eight-stranger playtest is claimed. Do not claim a new job before this one is DONE/BLOCKED.
+- Current final physics/tactics source passes all 67 rules: original rules, solid posts,
+  judged crossing priority/sweeps, eight corner recoveries and repeated kickoff opportunities.
+  Strict contact geometry, clocks, scoring, intent leases and external bot RNG remain intact.
+- New public-geometry banks clear trapped corners. Near contact uses the real ball; goals and
+  halftime rotate dribble angles. Retained known-seed traces show 0–0 trapped, 0–24 bank-only,
+  then 12–12 with style rotation. This is a diagnostic, not competitive parity evidence.
+- Physics milestone CI 38207797194 failed 131/132 due to zero sharp two-player goals. The
+  bank-only two-player 1,000-match probe now passes, but final rotating tactics still need the
+  full scoped test run. Run PB_WRITE_EVIDENCE=1 pnpm.cmd vitest run games/haxball with one worker.
+  Expect 141 tests / 7 files, including 7,000 matches (1,000 at every count 2–8) and 1,003 seeds.
+- After the full run, execute the 20 mutations sequentially with source frozen. Independently
+  verify restored source hashes and every media SHA-256, total strictly below 10 MB.
+- Latest client evidence: 46 focused tests, 75 layouts, 67 controls, 64 goal cues and 12 retained
+  credit checks. Capture 2026-10-12T05:33:06.395Z; browser/endpoint closed, profile removed.
+  Compare canonical final generated HTML with this captured revision; recapture only if changed.
+- Update VERIFY.md/LOOP.md with actual results. Then finish three actual five-weakness reviews
+  in a row with no player-visible gain. Keep the PR draft until final exact-head P24 CI is green.
+- Push milestones, refresh CLAIMS.md on main after pulling --rebase, and keep this file current.
+  Install is complete. Use pnpm.cmd; root owns only this game's tests and one headless browser,
+  closed in finally. No original live, human LAN/eight-stranger, acoustic or parity test claimed.
+  Do not claim another job until this one is DONE/BLOCKED.

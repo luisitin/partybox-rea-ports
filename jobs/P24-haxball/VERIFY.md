@@ -1,11 +1,13 @@
 # P24 verification
 
 Runner `r3-local`, branch `job/P24-haxball`; implementation milestone `c51f050`.
-Install is reused from P03. Local starts are 2026-10-11; UTC starts are 2026-10-12.
+Install is reused from P03. Initial local starts are 2026-10-11; UTC starts are 2026-10-12.
+
+## Initial verification (historical, before post-green physics and tactics)
 
 | Check                | Exact command / evidence                                                                                                  | Actual result                                                                                                                                                                    |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| TypeScript           | `pnpm.cmd typecheck`                                                                                                      | PASS on the current source.                                                                                                                                                      |
+| TypeScript           | `pnpm.cmd typecheck`                                                                                                      | PASS on the initial implementation source.                                                                                                                                       |
 | Client               | `pnpm.cmd vitest run games/haxball/client --maxWorkers=1 --pool=threads`                                                  | PASS: 25 tests / 2 files, 13.32 s; start 22:39:10 local / 03:39:10 UTC.                                                                                                          |
 | Rules                | `pnpm.cmd vitest run games/haxball/__tests__/game.test.ts --maxWorkers=1 --pool=threads`                                  | PASS: 34 tests / 1 file, 546 ms; start 22:46:32 local / 03:46:32 UTC.                                                                                                            |
 | SSR / fixtures       | Evidence environment below; `pnpm.cmd vitest run games/haxball/__tests__/evidence.test.tsx --maxWorkers=1 --pool=threads` | PASS: 11 tests / 1 file, 4.86 s; start 22:43:14 local / 03:43:14 UTC. Near-final second-half fixture and replayed done state regenerated.                                        |
@@ -144,3 +146,35 @@ temporary profile was removed. Root inspected revised phone-only and TV halftime
 
 Round 4 canonical media: 167 files, 8,606,409 bytes; `hash-media.mjs` completed and independent
 PowerShell `Get-FileHash -Algorithm SHA256` recomputed all 167 files with zero mismatches.
+
+Corner recovery test-first evidence: `pnpm.cmd vitest run games/haxball/__tests__/game.test.ts
+-t 'sharp bot corner recovery' --maxWorkers=1 --pool=threads` FAILED all eight new cases on
+unchanged tactics, 58 skipped, 553 ms, start 00:38:28 local / 05:38:28 UTC. Each case uses an
+actual bot input and reducer timers at 400 ms batches, both attacking teams at all four corners.
+No case produced an authoritative kick within eight seconds. The bound accepts an inward bank
+clear or a legitimate goal; it does not prescribe the bot's direction or implementation.
+
+The first bank-clear iteration passed four corner cases and failed four (58 skipped), 495 ms,
+start 00:42:30 local / 05:42:30 UTC. It incorrectly used an oversized approach waypoint and
+buffered wall bounds as a contact-feasibility check, reversing an already outward horizontal
+component at the attacking corner. Actual player-center bounds and radial kick contact must
+drive feasibility; the unchanged eight behavioral checks remain required.
+
+Round 5 bot verification:
+
+- Revised actual-contact bank tactics PASS all 66 rules, 1.46 s, start 00:44:56 local /
+  05:44:56 UTC. The two-player 1,000-game activity probe then PASS, all three strengths
+  scoring, 21.30 s, start 00:46:38 local / 05:46:38 UTC. This probe predates the public style
+  rotation; the final full run must replace it as current simulation evidence.
+- `pnpm.cmd exec tsx jobs/P24-haxball/trace-bots.ts` is the retained known-seed diagnostic,
+  using actual bot snapshots and reducers. Before the corner fix: four kicks, 0–0, ball trapped.
+  Contact-bank revision: 24 kicks, 0–24 with a repeated favorable p2 route. Public goal/half
+  rotation: 24 kicks, 12–12. These traces are retained as `media/bot-trace-before.json`,
+  `media/bot-trace-bank.json` and `media/bot-trace-rotated.json`. One fixture is not parity proof.
+- The repeated-kickoff regression FAILED with the old fixed lane styles: one case failed,
+  66 skipped, 608 ms, start 00:51:27 local / 05:51:27 UTC. Only p2 obtained the first confirmed
+  kick at three real kickoffs. Root restored the rotating source in finally before further checks.
+- Final focused command `pnpm.cmd vitest run games/haxball/__tests__/game.test.ts --maxWorkers=1
+--pool=threads` PASS: all 67 rules, 1.04 s, start 00:52:10 local / 05:52:10 UTC. Corner tests
+  retain strict kick geometry; the repeated-kickoff case now observes first kicks from both seats
+  before halftime without specifying an angle, score or rotation formula. Full scope remains next.
