@@ -1,6 +1,12 @@
 # KEEP GOING
 
-Owner naming/overlap instructions reopened this job on 2026-10-12. The current module upgrades existing Lightning Round; all rounds below describe the superseded standalone engine. A new loop must run after upgraded-game CI is green. The previous no-gain streak does not complete the upgrade.
+## Current two-mode upgrade (2026-10-12)
+
+Started after PR #2 passed CI38225649131 at ca58d1b and left draft. Historical rounds below do not count toward this upgrade's no-gain streak.
+
+1. Five weaknesses in the eight-stranger walkthrough: crowded TV race identities (severe at16), long required reading holds, exact20-question replay overlap, English-only classic content, and receipt-time network differences in speed scoring. Fixed race identification: thirteen–sixteen-player ordinary receipts put the name above verdict/time/streak/points, retaining36px names and32px deltas. Measured gain: default sixteen-seat truncated names15→0; minimum name space65→337px; crowded eight-seat names also fit. Prevented a twenty-streak wrap and verified it together with longest EN/ES content through actual twenty-question reducer matches. All82 captures fit including Stage overscan;34 focused assertions pass. Full name titles remain available; server/scoring/timing and smaller-room layouts are unchanged. Final artifact hashes and post-round CI are recorded in VERIFY.md.
+
+## Historical standalone engine
 
 Started after PR #2 passed CI run 38176682177 and left draft.
 

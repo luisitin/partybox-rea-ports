@@ -527,6 +527,56 @@ ight is the :root default above) ────────
         min-width: 0;
       }
 
+      /* A correct answer adds its time beside the verdict and points. At thirteen to sixteen
+   seats that left only the first letter of a name. Keep the same four columns and avatar,
+   but give the name its own line; the receipt below stays readable at the TV body minimum.
+   Final wagers retain their separately choreographed cards. */
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b {
+        display: grid;
+        grid-template-columns: 48px auto auto minmax(0, 1fr) auto;
+        column-gap: var(--pb-space-1);
+        row-gap: 0;
+        line-height: 1;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > :first-child {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._name_e45a3b {
+        grid-column: 2 / -1;
+        grid-row: 1;
+        font-size: var(--pb-font-body);
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._verdict_e45a3b,
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._delta_e45a3b {
+        grid-row: 2;
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._verdict_e45a3b {
+        grid-column: 2;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._raceTime_e45a3b {
+        grid-column: 3;
+        grid-row: 2;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._streak_e45a3b {
+        grid-column: 4;
+        grid-row: 2;
+        justify-self: end;
+        white-space: nowrap;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._delta_e45a3b {
+        grid-column: 5;
+        justify-self: end;
+      }
+
       ._row_e45a3b {
         border: 1px solid var(--pb-border);
         display: flex;

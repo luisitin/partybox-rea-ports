@@ -300,7 +300,9 @@ export function RevealRows({
           >
             <Avatar avatarId={row.avatarId} size={48} dim={!row.connected} />
             {crowned && leads && row.score === top ? <LeadMark className={styles.crown} /> : null}
-            <span className={styles.name}>{row.name}</span>
+            <span className={styles.name} title={row.name}>
+              {row.name}
+            </span>
             {row.streak >= 2 ? (
               <span
                 className={`${styles.streak} ${row.streak >= 3 ? styles.streakHot : ''}`}

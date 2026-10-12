@@ -527,6 +527,56 @@ ight is the :root default above) ────────
         min-width: 0;
       }
 
+      /* A correct answer adds its time beside the verdict and points. At thirteen to sixteen
+   seats that left only the first letter of a name. Keep the same four columns and avatar,
+   but give the name its own line; the receipt below stays readable at the TV body minimum.
+   Final wagers retain their separately choreographed cards. */
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b {
+        display: grid;
+        grid-template-columns: 48px auto auto minmax(0, 1fr) auto;
+        column-gap: var(--pb-space-1);
+        row-gap: 0;
+        line-height: 1;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > :first-child {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._name_e45a3b {
+        grid-column: 2 / -1;
+        grid-row: 1;
+        font-size: var(--pb-font-body);
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._verdict_e45a3b,
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._delta_e45a3b {
+        grid-row: 2;
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._verdict_e45a3b {
+        grid-column: 2;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._raceTime_e45a3b {
+        grid-column: 3;
+        grid-row: 2;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._streak_e45a3b {
+        grid-column: 4;
+        grid-row: 2;
+        justify-self: end;
+        white-space: nowrap;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._delta_e45a3b {
+        grid-column: 5;
+        justify-self: end;
+      }
+
       ._row_e45a3b {
         border: 1px solid var(--pb-border);
         display: flex;
@@ -1061,7 +1111,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 01 Aster</span
+              ><span class="_name_e45a3b" title="Guest 01 Aster">Guest 01 Aster</span
               ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked C, correct"
                 >C✓</span
               ><span class="_delta_e45a3b _deltaUp_e45a3b">+997</span>
@@ -1094,7 +1144,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 02 Aster</span
+              ><span class="_name_e45a3b" title="Guest 02 Aster">Guest 02 Aster</span
               ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked C, correct"
                 >C✓</span
               ><span class="_delta_e45a3b _deltaUp_e45a3b">+991</span>
@@ -1127,7 +1177,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 03 Aster</span
+              ><span class="_name_e45a3b" title="Guest 03 Aster">Guest 03 Aster</span
               ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked C, correct"
                 >C✓</span
               ><span class="_delta_e45a3b _deltaUp_e45a3b">+985</span>
@@ -1160,7 +1210,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 04 Aster</span
+              ><span class="_name_e45a3b" title="Guest 04 Aster">Guest 04 Aster</span
               ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked C, correct"
                 >C✓</span
               ><span class="_delta_e45a3b _deltaUp_e45a3b">+985</span>
@@ -1193,7 +1243,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 10 Aster</span
+              ><span class="_name_e45a3b" title="Guest 10 Aster">Guest 10 Aster</span
               ><span class="_verdict_e45a3b _verdictNo_e45a3b" aria-label="picked D, wrong">D✗</span
               ><span class="_delta_e45a3b">0</span>
             </li>
@@ -1225,7 +1275,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 11 Aster</span
+              ><span class="_name_e45a3b" title="Guest 11 Aster">Guest 11 Aster</span
               ><span class="_verdict_e45a3b _verdictNo_e45a3b" aria-label="picked D, wrong">D✗</span
               ><span class="_delta_e45a3b">0</span>
             </li>
@@ -1257,7 +1307,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 12 Aster</span
+              ><span class="_name_e45a3b" title="Guest 12 Aster">Guest 12 Aster</span
               ><span class="_verdict_e45a3b _verdictNo_e45a3b" aria-label="picked D, wrong">D✗</span
               ><span class="_delta_e45a3b">0</span>
             </li>
@@ -1289,7 +1339,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 13 Aster</span
+              ><span class="_name_e45a3b" title="Guest 13 Aster">Guest 13 Aster</span
               ><span class="_verdict_e45a3b _verdictNo_e45a3b" aria-label="picked D, wrong">D✗</span
               ><span class="_delta_e45a3b">0</span>
             </li>
@@ -1321,7 +1371,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 14 Aster</span
+              ><span class="_name_e45a3b" title="Guest 14 Aster">Guest 14 Aster</span
               ><span class="_verdict_e45a3b _verdictNo_e45a3b" aria-label="picked D, wrong">D✗</span
               ><span class="_delta_e45a3b">0</span>
             </li>
@@ -1353,7 +1403,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 15 Aster</span
+              ><span class="_name_e45a3b" title="Guest 15 Aster">Guest 15 Aster</span
               ><span class="_verdict_e45a3b _verdictNo_e45a3b" aria-label="picked D, wrong">D✗</span
               ><span class="_delta_e45a3b">0</span>
             </li>
@@ -1385,7 +1435,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 16 Aster</span
+              ><span class="_name_e45a3b" title="Guest 16 Aster">Guest 16 Aster</span
               ><span class="_verdict_e45a3b _verdictNo_e45a3b" aria-label="picked D, wrong">D✗</span
               ><span class="_delta_e45a3b">0</span>
             </li>
@@ -1417,7 +1467,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 05 Aster</span
+              ><span class="_name_e45a3b" title="Guest 05 Aster">Guest 05 Aster</span
               ><span class="_verdict_e45a3b _verdictNo_e45a3b" aria-label="picked D, wrong">D✗</span
               ><span class="_delta_e45a3b">0</span>
             </li>
@@ -1449,7 +1499,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 06 Aster</span
+              ><span class="_name_e45a3b" title="Guest 06 Aster">Guest 06 Aster</span
               ><span class="_verdict_e45a3b _verdictNo_e45a3b" aria-label="picked D, wrong">D✗</span
               ><span class="_delta_e45a3b">0</span>
             </li>
@@ -1481,7 +1531,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 07 Aster</span
+              ><span class="_name_e45a3b" title="Guest 07 Aster">Guest 07 Aster</span
               ><span class="_verdict_e45a3b _verdictNo_e45a3b" aria-label="picked D, wrong">D✗</span
               ><span class="_delta_e45a3b">0</span>
             </li>
@@ -1513,7 +1563,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 08 Aster</span
+              ><span class="_name_e45a3b" title="Guest 08 Aster">Guest 08 Aster</span
               ><span class="_verdict_e45a3b _verdictNo_e45a3b" aria-label="picked D, wrong">D✗</span
               ><span class="_delta_e45a3b">0</span>
             </li>
@@ -1545,7 +1595,7 @@ ight is the :root default above) ────────
                   <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
                 </g>
                 <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
-              ><span class="_name_e45a3b">Guest 09 Aster</span
+              ><span class="_name_e45a3b" title="Guest 09 Aster">Guest 09 Aster</span
               ><span class="_verdict_e45a3b _verdictNo_e45a3b" aria-label="picked D, wrong">D✗</span
               ><span class="_delta_e45a3b">0</span>
             </li>

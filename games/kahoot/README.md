@@ -41,12 +41,12 @@ ranks, including podium ties. Phones retain their own total; they do not receive
 `ctx.presence.phoneOnly` is captured at init; `canSeeTv: false` also gives that player the stage.
 Clients honour the SDK `usePhoneOnly` context. Staged players never receive “look at the TV” instructions.
 
-| Beat           | Phone-only/remote player                                         | Spectator or permanently departed player                     |
-| -------------- | ---------------------------------------------------------------- | ------------------------------------------------------------ |
-| Intro/question | Title notice; complete prompt/options and controls               | Public title/question/options, without controls              |
-| Reveal         | Personal receipt; classic chart/standings; wager per-player rows | Public chart, rows/standings and explanations as appropriate |
-| Wager          | Stakes controls and topic; missing bet defaults to zero          | Topic, rules and standings; no stakes controls               |
-| Podium/done    | Unveiled tiers, then full board; personal rank/score             | Same public stage, without personal controls                 |
+| Beat           | Phone-only/remote player                                               | Spectator or permanently departed player                |
+| -------------- | ---------------------------------------------------------------------- | ------------------------------------------------------- |
+| Intro/question | Title notice; complete prompt/options and controls                     | Public title/question/options, without controls         |
+| Reveal         | Personal receipt; chart → standings; wager final: compact bets/results | Same public beats without receipt; classic explanations |
+| Wager          | Stakes controls and topic; missing bet defaults to zero                | Topic, rules and standings; no stakes controls          |
+| Podium/done    | Unveiled tiers, then full board; personal rank/score                   | Same public stage, without personal controls            |
 
 ## Inputs
 

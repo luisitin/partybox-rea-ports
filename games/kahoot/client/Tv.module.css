@@ -327,6 +327,56 @@
   min-width: 0;
 }
 
+/* A correct answer adds its time beside the verdict and points. At thirteen to sixteen
+   seats that left only the first letter of a name. Keep the same four columns and avatar,
+   but give the name its own line; the receipt below stays readable at the TV body minimum.
+   Final wagers retain their separately choreographed cards. */
+.rows4:not(.rowsFinal) > .row {
+  display: grid;
+  grid-template-columns: 48px auto auto minmax(0, 1fr) auto;
+  column-gap: var(--pb-space-1);
+  row-gap: 0;
+  line-height: 1;
+}
+
+.rows4:not(.rowsFinal) > .row > :first-child {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.rows4:not(.rowsFinal) > .row > .name {
+  grid-column: 2 / -1;
+  grid-row: 1;
+  font-size: var(--pb-font-body);
+}
+
+.rows4:not(.rowsFinal) > .row > .verdict,
+.rows4:not(.rowsFinal) > .row > .delta {
+  grid-row: 2;
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+}
+
+.rows4:not(.rowsFinal) > .row > .verdict {
+  grid-column: 2;
+}
+
+.rows4:not(.rowsFinal) > .row > .raceTime {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.rows4:not(.rowsFinal) > .row > .streak {
+  grid-column: 4;
+  grid-row: 2;
+  justify-self: end;
+  white-space: nowrap;
+}
+
+.rows4:not(.rowsFinal) > .row > .delta {
+  grid-column: 5;
+  justify-self: end;
+}
+
 .row {
   border: 1px solid var(--pb-border);
   display: flex;

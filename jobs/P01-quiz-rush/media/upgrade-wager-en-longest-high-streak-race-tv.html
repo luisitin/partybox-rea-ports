@@ -1,0 +1,1640 @@
+<!doctype html>
+<html lang="en" data-surface="tv" data-motion="off">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Kahoot! upgrade · upgrade-wager-en-longest-high-streak-race-tv</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>; 
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+
+      /* games/kahoot/client/Tv.module.css */
+      /* TV layout for Lightning Round: 2×2 choice grid + reveal rows. Tokens only (docs/DESIGN_SYSTEM._md_e45a3b). */
+      ._header_e45a3b {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--pb-space-5);
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      ._kicker_e45a3b {
+        color: var(--pb-accent-2);
+      }
+
+      /* Once-per-game stakes moments (wager kicker, final question, final reveal) pop instead of rise. */
+      ._final_e45a3b {
+        color: var(--pb-accent);
+        animation: pb-pop var(--pb-motion-slow) var(--pb-ease) both;
+      }
+
+      /* The question page measures the room it gets: a sixteen-player roster (four chip rows) leaves the
+   stage ~480 px and "0 / 16 locked in" went under the host bar. Below 560 px the prompt drops to
+   h2 and the cards shrink; twelve players (three rows) keep the full size. */
+      ._page_e45a3b {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+        container-type: size;
+      }
+
+      /* The final reveal's column inside `._page_e45a3b` (a container cannot restyle its own gap, so the
+   compact rules tighten this inner column instead). */
+      ._fit_e45a3b {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+      }
+
+      @container (max-height: 560px) {
+        ._page_e45a3b ._prompt_e45a3b {
+          font-size: var(--pb-font-h2);
+        }
+        ._page_e45a3b ._grid_e45a3b {
+          gap: var(--pb-space-3);
+        }
+        ._page_e45a3b ._choice_e45a3b {
+          min-height: 84px;
+          padding: var(--pb-space-3) var(--pb-space-5);
+        }
+        ._page_e45a3b ._count_e45a3b {
+          font-size: var(--pb-font-body);
+        }
+        /* The final reveal in the same room: a slimmer answer bar, tighter rows at caption size (the
+     bet keeps its own line — inline it clipped four-digit bets in a 420 px cell), so four rows
+     of sixteen stay above the host bar. */
+        ._page_e45a3b ._fit_e45a3b {
+          gap: var(--pb-space-3);
+        }
+        ._page_e45a3b ._answer_e45a3b {
+          min-height: 64px;
+          font-size: var(--pb-font-h2);
+          padding: var(--pb-space-1) var(--pb-space-4);
+        }
+        ._page_e45a3b ._answer_e45a3b ._letter_e45a3b {
+          width: 44px;
+          height: 44px;
+          font-size: var(--pb-font-caption);
+        }
+        ._page_e45a3b ._stack_e45a3b {
+          line-height: 1.05;
+        }
+        ._page_e45a3b ._rows_e45a3b {
+          gap: var(--pb-space-2) var(--pb-space-3);
+        }
+        ._page_e45a3b ._rowFinal_e45a3b {
+          min-height: 60px;
+          gap: var(--pb-space-2);
+          padding: var(--pb-space-1) var(--pb-space-3);
+          font-size: var(--pb-font-caption);
+        }
+        ._page_e45a3b ._deltaFinal_e45a3b {
+          font-size: var(--pb-font-body);
+        }
+      }
+
+      ._grid_e45a3b {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--pb-space-4);
+        width: 100%;
+      }
+
+      ._choice_e45a3b {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: var(--pb-space-4);
+        min-height: 120px;
+        padding: var(--pb-space-4) var(--pb-space-5);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface);
+        border: 4px solid var(--pb-border);
+        font-size: var(--pb-font-body);
+        font-weight: 700;
+        overflow-wrap: anywhere;
+        /* Beat two after the prompt (which rides the shell's ._game_e45a3b rise): A, B, C, D in reading order. */
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+        animation-delay: calc(var(--pb-motion-fast) + var(--pb-motion-fast) * var(--i, 0) / 3);
+      }
+
+      ._letter_e45a3b {
+        width: 48px;
+        height: 48px;
+        font-size: var(--pb-font-body);
+      }
+
+      ._letter_e45a3b {
+        display: grid;
+        place-items: center;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: var(--pb-surface-2);
+        font-size: var(--pb-font-h2);
+        font-weight: 900;
+        flex-shrink: 0;
+      }
+
+      ._mark_e45a3b {
+        font-size: var(--pb-font-h2);
+        font-weight: 900;
+        min-width: 1.2em;
+        text-align: right;
+      }
+
+      ._correct_e45a3b {
+        border-color: var(--pb-accent-3);
+        background: var(--pb-surface-2);
+      }
+
+      ._correct_e45a3b ._letter_e45a3b,
+      ._correct_e45a3b ._mark_e45a3b {
+        color: var(--pb-accent-3);
+      }
+
+      ._dim_e45a3b {
+        opacity: 0.7;
+      }
+
+      /* Reveal: the question, already known, steps back to a muted body line… */
+      ._asked_e45a3b {
+        margin: 0;
+        flex-shrink: 0;
+        font-size: var(--pb-font-body);
+        font-weight: 700;
+        color: var(--pb-text-muted);
+        text-wrap: balance;
+      }
+
+      /* …and the correct answer is the biggest thing on the stage: one full-width card, letter disc
+   filled, ✓ at the end (shape + glyph, never colour alone). */
+      ._answer_e45a3b {
+        flex-shrink: 0;
+        min-height: 0;
+        padding: var(--pb-space-2) var(--pb-space-5);
+        font-size: var(--pb-font-h1);
+        line-height: 1;
+        border-color: var(--pb-accent-3);
+        background: var(--pb-surface-2);
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      ._answer_e45a3b ._letter_e45a3b {
+        background: var(--pb-accent-3);
+        color: var(--pb-on-accent);
+      }
+
+      ._answer_e45a3b ._mark_e45a3b {
+        font-size: var(--pb-font-h1);
+        color: var(--pb-accent-3);
+      }
+
+      ._revealSummary_e45a3b {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+        gap: var(--pb-space-4);
+        align-items: center;
+        flex-shrink: 0;
+      }
+
+      /* Final reveal holds the answer back (space kept) until its beat; removing the class replays the pop. */
+      ._answerHidden_e45a3b {
+        visibility: hidden;
+        animation: none;
+      }
+
+      /* ── Intro ── */
+      ._bolt_e45a3b {
+        width: var(--pb-font-display);
+        height: var(--pb-font-display);
+        color: var(--pb-accent-2);
+        flex-shrink: 0;
+      }
+
+      ._introLine_e45a3b {
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+        animation-delay: calc(var(--pb-motion-base) * var(--i, 0));
+      }
+
+      ._introPill_e45a3b {
+        display: inline-block;
+        padding: var(--pb-space-2) var(--pb-space-5);
+        border-radius: 999px;
+        background: var(--pb-surface-2);
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--pb-text-muted);
+      }
+
+      /* Wager header: "3 / 6 placed" opposite the kicker; the number pops (._countNum_e45a3b). */
+      ._placed_e45a3b {
+        color: var(--pb-accent-2);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      ._placed_e45a3b ._countNum_e45a3b {
+        color: inherit;
+      }
+
+      ._rules_e45a3b {
+        margin: 0;
+      }
+
+      /* T-0175: the wager's heading, topic and rules as one block (tighter than the stage's gap); the
+   space under it clears the board's rank bands ("1–2"), which sit above its first row. */
+      ._wagerHead_e45a3b {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-2);
+        margin-bottom: var(--pb-space-4);
+      }
+
+      ._count_e45a3b {
+        font-size: var(--pb-font-h2);
+        color: var(--pb-text-muted);
+        text-align: center;
+        margin: 0;
+      }
+
+      /* Large rooms can put thirteen faces and three waiting names on this line. Keep it secondary
+   to the prompt so a three-line shipped question still clears the TV's bottom safe margin. */
+      ._countDense_e45a3b {
+        font-size: var(--pb-font-body);
+      }
+
+      /* The number is keyed on its value so every lock-in remounts it and it pops. */
+      ._countNum_e45a3b {
+        display: inline-block;
+        color: var(--pb-text);
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      ._holdouts_e45a3b {
+        color: var(--pb-text-muted);
+        font-weight: 400;
+      }
+
+      ._rows_e45a3b {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        flex-shrink: 0;
+        display: grid;
+        /* columns by player count (rowsClass): 2 up to 8, 3 up to 12, 4 up to 16 — never more than 4 rows */
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-2) var(--pb-space-3);
+        width: 100%;
+      }
+
+      /* Four players or fewer (pass 871): one column, rows half again as tall, the name at h2 — a
+   three-player final used to sit in the top third of the results stage. */
+      ._rows1_e45a3b {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--pb-space-3);
+      }
+
+      ._rows1_e45a3b ._row_e45a3b {
+        /* 88, not 96: four rows end above the host bar under the full header (T-0179). */
+        min-height: 88px;
+        font-size: var(--pb-font-h2);
+      }
+
+      ._rows1_e45a3b ._rowFinal_e45a3b {
+        min-height: 120px;
+      }
+
+      ._rows2_e45a3b {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      ._rows3_e45a3b {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      ._rows4_e45a3b {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      /* Four 420 px cells: tighter gaps and no reserved verdict width so five-letter names survive. */
+      ._rows4_e45a3b ._row_e45a3b {
+        gap: var(--pb-space-2);
+      }
+
+      ._rows4_e45a3b ._verdict_e45a3b {
+        min-width: 0;
+      }
+
+      /* A correct answer adds its time beside the verdict and points. At thirteen to sixteen
+   seats that left only the first letter of a name. Keep the same four columns and avatar,
+   but give the name its own line; the receipt below stays readable at the TV body minimum.
+   Final wagers retain their separately choreographed cards. */
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b {
+        display: grid;
+        grid-template-columns: 48px auto auto minmax(0, 1fr) auto;
+        column-gap: var(--pb-space-1);
+        row-gap: 0;
+        line-height: 1;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > :first-child {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._name_e45a3b {
+        grid-column: 2 / -1;
+        grid-row: 1;
+        font-size: var(--pb-font-body);
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._verdict_e45a3b,
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._delta_e45a3b {
+        grid-row: 2;
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._verdict_e45a3b {
+        grid-column: 2;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._raceTime_e45a3b {
+        grid-column: 3;
+        grid-row: 2;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._streak_e45a3b {
+        grid-column: 4;
+        grid-row: 2;
+        justify-self: end;
+        white-space: nowrap;
+      }
+
+      ._rows4_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b > ._delta_e45a3b {
+        grid-column: 5;
+        justify-self: end;
+      }
+
+      ._row_e45a3b {
+        border: 1px solid var(--pb-border);
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-3);
+        padding: var(--pb-space-1) var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-body);
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      /* T-0190: the standings reorder the same rows, and a row React moves in the DOM would play its
+   entrance again (a re-inserted node restarts its CSS animations); the FLIP in flip._ts_e45a3b moves them. */
+      ._settled_e45a3b ._row_e45a3b,
+      ._settled_e45a3b ._row_e45a3b * {
+        animation: none;
+      }
+
+      ._rowCorrect_e45a3b {
+        outline: 3px solid var(--pb-accent-3);
+      }
+
+      /* Nothing happened here: no points, so the row (name, glyph, 0) steps back. */
+      ._rowQuiet_e45a3b {
+        color: var(--pb-text-muted);
+      }
+
+      ._crown_e45a3b {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-accent-2);
+      }
+
+      ._name_e45a3b {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 700;
+      }
+
+      ._verdict_e45a3b {
+        font-weight: 900;
+        min-width: 2.2em;
+        text-align: center;
+      }
+
+      ._verdictOk_e45a3b {
+        color: var(--pb-accent-3);
+      }
+
+      ._verdictNo_e45a3b {
+        color: color-mix(in srgb, var(--pb-danger) 55%, var(--pb-text));
+      }
+
+      ._delta_e45a3b {
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._deltaUp_e45a3b {
+        color: var(--pb-accent-3);
+      }
+
+      ._deltaDown_e45a3b {
+        color: color-mix(in srgb, var(--pb-danger) 55%, var(--pb-text));
+      }
+
+      /* Running total (two-column boards only, where there is room). */
+      ._score_e45a3b {
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-caption);
+        font-variant-numeric: tabular-nums;
+        min-width: 3ch;
+        text-align: right;
+      }
+
+      ._streak_e45a3b {
+        display: inline-block;
+        color: var(--pb-accent-2);
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+      }
+
+      /* Three in a row and up pops in after the rows have landed, in row order. */
+      ._streakHot_e45a3b {
+        animation: pb-pop var(--pb-motion-slow) var(--pb-ease) both;
+        animation-delay: calc(
+          var(--pb-motion-base) * 2 + var(--pb-motion-fast) * var(--i, 0) + var(--pb-motion-fast)
+        );
+      }
+
+      /* ── Final-wager reveal (TvFinal._tsx_e45a3b): name over "✓ bet 3150 · 2340 pts", h2 delta, 80 px rows ── */
+      ._rowsFinal_e45a3b {
+        /* per-row stagger in --pb-motion-slow units (set inline as a unitless factor → 0 under reduced motion) */
+        --pb-final-step: 0ms;
+      }
+
+      ._pausedFinal_e45a3b,
+      ._pausedFinal_e45a3b * {
+        animation-play-state: paused !important;
+      }
+
+      ._rowFinal_e45a3b {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        min-height: 80px;
+      }
+
+      ._stack_e45a3b {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        line-height: 1.15;
+      }
+
+      ._stack_e45a3b ._name_e45a3b {
+        flex: none;
+      }
+
+      ._bet_e45a3b {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      ._deltaFinal_e45a3b {
+        font-size: var(--pb-font-h2);
+        min-width: 3ch;
+        text-align: right;
+      }
+
+      /* Three and four columns cannot spare h2 deltas next to "✓ bet 3150 · 2340 pts"; four cannot spare
+   the total either (the results board follows). */
+      ._rows3_e45a3b ._deltaFinal_e45a3b,
+      ._rows4_e45a3b ._deltaFinal_e45a3b {
+        font-size: var(--pb-font-body);
+      }
+
+      ._rows4_e45a3b ._total_e45a3b {
+        display: none;
+      }
+
+      /* Totals land on every row at once (the per-row stagger is for verdicts and deltas only). */
+      ._rowsFinal_e45a3b ._pop_e45a3b._total_e45a3b {
+        animation-delay: calc(0ms - var(--pb-final-total-skip, 0ms));
+      }
+
+      ._deltaZero_e45a3b {
+        color: var(--pb-text-muted);
+      }
+
+      /* Verdict, delta and total arrive per row, smallest bet first. */
+      ._pop_e45a3b {
+        display: inline-block;
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+        animation-delay: calc(var(--i, 0) * var(--pb-final-step, 0ms));
+      }
+
+      /* Reloads keep the room's reveal age instead of replaying already-finished entrances. */
+      ._rowsFinal_e45a3b > ._row_e45a3b {
+        animation-delay: calc(0ms - var(--pb-final-row-skip, 0ms));
+      }
+      ._rowsFinal_e45a3b ._pop_e45a3b {
+        animation-delay: calc(
+          var(--i, 0) * var(--pb-final-step, 0ms) - var(--pb-final-verdict-skip, 0ms)
+        );
+      }
+
+      /* The leading number of "n / m" pops when it changes; min-width so 9 → 10 does not shift the text. */
+      ._countNum_e45a3b {
+        display: inline-block;
+        min-width: 2ch;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      /* Reveal beat (review-loop #24): the answer card pops at 0 ms; the player rows follow 150 ms later,
+   60 ms apart (--i is set inline per row). Final-wager rows keep their own slower stagger. */
+      ._rows_e45a3b:not(._rowsFinal_e45a3b) > ._row_e45a3b {
+        animation-delay: calc(var(--pb-motion-fast) + var(--pb-motion-fast) * 0.4 * var(--i, 0));
+      }
+
+      /* ── I-007 A: the crowd on the count line — one face per lock-in, each popping in once. */
+      ._crowd_e45a3b {
+        display: inline-flex;
+        align-items: center;
+        margin-right: var(--pb-space-3);
+        vertical-align: middle;
+      }
+      ._crowdFace_e45a3b {
+        display: inline-flex;
+        margin-left: calc(-1 * var(--pb-space-2));
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+      ._crowdFace_e45a3b:first-child {
+        margin-left: 0;
+      }
+
+      /* ── I-589 A: a right answer's time on its reveal row; the fastest wears the bolt. */
+      ._raceTime_e45a3b {
+        font-size: var(--pb-font-caption);
+        font-weight: 800;
+        color: var(--pb-accent-2);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      /* ── I-550 A: the final's topic under "Place your wagers". */
+      /* T-0175: body size, the topic in the text colour and the difficulty in the accent (a whole h2 line
+   in yellow was hard to read). */
+      ._finalTopic_e45a3b {
+        margin: 0;
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-body);
+      }
+
+      ._finalTopic_e45a3b strong {
+        color: var(--pb-text);
+        font-weight: 800;
+      }
+
+      ._finalTopic_e45a3b ._finalLevel_e45a3b {
+        color: var(--pb-accent-2);
+      }
+
+      /* games/kahoot/client/AnswerChart.module.css */
+      /* Counts share the muted question's row; the correct answer keeps its full-width focal card. */
+      ._chart_824287 {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 2.5fr);
+        align-items: center;
+        gap: var(--pb-space-3);
+        padding: var(--pb-space-1) var(--pb-space-3);
+        margin: 0;
+        list-style: none;
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-h2);
+        line-height: 1.1;
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._chart_824287 li {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--pb-space-1);
+        color: var(--pb-text-muted);
+      }
+
+      ._pair_824287 {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: var(--pb-space-3);
+      }
+
+      ._chart_824287 b {
+        color: var(--pb-text);
+      }
+
+      ._chart_824287 ._correct_824287,
+      ._correct_824287 b {
+        color: var(--pb-accent-3);
+      }
+
+      ._label_824287 {
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      ._track_824287 {
+        height: var(--pb-space-5);
+        overflow: hidden;
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface-2);
+      }
+
+      /* The last cell reserves 2.5 columns for its words, but every bar uses the same count scale. */
+      ._chart_824287 li:last-child ._track_824287 {
+        width: 40%;
+        justify-self: center;
+      }
+
+      ._bar_824287 {
+        display: block;
+        height: 100%;
+        background: currentColor;
+        transform: scaleX(var(--pb-answer-share, 0));
+        transform-origin: left;
+      }
+
+      /* packages/game-sdk/src/tv/Stage.module.css */
+      ._stage_262f13 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+        min-height: 100%;
+        /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+        padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+          var(--pb-overscan-y, 54px);
+      }
+
+      ._center_262f13 {
+        /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+        justify-content: safe center;
+        align-items: safe center;
+        text-align: center;
+      }
+
+      /* packages/game-sdk/src/ui/Avatar.module.css */
+      /* The face's `size` as CSS, at no specificity: a caller's class or `._x_8c3e65 svg` rule still sizes it,
+   as it did over the old width/height attributes, which can't hold a CSS var (WebKit logged an
+   error for every face, T-0174). */
+      :where(._avatar_8c3e65) {
+        width: var(--pb-avatar-size);
+        height: var(--pb-avatar-size);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+        font-size: var(--pb-font-body);
+        line-height: 1.4;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h2 {
+        font-size: var(--pb-font-h1);
+        line-height: 1.2;
+        font-weight: 900;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+        color: inherit;
+      }
+      .evidence-shell {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template-rows: 84px minmax(0, 1fr) 48px;
+      }
+      [data-surface='tv'] .evidence-shell {
+        grid-template-rows: 100px minmax(0, 1fr) 80px;
+      }
+      .evidence-header,
+      .evidence-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--pb-space-4);
+        background: var(--pb-surface);
+        gap: var(--pb-space-3);
+      }
+      .evidence-footer {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+      .evidence-main {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        min-width: 0;
+        overflow: hidden;
+        --pb-stage-top: var(--pb-space-5);
+      }
+      .evidence-code {
+        font-weight: 900;
+        color: var(--pb-accent-2);
+      }
+      .pb-visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      :root[data-motion='off'] *,
+      :root[data-motion='off'] *::before,
+      :root[data-motion='off'] *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="evidence-shell">
+      <header class="evidence-header">
+        <b>PartyBox</b><span class="evidence-code">KAHOOT</span>
+      </header>
+      <main class="evidence-main" aria-label="Game stage">
+        <div class="_stage_262f13">
+          <div class="_header_e45a3b">
+            <span class="_kicker_e45a3b">Question 20 of 20</span
+            ><span>STEM · Computing · medium</span>
+          </div>
+          <div class="_revealSummary_e45a3b">
+            <p class="_asked_e45a3b">
+              Chrome&#x27;s Incognito mode chiefly avoids retaining what after its private session
+              closes?
+            </p>
+            <ol class="_chart_824287" aria-label="Answer distribution">
+              <li aria-label="A: Records kept by the internet provider · 0 answers">
+                <span class="_pair_824287" aria-hidden="true"
+                  ><span class="_label_824287">A</span><b>0</b></span
+                ><span class="_track_824287" aria-hidden="true"
+                  ><span class="_bar_824287" style="--pb-answer-share: 0"></span
+                ></span>
+              </li>
+              <li aria-label="B: Downloaded files on the computer · 0 answers">
+                <span class="_pair_824287" aria-hidden="true"
+                  ><span class="_label_824287">B</span><b>0</b></span
+                ><span class="_track_824287" aria-hidden="true"
+                  ><span class="_bar_824287" style="--pb-answer-share: 0"></span
+                ></span>
+              </li>
+              <li aria-label="C: Records kept by the websites visited · 0 answers">
+                <span class="_pair_824287" aria-hidden="true"
+                  ><span class="_label_824287">C</span><b>0</b></span
+                ><span class="_track_824287" aria-hidden="true"
+                  ><span class="_bar_824287" style="--pb-answer-share: 0"></span
+                ></span>
+              </li>
+              <li
+                class="_correct_824287"
+                aria-label="D: That session&#x27;s local browsing history · 16 answers · correct answer"
+              >
+                <span class="_pair_824287" aria-hidden="true"
+                  ><span class="_label_824287">D✓</span><b>16</b></span
+                ><span class="_track_824287" aria-hidden="true"
+                  ><span class="_bar_824287" style="--pb-answer-share: 1"></span
+                ></span>
+              </li>
+              <li aria-label="0 did not answer">
+                <span class="_pair_824287" aria-hidden="true"
+                  ><span class="_label_824287">No answer</span><b>0</b></span
+                ><span class="_track_824287" aria-hidden="true"
+                  ><span class="_bar_824287" style="--pb-answer-share: 0"></span
+                ></span>
+              </li>
+            </ol>
+          </div>
+          <div class="_choice_e45a3b _answer_e45a3b" style="animation-delay: 0ms" role="status">
+            <span class="_letter_e45a3b" aria-hidden="true">D</span
+            ><span>That session&#x27;s local browsing history</span
+            ><span class="_mark_e45a3b" aria-hidden="true">✓</span
+            ><span class="pb-visually-hidden">correct answer: D</span>
+          </div>
+          <ol class="_rows_e45a3b _rows4_e45a3b" aria-label="results">
+            <li data-player="seat-1" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 0">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="01 Maximiliana Guadalupe Washington"
+                >01 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-10" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 1">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="10 Maximiliana Guadalupe Washington"
+                >10 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-11" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 2">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="11 Maximiliana Guadalupe Washington"
+                >11 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-12" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 3">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="12 Maximiliana Guadalupe Washington"
+                >12 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-13" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 4">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="13 Maximiliana Guadalupe Washington"
+                >13 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-14" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 5">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="14 Maximiliana Guadalupe Washington"
+                >14 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-15" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 6">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="15 Maximiliana Guadalupe Washington"
+                >15 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-16" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 7">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="16 Maximiliana Guadalupe Washington"
+                >16 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-2" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 8">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="02 Maximiliana Guadalupe Washington"
+                >02 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-3" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 9">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="03 Maximiliana Guadalupe Washington"
+                >03 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-4" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 10">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="04 Maximiliana Guadalupe Washington"
+                >04 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-5" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 11">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="05 Maximiliana Guadalupe Washington"
+                >05 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-6" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 12">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="06 Maximiliana Guadalupe Washington"
+                >06 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-7" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 13">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="07 Maximiliana Guadalupe Washington"
+                >07 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-8" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 14">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="08 Maximiliana Guadalupe Washington"
+                >08 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+            <li data-player="seat-9" class="_row_e45a3b _rowCorrect_e45a3b" style="--i: 15">
+              <svg
+                viewBox="0 0 64 64"
+                width="48"
+                height="48"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: 48px;
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_e45a3b" title="09 Maximiliana Guadalupe Washington"
+                >09 Maximiliana Guadalupe Washington</span
+              ><span class="_streak_e45a3b _streakHot_e45a3b" aria-label="streak 20">🔥20</span
+              ><span class="_verdict_e45a3b _verdictOk_e45a3b" aria-label="picked D, correct"
+                >D✓</span
+              ><span class="_raceTime_e45a3b">⚡ 0.4 s</span
+              ><span class="_delta_e45a3b _deltaUp_e45a3b">+1297</span>
+            </li>
+          </ol>
+        </div>
+      </main>
+      <footer class="evidence-footer"><span>Kahoot! · tv</span><span>1920 × 1080</span></footer>
+    </div>
+  </body>
+</html>

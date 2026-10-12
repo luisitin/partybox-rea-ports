@@ -99,7 +99,18 @@ class Devtools {
 
 function measure() {
   const main = document.querySelector('.evidence-main');
-  const bounds = main.getBoundingClientRect();
+  const mainBounds = main.getBoundingClientRect();
+  const stage =
+    document.documentElement.dataset.surface === 'tv'
+      ? main.querySelector('[class*="_stage_"]')
+      : null;
+  const stageStyle = stage ? getComputedStyle(stage) : null;
+  const bounds = {
+    top: mainBounds.top + (stageStyle ? parseFloat(stageStyle.paddingTop) : 0),
+    bottom: mainBounds.bottom - (stageStyle ? parseFloat(stageStyle.paddingBottom) : 0),
+    left: mainBounds.left + (stageStyle ? parseFloat(stageStyle.paddingLeft) : 0),
+    right: mainBounds.right - (stageStyle ? parseFloat(stageStyle.paddingRight) : 0),
+  };
   const all = [...main.querySelectorAll('*')];
   const named = (el) =>
     `${el.tagName.toLowerCase()}.${String(el.className).split(' ')[0]} ${(el.textContent ?? '').slice(0, 70)}`;
@@ -119,12 +130,24 @@ function measure() {
   );
   const clipped = content
     .filter((el) => {
-      const r = el.getBoundingClientRect();
+      const insideStage = stage?.contains(el);
+      const limit = insideStage ? bounds : mainBounds;
+      let r = el.getBoundingClientRect();
+      // The TV's Next hint cancels transparent padding to keep its header stable.
+      // Check its visible words; the shell timer is a sibling outside the game Stage.
+      if (insideStage && el.matches('button')) {
+        const style = getComputedStyle(el);
+        if (style.backgroundColor === 'rgba(0, 0, 0, 0)' && parseFloat(style.marginTop) < 0) {
+          const range = document.createRange();
+          range.selectNodeContents(el);
+          r = range.getBoundingClientRect();
+        }
+      }
       return (
-        r.top < bounds.top - 1 ||
-        r.bottom > bounds.bottom + 1 ||
-        r.left < bounds.left - 1 ||
-        r.right > bounds.right + 1
+        r.top < limit.top - 1 ||
+        r.bottom > limit.bottom + 1 ||
+        r.left < limit.left - 1 ||
+        r.right > limit.right + 1
       );
     })
     .map(named);
@@ -148,10 +171,26 @@ function measure() {
   return {
     horizontalOverflow: document.documentElement.scrollWidth - innerWidth,
     verticalOverflow: document.documentElement.scrollHeight - innerHeight,
-    main: { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height },
+    main: {
+      x: mainBounds.x,
+      y: mainBounds.y,
+      width: mainBounds.width,
+      height: mainBounds.height,
+    },
+    safeBounds: bounds,
     scrollers,
     clipped,
     unstyled,
+    nameVisibility: [...main.querySelectorAll('[data-player] [class*="_name_"]')]
+      .filter(visible)
+      .map((el) => ({
+        playerId: el.closest('[data-player]').getAttribute('data-player'),
+        name: el.textContent.trim(),
+        title: el.getAttribute('title'),
+        availableWidth: el.clientWidth,
+        requiredWidth: el.scrollWidth,
+        truncated: el.scrollWidth > el.clientWidth + 1,
+      })),
     touchTargets: [...main.querySelectorAll('button')].map((el) => {
       const r = el.getBoundingClientRect();
       return {

@@ -214,6 +214,32 @@ function atEnd(state: State): number {
   return state.phase.deadline === null ? state.phase.startedAt + 5000 : state.phase.deadline - 1;
 }
 
+function longestQuestion(ids: readonly string[], lang?: 'en' | 'es'): string {
+  return [...ids].sort((a, b) => {
+    const size = (id: string): number => {
+      const q = questionById(id, lang);
+      return q
+        ? q.question.length +
+            q.choices.reduce((sum, option) => sum + option.length, 0) +
+            ('explanation' in q ? q.explanation.length : 0)
+        : 0;
+    };
+    return size(b) - size(a);
+  })[0]!;
+}
+
+/** Move a chosen shipped question without introducing a duplicate into the drawn match. */
+function selectQuestion(state: State, index: number, id: string): State {
+  const questionIds = [...state.questionIds];
+  const displaced = questionIds[index];
+  if (!displaced) throw new Error('Evidence question slot missing');
+  const previous = questionIds.indexOf(id);
+  if (previous !== -1) questionIds[previous] = displaced;
+  questionIds[index] = id;
+  expect(new Set(questionIds).size).toBe(questionIds.length);
+  return { ...state, questionIds };
+}
+
 it('renders fresh classic and wager phases on every supported stage surface', () => {
   const classic = played('classic');
   const wager = played('wager');
@@ -285,25 +311,13 @@ it('renders fresh classic and wager phases on every supported stage surface', ()
 
 it('renders shipped longest classic and bilingual wager text with sixteen long names', () => {
   const classicIds = Object.values(CLASSIC_PACKS).flatMap((p) => p.questions.map((q) => q.id));
-  const ranked = (ids: readonly string[], lang?: 'en' | 'es'): string =>
-    [...ids].sort((a, b) => {
-      const size = (id: string): number => {
-        const q = questionById(id, lang);
-        return q
-          ? q.question.length +
-              q.choices.reduce((sum, option) => sum + option.length, 0) +
-              ('explanation' in q ? q.explanation.length : 0)
-          : 0;
-      };
-      return size(b) - size(a);
-    })[0]!;
   for (const [mode, lang, id] of [
-    ['classic', 'en', ranked(classicIds)],
-    ['wager', 'en', ranked(QUESTIONS.map((q) => q.id))],
+    ['classic', 'en', longestQuestion(classicIds)],
+    ['wager', 'en', longestQuestion(QUESTIONS.map((q) => q.id))],
     [
       'wager',
       'es',
-      ranked(
+      longestQuestion(
         QUESTIONS_ES.map((q) => q.id),
         'es',
       ),
@@ -311,9 +325,8 @@ it('renders shipped longest classic and bilingual wager text with sixteen long n
   ] as const) {
     const initial = start(mode, 16, true);
     const selected = {
-      ...initial,
+      ...selectQuestion(initial, 0, id),
       contentLang: lang,
-      questionIds: [id, ...initial.questionIds.slice(1)],
     };
     const question = enterQuestion(selected, initial.phase.deadline!);
     language.value = lang;
@@ -322,7 +335,19 @@ it('renders shipped longest classic and bilingual wager text with sixteen long n
       'phone-only',
       'spectator',
     ]);
-    const reveal = timer(question);
+    let reveal = question;
+    if (mode === 'wager') {
+      const answer = questionById(id, lang)?.answerIndex;
+      if (answer === undefined) throw new Error('Longest wager answer missing');
+      for (const player of Object.values(question.players))
+        reveal = input(
+          reveal,
+          player.id,
+          { type: 'pick', index: answer },
+          question.phase.startedAt + 400,
+        );
+    }
+    if (reveal.phase.id === 'question') reveal = timer(reveal);
     expect(reveal.phase.id).toBe('reveal');
     paint(
       `${mode}-${lang}-longest-reveal`,
@@ -378,6 +403,78 @@ it('renders legal forty-character final names with five-digit bets and totals fr
   fixtures['wager-final-wide-names-five-digits'] = final;
 });
 
+it('keeps eight and sixteen crowded TV race receipts identifiable after a long match', () => {
+  for (const [count, size] of [
+    [8, 'eight'],
+    [16, 'sixteen'],
+  ] as const) {
+    const initial = game.init({
+      players: seats(count),
+      settings: { quizMode: 'wager', category: 'all', questions: 20, answerSeconds: 10 },
+      seed: 42,
+      now: T0,
+      presence: { mode: 'together', phoneOnly: false },
+    });
+    const reveals = played('wager', true, initial).filter(
+      (state) => state.phase.id === 'reveal' && !tv(state).round?.final,
+    );
+    const race = reveals[reveals.length - 1];
+    if (!race) throw new Error('Crowded ordinary race missing');
+    for (const row of tv(race).rows ?? []) {
+      expect(row.streak).toBeGreaterThanOrEqual(10);
+      expect(row.elapsedMs).toBe(400);
+      expect(row.score).toBeGreaterThanOrEqual(10000);
+    }
+    const name = `wager-race-${size}`;
+    paint(name, race, (tv(race).revealAt ?? race.phase.startedAt) + 1000, ['tv']);
+    const frame = frames[frames.length - 1]!;
+    expect(frame.html.match(/data-player=/g)).toHaveLength(count);
+    for (const player of seats(count)) expect(frame.html).toContain(`title="${player.name}"`);
+    expect(frame.html).toContain('0.4 s');
+    expect(frame.html).toContain('⚡');
+    fixtures[name] = race;
+  }
+});
+
+it('fits the longest translated race together with twenty-answer streaks from real play', () => {
+  for (const lang of ['en', 'es'] as const) {
+    const id = longestQuestion(
+      (lang === 'es' ? QUESTIONS_ES : QUESTIONS).map((q) => q.id),
+      lang,
+    );
+    const initial = game.init({
+      players: seats(16, true),
+      settings: { quizMode: 'wager', category: 'all', questions: 20, answerSeconds: 10 },
+      seed: 42,
+      now: T0,
+      contentLang: lang,
+      presence: { mode: 'together', phoneOnly: false },
+    });
+    const index = initial.settings.questions - 1;
+    const selected = selectQuestion(initial, index, id);
+    const race = played('wager', true, selected).find(
+      (state) => state.phase.id === 'reveal' && state.index === index,
+    );
+    if (!race) throw new Error('Longest high-streak race missing');
+    expect(race.questionIds[race.index]).toBe(id);
+    expect(tv(race).round?.final).toBe(false);
+    expect(tv(race).rows).toHaveLength(16);
+    for (const row of tv(race).rows ?? []) {
+      expect(row.streak).toBe(20);
+      expect(row.elapsedMs).toBe(400);
+      expect(row.score).toBeGreaterThanOrEqual(10000);
+    }
+    language.value = lang;
+    const name = `wager-${lang}-longest-high-streak-race`;
+    paint(name, race, (tv(race).revealAt ?? race.phase.startedAt) + 1000, ['tv']);
+    const frame = frames[frames.length - 1]!;
+    expect(frame.html.match(/data-player=/g)).toHaveLength(16);
+    expect(frame.html.match(/🔥20/g)).toHaveLength(16);
+    for (const player of seats(16, true)) expect(frame.html).toContain(`title="${player.name}"`);
+    fixtures[name] = race;
+  }
+});
+
 function captureFrames(): UpgradeFrame[] {
   return frames.filter((frame) => {
     const name = frame.name.slice('upgrade-'.length, -(frame.surface.length + 1));
@@ -385,6 +482,7 @@ function captureFrames(): UpgradeFrame[] {
       frame.surface === 'tv' || frame.surface === 'phone-tv' || frame.surface === 'phone-only';
     const stage = frame.surface === 'tv' || frame.surface === 'phone-only';
     if (name === 'wager-final-wide-names-five-digits') return true;
+    if (/^wager-race-(?:eight|sixteen)$/.test(name)) return frame.surface === 'tv';
     if (/^(?:classic|wager)-(?:intro|question|reveal-chart|done)$/.test(name))
       return (
         basic ||
@@ -418,7 +516,7 @@ it('writes current HTML and manifest only when the root requests fresh evidence'
   );
   const captures = captureFrames();
   expect(captures.length).toBeGreaterThanOrEqual(65);
-  expect(captures.length).toBeLessThanOrEqual(78);
+  expect(captures.length).toBeLessThanOrEqual(82);
   expect(timer(fixtures['classic-podium-1']!)).toEqual(fixtures['classic-done']);
   expect(timer(fixtures['wager-final-reveal']!)).toEqual(fixtures['wager-done']);
   if (process.env.PB_WRITE_EVIDENCE === '1') writeUpgradeEvidence(captures, fixtures);

@@ -2,6 +2,8 @@
 
 ## Resumed locally (2026-10-12, r1-local)
 
+- Initial upgrade CI38225649131 atca58d1b is green and PR2 is ready. KEEP GOING round1 repairs TV race identities:15→0 default sixteen-seat name truncations,65→337px space, body36px/delta32px. Combined longest EN/ES withstreak20 also fits. Focused34tests pass;82captures pass Stage safe margins; browserPID31420closed in finally. Final artifact formatting/hash update and post-round CI are next; three consecutive no-gain rounds still required.
+
 - Resume-first confirmed P01 is the only unfinished r1-local claim; P22 remains DONE. The existing uncommitted classic upgrade was preserved. Frozen dependencies were reinstalled with corepack/pnpm; no additions.
 - The additive classic implementation is complete: stamped shape answers, three twenty-question packs, remote/spectator stage and occupied podium tiers. Wager/legacy stays the default. The audit repaired score-before-reveal timing, final-chart Next timing, paused final clocks and staged-phone totals, and expanded podium receipt reading budgets and Spanish UI keys.
 - The 72/72 real-reducer mutation baseline passes; all 20 meaningful upgrade mutants were killed and original server hashes restored. The initial 227-test run exposed stale fixtures, an outdated 8-minute estimate, unrelated minigame pool assertions and remote copy. Those are corrected; the estimate is now 26 minutes.
