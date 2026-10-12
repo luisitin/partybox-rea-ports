@@ -174,6 +174,45 @@ it('renders every phase for TV, player, stage, remote and spectator from a real 
     }
   }
   if (build) {
+    const homeCrossing: State = {
+      ...play,
+      world: {
+        ...play.world,
+        runners: play.world.runners.map((runner, index) => ({
+          ...runner,
+          cell: index === 0 ? play.world.runners[1]!.home : runner.home,
+          alive: index !== 1,
+          trail: [],
+          respawnTick: index === 1 ? play.world.stepped + 15 : null,
+          cause: index === 1 ? 'cut' : null,
+        })),
+      },
+    };
+    for (const mode of ['tv', 'phone-only-spectator'] as const) {
+      const body = renderToStaticMarkup(
+        <ServerClockProvider offsetMs={play.began + play.checked - Date.now()}>
+          <PhoneOnlyProvider value={mode !== 'tv'}>
+            {mode === 'tv' ? (
+              <Tv view={{ ...game.tvView(homeCrossing), vip: null }} />
+            ) : (
+              <Controller
+                view={{
+                  ...game.controllerView({ ...homeCrossing, phoneOnly: true }, 'audience'),
+                  vip: null,
+                }}
+                me={{ id: 'audience', name: 'Audience', avatarId: 'fox' }}
+                send={() => undefined}
+              />
+            )}
+          </PhoneOnlyProvider>
+        </ServerClockProvider>,
+      );
+      expect(body).toContain('data-home-link="2"');
+      writeFileSync(
+        resolve(media, `play-home-crossing-${mode}.html`),
+        pageHtml(body, `play home crossing ${mode}`, css, mode === 'tv'),
+      );
+    }
     for (const mode of ['phone-only', 'phone-only-spectator'] as const) {
       const fixture: State = {
         ...done,

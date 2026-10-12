@@ -4,9 +4,9 @@ Install once: `corepack enable`; `pnpm.cmd install`, completed. Windows script p
 
 ## Tests and contracts
 
-Latest completed full check: `pnpm vitest run games/paper-territory --maxWorkers=1`, [CI 38182241720](https://github.com/luisitin/partybox-rea-ports/actions/runs/38182241720), head `e87dc662df09c7cdefaab89326877cae7b044a7f`: **133/133 tests in14files**,64.55s; typecheck and format also passed. This includes real SDK contracts,1,003property traces and3,000simulations, including the shorter bot fallback. Later R8–R11 home/phone/result/departure changes need fresh CI. `tools/record-scoped-ci.mjs <run-id>` retains exact metadata, metrics and per-game-file tested/local SHA256 comparisons in latest-scoped-ci.json; historical final-ci files remain labelled with their original head.
+Latest completed full check: `pnpm vitest run games/paper-territory --maxWorkers=1`, [CI 38192798653](https://github.com/luisitin/partybox-rea-ports/actions/runs/38192798653), head `5567b109f11301bfcf1a0eb565cfc8ccec5324c9`: **144/144 tests in 14 files**, 128.2 s; typecheck and format also passed. This includes real SDK contracts, 1,003 property traces and 7,000 simulations at every count 2–8. R12–R14 visual feedback changes require fresh CI. `tools/record-scoped-ci.mjs <run-id>` retains exact metadata, metrics and tested/local game-file SHA256 comparisons in latest-scoped-ci.json. Historical final-ci files retain their original head.
 
-Resumed focused commands: `PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/paper-territory/__tests__/artifacts.test.tsx games/paper-territory/client --maxWorkers=1`:57/57passed in3.03s. `pnpm.cmd vitest run games/paper-territory/__tests__/presence.test.ts games/paper-territory/__tests__/contract.test.ts games/paper-territory/client/feedback.test.tsx --maxWorkers=1`:51/51passed in9.43s after permanent departure fix. No other game's tests or browser suite ran.
+Resumed focused commands: `PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/paper-territory/client games/paper-territory/__tests__/artifacts.test.tsx --maxWorkers=1`: 60/60 passed in 10.25 s after displaced labels, visible trail gaps and public crash causes. `pnpm.cmd vitest run games/paper-territory/__tests__/presence.test.ts games/paper-territory/__tests__/contract.test.ts games/paper-territory/client/feedback.test.tsx --maxWorkers=1`: 51/51 passed in 9.43 s after permanent departure fix. Revised `pnpm.cmd vitest run games/paper-territory/__tests__/property.test.ts --maxWorkers=1`: all 1,003 traces passed (4 assertions, 35.14 s). No other game's tests or browser suite ran.
 
 Historical local checks before KEEP GOING:
 
@@ -17,17 +17,21 @@ Historical local checks before KEEP GOING:
 
 ## Simulation and properties
 
-The current authoritative CI executed 1,000 seeds at each player count, with 600 ms bot decisions and 200 ms physics. Each batch cycles easy/normal/sharp (334/333/333 games). All **3,000 terminated** within the manifest limit of 360,000 ms.
+The latest CI executed 1,000 seeds at every supported player count, with 600 ms bot decisions and 200 ms physics. Each batch cycles easy/normal/sharp (334/333/333 games). All **7,000 terminated** within the manifest limit of 360,000 ms. This includes the specifically required 2/4/8 batches.
 
 | Players | Games | Median play | Maximum whole game | Wall time |
 | ------- | ----- | ----------- | ------------------ | --------- |
-| 2       | 1,000 | 120,000 ms  | 131,000 ms         | 5.68 s    |
-| 4       | 1,000 | 120,000 ms  | 131,000 ms         | 11.03 s   |
-| 8       | 1,000 | 120,000 ms  | 131,000 ms         | 21.51 s   |
+| 2       | 1,000 | 120,000 ms  | 131,000 ms         | 5.78 s    |
+| 3       | 1,000 | 120,000 ms  | 131,000 ms         | 8.51 s    |
+| 4       | 1,000 | 120,000 ms  | 131,000 ms         | 11.45 s   |
+| 5       | 1,000 | 120,000 ms  | 131,000 ms         | 14.37 s   |
+| 6       | 1,000 | 120,000 ms  | 131,000 ms         | 17.58 s   |
+| 7       | 1,000 | 120,000 ms  | 131,000 ms         | 20.51 s   |
+| 8       | 1,000 | 120,000 ms  | 131,000 ms         | 23.70 s   |
 
-tools/simulation-results.json and tools/final-keep-going-simulation-results.json record current per-strength area, captures, deaths and growth beyond home. These are same-strength matches and do not establish mixed-match skill ordering. Compared with the retained pre-loop 1,000-game eight-seat batch, sharp median area rose 9→48, median captures 16→37 and mean deaths fell 9.966→5.954 (40.26%). The original local timings (6.55/33.19/60.70 s) and experiments remain historical evidence. An obsolete early 200 ms decision batch was stopped and is not counted: tools/obsolete-batch.md.
+`tools/latest-scoped-ci.json` records current per-strength area, captures, deaths and growth beyond home at all seven counts. These are same-strength matches and do not establish mixed-match skill ordering. Latest eight-seat sharp median area is 45 cells, median captures 37 and mean deaths 5.827; pre-loop values were 9, 16 and 9.966. Earlier simulation JSON files are historical experiments tied to their recorded source/CI head. An obsolete early 200 ms decision batch was stopped and is not counted: tools/obsolete-batch.md.
 
-Property tests passed seeds 1, 2, 3 plus **1,000 generated seeds** (generator 0x5eed07), 40 mixed events per trace. Checks: JSON/finite/view bounds, spectator identity, source immutability, deterministic replay, complete results. All seeds: tools/property-results.json.
+Property tests passed seeds 1, 2, 3 plus **1,000 generated seeds** (generator 0x5eed07), 40 mixed events per trace, now sampling every supported count and permanent departures. Checks: JSON/finite/view bounds, spectator identity, permanent-seat invariants, source immutability, deterministic replay, complete results. Seed generator/list: tools/property-results.json; current passed harness and source hash: latest-scoped-ci.json.
 
 ## Actual source mutations
 
@@ -60,11 +64,11 @@ This game has no secret information. View assertions check public stage versus l
 
 ## Screens and media
 
-Latest `node jobs/P07-paper-territory/tools/capture.mjs`: **32screens** with one isolated cached Chromium, closed in finally. TV1920×1080; phones390×844 with80pxreserved at both ends for the shell. Every phase covers local/phone-only/remote/spectators; play includes paused/eliminated phones and adjacent heads with maximum-area/long-name rows; final screens stress long-name players/spectators. It waits for the correct complete document, fonts and two painted frames before measurements/capture.
+Latest `node jobs/P07-paper-territory/tools/capture.mjs`: **34 screens** with one isolated cached Chromium, closed in finally. TV 1920 × 1080; phones 390 × 844 with 80 px reserved at both ends for the shell. Every phase covers local/phone-only/remote/spectators; play includes paused/eliminated phones, adjacent heads, home crossings and maximum-area/long-name rows; final screens stress long-name players/spectators. It waits for the correct complete document, fonts and two painted frames before measurements/capture.
 
 Fit report: zero horizontal/vertical overflow, outside elements or internal scrolling. Smallest active touch: **58.65625 px**. Manually inspected three contact sheets: shared map is focal, eight original monochrome ownership textures, persistent homes, readable numbered direction markers, eight-seat standings. TV body 36 px, timer 96 px from tokens. Reduced-motion disables control transitions.
 
-Resumed captures confirmed zero overflow/outside/internal-scroll failures,58.65625pxminimum active touch,358×256pxfinal stage maps and15.108pxhead glyphs. Manually inspected final long-name screens, adjacent-head stress screens and TV/local/stage contact sheets. Media after format:4,990,382bytes across71files, below10MB; recompute/verify SHA256SUMS.txt after any formatting. Capture accepts PB_CHROME for an existing executable; installs no browser/dependency.
+Resumed captures confirmed zero overflow/outside/internal-scroll failures, 58.65625 px minimum active touch, 358 × 256 px final stage maps and 15.108 px head glyphs. Active phone heads are at least 14.72 px; TV heads at least 34.36 px. Manually inspected final long-name screens, adjacent-head/home-crossing stress screens and TV/local/stage contact sheets. Media stays below 10 MB; SHA256SUMS.txt covers every media file after formatting. Capture accepts PB_CHROME for an existing executable; installs no browser/dependency.
 
 ## CI and iteration
 
@@ -72,4 +76,4 @@ Resumed captures confirmed zero overflow/outside/internal-scroll failures,58.656
 
 Initial full CI passed: [run 38177872218](https://github.com/luisitin/partybox-rea-ports/actions/runs/38177872218), 1m30s. PR #4 left draft after this result. R1 targeted command: `pnpm.cmd vitest run games/paper-territory/client/DirectionPad.test.tsx games/paper-territory/client/controls.test.ts games/paper-territory/__tests__/views.test.ts games/paper-territory/__tests__/contract.test.ts --maxWorkers=1`; 3 existing files, 27/27 assertions passed in 4.57 s. The views glob has no separate file; projections are checked by SDK contract and the real-game controller regression.
 
-R1–R6 source changes and focused results are recorded in LOOP.md. The authoritative current full result above replaces the duplicate local attempt, which was stopped to preserve desktop CPU. Native PowerShell processes stalled after output; the equivalent installed CLI fallback was `env -u PB_SIM_GAMES PB_RECORD_VERIFY=1 node node_modules/vitest/vitest.mjs run games/paper-territory --maxWorkers=1`. Exact attempts are in tools/final-keep-going-command.json; partial local logs are explicitly non-final. The first fresh capture timed out at Page.captureScreenshot and is not counted. A subsequent 28-screen capture produced zero fit failures and 58.671875 px minimum touch; it was manually reviewed, and its owned browser/profile were closed/removed in cleanup. The Windows CDP handle retained an idle Node process after cleanup, so the tool now exits explicitly only after successful finally completion. Final adjacent-head stress captures and the next client CI remain pending.
+LOOP.md records every measured iteration. Duplicate local simulation attempts were stopped to preserve desktop CPU; partial logs are explicitly non-final. Earlier failed screenshot timeout and successful 28-screen capture remain historical evidence. Resumed captures include all required/stress variants, and the tool exits only after its finally cleanup has closed the owned browser. Fresh CI after R12–R14 is required before convergence can be claimed.

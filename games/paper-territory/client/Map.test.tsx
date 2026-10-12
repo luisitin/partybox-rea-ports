@@ -6,6 +6,7 @@ import type { Direction } from '../server/types';
 import { Map, trailMarkerCells, trailOwnerMarkers } from './Map';
 import type { MapProps } from './Map';
 import { headingTriangle, markerGeometry } from './markerGeometry';
+import { homeLabelPositions } from './homeLabels';
 import { SeatBadge } from './SeatBadge';
 import { OWNERSHIP_TEXTURES } from './textures';
 
@@ -67,6 +68,30 @@ describe('color-independent map identity', () => {
 });
 
 describe('readable player heads', () => {
+  it.each([false, true])(
+    'keeps an empty home’s owner distinct from a foreign head crossing it (compact=%s)',
+    (compact) => {
+      const props = board();
+      props.runners = props.runners.slice(0, 2);
+      const home = props.runners[1]!.home;
+      props.runners[1]!.alive = false;
+      props.runners[0]!.cell = home;
+      const labels = homeLabelPositions(props.runners, 40, 28, []);
+      const label = labels.get('player-1')!;
+      const [hx, hy] = [(home % 40) + 0.5, Math.floor(home / 40) + 0.5];
+      expect(Math.hypot(label[0] - hx, label[1] - hy)).toBeGreaterThanOrEqual(2);
+      const html = renderToStaticMarkup(<Map {...props} compact={compact} />);
+      expect(html).toContain('data-home-link="2"');
+      expect(html).toMatch(/data-marker="home"[^>]*>2<\/text>/);
+      expect(html).toMatch(/data-marker="runner"[^>]*>1<\/text>/);
+      expect(html).not.toMatch(/data-marker="runner"[^>]*>2<\/text>/);
+      // Vacating the rival home restores its centred number without a connector.
+      props.runners[0]!.cell = home + 4;
+      const clear = renderToStaticMarkup(<Map {...props} compact={compact} />);
+      expect(clear).not.toContain('data-home-link="2"');
+    },
+  );
+
   it.each([false, true])(
     'shows two adjacent runners without a third home digit and restores an empty home (compact=%s)',
     (compact) => {
@@ -188,6 +213,17 @@ describe('readable player heads', () => {
 });
 
 describe('identifiable vulnerable trails', () => {
+  it('leaves visible gaps after round caps on both ordinary and stronger local trails', () => {
+    const css = readFileSync(new URL('./Map.module.css', import.meta.url), 'utf8');
+    const ordinary = Number(css.match(/\.trail\s*\{[^}]*stroke-width: ([\d.]+)/)?.[1]);
+    const local = Number(css.match(/\.trail\[data-mine\]\s*\{[^}]*stroke-width: ([\d.]+)/)?.[1]);
+    const dash = css.match(/\.trail\s*\{[^}]*stroke-dasharray: ([\d.]+) ([\d.]+)/);
+    const gap = Number(dash?.[2]);
+    // Two round end caps consume one full stroke width across each blank gap.
+    expect((gap - ordinary) * (727.5 / 30.5)).toBeGreaterThanOrEqual(8);
+    expect((gap - local) * (250 / 30.5)).toBeGreaterThanOrEqual(2);
+  });
+
   it('staggers adjacent parallel trail owners and reserves space around every live head', () => {
     const props = board();
     props.runners = props.runners.slice(0, 2).map((runner, slot) => ({

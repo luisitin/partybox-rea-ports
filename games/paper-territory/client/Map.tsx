@@ -4,6 +4,7 @@ import type { JSX } from 'react';
 import type { Direction } from '../server/types';
 import { cellCenter, playerInk, territoryPaths, trailPath } from './mapMath';
 import { headingTriangle, markerGeometry } from './markerGeometry';
+import { homeLabelPositions } from './homeLabels';
 import { OwnershipPattern } from './OwnershipPattern';
 import { OWNERSHIP_TEXTURES, ownershipTexture } from './textures';
 import styles from './Map.module.css';
@@ -99,6 +100,12 @@ export function Map({
   const paths = territoryPaths(owners, width, height);
   const marker = markerGeometry(compact);
   const trailPins = trailOwnerMarkers(runners, width);
+  const homeLabels = homeLabelPositions(
+    runners,
+    width,
+    height,
+    trailPins.map((pin) => pin.cell),
+  );
   const heads = runners
     .filter((runner) => runner.alive)
     .sort((a, b) => Number(a.id === meId) - Number(b.id === meId));
@@ -135,12 +142,8 @@ export function Map({
       <rect width={width} height={height} className={styles.edge} />
       {runners.map((runner) => {
         const [x, y] = cellCenter(runner.home, width);
-        // A live disc beside its home already supplies the seat number. Avoid
-        // painting a duplicate digit that looks like another nearby player.
-        const covered = heads.some((head) => {
-          const [hx, hy] = cellCenter(head.cell, width);
-          return Math.hypot(x - hx, y - hy) < 2;
-        });
+        const label = homeLabels.get(runner.id);
+        const displaced = label && (label[0] !== x || label[1] !== y);
         return (
           <g key={runner.id}>
             <rect
@@ -151,10 +154,20 @@ export function Map({
               stroke={playerInk(runner.slot)}
               className={styles.home}
             />
-            {!covered ? (
+            {displaced ? (
+              <line
+                x1={x}
+                y1={y}
+                x2={label[0]}
+                y2={label[1]}
+                className={styles.homeLink}
+                data-home-link={runner.slot + 1}
+              />
+            ) : null}
+            {label ? (
               <text
-                x={x}
-                y={y}
+                x={label[0]}
+                y={label[1]}
                 className={styles.homeNumber}
                 data-marker="home"
                 textAnchor="middle"

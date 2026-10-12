@@ -7,6 +7,9 @@ on:
       - '.github/workflows/P07.yml'
 permissions:
   contents: read
+concurrency:
+  group: P07-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 jobs:
   verify:
     runs-on: ubuntu-latest

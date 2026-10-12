@@ -1,10 +1,14 @@
 # Paper Territory
 
+## Overview
+
 An original PartyBox map race inspired by the classic browser territory loop. Two to eight players move continuously across one 40 × 28 map. Tap a direction on your phone, leave your land to draw an exposed trail, and return to any of your land to capture the enclosed cells. Cut a rival's trail to send them home. After two minutes, the most owned tiles wins. Everyone has a numbered, protected 3 × 3 home and returns there three seconds after a crash, so nobody spends the match watching.
 
-## Players and pacing
+## Players
 
 2–8 players, including bots. One 120-second match, a four-second start beat and seven-second map verdict. Manifest estimate: three minutes. No configurable match length; the shared two-minute deadline is part of the race. English only, family friendly, no network calls or external assets.
+
+## Phases
 
 | Phase | Duration/exit                                                | TV                                                                    | Phone with a TV                                                                                                        |
 | ----- | ------------------------------------------------------------ | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
@@ -21,11 +25,11 @@ An original PartyBox map race inspired by the classic browser territory loop. Tw
 | Remote player who cannot see the TV | Same map as a phone-only player                                        | Same controls                                 |
 | Spectator                           | Public map and standings in every room                                 | None                                          |
 
-The map uses stable player numbers as well as colour, and protected home squares remain visibly distinct. Home digits yield while a live head is nearby, so they cannot be mistaken for another runner; empty homes keep their number. Stage phones do not point at a TV. Their final map remains large enough to inspect above all eight standings. A local player's reconnect restores the current direction, land and live return timer from server state.
+The map uses stable player numbers as well as colour, and protected home squares remain visibly distinct. An own head near home supplies its number; a foreign head or trail pin moves the home's number to a clear callout connected to the square by a solid line. Exposed trails keep visible dashed gaps. Stage phones do not point at a TV. Their final map remains large enough to inspect above all eight standings. A local player's reconnect restores the current direction, land and live return timer from server state.
 
 The ready screens teach movement, closure, trail cuts, and crashes: walls, your own exposed trail and head collisions cost every tile outside your protected home. During play the phone's existing header identifies the leading seat and gap, or reports the number of tied leaders. Its third stat shows the player's current place, with competition ranks shared across ties. The TV names the leader's margin, or the number of tied leaders. These gaps count owned cells and update from the public scores when ownership changes.
 
-## Inputs and movement
+## Inputs
 
 `{ type: 'direction', dir: 0 | 1 | 2 | 3 }`: up, right, down, left in screen coordinates. One tap changes the queued direction; holding is unnecessary. The next 200 ms tick applies it. Opposite directions are rejected against the last judged movement, so two taps before a tick cannot sneak in a U-turn. Spectators, disconnected/permanently departed players, unknown IDs and other-phase inputs do nothing.
 
@@ -43,7 +47,7 @@ The eight stable slots open clockwise with headings east, west, south, north, ea
 - Multiple closures use one post-crash snapshot. Cells claimed by more than one player on the same tick become neutral, including previously owned land; protected homes retain their owner. Every unambiguous claim wins independently of roster iteration order.
 - A crash removes all your land outside your protected home and clears your trail. You return after 15 physics ticks (three seconds), unless someone occupies the home centre; then return waits for a free tick. Returns happen after existing heads move, and the player gets a stationary home frame before moving. You never spawn on another head.
 
-## Scoring and bots
+## Scoring
 
 One owned tile = one point. The final score is the area at the buzzer, including protected home tiles. Capture totals and crashes are feedback, not bonuses or tiebreakers. Equal area shares rank and first place. VIP skip/end scores the judged map at that event; it does not award future area.
 
@@ -51,11 +55,19 @@ After a closure gaining new cells, a living player on owned land sees `Loop clos
 
 Bots read the same public ownership, exposed trails and head positions. Easy bots attempt short two-cell turns; normal and sharp bots use three-cell turns. Sharp bots watch nearby danger from two cells away and route home when an enemy approaches within four cells of their exposed trail, compared with two for normal. A small 0.35 look-ahead incentive favours reachable enemy trails without letting it dominate safe area growth. Wall/self-trail safety looks six cells ahead, and public opponent headings predict six ticks of head danger. When every six-cell runway is blocked, they take the longest clear shorter escape and can turn again on the next decision beat; head danger keeps the full horizon. They trace rectangular loops and route home when exposed too long. Seeded bot randomness breaks equally safe turn choices; no hidden knowledge or external planner.
 
-## Edge cases and clock ownership
+## Edge cases
 
-Pause freezes all physics and return timers. Resume moves `began` and `endsAt` by the exact paused duration while world ticks remain relative. No client decides movement or scoring. A temporary disconnect clears that player's trail and land outside home without adding a gameplay crash; their return runs only after reconnect. A permanent leave/kick never respawns, even after repeated connection changes, and stable slot numbers and final results retain their seat. The TV distinguishes disconnected seats, timed returns and permanent departures. Drops during pause cannot move the map. Host/VIP changes are owned by the SDK. No game phase waits for input from a disconnected player; an all-disconnected room still reaches the timed result.
+Pause freezes all physics and return timers. Resume moves `began` and `endsAt` by the exact paused duration while world ticks remain relative. No client decides movement or scoring. A temporary disconnect clears that player's trail and land outside home without adding a gameplay crash; their return runs only after reconnect. A permanent leave/kick never respawns, even after repeated connection changes, and stable slot numbers and final results retain their seat. The TV distinguishes disconnected seats, timed returns and permanent departures, and names gameplay crash causes in the existing status rows. Drops during pause cannot move the map. Host/VIP changes are owned by the SDK. No game phase waits for input from a disconnected player; an all-disconnected room still reaches the timed result.
 
 The state is JSON, bounded by 1,120 ownership cells and unique exposed trail cells per player. Views have no secret gameplay information; public paths, land and scores are intentionally visible to everyone. The server is deterministic and uses only event time; runtime imports are the real SDK. Art is original inline SVG and CSS using PartyBox tokens, numbered markers, dashed trails and reduced-motion support.
+
+## Settings
+
+None. Match length, movement rate and return delay are fixed for every seat.
+
+## Content
+
+No packs. The board has fixed protected homes; bot choices use the match's seeded random stream. `content/schema.ts` exports an empty pack collection. Every visual is original inline SVG or CSS.
 
 ## Sources
 

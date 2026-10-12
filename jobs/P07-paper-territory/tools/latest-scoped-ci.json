@@ -1,20 +1,20 @@
 {
-  "recordedAtUtc": "2026-10-12T01:32:56.140Z",
+  "recordedAtUtc": "2026-10-12T01:44:52.394Z",
   "conclusion": "success",
-  "createdAt": "2026-10-11T22:54:14Z",
-  "headSha": "e87dc662df09c7cdefaab89326877cae7b044a7f",
+  "createdAt": "2026-10-12T01:40:27Z",
+  "headSha": "5567b109f11301bfcf1a0eb565cfc8ccec5324c9",
   "status": "completed",
-  "updatedAt": "2026-10-11T22:55:48Z",
-  "url": "https://github.com/luisitin/partybox-rea-ports/actions/runs/38182241720",
+  "updatedAt": "2026-10-12T01:43:08Z",
+  "url": "https://github.com/luisitin/partybox-rea-ports/actions/runs/38192798653",
   "command": "pnpm vitest run games/paper-territory --maxWorkers=1",
   "files": 14,
-  "tests": 133,
+  "tests": 144,
   "failed": 0,
-  "durationSeconds": 64.55,
+  "durationSeconds": 128.2,
   "propertyTraces": 1003,
   "regressionSeeds": [1, 2, 3],
   "generatedSeeds": 1000,
-  "botMatches": 3000,
+  "botMatches": 7000,
   "metrics": {
     "2": {
       "games": 1000,
@@ -25,9 +25,9 @@
       "maximumGameMs": 131000,
       "maximumEvents": 845,
       "decisionBeatMs": 600,
-      "wallMs": 5718.168187,
-      "botMs": 790.1669730000372,
-      "reducerMs": 4701.994518999576,
+      "wallMs": 5775.708439,
+      "botMs": 814.3024919996699,
+      "reducerMs": 4735.04579399966,
       "bySkill": {
         "easy": {
           "games": 334,
@@ -68,6 +68,58 @@
       },
       "budgetMs": 360000
     },
+    "3": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 1002,
+      "decisionBeatMs": 600,
+      "wallMs": 8513.547378,
+      "botMs": 1590.086513999866,
+      "reducerMs": 6661.055117999725,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 1002,
+          "meanFinalArea": 146.62075848303394,
+          "medianFinalArea": 120,
+          "maximumFinalArea": 441,
+          "meanCaptures": 45.55888223552894,
+          "medianCaptures": 45,
+          "meanDeaths": 1.6497005988023952,
+          "medianDeaths": 1,
+          "grewBeyondHome": 884
+        },
+        "normal": {
+          "games": 333,
+          "players": 999,
+          "meanFinalArea": 151.92192192192192,
+          "medianFinalArea": 122,
+          "maximumFinalArea": 459,
+          "meanCaptures": 43.1991991991992,
+          "medianCaptures": 43,
+          "meanDeaths": 1.952952952952953,
+          "medianDeaths": 2,
+          "grewBeyondHome": 865
+        },
+        "sharp": {
+          "games": 333,
+          "players": 999,
+          "meanFinalArea": 111.998998998999,
+          "medianFinalArea": 90,
+          "maximumFinalArea": 455,
+          "meanCaptures": 42.84084084084084,
+          "medianCaptures": 45,
+          "meanDeaths": 2.4854854854854853,
+          "medianDeaths": 1,
+          "grewBeyondHome": 842
+        }
+      },
+      "budgetMs": 360000
+    },
     "4": {
       "games": 1000,
       "seeds": "1..1000",
@@ -77,9 +129,9 @@
       "maximumGameMs": 131000,
       "maximumEvents": 1137,
       "decisionBeatMs": 600,
-      "wallMs": 11305.758343999998,
-      "botMs": 2493.1915260002233,
-      "reducerMs": 8499.183267000135,
+      "wallMs": 11453.22669,
+      "botMs": 2559.5046989981493,
+      "reducerMs": 8560.644094003896,
       "bySkill": {
         "easy": {
           "games": 334,
@@ -120,6 +172,162 @@
       },
       "budgetMs": 360000
     },
+    "5": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 1271,
+      "decisionBeatMs": 600,
+      "wallMs": 14365.334384000002,
+      "botMs": 3646.2053159984825,
+      "reducerMs": 10327.312461004603,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 1670,
+          "meanFinalArea": 88.07065868263473,
+          "medianFinalArea": 80.5,
+          "maximumFinalArea": 309,
+          "meanCaptures": 43.18203592814371,
+          "medianCaptures": 43,
+          "meanDeaths": 3.2520958083832334,
+          "medianDeaths": 3,
+          "grewBeyondHome": 1400
+        },
+        "normal": {
+          "games": 333,
+          "players": 1665,
+          "meanFinalArea": 88.64924924924925,
+          "medianFinalArea": 82,
+          "maximumFinalArea": 272,
+          "meanCaptures": 41.04864864864865,
+          "medianCaptures": 41,
+          "meanDeaths": 3.36996996996997,
+          "medianDeaths": 3,
+          "grewBeyondHome": 1384
+        },
+        "sharp": {
+          "games": 333,
+          "players": 1665,
+          "meanFinalArea": 90.87327327327327,
+          "medianFinalArea": 86,
+          "maximumFinalArea": 291,
+          "meanCaptures": 40.91411411411411,
+          "medianCaptures": 41,
+          "meanDeaths": 3.5297297297297296,
+          "medianDeaths": 3,
+          "grewBeyondHome": 1389
+        }
+      },
+      "budgetMs": 360000
+    },
+    "6": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 1407,
+      "decisionBeatMs": 600,
+      "wallMs": 17575.086005999998,
+      "botMs": 4894.151206999566,
+      "reducerMs": 12224.251047003323,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 2004,
+          "meanFinalArea": 75.54241516966069,
+          "medianFinalArea": 76,
+          "maximumFinalArea": 243,
+          "meanCaptures": 42.942115768463076,
+          "medianCaptures": 43,
+          "meanDeaths": 3.55938123752495,
+          "medianDeaths": 3,
+          "grewBeyondHome": 1643
+        },
+        "normal": {
+          "games": 333,
+          "players": 1998,
+          "meanFinalArea": 75.61261261261261,
+          "medianFinalArea": 76,
+          "maximumFinalArea": 265,
+          "meanCaptures": 40.33983983983984,
+          "medianCaptures": 40,
+          "meanDeaths": 3.903903903903904,
+          "medianDeaths": 4,
+          "grewBeyondHome": 1628
+        },
+        "sharp": {
+          "games": 333,
+          "players": 1998,
+          "meanFinalArea": 75.92892892892893,
+          "medianFinalArea": 76,
+          "maximumFinalArea": 235,
+          "meanCaptures": 40.567067067067065,
+          "medianCaptures": 41,
+          "meanDeaths": 3.942942942942943,
+          "medianDeaths": 4,
+          "grewBeyondHome": 1619
+        }
+      },
+      "budgetMs": 360000
+    },
+    "7": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 1521,
+      "decisionBeatMs": 600,
+      "wallMs": 20505.473371,
+      "botMs": 6342.42117399101,
+      "reducerMs": 13659.770775998768,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 2338,
+          "meanFinalArea": 61.876817792985456,
+          "medianFinalArea": 56,
+          "maximumFinalArea": 212,
+          "meanCaptures": 40.13644140290847,
+          "medianCaptures": 41,
+          "meanDeaths": 5.128314798973482,
+          "medianDeaths": 5,
+          "grewBeyondHome": 1792
+        },
+        "normal": {
+          "games": 333,
+          "players": 2331,
+          "meanFinalArea": 62.497211497211495,
+          "medianFinalArea": 55,
+          "maximumFinalArea": 216,
+          "meanCaptures": 37.902187902187904,
+          "medianCaptures": 38,
+          "meanDeaths": 5.435006435006435,
+          "medianDeaths": 5,
+          "grewBeyondHome": 1726
+        },
+        "sharp": {
+          "games": 333,
+          "players": 2331,
+          "meanFinalArea": 62.71042471042471,
+          "medianFinalArea": 57,
+          "maximumFinalArea": 253,
+          "meanCaptures": 38.32689832689832,
+          "medianCaptures": 38,
+          "meanDeaths": 5.20978120978121,
+          "medianDeaths": 5,
+          "grewBeyondHome": 1722
+        }
+      },
+      "budgetMs": 360000
+    },
     "8": {
       "games": 1000,
       "seeds": "1..1000",
@@ -129,9 +337,9 @@
       "maximumGameMs": 131000,
       "maximumEvents": 1653,
       "decisionBeatMs": 600,
-      "wallMs": 21871.036121999998,
-      "botMs": 7584.526606999898,
-      "reducerMs": 13755.32442899951,
+      "wallMs": 23699.02218700001,
+      "botMs": 7871.122191986549,
+      "reducerMs": 15264.457517016257,
       "bySkill": {
         "easy": {
           "games": 334,
@@ -188,15 +396,15 @@
     },
     {
       "file": "games/paper-territory/README.md",
-      "testedSha256Lf": "a6d222908244d8020e0f4a25e7b907da608a97c76f444762168d2898e65948b2",
-      "currentSha256Lf": "ec3abf1f8b732ed63939910f8661de786c9dc797a48e3d25ab3b52837c3570d5",
+      "testedSha256Lf": "ec3abf1f8b732ed63939910f8661de786c9dc797a48e3d25ab3b52837c3570d5",
+      "currentSha256Lf": "d46140174f3fa7348dacebe2de7638d43aa2107727a8b803d96347871e8b78a2",
       "matchesTestedHead": false
     },
     {
       "file": "games/paper-territory/__tests__/artifacts.test.tsx",
-      "testedSha256Lf": "871cd4a815324f9e18975eb3d11c1504df240c0ba3e274e6698dfbcb744c6af0",
+      "testedSha256Lf": "f3cf24a1aa2ecf8da4072cf60e1b5076b1d2c95e73cba022e4cd8265a4ef87cb",
       "currentSha256Lf": "f3cf24a1aa2ecf8da4072cf60e1b5076b1d2c95e73cba022e4cd8265a4ef87cb",
-      "matchesTestedHead": false
+      "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/__tests__/bot.test.ts",
@@ -224,20 +432,20 @@
     },
     {
       "file": "games/paper-territory/__tests__/presence.test.ts",
-      "testedSha256Lf": "0495051a593288704802ed2320ca880b2553a078751dc11c35d68d3907b56dac",
+      "testedSha256Lf": "b7941a9c3d03aa9561988a54f461c6cc655433100f550ac104c446196140e32f",
       "currentSha256Lf": "b7941a9c3d03aa9561988a54f461c6cc655433100f550ac104c446196140e32f",
-      "matchesTestedHead": false
+      "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/__tests__/property.test.ts",
-      "testedSha256Lf": "22cc3c17045edb121d195135aa0c3152e14265b1566ae24e269689ce8f72731c",
-      "currentSha256Lf": "22cc3c17045edb121d195135aa0c3152e14265b1566ae24e269689ce8f72731c",
+      "testedSha256Lf": "f7eff3ad1db264001d310f9c107fa4e14110632d6c79e1ae0b2ae9f9b292facc",
+      "currentSha256Lf": "f7eff3ad1db264001d310f9c107fa4e14110632d6c79e1ae0b2ae9f9b292facc",
       "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/__tests__/simulation.test.ts",
-      "testedSha256Lf": "d1d09a58297a3cc918730a271158669bc5c852e10ca7f48d4ee789ae59ea5feb",
-      "currentSha256Lf": "d1d09a58297a3cc918730a271158669bc5c852e10ca7f48d4ee789ae59ea5feb",
+      "testedSha256Lf": "c2efbb36b437058be6b5c506b8d1ded835bf8bc6ec640b798c165321532142c8",
+      "currentSha256Lf": "c2efbb36b437058be6b5c506b8d1ded835bf8bc6ec640b798c165321532142c8",
       "matchesTestedHead": true
     },
     {
@@ -248,15 +456,15 @@
     },
     {
       "file": "games/paper-territory/client/Controller.module.css",
-      "testedSha256Lf": "2c56a9d33c92628145df16eace17f09932309a3cd7770090c2e96a7e93dcfc62",
+      "testedSha256Lf": "7d619f534e278c5cd3b93362acc4c09d6fa7dc34d0e2810290b859d279c655fa",
       "currentSha256Lf": "7d619f534e278c5cd3b93362acc4c09d6fa7dc34d0e2810290b859d279c655fa",
-      "matchesTestedHead": false
+      "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/client/Controller.tsx",
-      "testedSha256Lf": "2a5bad126de55fd815ef505177bb8c7e69f6168ecaed683042621de43b51b41e",
+      "testedSha256Lf": "a2d5f49d7e924fc8f3f623965643f89c83658363d44e2427450a4d2442101b22",
       "currentSha256Lf": "a2d5f49d7e924fc8f3f623965643f89c83658363d44e2427450a4d2442101b22",
-      "matchesTestedHead": false
+      "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/client/DirectionPad.test.tsx",
@@ -278,15 +486,15 @@
     },
     {
       "file": "games/paper-territory/client/Map.test.tsx",
-      "testedSha256Lf": "422e363f34efab092735f11cc94850969d89da29bcc3f52e754c875bdd2367c9",
+      "testedSha256Lf": "2b3496fc327d4d13a51a9c84cbe75c924f2420ca997837da3e6b04091b7d68f8",
       "currentSha256Lf": "2b3496fc327d4d13a51a9c84cbe75c924f2420ca997837da3e6b04091b7d68f8",
-      "matchesTestedHead": false
+      "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/client/Map.tsx",
-      "testedSha256Lf": "d0a75ed51d03049f9db294849aeca2e0ddc8790114d44cc7f426b46732dd7594",
+      "testedSha256Lf": "86fe5ceb9ce5bc80f8bb2fd6106f56360eb50937894ca71e632280340de4d46e",
       "currentSha256Lf": "86fe5ceb9ce5bc80f8bb2fd6106f56360eb50937894ca71e632280340de4d46e",
-      "matchesTestedHead": false
+      "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/client/OwnershipPattern.module.css",
@@ -320,9 +528,9 @@
     },
     {
       "file": "games/paper-territory/client/Tv.tsx",
-      "testedSha256Lf": "5012f9cadfed4cadef03a6224c31bea9396c43ff083ab1305ae81b1154be0552",
+      "testedSha256Lf": "a0416bd7ae9c6dfa22e7cee91af72b2ce02e2cdfc661736a4f809c94c6616dbf",
       "currentSha256Lf": "a0416bd7ae9c6dfa22e7cee91af72b2ce02e2cdfc661736a4f809c94c6616dbf",
-      "matchesTestedHead": false
+      "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/client/controls.test.ts",
@@ -338,9 +546,9 @@
     },
     {
       "file": "games/paper-territory/client/feedback.test.tsx",
-      "testedSha256Lf": "5db03525503e187004ce947ce541bf8b035b987c7fbdbeb1c8374ebf5ef1db39",
+      "testedSha256Lf": "79f3b1b752b15360e86e400a628690f6869b21237a7e6c23fcc516b55c051b9e",
       "currentSha256Lf": "79f3b1b752b15360e86e400a628690f6869b21237a7e6c23fcc516b55c051b9e",
-      "matchesTestedHead": false
+      "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/client/mapMath.test.ts",
@@ -410,15 +618,15 @@
     },
     {
       "file": "games/paper-territory/fixtures/done.json",
-      "testedSha256Lf": "da2bbe39aec830b2b74bbff79bcb0b27b0ac1a6fdbb477830eb5e728c71700a1",
+      "testedSha256Lf": "6d3482b702e1a8960cb52a3c61f7f8168679fdd116ce05b80af19407187397c0",
       "currentSha256Lf": "6d3482b702e1a8960cb52a3c61f7f8168679fdd116ce05b80af19407187397c0",
-      "matchesTestedHead": false
+      "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/fixtures/play.json",
-      "testedSha256Lf": "41126ce6320ab622d6e491114ae7c729e3de99ad7cf67ecc28ef55dfd29bddf6",
+      "testedSha256Lf": "ccb3d2eae611d18a98805a61b4d214d73a36c4845f9a7e16f039a2b57ee35ac9",
       "currentSha256Lf": "ccb3d2eae611d18a98805a61b4d214d73a36c4845f9a7e16f039a2b57ee35ac9",
-      "matchesTestedHead": false
+      "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/fixtures/ready.json",
@@ -428,9 +636,9 @@
     },
     {
       "file": "games/paper-territory/fixtures/score.json",
-      "testedSha256Lf": "f770c838f5f5dbfd63242e6c353e2fbedf8c67e0b296f497bf865447048cb590",
+      "testedSha256Lf": "aca70b79c202dc011c5907127f217f7feb160f4e5e526214a037d0d35d7521d3",
       "currentSha256Lf": "aca70b79c202dc011c5907127f217f7feb160f4e5e526214a037d0d35d7521d3",
-      "matchesTestedHead": false
+      "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/manifest.json",
@@ -452,9 +660,9 @@
     },
     {
       "file": "games/paper-territory/server/index.ts",
-      "testedSha256Lf": "a3fb85bdc5642e801b022753b59ab244b84990549bf7a6c484c6059d5e0fc6b6",
+      "testedSha256Lf": "5477933377ec2caa87c7b00fb689dde403321e585980a01715a3ed9ef0af9b32",
       "currentSha256Lf": "5477933377ec2caa87c7b00fb689dde403321e585980a01715a3ed9ef0af9b32",
-      "matchesTestedHead": false
+      "matchesTestedHead": true
     },
     {
       "file": "games/paper-territory/server/phases/done.ts",

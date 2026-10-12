@@ -240,7 +240,7 @@ describe('honest closure feedback', () => {
       }
       if (transition === 'death') {
         expect(phone(view)).toContain('Head collision');
-        expect(tv(view)).toContain('Returning');
+        expect(tv(view)).toContain('Head crash');
       }
       if (transition === 'paused')
         expect(phone(view)).toContain('Paused — your trail is safe for now');

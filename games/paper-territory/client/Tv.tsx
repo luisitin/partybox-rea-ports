@@ -80,6 +80,16 @@ export function Tv({ view }: GameTvProps<PaperTerritoryTvView>): JSX.Element {
           <ul className={styles.rows} aria-label={L('Players and territory')}>
             {rows.map((row) => {
               const runner = view.runners.find((candidate) => candidate.id === row.id);
+              const crash =
+                runner?.cause === 'cut'
+                  ? L('Trail cut')
+                  : runner?.cause === 'wall'
+                    ? L('Wall hit')
+                    : runner?.cause === 'trail'
+                      ? L('Own trail')
+                      : runner?.cause === 'head'
+                        ? L('Head crash')
+                        : L('Returning');
               const status = over
                 ? L('Place {rank}', { rank: row.rank })
                 : view.paused
@@ -89,7 +99,7 @@ export function Tv({ view }: GameTvProps<PaperTerritoryTvView>): JSX.Element {
                       ? L('Left')
                       : view.players.find((player) => player.id === row.id)?.connected === false
                         ? L('Disconnected')
-                        : L('Returning')
+                        : crash
                     : row.exposed
                       ? L('Trail out')
                       : view.phaseId === 'play' && (runner?.lastCapture ?? 0) > 0
