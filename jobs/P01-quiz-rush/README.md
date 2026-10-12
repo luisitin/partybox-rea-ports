@@ -2,13 +2,13 @@
 
 This upgrade extends PartyBox's existing Lightning Round under the canonical Kahoot! name.
 It replaces the former standalone Quiz Rush implementation rather than adding a duplicate.
-Round 1 passed 226 tests, typecheck and formatting in
-[CI](https://github.com/luisitin/partybox-rea-ports/actions/runs/38229318876) at `4cf1a53`; PR #2 is open.
-Evidence includes 32,000 bot matches and 20 mutation kills. Round 2 corrected the capture shell:
-pinned TV geometry leaves a 692 px stage/626 px inner area, with the actual Nunito font and h2 rules.
-All 91 captures pass fit checks; evidence totals 8,957,011 B and browser PID 96636 is closed.
-A later rank separator awaits focused recapture; the full game run (21307) is active.
-Fresh checks and the KEEP GOING loop remain pending; round 2 is not complete.
+Round-3 pacing is complete: 240 tests, 32,000 bots, 2,006 property seeds, 20 mutation kills and
+[CI 38239089152](https://github.com/luisitin/partybox-rea-ports/actions/runs/38239089152) green at `bd91828`; later Finale/start-copy source changes belong to round 4.
+Real Results fit now retains all sixteen bet/delta/totals at 32 px; EN/ES start copy describes both modes.
+Current 94/94 captures are clean; one explicit before-repair baseline has 85 clipped items.
+Media: 235 files/8,279,094 B. Browser 87684 closed; temporary-profile EPERM cleanup is deferred.
+Typecheck, 42/42 SSR and nine renderer checks pass; full session 60859 and final format/hash/push/head CI remain pending.
+No no-gain rounds or DONE are claimed; three consecutive no-gain rounds remain required.
 
 The upgrade preserves 1–16 players, EN/ES libraries, category/topic draws, speed points,
 a 300-point streak cap, custom/preset final wagers and the existing minigame. Classic adds three

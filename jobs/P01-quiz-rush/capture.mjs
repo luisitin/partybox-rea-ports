@@ -27,6 +27,8 @@ const browserPath = [
 if (!browserPath) throw new Error('Neither the standard Chrome nor Edge executable exists.');
 const cases = JSON.parse(readFileSync(resolve(media, 'capture-manifest.json'), 'utf8'));
 const fontBytes = readFileSync(resolve(media, 'nunito-latin-wght-normal.woff2'));
+const tokenCSS = readFileSync(resolve(media, 'tokens.css'), 'utf8');
+const evidenceCSS = readFileSync(resolve(media, 'evidence.css'), 'utf8');
 mkdirSync(temp, { recursive: true });
 
 function pause(ms) {
@@ -305,7 +307,7 @@ try {
     // Page.setDocumentContent has no file base URL. Load the committed local font bytes directly;
     // opening the standalone HTML from disk uses the same adjacent OFL font, without a network.
     await dev.call('Runtime.evaluate', {
-      expression: `(()=>{const bytes=Uint8Array.from(atob('${fontBytes.toString('base64')}'),char=>char.charCodeAt(0));const face=new FontFace('Nunito Variable',bytes,{weight:'200 1000',style:'normal'});document.fonts.add(face);return face.load().then(()=>document.fonts.ready).then(()=>true)})()`,
+      expression: `(()=>{const tokens=document.createElement('style');tokens.textContent=${JSON.stringify(tokenCSS)};document.head.append(tokens);const rules=document.createElement('style');rules.textContent=${JSON.stringify(evidenceCSS)};document.head.append(rules);const bytes=Uint8Array.from(atob('${fontBytes.toString('base64')}'),char=>char.charCodeAt(0));const face=new FontFace('Nunito Variable',bytes,{weight:'200 1000',style:'normal'});document.fonts.add(face);return face.load().then(()=>document.fonts.ready).then(()=>true)})()`,
       awaitPromise: true,
     });
     // The real host's layout effect auto-collapses the named strip past two rows before paint.
@@ -319,7 +321,7 @@ try {
       returnByValue: true,
     });
     if (result.exceptionDetails) throw new Error(JSON.stringify(result.exceptionDetails));
-    metrics.push({ name: frame.name, ...result.result.value });
+    metrics.push({ name: frame.name, baseline: frame.baseline === true, ...result.result.value });
     const shot = await dev.call('Page.captureScreenshot', {
       format: 'png',
       captureBeyondViewport: false,
@@ -436,17 +438,22 @@ writeFileSync(
 );
 const failed = metrics.filter(
   (m) =>
-    m.horizontalOverflow > 1 ||
-    m.verticalOverflow > 1 ||
-    m.clipped.length ||
-    m.unstyled.length ||
-    !m.nunitoLoaded ||
-    m.scrollers.some((s) => s.overflow > 1),
+    !m.baseline &&
+    (m.horizontalOverflow > 1 ||
+      m.verticalOverflow > 1 ||
+      m.clipped.length ||
+      m.unstyled.length ||
+      !m.nunitoLoaded ||
+      m.scrollers.some((s) => s.overflow > 1)),
 );
 console.log(
   JSON.stringify(
     {
       screens: metrics.length,
+      currentScreens: metrics.filter((m) => !m.baseline).length,
+      baseline: metrics
+        .filter((m) => m.baseline)
+        .map((m) => ({ name: m.name, clipped: m.clipped })),
       bytes,
       failed: failed.map((m) => ({
         name: m.name,

@@ -4,16 +4,22 @@ import { resolve } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import {
   PhoneOnlyProvider,
+  Avatar,
+  BigText,
   PlayerChip,
   PlayerChips,
   ServerClockProvider,
   Timer,
+  Stage,
 } from '@partybox/game-sdk/ui';
 import chipStyles from '../../../packages/game-sdk/src/tv/PlayerChips.module.css';
 import type { PlayerInfo } from '@partybox/game-sdk';
 import { afterEach, expect, it, vi } from 'vitest';
 import { Controller } from '../client/Controller';
 import { Tv } from '../client/Tv';
+import { Finale } from '../client/Finale';
+import { FinalReveal } from '../client/TvFinal';
+import type { RoomSnapshot } from '@partybox/shared';
 import { tv as tvModule } from '../client/tv-entry';
 import { game } from '../server/index';
 import { QUESTIONS, QUESTIONS_ES, questionById } from '../server/content';
@@ -85,6 +91,7 @@ function played(
   tied = false,
   initial = start(mode),
   allIn = false,
+  tiedCount?: number,
 ): State[] {
   const states: State[] = [];
   let state = initial;
@@ -96,7 +103,7 @@ function played(
       if (!q) throw new Error('Real evidence question missing');
       const at = state.phase.startedAt;
       for (const [index, player] of Object.values(state.players).entries()) {
-        const correct = tied || index < 4;
+        const correct = tied ? tiedCount === undefined || index < tiedCount : index < 4;
         const choice = correct ? q.answerIndex : (q.answerIndex + 1) % 4;
         const delay = tied ? 400 : ([300, 800, 1300, 1300][index] ?? 1600);
         const stamp = phone(state, player.id).answerStamp;
@@ -279,6 +286,109 @@ function first(states: State[], phase: State['phase']['id'], final = false): Sta
 
 function atEnd(state: State): number {
   return state.phase.deadline === null ? state.phase.startedAt + 5000 : state.phase.deadline - 1;
+}
+
+/** The pinned host retains final-reveal as lastView and renders Finale under its winner hero. */
+function paintResults(name: string, last: State, line: string, baseline = false): void {
+  const done = timer(last);
+  expect(done.phase.id).toBe('done');
+  const results = game.results(done);
+  if (!results) throw new Error('Finished evidence match has no results');
+  const players = Object.values(done.players);
+  const winners = players.filter((p) => results.winnerIds.includes(p.id));
+  const tied = winners.length > 1;
+  const shown = winners.slice(0, winners.length > 8 ? 7 : 8);
+  const room: RoomSnapshot = {
+    code: 'KAHOOT',
+    status: 'results',
+    locked: false,
+    capacity: 16,
+    players: [],
+    vip: 'seat-1',
+    selectedGameId: 'kahoot',
+    settings: {
+      quizMode: done.settings.quizMode ?? 'wager',
+      questions: done.settings.questions,
+      answerSeconds: done.settings.answerSeconds,
+      category: done.settings.category,
+    },
+    results: { gameId: 'kahoot', players, results, at: atEnd(last) + 1 },
+    canStart: { ok: true },
+    recording: true,
+    musicOnPhones: false,
+    contentLang: last.contentLang ?? 'en',
+    phoneOnly: false,
+    listed: false,
+  };
+  const html = renderToStaticMarkup(
+    <ServerClockProvider offsetMs={0}>
+      <Stage center className="evidence-results">
+        <div className="evidence-hero-block">
+          <div
+            className={`evidence-hero ${tied ? 'evidence-hero-tied' : ''}`}
+            data-screen="results"
+          >
+            {tied ? (
+              <span className="evidence-tied-faces" aria-hidden>
+                {shown.map((p) => (
+                  <span key={p.id} className="evidence-tied-face">
+                    <Avatar avatarId={p.avatarId} size={72} />
+                  </span>
+                ))}
+                {winners.length > shown.length ? (
+                  <span className="evidence-tied-face evidence-tied-more">
+                    +{winners.length - shown.length}
+                  </span>
+                ) : null}
+              </span>
+            ) : winners[0] ? (
+              <Avatar avatarId={winners[0].avatarId} size={96} />
+            ) : null}
+            <span className="evidence-headline">
+              <BigText level="h1" tone="accent">
+                <span>{line}</span>
+              </BigText>
+              {!tied && winners[0] ? (
+                <span className="evidence-winner-score">{results.scores[winners[0].id]}</span>
+              ) : null}
+            </span>
+          </div>
+        </div>
+        <div>
+          {baseline ? (
+            <FinalReveal
+              settled
+              question={tv(last).question!}
+              correctIndex={tv(last).correctIndex!}
+              rows={tv(last).rows ?? []}
+            />
+          ) : (
+            <Finale lastView={{ ...tv(last), vip: null }} room={room} />
+          )}
+        </div>
+        <p className="evidence-recap">📼 Recap saved on the host PC</p>
+      </Stage>
+    </ServerClockProvider>,
+  );
+  const frame: UpgradeFrame = {
+    name: `upgrade-${name}-tv`,
+    surface: 'tv',
+    width: 1920,
+    height: 1080,
+    at: atEnd(last) + 1,
+    stateHash: stateDigest(last),
+    html,
+    layout: 'results',
+    baseline: baseline || undefined,
+  };
+  expect(html).not.toMatch(/NaN|undefined|Infinity/);
+  if (!baseline) expect(html.match(/data-player=/g)).toHaveLength(players.length);
+  for (const row of tv(last).rows ?? []) {
+    expect(html).toContain(`title="${row.name}"`);
+    expect(html).toContain(String(row.score));
+  }
+  frames.push(frame);
+  fixtures[name] = last;
 }
 
 function longestQuestion(ids: readonly string[], lang?: 'en' | 'es'): string {
@@ -575,6 +685,37 @@ it('fits paired and tripled first-place ties with legal forty-character wide nam
   }
 });
 
+it('fits the actual host results Finale beneath wins and wide-name ties with saved recap', () => {
+  const final = first(played('wager'), 'reveal', true);
+  paintResults('wager-results-sixteen-winner', final, 'Guest 01 Aster wins!');
+  const all = fixtures['wager-final-wide-names-five-digits']!;
+  expect(all).toBeDefined();
+  paintResults('wager-results-sixteen-all-tied-wide', all, 'A tie!');
+  const initial = game.init({
+    players: Object.values(all.players),
+    settings: { quizMode: 'wager', category: 'all', questions: 20, answerSeconds: 10 },
+    seed: 42,
+    now: T0,
+    presence: { mode: 'together', phoneOnly: false },
+  });
+  const three = first(played('wager', true, initial, true, 3), 'reveal', true);
+  expect(game.results(timer(three))?.winnerIds).toHaveLength(3);
+  const names = Object.values(three.players)
+    .slice(0, 3)
+    .map((p) => p.name);
+  paintResults(
+    'wager-results-sixteen-three-tied-wide',
+    three,
+    `${names[0]}, ${names[1]} & ${names[2]} tie!`,
+  );
+  paintResults(
+    'wager-results-before-three-tied-wide',
+    three,
+    `${names[0]}, ${names[1]} & ${names[2]} tie!`,
+    true,
+  );
+});
+
 function captureFrames(): UpgradeFrame[] {
   return frames.filter((frame) => {
     const name = frame.name.slice('upgrade-'.length, -(frame.surface.length + 1));
@@ -582,6 +723,7 @@ function captureFrames(): UpgradeFrame[] {
       frame.surface === 'tv' || frame.surface === 'phone-tv' || frame.surface === 'phone-only';
     const stage = frame.surface === 'tv' || frame.surface === 'phone-only';
     if (name === 'wager-final-wide-names-five-digits') return true;
+    if (name.startsWith('wager-results-')) return true;
     if (/^classic-podium-wide-tie-/.test(name)) return true;
     if (/^wager-small-/.test(name) || /^wager-(?:en|es)-longest-standings$/.test(name)) return true;
     if (/^wager-race-(?:eight|sixteen)$/.test(name)) return frame.surface === 'tv';
@@ -618,7 +760,8 @@ it('writes current HTML and manifest only when the root requests fresh evidence'
   );
   const captures = captureFrames();
   expect(captures.length).toBeGreaterThanOrEqual(65);
-  expect(captures.length).toBeLessThanOrEqual(91);
+  expect(captures.filter((frame) => !frame.baseline).length).toBe(94);
+  expect(captures.filter((frame) => frame.baseline).length).toBe(1);
   expect(timer(fixtures['classic-podium-1']!)).toEqual(fixtures['classic-done']);
   expect(timer(fixtures['wager-final-reveal']!)).toEqual(fixtures['wager-done']);
   if (process.env.PB_WRITE_EVIDENCE === '1') writeUpgradeEvidence(captures, fixtures);

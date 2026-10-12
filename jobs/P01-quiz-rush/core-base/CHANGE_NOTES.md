@@ -18,14 +18,41 @@ wide names wrap within the podium. Unrevealed classic final rivals' totals remai
 
 Capture evidence now loads the pinned Nunito Variable font from a licensed local WOFF2 asset,
 retaining `NUNITO-LICENSE.txt` (OFL 1.1). It uses the core global h2 rule and colour inheritance.
-The 1920×1080 TV frame reserves a 133.2 px header, 152.8 px player strip, 22 px bar and 80 px footer,
+The 1920×1080 playing TV frame reserves a 133.2 px header, 152.8 px player strip, 22 px bar and 80 px footer,
 leaving a 692 px Stage/626 px inner area. The 390×844 phone uses a 60 px VIP header, 27.6 px
 counter strut and 4 px bar; there is no invented host footer or extra main-area timer.
 
-The latest 91 captures pass fit checks and hand review; evidence is 8,957,011 B, browser PID 96636
-is closed. A CSS rank separator added after hand review awaits focused recapture. Full game run
-21307 is active; fresh typecheck/format/full-test/CI results and remaining KEEP GOING gates are
-not claimed complete. Round-1 CI at `4cf1a53` (226/226) is historical baseline evidence.
+Round-2 baseline passes 238/238 tests (26 files, 416.59 s), 32,000 bots, 2,006 property seeds
+and fresh 20/20 behavioral mutations. CI 38235645918 passed at `e189d22`. The 91 actual-host
+captures include the rank separator; browser PID 39756 closed. Final baseline hashes pass:
+226 media files/9,843,669 B and all 76 source, six restoration, font and token hashes match.
+Session 94152 passed typecheck; formatting failed only for VERIFY.md during an active edit.
+
+Round 3 removes the stale disjoint choices/roster minimum while keeping 2 s settling and max
+actual TV/phone/staged reading floors. EN/ES eight-seat holds improve 58,063 → 53,734 /
+63,257 → 56,331 ms. Local checks pass 240/240, 26 files, 881.47 s, exit 0; all 32,000 bots and
+2,006 property seeds regenerated. Fresh mutation session 84630 passes 20/20 against 72 baseline
+tests, exit 0, source restored. Typical wager medians improve eight-player 84,906 → 84,473 ms
+(433 ms saved) and sixteen-player 115,642 → 113,910 ms (1,732 ms); longest remains 1,425,695 ms.
+
+The `8cb7355` milestone omitted a regenerated fixture and failed CI 38238453616; root corrected
+it at `df5322a`, then CI 38238947209 failed formatting 21 fixtures. Root formatted/pushed
+`bd91828`; CI 38239089152 is green, with main claim refresh `646f3a0`. Failed runs are not PASS.
+
+Round 4 fixes Finale host fit and unconditional wager start copy. The real Results Stage is
+866.8 px/758.8 px inner with winner hero/recap; all sixteen bets/deltas/totals remain at 32 px.
+EN/ES step 3 distinguishes Classic podium from Wager final bet. Current runtime differs from
+round-3 pacing; its full/head CI checks remain pending.
+
+Current capture passes 94/94 with zero overflow/clipping/unstyled content/scrolling; a deliberate
+same-state before-repair baseline has 85 clipped items, giving 95 records total. Ninety earlier
+PNGs remain byte-identical to e189d22; the remaining old frame changes the rank separator.
+Shared evidence CSS bundles the actual module selectors plus capture shell, keeping local tokens/
+font and reducing the checkpoint to 235 files/8,279,094 B. Browser PID 87684 verified closed in
+finally; EPERM profile cleanup is deferred. Typecheck 41896 PASS, SSR 42/42 and nine renderer
+checks PASS. Full 60859 is active without evidence fixture generation; expected 241 tests in 26 files is not
+PASS. Root will format, produce stable fresh hashes, push sources/artifacts and require final-head
+CI. Three no-gain rounds remain; no completed upgrade loop or DONE. Historical hashes stay below.
 
 ## Historical preparation snapshot
 

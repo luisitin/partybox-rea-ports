@@ -1,0 +1,174 @@
+/* The results host supplies the winner headline and recap. Scope layout changes to its one
+   wrapper containing this game's settled board, then let flex allocate the exact space left. */
+:global(div):has(> div > .finaleRoot) {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+:global(div):has(> .finaleRoot) {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Nunito's inline headline span extends slightly beyond its line box. Keep that span inside
+   the host's safe overscan band as well as the visible letter shapes. */
+:global(div):has(> div > .finaleRoot) > :first-child {
+  padding-top: var(--pb-space-2);
+}
+
+/* Only long named ties need a smaller host headline; the face/crown and lone-winner h1 stay. */
+:global(div):has(> div > .finaleRoot[data-compact-hero='true'])
+  > :first-child
+  :global([data-screen='results'])
+  p {
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  line-height: 1.1;
+}
+
+.finaleRoot {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  container-type: size;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  justify-content: safe center;
+  gap: var(--pb-space-2);
+}
+
+.answerBar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--pb-space-3);
+  flex-shrink: 0;
+  padding: var(--pb-space-1);
+  border: calc(var(--pb-space-1) / 2) solid var(--pb-accent-3);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface-2);
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  line-height: 1;
+}
+
+.answer {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+  min-width: 0;
+  margin: 0;
+}
+
+.answer strong {
+  overflow-wrap: anywhere;
+}
+
+.letter {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--pb-space-7);
+  height: var(--pb-space-7);
+  border-radius: 50%;
+  background: var(--pb-accent-3);
+  color: var(--pb-on-accent);
+}
+
+.mark {
+  flex-shrink: 0;
+  color: var(--pb-accent-3);
+  font-weight: 900;
+}
+
+.legend {
+  margin: 0;
+  padding-inline: var(--pb-space-2);
+  color: var(--pb-text-muted);
+  white-space: nowrap;
+}
+
+.receipts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--pb-space-2);
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  line-height: 1;
+}
+
+.receipts[data-count='1'] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.receipts:is([data-count='9'], [data-count='10'], [data-count='11'], [data-count='12']) {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.receipts:is([data-count='13'], [data-count='14'], [data-count='15'], [data-count='16']) {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.receipts li {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  padding: var(--pb-space-1);
+  border: calc(var(--pb-space-1) / 4) solid var(--pb-border);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+}
+
+.receipts li[data-leader] {
+  border-color: var(--pb-accent-3);
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.numbers {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--pb-space-1);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bet {
+  white-space: nowrap;
+}
+
+.separator {
+  color: var(--pb-text-muted);
+}
+
+.right {
+  color: var(--pb-accent-3);
+}
+
+.wrong {
+  color: color-mix(in srgb, var(--pb-danger) 55%, var(--pb-text));
+}
+
+/* A long winner line consumes more of the host's room. Keep every number at 32 px while
+   removing only receipt padding; the measured container height comes from the host flow. */
+@container (max-height: 430px) {
+  .receipts li {
+    padding-block: 0;
+  }
+}

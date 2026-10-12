@@ -55,7 +55,7 @@
   the pinned core `global.css` rule making button/input colour inherit. The helper now matches that
   rule. This was a capture artifact, not a newly identified wager colour defect in the core host.
 - The earlier 82 clean frames used a fake 900 px TV stage. Their fit/safe-margin claims do not
-  establish pinned-host fit. Current captures reserve the 133.2 px header, 152.8 px player strip,
+  establish pinned-host fit. Playing-phase captures reserve the 133.2 px header, 152.8 px player strip,
   22 px bar and 80 px footer at 1920×1080, leaving a 692 px Stage/626 px inner area. Hiding shell
   names/scores during intro, reveal and podium preserves the player strip's reserved height.
 - The actual phone question shell has a 60 px VIP header, 27.6 px counter strut and 4 px bar at
@@ -69,13 +69,48 @@
   now shows every seat's total, including sixteen-player boards. Classic switches to a board for
   3+ tied entries at any rank; pairs retain podium plinths with readable wrapping wide names.
 - Round 1 repaired the measured 15 → 0 default race-name truncations in the old harness.
-  Post-round-1 checks passed 226/226 in 25 files, 196.07 s; CI 38229318876 passed at `4cf1a53`.
-  These remain baseline evidence while round 2 verification is being completed.
-- The current 91 Nunito/pinned-chrome captures pass fit metrics and hand review; evidence totals
-  8,957,011 B and browser PID 96636 is closed. A rank separator added after hand review still
-  requires focused recapture. Full game test run 21307 is active; its result is not yet green.
-- Old standalone 116-test/7,000-match/screens/mutation/loop evidence is historical. Fresh upgraded
-  verification, CI and the remaining KEEP GOING gates are required before DONE. Initial and
-  post-round-1 CI are green; no fresh round-2 CI pass or completed loop is claimed. The public
-  kit lacks core gen-registry/verify commands; its discovery, typecheck, format and contract
-  checks validate this module. The core migration handoff remains unapplied.
+  Its 226/226 tests and CI 38229318876 at `4cf1a53` remain historical baseline evidence.
+- Round 2 baseline is verified: 238/238 tests in 26 files, 416.59 s; 32,000 seeded matches,
+  2,006 property seeds and fresh 20/20 behavioral mutation kills against 72 baseline tests.
+  CI 38235645918 passed at `e189d22`. All 91 actual-host/Nunito captures, including the rank
+  separator, pass; owned browser PID 39756 closed in finally. Hash checks passed 226 media files,
+  9,843,669 B, and matched all 76 runtime-source, six restoration, font and token hashes.
+- Session 94152 passed typecheck. Formatting failed only for VERIFY.md while that document was
+  being edited; it is not recorded as a format PASS. The earlier mutation-overlap check is also
+  not a final formatting result. Later source changes require fresh types/format/evidence/hashes.
+- Round 3 removes the obsolete minimum combining choices and roster text from disjoint previous
+  phone layouts, preserving max actual TV/phone/staged reading floors plus 2 s. Eight-seat EN/ES
+  examples improve 58,063 → 53,734 / 63,257 → 56,331 ms. Regenerated typical wager medians save
+  433 ms at eight players (84,906 → 84,473) and 1,732 ms at sixteen (115,642 → 113,910); longest
+  sixteen-player wager match remains 1,425,695 ms. The examples are not typical-match gain claims.
+- Round-3 pacing local checks pass: 240/240 tests, 26 files, 881.47 s, session 36474 exit 0;
+  32,000 simulations and 2,006 property seeds regenerated. Fresh mutation session 84630 passes
+  20/20 against 72 baseline tests, exit 0, source restored. Pacing CI 38239089152 is green at bd91828;
+  later Finale/copy changes need their own checks.
+- Root omitted the regenerated fixture from `8cb7355`, an avoidable incomplete milestone;
+  CI 38238453616 failed its answer-chart deadline comparison. Root added the fixture at `df5322a`;
+  CI 38238947209 then failed 21 unformatted fixtures. They were formatted in `bd91828` and
+  CI 38239089152 passed. Neither failure is counted as PASS. Main claim refresh is `646f3a0`.
+- Round 4 repairs results Finale fit and static Classic start wording. Real Results Stage is
+  866.8 px/758.8 px inside with winner hero/recap; all sixteen bets/deltas/totals remain at 32 px.
+  EN/ES step 3 distinguishes Classic podium from Wager's final bet. Copy stays static because
+  core about-copy is cached by game id/language, not settings; current runtime has changed.
+- Current capture passes 94/94 with zero overflow/clipped/unstyled elements or scrolling. One
+  explicit before-repair comparison from the same three-winner/sixteen-wide-name reducer state
+  has 85 clipped items; 95 records include that deliberate baseline, not a current failure.
+  Ninety of the earlier 91 PNGs are byte-identical to e189d22; the remaining old frame changes
+  the standings rank separator. Shared evidence CSS preserves actual selectors/tokens/font.
+  Media checkpoint: 235 files/8,279,094 B, below decimal 10 MB; stable fresh hashes are pending.
+- Browser PID 87684 verified closed in finally. EPERM deferred profile cleanup only. Current
+  typecheck 41896 passes; SSR 42/42 and nine-renderer follow-up pass after guards/type fixes.
+  Full 60859 is active without PB_WRITE_EVIDENCE; expected 241 tests in 26 files is not a result. Final
+  formatting/hashes, source/artifact push and resulting-head CI remain pending.
+- VIP Next/skip is an inherited platform input without a phase stamp (public shared/protocol.ts;
+  pinned core Playing.tsx and engine/vip.ts). A delayed old-screen Next can skip the new current
+  phase after automatic advance; local duplicate-click guards do not prevent that across devices.
+  Repair requires protocol/engine phase matching outside the authorized game/core-read-only scope.
+  No complete stale-Next protection is claimed.
+- Old standalone 116-test/7,000-match/screens/mutation/loop evidence is historical. No upgrade
+  no-gain rounds or DONE are claimed; three consecutive no-gain rounds and final checks remain.
+  The public kit lacks core gen-registry/verify commands; discovery, typecheck, format and
+  contract checks validate this module. The core migration handoff remains unapplied.
