@@ -5,7 +5,13 @@ import type { GameControllerProps } from '@partybox/game-sdk/ui';
 import type { BonkControllerView } from '../server/index';
 import type { Input } from '../server/types';
 import { Arena } from './Arena';
-import { ControlSession, emptyHeld, keyEventControl, shortcutModified } from './controls';
+import {
+  ControlSession,
+  editableKeyTarget,
+  emptyHeld,
+  keyEventControl,
+  shortcutModified,
+} from './controls';
 import type { Control } from './controls';
 import { finalRoundText } from './roundContext';
 import { clockText, playerStyle, secondsLeft, standingsRows } from './standings';
@@ -85,16 +91,11 @@ export function Controller({
     const keyboard =
       (down: boolean) =>
       (event: KeyboardEvent): void => {
-        if (
-          event.target instanceof HTMLElement &&
-          (event.target.isContentEditable ||
-            ['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName))
-        )
-          return;
-        const control = keyEventControl(event.key, down, event);
+        const editable = event.target instanceof HTMLElement && editableKeyTarget(event.target);
+        const control = keyEventControl(event.key, down, event, editable);
         if (!control) return;
         if (down && !latest.current.active) return;
-        event.preventDefault();
+        if (down || !editable) event.preventDefault();
         if (down && event.repeat) return;
         actions.current.press(control, `key:${event.code || event.key.toLowerCase()}`, down);
       };

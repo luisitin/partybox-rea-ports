@@ -3,6 +3,7 @@ import type { Input } from '../server/types';
 import {
   ControlSession,
   command,
+  editableKeyTarget,
   emptyHeld,
   holdSource,
   keyControl,
@@ -72,6 +73,48 @@ describe('hold controls', () => {
         if (release !== null && release !== 'jump') session.press(release, `key:${key}`, false);
         expect(sent.at(-1)).toMatchObject({ move: 0, heavy: false });
       }
+    },
+  );
+
+  it.each([
+    ['input', { tagName: 'INPUT' }],
+    ['textarea', { tagName: 'TEXTAREA' }],
+    ['select', { tagName: 'SELECT' }],
+    ['contentEditable', { tagName: 'DIV', isContentEditable: true }],
+  ] as const)(
+    'a body-focused keyboard hold releases after focus moves to %s without releasing a second finger',
+    (_name, target) => {
+      const sent: Input[] = [];
+      const session = new ControlSession((input) => sent.push(input));
+      const plain = { altKey: false, ctrlKey: false, metaKey: false };
+      const bodyEditable = editableKeyTarget({ tagName: 'BODY' });
+      const fieldEditable = editableKeyTarget(target);
+      expect(bodyEditable).toBe(false);
+      expect(fieldEditable).toBe(true);
+      session.context('same-round', true);
+      const key = (down: boolean, editable: boolean): void => {
+        const control = keyEventControl('a', down, plain, editable);
+        if (control !== null && control !== 'jump') session.press(control, 'key:KeyA', down);
+      };
+      key(true, bodyEditable);
+      expect(sent.at(-1)).toMatchObject({ move: -1 });
+      key(false, fieldEditable);
+      expect(session.held.left).toEqual([]);
+      expect(sent.at(-1)).toMatchObject({ move: 0, heavy: false, jump: false });
+
+      const count = sent.length;
+      for (const name of ['a', 'ArrowRight', 'w', 'x'])
+        expect(keyEventControl(name, true, plain, fieldEditable)).toBeNull();
+      key(true, fieldEditable);
+      expect(sent).toHaveLength(count);
+
+      key(true, bodyEditable);
+      session.press('left', 'pointer:1', true);
+      key(false, fieldEditable);
+      expect(session.held.left).toEqual(['pointer:1']);
+      expect(sent.at(-1)).toMatchObject({ move: -1 });
+      session.press('left', 'pointer:1', false);
+      expect(sent.at(-1)).toMatchObject({ move: 0, heavy: false, jump: false });
     },
   );
 

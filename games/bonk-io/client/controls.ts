@@ -54,13 +54,21 @@ export function shortcutModified(modifiers: {
   return modifiers.altKey || modifiers.ctrlKey || modifiers.metaKey;
 }
 
-/** Browser shortcuts must not start game input; their keyups still release old holds. */
+export function editableKeyTarget(target: {
+  tagName: string;
+  isContentEditable?: boolean;
+}): boolean {
+  return !!target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
+}
+
+/** Editable fields and browser shortcuts cannot start game input; keyups still release old holds. */
 export function keyEventControl(
   key: string,
   down: boolean,
   modifiers: { altKey: boolean; ctrlKey: boolean; metaKey: boolean },
+  editable = false,
 ): Control | null {
-  if (down && shortcutModified(modifiers)) return null;
+  if (down && (editable || shortcutModified(modifiers))) return null;
   return keyControl(key);
 }
 
