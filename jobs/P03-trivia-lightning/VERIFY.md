@@ -12,8 +12,8 @@ It regenerated **82 SSR pages**, phase fixtures, public interaction views and th
 The **21,000 seeded games / 105,000 seats** finished. Prior **20/20 caught mutations** remain
 rule evidence because the rename changes no rules. The renamed capture passed all **82 layouts**
 and **61 mounted checks / 14 additional PNGs**. Browser closure is independently verified.
-All **183 media hashes match**, at **9,839,146 bytes**. Renamed-head CI and final stable-audit
-logging remain the completion gates.
+All **183 media hashes match**, at **9,839,146 bytes**. Renamed implementation CI is green,
+and audits 9-11 complete the three consecutive stable KEEP GOING rounds.
 
 ## Commands and results
 
@@ -32,7 +32,7 @@ All Vitest commands are restricted to this game. No whole-suite browser run was 
 | Final formatting                                      | `pnpm.cmd format`                                                                                                                                                                                   | PASS, exit 0, after renamed capture/evidence and scoped formatting writes.                                                                                                                                                                                                        |
 | Final media budget                                    | `Get-ChildItem -LiteralPath jobs/P03-trivia-lightning/media -File \| Measure-Object Length -Sum`                                                                                                    | PASS: 183 files / 9,839,146 bytes, below 10,000,000 bytes; lossless PNG optimization verified identical pixels.                                                                                                                                                                   |
 | Final media integrity                                 | `Get-ChildItem -LiteralPath jobs/P03-trivia-lightning/media -File \| Sort-Object Name \| Get-FileHash -Algorithm SHA256`                                                                            | PASS: regenerated all 183 SHA256SUMS.txt records and independently recomputed each hash; zero mismatches.                                                                                                                                                                         |
-| PR CI                                                 | `gh pr checks 3`                                                                                                                                                                                    | Prior heads `b67e5ec` and stable-audit-9 head `43c69d1` passed CI. Renamed-head CI pending final evidence push.                                                                                                                                                                   |
+| PR CI                                                 | `gh pr checks 3`                                                                                                                                                                                    | PASS: renamed implementation `67ec95a`, run 38195659698; stable audit 10 `3f66a89`, run 38195782172. Latest documentation head is checked before leaving draft.                                                                                                                   |
 
 ## SDK contract, rules and regressions
 
@@ -220,17 +220,20 @@ job/workflow filters, Ubuntu latest, 30-minute timeout, read-only contents permi
 `actions/*`, Node 24, Corepack, frozen-lockfile install, typecheck, format and game-only tests.
 Prior implementation head `b67e5ec` passed [run 38193988918](https://github.com/luisitin/partybox-rea-ports/actions/runs/38193988918).
 Stable-audit-9 head `43c69d1` passed [run 38194604291](https://github.com/luisitin/partybox-rea-ports/actions/runs/38194604291).
-These are actual pre-rename green results. The final renamed evidence head must receive green CI
-before the PR leaves draft; no prior green run is relabeled as validation of that head.
+Renamed implementation `67ec95a` passed [run 38195659698](https://github.com/luisitin/partybox-rea-ports/actions/runs/38195659698).
+Stable audit 10 `3f66a89` passed [run 38195782172](https://github.com/luisitin/partybox-rea-ports/actions/runs/38195782172).
+The primary runner checks the latest documentation head with `gh pr checks 3` before making
+PR #3 ready and marking the main claim DONE; prior results are not relabeled as that head's check.
 
 [LOOP.md](LOOP.md) records eight player-visible improvement passes: phone standings, readable
 named lanes, occupied podium beats, informed rival choice, score-derived lead cues, request
 acknowledgement, return/verdict identity and readable completion/stable identity. Measured gains
 are regression behavior, removed waits, fit or explicit information; no human comprehension or
-network latency gain is asserted. Stable audit 9 is logged and its head is green. Read-only
-stable reviews 10 and 11 were completed by the primary runner; their final records will be logged
-after renamed-head CI is green. Capture/cleanup, media budget/hashes and local checks have passed. Renamed-head CI and
-stable-audit logging remain the completion gates.
+network latency gain is asserted. Stable audits 9-11 each found zero new player-visible gain.
+Root and independent read-only reviews covered score/choices, phone/spectator stages and recovery;
+all three actual records are in LOOP.md. Local checks, final capture/cleanup, media budget/hashes
+and renamed implementation CI passed. The final documentation head receives the same CI before
+PR readiness and claim completion.
 
 ## Research and practical limits
 

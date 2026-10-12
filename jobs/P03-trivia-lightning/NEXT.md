@@ -12,10 +12,13 @@
 - Renamed evidence: 82 static pages with zero fit issues; 61 mounted checks / 14 captures pass.
   Chrome native closure and exact endpoint verified in finally; locked profile retained (EBUSY).
   183 media files / 9,839,146 bytes; all SHA256 hashes independently match.
-- KEEP GOING rounds 1-8 improve behavior; stable round 9 is logged and green.
-  Read-only score/phone/spectator and recovery reviews found no further player-visible gain.
-- Remaining: green CI on renamed evidence push, log/push stable audits 10 and 11,
-  make PR ready after final green check, mark P03 DONE on main, take next eligible job.
+- Local typecheck, format and game tests pass. Renamed implementation CI is green:
+  https://github.com/luisitin/partybox-rea-ports/actions/runs/38195659698
+- KEEP GOING complete: rounds 1-8 improve behavior; rounds 9-11 each find no further
+  player-visible gain after score/choice, phone/spectator and recovery reviews.
+- Implementation and evidence are complete. Publication gate: latest documentation-head CI
+  must pass before PR readiness; main claim becomes DONE afterward. Check PR/CLAIMS for status.
+- After publication, take the next eligible job; this job needs no further implementation work.
 - Before every CLAIMS.md commit: pull --rebase origin main in the existing main worktree
   C:/dev/rea-runs/r3-claims. Refresh only the r3-local line after every branch push.
 - Install completed once with corepack enable and pnpm.cmd install. Use pnpm.cmd in PowerShell.
