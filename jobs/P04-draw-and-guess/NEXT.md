@@ -18,10 +18,10 @@ R25/R26/R28/R30 gains remain intact. CI38204596894 for44c437e passes331checks/
 fresh20/20R23mutation campaign. Rendering markup/CSS and33SSR captures are
 unchanged;68media files total2,157,072bytes and are rehashed after final reports.
 
-CI38205795568 is green for the final R34 source a476457. R35 root review finds
-no further bounded player-visible gain; no-gain streak1/3. Two rounds remain.
-Rank/log five residuals per
-round, push/refresh each. Refresh PR body from this job README and ready only on
+CI38205795568 is green for final R34 source a476457 (331tests/32files,26.69s).
+Latest9227289 documentation CI38205957432 is green. R35/R36 find no further
+bounded player-visible gain; no-gain streak2/3. One independent round remains.
+Rank/log five residuals, push/refresh. Refresh PR body from this job README and ready only on
 latest green CI, then mark P04 DONE before taking the next lowest eligible job.
 
 Original interactive play was unavailable through CUA; see RESEARCH.md.
