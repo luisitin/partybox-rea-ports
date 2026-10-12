@@ -68,7 +68,7 @@ export function Controller({
   const title =
     phase === 'choose'
       ? view.isDrawer && player
-        ? L('Pick your secret word')
+        ? L('Pick a word')
         : L('{name} is choosing', { name: view.drawerName })
       : phase === 'draw'
         ? view.isDrawer && player
@@ -133,7 +133,7 @@ export function Controller({
       {phase === 'choose' && view.isDrawer && player ? (
         <div className={styles.choose}>
           <Pencil />
-          <p>{L('Pick a picture you can draw. Keep it secret!')}</p>
+          <p>{L('Keep it secret!')}</p>
           <div className={styles.choices} role="group" aria-label={L('Secret word choices')}>
             {view.choices?.map((word, index) => (
               <button

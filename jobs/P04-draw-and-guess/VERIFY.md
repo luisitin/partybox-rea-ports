@@ -154,3 +154,18 @@ Final `pnpm.cmd format` passes, exit0. Final formatting followed browser output;
 `node jobs/P04-draw-and-guess/tools/hash-media.mjs` hashes all66HTML/PNG files
 (2,080,808bytes, under10MB). `git diff --check` passes. No game source changed
 after the246-test suite; only formatting and evidence/documentation followed.
+
+R21: `pnpm.cmd vitest run games/draw-and-guess/__tests__/choice-reading.test.tsx games/draw-and-guess/__tests__/evidence.test.tsx --maxWorkers=1 --pool=threads`
+with WRITE_EVIDENCE=1 passes14checks, exit0, in1.14s. Four added cases render
+eight artist screens using the highest-word-count legal hands. The SDK
+new-action reading budget drops3,030ms per hand; worst10,608→7,578ms, within
+the existing8,000ms clock. Shortening only the instruction would leave8,011ms,
+so the artist heading also shrinks. CI38193636532 passed48s before this review.
+
+R21 final `pnpm.cmd typecheck` passes, exit0. The new SSR fixture supplies the
+SDK's required `vip:null`; the initial missing-field compiler failure was fixed.
+`node jobs/P04-draw-and-guess/tools/capture.mjs` recaptures all33screens with
+zero overflow and closes its one browser in finally. Scoped Prettier follows
+capture output; `node jobs/P04-draw-and-guess/tools/hash-media.mjs` hashes66files
+totaling2,076,820bytes. Server mechanics are unchanged since the246-test run;
+CI will run all250checks including the four new rendered-copy cases.
