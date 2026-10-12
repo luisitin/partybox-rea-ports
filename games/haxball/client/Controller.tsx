@@ -8,6 +8,7 @@ import { Controls } from './Controls';
 import { heldVector } from './input-state';
 import { MatchStage, ScoreLine } from './MatchStage';
 import { attackRight, jersey, shortName, teamName } from './match';
+import { useGoalCue } from './useGoalCue';
 import { useHeldControls } from './useHeldControls';
 import styles from './Controller.module.css';
 
@@ -16,6 +17,7 @@ export function Controller({
   send,
 }: GameControllerProps<HaxballControllerView, Input>): JSX.Element {
   const phoneOnly = usePhoneOnly();
+  useGoalCue(view, phoneOnly);
   const now = useServerNow(250, view.paused, view.clockHeldAt);
   const play = useSound();
   const controls = useHeldControls(view, send);

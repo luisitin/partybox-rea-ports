@@ -2,9 +2,13 @@
 // Uses the installed Chrome, one browser and one page; no downloaded browser or dependency.
 import { auditLayout } from './capture-audit.mjs';
 import { closePrivateChrome } from './capture-processes.mjs';
-import { runInteraction } from './interaction.mjs';
+import {
+  buildInteractionBundle,
+  buildInteractionDocument,
+  runInteraction,
+} from './interaction.mjs';
 import { spawn } from 'node:child_process';
-import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { basename, dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -294,6 +298,238 @@ async function stopBrowser() {
   }
 }
 
+/** Mount real TV/phone components using only matching authoritative public projections. */
+async function runGoalAudio(sessionId) {
+  const report = {
+    capturedAt: new Date().toISOString(),
+    source: ['interaction-views.json', 'interaction-tv-views.json'],
+    browserOwnership: 'Same capture.mjs browser and page; no new instance or tab.',
+    method:
+      'Real Tv/Controller in SoundProvider; observed cheer callbacks, without microphone/audio-output claims.',
+    checks: [],
+    captures: [],
+    passed: false,
+  };
+  let mounted = false;
+  const check = (name, passed, observed) => {
+    report.checks.push({ name, passed: !!passed, observed });
+    console.log(`P24 goal audio: ${passed ? 'PASS' : 'FAIL'} ${name}`);
+  };
+  const evaluate = async (expression) => {
+    if (stopping) throw new Error('Goal audio capture interrupted.');
+    const response = await cdp.send(
+      'Runtime.evaluate',
+      { expression, awaitPromise: true, returnByValue: true },
+      sessionId,
+    );
+    if (response.exceptionDetails) throw new Error(JSON.stringify(response.exceptionDetails));
+    return response.result.value;
+  };
+  const cuesAre = async (name, expected) => {
+    const observed = await evaluate(`({ cues: [...window.harness.cues],
+      surface: window.harness.surface, kind: window.harness.kind,
+      phoneOnly: window.harnessPhoneOnly, goals: window.harness.currentView.goals })`);
+    check(name, JSON.stringify(observed.cues) === JSON.stringify(expected), {
+      expected,
+      ...observed,
+    });
+  };
+  const push = async (kind) => {
+    await evaluate(`window.harness.setView(${JSON.stringify(kind)})`);
+    await sleep(40);
+  };
+  const mount = async (surface, phoneOnly, kind = 'audio-zero') => {
+    const phone = surface === 'controller';
+    await cdp.send(
+      'Emulation.setDeviceMetricsOverride',
+      {
+        width: phone ? 390 : 1920,
+        height: phone ? 844 : 1080,
+        deviceScaleFactor: 1,
+        mobile: false,
+        screenWidth: phone ? 390 : 1920,
+        screenHeight: phone ? 844 : 1080,
+      },
+      sessionId,
+    );
+    await evaluate(
+      `window.harness.setSurface(${JSON.stringify(surface)},${JSON.stringify(kind)},${phoneOnly})`,
+    );
+    await sleep(40);
+  };
+  const capture = async (file, phone) => {
+    const layout = await evaluate(`(${auditLayout.toString()})(${phone})`);
+    check(
+      `mounted audio surface fits: ${file}`,
+      !layout.overflow.horizontal &&
+        !layout.overflow.vertical &&
+        layout.summary.controlIssues === 0 &&
+        layout.summary.offscreen === 0 &&
+        layout.summary.textClipped === 0 &&
+        layout.summary.scrollContainers === 0 &&
+        layout.summary.typographyIssues === 0,
+      { summary: layout.summary, overflow: layout.overflow },
+    );
+    const image = await cdp.send(
+      'Page.captureScreenshot',
+      { format: 'png', captureBeyondViewport: false },
+      sessionId,
+    );
+    await writeFile(join(media, file), Buffer.from(image.data, 'base64'));
+    report.captures.push({ file, ...layout });
+  };
+  try {
+    const [controllers, televisions] = await Promise.all([
+      readFile(join(media, 'interaction-views.json'), 'utf8').then(JSON.parse),
+      readFile(join(media, 'interaction-tv-views.json'), 'utf8').then(JSON.parse),
+    ]);
+    const names = [
+      'audio-zero',
+      'audio-red',
+      'audio-red-paused',
+      'audio-red-resumed',
+      'audio-blue',
+      'audio-reset',
+      'audio-red-cap',
+      'audio-red-done',
+      'audio-red-delayed',
+      'audio-red-new',
+    ];
+    for (const name of names) {
+      for (const view of [controllers[name], televisions[name]]) {
+        if (
+          !view ||
+          view.gameId !== 'haxball' ||
+          !Array.isArray(view.discs) ||
+          ['intents', 'rng', 'playersState', 'phase'].some((key) => Object.hasOwn(view, key))
+        )
+          throw new Error(`Missing or private goal audio projection: ${name}`);
+      }
+      if (JSON.stringify(controllers[name].goals) !== JSON.stringify(televisions[name].goals))
+        throw new Error(`TV/controller goal projections disagree: ${name}`);
+    }
+    const { script, css } = await buildInteractionBundle();
+    const tvJson = JSON.stringify(televisions).replace(/</g, '\\u003c');
+    const html = buildInteractionDocument(css, script, controllers).replace(
+      '<script>',
+      () => `<script>window.harnessTvViews=${tvJson};`,
+    );
+    await cdp.send('Page.navigate', { url: 'about:blank' }, sessionId);
+    let ready = false;
+    for (let n = 0; n < 100; n++) {
+      if (await evaluate('document.readyState === "complete" && location.href === "about:blank"')) {
+        ready = true;
+        break;
+      }
+      await sleep(25);
+    }
+    if (!ready) throw new Error('Goal audio page did not reach about:blank.');
+    const { frameTree } = await cdp.send('Page.getFrameTree', {}, sessionId);
+    await cdp.send('Page.setDocumentContent', { frameId: frameTree.frame.id, html }, sessionId);
+    for (let n = 0; n < 100; n++) {
+      if (await evaluate('typeof window.harness?.setSurface === "function"')) {
+        mounted = true;
+        break;
+      }
+      await sleep(25);
+    }
+    if (!mounted) throw new Error('Real TV/controller goal audio fixture did not mount.');
+    await evaluate('document.fonts.ready');
+    for (const mode of [
+      { surface: 'tv', phoneOnly: false, name: 'TV', audible: true },
+      { surface: 'controller', phoneOnly: true, name: 'phone-only Controller', audible: true },
+      { surface: 'controller', phoneOnly: false, name: 'with-TV Controller', audible: false },
+    ]) {
+      const expected = (count) => (mode.audible ? Array(count).fill('cheer') : []);
+      await mount(mode.surface, mode.phoneOnly);
+      await cuesAre(`${mode.name} first mount is silent`, []);
+      await push('audio-red');
+      await cuesAre(`${mode.name} red goal cues exactly once when enabled`, expected(1));
+      if (mode.audible)
+        await capture(
+          mode.surface === 'tv' ? 'interaction-goal-tv.png' : 'interaction-goal-phone.png',
+          mode.surface === 'controller',
+        );
+      for (const kind of ['audio-red', 'audio-red-paused', 'audio-red-resumed']) {
+        await push(kind);
+        await cuesAre(`${mode.name} ${kind} cannot replay red goal`, expected(1));
+      }
+      await push('audio-blue');
+      await cuesAre(`${mode.name} blue goal adds one cue when enabled`, expected(2));
+      // reset clears records BEFORE the actual unmount/mount, preserving any erroneous mount cue.
+      await evaluate('window.harness.reset("audio-red")');
+      await sleep(40);
+      await cuesAre(`${mode.name} retained goal remount is silent`, []);
+      await push('audio-blue');
+      await cuesAre(
+        `${mode.name} later blue rise after remount cues once when enabled`,
+        expected(1),
+      );
+      for (const kind of ['audio-red', 'audio-reset', 'audio-red', 'audio-blue']) {
+        await push(kind);
+        await cuesAre(
+          `${mode.name} decrease/reset/historical restore ${kind} stays silent`,
+          expected(1),
+        );
+      }
+      await push('audio-red-new');
+      await cuesAre(`${mode.name} genuinely higher red score cues once when enabled`, expected(2));
+      for (const kind of ['audio-red-cap', 'audio-red-done', 'audio-red-delayed']) {
+        await mount(mode.surface, mode.phoneOnly);
+        await push(kind);
+        await cuesAre(
+          `${mode.name} direct ${kind} score projection cues once when enabled`,
+          expected(1),
+        );
+      }
+      await mount(mode.surface, mode.phoneOnly);
+      await push('audio-red-paused');
+      await cuesAre(`${mode.name} paused score rise is silent`, []);
+      await push('audio-red-resumed');
+      await cuesAre(`${mode.name} resume cannot replay a paused rise`, []);
+      await push('audio-blue');
+      await cuesAre(
+        `${mode.name} next fresh unpaused blue score cues once when enabled`,
+        expected(1),
+      );
+    }
+    await mount('controller', false);
+    await push('audio-red');
+    await cuesAre('with-TV Controller consumes disabled goal rise silently', []);
+    await evaluate('window.harnessPhoneOnly=true; window.harness.setView("audio-red")');
+    await sleep(40);
+    await cuesAre('enabling phone-only cannot replay disabled goal rise', []);
+    await push('audio-blue');
+    await cuesAre('enabled phone-only next blue goal cheers exactly once', ['cheer']);
+    const errors = await evaluate('window.qaErrors');
+    check('goal audio page reports no runtime errors', errors.length === 0, { errors });
+  } catch (error) {
+    check('mounted goal audio scenario completion', false, { error: String(error) });
+  } finally {
+    if (mounted) {
+      try {
+        await evaluate('window.harness.dispose()');
+      } catch (error) {
+        check('goal audio fixture cleanup', false, { error: String(error) });
+      }
+    }
+    report.passed = report.checks.length > 0 && report.checks.every((item) => item.passed);
+    await writeFile(join(media, 'goal-audio.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+    const entries = await readdir(media, { withFileTypes: true });
+    const sizes = await Promise.all(
+      entries.filter((entry) => entry.isFile()).map((entry) => stat(join(media, entry.name))),
+    );
+    const bytes = sizes.reduce((total, entry) => total + entry.size, 0);
+    check('job media after goal audio stays below10 MB', bytes < 10_000_000, {
+      bytes,
+      limitBytes: 10_000_000,
+    });
+    report.passed = report.checks.every((item) => item.passed);
+    await writeFile(join(media, 'goal-audio.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+  }
+  return report;
+}
+
 async function main() {
   const interactionOnly = process.env.P24_INTERACTION_ONLY === '1';
   const files = interactionOnly
@@ -374,6 +610,8 @@ async function main() {
     if (stopping) throw new Error('Capture interrupted.');
     report.interaction = await runInteraction(cdp, sessionId, () => stopping);
     if (!report.interaction.passed) process.exitCode = 1;
+    report.goalAudio = await runGoalAudio(sessionId);
+    if (!report.goalAudio.passed) process.exitCode = 1;
   } finally {
     try {
       report.cleanup = await stopBrowser();
@@ -393,6 +631,14 @@ async function main() {
                   passed: report.interaction.passed,
                   checks: report.interaction.checks.length,
                   captures: report.interaction.captures.length,
+                }
+              : undefined,
+            goalAudio: report.goalAudio
+              ? {
+                  report: 'goal-audio.json',
+                  passed: report.goalAudio.passed,
+                  checks: report.goalAudio.checks.length,
+                  captures: report.goalAudio.captures.length,
                 }
               : undefined,
           },

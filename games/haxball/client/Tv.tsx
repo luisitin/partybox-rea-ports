@@ -3,10 +3,12 @@ import { Stage, useServerNow } from '@partybox/game-sdk/ui';
 import type { GameTvProps } from '@partybox/game-sdk/ui';
 import type { HaxballTvView } from '../server/index';
 import { MatchStage } from './MatchStage';
+import { useGoalCue } from './useGoalCue';
 import styles from './Tv.module.css';
 
 export function Tv({ view }: GameTvProps<HaxballTvView>): JSX.Element {
   const now = useServerNow(250, view.paused, view.clockHeldAt);
+  useGoalCue(view, true);
   return (
     <Stage className={styles.stage}>
       <MatchStage view={view} now={now} />

@@ -22,3 +22,7 @@
   closes it in finally; no whole-suite browser run.
 - gen-registry and verify scripts and docs/ADDING_A_GAME.md are absent from this public snapshot;
   use its typecheck, format and scoped game tests plus the real SDK contract wrapper.
+- Goal and kick feedback uses the shell's semantic `cheer` and `thud` cues; no original audio
+  is retained. Mounted checks measure cue requests, not speaker acoustics or subjective feel.
+- The odd-roster helper uses the normal strategy and 200 ms decision cadence. It does not draw
+  the external normal bot's 4% kick-miss sample; competitive human/helper parity is unmeasured.

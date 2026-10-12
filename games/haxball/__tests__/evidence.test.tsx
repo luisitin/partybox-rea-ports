@@ -7,9 +7,10 @@ import { Controller } from '../client/Controller';
 import { Tv } from '../client/Tv';
 import { game } from '../server/index';
 import { enterGoal } from '../server/phases/goal';
-import type { State } from '../server/types';
+import { BALL_R, H, W } from '../server/types';
+import type { State, Team } from '../server/types';
 import { fixtures } from './fixtures';
-import { body, control, copy, timer, T0 } from './helpers';
+import { body, control, copy, start, timer, T0 } from './helpers';
 
 // Vitest's node CSS stubs do not carry generated selectors. Give each actual
 // module a deterministic namespace, then export its actual CSS with that same map.
@@ -69,6 +70,50 @@ interface ScreenRecord {
   bytes: number;
 }
 const records: ScreenRecord[] = [];
+
+// Only boundary positioning is controlled. Goals, pauses, resets and horn exits
+// are judged by the real reducer; both mounted surfaces receive its public views.
+function goalPosition(state: State, team: Team, distance = 0.5): State {
+  const right = (team === 'red') === state.redAttacksRight;
+  const scorer = state.discs.find((disc) => disc.team === team)!;
+  return {
+    ...copy(state),
+    ball: body(right ? W + BALL_R - distance : -BALL_R + distance, H / 2, right ? 40 : -40),
+    discs: state.discs.map((disc, i) => ({ ...disc, x: 30 + i * 12, y: 15, vx: 0, vy: 0 })),
+    lastTouch: scorer.id,
+  };
+}
+function audioFixtures(): Record<string, State> {
+  const zero = start();
+  const red = timer(goalPosition(zero, 'red'), T0 + 100);
+  const paused = game.reduce(red, { type: 'vip', now: red.clock + 100, action: 'pause' });
+  const resumed = game.reduce(paused, { type: 'vip', now: paused.clock + 500, action: 'resume' });
+  const redPlay = timer(resumed);
+  const blue = timer(goalPosition(redPlay, 'blue'), redPlay.clock + 100);
+  const bluePlay = timer(blue);
+  const redNew = timer(goalPosition(bluePlay, 'red'), bluePlay.clock + 100);
+  // Two fixed steps place the crossing exactly at the horn. No goal beat may
+  // extend either half, so the public phase is halftime/done at this score rise.
+  const firstLate = timer(zero, zero.halfEndsAt - 100);
+  const cap = timer(goalPosition(firstLate, 'red', 2.5), firstLate.halfEndsAt);
+  const second = timer(timer(zero, zero.halfEndsAt));
+  const secondLate = timer(second, second.halfEndsAt - 100);
+  const done = timer(goalPosition(secondLate, 'red', 2.5), secondLate.halfEndsAt);
+  const delayed = timer(goalPosition(zero, 'red'), T0 + 4000);
+  return {
+    'audio-zero': zero,
+    'audio-red': red,
+    'audio-red-paused': paused,
+    'audio-red-resumed': resumed,
+    'audio-blue': blue,
+    'audio-reset': start(8, 2),
+    'audio-red-cap': cap,
+    'audio-red-done': done,
+    'audio-red-delayed': delayed,
+    'audio-red-new': redNew,
+  };
+}
+const audioSamples = audioFixtures();
 
 function render(
   state: State,
@@ -134,6 +179,7 @@ function writePublicInteractions(): void {
     departed: samples['play-left']!,
     spectator: play,
     done: samples['done']!,
+    ...audioSamples,
   };
   const views = Object.fromEntries(
     Object.entries(states).map(([key, state]) => [
@@ -149,9 +195,57 @@ function writePublicInteractions(): void {
   expect(views['kick-fired']?.lastKickAt).toBe(T0 + 50);
   expect(views['kick-fired-new']?.lastKickAt).toBe(T0 + 400);
   writeFileSync(`${media}/interaction-views.json`, `${JSON.stringify(views, null, 2)}\n`, 'utf8');
+  const tvViews = Object.fromEntries(
+    Object.entries(states).map(([key, state]) => [key, { ...game.tvView(state), vip: null }]),
+  );
+  writeFileSync(
+    `${media}/interaction-tv-views.json`,
+    `${JSON.stringify(tvViews, null, 2)}\n`,
+    'utf8',
+  );
 }
 
 describe('actual-components SSR phase and edge evidence', () => {
+  it('projects real red/blue goals and horn/delayed score rises without private input or kick cues', () => {
+    const scores = {
+      'audio-zero': [0, 0],
+      'audio-red': [1, 0],
+      'audio-red-paused': [1, 0],
+      'audio-red-resumed': [1, 0],
+      'audio-blue': [1, 1],
+      'audio-reset': [0, 0],
+      'audio-red-cap': [1, 0],
+      'audio-red-done': [1, 0],
+      'audio-red-delayed': [1, 0],
+      'audio-red-new': [2, 1],
+    };
+    for (const [key, state] of Object.entries(audioSamples)) {
+      const tv = game.tvView(state);
+      const controller = game.controllerView(state, 'p1');
+      expect([tv.goals.red, tv.goals.blue], key).toEqual(scores[key as keyof typeof scores]);
+      expect(controller.goals, key).toEqual(tv.goals);
+      expect(controller.lastKickAt, key).toBeNull();
+      for (const view of [tv, controller]) {
+        expect(JSON.stringify(view), key).not.toMatch(/"(?:intents|until|lastTouch)"/);
+      }
+      expect(render(state, 'tv'), key).toContain('data-haxball-pitch="true"');
+    }
+    expect(audioSamples['audio-red']!.phase.id).toBe('goal');
+    expect(audioSamples['audio-blue']!.phase.id).toBe('goal');
+    expect(audioSamples['audio-red-paused']!.phase.paused).toBeTruthy();
+    expect(audioSamples['audio-red-resumed']!.phase.paused).toBeFalsy();
+    expect(audioSamples['audio-red-cap']!.phase.id).toBe('halftime');
+    expect(audioSamples['audio-red-cap']!.phase.startedAt).toBe(
+      audioSamples['audio-zero']!.halfEndsAt,
+    );
+    expect(audioSamples['audio-red-done']!.phase.id).toBe('done');
+    expect(audioSamples['audio-red-done']!.phase.startedAt).toBe(
+      audioSamples['audio-red-done']!.halfEndsAt,
+    );
+    expect(audioSamples['audio-red-delayed']!.phase.id).toBe('play');
+    expect(audioSamples['audio-red-delayed']!.clock).toBe(T0 + 4000);
+  });
+
   it.each(Object.keys(samples))(
     'renders%s for1920×1080 TV and390×844 active/spectator phones with actual CSS/token maps',
     (name) => {

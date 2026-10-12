@@ -72,7 +72,25 @@ Earlier failures, retained honestly:
 
 Final local gates: `pnpm.cmd typecheck` and `pnpm.cmd format` PASS. Manual visual review covered every phase/role and final changed layouts. `node jobs/P24-haxball/hash-media.mjs` produced120 hashes for120 media files totaling5,832,972 bytes; independent PowerShell SHA-256 recomputation is required after every media change. Source SHA-256 values match all four restored mutation files. Temporary Chrome profiles can remain locked with EBUSY after their browser/endpoint are verified closed; no owned active browser remains.
 
-Pending: P24 PR CI and post-green KEEP GOING.
+Initial PR CI: PASS on `4337c3db16ca062e98ed682279dc934e68280cee`,
+run [38203229374](https://github.com/luisitin/partybox-rea-ports/actions/runs/38203229374).
+Draft PR [17](https://github.com/luisitin/partybox-rea-ports/pull/17) remains draft during
+post-green improvements and final exact-head checks.
+
+Post-green round 1: `pnpm.cmd typecheck` PASS. With `PB_WRITE_EVIDENCE=1`,
+`pnpm.cmd vitest run games/haxball/client games/haxball/__tests__/evidence.test.tsx --maxWorkers=1 --pool=threads`
+PASS: 37 tests / 3 files, 17.63 s, start 23:32:48 local / 04:32:48 UTC.
+The added SSR regression projects goals judged by the real reducer directly into goal,
+halftime, done and delayed play views, with no foreign intent or kick metadata.
+Mounted round 1: `P24_CPU_CAPTURE=1 P24_INTERACTION_ONLY=1 node jobs/P24-haxball/capture.mjs`
+PASS: 64/64 goal-cue checks in `media/goal-audio.json` and 67/67 control checks in
+`media/interaction.json`; real TV and controller components use their actual surface tokens.
+Two goal PNGs fit, and native browser/process plus exact endpoint closure is verified in
+`media/interaction-capture.json`. Measurements are semantic cue requests, not speaker acoustics.
+The first round-1 capture passed all 64 goal checks but failed one existing heartbeat bound:
+steady intervals 282/312/347/470 ms against its unchanged 200–450 ms tolerance. All were within
+the 650 ms lease. A justified rerun passed the unchanged check at 297/313 ms; no tolerance was
+relaxed and no product input code changed.
 
 Original live practice and a human eight-stranger network playtest were unavailable.
 Research, simulation, SSR and mounted evidence are not original live play.

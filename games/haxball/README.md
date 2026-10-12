@@ -11,7 +11,8 @@ and owned physics tuning, with no original code, branding artwork, audio or runt
 ## Players
 
 2–8 participants, seeded balanced team assignment and stable numbered jerseys within each team.
-For 3/5/7 participants, the smaller team receives one explicitly named normal-strength helper disc.
+For 3/5/7 participants, the smaller team receives one explicitly named helper disc using the normal
+strategy and 200 ms decision cadence.
 Helpers are public, never SDK participants or result rows. Easy bots chase the ball with mistakes.
 All strengths move into a side lane when an opponent blocks a radial kick. Normal bots divide
 attack/defence and line up behind the ball; sharp bots predict further ahead and compare three
@@ -38,6 +39,11 @@ Spectators watch the whole public pitch without controls.
 
 The shell supplies the opening instructions, readiness and countdown; the game begins directly
 in play. No phone-only copy points at a TV.
+
+The TV, or each phone-only stage, cues a fresh confirmed goal with the SDK's `cheer`.
+It also catches a score first seen after a delayed reset or at the horn. Refreshes,
+duplicate updates and pause/resume do not replay goals; phones with a TV leave this cue to it.
+The shell supplies playback and mute settings. A player's own confirmed kick uses `thud`.
 
 ## Inputs
 
