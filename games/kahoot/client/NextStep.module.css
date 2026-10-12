@@ -1,0 +1,33 @@
+/* NextStep.tsx's button, on the TV's header and the VIP's phone — its own file: in Tv.module.css it
+   pulled the whole TV stylesheet into every phone's download (check-bundle: "TV code on phones"). */
+
+/* ── I-589 (the owner's note): the standings' Next button, in the header's topic slot. The header
+   is caption text; the pill's padding is cancelled by negative margins so the line keeps its height
+   (nothing below moves when it arrives). It rises in with the standings (pb-rise, one easing, the
+   base token — reduced motion collapses it). */
+.nextButton {
+  margin-block: calc(-1 * var(--pb-space-2));
+  padding: var(--pb-space-2) var(--pb-space-5);
+  border-radius: 999px;
+  border: 0;
+  /* review 6c24ba (4): a hint, not a call to action — no fill, the accent in the text */
+  background: transparent;
+  color: var(--pb-accent);
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  animation: global(pb-rise) var(--pb-motion-base) var(--pb-ease) both;
+}
+
+.nextButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.nextButton:focus-visible {
+  outline: 3px solid var(--pb-focus);
+  outline-offset: 2px;
+}

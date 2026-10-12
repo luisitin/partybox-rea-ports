@@ -1,0 +1,64 @@
+/* Counts share the muted question's row; the correct answer keeps its full-width focal card. */
+.chart {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 2.5fr);
+  align-items: center;
+  gap: var(--pb-space-3);
+  padding: var(--pb-space-1) var(--pb-space-3);
+  margin: 0;
+  list-style: none;
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  font-size: var(--pb-font-h2);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--pb-space-1);
+  color: var(--pb-text-muted);
+}
+
+.pair {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--pb-space-3);
+}
+
+.chart b {
+  color: var(--pb-text);
+}
+
+.chart .correct,
+.correct b {
+  color: var(--pb-accent-3);
+}
+
+.label {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.track {
+  height: var(--pb-space-5);
+  overflow: hidden;
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface-2);
+}
+
+/* The last cell reserves 2.5 columns for its words, but every bar uses the same count scale. */
+.chart li:last-child .track {
+  width: 40%;
+  justify-self: center;
+}
+
+.bar {
+  display: block;
+  height: 100%;
+  background: currentColor;
+  transform: scaleX(var(--pb-answer-share, 0));
+  transform-origin: left;
+}

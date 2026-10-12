@@ -1,0 +1,18 @@
+# Lightning Round backdrop sources (T-0271)
+
+A quiz studio: podium, light towers and a cropped lightning motif.
+
+Both styles are derivative vector compositions. Art is clipped to x=0–280 / 1640–1920 and y=280–984; the centre 70%, top 260 px and bottom 80 px contain only the opaque flat base. Pop uses flat fills and clean outlines; Gouache adds offset matte edges and broad vector brush shapes clipped inside the borrowed silhouettes. No raster images, fonts, filters, animation or runtime code are used.
+
+## Borrowed vectors
+
+| Source and author                                                                             | Pinned asset / license                                                                                                                                                                                                              | Adaptation                                                                                                                                                                                                      |
+| --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Icons made by Delapouite, [game-icons.net](https://game-icons.net/1x1/delapouite/podium.html) | [game-icons/icons, `82d948812bfe3f269ef8f731dcdb07b08160edc4`](https://github.com/game-icons/icons/blob/82d948812bfe3f269ef8f731dcdb07b08160edc4/delapouite/podium.svg), [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)  | Removed the black square; retained the actual foreground paths; recoloured, scaled, positioned and outlined / layered for the style. Removed the numeral subpaths from the podium to keep artwork free of text. |
+| Icons made by Lorc, [game-icons.net](https://game-icons.net/1x1/lorc/lightning-arc.html)      | [game-icons/icons, `82d948812bfe3f269ef8f731dcdb07b08160edc4`](https://github.com/game-icons/icons/blob/82d948812bfe3f269ef8f731dcdb07b08160edc4/lorc/lightning-arc.svg), [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) | Removed the black square; retained the actual foreground paths; recoloured, scaled, positioned and outlined / layered for the style.                                                                            |
+
+## PartyBox reference and original gaps
+
+- [PartyBox reference backdrop](https://github.com/luisitin/partybox/blob/c26bc2c7542e23edd757586fac1f9d1bdf328dd0/games/blind-auction/art/pop/backdrop.svg), commit `c26bc2c7542e23edd757586fac1f9d1bdf328dd0`: the existing game-stage layout, quiet zones and curtain idea. The reference Pop SVG is unchanged. This private repository has no standalone root LICENSE; these adaptations are made for its owner under this task.
+- Original work: the composition, palette derived from PartyBox’s tokens, side wall / stage / desk geometry needed to join the sourced parts, and Gouache’s clipped brush marks. These are the layout and style gaps; the recognizable object and landscape silhouettes listed above are adapted source vectors.
+- Source metadata and licenses live here because `check-art` rejects non-art files inside `art/` and its style directories. The SVGs point here without fetching this file.
