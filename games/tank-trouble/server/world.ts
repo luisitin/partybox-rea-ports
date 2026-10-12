@@ -34,6 +34,7 @@ function step(world: World, t: number, buckets: Map<number, Wall[]>): World {
       drive: held ? tank.drive : 0,
       turn: held ? tank.turn : 0,
       fire: held && tank.fire,
+      firePulse: held && tank.fire && tank.firePulse === true,
     };
     if (next.weapon !== 'shell' && (t >= next.weaponUntil || next.weaponAmmo <= 0))
       next = { ...next, weapon: 'shell', weaponAmmo: 0, weaponUntil: 0 };
@@ -114,6 +115,8 @@ function step(world: World, t: number, buckets: Map<number, Wall[]>): World {
     if (!fired) return tank;
     return {
       ...tank,
+      fire: tank.firePulse ? false : tank.fire,
+      firePulse: false,
       reloadAt: t + (kind === 'scatter' ? 700 : RELOAD_MS),
       weaponAmmo: kind === 'shell' ? 0 : Math.max(0, tank.weaponAmmo - 1),
     };
@@ -127,7 +130,16 @@ function step(world: World, t: number, buckets: Map<number, Wall[]>): World {
   }
   tanks = tanks.map((tank) =>
     dead.has(tank.id)
-      ? { ...tank, alive: false, died: t, drive: 0, turn: 0, fire: false, inputUntil: 0 }
+      ? {
+          ...tank,
+          alive: false,
+          died: t,
+          drive: 0,
+          turn: 0,
+          fire: false,
+          firePulse: false,
+          inputUntil: 0,
+        }
       : tank,
   );
   const pickups: Pickup[] = [];
@@ -183,6 +195,7 @@ export function apply(world: World, id: string, input: Input, t: number): World 
     drive: input.drive || 0,
     turn: input.turn || 0,
     fire: input.fire,
+    firePulse: input.fire && input.pulse === true,
     controlAt: world.stepped * STEP_MS,
     inputUntil: t + INPUT_LEASE_MS,
   };
@@ -199,6 +212,7 @@ export function stopTank(world: World, id: string, gone = false): World {
             drive: 0,
             turn: 0,
             fire: false,
+            firePulse: false,
             inputUntil: 0,
             ...(gone && tank.alive ? { alive: false, died: world.stepped * STEP_MS } : {}),
           }

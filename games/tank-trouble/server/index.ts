@@ -142,6 +142,7 @@ const composed = composeReduce<State, Input>({
             drive: 0,
             turn: 0,
             fire: false,
+            firePulse: false,
             inputUntil: 0,
           })),
         },

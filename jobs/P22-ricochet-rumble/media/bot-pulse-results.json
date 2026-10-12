@@ -1,0 +1,18 @@
+{
+  "baseline": { "expectedFailures": 15, "durationSeconds": 0.693 },
+  "fixed": { "passedFocusedChecks": 105, "durationSeconds": 9.1 },
+  "judgedCases": [
+    { "case": "legacy rotated preview", "ownerDiedAt": 1120, "fixedOwnerAliveAt": 2200 },
+    {
+      "case": "held pose repeats after target dies",
+      "ownerDiedAt": 1980,
+      "fixedOwnerAliveAt": 2200,
+      "fixedVolleys": 1
+    },
+    { "case": "incoming shell", "frozenOwnerDiedAt": 300, "escapingOwnerAliveAt": 600 }
+  ],
+  "usefulWeapons": ["shell", "scatter", "beam", "guided"],
+  "readinessDeferrals": ["reload", "spawn", "shell-capacity", "burst-capacity", "expiry", "ammo"],
+  "humanHeldFire": "still queues behind reload; ordinary repeated Fire regressions pass",
+  "method": "actual botInput, apply and fixed-step tick, not rendered motion"
+}

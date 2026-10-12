@@ -3,11 +3,13 @@ import type { BotSkill, Rng } from '@partybox/game-sdk';
 import {
   BOT_BEAT_MS,
   H,
+  MAX_SHELLS,
   OMEGA,
   OWNER_SAFE_MS,
   SHELL_RADIUS,
   SHELL_SPEED,
   SPEED,
+  STEP_MS,
   TANK_RADIUS,
   W,
   angleDelta,
@@ -228,7 +230,8 @@ export function botInput(
         );
     return nearest;
   };
-  if (dangerAt(me) < TANK_RADIUS + 2) {
+  const threatened = dangerAt(me) < TANK_RADIUS + 2;
+  if (threatened) {
     let best = -Infinity;
     for (const choice of [-1, 0, 1]) {
       const a = me.angle + turn * OMEGA * horizon * 0.5;
@@ -246,6 +249,16 @@ export function botInput(
     if (drive === 0 && skill === 'sharp') turn = Math.abs(turn) < 0.2 ? 0.8 : turn;
   }
   const aimed = shotTarget(world, me, me.angle);
-  const fire = aimed !== null && (skill !== 'easy' || rng.chance(0.65));
+  const shotAt = (world.stepped + 1) * STEP_MS;
+  const slots = me.weapon === 'scatter' ? 3 : 1;
+  const ready =
+    shotAt >= world.safeUntil &&
+    shotAt >= me.reloadAt &&
+    (me.weapon === 'shell' || (me.weaponAmmo > 0 && shotAt < me.weaponUntil)) &&
+    world.bullets.filter((bullet) => bullet.owner === me.id).length + slots <= MAX_SHELLS;
+  const fire = !threatened && ready && aimed !== null && (skill !== 'easy' || rng.chance(0.65));
+  // One immediate volley holds the body and barrel used by the public preview. A pulse never
+  // repeats a stale line after its target dies; imminent threats retain the escape command.
+  if (fire) return { type: 'control', drive: 0, turn: 0, fire: true, pulse: true };
   return { type: 'control', drive: drive || 0, turn: Math.round(turn * 1000) / 1000 || 0, fire };
 }

@@ -30,6 +30,7 @@ export const inputSchema = z.object({
   drive: z.number().int().min(-1).max(1),
   turn: z.number().min(-1).max(1),
   fire: z.boolean(),
+  pulse: z.boolean().optional(),
 });
 export type Input = z.infer<typeof inputSchema>;
 export interface Wall {
@@ -57,6 +58,8 @@ export interface Tank {
   drive: number;
   turn: number;
   fire: boolean;
+  /** A one-volley input; ordinary held Fire leaves this false. */
+  firePulse: boolean;
   /** Last accepted controls, their lease and the next permitted shot, on the round clock. */
   controlAt: number;
   inputUntil: number;
@@ -116,6 +119,7 @@ export function makeTank(id: string, slot: number, x: number, y: number, angle =
     drive: 0,
     turn: 0,
     fire: false,
+    firePulse: false,
     controlAt: -BOT_BEAT_MS,
     inputUntil: 0,
     reloadAt: 0,

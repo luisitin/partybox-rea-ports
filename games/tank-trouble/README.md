@@ -41,6 +41,9 @@ Nothing directs them to a TV. A temporarily eliminated player keeps watching the
 ## Inputs
 
 `{ type: 'control', drive: -1 | 0 | 1, turn: number, fire: boolean }` in play.
+An optional `pulse: true` requests one volley; omitted/false keeps ordinary held Fire.
+Bots pulse only an immediately ready, publicly previewed shot from a stationary pose,
+then reevaluate before shooting again. Incoming threats retain their escape command.
 Drive is reverse, stop or forward; turn ranges from -1 to 1. Drag one thumb on the
 steering pad: corners combine drive and turn, the center stops, and a second thumb holds
 Fire. Five real buttons also support keyboard focus, arrows/WASD and Space/Enter.
