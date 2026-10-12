@@ -218,3 +218,13 @@ rerun. The same 20 semantic faults remain; no syntax/import failure counts as a 
 Final media integrity: `node jobs/P24-haxball/hash-media.mjs` reports 172 files,
 8,965,907 bytes < 10,000,000. Independent PowerShell Get-FileHash -Algorithm SHA256 verifies
 all 172 digests with zero mismatches. Current guard source also passes `pnpm.cmd typecheck`.
+
+Round 7 pointer baseline: same interaction-only command exited 1. Both trusted same-contact
+moves retained actual capture on the original left button across explicitly synthetic blur/refocus
+and hidden/visible signals, then revived rightward input without touchEnd. Each also restarted
+heartbeats. All 16 new checks executed: four target failures, with neutral-lift and fresh-press
+checks passing. The full mounted run did not complete: 64 control checks completed, eight failed,
+including the original heartbeat timing bound and an unrelated late CDP Input.dispatchKeyEvent
+timeout, setup and cleanup failures. No JS runtime errors were reported. The closed native
+browser/endpoint evidence and partial failure report are retained as pointer-replay-before files.
+No claim of 104 successful baseline checks is made; the final rerun must pass the unchanged set.

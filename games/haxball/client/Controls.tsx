@@ -19,25 +19,40 @@ const directions: readonly { action: Direction; arrow: string; label: string }[]
 export function Controls({
   sources,
   update,
+  getGestureToken,
   identity,
 }: {
   sources: HeldSources;
   update: (source: string, action: ControlAction | null) => void;
+  getGestureToken: () => string;
   identity: string;
 }): JSX.Element {
   const pad = useRef<HTMLDivElement>(null);
+  const gestures = useRef(new Map<number, string>());
   const held = new Set(Object.values(sources));
   const down = (event: PointerEvent<HTMLButtonElement>, action: ControlAction): void => {
     event.preventDefault();
+    const token = getGestureToken();
     event.currentTarget.setPointerCapture(event.pointerId);
+    gestures.current.set(event.pointerId, token);
     update(`pointer:${event.pointerId}`, action);
     buzz(8);
   };
-  const up = (event: PointerEvent<HTMLButtonElement>): void =>
+  const up = (event: PointerEvent<HTMLButtonElement>): void => {
+    gestures.current.delete(event.pointerId);
     update(`pointer:${event.pointerId}`, null);
+  };
   const drag = (event: PointerEvent<HTMLButtonElement>): void => {
+    const token = gestures.current.get(event.pointerId);
+    if (token === undefined) return;
+    if (token !== getGestureToken()) {
+      gestures.current.delete(event.pointerId);
+      return;
+    }
     if (!event.currentTarget.hasPointerCapture(event.pointerId) || !pad.current) return;
     const rect = pad.current.getBoundingClientRect();
+    // Centre/outside movement is neutral within this still-held gesture;
+    // keep registration so a legitimate drag back into the pad can resume it.
     update(
       `pointer:${event.pointerId}`,
       directionAt(event.clientX - rect.left, event.clientY - rect.top, rect.width, rect.height),

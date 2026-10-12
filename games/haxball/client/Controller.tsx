@@ -80,7 +80,12 @@ export function Controller({
           <p className={styles.feedback} role="status" aria-live="polite">
             {kickStatus}
           </p>
-          <Controls sources={controls.sources} update={controls.update} identity={identity} />
+          <Controls
+            sources={controls.sources}
+            update={controls.update}
+            getGestureToken={controls.getGestureToken}
+            identity={identity}
+          />
           <p className={styles.hint}>
             Get behind the ball. Kick sends it away. Release to rearm.
             <br />

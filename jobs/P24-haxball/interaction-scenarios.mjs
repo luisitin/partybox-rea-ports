@@ -326,6 +326,125 @@ export async function runScenarios(qa) {
     })()`);
   });
 
+  for (const boundary of [
+    {
+      name: 'blur/refocus',
+      id: 101,
+      enter: 'window.dispatchEvent(new Event("blur"))',
+      resume: 'window.dispatchEvent(new Event("focus"))',
+    },
+    {
+      name: 'hidden/visible',
+      id: 111,
+      enter: `(() => {
+        window.qaHiddenDescriptor = Object.getOwnPropertyDescriptor(document, 'hidden');
+        window.qaHiddenOverride = true;
+        Object.defineProperty(document, 'hidden', { configurable:true, get:()=>true });
+        document.dispatchEvent(new Event('visibilitychange'));
+      })()`,
+      resume: `(() => {
+        if (window.qaHiddenDescriptor) Object.defineProperty(document,'hidden',window.qaHiddenDescriptor);
+        else delete document.hidden;
+        delete window.qaHiddenDescriptor;
+        delete window.qaHiddenOverride;
+        document.dispatchEvent(new Event('visibilitychange'));
+      })()`,
+    },
+  ]) {
+    await scenario(`same held touch moves after ${boundary.name}`, async () => {
+      await reset();
+      await start(boundary.id, 'left');
+      await lastIs(`${boundary.name}: initial trusted touch holds movement`, {
+        dx: -1,
+        dy: 0,
+        kick: false,
+      });
+      const pointerId = browserPointers.get(boundary.id);
+      const captureStatus = () =>
+        pointerId === undefined
+          ? null
+          : evaluate(`([...document.querySelectorAll('[data-hax-control]')]
+              .filter(element=>element.hasPointerCapture(${pointerId}))
+              .map(element=>element.getAttribute('data-hax-control')))`);
+      const captureBefore = await captureStatus();
+      // These lifecycle signals are synthetic; touchStart/Move/End remain real CDP events.
+      await evaluate(boundary.enter);
+      await pause(40);
+      await lastIs(`${boundary.name}: lifecycle release sends neutral touch input`, {
+        dx: 0,
+        dy: 0,
+        kick: false,
+      });
+      await evaluate(boundary.resume);
+      await pause(40);
+      const resumed = await snapshot();
+      const captureAfter = await captureStatus();
+      const pointerOffset = resumed.pointers.length;
+      // Keep exactly the original contact active; do not replace it with a fresh pointerdown.
+      await move(boundary.id, await point(control('right')));
+      const moved = await snapshot();
+      const movement = moved.pointers.slice(pointerOffset);
+      check(
+        `${boundary.name}: same held contact produces a trusted pointer move`,
+        pointerId !== undefined &&
+          movement.some(
+            (event) =>
+              event.type === 'pointermove' &&
+              event.pointerId === pointerId &&
+              event.pointerType === 'touch' &&
+              event.trusted,
+          ) &&
+          !moved.pointers.some(
+            (event) =>
+              event.pointerId === pointerId &&
+              (event.type === 'pointerup' || event.type === 'pointercancel'),
+          ),
+        { contactId: boundary.id, pointerId, captureBefore, captureAfter, movement },
+      );
+      check(
+        `${boundary.name}: stale touch move cannot revive canceled movement`,
+        moved.sent.length === resumed.sent.length &&
+          moved.heldControls.length === 0 &&
+          equals(vector(moved.sent.at(-1)), { dx: 0, dy: 0, kick: false }),
+        {
+          packetsBeforeMove: resumed.sent.length,
+          packetsAfterMove: moved.sent.length,
+          last: moved.sent.at(-1) ?? null,
+          heldControls: moved.heldControls,
+          captureBefore,
+          captureAfter,
+        },
+      );
+      await stopped(`${boundary.name}: stale touch move cannot restart heartbeats`);
+      await end(boundary.id);
+      await lastIs(`${boundary.name}: lifting the canceled contact remains neutral`, {
+        dx: 0,
+        dy: 0,
+        kick: false,
+      });
+      const lifted = await snapshot();
+      await start(boundary.id + 1, 'down-right');
+      const fresh = await lastIs(`${boundary.name}: a fresh touch can drive again`, {
+        dx: 1,
+        dy: 1,
+        kick: false,
+      });
+      const freshPackets = fresh.sent.slice(lifted.sent.length);
+      check(
+        `${boundary.name}: fresh touch uses current phase and increasing sequence`,
+        freshPackets.length > 0 &&
+          freshPackets.every(
+            (packet, i) =>
+              packet.phaseAt === fresh.phaseAt &&
+              packet.seq > fresh.acceptedSeq &&
+              (i === 0 || packet.seq > freshPackets[i - 1].seq),
+          ),
+        { phaseAt: fresh.phaseAt, acceptedSeq: fresh.acceptedSeq, packets: freshPackets },
+      );
+      await end(boundary.id + 1);
+    });
+  }
+
   for (const kind of ['paused', 'goal', 'departed', 'done']) {
     await scenario(`${kind} push releases held sources`, async () => {
       await reset();
@@ -616,6 +735,6 @@ export async function runScenarios(qa) {
       note: 'Primary source inspected: WebTouch erases supplied touchEnd IDs; active-point omission releases belong to the optional SyntheticPointerActions branch. Protocol documentation differs from the default WebTouch implementation.',
     },
     lifecycleMethod:
-      'Pause/phase/departure use supplied public views; trusted CDP keyboard repeat stays held across pause/phase/blur until a real key-up and fresh key-down. Blur/refocus and document-hidden signals are explicitly synthetic handler tests.',
+      'Pause/phase/departure use supplied public views; trusted CDP keyboard repeat stays held across pause/phase/blur until a real key-up and fresh key-down. Trusted same-contact touch moves exercise release after blur/visibility, followed by touchEnd and a fresh touchStart. Blur/refocus and document-hidden/visible signals are explicitly synthetic handler tests.',
   };
 }

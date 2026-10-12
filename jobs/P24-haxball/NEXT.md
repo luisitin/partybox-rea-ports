@@ -14,7 +14,12 @@ Runner r3-local, branch job/P24-haxball. Draft [PR 17](https://github.com/luisit
 - Refreshed mutations pass 20/20, zero invalid/surviving. Independent SHA-256 verification
   matches all four restored game files. Run hash-media.mjs and independently verify every
   media hash after evidence changes; keep the folder strictly below 10 MB.
-- Next: wait for exact-head CI including the final client guard, then perform three actual
+- Round 7 touch replay fix is implemented; 46 focused client/SSR tests pass (4.74 s).
+  All 16 new touch checks pass; two 104-check runs each fail only the original heartbeat
+  timing check (472 ms, then 849 ms). Timing limits and the 650 ms game lease are unchanged.
+  Foreground browser scheduling/GPU capture is the next verification step. Latest committed
+  keyboard source e464ff9 has green CI 38212158614; touch source CI is still required.
+- Next: obtain all 104 mounted checks green, then perform three actual
   five-weakness reviews in a row with no player-visible gain. Log/push each review and refresh
   CLAIMS.md on main after pulling --rebase. Final latest-head CI must be green before PR ready.
 - After that, mark P24 r3-local DONE on main, with pull --rebase before its claim commit.

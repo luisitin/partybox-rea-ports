@@ -22,6 +22,7 @@ export function useHeldControls(view: HaxballControllerView, send: (input: Input
   latest.current = { view, send };
   const held = useRef<HeldSources>(empty);
   const seat = useRef(view.me.id);
+  const cancellationEpoch = useRef(0);
   const seq = useRef(-1);
   const previous = useRef(heldVector(empty));
   const key = `${view.me.id}:${view.phaseId}:${view.phaseAt}:${view.paused}:${view.departed}`;
@@ -32,10 +33,19 @@ export function useHeldControls(view: HaxballControllerView, send: (input: Input
     const current = latest.current.view;
     if (seat.current === current.me.id) return;
     seat.current = current.me.id;
+    cancellationEpoch.current += 1;
     held.current = empty;
     seq.current = current.acceptedSeq;
     previous.current = heldVector(empty);
   }, []);
+
+  const getGestureToken = useCallback((): string => {
+    ensureSeat();
+    const current = latest.current.view;
+    // Read the live context so a captured contact cannot cross a phase/seat
+    // boundary while waiting for the reset effect to run.
+    return `${current.me.id}:${current.phaseId}:${current.phaseAt}:${current.paused}:${current.departed}:${cancellationEpoch.current}`;
+  }, [ensureSeat]);
 
   const emit = useCallback(
     (sources: HeldSources, force = false): void => {
@@ -75,6 +85,9 @@ export function useHeldControls(view: HaxballControllerView, send: (input: Input
 
   const release = useCallback(
     (publish = true): void => {
+      // A captured contact may currently be neutral at the D-pad centre.
+      // Cancel its gesture even when there is no held source to release.
+      cancellationEpoch.current += 1;
       held.current = empty;
       emit(empty);
       if (publish) {
@@ -142,6 +155,7 @@ export function useHeldControls(view: HaxballControllerView, send: (input: Input
   return {
     enabled,
     sources: enabled && snapshot.key === key ? snapshot.held : empty,
+    getGestureToken,
     update,
     release,
   };
