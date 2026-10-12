@@ -1,0 +1,27 @@
+name: P05 Agar.io
+on:
+  pull_request:
+    paths:
+      - 'games/agar-io/**'
+      - 'jobs/P05-blob-arena/**'
+      - '.github/workflows/P05.yml'
+permissions:
+  contents: read
+concurrency:
+  group: P05-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm format
+      - run: node jobs/P05-blob-arena/record-source.mjs
+      - run: pnpm vitest run games/agar-io --maxWorkers=1 --disableConsoleIntercept

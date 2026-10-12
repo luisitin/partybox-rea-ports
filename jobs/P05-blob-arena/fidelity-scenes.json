@@ -1,0 +1,59 @@
+[
+  {
+    "id": "start",
+    "description": "one 24-mass owned cell among two rivals and plain food",
+    "width": 390,
+    "height": 500,
+    "cells": [
+      { "id": 1, "owner": "p1", "x": 80, "y": 50, "mass": 24 },
+      { "id": 2, "owner": "p2", "x": 96, "y": 54, "mass": 60 },
+      { "id": 3, "owner": "p3", "x": 64, "y": 62, "mass": 32 }
+    ]
+  },
+  {
+    "id": "growth",
+    "description": "owned mass grows from24 to192; camera pulls back",
+    "width": 390,
+    "height": 500,
+    "cells": [
+      { "id": 1, "owner": "p1", "x": 91, "y": 48, "mass": 192 },
+      { "id": 2, "owner": "p2", "x": 116, "y": 42, "mass": 60 },
+      { "id": 3, "owner": "p3", "x": 68, "y": 67, "mass": 32 }
+    ]
+  },
+  {
+    "id": "split",
+    "description": "two equal owned halves; centroid follows both and name repeats inside each",
+    "width": 390,
+    "height": 500,
+    "cells": [
+      { "id": 1, "owner": "p1", "x": 80, "y": 48, "mass": 96 },
+      { "id": 4, "owner": "p1", "x": 101, "y": 48, "mass": 96 },
+      { "id": 2, "owner": "p2", "x": 112, "y": 70, "mass": 60 },
+      { "id": 3, "owner": "p3", "x": 65, "y": 67, "mass": 32 }
+    ]
+  },
+  {
+    "id": "edge",
+    "description": "owned cell near the top-left map edge; original viewport grid continues beyond map bounds",
+    "width": 390,
+    "height": 500,
+    "cells": [
+      { "id": 1, "owner": "p1", "x": 4, "y": 5, "mass": 24 },
+      { "id": 2, "owner": "p2", "x": 16, "y": 7, "mass": 60 },
+      { "id": 3, "owner": "p3", "x": 13, "y": 24, "mass": 32 }
+    ]
+  },
+  {
+    "id": "long-name",
+    "description": "a legal16-character wide name remains full and centered on its original-sized cell",
+    "width": 390,
+    "height": 500,
+    "names": { "p1": "WWWWWWWWWWWWWWWW" },
+    "cells": [
+      { "id": 1, "owner": "p1", "x": 80, "y": 50, "mass": 24 },
+      { "id": 2, "owner": "p2", "x": 96, "y": 54, "mass": 60 },
+      { "id": 3, "owner": "p3", "x": 64, "y": 62, "mass": 32 }
+    ]
+  }
+]

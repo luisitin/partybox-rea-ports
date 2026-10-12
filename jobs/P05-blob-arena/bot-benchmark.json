@@ -1,0 +1,665 @@
+{
+  "command": "node --import ./jobs/P05-blob-arena/loader.mjs ./jobs/P05-blob-arena/bot-benchmark.mjs",
+  "matches": 30,
+  "decisions": 37380,
+  "allInputsAndRngStatesIdentical": true,
+  "baselineDiff": "Only the pellet sort block is replaced with the original repeated-distance comparator.",
+  "cachedSourceSha256": "09ba7adf5f5847e2637a1b249bf9347ef55c04f38dbe86ed86ea190fd5230313",
+  "baselineSourceSha256": "bb45c36a6d15f2cdf48106d0d8d0e1d413c29325393549294ca600f96122892d",
+  "oldCallMs": 693.8355000000086,
+  "cachedCallMs": 327.1895999999829,
+  "botTimeReductionPercent": 52.84334687400993,
+  "measuredWallMs": 1440.2008,
+  "comparisons": [
+    {
+      "players": 2,
+      "seed": 1,
+      "skill": "easy",
+      "matchedDecisions": 534,
+      "events": 1869,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "309ed16f8a3d6f10fe0c3c7e6574f18c08cf523c72d838b173624f36eb535123",
+      "resultsSha256": "aff617201ebef3e0ca58d905c40175cf622c6e1eba79428a41c2efd08590e48b",
+      "scores": {
+        "p1": 1566,
+        "p2": 1659
+      },
+      "botRng": {
+        "seed": 1511505646,
+        "step": 534
+      }
+    },
+    {
+      "players": 2,
+      "seed": 2,
+      "skill": "normal",
+      "matchedDecisions": 534,
+      "events": 1864,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "54763191c79ed11f6f706d79c39e2b5f05945245905a4a225be9f1edb959f713",
+      "resultsSha256": "15330491d7ea4e76e387d47abfdcd535652e7a8aafef0800baedcbf039167189",
+      "scores": {
+        "p1": 1323,
+        "p2": 1737
+      },
+      "botRng": {
+        "seed": 1511505645,
+        "step": 0
+      }
+    },
+    {
+      "players": 2,
+      "seed": 3,
+      "skill": "sharp",
+      "matchedDecisions": 534,
+      "events": 1846,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "e9f3de47312a0833a3f38f62f553757242db87750b7a4b1dc68b4c03e0f32226",
+      "resultsSha256": "cd2367cd98bd79caf877470fc6e65d36da7b08a1eb5fba3fe0ed57b5b99eb9ca",
+      "scores": {
+        "p1": 1317,
+        "p2": 1563
+      },
+      "botRng": {
+        "seed": 1511505644,
+        "step": 0
+      }
+    },
+    {
+      "players": 2,
+      "seed": 4,
+      "skill": "easy",
+      "matchedDecisions": 534,
+      "events": 1858,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "3693c750c9b1d00e9c2836342ffe63cd14b8ec191a09800bb57f23d3b209435f",
+      "resultsSha256": "f2c6d4ed0f7d31dcf83cb45ef1d5a1e968703237f32254f74acbd2b5e06ebb03",
+      "scores": {
+        "p1": 1518,
+        "p2": 1671
+      },
+      "botRng": {
+        "seed": 1511505643,
+        "step": 525
+      }
+    },
+    {
+      "players": 2,
+      "seed": 5,
+      "skill": "normal",
+      "matchedDecisions": 534,
+      "events": 1850,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "7dbdc487c7dd688f8b17f1cf5a893eb09de7770a3fcec8432f46a67dea66c266",
+      "resultsSha256": "3b3f818982c339e383561d255697422fe722cb4828e6847930d63b485ab47b0e",
+      "scores": {
+        "p1": 2628,
+        "p2": 696
+      },
+      "botRng": {
+        "seed": 1511505642,
+        "step": 0
+      }
+    },
+    {
+      "players": 2,
+      "seed": 6,
+      "skill": "sharp",
+      "matchedDecisions": 534,
+      "events": 1848,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "2689362580acac77cdab708ada59f7dc010a116ae0f39889368cfa0a5b8a5bbe",
+      "resultsSha256": "7c3b870a93adaadf7f8b6625f061b2c04fbe7eed858a01bf213f8895471db2c2",
+      "scores": {
+        "p1": 1359,
+        "p2": 1758
+      },
+      "botRng": {
+        "seed": 1511505641,
+        "step": 0
+      }
+    },
+    {
+      "players": 2,
+      "seed": 7,
+      "skill": "easy",
+      "matchedDecisions": 534,
+      "events": 1864,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "88bd097f8e029da56f857b8a7240695625f86b178b7c72dea1001ae6453058a8",
+      "resultsSha256": "e6c6cdb3107caace19b6219b1fe4a6b58cd68c918102e4cc34dc243303d7832f",
+      "scores": {
+        "p1": 1968,
+        "p2": 1056
+      },
+      "botRng": {
+        "seed": 1511505640,
+        "step": 528
+      }
+    },
+    {
+      "players": 2,
+      "seed": 8,
+      "skill": "normal",
+      "matchedDecisions": 534,
+      "events": 1858,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "7a1d37a58f353f25f5586616a404758da7af6a5606a384e62cc8055bcd1e271c",
+      "resultsSha256": "fccbcaa9c6b7dacf0bbb39feeff908f68d92752a5f527bfc7217171479038387",
+      "scores": {
+        "p1": 1902,
+        "p2": 1563
+      },
+      "botRng": {
+        "seed": 1511505639,
+        "step": 0
+      }
+    },
+    {
+      "players": 2,
+      "seed": 9,
+      "skill": "sharp",
+      "matchedDecisions": 534,
+      "events": 1861,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "46a114254829fe37faf1e31aaecef5c9f7018d2182e31030796f748db943484b",
+      "resultsSha256": "9db7b7186141a7022635fb5ba8311a91f0846ab809537898782101f971eb3997",
+      "scores": {
+        "p1": 1602,
+        "p2": 1215
+      },
+      "botRng": {
+        "seed": 1511505638,
+        "step": 0
+      }
+    },
+    {
+      "players": 2,
+      "seed": 10,
+      "skill": "easy",
+      "matchedDecisions": 534,
+      "events": 1858,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "c6965b79cdd6dc38a1952040f505c4db28a3666639fda178cca1cb428ff5b07f",
+      "resultsSha256": "333fbb25f6ff7aaf36f5ce00b5943b192283c9337f1bea17658f6fcbe503a5b8",
+      "scores": {
+        "p1": 1656,
+        "p2": 1500
+      },
+      "botRng": {
+        "seed": 1511505637,
+        "step": 531
+      }
+    },
+    {
+      "players": 4,
+      "seed": 1,
+      "skill": "easy",
+      "matchedDecisions": 1068,
+      "events": 2364,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "5e09f3af6941c06afbc76a782ac3b6848bbafb1505fb560f2f0b83bd767b7be7",
+      "resultsSha256": "2722e291fd221e9ec19851bcd056e6e6c82db99702ebe2be256e4982193d118b",
+      "scores": {
+        "p1": 1542,
+        "p2": 2229,
+        "p3": 1578,
+        "p4": 1497
+      },
+      "botRng": {
+        "seed": 1511505646,
+        "step": 1045
+      }
+    },
+    {
+      "players": 4,
+      "seed": 2,
+      "skill": "normal",
+      "matchedDecisions": 1068,
+      "events": 2363,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "8d4e64ee2ad65fc6590d6bc0664b83ee46eada17246f7a709f036a6bccf4cfd4",
+      "resultsSha256": "d858583635e4e3795dc954591ef0082ffa992bcb35578f6c934343e8509e183f",
+      "scores": {
+        "p1": 2652,
+        "p2": 1074,
+        "p3": 1728,
+        "p4": 1074
+      },
+      "botRng": {
+        "seed": 1511505645,
+        "step": 0
+      }
+    },
+    {
+      "players": 4,
+      "seed": 3,
+      "skill": "sharp",
+      "matchedDecisions": 1068,
+      "events": 2308,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "ecabacfac14d00883a6aa3507dc0b52a6e1ac1055ccfdb397fb65d0824353c7d",
+      "resultsSha256": "5972fd0407097223d41734b2ef2f4b82400fb153328e2b1dd234d076c217f987",
+      "scores": {
+        "p1": 2139,
+        "p2": 267,
+        "p3": 1221,
+        "p4": 1860
+      },
+      "botRng": {
+        "seed": 1511505644,
+        "step": 1
+      }
+    },
+    {
+      "players": 4,
+      "seed": 4,
+      "skill": "easy",
+      "matchedDecisions": 1068,
+      "events": 2341,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "fa5cc72f7c49fc80fb374e2dec9a0210f3946bb6ef72180c1c9c828bd0b09320",
+      "resultsSha256": "05e5f80b8b27bad7d8c23f0efe4372dbe8b7125378bfc1d5d9e3f23cb62ebcc7",
+      "scores": {
+        "p1": 1626,
+        "p2": 630,
+        "p3": 1698,
+        "p4": 3036
+      },
+      "botRng": {
+        "seed": 1511505643,
+        "step": 1020
+      }
+    },
+    {
+      "players": 4,
+      "seed": 5,
+      "skill": "normal",
+      "matchedDecisions": 1068,
+      "events": 2361,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "fb11e81f8dafaa11be21f9df88eca73b65e8f7fa58f41cd376a47f942e928543",
+      "resultsSha256": "e997e62e441a6c66369c96bdd8491aa7978f78f07bad306f38e387503aa1aec7",
+      "scores": {
+        "p1": 2505,
+        "p2": 1809,
+        "p3": 1176,
+        "p4": 1515
+      },
+      "botRng": {
+        "seed": 1511505642,
+        "step": 0
+      }
+    },
+    {
+      "players": 4,
+      "seed": 6,
+      "skill": "sharp",
+      "matchedDecisions": 1068,
+      "events": 2320,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "6cd74883c4c1879aacecb3656a7e27921c2e621a04c9759f0808c35addf9d367",
+      "resultsSha256": "827d575d3f6ec0f4159e8cded5bcfec62af6bc0b81597764b944c936f6e10bc3",
+      "scores": {
+        "p1": 1809,
+        "p2": 636,
+        "p3": 2445,
+        "p4": 1332
+      },
+      "botRng": {
+        "seed": 1511505641,
+        "step": 0
+      }
+    },
+    {
+      "players": 4,
+      "seed": 7,
+      "skill": "easy",
+      "matchedDecisions": 1068,
+      "events": 2364,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "b2eb4cc095f4a5cbacf1cd6219c7890aa264f62a4a1346586789bde9fdca75bd",
+      "resultsSha256": "1f163fbf7ac0e0fc0a9ec775b5a348aac5c154d79a257d64814f2f3e1a931ea0",
+      "scores": {
+        "p1": 1494,
+        "p2": 1053,
+        "p3": 1944,
+        "p4": 2094
+      },
+      "botRng": {
+        "seed": 1511505640,
+        "step": 1050
+      }
+    },
+    {
+      "players": 4,
+      "seed": 8,
+      "skill": "normal",
+      "matchedDecisions": 1068,
+      "events": 2375,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "47c1f035c05111b6a6d8dcc092abb6f141b31e4ed30022db8f9352ed72d74dcc",
+      "resultsSha256": "2d811bbe0fbe77e36f83548215e594aa9c641fd438cd1ac4fc38ed06d5e41512",
+      "scores": {
+        "p1": 1932,
+        "p2": 1671,
+        "p3": 1881,
+        "p4": 1131
+      },
+      "botRng": {
+        "seed": 1511505639,
+        "step": 0
+      }
+    },
+    {
+      "players": 4,
+      "seed": 9,
+      "skill": "sharp",
+      "matchedDecisions": 1068,
+      "events": 2317,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "0ebe2055d1fca1e061e87b1ed40363744d6c51e4683450921471b2f5a94015de",
+      "resultsSha256": "32305bdfb4cc427ed757e7b49dec41e788076c76456eb766ca5849388d27ed1e",
+      "scores": {
+        "p1": 513,
+        "p2": 2997,
+        "p3": 2439,
+        "p4": 246
+      },
+      "botRng": {
+        "seed": 1511505638,
+        "step": 2
+      }
+    },
+    {
+      "players": 4,
+      "seed": 10,
+      "skill": "easy",
+      "matchedDecisions": 1068,
+      "events": 2369,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "f1faaf0d2f1f212d72e76642423093edfa676ad69ae9d08116dbd1cc9cddd0fe",
+      "resultsSha256": "3be7b85bc999626971c7ed1a5e421a916a2a15138ab171469080591d6dd98e8e",
+      "scores": {
+        "p1": 1950,
+        "p2": 2010,
+        "p3": 2205,
+        "p4": 864
+      },
+      "botRng": {
+        "seed": 1511505637,
+        "step": 1050
+      }
+    },
+    {
+      "players": 8,
+      "seed": 1,
+      "skill": "easy",
+      "matchedDecisions": 2136,
+      "events": 3262,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "a4f748b76a0a7b57370ed28df6e836f79012c8ad20fb1ee844bd4328c10e6f49",
+      "resultsSha256": "42c5ed27ee12057ac2af9d23ab79407c02749fe4a5033ccfa1e08f981f98be7b",
+      "scores": {
+        "p1": 1251,
+        "p2": 2148,
+        "p3": 2574,
+        "p4": 3486,
+        "p5": 444,
+        "p6": 3774,
+        "p7": 2706,
+        "p8": 456
+      },
+      "botRng": {
+        "seed": 1511505646,
+        "step": 1951
+      }
+    },
+    {
+      "players": 8,
+      "seed": 2,
+      "skill": "normal",
+      "matchedDecisions": 2136,
+      "events": 3311,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "df30f8551874262226b469b4eb0db16a92f6d193c26a4f76af904723f64c7936",
+      "resultsSha256": "ac78fbdc3992feb38bbee3704c079fc13ea3a4f64a2e91c3893c2f4c561543f6",
+      "scores": {
+        "p1": 2094,
+        "p2": 2775,
+        "p3": 669,
+        "p4": 2526,
+        "p5": 3369,
+        "p6": 1206,
+        "p7": 1368,
+        "p8": 291
+      },
+      "botRng": {
+        "seed": 1511505645,
+        "step": 0
+      }
+    },
+    {
+      "players": 8,
+      "seed": 3,
+      "skill": "sharp",
+      "matchedDecisions": 2136,
+      "events": 3152,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "de996db6e8e9d3b89d654a2de98d59f08e6aef5d66f88c4995fc6d3dd3a377f8",
+      "resultsSha256": "a775dc0f6ccbfe04bbabf44ca6169d34fa23311c7c9ffd7e49aff7c85d99aa88",
+      "scores": {
+        "p1": 741,
+        "p2": 4417,
+        "p3": 492,
+        "p4": 1761,
+        "p5": 2788,
+        "p6": 183,
+        "p7": 735,
+        "p8": 780
+      },
+      "botRng": {
+        "seed": 1511505644,
+        "step": 5
+      }
+    },
+    {
+      "players": 8,
+      "seed": 4,
+      "skill": "easy",
+      "matchedDecisions": 2136,
+      "events": 3255,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "e126dbd2c706d3415150cce07ee8f1037a029eb1486d2de7f2b3b604c1daa71a",
+      "resultsSha256": "d1cc55fe67836ebaf480c676b69267fed0496048fbd34cb00067363038683b88",
+      "scores": {
+        "p1": 1662,
+        "p2": 1032,
+        "p3": 780,
+        "p4": 1317,
+        "p5": 2103,
+        "p6": 1215,
+        "p7": 5745,
+        "p8": 2499
+      },
+      "botRng": {
+        "seed": 1511505643,
+        "step": 1949
+      }
+    },
+    {
+      "players": 8,
+      "seed": 5,
+      "skill": "normal",
+      "matchedDecisions": 2136,
+      "events": 3316,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "7718399ef467c40bc2bb48e60605fae5cdaa3ce784c02965605c725afa874aab",
+      "resultsSha256": "22bb3aa6e8e082b081b570dabd758488f08789a530d9ed3fde0c8fef560e7bc8",
+      "scores": {
+        "p1": 3870,
+        "p2": 2619,
+        "p3": 993,
+        "p4": 1245,
+        "p5": 216,
+        "p6": 990,
+        "p7": 1410,
+        "p8": 1677
+      },
+      "botRng": {
+        "seed": 1511505642,
+        "step": 0
+      }
+    },
+    {
+      "players": 8,
+      "seed": 6,
+      "skill": "sharp",
+      "matchedDecisions": 2136,
+      "events": 3125,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "893f621bf6594ac69a95724478fe46c824bd6c545fdfc30e53ffd9a9d58012c5",
+      "resultsSha256": "bc89e73554f0e74817068a6adf4ab6c0cf963448ab6a6ae53090cedb7449bdca",
+      "scores": {
+        "p1": 2103,
+        "p2": 1728,
+        "p3": 135,
+        "p4": 2178,
+        "p5": 2358,
+        "p6": 162,
+        "p7": 3561,
+        "p8": 324
+      },
+      "botRng": {
+        "seed": 1511505641,
+        "step": 5
+      }
+    },
+    {
+      "players": 8,
+      "seed": 7,
+      "skill": "easy",
+      "matchedDecisions": 2136,
+      "events": 3273,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "d17cbbb62ac23bab1fdd03901f4bc4f0aed3c82eda5c09f8625f3e3026afdbbc",
+      "resultsSha256": "5be2e72bf73efbef11ef6f13a6120f9d7d702d10b10b354f05dfb82e14229fff",
+      "scores": {
+        "p1": 1611,
+        "p2": 3249,
+        "p3": 3321,
+        "p4": 2190,
+        "p5": 1485,
+        "p6": 1875,
+        "p7": 882,
+        "p8": 906
+      },
+      "botRng": {
+        "seed": 1511505640,
+        "step": 1983
+      }
+    },
+    {
+      "players": 8,
+      "seed": 8,
+      "skill": "normal",
+      "matchedDecisions": 2136,
+      "events": 3277,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "0cee894a32172e36a37c1f5a2f1fe6d70978d1a9eb816a8aa63886f5cb8fbf6a",
+      "resultsSha256": "12d1a8cd5eb835566d890aee54680667733ec75ba980983ff8f4bbf366ed2560",
+      "scores": {
+        "p1": 186,
+        "p2": 3822,
+        "p3": 345,
+        "p4": 3429,
+        "p5": 4281,
+        "p6": 333,
+        "p7": 1794,
+        "p8": 762
+      },
+      "botRng": {
+        "seed": 1511505639,
+        "step": 0
+      }
+    },
+    {
+      "players": 8,
+      "seed": 9,
+      "skill": "sharp",
+      "matchedDecisions": 2136,
+      "events": 3090,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "f4a1e186fd12e5b6ccdf29fdb4adbc14b308fc918e291b7c0fe76198e4fc3d9b",
+      "resultsSha256": "cdc5e10a803e232b0ac34858ac0f87c340d94f8e2042cfd3ef107bb48cf4e054",
+      "scores": {
+        "p1": 1008,
+        "p2": 354,
+        "p3": 2901,
+        "p4": 1494,
+        "p5": 2916,
+        "p6": 915,
+        "p7": 327,
+        "p8": 2289
+      },
+      "botRng": {
+        "seed": 1511505638,
+        "step": 5
+      }
+    },
+    {
+      "players": 8,
+      "seed": 10,
+      "skill": "easy",
+      "matchedDecisions": 2136,
+      "events": 3244,
+      "durationMs": 289500,
+      "roundsMs": [90000, 90000, 90000],
+      "finalStateSha256": "a4bd4d56afbaf9bafa460efac3e8ed5242490b770cd8099ad8cad9d847ea026b",
+      "resultsSha256": "768b261cc0f3f6cb9f19c49ec6b2e28e3ddef79bf0b3302d108527fabd8971d9",
+      "scores": {
+        "p1": 1086,
+        "p2": 1563,
+        "p3": 1959,
+        "p4": 60,
+        "p5": 1809,
+        "p6": 2889,
+        "p7": 1989,
+        "p8": 4086
+      },
+      "botRng": {
+        "seed": 1511505637,
+        "step": 1933
+      }
+    }
+  ]
+}

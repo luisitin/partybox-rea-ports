@@ -1,0 +1,721 @@
+{
+  "preview": {
+    "root": "C:\\dev\\rea-runs\\r4",
+    "pid": 30288
+  },
+  "shell": {
+    "top": 80,
+    "bottom": 80
+  },
+  "method": "Native CDP pointer/key checks plus explicitly labelled lifecycle-event/view-patch probes against this owned local Controller; no original/live-room gameplay",
+  "completed": false,
+  "status": "failed",
+  "failure": {
+    "name": "Error",
+    "message": "CDP timed out: Input.dispatchTouchEvent",
+    "stack": "Error: CDP timed out: Input.dispatchTouchEvent\n    at Timeout._onTimeout (file:///C:/dev/rea-runs/r4/jobs/P05-blob-arena/capture.mjs:157:16)\n    at listOnTimeout (node:internal/timers:635:17)\n    at process.processTimers (node:internal/timers:571:7)"
+  },
+  "checks": [
+    {
+      "phoneOnly": false,
+      "action": "native 22px drag and release",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "pad": {
+        "x": 195,
+        "y": 405.8984375,
+        "width": 366,
+        "height": 447.828125
+      }
+    },
+    {
+      "phoneOnly": false,
+      "action": "native 44px drag and release",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "pad": {
+        "x": 195,
+        "y": 405.8984375,
+        "width": 366,
+        "height": 447.828125
+      }
+    },
+    {
+      "phoneOnly": false,
+      "action": "mouse isolated native lost capture stops steering",
+      "method": "native CDP pointer plus releasePointerCapture; browser-generated lostpointercapture",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "pointerCapture": {
+        "pointerId": 1,
+        "lost": 1
+      }
+    },
+    {
+      "phoneOnly": false,
+      "action": "mouse old pointer movement/up stays neutral after capture loss",
+      "method": "native CDP input",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "touch isolated native lost capture stops steering",
+      "method": "native CDP pointer plus releasePointerCapture; browser-generated lostpointercapture",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "pointerCapture": {
+        "pointerId": 2,
+        "lost": 1
+      }
+    },
+    {
+      "phoneOnly": false,
+      "action": "touch old pointer movement/up stays neutral after capture loss",
+      "method": "native CDP input",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "two-finger steer/split/cancel",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "split"
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "keyboard steer/split/release",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "split"
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "input focus keyup releases held steering",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "input keydown ignored",
+      "method": "native CDP input",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "contenteditable focus keyup releases held steering",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "contenteditable keydown ignored",
+      "method": "native CDP input",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "modifier 1 keydown ignored",
+      "method": "native CDP input",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "modifier 1 keyup releases prior hold",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "modifier 2 keydown ignored",
+      "method": "native CDP input",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "modifier 2 keyup releases prior hold",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "modifier 4 keydown ignored",
+      "method": "native CDP input",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "modifier 4 keyup releases prior hold",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "pointer release preserves independent keyboard hold",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "last held source releases",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "blur resets holds",
+      "method": "native key plus synthetic browser lifecycle event",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "pagehide resets holds",
+      "method": "native key plus synthetic browser lifecycle event",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "offline resets holds",
+      "method": "native key plus synthetic browser lifecycle event",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "online resets holds",
+      "method": "native key plus synthetic browser lifecycle event",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "hidden visibility resets holds",
+      "method": "native key plus synthetic hidden-document event",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "same-phase identity change resets steering",
+      "method": "native key plus authored identity/view change",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "identity restoration does not restart steering",
+      "method": "authored identity/view restoration",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "own envelope-only disconnect resets held steering",
+      "method": "native key plus authored envelope-only presence patch",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "own envelope-only disconnect blocks fresh key and pointer movement",
+      "method": "native CDP input",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "own envelope reconnection never restarts steering",
+      "method": "authored envelope presence restoration",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "fresh key works after own envelope reconnection",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "disconnected context resets held steering",
+      "method": "native key plus authored public-view patch",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "disconnected restoration never restarts steering",
+      "method": "authored public-view restoration",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "disconnected fresh key works after restoration",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "pause context resets held steering",
+      "method": "native key plus authored public-view patch",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "pause restoration never restarts steering",
+      "method": "authored public-view restoration",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "pause fresh key works after restoration",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "round change context resets held steering",
+      "method": "native key plus authored public-view patch",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "round change restoration never restarts steering",
+      "method": "authored public-view restoration",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "round change fresh key works after restoration",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "permanent departure context resets held steering",
+      "method": "native key plus authored public-view patch",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": false,
+      "action": "permanent departure restoration never restarts steering",
+      "method": "authored public-view restoration",
+      "inputs": []
+    },
+    {
+      "phoneOnly": false,
+      "action": "permanent departure fresh key works after restoration",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "phoneOnly": true,
+      "action": "native 22px drag and release",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "pad": {
+        "x": 195,
+        "y": 524.2734375,
+        "width": 366,
+        "height": 211.078125
+      }
+    },
+    {
+      "phoneOnly": true,
+      "action": "native 44px drag and release",
+      "method": "native CDP input",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "pad": {
+        "x": 195,
+        "y": 524.2734375,
+        "width": 366,
+        "height": 211.078125
+      }
+    },
+    {
+      "phoneOnly": true,
+      "action": "mouse isolated native lost capture stops steering",
+      "method": "native CDP pointer plus releasePointerCapture; browser-generated lostpointercapture",
+      "inputs": [
+        {
+          "type": "steer",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "steer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "pointerCapture": {
+        "pointerId": 1,
+        "lost": 1
+      }
+    },
+    {
+      "phoneOnly": true,
+      "action": "mouse old pointer movement/up stays neutral after capture loss",
+      "method": "native CDP input",
+      "inputs": []
+    }
+  ]
+}

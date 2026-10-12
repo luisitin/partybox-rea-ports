@@ -1,0 +1,188 @@
+.stage {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  padding: var(--pb-stage-top, var(--pb-space-5)) var(--pb-space-6) var(--pb-space-6);
+  box-sizing: border-box;
+}
+
+.board {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) * 8);
+  grid-template-rows: minmax(0, 1fr);
+  gap: var(--pb-space-5);
+  align-items: center;
+  min-height: 0;
+}
+
+.field {
+  position: relative;
+  width: 100%;
+  max-height: 100%;
+  aspect-ratio: 160 / 100;
+  overflow: hidden;
+  border: var(--pb-space-1) solid var(--pb-text-muted);
+  border-radius: var(--pb-radius-lg);
+  box-sizing: border-box;
+}
+
+.side {
+  --blob-tv-body: calc(var(--pb-font-body) - var(--pb-space-1));
+  display: grid;
+  gap: var(--pb-space-2);
+  align-content: safe center;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Round results are party plumbing: one readable summary, with no duplicate
+   arena labels competing with the server's measured reading hold. */
+.board[data-summary='true'] {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+}
+
+.board[data-summary='true'] .side {
+  width: min(100%, calc(var(--pb-space-8) * 22));
+}
+
+.headline {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  line-height: 1.2;
+  font-weight: 900;
+}
+
+/* The final winner line gets the full stage width, including an eight-way tie. */
+.matchHeadline {
+  flex: none;
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  line-height: 1.2;
+  font-weight: 900;
+  text-align: center;
+}
+
+.clock {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+}
+
+.clockLabel {
+  font-size: var(--blob-tv-body);
+  line-height: 1.25;
+  font-weight: 800;
+  color: var(--pb-text-muted);
+}
+
+.clockValue {
+  font-size: calc(var(--pb-font-display) * 0.75);
+  line-height: 1.2;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock[data-low='true'] .clockValue {
+  color: var(--pb-accent-2);
+}
+
+.legend,
+.rows li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 6ch 6ch;
+  align-items: center;
+  gap: var(--pb-space-2);
+  font-size: var(--blob-tv-body);
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+}
+
+.legend {
+  color: var(--pb-text-muted);
+  font-weight: 800;
+  padding: var(--pb-space-1) var(--pb-space-2);
+}
+
+.legend span:not(:first-child) {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.rows {
+  display: grid;
+  gap: var(--pb-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rows li {
+  min-height: var(--pb-space-7);
+  padding: var(--pb-space-1) var(--pb-space-2);
+  box-sizing: border-box;
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+  min-width: 0;
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  width: calc(var(--pb-space-7) - var(--pb-space-2));
+  height: calc(var(--pb-space-7) - var(--pb-space-2));
+  flex: none;
+  border-radius: 50%;
+  color: var(--pb-on-accent-2-fill);
+  background: var(--blob-colour);
+  font-size: var(--blob-tv-body);
+  line-height: 1;
+  font-weight: 900;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+.value,
+.total {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+}
+
+.value {
+  color: var(--pb-accent-2);
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--blob-tv-body);
+  line-height: 1.25;
+  color: var(--pb-text-muted);
+}
+
+.offline {
+  flex: none;
+  white-space: nowrap;
+  color: var(--pb-text-muted);
+}
