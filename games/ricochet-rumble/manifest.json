@@ -1,0 +1,31 @@
+{
+  "id": "ricochet-rumble",
+  "name": "Ricochet Rumble",
+  "icon": "💥",
+  "tagline": "Dodge the shot you just fired.",
+  "description": "Steer a numbered tank through a new maze each round. Hold Fire to send shells bouncing off walls, then move away: your own shots can hit you. Collect special weapons, survive five rounds, and win the most rounds.",
+  "howToPlay": [
+    "Find your numbered tank. Hold forward or reverse to drive; hold left or right to turn.",
+    "Hold Fire to shoot. Shells bounce off walls and can hit your own tank. Drive over a weapon crate to collect it.",
+    "The last tank standing wins a point. Multiple survivors at the time limit draw. Most points after five rounds wins."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 6,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-10-12",
+  "noCards": true,
+  "settings": [
+    {
+      "key": "powerups",
+      "label": "Weapon crates",
+      "description": "Collect Burst, Beam and Seeker weapons in the maze",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "supportsBots": true
+}
