@@ -1,15 +1,18 @@
 # Resume P24 Haxball
 
-- Claimed by r3-local on job/P24-haxball after finishing P03 / PR #3.
-- Research: official physics/controls/team docs plus independent firsthand sources inspected;
-  deeper transient client findings are being recorded in RESEARCH.md / SOURCES.md.
-- Monorepo duplicate check complete: no equivalent game in the 110-game inventory.
-- Architecture: pure fixed-step circle physics, numbered red/blue teams, two 90s halves,
-  held D-pad + one-armed-kick-per-press, input leases and phase/sequence replay protection.
-- Research/design milestone complete. Server, client and verification are being implemented;
-  no validation pass is claimed yet. Run the evidence test once to export phase fixtures before
-  collecting the full haxball SDK shard, then run all scoped checks.
-- Remaining: build, meaningful rule/contract/property/bot/mutation checks, phase fixtures and
-  TV/phone/phone-only/spectator capture; green CI, PR and KEEP GOING before DONE.
-- Install is already complete. Use pnpm.cmd in PowerShell and only games/haxball tests.
-- Refresh main CLAIMS.md after every push, with pull --rebase before each CLAIMS commit.
+Runner r3-local on job/P24-haxball. Research and implementation complete; verification in progress.
+
+- Server: fixed50ms circle physics,100ms host beat, edge-armed kicks,650ms leases,
+  two90s wall-clock halves,8s halftime, team goals, odd-seat helper, deterministic bots.
+- Phone: independent eight-way D-pad and Kick holds,300ms heartbeats, blur/hidden/phase
+  cancellation; phone-only public pitch and spectator stage. TV has numbered team discs.
+- Passed: typecheck;31 focused server tests;23 client tests;11 actual-component SSR cases.
+- First capture:55 static screens pass geometry/TV typography. Mounted harness setup fails
+  with Unexpected identifier object; capture browser and exact endpoint verified closed.
+- Full game shard (contract/property/7000 bot games) rerunning in root session2934 after
+  paused VIP End fix. The interrupted earlier full run has no pass claim.
+- Pending: mounted QA fix, final full shard,20 mutations, format, media hashes/budget,
+  PR/green P24 CI and three successive KEEP GOING audits with no player-visible gain.
+- Root alone executes checks/browser. pnpm.cmd in PowerShell. Install already complete.
+- Push every milestone/at least30min and refresh main CLAIMS.md each push; pull --rebase
+  before every CLAIMS commit. No PR yet; no live original or human LAN playtest claimed.

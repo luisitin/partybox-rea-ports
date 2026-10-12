@@ -1,0 +1,195 @@
+.screen {
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-3);
+  color: var(--pb-text);
+}
+.identity {
+  flex: none;
+  text-align: center;
+}
+.identity h2 {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  line-height: 1.15;
+}
+.identity p {
+  margin: var(--pb-space-1) 0 0;
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+  overflow-wrap: anywhere;
+}
+.identity[data-team='red'] h2 {
+  color: var(--pb-danger);
+}
+.identity[data-team='blue'] h2 {
+  color: var(--pb-info);
+}
+.score {
+  flex: none;
+}
+.attack {
+  margin: var(--pb-space-2) 0 0;
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+  text-align: center;
+}
+.phonePitch {
+  flex: none;
+  min-height: 0;
+}
+.feedback {
+  flex: none;
+  margin: 0;
+  padding: var(--pb-space-1) var(--pb-space-2);
+  min-height: calc(var(--pb-font-body) * 1.25);
+  font-size: var(--pb-font-body);
+  line-height: 1.25;
+  font-weight: 800;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.controls {
+  flex: 1;
+  min-height: calc(var(--pb-touch) * 3 + var(--pb-space-8));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-3);
+}
+.pad {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(3, calc(var(--pb-touch) + var(--pb-space-4)));
+  grid-template-rows: repeat(3, calc(var(--pb-touch) + var(--pb-space-4)));
+  gap: var(--pb-space-1);
+  touch-action: none;
+}
+.direction,
+.kick {
+  appearance: none;
+  border: 0;
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface-2);
+  color: var(--pb-text);
+  font-family: var(--pb-font-family);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.direction {
+  display: grid;
+  place-items: center;
+  min-width: var(--pb-touch);
+  min-height: var(--pb-touch);
+  padding: 0;
+  font-size: var(--pb-font-h1);
+  font-weight: 900;
+}
+.direction[data-hax-control='up-left'] {
+  grid-area: 1 / 1;
+}
+.direction[data-hax-control='up'] {
+  grid-area: 1 / 2;
+}
+.direction[data-hax-control='up-right'] {
+  grid-area: 1 / 3;
+}
+.direction[data-hax-control='left'] {
+  grid-area: 2 / 1;
+}
+.direction[data-hax-control='right'] {
+  grid-area: 2 / 3;
+}
+.direction[data-hax-control='down-left'] {
+  grid-area: 3 / 1;
+}
+.direction[data-hax-control='down'] {
+  grid-area: 3 / 2;
+}
+.direction[data-hax-control='down-right'] {
+  grid-area: 3 / 3;
+}
+.padCentre {
+  grid-area: 2 / 2;
+  display: grid;
+  place-items: center;
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+}
+.kick {
+  flex: 1;
+  max-width: calc(var(--pb-touch) * 2.5);
+  min-height: calc(var(--pb-touch) * 3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+}
+.kick span {
+  font-size: var(--pb-font-display);
+  line-height: 1;
+}
+.kick b {
+  font-size: var(--pb-font-h2);
+}
+.kick small {
+  font-size: var(--pb-font-caption);
+  text-align: center;
+}
+.direction[data-held],
+.kick[data-held] {
+  background: var(--pb-accent-2-fill);
+  color: var(--pb-on-accent-2-fill);
+  outline: var(--pb-space-1) solid var(--pb-focus);
+  outline-offset: 0;
+}
+.direction:focus-visible,
+.kick:focus-visible {
+  outline: var(--pb-space-1) solid var(--pb-focus);
+  outline-offset: var(--pb-space-1);
+}
+.hint {
+  flex: none;
+  margin: 0;
+  font-size: var(--pb-font-caption);
+  line-height: 1.25;
+  text-align: center;
+  color: var(--pb-text-muted);
+}
+.hint span {
+  display: inline-block;
+  margin-top: var(--pb-space-1);
+}
+.watching {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-2);
+}
+.watching > :first-child {
+  flex: 1;
+  min-height: 0;
+}
+@media (max-height: 740px) {
+  .screen {
+    gap: var(--pb-space-1);
+  }
+  .hint span {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .screen * {
+    animation: none;
+    transition: none;
+  }
+}
