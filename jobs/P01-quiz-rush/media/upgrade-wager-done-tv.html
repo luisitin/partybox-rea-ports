@@ -1,0 +1,1439 @@
+<!doctype html>
+<html lang="en" data-surface="tv" data-motion="off">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Kahoot! upgrade · upgrade-wager-done-tv</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>; 
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+
+      /* packages/game-sdk/src/tv/Stage.module.css */
+      ._stage_262f13 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+        min-height: 100%;
+        /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+        padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+          var(--pb-overscan-y, 54px);
+      }
+
+      ._center_262f13 {
+        /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+        justify-content: safe center;
+        align-items: safe center;
+        text-align: center;
+      }
+
+      /* packages/game-sdk/src/tv/Scoreboard.module.css */
+      ._board_19260b {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--pb-space-2);
+        width: 100%;
+        max-width: 28em;
+      }
+
+      /* 5-6 rows under a heading: body-size rows (~60 px) so six fit in ≈ 400 px. */
+      ._tight_19260b ._row_19260b,
+      ._tight3_19260b ._row_19260b,
+      ._tight4_19260b ._row_19260b {
+        font-size: var(--pb-font-body);
+        --pb-row-py: var(--pb-space-1);
+        padding: var(--pb-row-py) var(--pb-space-3);
+        --pb-chip-size: 1.3em;
+      }
+
+      ._dense_19260b {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-2) var(--pb-space-4);
+        max-width: none;
+      }
+
+      ._dense_19260b ._row_19260b {
+        /* h2 digits still read from the couch (7-12 rows); 12 rows in two columns ≈ 470 px */
+        --pb-row-py: var(--pb-space-1);
+        padding: var(--pb-row-py) var(--pb-space-3);
+        --pb-chip-size: 1.3em;
+      }
+
+      /* 13+ rows: three body-size columns (16 players = 6 rows ≈ 400 px). */
+      ._tight3_19260b {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--pb-space-2) var(--pb-space-4);
+        max-width: none;
+      }
+
+      /* Four columns on request (`columns={4}`): 16 rows in four ≈ 270 px, for a board under a four-row
+   roster. ~420 px cells, so the gaps tighten like the three-column rows. */
+      ._tight4_19260b {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--pb-space-2) var(--pb-space-3);
+        max-width: none;
+      }
+
+      /* Small: body-size rows for a dense board that shares the stage with a tall header. */
+      ._sm_19260b ._row_19260b {
+        font-size: var(--pb-font-body);
+        --pb-row-py: var(--pb-space-1);
+        padding: var(--pb-row-py) var(--pb-space-3);
+        --pb-chip-size: 1.3em;
+      }
+
+      /* Large: the board owns the stage (results, 7–8 players in two columns of ≤ 4). 1.1× h2 with
+   roomier padding — h1 rows spilled their scores out of a 3/5-width column (review-loop #32). */
+      ._lg_19260b ._row_19260b {
+        font-size: calc(var(--pb-font-h2) * 1.1);
+        --pb-row-py: var(--pb-space-3);
+        padding: var(--pb-row-py) var(--pb-space-4);
+        --pb-chip-size: 1.4em;
+      }
+
+      ._lg_19260b ._name_19260b {
+        min-width: 4ch;
+      }
+
+      ._lg_19260b {
+        gap: var(--pb-space-3) var(--pb-space-5);
+      }
+
+      /* Column-major: ranks read down the left column, then the next (--pb-board-rows is set inline). */
+      ._dense_19260b,
+      ._tight3_19260b,
+      ._tight4_19260b {
+        grid-auto-flow: column;
+        grid-template-rows: repeat(var(--pb-board-rows, 1), auto);
+      }
+
+      ._row_19260b {
+        display: grid;
+        grid-template-columns: 1.6em auto 1fr auto auto;
+        align-items: center;
+        gap: var(--pb-space-3);
+        --pb-row-py: var(--pb-space-2);
+        padding: var(--pb-row-py) var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        border: 1px solid var(--pb-border);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-h2);
+        font-weight: 700;
+      }
+
+      ._compact_19260b ._row_19260b {
+        font-size: var(--pb-font-body);
+        --pb-row-py: var(--pb-space-2);
+        padding: var(--pb-row-py) var(--pb-space-3);
+        gap: var(--pb-space-2);
+      }
+
+      /* The phone board is measured in its rows' own text size, so 200 % text (≈ 10 em across a phone)
+   is told apart from an SE at 100 % (≈ 16 em): there the rank column, gaps and padding give their
+   room to the name, so "Maximiliano" fits whole (session-c ec3ea7). */
+      ._compact_19260b {
+        container-type: inline-size;
+        width: 100%;
+        font-size: var(--pb-font-body);
+      }
+
+      @container (max-width: 12em) {
+        ._compact_19260b ._row_19260b {
+          grid-template-columns: 1.05em auto 1fr auto auto;
+          gap: var(--pb-space-1);
+          padding-inline: var(--pb-space-1) var(--pb-space-2);
+        }
+
+        /* a row with no delta or wager mark drops that empty track and its gap: "Maximiliano" beside a
+     4-digit score needed 203 px against 197 (session-c 42aaee) */
+        ._compact_19260b ._row_19260b:not(:has(> ._delta_19260b, > ._mark_19260b)) {
+          grid-template-columns: 1.05em auto 1fr auto;
+        }
+
+        ._compact_19260b ._score_19260b {
+          font-size: 0.88em;
+        }
+      }
+
+      /* On a phone the delta and the score take the row's end: a name wraps to a second line instead of
+   losing its end to an ellipsis ("Tess's bo…", fake-out's SE play-test), at its spaces only; a word
+   wider than the row ends in its own ellipsis ("Maximili…" over "Guadalupe" at 200 %, session-c
+   ec3ea7: never broken mid-word). */
+      ._compact_19260b ._name_19260b {
+        white-space: normal;
+        line-height: 1.15;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      ._compact_19260b ._word_19260b {
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: top;
+      }
+
+      ._top_19260b {
+        background: var(--pb-surface-2);
+        outline: 3px solid var(--pb-accent-2);
+      }
+
+      ._me_19260b {
+        /* --pb-me: a team's card sets its own colour, so "you" never reads as the other team (Sun is the
+     accent pink: tune-in 243619) */
+        box-shadow: inset 4px 0 0 var(--pb-me, var(--pb-accent));
+      }
+
+      /* Phone (compact) only: my row pops in and, when not the winner's outlined row, gets its own
+   accent ring so "that one is me" reads at a glance. The ring is an inset shadow with the left bar
+   folded in: an outline drew outside the row (clipped by the scroller, doubled beside the bar and
+   the neighbours' edges: T-0282). */
+      ._compact_19260b ._me_19260b:not(._top_19260b) {
+        box-shadow:
+          inset 0 0 0 2px var(--pb-me, var(--pb-accent)),
+          inset 4px 0 0 var(--pb-me, var(--pb-accent));
+      }
+
+      ._compact_19260b ._me_19260b {
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      ._rank_19260b {
+        text-align: center;
+        color: var(--pb-text-muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* T-0257: a row's tags on their own line under the name (a hidden role, a power used). */
+      ._tags_19260b {
+        display: block;
+        font-size: 0.72em;
+        color: var(--pb-text-muted);
+        white-space: normal;
+      }
+
+      ._name_19260b {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        /* a centred Stage must not centre the names */
+        text-align: left;
+      }
+
+      /* Names keep a floor so they do not vanish, but never so much that the score column is pushed out
+   of the cell (9ch clipped a 4-digit winner's score in the results' 3/5-width board). */
+      ._dense_19260b ._name_19260b {
+        min-width: 5ch;
+      }
+
+      /* Three columns in a narrow results board leave ~100 px for the name: tighter rank + gaps. */
+      ._tight3_19260b ._row_19260b,
+      ._tight4_19260b ._row_19260b {
+        grid-template-columns: 1.2em auto 1fr auto auto;
+        gap: var(--pb-space-2);
+      }
+
+      ._delta_19260b {
+        color: var(--pb-accent-3);
+        font-size: 0.8em;
+      }
+      ._loss_19260b {
+        /* a touch toward the text colour: the night danger red was 4.4:1 on the row (T-0236) */
+        color: color-mix(in srgb, var(--pb-danger) 88%, var(--pb-text));
+      }
+
+      /* A ✓ in the delta slot (markIds): this row has acted, e._g_19260b. its wager is placed. */
+      ._mark_19260b {
+        color: var(--pb-accent-3);
+        font-weight: 900;
+      }
+
+      ._score_19260b {
+        font-variant-numeric: tabular-nums;
+        color: var(--pb-accent-2);
+        font-weight: 900;
+        /* T-0175: always the last column, so a row with no delta or ✓ ends where the others do (it
+     sat one gap short of the edge) */
+        grid-column: -2;
+      }
+
+      /* Entrance (R-056): rows rise one per --pb-stagger-step in --pb-i order; each delta lands a beat
+   after its row; the leader's trophy pops as its row settles (on `down`, the results screen, that
+   is first: T-0230). Tokens only, so reduced motion = instant. */
+      ._staggered_19260b {
+        --pb-stagger-step: var(--pb-motion-fast);
+      }
+
+      ._staggered_19260b._dense_19260b,
+      ._staggered_19260b._tight3_19260b,
+      ._staggered_19260b._tight4_19260b,
+      ._staggered_19260b._down_19260b {
+        --pb-stagger-step: calc(var(--pb-motion-fast) / 2);
+      }
+
+      ._staggered_19260b ._row_19260b {
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+        animation-delay: calc(var(--pb-i, 0) * var(--pb-stagger-step));
+      }
+
+      ._staggered_19260b ._delta_19260b {
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+        animation-delay: calc(var(--pb-i, 0) * var(--pb-stagger-step) + var(--pb-motion-base));
+      }
+
+      ._staggered_19260b ._top_19260b ._rank_19260b {
+        display: inline-block;
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+        animation-delay: calc(
+          var(--pb-i, 0) * var(--pb-stagger-step) + var(--pb-motion-base) + var(--pb-motion-slow)
+        );
+      }
+
+      /* On `down` the winner lands first (T-0230), so its trophy pops as that row settles, not a slow
+   beat later (the review: 0.6 s of a winner row without its trophy). */
+      ._staggered_19260b._down_19260b ._top_19260b ._rank_19260b {
+        animation-delay: calc(var(--pb-i, 0) * var(--pb-stagger-step) + var(--pb-motion-base));
+      }
+
+      /* ── I-027 A, T-0280: the climb (stagger="climb"). Rows fade in where they stood last round —
+   --pb-from rows away (a row's own height plus the board gap per row) — the deltas land a beat
+   later, the totals count from --pb-motion-base, and each mover slides to its new place over
+   --pb-motion-slow, starting at its own --pb-start (Scoreboard._tsx_19260b climbPlan: a fixed stagger, top
+   place first). One move per row: translateY only, no scale, no fade, no lift shadow; the z-order
+   is fixed for the whole climb (climbers over, holders mid, fallers under, set inline), so a row
+   never flips in front of another mid-slide; a climber also shrinks toward its right edge while
+   it passes, so the row it crosses keeps its rank, face and name in view (review of T-0280: with
+   the climbers under, or unshrunk, whole rows vanished mid-slide). A mover's delta and glow land with its own row
+   (--pb-land); a holder's delta lands at --pb-motion-base. Reduced motion drops every wait. */
+      ._climb_19260b ._row_19260b {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          _pb-climb_19260b var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both;
+      }
+      ._climb_19260b ._delta_19260b {
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease)
+          var(--pb-delta-at, var(--pb-motion-base)) both; /* prettier-ignore */
+      }
+      /* A lane cannot fix a full overlap (two neighbours swapping cross exactly), so the climber shrinks
+   toward its right edge instead: it covers only the passed row's score end, baring its rank, face
+   and name. It stays over; the right edge never moves. */
+      ._climb_19260b ._rose_19260b {
+        --pb-lift: 0.55;
+        transform-origin: right center;
+      }
+      ._columns_19260b._climb_19260b ._rose_19260b {
+        --pb-lift: 0.5;
+      }
+      /* T-0301 (F18): a climber shrunk toward its right edge still covers the passed row's score end,
+   and mid-slide it cuts that number through the glyphs. While the climbers are in their lane the
+   fallers' totals sit back (a dim number, not half of one) and come home once the board settles. */
+      ._climb_19260b ._fell_19260b ._score_19260b {
+        animation: _pb-score-dim_19260b var(--pb-lane-run, 0ms) ease-in-out 1100ms both;
+      }
+      @keyframes _pb-score-dim_19260b {
+        from,
+        to {
+          opacity: 1;
+        }
+        12%,
+        84% {
+          opacity: 0.12;
+        }
+      }
+      @keyframes _pb-lane_19260b {
+        from,
+        to {
+          scale: 1;
+        }
+        /* the run is the whole climb / 0.8 (Scoreboard._tsx_19260b), so the last row lands at 80 % and the
+     shrink is held until 84 %: it only ramps out on a settled board */
+        12%,
+        84% {
+          scale: var(--pb-lift, 1);
+        }
+      }
+      @keyframes _pb-climb_19260b {
+        from {
+          transform: translateY(calc(var(--pb-from, 0) * (100% + var(--pb-space-2))));
+        }
+        to {
+          transform: none;
+        }
+      }
+
+      /* ── I-027 B: movers glow once their row lands: a climbed row's outline is green and fades over
+   1 s, a fallen row's a dim red; a row that held its place gets nothing. The glow fills forwards
+   only (T-0280: with `both` it painted its first colour from 0 s, before the row had moved). The
+   rank digit and the slide itself carry the story — the colour is never alone. */
+      ._climb_19260b ._rose_19260b,
+      ._climb_19260b ._fell_19260b {
+        outline: 3px solid transparent;
+        outline-offset: -1px;
+      }
+      ._climb_19260b ._rose_19260b {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          _pb-climb_19260b var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+          _pb-glow-up_19260b var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards,
+          _pb-lane_19260b var(--pb-lane-run, var(--pb-motion-slow)) ease-in-out 1100ms both;
+      }
+      ._climb_19260b ._fell_19260b {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          _pb-climb_19260b var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+          _pb-glow-down_19260b var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards;
+      }
+      /* The old rank gives way to the new one as its row lands. */
+      ._swap_19260b {
+        display: inline-block;
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+      /* T-0191: a row that changes column does not fly across the board. T-0262: it stays at its old
+   place (--pb-col-from columns, --pb-from rows away; a column is its own width plus the column gap)
+   until the slide, fades out there as the others move, and fades in at its new place: the board
+   never shows a hole. `filter: opacity` keeps the mount fade (`opacity`) its own. */
+      ._board_19260b {
+        --pb-col-gap: var(--pb-space-2);
+      }
+      ._dense_19260b,
+      ._tight3_19260b {
+        --pb-col-gap: var(--pb-space-4);
+      }
+      ._tight4_19260b {
+        --pb-col-gap: var(--pb-space-3);
+      }
+      ._lg_19260b {
+        --pb-col-gap: var(--pb-space-5);
+      }
+      ._climb_19260b ._row_19260b._hop_19260b {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          _pb-hop_19260b var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both;
+      }
+      ._climb_19260b ._row_19260b._hop_19260b._rose_19260b {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          _pb-hop_19260b var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+          _pb-glow-up_19260b var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards;
+      }
+      ._climb_19260b ._row_19260b._hop_19260b._fell_19260b {
+        animation:
+          pb-fade-in var(--pb-motion-base) var(--pb-ease) both,
+          _pb-hop_19260b var(--pb-motion-slow) var(--pb-ease) var(--pb-start, 1200ms) both,
+          _pb-glow-down_19260b var(--pb-motion-pulse) ease-out var(--pb-land, 1800ms) forwards;
+      }
+      @keyframes _pb-hop_19260b {
+        from,
+        45% {
+          transform: translate(
+            calc(var(--pb-col-from, 0) * (100% + var(--pb-col-gap))),
+            calc(var(--pb-from, 0) * (100% + var(--pb-space-2)))
+          );
+        }
+        from,
+        25% {
+          filter: opacity(1);
+        }
+        45%,
+        46% {
+          filter: opacity(0);
+        }
+        46%,
+        to {
+          transform: none;
+        }
+        66%,
+        to {
+          filter: opacity(1);
+        }
+      }
+      @keyframes _pb-glow-up_19260b {
+        from {
+          outline-color: var(--pb-accent-3);
+        }
+        to {
+          outline-color: transparent;
+        }
+      }
+      @keyframes _pb-glow-down_19260b {
+        from {
+          outline-color: color-mix(in srgb, var(--pb-danger) 60%, transparent);
+        }
+        to {
+          outline-color: transparent;
+        }
+      }
+
+      /* The waits are literal (1200 / 1800 ms), so they collapse here — after the ._rose_19260b / ._fell_19260b rules,
+   which restate the animation list (pass 865: movers still sat 1.2 s in the old order). */
+      @media (prefers-reduced-motion: reduce) {
+        ._climb_19260b {
+          --pb-lane-run: 0ms !important; /* no lift held while the rows are already in place */
+        }
+        ._climb_19260b ._row_19260b,
+        ._climb_19260b ._rose_19260b,
+        ._climb_19260b ._fell_19260b,
+        ._climb_19260b ._row_19260b._hop_19260b,
+        ._climb_19260b ._row_19260b._hop_19260b._rose_19260b,
+        ._climb_19260b ._row_19260b._hop_19260b._fell_19260b,
+        ._climb_19260b ._delta_19260b {
+          animation-delay: 0ms;
+        }
+      }
+      :root[data-motion='off'] ._climb_19260b {
+        --pb-lane-run: 0ms !important;
+      }
+      :root[data-motion='off'] ._climb_19260b ._row_19260b,
+      :root[data-motion='off'] ._climb_19260b ._rose_19260b,
+      :root[data-motion='off'] ._climb_19260b ._fell_19260b,
+      :root[data-motion='off'] ._climb_19260b ._row_19260b._hop_19260b,
+      :root[data-motion='off'] ._climb_19260b ._row_19260b._hop_19260b._rose_19260b,
+      :root[data-motion='off'] ._climb_19260b ._row_19260b._hop_19260b._fell_19260b,
+      :root[data-motion='off'] ._climb_19260b ._delta_19260b {
+        animation-delay: 0ms;
+      }
+
+      /* ── I-146 B: the band a split column covers, over its first row. */
+      ._band_19260b {
+        position: absolute;
+        top: -1.35em;
+        left: var(--pb-space-3);
+        font-size: 0.62em;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: var(--pb-muted, rgba(255, 255, 255, 0.55));
+      }
+      ._board_19260b ._row_19260b {
+        position: relative;
+      }
+
+      /* ── I-146 C, T-0181, T-0280: a tie is a tinted chip inside each tied row's own rank cell — two
+   rows sharing a number. It replaced a pill that ran down through the row gaps (and a copy of the
+   winner's ring above it): that slab painted past the rows and, mid-climb, sat where the rows no
+   longer were. Now nothing is drawn outside a row. The winners' own tie is the trophies: no chip on
+   a 🏆 row. */
+      ._tied_19260b ._rank_19260b {
+        display: grid;
+        place-items: center;
+        align-self: stretch;
+        border-radius: 0.4em;
+        color: var(--pb-text);
+        background: color-mix(in srgb, var(--pb-accent) 34%, var(--pb-surface));
+      }
+
+      /* No ranks (a team's card, ADR-052): the rows drop the rank column along with its cell, so the
+   name takes that room (~110 px at 200 % text; reviewer 69417f). After the tiers so it wins. */
+      ._noRanks_19260b ._row_19260b,
+      ._noRanks_19260b._tight3_19260b ._row_19260b,
+      ._noRanks_19260b._tight4_19260b ._row_19260b {
+        grid-template-columns: auto 1fr auto auto;
+      }
+
+      @container (max-width: 12em) {
+        ._compact_19260b._noRanks_19260b ._row_19260b {
+          grid-template-columns: auto 1fr auto auto;
+        }
+
+        ._compact_19260b._noRanks_19260b ._row_19260b:not(:has(> ._delta_19260b, > ._mark_19260b)) {
+          grid-template-columns: auto 1fr auto;
+        }
+      }
+
+      /* A narrow phone (SE at 200 %) stacks the delta over its total: side by side with a 1-space gap
+   "−25 75" read as "−2575" (T-0043 F2), and the stack gives the name the row's width back. */
+      @container (max-width: 12em) {
+        ._compact_19260b ._row_19260b:has(> ._delta_19260b) {
+          grid-template-columns: 1.05em auto 1fr auto;
+          row-gap: 0;
+        }
+
+        ._compact_19260b._noRanks_19260b ._row_19260b:has(> ._delta_19260b) {
+          grid-template-columns: auto 1fr auto;
+        }
+
+        ._compact_19260b
+          ._row_19260b:has(> ._delta_19260b)
+          > :not(._delta_19260b, ._score_19260b, ._band_19260b) {
+          grid-row: 1 / span 2;
+        }
+
+        ._compact_19260b ._row_19260b > ._delta_19260b {
+          grid-column: -2;
+          grid-row: 1;
+          justify-self: end;
+          align-self: end;
+          line-height: 1.1;
+        }
+
+        ._compact_19260b ._row_19260b:has(> ._delta_19260b) > ._score_19260b {
+          grid-column: -2;
+          grid-row: 2;
+          justify-self: end;
+          align-self: start;
+          line-height: 1.1;
+        }
+      }
+
+      /* packages/game-sdk/src/tv/BigText.module.css */
+      ._big_12fdbe {
+        font-weight: 800;
+        line-height: 1.15;
+        text-wrap: balance;
+        overflow-wrap: anywhere;
+      }
+
+      ._display_12fdbe {
+        font-size: var(--pb-font-display);
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      ._h1_12fdbe {
+        font-size: var(--pb-font-h1);
+      }
+
+      ._h2_12fdbe {
+        font-size: var(--pb-font-h2);
+      }
+
+      ._accent_12fdbe {
+        color: var(--pb-accent-2);
+      }
+
+      ._muted_12fdbe {
+        color: var(--pb-text-muted);
+      }
+
+      ._default_12fdbe {
+        color: var(--pb-text);
+      }
+
+      /* packages/game-sdk/src/ui/Avatar.module.css */
+      /* The face's `size` as CSS, at no specificity: a caller's class or `._x_8c3e65 svg` rule still sizes it,
+   as it did over the old width/height attributes, which can't hold a CSS var (WebKit logged an
+   error for every face, T-0174). */
+      :where(._avatar_8c3e65) {
+        width: var(--pb-avatar-size);
+        height: var(--pb-avatar-size);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+        font-size: var(--pb-font-body);
+        line-height: 1.4;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h2 {
+        font-size: var(--pb-font-h1);
+        line-height: 1.2;
+        font-weight: 900;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+        color: inherit;
+      }
+      .evidence-shell {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template-rows: 84px minmax(0, 1fr) 48px;
+      }
+      [data-surface='tv'] .evidence-shell {
+        grid-template-rows: 100px minmax(0, 1fr) 80px;
+      }
+      .evidence-header,
+      .evidence-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--pb-space-4);
+        background: var(--pb-surface);
+        gap: var(--pb-space-3);
+      }
+      .evidence-footer {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+      .evidence-main {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        min-width: 0;
+        overflow: hidden;
+        --pb-stage-top: var(--pb-space-5);
+      }
+      .evidence-code {
+        font-weight: 900;
+        color: var(--pb-accent-2);
+      }
+      .pb-visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      :root[data-motion='off'] *,
+      :root[data-motion='off'] *::before,
+      :root[data-motion='off'] *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="evidence-shell">
+      <header class="evidence-header">
+        <b>PartyBox</b><span class="evidence-code">KAHOOT</span>
+      </header>
+      <main class="evidence-main" aria-label="Game stage">
+        <div class="_stage_262f13">
+          <p class="_big_12fdbe _h1_12fdbe _accent_12fdbe">That&#x27;s the round!</p>
+          <ol
+            class="_board_19260b _tight3_19260b _staggered_19260b"
+            style="--pb-board-rows: 6"
+            aria-label="scoreboard"
+          >
+            <li class="_row_19260b _top_19260b" data-rank="1" style="--pb-i: 15">
+              <span class="_band_19260b" aria-hidden="true">1–5</span
+              ><span class="_rank_19260b" aria-label="rank 1">🏆</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">01</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">11770</span>
+            </li>
+            <li class="_row_19260b" data-rank="2" style="--pb-i: 14">
+              <span class="_rank_19260b" aria-label="rank 2">2</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">03</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">11654</span>
+            </li>
+            <li class="_row_19260b" data-rank="3" style="--pb-i: 13">
+              <span class="_rank_19260b" aria-label="rank 3">3</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">02</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">8776</span>
+            </li>
+            <li class="_row_19260b" data-rank="4" style="--pb-i: 12">
+              <span class="_rank_19260b" aria-label="rank 4">4</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">04</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">8737</span>
+            </li>
+            <li class="_row_19260b _tied_19260b" data-rank="5" style="--pb-i: 11">
+              <span class="_rank_19260b" aria-label="rank 5, tied">5</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">10</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">0</span>
+            </li>
+            <li class="_row_19260b _tied_19260b" data-rank="5" style="--pb-i: 10">
+              <span class="_rank_19260b" aria-label="rank 5, tied">5</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">11</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">0</span>
+            </li>
+            <li class="_row_19260b _tied_19260b" data-rank="5" style="--pb-i: 9">
+              <span class="_band_19260b" aria-hidden="true">5</span
+              ><span class="_rank_19260b" aria-label="rank 5, tied">5</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">12</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">0</span>
+            </li>
+            <li class="_row_19260b _tied_19260b" data-rank="5" style="--pb-i: 8">
+              <span class="_rank_19260b" aria-label="rank 5, tied">5</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">13</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">0</span>
+            </li>
+            <li class="_row_19260b _tied_19260b" data-rank="5" style="--pb-i: 7">
+              <span class="_rank_19260b" aria-label="rank 5, tied">5</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">14</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">0</span>
+            </li>
+            <li class="_row_19260b _tied_19260b" data-rank="5" style="--pb-i: 6">
+              <span class="_rank_19260b" aria-label="rank 5, tied">5</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">15</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">0</span>
+            </li>
+            <li class="_row_19260b _tied_19260b" data-rank="5" style="--pb-i: 5">
+              <span class="_rank_19260b" aria-label="rank 5, tied">5</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">16</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">0</span>
+            </li>
+            <li class="_row_19260b _tied_19260b" data-rank="5" style="--pb-i: 4">
+              <span class="_rank_19260b" aria-label="rank 5, tied">5</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">05</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">0</span>
+            </li>
+            <li class="_row_19260b _tied_19260b" data-rank="5" style="--pb-i: 3">
+              <span class="_band_19260b" aria-hidden="true">5</span
+              ><span class="_rank_19260b" aria-label="rank 5, tied">5</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">06</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">0</span>
+            </li>
+            <li class="_row_19260b _tied_19260b" data-rank="5" style="--pb-i: 2">
+              <span class="_rank_19260b" aria-label="rank 5, tied">5</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">07</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">0</span>
+            </li>
+            <li class="_row_19260b _tied_19260b" data-rank="5" style="--pb-i: 1">
+              <span class="_rank_19260b" aria-label="rank 5, tied">5</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">08</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">0</span>
+            </li>
+            <li class="_row_19260b _tied_19260b" data-rank="5" style="--pb-i: 0">
+              <span class="_rank_19260b" aria-label="rank 5, tied">5</span
+              ><svg
+                viewBox="0 0 64 64"
+                class="_avatar_8c3e65"
+                role="img"
+                aria-label="avatar fox"
+                style="
+                  --pb-avatar-size: var(--pb-chip-size);
+                  color: var(--pb-player-1);
+                  opacity: 1;
+                  flex-shrink: 0;
+                  --pb-blink-delay: 5.3s;
+                  --pb-blink-name: pb-blink-twice;
+                "
+              >
+                <circle cx="32" cy="32" r="31" fill="currentColor"></circle>
+                <path
+                  d="M14 30 L18 12 L30 24 Z M50 30 L46 12 L34 24 Z"
+                  fill="#1a0b12"
+                  opacity="0.35"
+                ></path>
+                <g class="pb-eyes" style="transform-origin: 32px 32px">
+                  <circle cx="23" cy="32" r="3.2" fill="#1a0b12"></circle>
+                  <circle cx="41" cy="32" r="3.2" fill="#1a0b12"></circle>
+                </g>
+                <ellipse cx="32" cy="42" rx="4" ry="3" fill="#1a0b12"></ellipse></svg
+              ><span class="_name_19260b"
+                ><span class="_word_19260b">Guest</span> <span class="_word_19260b">09</span>
+                <span class="_word_19260b">Aster</span></span
+              ><span class="_score_19260b">0</span>
+            </li>
+          </ol>
+        </div>
+      </main>
+      <footer class="evidence-footer"><span>Kahoot! · tv</span><span>1920 × 1080</span></footer>
+    </div>
+  </body>
+</html>

@@ -250,6 +250,33 @@ describe.each(['classic', 'wager'] as const)('%s shared question stages', (mode)
 });
 
 describe('inherited final-wager registration', () => {
+  it('retains every full forty-character final name in accessible labels and titles', () => {
+    const players = seats(16).map((player, index) => ({
+      ...player,
+      name: `${String(index + 1).padStart(2, '0')}${'W'.repeat(38)}`,
+    }));
+    const initial = game.init({
+      players,
+      settings: { quizMode: 'wager', category: 'all', questions: 5, answerSeconds: 10 },
+      seed: 42,
+      now: T0,
+      presence: { mode: 'together', phoneOnly: true },
+    });
+    const final = visitPhases(initial).find(
+      (state) => state.phase.id === 'reveal' && tv(state).round?.final,
+    );
+    if (!final) throw new Error('Long-name final wager match missing');
+    for (const id of ['seat-1', 'audience']) {
+      const html = paintPhone(final, id, true, final.phase.deadline! - 1);
+      expect(html.match(/<li\b/g)).toHaveLength(16);
+      expect(buttons(html)).toHaveLength(0);
+      for (const player of players) {
+        expect(html).toContain(`title="${player.name}"`);
+        expect(html).toContain(`aria-label="${player.name} · `);
+      }
+    }
+  });
+
   it.each([8, 16])(
     'separates the public answer chart and standings at %i seats without answer pads',
     (count) => {

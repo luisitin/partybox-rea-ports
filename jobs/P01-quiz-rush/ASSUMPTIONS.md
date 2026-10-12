@@ -19,8 +19,9 @@
 - The PartyBox shell handles codes, joining, lobby names and starting. The plugin has an intro
   beat after the shell start. It automatically advances and also preserves VIP Next/skip controls;
   reading floors and reveal/standings/podium durations are tuning choices, not original measurements.
-- Preserve wager default and absent-mode legacy behavior, 1–16 seats, EN 6,153/ES 5,561 libraries,
-  custom/preset bets, final wager scoring, awards/recap and the 100-second wager minigame. Classic is additive.
+- The implemented upgrade preserves wager default and absent-mode legacy behavior, 1–16 seats,
+  EN 6,153/ES 5,561 libraries, custom/preset bets, final wager scoring, awards/recap and the
+  100-second wager minigame. Classic is implemented as an additive mode, not a second registration.
 - Both modes default to a **15-second requested answer minimum**, 5–30 step 5, extended to their
   visible-text reading floor. Wager bets have a 15-second minimum plus their reading floor. Early
   complete input holds the words until readable; speed arithmetic uses the original fixed answer end.
@@ -48,6 +49,13 @@
 - Core source/provenance is pinned in core-base. Inventory hashes describe the prepared input
   snapshot, not the final modified game. Inherited file art and licensed file music are excluded;
   inline authored visuals and SDK synthesized beds are retained. No new dependency/runtime API is needed.
+- The manifest estimate is now 26 minutes, with an adjustable prediction based on question and
+  player counts. This includes reading-safe holds; it is not a measured original Kahoot duration.
+- Initial static captures showed black labels on wager buttons because the helper shell omitted
+  the pinned core `global.css` rule making button/input colour inherit. The helper now matches that
+  rule. This was a capture artifact, not a newly identified wager colour defect in the core host.
 - Old standalone 116-test/7,000-match/screens/mutation/loop evidence is historical. Fresh upgraded
-  verification and a new three-no-gain loop are required before READY/DONE. The public kit lacks core
-  gen-registry/verify commands; its discovery, typecheck, format and contract checks validate this module.
+  verification, evidence review, green CI and a new three-no-gain loop remain final gates before
+  READY/DONE. The additive implementation is complete; pending checks do not imply unfinished modes.
+  The public kit lacks core gen-registry/verify commands; its discovery, typecheck, format and
+  contract checks validate this module.

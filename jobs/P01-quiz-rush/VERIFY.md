@@ -1,5 +1,68 @@
 # P01 verification
 
+## Current two-mode upgrade (2026-10-12, r1-local)
+
+Current implementation is `games/kahoot`, derived from the pinned Lightning Round source in
+`core-base/SOURCE.json`. The historical standalone checks below do not verify this implementation.
+All local game executions use one thread worker; no repository-wide or whole-suite browser run.
+
+| Check                                | Exact command                                                                                                                                                                                                                                                             | Current result                                                                                                                                                                      |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Install                              | `corepack enable`; `pnpm.cmd install --frozen-lockfile`                                                                                                                                                                                                                   | PASS; no added dependencies                                                                                                                                                         |
+| Types                                | `pnpm.cmd typecheck`                                                                                                                                                                                                                                                      | PASS on the latest implementation                                                                                                                                                   |
+| Focused screens/minigame/reload      | `$env:PB_WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/kahoot/__tests__/render-upgrade.test.tsx games/kahoot/__tests__/minigame-upgrade.test.ts games/kahoot/__tests__/stage-screens.test.tsx games/kahoot/__tests__/final-reload.test.tsx --maxWorkers=1 --pool=threads` | Latest PASS 33/33; 4 files; 14.58 s; reducer-backed fixtures and legal long-name cases included                                                                                     |
+| Published SDK contract               | `pnpm.cmd vitest run games/kahoot/__tests__/sdk.test.ts --maxWorkers=1 --pool=threads`                                                                                                                                                                                    | PASS 20/20; 25.27 s; exit 0; unmodified assertions                                                                                                                                  |
+| Mutation check                       | `node jobs/P01-quiz-rush/mutate-upgrade.mjs`                                                                                                                                                                                                                              | PASS 20/20 behavioral kills; 72 baseline tests; zero invalid mutations; all 6 tested source hashes restored and rechecked                                                           |
+| Browser fit                          | `node jobs/P01-quiz-rush/capture.mjs`                                                                                                                                                                                                                                     | Latest PASS 78/78 at 1920×1080 and 390×844; zero overflow, clipping, scrollers or missing CSS; browser PID 112464 closed in finally; temporary profile cleanup deferred after EPERM |
+| Full game/SDK/properties/32,000 bots | `$env:PB_WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/kahoot --maxWorkers=1 --pool=threads --reporter=default --reporter=json --outputFile=jobs/P01-quiz-rush/upgrade-tests.json`                                                                                        | PASS 224/224; 25 files; 481.32 s; exit 0; all SDK,32,000 matches and property checks included                                                                                       |
+| Format/CI/hashes                     | `pnpm.cmd format`; job P01 CI; `node jobs/P01-quiz-rush/hash-media.mjs`                                                                                                                                                                                                   | Format PASS;194 files/7,373,326bytes hashed; CI pending                                                                                                                             |
+
+The initial full run passed 196/227 tests and exposed an outdated 8-minute duration estimate,
+stale fixtures/SSR clock assumptions, remote-phone lock text pointing at a TV, and SDK minigame
+pool tests that require unrelated games. Those results are not counted as green. The estimate is
+now 26 minutes. The unmodified published SDK contract remains imported with discovery restricted
+to Kahoot!; dedicated game tests exercise the real SDK minigame wrapper for FFA/duel and its 100-second
+play budget. Only unrelated pool-availability assertions are omitted. Bounded reducer loops make
+phase-exit mutants fail behaviorally instead of hanging.
+
+The first upgrade capture failed five inherited wager phone-only reveals. Separate chart and
+standings beats plus compact final rows corrected them; final originals were checked by hand.
+Black wager button text was an incomplete capture-shell reset, confirmed against pinned core
+`packages/client/src/styles/global.css`; the shell now inherits the same token text colour.
+An additional final-reveal case now covers 16 legal 40-character player names and five-digit
+totals in tests and phone-only/remote/spectator captures. The latest four-file focused run passed 33/33
+in 14.58 s, and the latest 78-frame capture is clean. Its owned browser PID 112464 closed in
+`finally`; temporary profile cleanup remains deferred after Windows returned EPERM.
+
+All 20 planted defects were caught: inflated base points; inflated speed bonus; inflated streak
+cap; reduced streak growth; wrong-answer streak retention; double streak increments; wrong final
+wager wins; points for wrong answers; collection completes on first pick; duplicate replacement;
+wrong question id; wrong opening stamp; disconnected answer; deadline answer; early answer;
+question timer cannot exit; reveal timer cannot exit; removed reading hold; asking-phase key leak;
+all podium tiers unveiled immediately. `media/mutation-upgrade.json` records the failing behavioral
+assertions and source hashes. `mutate.mjs` below belongs to the superseded standalone port.
+
+The follow-up `pnpm.cmd vitest run games/kahoot/__tests__/sdk.test.ts --maxWorkers=1 --pool=threads`
+passed all 20 unmodified SDK contract checks (25.27 s, exit 0). The sole failure in the prior
+221/222 full run compared the canonical wager done fixture with the classic podium fixture.
+The documented `lastScores` hint now selects `wager-final-reveal`, preserving same-match continuity
+with canonical default-wager `done.json`; the classic podium remains a separate fixture. Added
+continuation regressions cover both classic and wager matches. No contract assertion was skipped.
+
+The complete simulation run passed 32,000/32,000 default-setting matches: 1,000 seeds at every count
+1–16 in each mode, rotating easy/normal/sharp, the three classic packs, Spanish wager games and
+phone-only rooms. The longest match was 1,566.388 s, below 26 × 120 = 3,120 s. Reports are
+`media/sim-{classic,wager}-{1..16}.json`. Median round lengths (question plus automatic reveal) at
+2/4/8/16 players: classic 52.171/56.933/66.024/84.205 s; wager 67.590/77.114/97.027/129.494 s.
+Properties passed seeds 1, 2, 3 plus 1,000 sampled seeds per mode: 96,436 events and 1,205,348 views.
+`media/property-upgrade.json` records seeds and invariants. The final full rerun passes 224/224
+in 25 files (481.32 s, exit 0). `media/verification-upgrade.json` records the result and test hashes.
+Repository formatting passes. All 194 media files have fresh SHA256 sums and total 7,373,326 bytes,
+below 10 MB. The smallest captured touch target is 45.27×46.19 px; TV timers are 128 px.
+Primary TV body text uses the 36 px or larger tokens; smaller metadata uses caption tokens.
+Current runtime/capture source hashes and all six mutation source hashes match the final bytes.
+CI and the new KEEP GOING completion gate remain pending; no upgraded DONE claim is made.
+
 ## Owner-required upgrade baseline (2026-10-12)
 
 The results below this section describe the superseded standalone Quiz Rush at 1c8d264. They do not verify the replacement Lightning Round upgrade in games/kahoot. Provenance is pinned in core-base/SOURCE.json and CHANGE_NOTES.md. No new install/dependency was needed.

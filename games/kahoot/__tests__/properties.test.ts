@@ -10,10 +10,15 @@ import { game } from '../server/index';
 import type { Input } from '../server/types';
 import { T0 } from './run';
 
+// Remember only graphs this helper has already frozen completely. Reducer snapshots share
+// untouched subtrees; revisiting those millions of times adds cost without more mutation coverage.
+const frozenGraphs = new WeakSet<object>();
 function freeze<T>(value: T): T {
   if (value && typeof value === 'object') {
+    if (frozenGraphs.has(value)) return value;
     Object.freeze(value);
     for (const child of Object.values(value)) freeze(child);
+    frozenGraphs.add(value);
   }
   return value;
 }

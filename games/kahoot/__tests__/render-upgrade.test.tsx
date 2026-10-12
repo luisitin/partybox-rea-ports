@@ -72,9 +72,14 @@ function start(mode: 'classic' | 'wager', count = 16, long = false): State {
   });
 }
 
-function played(mode: 'classic' | 'wager', tied = false): State[] {
+function played(
+  mode: 'classic' | 'wager',
+  tied = false,
+  initial = start(mode),
+  allIn = false,
+): State[] {
   const states: State[] = [];
-  let state = start(mode);
+  let state = initial;
   for (let step = 0; step < 80; step++) {
     states.push(state);
     if (state.phase.id === 'done') return states;
@@ -102,7 +107,7 @@ function played(mode: 'classic' | 'wager', tied = false): State[] {
         state = input(
           state,
           player.id,
-          { type: 'wager', percent: index % 2 ? 50 : 100 },
+          { type: 'wager', percent: allIn ? 100 : index % 2 ? 50 : 100 },
           at + 300 + index * 50,
         );
     }
@@ -336,12 +341,50 @@ it('renders shipped longest classic and bilingual wager text with sixteen long n
   ]);
 });
 
+it('renders legal forty-character final names with five-digit bets and totals from actual play', () => {
+  const players = seats(16).map((player, index) => ({
+    ...player,
+    name: `${String(index + 1).padStart(2, '0')}${'W'.repeat(38)}`,
+  }));
+  const initial = game.init({
+    players,
+    settings: { quizMode: 'wager', category: 'all', questions: 20, answerSeconds: 10 },
+    seed: 42,
+    now: T0,
+    presence: { mode: 'together', phoneOnly: false },
+  });
+  const match = played('wager', true, initial, true);
+  const final = first(match, 'reveal', true);
+  const rows = tv(final).rows;
+  expect(rows).toHaveLength(16);
+  for (const row of rows ?? []) {
+    expect(row.name).toHaveLength(40);
+    expect(row.wagerAmount).toBeGreaterThanOrEqual(10000);
+    expect(row.wagerAmount).toBeLessThan(100000);
+    expect(row.delta).toBe(row.wagerAmount);
+    expect(row.score).toBeGreaterThanOrEqual(10000);
+    expect(row.score).toBeLessThan(100000);
+  }
+  const name = 'wager-final-wide-names-five-digits';
+  paint(name, final, atEnd(final), ['phone-only', 'spectator', 'remote']);
+  for (const frame of frames.filter((frame) => frame.name.startsWith(`upgrade-${name}-`))) {
+    expect(frame.html.match(/<li\b/g)).toHaveLength(16);
+    expect(frame.html).not.toContain('role="radio"');
+    for (const player of players) {
+      expect(frame.html).toContain(`title="${player.name}"`);
+      expect(frame.html).toContain(`aria-label="${player.name} · `);
+    }
+  }
+  fixtures['wager-final-wide-names-five-digits'] = final;
+});
+
 function captureFrames(): UpgradeFrame[] {
   return frames.filter((frame) => {
     const name = frame.name.slice('upgrade-'.length, -(frame.surface.length + 1));
     const basic =
       frame.surface === 'tv' || frame.surface === 'phone-tv' || frame.surface === 'phone-only';
     const stage = frame.surface === 'tv' || frame.surface === 'phone-only';
+    if (name === 'wager-final-wide-names-five-digits') return true;
     if (/^(?:classic|wager)-(?:intro|question|reveal-chart|done)$/.test(name))
       return (
         basic ||
@@ -375,7 +418,9 @@ it('writes current HTML and manifest only when the root requests fresh evidence'
   );
   const captures = captureFrames();
   expect(captures.length).toBeGreaterThanOrEqual(65);
-  expect(captures.length).toBeLessThanOrEqual(75);
+  expect(captures.length).toBeLessThanOrEqual(78);
+  expect(timer(fixtures['classic-podium-1']!)).toEqual(fixtures['classic-done']);
+  expect(timer(fixtures['wager-final-reveal']!)).toEqual(fixtures['wager-done']);
   if (process.env.PB_WRITE_EVIDENCE === '1') writeUpgradeEvidence(captures, fixtures);
   else if (existsSync(resolve(MEDIA, 'evidence-source.json'))) {
     const source = JSON.parse(readFileSync(resolve(MEDIA, 'evidence-source.json'), 'utf8')) as {

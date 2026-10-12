@@ -78,7 +78,9 @@
   line-height: 1.15;
 }
 .results b {
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .results span {
   font-variant-numeric: tabular-nums;

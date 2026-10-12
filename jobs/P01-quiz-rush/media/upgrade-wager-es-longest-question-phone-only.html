@@ -1,0 +1,1431 @@
+<!doctype html>
+<html lang="en" data-surface="phone" data-motion="off">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Kahoot! upgrade · upgrade-wager-es-longest-question-phone-only</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>; 
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+
+      /* games/kahoot/client/Controller.module.css */
+      /* Phone-only pieces for Lightning Round. Tokens only (docs/DESIGN_SYSTEM._md_57e7b9). */
+      /* ── I-790 C: the reveal band under the question — verdict, "+n this round", "n total" on one
+   line (it wraps at 200 % text), tinted by the verdict; it rises a beat after the tiles' marks
+   land (tokens: 0 ms under reduced motion). Never colour alone: the verdict is a word. */
+      ._band_57e7b9 {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: var(--pb-space-2);
+        row-gap: var(--pb-space-1);
+        padding: var(--pb-space-2) var(--pb-space-3);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        font-variant-numeric: tabular-nums;
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) var(--pb-motion-fast) both;
+      }
+
+      /* The final reveal's band before its beat: laid out, unseen (Controller._tsx_57e7b9) */
+      ._bandHeld_57e7b9 {
+        visibility: hidden;
+      }
+
+      ._band_57e7b9._good_57e7b9 {
+        background: color-mix(in oklab, var(--pb-accent-3) 18%, var(--pb-surface));
+      }
+
+      ._band_57e7b9._bad_57e7b9 {
+        background: color-mix(in oklab, var(--pb-danger) 18%, var(--pb-surface));
+      }
+
+      ._bandVerdict_57e7b9 {
+        font-size: var(--pb-font-body);
+        font-weight: 800;
+      }
+
+      ._bandStreak_57e7b9 {
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+      }
+
+      ._bandDelta_57e7b9 {
+        font-size: var(--pb-font-caption);
+        font-weight: 800;
+      }
+
+      ._good_57e7b9 ._bandDelta_57e7b9 {
+        color: var(--pb-accent-3);
+      }
+
+      ._bad_57e7b9 ._bandDelta_57e7b9 {
+        color: color-mix(in srgb, var(--pb-danger) 55%, var(--pb-text));
+      }
+
+      ._bandTotal_57e7b9 {
+        margin-left: auto;
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        color: var(--pb-text-muted);
+      }
+
+      ._footnote_57e7b9 {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+        text-align: center;
+      }
+
+      /* Wager screen (R-064): the rule under the prompt, the amount-led option rows, the stake card. */
+      ._rule_57e7b9 {
+        display: block;
+        margin-top: var(--pb-space-2);
+        font-size: var(--pb-font-caption);
+        font-weight: 600;
+        color: var(--pb-text-muted);
+      }
+
+      ._wagerRow_57e7b9 {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: var(--pb-space-3);
+      }
+
+      ._amount_57e7b9 {
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+        line-height: 1.1;
+        font-variant-numeric: tabular-nums;
+      }
+
+      ._pct_57e7b9 {
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        color: var(--pb-text-muted);
+      }
+
+      ._stake_57e7b9 {
+        text-align: center;
+        padding: var(--pb-space-3) var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        border: 3px solid var(--pb-border);
+        font-size: var(--pb-font-body);
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* only the number is pink: "✓ Locked in — look at the TV" (green, above) stays the strongest line */
+      ._stake_57e7b9 b {
+        color: var(--pb-accent);
+      }
+
+      /* ── I-026 A: chips on the wager row — a stack of discs, one per 25 % of the share, in the
+   game's gold; the 0 row's single chip is hollow. */
+      ._chips_57e7b9 {
+        display: inline-flex;
+        align-items: center;
+        margin-right: var(--pb-space-2);
+      }
+      ._chip_57e7b9 {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        margin-left: -8px;
+        background: var(--pb-accent-2-fill);
+        border: 3px solid var(--pb-on-accent-2-fill);
+        box-sizing: border-box;
+      }
+      ._chip_57e7b9:first-child {
+        margin-left: 0;
+      }
+      ._chipEmpty_57e7b9 {
+        background: transparent;
+        /* the muted ink, not the border token: on Night / Daylight / Arcade / Cabin the border is the
+     row's own surface and the hollow chip vanished (pass 864) */
+        border: 3px dashed var(--pb-text-muted);
+      }
+
+      /* ── I-026 B: the pick settles — the chosen row's chips bump, the other rows step back. */
+      ._pot_57e7b9 {
+        display: inline-block;
+        color: var(--pb-accent-2);
+      }
+      ._placed_57e7b9 [role='radio'][aria-checked='true'] ._chip_57e7b9,
+      ._placed_57e7b9 ._customOn_57e7b9 ._chip_57e7b9 {
+        animation: pb-bump var(--pb-motion-base) var(--pb-ease) both;
+      }
+      ._placed_57e7b9 [role='radio']:not([aria-checked='true']),
+      ._placed_57e7b9 ._customOff_57e7b9 {
+        opacity: 0.6;
+        transition: opacity var(--pb-motion-base) var(--pb-ease);
+      }
+
+      /* ── I-026 C: a live bet breathes (the lobby's idle keyframe; absent under reduced motion). */
+      ._stakeLive_57e7b9 {
+        animation: pb-breathe calc(var(--pb-motion-pulse) * 2) ease-in-out infinite;
+      }
+      :root[data-motion='off'] ._stakeLive_57e7b9 {
+        animation: none;
+      }
+
+      /* ── I-026 (the owner): the custom row — the presets' row shape over a number, a unit switch
+   and Place; ✓ and the pot line say it landed (never colour alone). */
+      ._custom_57e7b9 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-3) var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        border: 3px solid var(--pb-border);
+      }
+      ._customOn_57e7b9 {
+        border-color: var(--pb-accent);
+      }
+      ._customForm_57e7b9 {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: var(--pb-space-2);
+      }
+      ._customInput_57e7b9 {
+        min-width: 0;
+        min-height: 48px;
+        padding: 0 var(--pb-space-3);
+        border-radius: var(--pb-radius);
+        border: 3px solid var(--pb-border);
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font: inherit;
+        font-size: var(--pb-font-h2);
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+      ._customInput_57e7b9:focus {
+        outline: none;
+        border-color: var(--pb-accent);
+      }
+      ._unit_57e7b9,
+      ._place_57e7b9 {
+        min-height: 48px;
+        min-width: 56px;
+        padding: 0 var(--pb-space-3);
+        border-radius: var(--pb-radius);
+        border: 3px solid var(--pb-border);
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        font: inherit;
+        font-weight: 800;
+      }
+      ._unit_57e7b9[aria-pressed='true'] {
+        border-color: var(--pb-accent-2);
+      }
+      ._place_57e7b9 {
+        background: var(--pb-accent);
+        border-color: var(--pb-accent);
+        color: var(--pb-on-accent);
+      }
+      /* review 6c24ba (3): Place with no value reads as off — flat, outlined, muted, no accent — and
+   turns accent-filled the moment a stake is typed (never opacity alone). */
+      ._place_57e7b9:disabled {
+        background: transparent;
+        border-style: dashed;
+        border-color: var(--pb-border);
+        color: var(--pb-text-muted);
+        cursor: not-allowed;
+      }
+
+      /* A "phone only" room (S-005, the owner): the TV's reveal rows on the phone — one line each,
+   the correct ones lit, under the player's own outcome. */
+      ._roomRows_57e7b9 {
+        list-style: none;
+        margin: var(--pb-space-3) 0 0;
+        padding: 0;
+        display: grid;
+        gap: var(--pb-space-1);
+      }
+      ._roomRow_57e7b9 {
+        display: grid;
+        grid-template-columns: 24px minmax(0, 1fr) 1.2em 3.5em 3em;
+        align-items: center;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-1) var(--pb-space-2);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        color: var(--pb-text-muted);
+      }
+      ._roomRowOk_57e7b9 {
+        color: var(--pb-text);
+        background: color-mix(in oklab, var(--pb-accent-3) 18%, var(--pb-surface));
+      }
+      ._roomName_57e7b9 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      ._roomVerdict_57e7b9 {
+        text-align: center;
+      }
+      ._roomDelta_57e7b9,
+      ._roomScore_57e7b9 {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      ._roomScore_57e7b9 {
+        color: var(--pb-text);
+      }
+
+      /* ── I-288 B: the live worth of a right answer, under the question. */
+      ._worth_57e7b9 {
+        display: block;
+        margin-top: var(--pb-space-1);
+        font-size: var(--pb-font-caption);
+        font-weight: 900;
+        color: var(--pb-accent-2);
+        font-variant-numeric: tabular-nums;
+      }
+      /* I-789 B: locked in, the line keeps its space (the answers below never move on a tap) */
+      ._worthHeld_57e7b9 {
+        visibility: hidden;
+      }
+
+      /* ── I-550 (the owner's note: the bet page was "a bit cramped and visually unappealing" — on an
+   SE one preset showed, the rest sat under the ▾ behind a half-screen custom row). The presets go
+   two by two, amount over share with the chips beside it; an odd one out (the 0 of five, or a
+   lone 0) spans the row on one line; the open custom row is one line. */
+      ._wagerScreen_57e7b9 [role='radiogroup'] {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--pb-space-2);
+        align-content: start;
+      }
+      ._wagerScreen_57e7b9 [role='radio'] {
+        position: relative;
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 48px;
+        padding: var(--pb-space-2) var(--pb-space-2) var(--pb-space-2) var(--pb-space-3);
+      }
+      /* the ✓ of a taken stake sits in the tile's corner, so the row's width goes to amount and chips
+   and nothing shifts when it lands */
+      ._wagerScreen_57e7b9 [role='radio'] > span[aria-hidden] {
+        position: absolute;
+        right: var(--pb-space-2);
+        bottom: var(--pb-space-1);
+      }
+      ._wagerScreen_57e7b9 [role='radio'] ._wagerRow_57e7b9 {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas: 'amount chips' 'pct pct';
+        align-items: center;
+        column-gap: var(--pb-space-2);
+      }
+      ._wagerScreen_57e7b9 [role='radio'] ._amount_57e7b9 {
+        grid-area: amount;
+        font-size: var(--pb-font-h2);
+        white-space: nowrap;
+      }
+      ._wagerScreen_57e7b9 [role='radio'] ._chips_57e7b9 {
+        grid-area: chips;
+        margin-right: 0;
+      }
+      /* in a tile the stack is smaller: four chips fit beside a four-digit amount on a 320 px phone */
+      ._wagerScreen_57e7b9 [role='radio'] ._chip_57e7b9 {
+        width: 16px;
+        height: 16px;
+        margin-left: -6px;
+        border-width: 2px;
+      }
+      ._wagerScreen_57e7b9 [role='radio'] ._chip_57e7b9:first-child {
+        margin-left: 0;
+      }
+      ._wagerScreen_57e7b9 [role='radio'] ._pct_57e7b9 {
+        grid-area: pct;
+      }
+      ._wagerPrompt_57e7b9 {
+        display: block;
+      }
+      ._wagerScreen_57e7b9 [role='radio']:first-child:nth-last-child(odd) {
+        grid-column: 1 / -1;
+      }
+      ._wagerScreen_57e7b9 [role='radio']:first-child:nth-last-child(odd) ._wagerRow_57e7b9 {
+        grid-template-columns: auto auto minmax(0, 1fr);
+        grid-template-areas: 'chips amount pct';
+      }
+      ._customOpen_57e7b9 {
+        flex-direction: row;
+        flex-wrap: wrap; /* at 200 % text the form drops under "Custom" instead of crushing the field */
+        align-items: center;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-2);
+      }
+      ._customOpen_57e7b9 ._customForm_57e7b9 {
+        flex: 1 1 0;
+      }
+      ._customOpen_57e7b9 ._customInput_57e7b9 {
+        min-width: 3.2em;
+        padding: 0 var(--pb-space-2);
+        font-size: var(--pb-font-body);
+      }
+      ._customOpen_57e7b9 ._customInput_57e7b9::placeholder {
+        font-size: var(--pb-font-caption);
+      }
+      ._customOpen_57e7b9 ._unit_57e7b9 {
+        min-width: 44px;
+      }
+      /* never narrower than its word: a crushed row wraps instead of clipping "Place" */
+      ._customOpen_57e7b9 ._place_57e7b9 {
+        min-width: max-content;
+        padding: 0 var(--pb-space-2);
+      }
+      ._customLead_57e7b9 {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      ._customLead_57e7b9 ._amount_57e7b9 {
+        font-size: var(--pb-font-h2);
+        line-height: 1;
+      }
+
+      /* The wager's presets never resize, so it needs no held status line (I-789 B holds one under
+   every fill grid): on an SE that space is the last row of stakes. The line itself still lands. */
+      ._wagerScreen_57e7b9 > div:first-child > p[aria-hidden] {
+        display: none;
+      }
+
+      /* A short phone (a 568 px SE): the head tightens so the presets and the custom row share one look. */
+      @media (max-height: 600px) {
+        ._wagerScreen_57e7b9 > div:first-child {
+          gap: var(--pb-space-2);
+          padding-block: var(--pb-space-2);
+        }
+        ._wagerScreen_57e7b9 [role='radio'] {
+          padding-block: 6px;
+        }
+        ._wagerScreen_57e7b9 ._rule_57e7b9 {
+          margin-top: var(--pb-space-1);
+        }
+        ._wagerPrompt_57e7b9 {
+          font-size: var(--pb-font-body);
+        }
+      }
+
+      /* The content-language marker (the SDK's ContentLang): a quiet pill under English deck text on a phone
+   in another language. */
+      ._englishNote_57e7b9 {
+        display: block;
+        width: fit-content;
+        margin: var(--pb-space-1) auto 0;
+        padding: 0 var(--pb-space-2);
+        border-radius: 999px;
+        background: var(--pb-surface-2);
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+
+      /* packages/game-sdk/src/tv/Timer.module.css */
+      ._timer_4e1888 {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-3);
+        min-width: 2.2em;
+        padding: 0 var(--pb-space-4);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface);
+        color: var(--pb-accent-2);
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.1;
+        /* Leaving urgency at a phase boundary eases over the base token: the fast one read as a snap
+     next to the 300 ms phase rise (review-loop #17). */
+        transition:
+          transform var(--pb-motion-base) var(--pb-ease),
+          color var(--pb-motion-base) var(--pb-ease);
+      }
+
+      ._lg_4e1888 {
+        font-size: var(--pb-font-display);
+      }
+
+      ._md_4e1888 {
+        font-size: var(--pb-font-h1);
+      }
+
+      ._urgent_4e1888 {
+        color: var(--pb-danger);
+        transform: scale(1.15);
+        animation: _pb-timer-pulse_4e1888 var(--pb-motion-pulse) ease-in-out infinite;
+      }
+
+      /* One beat per second (≤ 3 flashes/s); reduced motion sets --pb-motion-pulse to 0 → no pulse. */
+      @keyframes _pb-timer-pulse_4e1888 {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        ._urgent_4e1888 {
+          transform: none;
+        }
+      }
+
+      ._paused_4e1888 {
+        color: var(--pb-text-muted);
+      }
+
+      ._pauseGlyph_4e1888 {
+        font-size: 0.5em;
+      }
+
+      ._digits_4e1888 {
+        display: inline-block;
+      }
+
+      /* The last five seconds say it in words as well as colour (T-0779 F15). Beside the digits, inside the
+   chip: a word hung under the chip ran into the deadline bar and the row below (T-0779 F2). The TV
+   body token is 36 px, above the 32 px floor. */
+      ._hurry_4e1888 {
+        color: var(--pb-danger);
+        font-size: var(--pb-font-body);
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      /* packages/game-sdk/src/controller/Screen.module.css */
+      /* Every screen rises on mount (the phone was the only surface that hard-cut). Fill `backwards`,
+   not `both`: a retained transform would make this frame the containing block for any future
+   position: fixed game element. Taps are never blocked (opacity does not gate pointer events). */
+      ._screen_72dfcc {
+        position: relative; /* the predecessor's snapshot overlays this frame (review-loop #18) */
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        overscroll-behavior: none;
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) backwards;
+        animation-delay: var(
+          --pb-screen-delay,
+          0ms
+        ); /* I-039 A: the shell can hold the rise a beat */
+      }
+
+      /* A leaving screen's snapshot, parked in the parent: on top, inert, fading over the base token. */
+      ._ghost_72dfcc {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        pointer-events: none;
+        animation: pb-fade-out var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      /* Cloned nodes would replay their entrance keyframes; freeze them where they were. */
+      ._ghost_72dfcc * {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      ._title_72dfcc {
+        padding: var(--pb-space-4) var(--pb-space-4) 0;
+        text-wrap: balance;
+      }
+
+      ._body_72dfcc {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: var(--pb-space-4);
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-4);
+      }
+
+      ._footer_72dfcc {
+        position: sticky;
+        bottom: 0;
+        padding: var(--pb-space-3) var(--pb-space-4)
+          calc(var(--pb-space-3) + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
+        background: linear-gradient(to top, var(--pb-bg) 70%, transparent);
+      }
+
+      /* A sideways phone in Safari (≈ 330 px tall): tighter body padding, the height goes to the game. */
+      @media (orientation: landscape) and (max-height: 420px) {
+        ._body_72dfcc {
+          padding: var(--pb-space-2) var(--pb-space-4);
+        }
+        ._footer_72dfcc {
+          padding: 4px var(--pb-space-4)
+            calc(4px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
+        }
+      }
+
+      /* A long body (six-row results, a wager list on an SE) folds under the footer and the last line is
+   cut mid-glyph (review-loop, six-player results on an iPhone). Browsers with scroll-driven animations fade the body's bottom 28 px
+   while there is more below and lift the fade at the end; a body that does not scroll has no
+   timeline, so no fade. Only meaningful overflow (the same threshold as the cue) folds: a few
+   pixels of card-arrival overshoot must not fade a whole row. Others keep the plain fold. */
+      @property --pb-fold {
+        syntax: '<length>';
+        inherits: false;
+        initial-value: 0px;
+      }
+
+      @supports (animation-timeline: scroll()) {
+        ._body_72dfcc {
+          mask-image: linear-gradient(to bottom, #000 calc(100% - var(--pb-fold)), transparent);
+        }
+        ._body_72dfcc[data-fold] {
+          animation: _pb-fold_72dfcc linear both;
+          animation-timeline: scroll(self);
+        }
+        /* fill1: a title drawn down to its bottom edge (the results' award chips) sat flush on the body's
+     clip line, so a row scrolled half out read as hidden under the chips — at 200 % text most of a
+     name. Scrolled away from the top, the body keeps the clear strip it has at rest (its own top
+     padding) and then fades in over twice the caption size, so nothing touches the title at any
+     text size. Paint only: every box stays where it was, and at the top there is no mask at all. */
+        ._body_72dfcc._fadeTop_72dfcc {
+          mask-image: linear-gradient(
+            to bottom,
+            transparent var(--pb-fold-clear),
+            #000 calc(var(--pb-fold-clear) + var(--pb-fold-top)),
+            #000 calc(100% - var(--pb-fold)),
+            transparent
+          );
+          animation: _pb-fold-top_72dfcc linear both;
+          animation-timeline: scroll(self);
+        }
+        ._body_72dfcc._fadeTop_72dfcc[data-fold] {
+          animation:
+            _pb-fold_72dfcc linear both,
+            _pb-fold-top_72dfcc linear both;
+          animation-timeline: scroll(self), scroll(self);
+        }
+      }
+
+      @property --pb-fold-top {
+        syntax: '<length>';
+        inherits: false;
+        initial-value: 0px;
+      }
+      @property --pb-fold-clear {
+        syntax: '<length>';
+        inherits: false;
+        initial-value: 0px;
+      }
+
+      @keyframes _pb-fold-top_72dfcc {
+        0% {
+          --pb-fold-clear: 0px;
+          --pb-fold-top: 0px;
+        }
+        8%,
+        100% {
+          --pb-fold-clear: var(--pb-space-4);
+          --pb-fold-top: calc(var(--pb-font-caption) * 2);
+        }
+      }
+
+      @keyframes _pb-fold_72dfcc {
+        0%,
+        92% {
+          --pb-fold: 72px; /* I-066 A: one cut row deep */
+        }
+        100% {
+          --pb-fold: 0px;
+        }
+      }
+
+      /* ── I-788 A (design review A, refines I-066 B / I-187): "more below" is a slim row of its own at the
+   top of the footer — a grab bar and the words — never a pill floating over the body's last line or
+   the button's own words. The row is laid out whenever the body overflows (the body gives up its
+   height), and only fades out at the end, so nothing shifts under a finger. With no footer the same
+   row sits in the bottom safe area. The whole row is the button: 28 px drawn, 40 px to the thumb. */
+      ._cue_72dfcc {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+        min-height: 28px;
+        margin: 0 0 2px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--pb-text-muted);
+        font: inherit;
+        font-size: calc(var(--pb-font-caption) * 0.86);
+        font-weight: 700;
+        line-height: 1.1;
+        cursor: pointer;
+        transition: opacity var(--pb-motion-base) var(--pb-ease);
+      }
+      ._cue_72dfcc::before {
+        content: '';
+        width: 28px;
+        height: 3px;
+        border-radius: 3px;
+        background: currentColor;
+        opacity: 0.6;
+        flex: none;
+      }
+      /* The thumb target reaches up to the footer's top edge (44 px), never down over the button. */
+      ._cue_72dfcc::after {
+        content: '';
+        position: absolute;
+        inset: calc(-1 * var(--pb-space-4)) 0 0;
+      }
+      ._cue_72dfcc[data-on='false'] {
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity var(--pb-motion-base) var(--pb-ease),
+          visibility 0s linear var(--pb-motion-base);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        ._cue_72dfcc,
+        ._cue_72dfcc[data-on='false'] {
+          transition: none;
+        }
+      }
+      :root[data-motion='off'] ._cue_72dfcc,
+      :root[data-motion='off'] ._cue_72dfcc[data-on='false'] {
+        transition: none;
+      }
+
+      /* No footer: the row alone, in the bottom safe area. */
+      ._cueOnly_72dfcc {
+        flex-shrink: 0;
+        padding: var(--pb-space-3) var(--pb-space-4)
+          calc(4px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
+      }
+
+      @media (orientation: landscape) and (max-height: 420px) {
+        ._cue_72dfcc {
+          min-height: 22px;
+          margin: 0;
+        }
+        ._cue_72dfcc::after {
+          inset: -4px 0 0;
+        }
+        ._cueOnly_72dfcc {
+          padding: 4px var(--pb-space-4)
+            calc(2px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
+        }
+      }
+
+      /* packages/game-sdk/src/controller/ChoiceGrid.module.css */
+      ._kicker_c871b3 {
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        color: var(--pb-accent-2);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      /* tone="final": the kicker matches the TV's accent "final question" kicker (R-064). */
+      ._kickerFinal_c871b3 {
+        color: var(--pb-accent);
+      }
+
+      ._prompt_c871b3 {
+        font-size: var(--pb-font-h2);
+        font-weight: 800;
+        text-wrap: balance;
+      }
+
+      ._grid_c871b3 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-3);
+      }
+
+      /* fill (I-789 B, the design review): the answers share the height left under the question —
+   each 66 px when there is room, down to its own content (one line: 50 px; the flex item's auto
+   minimum, never a fixed one — a two-line label must not spill onto the next tile) on a short
+   phone, so four fit an SE with no scroll. The tiles never stretch past 66 px, so nothing drifts
+   when the status line lands. */
+      ._layout_c871b3 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-4);
+        flex: 1 1 auto;
+        /* min-height stays auto: the block never shrinks below its tiles' content, so a long label
+     scrolls the body instead of sliding under the status line */
+      }
+
+      ._head_c871b3 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-2);
+      }
+
+      ._plain_c871b3 {
+        display: contents;
+      }
+
+      ._fill_c871b3 {
+        flex: 1 1 auto;
+        gap: var(--pb-space-2);
+      }
+
+      /* Basis 0 + grow: a tile's floor is its content (one line: 50 px — the block never shrinks below
+   it, so nothing slides under the status line), its ceiling 66 px or two lines of its own text,
+   whichever is taller (a two-line answer is never clipped). */
+      ._fill_c871b3 ._choice_c871b3 {
+        flex: 1 1 0;
+        min-height: auto;
+        max-height: max(66px, calc(2lh + 2 * var(--pb-space-2) + 6px));
+        padding: var(--pb-space-2) var(--pb-space-4);
+      }
+
+      ._fill_c871b3 ._letter_c871b3 {
+        width: max(
+          28px,
+          1.5em
+        ); /* grows with 200 % text, so the letter never spills out of its disc */
+        height: max(28px, 1.5em);
+      }
+
+      /* Four short answers: two by two, each tile at least 66 px; the ✓/✗ goes to the corner so the
+   label keeps the width… */
+      ._fill_c871b3._two_c871b3 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-content: start;
+      }
+
+      ._fill_c871b3._two_c871b3 ._choice_c871b3 {
+        min-height: 66px;
+        max-height: none;
+      }
+
+      /* …unless half the width holds under 7 em of the tiles' own text (200 % text): then one column of
+   content-high tiles. The query measures the layout, whose font is the tiles' body size. */
+      ._layout_c871b3 {
+        container-type: inline-size;
+        font-size: var(--pb-font-body);
+      }
+
+      @container (max-width: 14em) {
+        ._fill_c871b3._two_c871b3 {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        ._fill_c871b3._two_c871b3 ._choice_c871b3 {
+          min-height: 44px;
+        }
+      }
+
+      ._two_c871b3 ._choice_c871b3 {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--pb-space-1) var(--pb-space-2);
+        padding-inline: var(--pb-space-3);
+      }
+
+      /* a word is never split: the label is at least its longest word, and drops under the letter when
+   the two do not fit side by side */
+      ._two_c871b3 ._label_c871b3 {
+        flex: 1 1 0;
+        min-width: min-content;
+        overflow-wrap: break-word;
+      }
+
+      ._two_c871b3 ._mark_c871b3 {
+        position: absolute;
+        top: 2px;
+        right: var(--pb-space-2);
+        font-size: var(--pb-font-caption);
+      }
+
+      /* The reserved status line: the space of "✓ Locked in", held from the first frame. */
+      ._reserved_c871b3 {
+        visibility: hidden;
+        animation: none;
+      }
+
+      /* A phone wraps "✓ Locked in with 12 s to spare — look at the TV" to two lines (an iPhone 15
+   too): the line holds two from the start, so the tiles above never give up height on the tap. */
+      @media (max-width: 440px) {
+        ._layout_c871b3 ~ ._locked_c871b3 {
+          min-height: 2lh;
+        }
+      }
+
+      /* A short phone (an SE, 568 px): the question steps down to body size and the gaps tighten. */
+      @media (max-height: 600px) and (orientation: portrait) {
+        ._layout_c871b3 {
+          gap: var(--pb-space-2);
+        }
+        ._layout_c871b3 ._prompt_c871b3 {
+          font-size: var(--pb-font-body);
+        }
+        ._layout_c871b3 ._kicker_c871b3 {
+          letter-spacing: 0;
+        }
+        ._fill_c871b3 ._choice_c871b3 {
+          padding-block: 7px; /* with the 24 px disc a one-line answer is 44 px: the touch floor */
+        }
+        ._fill_c871b3 ._letter_c871b3 {
+          width: max(24px, 1.3em);
+          height: max(24px, 1.3em);
+        }
+      }
+
+      /* Sideways: the question holds the left, the answers the right, filling the height — a 2×2 for
+   short answers (the review's drawing), a column of four when an answer is long (half a sideways
+   phone would break its words). */
+      @media (orientation: landscape) and (max-height: 500px) {
+        ._layout_c871b3 {
+          flex-direction: row;
+          align-items: stretch;
+          gap: var(--pb-space-4);
+        }
+        ._layout_c871b3 > ._head_c871b3 {
+          flex: 1 1 0;
+          min-width: 0;
+          justify-content: center;
+        }
+        ._layout_c871b3 ._prompt_c871b3 {
+          font-size: var(--pb-font-body);
+        }
+        ._layout_c871b3 > ._fill_c871b3 {
+          flex: 1.3 1 0;
+          min-width: 0;
+        }
+        ._layout_c871b3 > ._fill_c871b3 ._choice_c871b3 {
+          max-height: none;
+        }
+        ._layout_c871b3 > ._fill_c871b3._two_c871b3 {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          grid-auto-rows: minmax(0, 1fr);
+          align-content: stretch;
+        }
+        ._layout_c871b3 > ._fill_c871b3._two_c871b3 ._choice_c871b3 {
+          min-height: 0;
+        }
+      }
+
+      ._choice_c871b3 {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: var(--pb-space-3);
+        min-height: 64px;
+        padding: var(--pb-space-3) var(--pb-space-4);
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface);
+        border: 3px solid var(--pb-border);
+        text-align: left;
+        font-size: var(--pb-font-body);
+        font-weight: 700;
+        transition:
+          transform var(--pb-motion-fast) var(--pb-ease),
+          border-color var(--pb-motion-base) var(--pb-ease),
+          background-color var(--pb-motion-base) var(--pb-ease),
+          color var(--pb-motion-base) var(--pb-ease);
+      }
+
+      /* Press: the accent edge + darker fill land the instant the finger is down (R-049); the scale
+   comes from the controller-surface rule in global._css_c871b3. */
+      ._choice_c871b3:active:not(:disabled) {
+        border-color: var(--pb-accent);
+        background: var(--pb-surface-2);
+      }
+
+      ._choice_c871b3:active:not(:disabled) ._letter_c871b3 {
+        transform: scale(1.12);
+      }
+
+      ._choice_c871b3:disabled {
+        cursor: default;
+      }
+
+      /* letters={false}: label + mark only. */
+      ._noLetters_c871b3 {
+        grid-template-columns: 1fr auto;
+      }
+
+      ._letter_c871b3 {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--pb-surface-2);
+        font-weight: 900;
+        transition:
+          transform var(--pb-motion-fast) var(--pb-ease),
+          background-color var(--pb-motion-base) var(--pb-ease),
+          color var(--pb-motion-base) var(--pb-ease);
+      }
+
+      ._label_c871b3 {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      ._mark_c871b3 {
+        font-weight: 900;
+        min-width: 1em;
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      /* I-790 C: the reveal's words on the tiles ("✓ the answer", "you"); a two-by-two tile keeps the
+   glyph only (its mark is a corner badge), where a wrong pick shows ✗ instead of the word. */
+      ._tag_c871b3 {
+        margin-left: 0.35em;
+        font-size: var(--pb-font-caption);
+        font-weight: 800;
+      }
+
+      ._glyphTight_c871b3 {
+        display: none;
+      }
+
+      ._two_c871b3 ._tag_c871b3 {
+        display: none;
+      }
+
+      ._two_c871b3 ._glyphTight_c871b3 {
+        display: inline;
+      }
+
+      /* Lock-in: the chosen card settles with a small pop and its ✓ pops in (both 0 ms under reduced
+   motion via the tokens; the border/fill/✓ state changes remain). The global pb-pop starts from
+   opacity 0, so the card itself uses a local settle that never hides an already-visible button. */
+      @keyframes _pb-choice-settle_c871b3 {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      ._selected_c871b3 {
+        border-color: var(--pb-accent);
+        background: var(--pb-surface-2);
+        animation: _pb-choice-settle_c871b3 var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      ._selected_c871b3 ._mark_c871b3 {
+        animation: pb-pop var(--pb-motion-fast) var(--pb-ease) both;
+      }
+
+      ._correct_c871b3 {
+        border-color: var(--pb-accent-3);
+        background: var(--pb-surface-2);
+      }
+
+      ._correct_c871b3 ._mark_c871b3 {
+        color: var(--pb-accent-3);
+      }
+
+      /* Reveal: the glyph is what newly appears, so it pops (not the card — pb-pop starts at opacity 0). */
+      ._correct_c871b3 ._mark_c871b3,
+      ._wrong_c871b3 ._mark_c871b3 {
+        animation: pb-pop var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      ._wrong_c871b3 {
+        border-color: var(--pb-danger);
+      }
+
+      ._wrong_c871b3 ._mark_c871b3 {
+        color: var(--pb-danger);
+      }
+
+      /* Dimmed by token, not opacity: muted text on the page bg keeps >= 6.4:1 in every theme (R-070);
+   opacity fell to ~3.5:1 in Daylight. Never co-occurs with ._selected_c871b3/._correct_c871b3/._wrong_c871b3. */
+      ._dim_c871b3 {
+        color: var(--pb-text-muted);
+        background: var(--pb-bg);
+      }
+
+      ._dim_c871b3 ._letter_c871b3 {
+        background: var(--pb-surface);
+        color: var(--pb-text-muted);
+      }
+
+      ._locked_c871b3 {
+        text-align: center;
+        font-size: var(--pb-font-caption);
+        font-weight: 700;
+        color: var(--pb-accent-3);
+        animation: pb-rise var(--pb-motion-base) var(--pb-ease) both;
+      }
+
+      /* The tap never reached the server: the grid is live again and the line says so (not colour-only). */
+      ._failed_c871b3 {
+        color: var(--pb-danger);
+      }
+
+      /* The last 5 s for an unanswered phone (`data-urgent` on the controller shell): the letters turn
+   danger so the thumb zone, not only the header, says "now". */
+      [data-urgent] ._choice_c871b3:not(:disabled) ._letter_c871b3 {
+        background: var(--pb-danger);
+        color: var(--pb-on-accent);
+      }
+
+      /* The revealed answer's disc is filled (shape + ✓, never colour alone), mirroring the TV card. */
+      ._correct_c871b3 ._letter_c871b3 {
+        background: var(--pb-accent-3);
+        color: var(--pb-on-accent);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+        font-size: var(--pb-font-body);
+        line-height: 1.4;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h2 {
+        font-size: var(--pb-font-h1);
+        line-height: 1.2;
+        font-weight: 900;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+        color: inherit;
+      }
+      .evidence-shell {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template-rows: 84px minmax(0, 1fr) 48px;
+      }
+      [data-surface='tv'] .evidence-shell {
+        grid-template-rows: 100px minmax(0, 1fr) 80px;
+      }
+      .evidence-header,
+      .evidence-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--pb-space-4);
+        background: var(--pb-surface);
+        gap: var(--pb-space-3);
+      }
+      .evidence-footer {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+      .evidence-main {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        min-width: 0;
+        overflow: hidden;
+        --pb-stage-top: var(--pb-space-5);
+      }
+      .evidence-code {
+        font-weight: 900;
+        color: var(--pb-accent-2);
+      }
+      .pb-visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      :root[data-motion='off'] *,
+      :root[data-motion='off'] *::before,
+      :root[data-motion='off'] *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="evidence-shell">
+      <header class="evidence-header">
+        <b>PartyBox</b><span class="evidence-code">KAHOOT</span>
+      </header>
+      <main class="evidence-main" aria-label="Game stage">
+        <div
+          class="_timer_4e1888 _md_4e1888"
+          role="timer"
+          aria-live="off"
+          aria-label="segundos restantes: 62"
+        >
+          <span class="_digits_4e1888">62</span>
+        </div>
+        <section class="_screen_72dfcc">
+          <div class="_body_72dfcc">
+            <div class="_layout_c871b3">
+              <div class="_head_c871b3">
+                <p class="_kicker_c871b3">Pregunta 1 de 5 · Informática · 0/16 listos</p>
+                <p class="_prompt_c871b3">
+                  ¿Qué desaparece de tu dispositivo al cerrar todas las ventanas de Incógnito en
+                  Chrome?<span class="_worth_57e7b9" aria-hidden="false">+992 ahora</span>
+                </p>
+              </div>
+              <div class="_grid_c871b3 _fill_c871b3" role="radiogroup" aria-label="opciones">
+                <button type="button" role="radio" aria-checked="false" class="_choice_c871b3">
+                  <span class="_letter_c871b3" aria-hidden="true">A</span
+                  ><span class="_label_c871b3"
+                    >Los registros que guarda el proveedor de internet</span
+                  ><span class="_mark_c871b3" aria-hidden="true"></span></button
+                ><button type="button" role="radio" aria-checked="false" class="_choice_c871b3">
+                  <span class="_letter_c871b3" aria-hidden="true">B</span
+                  ><span class="_label_c871b3">Los archivos descargados en la computadora</span
+                  ><span class="_mark_c871b3" aria-hidden="true"></span></button
+                ><button type="button" role="radio" aria-checked="false" class="_choice_c871b3">
+                  <span class="_letter_c871b3" aria-hidden="true">C</span
+                  ><span class="_label_c871b3"
+                    >Los registros que guardan los sitios web visitados</span
+                  ><span class="_mark_c871b3" aria-hidden="true"></span></button
+                ><button type="button" role="radio" aria-checked="false" class="_choice_c871b3">
+                  <span class="_letter_c871b3" aria-hidden="true">D</span
+                  ><span class="_label_c871b3">El historial de navegación local de esa sesión</span
+                  ><span class="_mark_c871b3" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+            <p class="_locked_c871b3 _reserved_c871b3" aria-hidden="true"> </p>
+          </div>
+        </section>
+      </main>
+      <footer class="evidence-footer">
+        <span>Kahoot! · phone-only</span><span>390 × 844</span>
+      </footer>
+    </div>
+  </body>
+</html>

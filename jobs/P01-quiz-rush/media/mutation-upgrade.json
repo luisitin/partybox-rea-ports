@@ -1,0 +1,718 @@
+{
+  "command": "node jobs/P01-quiz-rush/mutate-upgrade.mjs",
+  "testCommand": "node node_modules/vitest/vitest.mjs run games/kahoot/__tests__/scoring.test.ts games/kahoot/__tests__/classic-server.test.ts games/kahoot/__tests__/answer-window.test.ts games/kahoot/__tests__/vip.test.ts games/kahoot/__tests__/game.test.ts --maxWorkers=1 --pool=threads --reporter=json",
+  "baselineTests": 72,
+  "mutations": 20,
+  "killed": 20,
+  "invalidMutations": 0,
+  "sourceHashes": {
+    "games/kahoot/server/types.ts": "9889e4ee2e1640e52b7bfd8e51475be2606f70dbbc922f7e8c84c0f43d6d578e",
+    "games/kahoot/server/scoring.ts": "2b26ca40af29d374eb31e1d30302ab710311d820c089aa3d2bd763b3e576a804",
+    "games/kahoot/server/phases/question.ts": "106b6e1def8e3daad1923cda50cc9cfe6a3b013cee10555e395c3867b64d7db9",
+    "games/kahoot/server/phases/reveal.ts": "df185f69d44a395fe37d9d6caba9915323cc9ed85503a5c047b4839672565ee0",
+    "games/kahoot/server/views.ts": "9628100094fc88586fcd4ac49fc91990709c1f02d5cf9a5b9135cf16f22a72b2",
+    "games/kahoot/server/standings.ts": "c27a9f0bf1ff39bfbb0e65be95a1fdc7aa38af7be66480e6f7bcca8b42dee1a5"
+  },
+  "results": [
+    {
+      "id": "M01",
+      "description": "Base points inflated",
+      "file": "games/kahoot/server/types.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "question answer window a tap 0 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 5450 to be 950 // Object.is equality"
+        },
+        {
+          "name": "question answer window a tap 1 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 5450 to be 950 // Object.is equality"
+        },
+        {
+          "name": "question answer window a tap 5000 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 5450 to be 950 // Object.is equality"
+        },
+        {
+          "name": "question answer window accepts the final millisecond and ignores a tap before the question opens",
+          "message": "AssertionError: expected 5000 to be 500 // Object.is equality"
+        },
+        {
+          "name": "question answer window pause extends the deadline without changing speed or accepting a deadline tap",
+          "message": "AssertionError: expected 5452 to be less than 1000"
+        },
+        {
+          "name": "questionPoints is 1000 at 0 ms, 750 at half time, 500 at the deadline (10 s window)",
+          "message": "AssertionError: expected 5500 to be 1000 // Object.is equality"
+        },
+        {
+          "name": "questionPoints adds 100 per extra streak step, capped at 300",
+          "message": "AssertionError: expected 5600 to be 1100 // Object.is equality"
+        },
+        {
+          "name": "per-question scoring in play scores correct picks by speed, wrong picks 0, and tracks streaks",
+          "message": "AssertionError: expected { a: 5500, b: 5250, c: +0 } to deeply equal { a: 1000, b: 750, c: +0 }"
+        },
+        {
+          "name": "per-question scoring in play caps the streak bonus at +300 from the fourth correct answer on",
+          "message": "AssertionError: expected [ 5000, 5100, 5200, 5300, 5300 ] to deeply equal [ 500, 600, 700, 800, 800 ]"
+        },
+        {
+          "name": "wagers a custom stake (I-026) is clamped to the score and rounded down to tens",
+          "message": "AssertionError: expected 10000 to be 28276 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M02",
+      "description": "Speed bonus inflated",
+      "file": "games/kahoot/server/types.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "question answer window a tap 0 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 5000 to be 950 // Object.is equality"
+        },
+        {
+          "name": "question answer window a tap 1 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 5000 to be 950 // Object.is equality"
+        },
+        {
+          "name": "question answer window a tap 5000 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 5000 to be 950 // Object.is equality"
+        },
+        {
+          "name": "question answer window pause extends the deadline without changing speed or accepting a deadline tap",
+          "message": "AssertionError: expected 5024 to be less than 1000"
+        },
+        {
+          "name": "questionPoints is 1000 at 0 ms, 750 at half time, 500 at the deadline (10 s window)",
+          "message": "AssertionError: expected 5500 to be 1000 // Object.is equality"
+        },
+        {
+          "name": "questionPoints adds 100 per extra streak step, capped at 300",
+          "message": "AssertionError: expected 5600 to be 1100 // Object.is equality"
+        },
+        {
+          "name": "per-question scoring in play scores correct picks by speed, wrong picks 0, and tracks streaks",
+          "message": "AssertionError: expected { a: 5500, b: 3000, c: +0 } to deeply equal { a: 1000, b: 750, c: +0 }"
+        },
+        {
+          "name": "wagers a custom stake (I-026) is clamped to the score and rounded down to tens",
+          "message": "AssertionError: expected 10000 to be 27154 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M03",
+      "description": "Streak cap inflated",
+      "file": "games/kahoot/server/types.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers uses ordinary final-question points and chart, then only unveils third, second, first",
+          "message": "AssertionError: expected 400 to be 300 // Object.is equality"
+        },
+        {
+          "name": "questionPoints adds 100 per extra streak step, capped at 300",
+          "message": "AssertionError: expected 1800 to be 1300 // Object.is equality"
+        },
+        {
+          "name": "per-question scoring in play caps the streak bonus at +300 from the fourth correct answer on",
+          "message": "AssertionError: expected [ 500, 600, 700, 800, 900 ] to deeply equal [ 500, 600, 700, 800, 800 ]"
+        }
+      ]
+    },
+    {
+      "id": "M04",
+      "description": "Streak growth reduced",
+      "file": "games/kahoot/server/types.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers uses ordinary final-question points and chart, then only unveils third, second, first",
+          "message": "AssertionError: expected 40 to be 300 // Object.is equality"
+        },
+        {
+          "name": "questionPoints adds 100 per extra streak step, capped at 300",
+          "message": "AssertionError: expected 1010 to be 1100 // Object.is equality"
+        },
+        {
+          "name": "per-question scoring in play scores correct picks by speed, wrong picks 0, and tracks streaks",
+          "message": "AssertionError: expected { a: 1510, b: 750, c: +0 } to deeply equal { a: 1600, b: 750, c: +0 }"
+        },
+        {
+          "name": "per-question scoring in play caps the streak bonus at +300 from the fourth correct answer on",
+          "message": "AssertionError: expected [ 500, 510, 520, 530, 540 ] to deeply equal [ 500, 600, 700, 800, 800 ]"
+        }
+      ]
+    },
+    {
+      "id": "M05",
+      "description": "Wrong answers retain streaks",
+      "file": "games/kahoot/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "per-question scoring in play scores correct picks by speed, wrong picks 0, and tracks streaks",
+          "message": "AssertionError: expected { a: 2, b: 1, c: +0 } to deeply equal { a: 2, b: +0, c: +0 }"
+        }
+      ]
+    },
+    {
+      "id": "M06",
+      "description": "Streak increments twice",
+      "file": "games/kahoot/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "question answer window a tap 0 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 1050 to be 950 // Object.is equality"
+        },
+        {
+          "name": "question answer window a tap 1 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 1050 to be 950 // Object.is equality"
+        },
+        {
+          "name": "question answer window a tap 5000 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 1050 to be 950 // Object.is equality"
+        },
+        {
+          "name": "question answer window accepts the final millisecond and ignores a tap before the question opens",
+          "message": "AssertionError: expected 600 to be 500 // Object.is equality"
+        },
+        {
+          "name": "question answer window pause extends the deadline without changing speed or accepting a deadline tap",
+          "message": "AssertionError: expected 1052 to be less than 1000"
+        },
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers budgets the phone podium stage together with its unveiled personal streak receipt",
+          "message": "AssertionError: expected 10 to be 5 // Object.is equality"
+        },
+        {
+          "name": "per-question scoring in play scores correct picks by speed, wrong picks 0, and tracks streaks",
+          "message": "AssertionError: expected { a: 1100, b: 850, c: +0 } to deeply equal { a: 1000, b: 750, c: +0 }"
+        },
+        {
+          "name": "per-question scoring in play caps the streak bonus at +300 from the fourth correct answer on",
+          "message": "AssertionError: expected [ 600, 800, 800, 800, 800 ] to deeply equal [ 500, 600, 700, 800, 800 ]"
+        },
+        {
+          "name": "awards and results names real players for lightning fingers, hot streak and high roller",
+          "message": "AssertionError: expected '10 correct answers in a row' to contain '5'"
+        },
+        {
+          "name": "awards and results a streak of 1 or a lost wager does not earn an award",
+          "message": "AssertionError: expected [ 'lightning-fingers', 'hot-streak' ] to deeply equal [ 'lightning-fingers' ]"
+        }
+      ]
+    },
+    {
+      "id": "M07",
+      "description": "Wrong final wager wins",
+      "file": "games/kahoot/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "question answer window a late final answer loses the wager, matching an unanswered deadline",
+          "message": "AssertionError: expected 11552 to be +0 // Object.is equality"
+        },
+        {
+          "name": "wagers final question: correct adds the wager, wrong or idle subtracts it (score can drop)",
+          "message": "AssertionError: expected 8656 to be 2896 // Object.is equality"
+        },
+        {
+          "name": "VIP skip wager → final question with the wagers placed so far (missing = 0)",
+          "message": "AssertionError: expected 8656 to be 2896 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M08",
+      "description": "Wrong answers earn points",
+      "file": "games/kahoot/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "question answer window a tap 0 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 25 to be +0 // Object.is equality"
+        },
+        {
+          "name": "question answer window a tap 1 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 25 to be +0 // Object.is equality"
+        },
+        {
+          "name": "question answer window a tap 5000 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 25 to be +0 // Object.is equality"
+        },
+        {
+          "name": "hidden information the correct index and picks are absent from every view until reveal",
+          "message": "AssertionError: expected { correct: false, delta: 25 } to deeply equal { correct: false, delta: +0 }"
+        },
+        {
+          "name": "per-question scoring in play scores correct picks by speed, wrong picks 0, and tracks streaks",
+          "message": "AssertionError: expected { a: 1000, b: 750, c: 25 } to deeply equal { a: 1000, b: 750, c: +0 }"
+        },
+        {
+          "name": "wagers a 0-score player can only wager 0 whatever percent they send",
+          "message": "AssertionError: expected 125 to be +0 // Object.is equality"
+        },
+        {
+          "name": "VIP skip question → its reveal; unanswered players score 0 with no penalty",
+          "message": "AssertionError: expected 25 to be +0 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M09",
+      "description": "First pick completes collection",
+      "file": "games/kahoot/server/types.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "stamped answers and minimum reading holds restores the original window when an unanswered participant reconnects during a hold",
+          "message": "AssertionError: expected 120350 to be 134980 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M10",
+      "description": "Duplicate answer replaces first",
+      "file": "games/kahoot/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "stamped answers and minimum reading holds ignores unstamped, wrong-id, wrong-opening, unknown, early and duplicate answers",
+          "message": "AssertionError: expected { …(18) } to be { …(18) } // Object.is equality"
+        },
+        {
+          "name": "inputs a second pick from the same player is ignored",
+          "message": "AssertionError: expected { …(18) } to be { …(18) } // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M11",
+      "description": "Wrong question id accepted",
+      "file": "games/kahoot/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "stamped answers and minimum reading holds ignores unstamped, wrong-id, wrong-opening, unknown, early and duplicate answers",
+          "message": "AssertionError: expected { …(18) } to be { …(18) } // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M12",
+      "description": "Wrong opening stamp accepted",
+      "file": "games/kahoot/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "stamped answers and minimum reading holds ignores unstamped, wrong-id, wrong-opening, unknown, early and duplicate answers",
+          "message": "AssertionError: expected { …(18) } to be { …(18) } // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M13",
+      "description": "Disconnected seat answers",
+      "file": "games/kahoot/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "question answer window a disconnected seat cannot answer; reconnect restores the same open window",
+          "message": "AssertionError: expected { …(18) } to be { …(18) } // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M14",
+      "description": "Deadline answer accepted",
+      "file": "games/kahoot/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "question answer window a tap 0 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "question answer window pause extends the deadline without changing speed or accepting a deadline tap",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "question answer window a late final answer loses the wager, matching an unanswered deadline",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "stamped answers and minimum reading holds budgets the actual answer window and marks a deadline receipt too slow",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M15",
+      "description": "Early answer accepted",
+      "file": "games/kahoot/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "question answer window accepts the final millisecond and ignores a tap before the question opens",
+          "message": "AssertionError: expected { …(18) } to be { …(18) } // Object.is equality"
+        },
+        {
+          "name": "stamped answers and minimum reading holds ignores unstamped, wrong-id, wrong-opening, unknown, early and duplicate answers",
+          "message": "AssertionError: expected { …(18) } to be { …(18) } // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M16",
+      "description": "Question timer cannot exit",
+      "file": "games/kahoot/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "question answer window accepts the final millisecond and ignores a tap before the question opens",
+          "message": "AssertionError: expected +0 to be 500 // Object.is equality"
+        },
+        {
+          "name": "question answer window a late final answer loses the wager, matching an unanswered deadline",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "stamped answers and minimum reading holds rejects an old question stamp even when its timestamp arrives inside the next window",
+          "message": "AssertionError: expected +0 to be 1 // Object.is equality"
+        },
+        {
+          "name": "stamped answers and minimum reading holds locks all picks immediately, holds the screen, and keeps settled speed elapsed values",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers keeps wager reveal clocks aligned when a streak starts and resets",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers keeps classic reveal clocks aligned when a streak starts and resets",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers holds the last classic chart until its own Next beat without exposing a scoreboard",
+          "message": "AssertionError: expected +0 to be 4 // Object.is equality"
+        },
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers budgets the phone podium stage together with its unveiled personal streak receipt",
+          "message": "AssertionError: expected +0 to be 4 // Object.is equality"
+        },
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers uses ordinary final-question points and chart, then only unveils third, second, first",
+          "message": "AssertionError: expected +0 to be 4 // Object.is equality"
+        },
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers shares tied ranks and skips empty podium tiers",
+          "message": "AssertionError: expected +0 to be 4 // Object.is equality"
+        },
+        {
+          "name": "phase flow runs questions → wager → final question → done, with every phase deadlined",
+          "message": "AssertionError: expected 'question' to be 'done' // Object.is equality"
+        },
+        {
+          "name": "phase flow locks every connected pick, then reveals after the minimum reading hold",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "phase flow the wager holds its reading floor even when everyone wagers early",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "inputs ignores spectators, unknown ids, __proto__, wrong-phase and wrong-type inputs",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "inputs a disconnected player does not block \"all answered\"; reconnecting lets them answer",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "inputs works with a single player",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "hidden information the correct index and picks are absent from every view until reveal",
+          "message": "AssertionError: expected undefined to be +0 // Object.is equality"
+        },
+        {
+          "name": "hidden information wagers stay hidden from the TV and other phones until the final reveal",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "hidden information views never throw for spectators and unknown ids in any phase",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "per-question scoring in play scores correct picks by speed, wrong picks 0, and tracks streaks",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "per-question scoring in play caps the streak bonus at +300 from the fourth correct answer on",
+          "message": "AssertionError: expected [ +0, +0, +0, +0, +0 ] to deeply equal [ 500, 600, 700, 800, 800 ]"
+        },
+        {
+          "name": "wagers a custom stake (I-026) is clamped to the score and rounded down to tens",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "wagers a 0-score player can only wager 0 whatever percent they send",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "wagers a second wager is ignored; missing wagers count as 0 at the deadline",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "wagers final question: correct adds the wager, wrong or idle subtracts it (score can drop)",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "awards and results names real players for lightning fingers, hot streak and high roller",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "awards and results gives no awards when nobody qualifies and shares first place on ties",
+          "message": "AssertionError: expected 'question' to be 'done' // Object.is equality"
+        },
+        {
+          "name": "awards and results a streak of 1 or a lost wager does not earn an award",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "VIP skip wager → final question with the wagers placed so far (missing = 0)",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "VIP end and pause resume closes question when the last unfinished phone dropped during pause",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "VIP end and pause resume closes wager when the last unfinished phone dropped during pause",
+          "message": "Error: expected reveal, got question"
+        },
+        {
+          "name": "VIP end and pause resume still waits when an unfinished phone returns during the pause",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "VIP end and pause end → done from any phase with the scores so far",
+          "message": "Error: expected reveal, got question"
+        }
+      ]
+    },
+    {
+      "id": "M17",
+      "description": "Reveal timer cannot exit",
+      "file": "games/kahoot/server/phases/reveal.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "question answer window a tap 0 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 'reveal' to be 'question' // Object.is equality"
+        },
+        {
+          "name": "question answer window a tap 1 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 'reveal' to be 'question' // Object.is equality"
+        },
+        {
+          "name": "question answer window a tap 5000 ms past the deadline reveals without crediting it",
+          "message": "AssertionError: expected 'reveal' to be 'question' // Object.is equality"
+        },
+        {
+          "name": "question answer window a late final answer loses the wager, matching an unanswered deadline",
+          "message": "Error: expected wager, got reveal"
+        },
+        {
+          "name": "stamped answers and minimum reading holds rejects an old question stamp even when its timestamp arrives inside the next window",
+          "message": "AssertionError: expected +0 to be 1 // Object.is equality"
+        },
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers holds the last classic chart until its own Next beat without exposing a scoreboard",
+          "message": "AssertionError: expected +0 to be 4 // Object.is equality"
+        },
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers budgets the phone podium stage together with its unveiled personal streak receipt",
+          "message": "AssertionError: expected +0 to be 4 // Object.is equality"
+        },
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers uses ordinary final-question points and chart, then only unveils third, second, first",
+          "message": "AssertionError: expected +0 to be 4 // Object.is equality"
+        },
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers shares tied ranks and skips empty podium tiers",
+          "message": "AssertionError: expected +0 to be 4 // Object.is equality"
+        },
+        {
+          "name": "phase flow runs questions → wager → final question → done, with every phase deadlined",
+          "message": "AssertionError: expected 'reveal' to be 'done' // Object.is equality"
+        },
+        {
+          "name": "phase flow the wager holds its reading floor even when everyone wagers early",
+          "message": "Error: expected wager, got reveal"
+        },
+        {
+          "name": "inputs ignores spectators, unknown ids, __proto__, wrong-phase and wrong-type inputs",
+          "message": "Error: expected wager, got reveal"
+        },
+        {
+          "name": "inputs a disconnected player does not block \"all answered\"; reconnecting lets them answer",
+          "message": "AssertionError: expected undefined to deeply equal { index: +0, elapsedMs: 2000 }"
+        },
+        {
+          "name": "hidden information wagers stay hidden from the TV and other phones until the final reveal",
+          "message": "Error: expected wager, got reveal"
+        },
+        {
+          "name": "hidden information views never throw for spectators and unknown ids in any phase",
+          "message": "AssertionError: expected null not to be null"
+        },
+        {
+          "name": "per-question scoring in play scores correct picks by speed, wrong picks 0, and tracks streaks",
+          "message": "AssertionError: expected { a: 1000, b: 750, c: +0 } to deeply equal { a: 1600, b: 750, c: +0 }"
+        },
+        {
+          "name": "per-question scoring in play caps the streak bonus at +300 from the fourth correct answer on",
+          "message": "AssertionError: expected [ 500, 500, 500, 500, 500 ] to deeply equal [ 500, 600, 700, 800, 800 ]"
+        },
+        {
+          "name": "wagers a custom stake (I-026) is clamped to the score and rounded down to tens",
+          "message": "Error: expected wager, got reveal"
+        },
+        {
+          "name": "wagers a 0-score player can only wager 0 whatever percent they send",
+          "message": "Error: expected wager, got reveal"
+        },
+        {
+          "name": "wagers a second wager is ignored; missing wagers count as 0 at the deadline",
+          "message": "Error: expected wager, got reveal"
+        },
+        {
+          "name": "wagers final question: correct adds the wager, wrong or idle subtracts it (score can drop)",
+          "message": "Error: expected wager, got reveal"
+        },
+        {
+          "name": "awards and results names real players for lightning fingers, hot streak and high roller",
+          "message": "AssertionError: expected 'reveal' to be 'wager' // Object.is equality"
+        },
+        {
+          "name": "awards and results gives no awards when nobody qualifies and shares first place on ties",
+          "message": "AssertionError: expected 'reveal' to be 'done' // Object.is equality"
+        },
+        {
+          "name": "VIP skip wager → final question with the wagers placed so far (missing = 0)",
+          "message": "Error: expected wager, got reveal"
+        },
+        {
+          "name": "VIP end and pause resume closes wager when the last unfinished phone dropped during pause",
+          "message": "Error: expected wager, got reveal"
+        },
+        {
+          "name": "VIP end and pause end → done from any phase with the scores so far",
+          "message": "Error: expected wager, got reveal"
+        }
+      ]
+    },
+    {
+      "id": "M18",
+      "description": "Reading hold removed",
+      "file": "games/kahoot/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "stamped answers and minimum reading holds locks all picks immediately, holds the screen, and keeps settled speed elapsed values",
+          "message": "AssertionError: expected 'reveal' to be 'question' // Object.is equality"
+        },
+        {
+          "name": "stamped answers and minimum reading holds restores the original window when an unanswered participant reconnects during a hold",
+          "message": "AssertionError: expected 144478 to be less than 134980"
+        },
+        {
+          "name": "phase flow locks every connected pick, then reveals after the minimum reading hold",
+          "message": "AssertionError: expected 'reveal' to be 'question' // Object.is equality"
+        },
+        {
+          "name": "inputs a disconnected player does not block \"all answered\"; reconnecting lets them answer",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "inputs works with a single player",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "hidden information the correct index and picks are absent from every view until reveal",
+          "message": "AssertionError: expected undefined to be 3 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M19",
+      "description": "Answer key leaks while asking",
+      "file": "games/kahoot/server/views.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "hidden information the correct index and picks are absent from every view until reveal",
+          "message": "AssertionError: expected '{\"gameId\":\"kahoot\",\"phaseId\":\"questio…' not to contain 'correctIndex'"
+        }
+      ]
+    },
+    {
+      "id": "M20",
+      "description": "All podium tiers unveiled immediately",
+      "file": "games/kahoot/server/standings.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 72,
+      "failed": [
+        {
+          "name": "classic scoring, finale privacy and occupied podium tiers uses ordinary final-question points and chart, then only unveils third, second, first",
+          "message": "AssertionError: expected false to be true // Object.is equality"
+        }
+      ]
+    }
+  ]
+}

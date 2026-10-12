@@ -12,6 +12,8 @@ function finalPending(state: State): boolean {
 }
 
 export const contractConfig = {
+  // Canonical fixtures follow the default wager match; podium is a classic-only phase.
+  lastScores: 'wager-final-reveal',
   hiddenFromTv: (base: GameStateBase): string[] => {
     const state = base as State;
     const hidden: string[] = [];

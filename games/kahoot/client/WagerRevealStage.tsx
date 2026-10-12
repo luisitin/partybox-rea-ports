@@ -114,7 +114,7 @@ export function WagerRevealStage({
                     data-me={row.playerId === view.me.id || undefined}
                     aria-label={`${row.name} · ${row.correct ? L('Correct!') : row.pickIndex === null ? L('No answer') : L('Wrong')} · ${L('Bet')}: ${row.wagerAmount ?? 0} · ${row.delta >= 0 ? '+' : '−'}${Math.abs(row.delta)} · ${L('{n} points', { n: row.score })}`}
                   >
-                    <b>{row.name}</b>
+                    <b title={row.name}>{row.name}</b>
                     <span aria-hidden="true">
                       {row.correct ? '✓' : row.pickIndex === null ? '—' : '✗'}{' '}
                       {row.wagerAmount ?? 0} · {row.delta >= 0 ? '+' : '−'}
