@@ -22,9 +22,10 @@ Previous source0dec027 passed CI38201146096 (318checks/31files, all7,000matches
 and SDK/properties). R29 docs CI38201397620 is green. Server sources still match
 the fresh20/20R23mutation campaign; no mutation rerun is needed for these client fixes.
 
-Push this final client milestone and refresh CLAIMS; wait for current full CI.
-Then three fresh no-gain rounds must pass (streak0/3 after R30). Rank/log five
-residuals each, push/refresh per round. Refresh PR body from this job README,
+Latest source2b12e79 passes CI38202484673:327checks/32files in24.55s, full workflow54s.
+Final format/diff checks pass. R31 is the first fresh no-gain review; streak1/3.
+Two independent reviews are pending. Rank/log five residuals each and
+push/refresh per round. Refresh PR body from this job README,
 ready only on latest green CI, then mark P04 DONE before the next eligible job.
 
 Original interactive play was unavailable through CUA; see RESEARCH.md.

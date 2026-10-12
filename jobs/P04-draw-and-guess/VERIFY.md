@@ -31,6 +31,7 @@ R30 artist refresh:
 - First `node jobs/P04-draw-and-guess/tools/playcheck.mjs` attempt times out at Page.navigate before game checks and exits1 in finally. No active profile remains. Target activation now precedes navigation; that RPC alone has a bounded30s deadline.
 - Retried command passes51native checks, exit0. Two never-sent dots survive real same-turn Controller remount, drain exactly once in order, and a subsequent remount duplicates0packets. A dirty tail survives with [100,120]→[500,300]→[900,480], sends once and takes one Undo. The existing wrong-player unmount check sends0packets, and all pause/guess/draft/layout/audio checks remain green. Compact181.344×108.797px and46px full-label controls remain unchanged; projection/viewport errors0. Paused dot spacing189.1ms.
 - The successful browser reaches finally and has no active process. Rendered markup/CSS is unchanged from R28, so33SSR captures remain current; native pause PNGs are regenerated. Scoped report formatting and `node jobs/P04-draw-and-guess/tools/hash-media.mjs` update all68hashes,2,157,072bytes. Server sources/mutation evidence remain unchanged.
+- Final `pnpm.cmd format` and `git diff --check`:pass, exit0. CI38202484673 passes54s for2b12e79: install/typecheck/format and complete scoped suite327checks/32files in24.55s, with all7,000simulations, SDK contracts and seeded properties. R31 is a read-only gameplay review.
 
 Windows11, Node24.19.0, pnpm12.4.2. `pnpm.cmd` is the Windows launcher for the
 documented pnpm commands; PowerShell blocks pnpm.ps1. Only this game was tested.
