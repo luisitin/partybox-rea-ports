@@ -231,10 +231,65 @@ describe('pause, stale events and reconnect', () => {
     expect(dropped.world.time).toBe(200);
     expect(dropped.world.controls.p1).toMatchObject({ x: 0, y: 0, at: 235 });
     const returned = kit.player(dropped, 'p1', true, undefined, T0 + 236);
-    expect(returned.world).toBe(dropped.world);
+    expect(returned.world.cells).toEqual(dropped.world.cells);
+    expect(returned.world.pellets).toEqual(dropped.world.pellets);
+    expect(returned.world.respawns).toEqual(dropped.world.respawns);
+    expect(returned.rng).toEqual(dropped.rng);
+    expect(returned.world.controls.p1).toMatchObject({ x: 0, y: 0, at: 236 });
     expect(kit.input(returned, 'p1', { type: 'steer', x: 1, y: 0 }, T0 + 230)).toBe(returned);
     const fresh = kit.input(returned, 'p1', { type: 'steer', x: -1, y: 0 }, T0 + 236);
     expect(fresh.world.controls.p1).toMatchObject({ x: -1, y: 0, at: 236 });
+  });
+
+  it('a refresh within the host grace period releases old steering even without a preceding drop', () => {
+    const settled = deepFreeze({
+      ...kit.start(),
+      scores: { p1: 37, p2: 0, p3: 0 },
+      world: world([cell('p1', { mass: 96, vx: 12, vy: -4, mergeAt: 8200 })], {
+        time: 200,
+        controls: { p1: { x: 1, y: 0, at: 100, splitAt: 155 } },
+        respawns: { p2: 3100 },
+      }),
+    });
+    expect(settled.players.p1?.connected).toBe(true);
+    const refreshed = kit.player(settled, 'p1', true, undefined, T0 + 235);
+    expect(refreshed.players.p1?.connected).toBe(true);
+    expect(refreshed.world.time).toBe(200);
+    expect(refreshed.world.cells).toEqual(settled.world.cells);
+    expect(refreshed.world.pellets).toEqual(settled.world.pellets);
+    expect(refreshed.world.respawns).toEqual(settled.world.respawns);
+    expect(refreshed.scores).toEqual(settled.scores);
+    expect(refreshed.rng).toEqual(settled.rng);
+    expect(refreshed.world.controls.p1).toEqual({ x: 0, y: 0, at: 235, splitAt: 155 });
+    expect(settled.world.controls.p1?.x).toBe(1);
+    expect(kit.input(refreshed, 'p1', { type: 'steer', x: 1, y: 0 }, T0 + 230)).toBe(refreshed);
+    const fresh = kit.input(refreshed, 'p1', { type: 'steer', x: -1, y: 0 }, T0 + 236);
+    expect(fresh.world.controls.p1).toEqual({ x: -1, y: 0, at: 236, splitAt: 155 });
+    expect(fresh.world.cells).toEqual(settled.world.cells);
+  });
+
+  it('a true-to-true refresh during a long pause uses the frozen release barrier and keeps split inertia', () => {
+    const settled = {
+      ...kit.start(),
+      world: world([cell('p1', { mass: 96, vx: 12, vy: -4, mergeAt: 8200 })], {
+        time: 200,
+        controls: { p1: { x: 1, y: 0, at: 100, splitAt: 155 } },
+      }),
+    };
+    const paused = deepFreeze(kit.vip(settled, 'pause', T0 + 235));
+    const refreshed = kit.player(paused, 'p1', true, undefined, T0 + 20235);
+    expect(refreshed.players.p1?.connected).toBe(true);
+    expect(refreshed.world).toEqual(paused.world);
+    expect(refreshed.world.controls.p1).toEqual({ x: 0, y: 0, at: 235, splitAt: 155 });
+    const resumed = kit.vip(refreshed, 'resume', T0 + 30235);
+    expect(resumed.began).toBe(T0 + 30000);
+    expect(resumed.world).toEqual(paused.world);
+    expect(kit.input(resumed, 'p1', { type: 'steer', x: 1, y: 0 }, resumed.began + 230)).toBe(
+      resumed,
+    );
+    const fresh = kit.input(resumed, 'p1', { type: 'steer', x: -1, y: 0 }, resumed.began + 235);
+    expect(fresh.world.controls.p1).toEqual({ x: -1, y: 0, at: 235, splitAt: 155 });
+    expect(fresh.world.cells).toEqual(paused.world.cells);
   });
 
   it('a newer already-neutral hold blocks older steering without advancing off the physics grid', () => {

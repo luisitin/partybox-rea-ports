@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" data-surface="phone">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>play-paused phone</title>
+    <link rel="stylesheet" href="screens.css" />
+  </head>
+  <body style="--capture-top: 80px; --capture-bottom: 80px">
+    <header class="capture-header">PB · AGAR · Ana</header>
+    <main>
+      <div
+        class="Controllermodulecss_screen"
+        style="--blob-colour: var(--pb-player-1)"
+        data-controls="true"
+        data-phase="play"
+      >
+        <header class="Controllermodulecss_header">
+          <div class="Controllermodulecss_heading">
+            <h2 class="Controllermodulecss_headline">Round 1 of 3</h2>
+            <p class="Controllermodulecss_identity">
+              <b class="Controllermodulecss_badge">1</b>Your blob · <b>60 mass</b>
+            </p>
+          </div>
+          <p class="Controllermodulecss_clock" role="timer" aria-label="Time left">1:18</p>
+        </header>
+        <p class="Controllermodulecss_status" role="status">Paused — steering stopped</p>
+        <div class="Controllermodulecss_controls">
+          <button
+            type="button"
+            class="Controllermodulecss_pad"
+            data-pad-primary="true"
+            disabled=""
+            aria-label="Steering pad. Drag or use arrow keys or W A S D."
+          >
+            <span class="Controllermodulecss_padArrows" aria-hidden="true">↕<br />↔</span
+            ><span
+              class="Controllermodulecss_thumb"
+              style="--stick-x: 0; --stick-y: 0"
+              aria-hidden="true"
+            ></span
+            ><span class="Controllermodulecss_padLabel">Drag to steer</span>
+          </button>
+          <div class="Controllermodulecss_splitArea">
+            <button
+              type="button"
+              class="Controllermodulecss_split"
+              disabled=""
+              aria-describedby="blob-split-reason"
+            >
+              <span aria-hidden="true">↗</span> SPLIT
+            </button>
+            <p id="blob-split-reason" class="Controllermodulecss_reason" aria-live="polite">
+              Round held
+            </p>
+            <p class="Controllermodulecss_risk">Hold steer + tap. Smaller halves are vulnerable.</p>
+          </div>
+        </div>
+        <p class="Controllermodulecss_footer">Your number on the TV. Buzzer mass scores.</p>
+      </div>
+    </main>
+    <footer class="capture-footer">Agar.io · phone shell reserved space</footer>
+  </body>
+</html>

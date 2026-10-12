@@ -161,7 +161,7 @@ export function Controller({
                   <span className={styles.offline}>{L('Left')}</span>
                 ) : !row.connected ? (
                   <span className={styles.offline} aria-label={L('Disconnected')}>
-                    ○
+                    {L('Offline')}
                   </span>
                 ) : null}
                 {ordered ? <span className={styles.gain}>+{row.gained}</span> : null}

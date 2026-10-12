@@ -4,13 +4,14 @@ import type { GameEvent } from '@partybox/game-sdk';
 import { testKit, testPlayers } from '@partybox/game-sdk/testing';
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
+import { resolveCells } from '../server/collisions';
 import { radius } from '../server/geometry';
 import { game } from '../server/index';
 import { makeWorld } from '../server/spawn';
 import { H, MAX_CELLS, PELLET_COUNT, PHASES, ROUND_MS, STEP_MS, W } from '../server/types';
-import type { Input, State, World } from '../server/types';
+import type { Cell, Input, State, World } from '../server/types';
 import { apply, tick } from '../server/world';
-import { deepFreeze, T0 } from './helpers';
+import { cell, deepFreeze, T0 } from './helpers';
 
 function assertWorld(w: World): void {
   expect(w.time % STEP_MS).toBe(0);
@@ -93,6 +94,100 @@ describe('seeded world properties', () => {
       ),
       { seed: 20261011, numRuns: 1000 },
     );
+  }, 120000);
+});
+
+describe('seeded collision ownership properties', () => {
+  it('replays 1003 dense snapshots with mass-once ownership, frozen inputs and canonical storage order', () => {
+    const generated = createRng(0x05c0111d);
+    const seeds = [1, 2, 3, ...Array.from({ length: 1000 }, () => generated.int(4, 0xffffffff))];
+    let inputCells = 0;
+    let survivingCells = 0;
+    let ownershipDraws = 0;
+    for (const [trace, seed] of seeds.entries()) {
+      const config = createRng(seed);
+      const count = 2 + (trace % 7);
+      const source: Cell[] = [];
+      let id = 1;
+      for (let owner = 1; owner <= count; owner++) {
+        const pieces = config.int(1, MAX_CELLS);
+        for (let piece = 0; piece < pieces; piece++) {
+          source.push(
+            cell(`p${owner}`, {
+              id: id++,
+              x: 80 + config.int(-60000, 60000) / 10000,
+              y: 50 + config.int(-60000, 60000) / 10000,
+              mass: config.pick([24, 48, 60, 96, 120, 192]),
+              vx: config.int(-55, 55),
+              vy: config.int(-55, 55),
+              mergeAt: config.pick([0, 9000]),
+              shieldUntil: config.pick([0, 1900, 1950, 2100]),
+            }),
+          );
+        }
+      }
+      const previous = source.map((c) => ({
+        ...c,
+        x: c.x + config.int(-50000, 50000) / 10000,
+        y: c.y + config.int(-50000, 50000) / 10000,
+      }));
+      const rng = seedRng(seed);
+      deepFreeze({ source, previous, rng });
+      const before = JSON.stringify({ source, previous, rng });
+      const [end, next] = resolveCells(source, 2000, rng, previous);
+      expect(resolveCells(source, 2000, rng, previous)).toEqual([end, next]);
+      expect(resolveCells([...source].reverse(), 2000, rng, [...previous].reverse())).toEqual([
+        end,
+        next,
+      ]);
+      expect(JSON.stringify({ source, previous, rng })).toBe(before);
+      expect(end.reduce((sum, c) => sum + c.mass, 0)).toBe(
+        source.reduce((sum, c) => sum + c.mass, 0),
+      );
+      expect(end.length).toBeGreaterThan(0);
+      expect(end.length).toBeLessThanOrEqual(source.length);
+      expect(new Set(end.map((c) => c.id)).size).toBe(end.length);
+      for (const c of end) {
+        expect(source.some((original) => original.id === c.id && original.owner === c.owner)).toBe(
+          true,
+        );
+        expect(
+          [c.x, c.y, c.mass, c.vx, c.vy, c.mergeAt, c.shieldUntil].every(Number.isFinite),
+        ).toBe(true);
+        expect(c.mass).toBeGreaterThan(0);
+        const r = radius(c.mass);
+        expect(c.x).toBeGreaterThanOrEqual(r - 0.0001);
+        expect(c.x).toBeLessThanOrEqual(W - r + 0.0001);
+        expect(c.y).toBeGreaterThanOrEqual(r - 0.0001);
+        expect(c.y).toBeLessThanOrEqual(H - r + 0.0001);
+      }
+      expect(next.step).toBeGreaterThanOrEqual(rng.step);
+      expect(next.step - rng.step).toBeLessThanOrEqual(source.length);
+      inputCells += source.length;
+      survivingCells += end.length;
+      ownershipDraws += next.step - rng.step;
+    }
+    const report = {
+      snapshots: seeds.length,
+      inputCells,
+      survivingCells,
+      ownershipDraws,
+      fixedSeeds: [1, 2, 3],
+      generatedSeeds: 1000,
+      generatorSeed: 0x05c0111d,
+      players: '2..8',
+      cellsPerPlayer: '1..4',
+    };
+    console.log(`P05 COLLISION PROPERTIES: ${JSON.stringify(report)}`);
+    if (process.env['PB_RECORD_VERIFY'] === '1') {
+      const folder = new URL('../../../jobs/P05-blob-arena/', import.meta.url);
+      mkdirSync(folder, { recursive: true });
+      writeFileSync(
+        new URL('collision-property-report.json', folder),
+        JSON.stringify(report, null, 2) + '\n',
+        'utf8',
+      );
+    }
   }, 120000);
 });
 
@@ -259,11 +354,32 @@ function exerciseLifecycle(seed: number, count: number, trace: number): number {
   send(steerEvent(ids[0]!, 1, 0, T0 + 100));
   send(timerEvent(T0 + 200));
   send(playerEvent(ids[0]!, false, T0 + 235));
-  const dropped = JSON.stringify(state.world);
+  const judged = (s: State): string =>
+    JSON.stringify({
+      time: s.world.time,
+      cells: s.world.cells,
+      pellets: s.world.pellets,
+      respawns: s.world.respawns,
+      serial: s.world.serial,
+      rng: s.rng,
+    });
+  const dropped = judged(state);
   send(playerEvent(ids[0]!, true, T0 + 236));
-  check(JSON.stringify(state.world) === dropped, 'reconnect preserves judged world');
+  check(judged(state) === dropped, 'reconnect preserves judged arena and RNG');
+  check(state.world.controls[ids[0]!]!.at === 236, 'reconnect records its newer release barrier');
   send(steerEvent(ids[0]!, 1, 0, T0 + 230), true);
   send(steerEvent(ids[0]!, -1, 0, T0 + 236));
+  const beforeRefresh = judged(state);
+  send(playerEvent(ids[0]!, true, T0 + 245));
+  check(judged(state) === beforeRefresh, 'true-to-true refresh preserves judged arena and RNG');
+  check(
+    state.world.controls[ids[0]!]!.at === 245 &&
+      state.world.controls[ids[0]!]!.x === 0 &&
+      state.world.controls[ids[0]!]!.y === 0,
+    'true-to-true refresh releases its held pad',
+  );
+  send(steerEvent(ids[0]!, 1, 0, T0 + 240), true);
+  send(steerEvent(ids[0]!, -1, 0, T0 + 246));
   send(steerEvent(ids[0]!, 0, 0, T0 + 270));
   send(steerEvent(ids[0]!, 0, 0, T0 + 285));
   check(state.world.controls[ids[0]!]!.at === 285, 'newer neutral timestamp');

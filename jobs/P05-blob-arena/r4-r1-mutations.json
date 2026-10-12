@@ -1,0 +1,582 @@
+{
+  "command": "pnpm.cmd vitest run games/agar-io/__tests__/mechanics.test.ts games/agar-io/__tests__/game.test.ts games/agar-io/__tests__/regressions.test.ts --maxWorkers=1 --reporter=json --outputFile=jobs/P05-blob-arena/mutation-current.json",
+  "baseline": {
+    "exitCode": 0,
+    "success": true,
+    "failedTests": [],
+    "brokenSuites": [],
+    "error": null,
+    "passedTests": 61,
+    "totalTests": 61,
+    "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+  },
+  "mutations": [
+    {
+      "id": "M01",
+      "name": "Score rounds up instead of down",
+      "file": "scoring.ts",
+      "from": "Math.floor(totalMass(world, id))",
+      "to": "Math.ceil(totalMass(world, id))",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "the three-round match settles the last physics step at the horn and scores current mass once",
+          "failures": [
+            "AssertionError: expected { p1: 64, p2: 24, p3: +0 } to deeply equal { p1: 63, p2: 24, p3: +0 }\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:44:30\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "points and bot decisions scores floored total surviving mass, including all split parts and zero for swallowed seats",
+          "failures": [
+            "AssertionError: expected { p1: 55, p2: 10, p3: +0 } to deeply equal { p1: 54, p2: 9, p3: +0 }\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:379:48\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 59,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M02",
+      "name": "Score counts only the largest split part",
+      "file": "scoring.ts",
+      "from": "Math.floor(totalMass(world, id))",
+      "to": "Math.floor(Math.max(0, ...world.cells.filter(c => c.owner === id).map(c => c.mass)))",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "points and bot decisions scores floored total surviving mass, including all split parts and zero for swallowed seats",
+          "failures": [
+            "AssertionError: expected { p1: 30, p2: 9, p3: +0 } to deeply equal { p1: 54, p2: 9, p3: +0 }\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:379:48\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 60,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M03",
+      "name": "New round replaces previously banked points",
+      "file": "phases/score.ts",
+      "from": "n + (lastPoints[id] ?? 0)",
+      "to": "(lastPoints[id] ?? 0)",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "the three-round match adds end mass across exactly three rounds and returns every original seat",
+          "failures": [
+            "AssertionError: expected { p1: 27, p2: 33, p3: +0 } to deeply equal { p1: 78, p2: 96, p3: +0 }\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:82:22\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "the three-round match VIP skip banks the settled mass, moves standings to the next round, and end is final",
+          "failures": [
+            "AssertionError: expected 24 to be greater than or equal to 99\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:109:29\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "pause, stale events and reconnect a left seat stays retired across refresh and every later round",
+          "failures": [
+            "AssertionError: expected +0 to be 37 // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:330:27\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "pause, stale events and reconnect a kicked seat stays retired across refresh and every later round",
+          "failures": [
+            "AssertionError: expected +0 to be 37 // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:330:27\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 57,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M04",
+      "name": "Match exits after two rounds",
+      "file": "index.ts",
+      "from": "state.round >= 3",
+      "to": "state.round >= 2",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "the three-round match adds end mass across exactly three rounds and returns every original seat",
+          "failures": [
+            "AssertionError: expected 90000 to be +0 // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:77:30\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 60,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M05",
+      "name": "Timer waits beyond the horn before entering score",
+      "file": "phases/play.ts",
+      "from": "return now >= s.endsAt",
+      "to": "return now >= s.endsAt + 1000",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "the three-round match settles the last physics step at the horn and scores current mass once",
+          "failures": [
+            "AssertionError: expected 'play' to be 'score' // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:42:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "the three-round match adds end mass across exactly three rounds and returns every original seat",
+          "failures": [
+            "AssertionError: expected 'play' to be 'score' // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:74:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 59,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M06",
+      "name": "Horn drops the final physics step",
+      "file": "phases/play.ts",
+      "from": "Math.min(ROUND_MS, Math.max(0, now - state.began))",
+      "to": "Math.min(ROUND_MS - 100, Math.max(0, now - state.began))",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "the three-round match settles the last physics step at the horn and scores current mass once",
+          "failures": [
+            "AssertionError: expected 89900 to be 90000 // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:43:30\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "the three-round match accepts late input as the horn, never granting mass after 90 seconds",
+          "failures": [
+            "AssertionError: expected 89900 to be 90000 // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:94:29\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 59,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M07",
+      "name": "Predator needs only a 1.15 mass ratio",
+      "file": "types.ts",
+      "from": "export const EAT_RATIO = 1.25;",
+      "to": "export const EAT_RATIO = 1.15;",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "eating requires at least a 1.25 mass ratio, including the equality boundary",
+          "failures": [
+            "AssertionError: expected 51.599999999999994 to be 54 // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:197:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 60,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M08",
+      "name": "Grazing edges swallow prey without deep overlap",
+      "file": "collisions.ts",
+      "from": "d < radius(big.mass) - radius(small.mass) * 0.35",
+      "to": "d < radius(big.mass) + radius(small.mass)",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "eating requires deep overlap, rather than grazing the larger edge",
+          "failures": [
+            "AssertionError: expected [ { id: 1, owner: 'p1', x: 60, …(6) } ] to have a length of 2 but got 1\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1389:20)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:204:38\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 60,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M09",
+      "name": "Spawn shields do not prevent eating",
+      "file": "collisions.ts",
+      "from": "if (time < a.shieldUntil || time < b.shieldUntil) continue;",
+      "to": "if (false) continue;",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "eating protects both predator and prey until their shields expire",
+          "failures": [
+            "AssertionError: expected [ { id: 1, owner: 'p1', x: 60, …(6) } ] to have a length of 2 but got 1\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1389:20)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:216:40\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 60,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M10",
+      "name": "Splitting loses a third of the mass",
+      "file": "world.ts",
+      "from": "const half = c.mass / 2;",
+      "to": "const half = c.mass / 3;",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "splitting and rejoining splits exactly 48 mass in half, conserves mass, and launches in the pad direction",
+          "failures": [
+            "AssertionError: expected [ 16, 16 ] to deeply equal [ 24, 24 ]\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:125:43\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "splitting and rejoining requires enough mass, an aim, no shield, a free slot and the one-second cooldown",
+          "failures": [
+            "AssertionError: expected 85.33333333333333 to be 192 // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:155:37\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "splitting and rejoining brings separated siblings back together after the lock without another input",
+          "failures": [
+            "AssertionError: expected 64 to be 96 // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:186:37\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "review regressions a split lunge eats edible prey it crosses between physics samples",
+          "failures": [
+            "AssertionError: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/regressions.test.ts:38:53\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 57,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M11",
+      "name": "Splitting has no cooldown",
+      "file": "types.ts",
+      "from": "export const SPLIT_COOLDOWN_MS = 1000;",
+      "to": "export const SPLIT_COOLDOWN_MS = 0;",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "public views split availability reflects shield, cooldown, neutral aim, cap and paused state",
+          "failures": [
+            "AssertionError: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:489:77\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 60,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M12",
+      "name": "Splitting is allowed at starting mass",
+      "file": "types.ts",
+      "from": "export const SPLIT_MIN = 48;",
+      "to": "export const SPLIT_MIN = 24;",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "public views sends each player their own mass, split reason and rank without exposing RNG or controls",
+          "failures": [
+            "AssertionError: expected 'Steer to aim' to contain '48'\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:372:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "public views explicit member and connection fields govern controls while spectators always receive the public stage",
+          "failures": [
+            "AssertionError: expected { gameId: 'agar-io', …(25) } to match object { canSplit: false, …(1) }\n(35 matching properties omitted from actual)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1283:10)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:455:53\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        },
+        {
+          "name": "splitting and rejoining splits exactly 48 mass in half, conserves mass, and launches in the pad direction",
+          "failures": [
+            "AssertionError: expected [ 12, 12 ] to deeply equal [ 24, 24 ]\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:125:43\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 58,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M13",
+      "name": "The split cap allows eight cells",
+      "file": "types.ts",
+      "from": "export const MAX_CELLS = 4;",
+      "to": "export const MAX_CELLS = 8;",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "public views split availability reflects shield, cooldown, neutral aim, cap and paused state",
+          "failures": [
+            "AssertionError: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:489:77\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "splitting and rejoining requires enough mass, an aim, no shield, a free slot and the one-second cooldown",
+          "failures": [
+            "AssertionError: expected [ { id: 1, owner: 'p1', …(7) }, …(3) ] to have a length of 8 but got 4\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1389:20)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:154:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 59,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M14",
+      "name": "Siblings unlock merging after one second",
+      "file": "types.ts",
+      "from": "export const MERGE_MS = 8000;",
+      "to": "export const MERGE_MS = 1000;",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "splitting and rejoining brings separated siblings back together after the lock without another input",
+          "failures": [
+            "AssertionError: expected [ { id: 1, owner: 'p1', …(7) } ] to have a length of 2 but got 1\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1389:20)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:183:54\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 60,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M15",
+      "name": "A swallowed seat respawns in half the specified time",
+      "file": "world.ts",
+      "from": "respawns[id] = time + RESPAWN_MS;",
+      "to": "respawns[id] = time + RESPAWN_MS / 2;",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "spawn and clocks respawns a swallowed player exactly three seconds later with two seconds of protection",
+          "failures": [
+            "AssertionError: expected 1600 to be 3100 // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:341:31\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 60,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M16",
+      "name": "Respawns lose their two-second shield",
+      "file": "spawn.ts",
+      "from": "shieldUntil: world.time + shield,",
+      "to": "shieldUntil: world.time,",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "spawn and clocks creates 96 bounded seeded pellets and one independent safe blob per seat",
+          "failures": [
+            "AssertionError: expected false to be true // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:326:87\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "spawn and clocks respawns a swallowed player exactly three seconds later with two seconds of protection",
+          "failures": [
+            "AssertionError: expected 3100 to be 5100 // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:348:27\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 59,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M17",
+      "name": "A pellet awards double mass",
+      "file": "world.ts",
+      "from": "eater.mass += PELLET_MASS;",
+      "to": "eater.mass += PELLET_MASS * 2;",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "the three-round match settles the last physics step at the horn and scores current mass once",
+          "failures": [
+            "AssertionError: expected { p1: 66, p2: 24, p3: +0 } to deeply equal { p1: 63, p2: 24, p3: +0 }\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:44:30\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "eating a pellet adds exactly three mass and is replaced with the same id from state.rng",
+          "failures": [
+            "AssertionError: expected 30 to be 27 // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:246:34\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "eating the nearest overlapping cell wins a snack independently of storage order without a tie draw",
+          "failures": [
+            "AssertionError: expected [ 24, 54 ] to deeply equal [ 24, 27, 24 ]\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:270:42\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "eating equal and rounding-sized snack ties replay by seed and can reward either rival",
+          "failures": [
+            "TypeError: Cannot read properties of undefined (reading 'owner')\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:291:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "eating snack ties use the actual minimum distance and exclude a farther tolerance chain",
+          "failures": [
+            "TypeError: Cannot read properties of undefined (reading 'owner')\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:313:21\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 56,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M18",
+      "name": "An eaten pellet stays available at the same spot",
+      "file": "world.ts",
+      "from": "return fresh;",
+      "to": "return p;",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "eating a pellet adds exactly three mass and is replaced with the same id from state.rng",
+          "failures": [
+            "AssertionError: expected { id: 7, x: 60, y: 50 } to not deeply equal { id: 7, x: 60, y: 50 }\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/mechanics.test.ts:249:32\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 60,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M19",
+      "name": "Resume fails to extend the round end clock",
+      "file": "index.ts",
+      "from": "endsAt: state.endsAt + ms",
+      "to": "endsAt: state.endsAt",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "pause, stale events and reconnect settles at pause, freezes all physics, and shifts wall clocks without shifting relative ones",
+          "failures": [
+            "AssertionError: expected 1090000 to be 1095000 // Object.is equality\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:169:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 60,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    },
+    {
+      "id": "M20",
+      "name": "TV view exposes the future random sequence",
+      "file": "index.ts",
+      "from": "timerMode: 'quiet',",
+      "to": "timerMode: 'quiet',\n    ...{ rng: state.rng },",
+      "killed": true,
+      "exitCode": 1,
+      "success": false,
+      "failedTests": [
+        {
+          "name": "public views sends each player their own mass, split reason and rank without exposing RNG or controls",
+          "failures": [
+            "AssertionError: expected { gameId: 'agar-io', …(19) } to not have property \"rng\"\n    at C:/dev/rea-runs/r4/games/agar-io/__tests__/game.test.ts:376:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "brokenSuites": [],
+      "error": null,
+      "passedTests": 60,
+      "totalTests": 61,
+      "outputTail": "JSON report written to C:/dev/rea-runs/r4/jobs/P05-blob-arena/mutation-current.json\n\n"
+    }
+  ],
+  "killed": 20,
+  "total": 20,
+  "status": "passed",
+  "sourceFiles": 45,
+  "sourceRestored": true
+}

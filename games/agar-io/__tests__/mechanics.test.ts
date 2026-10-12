@@ -161,8 +161,8 @@ describe('splitting and rejoining', () => {
       cell('p1', { mass: 96, mergeAt: MERGE_MS }),
       cell('p1', { id: 2, x: 62, mass: 24, mergeAt: MERGE_MS }),
     ];
-    expect(resolveCells(siblings, MERGE_MS - 1)).toHaveLength(2);
-    const merged = resolveCells(siblings, MERGE_MS);
+    expect(resolveCells(siblings, MERGE_MS - 1, seedRng(1))[0]).toHaveLength(2);
+    const [merged] = resolveCells(siblings, MERGE_MS, seedRng(1));
     expect(merged).toHaveLength(1);
     expect(merged[0]!.mass).toBe(120);
     expect(merged[0]!.x).toBeCloseTo((60 * 96 + 62 * 24) / 120, 4);
@@ -190,20 +190,20 @@ describe('splitting and rejoining', () => {
 describe('eating', () => {
   it('requires at least a 1.25 mass ratio, including the equality boundary', () => {
     const meal = (mass: number) => [cell('p1', { mass }), cell('p2', { id: 2, mass: 24 })];
-    expect(resolveCells(meal(24 * EAT_RATIO - 0.001), 1000)).toHaveLength(2);
-    const eaten = resolveCells(meal(24 * EAT_RATIO), 1000);
+    expect(resolveCells(meal(24 * EAT_RATIO - 0.001), 1000, seedRng(1))[0]).toHaveLength(2);
+    const [eaten] = resolveCells(meal(24 * EAT_RATIO), 1000, seedRng(1));
     expect(eaten).toHaveLength(1);
     expect(eaten[0]!.owner).toBe('p1');
     expect(eaten[0]!.mass).toBe(54);
-    expect(resolveCells(meal(24), 1000)).toHaveLength(2);
+    expect(resolveCells(meal(24), 1000, seedRng(1))[0]).toHaveLength(2);
   });
 
   it('requires deep overlap, rather than grazing the larger edge', () => {
     const cutoff = radius(96) - radius(24) * 0.35;
     const near = [cell('p1', { mass: 96 }), cell('p2', { id: 2, x: 60 + cutoff + 0.01 })];
-    expect(resolveCells(near, 1000)).toHaveLength(2);
+    expect(resolveCells(near, 1000, seedRng(1))[0]).toHaveLength(2);
     expect(
-      resolveCells([{ ...near[0]! }, { ...near[1]!, x: 60 + cutoff - 0.01 }], 1000),
+      resolveCells([{ ...near[0]! }, { ...near[1]!, x: 60 + cutoff - 0.01 }], 1000, seedRng(1))[0],
     ).toHaveLength(1);
   });
 
@@ -213,8 +213,8 @@ describe('eating', () => {
         cell('p1', { mass: 96, shieldUntil: owner === 'p1' ? 2000 : 0 }),
         cell('p2', { id: 2, shieldUntil: owner === 'p2' ? 2000 : 0 }),
       ];
-      expect(resolveCells(pair, 1999)).toHaveLength(2);
-      expect(resolveCells(pair, 2000)).toHaveLength(1);
+      expect(resolveCells(pair, 1999, seedRng(1))[0]).toHaveLength(2);
+      expect(resolveCells(pair, 2000, seedRng(1))[0]).toHaveLength(1);
     }
   });
 
@@ -224,12 +224,149 @@ describe('eating', () => {
       cell('p2', { id: 2, mass: 96 }),
       cell('p3', { id: 3, x: 100 }),
     ]);
-    const end = resolveCells(source, 1000);
+    const [end, next] = resolveCells(source, 1000, seedRng(1));
     expect(end.map((c) => c.owner)).toEqual(['p2', 'p3']);
     expect(end[0]!.mass).toBe(120);
     expect(end.reduce((n, c) => n + c.mass, 0)).toBe(144);
-    expect(resolveCells([...source].reverse(), 1000)).toEqual(end);
+    expect(resolveCells([...source].reverse(), 1000, seedRng(1))).toEqual([end, next]);
     expect(source[0]!.mass).toBe(24);
+  });
+
+  it('either symmetric predator can own one victim with seeded replay and canonical ordering', () => {
+    for (const right of [64, 64.0004]) {
+      const source = deepFreeze([
+        cell('p1', { mass: 96 }),
+        cell('p2', { id: 2, x: right, mass: 96 }),
+        cell('p3', { id: 3, x: 62 }),
+      ]);
+      const winners = new Set<string>();
+      for (let seed = 1; seed <= 64; seed++) {
+        const rng = seedRng(seed);
+        const [end, next] = resolveCells(source, 2000, rng);
+        expect(end).toHaveLength(2);
+        expect(end.map((c) => c.mass).sort((a, b) => a - b)).toEqual([96, 120]);
+        expect(end.reduce((sum, c) => sum + c.mass, 0)).toBe(216);
+        winners.add(end.find((c) => c.mass === 120)!.owner);
+        expect(next.step).toBe(rng.step + 1);
+        expect(resolveCells(source, 2000, rng)).toEqual([end, next]);
+        expect(resolveCells([...source].reverse(), 2000, rng)).toEqual([end, next]);
+      }
+      expect([...winners].sort()).toEqual(['p1', 'p2']);
+      expect(source.map((c) => c.mass)).toEqual([96, 96, 24]);
+    }
+  });
+
+  it('the geometrically nearer higher-ID predator owns shared prey without an RNG draw', () => {
+    const source = [
+      cell('p1', { x: 58, mass: 96 }),
+      cell('p2', { id: 2, x: 64, mass: 96 }),
+      cell('p3', { id: 3, x: 62 }),
+    ];
+    const rng = seedRng(23);
+    const [end, next] = resolveCells(source, 2000, rng);
+    expect(end.map((c) => [c.owner, c.mass])).toEqual([
+      ['p1', 96],
+      ['p2', 120],
+    ]);
+    expect(next).toBe(rng);
+    expect(resolveCells([...source].reverse(), 2000, rng)).toEqual([end, next]);
+  });
+
+  it('ownership chains contribute each original mass once even when the chosen predator is swallowed', () => {
+    const source = deepFreeze([
+      cell('p1', { mass: 200 }),
+      cell('p2', { id: 2, x: 64, mass: 80 }),
+      cell('p3', { id: 3, x: 66 }),
+    ]);
+    const rng = seedRng(23);
+    const [end, next] = resolveCells(source, 2000, rng);
+    expect(end).toHaveLength(1);
+    expect(end[0]).toEqual({ ...source[0]!, mass: 304 });
+    expect(next).toBe(rng);
+    expect(resolveCells([...source].reverse(), 2000, rng)).toEqual([end, next]);
+  });
+
+  it('gained mass enables its next catch on the following physics frame, with RNG retained by world.tick', () => {
+    const source = [
+      cell('p1', { mass: 96 }),
+      cell('p2', { id: 2, x: 64, mass: 96 }),
+      cell('p3', { id: 3, x: 62 }),
+    ];
+    const winners = new Set<string>();
+    for (let seed = 1; seed <= 32; seed++) {
+      const rng = seedRng(seed);
+      const initial = world(source);
+      const [first, firstRng] = tick(initial, rng, STEP_MS);
+      expect(first.cells).toHaveLength(2);
+      expect(first.cells.map((c) => c.mass).sort((a, b) => a - b)).toEqual([96, 120]);
+      const [second, secondRng] = tick(first, firstRng, STEP_MS * 2);
+      expect(second.cells).toHaveLength(1);
+      expect(second.cells[0]!.mass).toBe(216);
+      winners.add(second.cells[0]!.owner);
+      expect(secondRng.step).toBe(rng.step + 1);
+      expect(tick(initial, rng, STEP_MS * 2)).toEqual([second, secondRng]);
+      expect(tick({ ...initial, cells: [...source].reverse() }, rng, STEP_MS * 2)).toEqual([
+        second,
+        secondRng,
+      ]);
+    }
+    expect([...winners].sort()).toEqual(['p1', 'p2']);
+  });
+
+  it('shared-victim choices exclude shielded predators and never consume protected prey', () => {
+    const source = [
+      cell('p1', { mass: 96, shieldUntil: 2001 }),
+      cell('p2', { id: 2, x: 64, mass: 96 }),
+      cell('p3', { id: 3, x: 62 }),
+    ];
+    const rng = seedRng(23);
+    const [end, next] = resolveCells(source, 2000, rng);
+    expect(end.map((c) => [c.owner, c.mass])).toEqual([
+      ['p1', 96],
+      ['p2', 120],
+    ]);
+    expect(next).toBe(rng);
+    const protectedPrey = source.map((c) => (c.owner === 'p3' ? { ...c, shieldUntil: 2001 } : c));
+    const [safe, safeRng] = resolveCells(protectedPrey, 2000, rng);
+    expect(safe.map((c) => c.mass)).toEqual([96, 96, 24]);
+    expect(safeRng).toBe(rng);
+  });
+
+  it('shield expiry inside a swept interval permits endpoint overlap without granting an earlier crossed catch', () => {
+    const previous = [cell('p1', { mass: 60 }), cell('p2', { id: 2, x: 70, shieldUntil: 1950 })];
+    const rng = seedRng(23);
+    const crossed = [{ ...previous[0]!, x: 80 }, previous[1]!];
+    expect(resolveCells(crossed, 2000, rng, previous)[0]).toHaveLength(2);
+    const touching = [{ ...previous[0]!, x: 70 }, previous[1]!];
+    const [caught, next] = resolveCells(touching, 2000, rng, previous);
+    expect(caught).toHaveLength(1);
+    expect(caught[0]!.mass).toBe(84);
+    expect(next).toBe(rng);
+  });
+
+  it('sibling locks and weighted reunion resolve before the rival snapshot, retaining merged shields and velocities', () => {
+    const source = [
+      cell('p1', { mass: 48, mergeAt: MERGE_MS, vx: 55 }),
+      cell('p2', { id: 2, x: 61, mass: 60 }),
+      cell('p1', { id: 3, x: 62, mass: 48, mergeAt: MERGE_MS, vy: -12 }),
+    ];
+    const rng = seedRng(23);
+    expect(resolveCells(source, MERGE_MS - 1, rng)[0]).toHaveLength(3);
+    const [merged, next] = resolveCells(source, MERGE_MS, rng);
+    expect(merged).toHaveLength(1);
+    expect(merged[0]).toMatchObject({ owner: 'p1', x: 61, y: 50, mass: 156, vx: 0, vy: 0 });
+    expect(next).toBe(rng);
+    const protectedPieces = source.map((c) => (c.owner === 'p1' ? { ...c, shieldUntil: 9000 } : c));
+    const [protectedMerge, protectedRng] = resolveCells(protectedPieces, MERGE_MS, rng);
+    expect(protectedMerge).toHaveLength(2);
+    expect(protectedMerge[0]).toMatchObject({
+      owner: 'p1',
+      mass: 96,
+      shieldUntil: 9000,
+      vx: 0,
+      vy: 0,
+    });
+    expect(protectedRng).toBe(rng);
   });
 
   it('a pellet adds exactly three mass and is replaced with the same id from state.rng', () => {

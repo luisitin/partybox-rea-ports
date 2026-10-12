@@ -88,7 +88,7 @@ export function Tv({ view }: GameTvProps<BlobArenaTvView>): JSX.Element {
                       <span className={styles.offline}>{L('Left')}</span>
                     ) : !row.connected ? (
                       <span className={styles.offline} aria-label={L('Disconnected')}>
-                        ○
+                        {L('Offline')}
                       </span>
                     ) : null}
                   </div>

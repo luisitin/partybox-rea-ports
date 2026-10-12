@@ -167,7 +167,7 @@ export function tick(
       r = next;
       return fresh;
     });
-    cells = resolveCells(cells, time, world.cells);
+    [cells, r] = resolveCells(cells, time, r, world.cells);
     const respawns = { ...world.respawns };
     const controls = { ...world.controls };
     world = { ...world, time, cells, pellets, respawns, controls };

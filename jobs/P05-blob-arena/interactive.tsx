@@ -33,6 +33,8 @@ declare global {
     __blobView: PreviewView;
     __blobStatus: PreviewStatus;
     __blobSetView: (patch: Partial<PreviewView>) => void;
+    __blobSetIdentity: (playerId: string) => void;
+    __blobSetFixture: (name: keyof typeof fixtures) => void;
     __blobClearInputs: () => void;
   }
 }
@@ -44,11 +46,14 @@ const playerId = query.get('player') ?? 'p1';
 const fixtures = { play, score, 'score-last': scoreLast, done };
 const source = fixtures[fixtureName as keyof typeof fixtures] ?? play;
 const state = structuredClone(source) as unknown as State;
+// Only this isolated harness freezes Date.now; the production game and physics are unchanged.
+const frozenWall = Date.now();
+Date.now = () => frozenWall;
 for (const p of Object.values(state.players)) p.canSeeTv = true;
 if (phoneOnly) state.phoneOnly = true;
 else delete state.phoneOnly;
 // Rebase only absolute display clocks. The seeded world and all relative physics times stay fixed.
-const shift = Date.now() - (state.began + state.world.time);
+const shift = frozenWall - (state.began + state.world.time);
 state.began += shift;
 state.endsAt += shift;
 state.phase.startedAt += shift;
@@ -85,6 +90,7 @@ window.addEventListener('unhandledrejection', (event) => {
 
 function Preview() {
   const [view, setView] = useState(initialView);
+  const [currentMe, setCurrentMe] = useState(me);
   const send = useCallback((input: Input) => {
     window.__blobInputs.push(structuredClone(input));
     window.__blobStatus.inputs = window.__blobInputs.length;
@@ -92,8 +98,27 @@ function Preview() {
   useEffect(() => {
     window.__blobView = view;
     window.__blobSetView = (patch) => setView((current) => ({ ...current, ...patch }));
+    window.__blobSetIdentity = (id) => {
+      setCurrentMe(state.players[id] ?? { id, name: 'Spectator', avatarId: 'fox' });
+      setView({ ...game.controllerView(state, id), vip: null });
+    };
+    window.__blobSetFixture = (name) => {
+      const snapshot = structuredClone(fixtures[name]) as unknown as State;
+      for (const player of Object.values(snapshot.players)) player.canSeeTv = true;
+      if (phoneOnly) snapshot.phoneOnly = true;
+      else delete snapshot.phoneOnly;
+      const delta = frozenWall - (snapshot.began + snapshot.world.time);
+      snapshot.began += delta;
+      snapshot.endsAt += delta;
+      snapshot.phase.startedAt += delta;
+      if (snapshot.phase.deadline !== null) snapshot.phase.deadline += delta;
+      if (snapshot.phase.paused) snapshot.phase.paused.at += delta;
+      setView({ ...game.controllerView(snapshot, currentMe.id), vip: null });
+      window.__blobStatus.fixture = name;
+    };
     Object.assign(window.__blobStatus, {
       ready: true,
+      playerId: currentMe.id,
       phase: view.phaseId,
       paused: view.paused,
       mass: view.mass,
@@ -103,12 +128,12 @@ function Preview() {
     rootElement.dataset.ready = 'true';
     rootElement.dataset.phase = view.phaseId;
     const header = document.getElementById('preview-header');
-    if (header) header.textContent = `PB · PREVIEW · ${me.name}`;
-  }, [view]);
+    if (header) header.textContent = `PB · AGAR PREVIEW · ${currentMe.name}`;
+  }, [view, currentMe]);
   return (
     <ServerClockProvider offsetMs={0}>
       <PhoneOnlyProvider value={phoneOnly}>
-        <Controller view={view} me={me} send={send} />
+        <Controller view={view} me={currentMe} send={send} />
       </PhoneOnlyProvider>
     </ServerClockProvider>
   );

@@ -134,11 +134,10 @@ const composed = composeReduce<State, Input>({
         },
       };
     const at = releaseTime(s, event.now);
+    // A refresh can reconnect inside the host grace period without ever emitting a drop.
     const world = departed
       ? retire(s.world, event.playerId, at)
-      : !event.connected
-        ? release(s.world, event.playerId, at)
-        : s.world;
+      : release(s.world, event.playerId, at);
     return world === s.world && left === s.left ? s : { ...s, left, world };
   },
 });

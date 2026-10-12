@@ -68,14 +68,14 @@ const mutations = [
     'M08',
     'Grazing edges swallow prey without deep overlap',
     'collisions.ts',
-    'd < radius(big.mass) - radius(small.mass) * 0.35',
-    'd < radius(big.mass) + radius(small.mass)',
+    'if (gap >= radius(predator.mass) - radius(victim.mass) * 0.35) continue;',
+    'if (gap >= radius(predator.mass) + radius(victim.mass)) continue;',
   ],
   [
     'M09',
-    'Spawn shields do not prevent eating',
+    'A spawn shield does not protect its victim',
     'collisions.ts',
-    'if (time < a.shieldUntil || time < b.shieldUntil) continue;',
+    'if (time < victim.shieldUntil) continue;',
     'if (false) continue;',
   ],
   [

@@ -40,7 +40,11 @@ export function Arena({
   // The compact phone board is 220px wide inside its border; live is 362px.
   const numberSize = phone ? (compact ? 12 : 7.2) : 4.2;
   const plateRadius = numberSize * 0.65;
-  const numbers = placeLabels(cells, plateRadius * 2, plateRadius * 2);
+  const bodyBounds = cells.map((cell) => {
+    const reach = radius(cell.mass) + (cell.shieldUntil > checked ? 0.9 : 0) + 0.4;
+    return { id: cell.id, x: cell.x, y: cell.y, width: reach * 2, height: reach * 2 };
+  });
+  const numbers = placeLabels(cells, plateRadius * 2, plateRadius * 2, bodyBounds);
   const numberById = new Map(numbers.map((label) => [label.id, label]));
   const nameSize = phone ? 6.4 : 4.2;
   const nameWidth = phone ? 36 : 30,
@@ -55,7 +59,7 @@ export function Arena({
     })),
     nameWidth,
     nameHeight,
-    numbers,
+    [...bodyBounds, ...numbers],
   );
   const tagById = new Map(tags.map((label) => [label.id, label]));
   const pose = (cell: { owner: string; x: number; y: number }): CSSProperties => ({
@@ -84,6 +88,33 @@ export function Arena({
         className={styles.grid}
         d="M20 0V100 M40 0V100 M60 0V100 M80 0V100 M100 0V100 M120 0V100 M140 0V100 M0 20H160 M0 40H160 M0 60H160 M0 80H160"
       />
+      {/* Every connector is behind every body, opaque plate and text label. */}
+      {cells.map((cell) => {
+        const number = numberById.get(cell.id)!;
+        const tag = tagById.get(cell.id);
+        return (
+          <g key={cell.id} data-leader-cell={cell.id} className={styles.pose} style={pose(cell)}>
+            <line
+              data-number-leader={cell.id}
+              className={styles.leader}
+              x1="0"
+              y1="0"
+              x2={number.x - cell.x}
+              y2={number.y - cell.y}
+            />
+            {tag ? (
+              <line
+                data-name-leader={cell.owner}
+                className={styles.leader}
+                x1="0"
+                y1="0"
+                x2={tag.x - cell.x}
+                y2={tag.y - cell.y}
+              />
+            ) : null}
+          </g>
+        );
+      })}
       {pellets.map((p) => (
         <g
           key={p.id}
@@ -124,10 +155,9 @@ export function Arena({
         const tag = tagById.get(cell.id)!;
         const name = names[cell.owner] ?? '';
         return (
-          <g key={cell.id} data-name-owner={cell.owner} style={playerStyle(slots[cell.owner] ?? 0)}>
+          <g key={cell.id} data-name-owner={cell.owner} className={styles.pose} style={pose(cell)}>
             <title>{name}</title>
-            <line className={styles.leader} x1={cell.x} y1={cell.y} x2={tag.x} y2={tag.y} />
-            <g transform={`translate(${tag.x} ${tag.y})`}>
+            <g transform={`translate(${tag.x - cell.x} ${tag.y - cell.y})`}>
               <rect
                 className={styles.tag}
                 x={-nameWidth / 2}
@@ -155,13 +185,6 @@ export function Arena({
             style={pose(cell)}
             data-mine={cell.owner === mine ? 'true' : undefined}
           >
-            <line
-              className={styles.leader}
-              x1="0"
-              y1="0"
-              x2={label.x - cell.x}
-              y2={label.y - cell.y}
-            />
             <circle
               className={styles.numberPlate}
               data-cell-label-backplate={cell.id}

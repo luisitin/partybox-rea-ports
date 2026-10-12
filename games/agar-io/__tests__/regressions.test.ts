@@ -41,10 +41,34 @@ describe('review regressions', () => {
   it('a swept near miss stays a miss and spawn protection blocks a crossed prey', () => {
     const old = [cell('p1', { mass: 60, x: 60 }), cell('p2', { id: 2, x: 70, y: 60 })];
     const moved = [{ ...old[0]!, x: 80 }, old[1]!];
-    expect(resolveCells(moved, 1000, old)).toHaveLength(2);
+    expect(resolveCells(moved, 1000, seedRng(1), old)[0]).toHaveLength(2);
     const protectedOld = [old[0]!, { ...old[1]!, y: 50, shieldUntil: 1000 }];
     const protectedMoved = [{ ...old[0]!, x: 80 }, protectedOld[1]!];
-    expect(resolveCells(protectedMoved, 999, protectedOld)).toHaveLength(2);
+    expect(resolveCells(protectedMoved, 999, seedRng(1), protectedOld)[0]).toHaveLength(2);
+  });
+
+  it('two symmetric swept predators share one victim fairly even when neither ends on the prey', () => {
+    const old = [
+      cell('p1', { mass: 96 }),
+      cell('p2', { id: 2, x: 80, mass: 96 }),
+      cell('p3', { id: 3, x: 70 }),
+    ];
+    const moved = [{ ...old[0]!, x: 80 }, { ...old[1]!, x: 60 }, old[2]!];
+    const winners = new Set<string>();
+    for (let seed = 1; seed <= 64; seed++) {
+      const rng = seedRng(seed);
+      const [end, next] = resolveCells(moved, 2000, rng, old);
+      expect(end).toHaveLength(2);
+      expect(end.reduce((sum, c) => sum + c.mass, 0)).toBe(216);
+      winners.add(end.find((c) => c.mass === 120)!.owner);
+      expect(next.step).toBe(rng.step + 1);
+      expect(resolveCells(moved, 2000, rng, old)).toEqual([end, next]);
+      expect(resolveCells([...moved].reverse(), 2000, rng, [...old].reverse())).toEqual([
+        end,
+        next,
+      ]);
+    }
+    expect([...winners].sort()).toEqual(['p1', 'p2']);
   });
 
   it('all bot strengths choose either tied snack reproducibly without storage-order preference', () => {

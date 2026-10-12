@@ -7,6 +7,7 @@ import { Arena } from '../client/Arena';
 import { Controller } from '../client/Controller';
 import { Tv } from '../client/Tv';
 import { standings } from '../client/display';
+import { radius } from '../server/geometry';
 import { game } from '../server/index';
 import type { BlobArenaControllerView } from '../server/index';
 import type { State } from '../server/types';
@@ -315,6 +316,24 @@ describe('stable identity and results', () => {
 });
 
 describe('connection, departure and compact stages', () => {
+  it('labels a dropped seat Offline and a permanent departure Left on both public rosters', () => {
+    const source = withTv(fixtures.play!);
+    const state: State = {
+      ...source,
+      left: ['p2'],
+      players: {
+        ...source.players,
+        p1: { ...source.players.p1!, connected: false },
+        p2: { ...source.players.p2!, connected: false },
+      },
+      world: { ...source.world, cells: source.world.cells.filter((cell) => cell.owner !== 'p2') },
+    };
+    for (const html of [tv(state), phone(state, 'spectator', true)]) {
+      expect(roster(html)).toMatch(/aria-label="Disconnected"[^>]*>Offline<\/span>/);
+      expect(roster(html)).toContain('Left');
+      expect(roster(html)).not.toContain('○');
+    }
+  });
   it('disables a disconnected living seat and restores controls at the same pose on reconnect', () => {
     const state = withTv(fixtures.play!);
     const base = game.controllerView(state, 'p1');
@@ -450,6 +469,40 @@ describe('connection, departure and compact stages', () => {
 });
 
 describe('public pose and identity layers', () => {
+  it('keeps small and grown physical cells visible outside their readable number plates', () => {
+    const view = game.tvView(withTv(fixtures.play!));
+    const cells = [24, 60].map((mass, index) => ({
+      ...view.cells[index]!,
+      x: 40 + index * 60,
+      y: 50,
+      mass,
+      shieldUntil: view.checked + 1000,
+    }));
+    for (const compact of [false, true]) {
+      const html = renderToStaticMarkup(<Arena {...view} cells={cells} phone compact={compact} />);
+      for (const cell of cells) {
+        const plate = html.match(
+          new RegExp(
+            `<circle[^>]*data-cell-label-backplate="${cell.id}"[^>]*cx="([^"]+)"[^>]*cy="([^"]+)"[^>]*r="([^"]+)"`,
+          ),
+        );
+        expect(plate).not.toBeNull();
+        const dx = Math.abs(Number(plate![1])),
+          dy = Math.abs(Number(plate![2])),
+          plateRadius = Number(plate![3]);
+        expect(Math.max(dx, dy)).toBeGreaterThan(radius(cell.mass) + 0.9 + plateRadius);
+      }
+      expect(html.lastIndexOf('data-number-leader=')).toBeLessThan(html.indexOf('data-cell-id='));
+      if (!compact) {
+        expect(html.lastIndexOf('data-name-leader=')).toBeLessThan(
+          html.indexOf('data-name-owner='),
+        );
+        expect(html.lastIndexOf('<line')).toBeLessThan(html.indexOf('data-name-owner='));
+      }
+      expect(html.lastIndexOf('<line')).toBeLessThan(html.indexOf('data-cell-label-backplate='));
+      expect(html.lastIndexOf('<line')).toBeLessThan(html.indexOf('data-cell-label-id='));
+    }
+  });
   it('keeps each received body, contrast plate and number aligned before and after a movement snapshot', () => {
     const view = game.tvView(withTv(fixtures.play!));
     for (const cells of [

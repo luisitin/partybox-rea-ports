@@ -1,0 +1,131 @@
+{
+  "head": "5efddc9b96fa96380b9ff1fb4ea4c634961c316d",
+  "ci": 38212411942,
+  "conclusion": "success",
+  "sourceFiles": 45,
+  "localSourceHashMatches": true,
+  "matches": 7000,
+  "simulations": [
+    {
+      "players": 2,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 324,
+      "maxScore": 2955,
+      "totalEvents": 1861354,
+      "maxEvents": 1880
+    },
+    {
+      "players": 3,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 87,
+      "maxScore": 3486,
+      "totalEvents": 2107854,
+      "maxEvents": 2140
+    },
+    {
+      "players": 4,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 30,
+      "maxScore": 4470,
+      "totalEvents": 2348790,
+      "maxEvents": 2392
+    },
+    {
+      "players": 5,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 0,
+      "maxScore": 5469,
+      "totalEvents": 2583022,
+      "maxEvents": 2645
+    },
+    {
+      "players": 6,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 0,
+      "maxScore": 6396,
+      "totalEvents": 2809250,
+      "maxEvents": 2900
+    },
+    {
+      "players": 7,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 0,
+      "maxScore": 6370,
+      "totalEvents": 3028994,
+      "maxEvents": 3149
+    },
+    {
+      "players": 8,
+      "games": 1000,
+      "gamesBySkill": {
+        "easy": 334,
+        "normal": 333,
+        "sharp": 333
+      },
+      "medianRoundMs": 90000,
+      "maxGameMs": 289500,
+      "minScore": 0,
+      "maxScore": 7521,
+      "totalEvents": 3244277,
+      "maxEvents": 3404
+    }
+  ],
+  "lifecycle": {
+    "traces": 1003,
+    "events": 61767,
+    "minEventsPerTrace": 50,
+    "maxEventsPerTrace": 74,
+    "fixedSeeds": [1, 2, 3],
+    "generatedSeeds": 1000,
+    "generatorSeed": 95472382,
+    "players": "2..8",
+    "randomStepsPerTrace": 24
+  },
+  "summary": [
+    "verify\tRun pnpm vitest run games/agar-io --maxWorkers=1 --disableConsoleIntercept\t2026-10-12T06:31:05.0939664Z ^[[2m Test Files ^[[22m ^[[1m^[[32m9 passed^[[39m^[[22m^[[90m (9)^[[39m",
+    "verify\tRun pnpm vitest run games/agar-io --maxWorkers=1 --disableConsoleIntercept\t2026-10-12T06:31:05.0941400Z ^[[2m      Tests ^[[22m ^[[1m^[[32m154 passed^[[39m^[[22m^[[90m (154)^[[39m",
+    "verify\tRun pnpm vitest run games/agar-io --maxWorkers=1 --disableConsoleIntercept\t2026-10-12T06:31:05.0944365Z ^[[2m   Duration ^[[22m 336.15s^[[2m (transform 682ms, setup 0ms, import 1.86s, tests 333.17s, environment 1ms)^[[22m"
+  ]
+}
