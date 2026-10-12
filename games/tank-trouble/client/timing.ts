@@ -1,6 +1,13 @@
 // Shared display helpers stay on the phone side without importing the TV or the server runtime.
 import type { Translator } from '@partybox/game-sdk/ui';
 
+// The pickup marks are shared with the TV legend so its symbols always name the same crate.
+export const WEAPON_MARKS = {
+  scatter: 'M-2 0H2M-1.5-1.5 1.5 1.5M-1.5 1.5 1.5-1.5',
+  beam: 'M-2 1 0-1H2M0-1 0 1',
+  guided: 'M-2 1Q-2-2 1-1M0-2 2-1 0 0',
+} as const;
+
 export const playerColor = (slot: number): string =>
   `var(--pb-player-${(((slot % 8) + 8) % 8) + 1})`;
 

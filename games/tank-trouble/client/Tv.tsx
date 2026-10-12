@@ -8,7 +8,7 @@ import { Arena } from './Arena';
 import { Standings } from './Standings';
 import { RoundResult } from './RoundResult';
 import { STRINGS } from './strings';
-import { clockText } from './timing';
+import { clockText, weaponName, WEAPON_MARKS } from './timing';
 import styles from './Tv.module.css';
 
 export function Tv({ view }: GameTvProps<TankTroubleTvView>): JSX.Element {
@@ -80,9 +80,19 @@ export function Tv({ view }: GameTvProps<TankTroubleTvView>): JSX.Element {
           </div>
           <p className={styles.line}>{line}</p>
           <p className={styles.legend}>
-            {L('✦ Burst')}
-            <span>{L('━ Beam')}</span>
-            <span>{L('◈ Seeker')}</span>
+            {Object.entries(WEAPON_MARKS).map(([kind, mark]) => (
+              <span key={kind}>
+                <svg
+                  className={styles.legendMark}
+                  viewBox="-3 -3 6 6"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d={mark} />
+                </svg>
+                {weaponName(kind, L)}
+              </span>
+            ))}
           </p>
         </div>
         <aside className={styles.rail}>

@@ -2,7 +2,7 @@
 import type { CSSProperties, JSX } from 'react';
 import { useT } from '@partybox/game-sdk/ui';
 import type { Arena as ArenaState } from '../server/world';
-import { playerColor, weaponName } from './timing';
+import { playerColor, weaponName, WEAPON_MARKS } from './timing';
 import { STRINGS } from './strings';
 import styles from './Arena.module.css';
 
@@ -39,13 +39,7 @@ export function Arena({ arena, players, me }: ArenaProps): JSX.Element {
           >
             <title>{weaponName(pickup.kind, L)}</title>
             <path d="M0-4 4 0 0 4-4 0Z" className={styles.crate} />
-            {pickup.kind === 'scatter' ? (
-              <path d="M-2 0H2M-1.5-1.5 1.5 1.5M-1.5 1.5 1.5-1.5" className={styles.mark} />
-            ) : pickup.kind === 'beam' ? (
-              <path d="M-2 1 0-1H2M0-1 0 1" className={styles.mark} />
-            ) : (
-              <path d="M-2 1Q-2-2 1-1M0-2 2-1 0 0" className={styles.mark} />
-            )}
+            <path d={WEAPON_MARKS[pickup.kind]} className={styles.mark} />
           </g>
         ))}
         {arena.bullets.map((bullet) => {

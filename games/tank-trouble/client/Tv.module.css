@@ -56,6 +56,21 @@
   line-height: 1.1;
   color: var(--pb-accent-2);
 }
+.legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pb-space-2);
+}
+.legendMark {
+  width: var(--pb-font-body);
+  height: var(--pb-font-body);
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 0.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .rail {
   display: flex;
   flex-direction: column;
