@@ -1835,7 +1835,8 @@ ight is the :root default above) ────────
 .Screenmodulecss_footer {
   position: sticky;
   bottom: 0;
-  padding: var(--pb-space-3) var(--pb-space-4) calc(var(--pb-space-3) + env(safe-area-inset-bottom));
+  padding: var(--pb-space-3) var(--pb-space-4)
+    calc(var(--pb-space-3) + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
   background: linear-gradient(to top, var(--pb-bg) 70%, transparent);
 }
 
@@ -1845,7 +1846,7 @@ ight is the :root default above) ────────
     padding: var(--pb-space-2) var(--pb-space-4);
   }
   .Screenmodulecss_footer {
-    padding: 4px var(--pb-space-4) calc(4px + env(safe-area-inset-bottom));
+    padding: 4px var(--pb-space-4) calc(4px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
   }
 }
 
@@ -1986,7 +1987,8 @@ ight is the :root default above) ────────
 /* No footer: the row alone, in the bottom safe area. */
 .Screenmodulecss_cueOnly {
   flex-shrink: 0;
-  padding: var(--pb-space-3) var(--pb-space-4) calc(4px + env(safe-area-inset-bottom));
+  padding: var(--pb-space-3) var(--pb-space-4)
+    calc(4px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
 }
 
 @media (orientation: landscape) and (max-height: 420px) {
@@ -1998,7 +2000,7 @@ ight is the :root default above) ────────
     inset: -4px 0 0;
   }
   .Screenmodulecss_cueOnly {
-    padding: 4px var(--pb-space-4) calc(2px + env(safe-area-inset-bottom));
+    padding: 4px var(--pb-space-4) calc(2px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
   }
 }
 
@@ -3087,101 +3089,86 @@ ight is the :root default above) ────────
   display: block;
   width: 100%;
   height: 100%;
-  background: var(--pb-bg);
+  overflow: hidden;
+  background: var(--pb-surface-2);
 }
-
+.Arenamodulecss_worldBounds {
+  fill: var(--pb-bg);
+  stroke: var(--pb-text-muted);
+  stroke-width: 0.2;
+}
+.Arenamodulecss_background {
+  fill: var(--pb-bg);
+}
 .Arenamodulecss_grid {
   fill: none;
   stroke: var(--pb-surface-2);
-  stroke-width: 0.15;
+  stroke-width: 0.055;
 }
-
 .Arenamodulecss_snack {
-  fill: var(--pb-accent-2-fill);
-  stroke: var(--pb-bg);
-  stroke-width: 0.15;
+  fill: var(--blob-colour);
+  stroke: var(--blob-colour);
+  stroke-width: 0.55;
+  stroke-linejoin: round;
 }
-
 .Arenamodulecss_body {
   fill: var(--blob-colour);
-  stroke: var(--pb-on-accent);
-  stroke-width: 0.35;
+  stroke: color-mix(in srgb, var(--blob-colour) 75%, var(--pb-bg));
+  stroke-width: 0.55;
+  stroke-linejoin: round;
 }
-
-.Arenamodulecss_cell[data-mine='true'] .Arenamodulecss_body {
-  stroke: var(--pb-focus);
-  stroke-width: 0.65;
+.Arenamodulecss_logicalRadius {
+  fill: none;
+  stroke: none;
+  visibility: hidden;
+  pointer-events: none;
 }
-
 .Arenamodulecss_shield {
   fill: none;
   stroke: var(--pb-text);
-  stroke-width: 0.25;
+  stroke-width: 0.16;
   stroke-dasharray: 0.7 0.5;
 }
-
-.Arenamodulecss_shine {
-  fill: none;
-  stroke: var(--pb-on-accent-2-fill);
-  stroke-width: 0.3;
-  stroke-linecap: round;
-}
-
-.Arenamodulecss_number,
 .Arenamodulecss_name {
   text-anchor: middle;
-  dominant-baseline: central;
-  font-family: var(--pb-font-family);
-  font-weight: 900;
-}
-
-/* These are SVG board coordinates, like the collision radii and snack geometry. */
-.Arenamodulecss_number {
+  dominant-baseline: alphabetic;
+  transform-origin: 0 0;
+  font-family: Ubuntu, serif;
+  font-weight: 400;
   fill: var(--pb-text);
+  stroke: var(--pb-bg);
+  stroke-width: 0.165;
+  stroke-linejoin: round;
+  paint-order: stroke fill;
 }
-
-.Arenamodulecss_numberPlate {
-  fill: var(--pb-bg);
-  stroke: var(--blob-colour);
-  stroke-width: 0.4;
+/* Classic received poses use 120ms smoothstep: x(t)=t, y(t)=3t²−2t³.
+   World camera filtering is a bounded native transform animation, authored once
+   per received snapshot; no per-frame JavaScript or extrapolated game physics. */
+.Arenamodulecss_world {
+  transform-origin: 0 0;
 }
-
-[data-mine='true'] .Arenamodulecss_numberPlate {
-  stroke: var(--pb-focus);
-  stroke-width: 0.65;
-}
-
-.Arenamodulecss_leader {
-  stroke: var(--blob-colour);
-  stroke-width: 0.25;
-}
-
 .Arenamodulecss_pose {
-  transition: transform calc(var(--pb-motion-fast) * 1.3333333333) linear;
+  transform-origin: 0 0;
 }
-
-.Arenamodulecss_arena[data-frozen='true'] .Arenamodulecss_pose {
+.Arenamodulecss_arena[data-frozen='true'] .Arenamodulecss_world,
+.Arenamodulecss_arena[data-frozen='true'] .Arenamodulecss_pose,
+.Arenamodulecss_arena[data-frozen='true'] .Arenamodulecss_body,
+.Arenamodulecss_arena[data-frozen='true'] .Arenamodulecss_shield {
   transition: none;
 }
-
 @media (prefers-reduced-motion: reduce) {
-  .Arenamodulecss_arena .Arenamodulecss_pose {
+  .Arenamodulecss_world,
+  .Arenamodulecss_pose,
+  .Arenamodulecss_body,
+  .Arenamodulecss_shield {
     transition: none;
   }
 }
-
-:root[data-motion='off'] .Arenamodulecss_arena .Arenamodulecss_pose {
+:root[data-motion='off'] .Arenamodulecss_world,
+:root[data-motion='off'] .Arenamodulecss_pose,
+:root[data-motion='off'] .Arenamodulecss_body,
+:root[data-motion='off'] .Arenamodulecss_shield {
   transition: none;
-}
-
-.Arenamodulecss_name {
-  fill: var(--pb-text);
-}
-
-.Arenamodulecss_tag {
-  fill: var(--pb-bg);
-  stroke: var(--blob-colour);
-  stroke-width: 0.2;
 }
 
 .Tvmodulecss_stage {
@@ -3196,6 +3183,7 @@ ight is the :root default above) ────────
   flex: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) * 8);
+  grid-template-rows: minmax(0, 1fr);
   gap: var(--pb-space-5);
   align-items: center;
   min-height: 0;
@@ -3213,17 +3201,30 @@ ight is the :root default above) ────────
 }
 
 .Tvmodulecss_side {
+  --blob-tv-body: calc(var(--pb-font-body) - var(--pb-space-1));
   display: grid;
-  gap: var(--pb-space-3);
-  align-content: center;
+  gap: var(--pb-space-2);
+  align-content: safe center;
+  align-self: stretch;
   min-width: 0;
   min-height: 0;
+}
+
+/* Round results are party plumbing: one readable summary, with no duplicate
+   arena labels competing with the server's measured reading hold. */
+.Tvmodulecss_board[data-summary='true'] {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+}
+
+.Tvmodulecss_board[data-summary='true'] .Tvmodulecss_side {
+  width: min(100%, calc(var(--pb-space-8) * 22));
 }
 
 .Tvmodulecss_headline {
   margin: 0;
   font-size: var(--pb-font-h2);
-  line-height: 1.1;
+  line-height: 1.2;
   font-weight: 900;
 }
 
@@ -3232,7 +3233,7 @@ ight is the :root default above) ────────
   flex: none;
   margin: 0;
   font-size: var(--pb-font-h2);
-  line-height: 1.1;
+  line-height: 1.2;
   font-weight: 900;
   text-align: center;
 }
@@ -3249,14 +3250,15 @@ ight is the :root default above) ────────
 }
 
 .Tvmodulecss_clockLabel {
-  font-size: var(--pb-font-body);
+  font-size: var(--blob-tv-body);
+  line-height: 1.25;
   font-weight: 800;
   color: var(--pb-text-muted);
 }
 
 .Tvmodulecss_clockValue {
   font-size: calc(var(--pb-font-display) * 0.75);
-  line-height: 1;
+  line-height: 1.2;
   font-weight: 900;
   font-variant-numeric: tabular-nums;
 }
@@ -3271,14 +3273,15 @@ ight is the :root default above) ────────
   grid-template-columns: minmax(0, 1fr) 6ch 6ch;
   align-items: center;
   gap: var(--pb-space-2);
-  font-size: var(--pb-font-body);
+  font-size: var(--blob-tv-body);
+  line-height: 1.25;
   font-variant-numeric: tabular-nums;
 }
 
 .Tvmodulecss_legend {
   color: var(--pb-text-muted);
   font-weight: 800;
-  padding: var(--pb-space-2);
+  padding: var(--pb-space-1) var(--pb-space-2);
 }
 
 .Tvmodulecss_legend span:not(:first-child) {
@@ -3288,14 +3291,14 @@ ight is the :root default above) ────────
 
 .Tvmodulecss_rows {
   display: grid;
-  gap: var(--pb-space-2);
+  gap: var(--pb-space-1);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .Tvmodulecss_rows li {
-  min-height: calc(var(--pb-space-8) - var(--pb-space-2));
+  min-height: var(--pb-space-7);
   padding: var(--pb-space-1) var(--pb-space-2);
   box-sizing: border-box;
   border-radius: var(--pb-radius);
@@ -3312,18 +3315,20 @@ ight is the :root default above) ────────
 .Tvmodulecss_badge {
   display: grid;
   place-items: center;
-  width: var(--pb-space-7);
-  height: var(--pb-space-7);
+  width: calc(var(--pb-space-7) - var(--pb-space-2));
+  height: calc(var(--pb-space-7) - var(--pb-space-2));
   flex: none;
   border-radius: 50%;
   color: var(--pb-on-accent-2-fill);
   background: var(--blob-colour);
-  font-size: var(--pb-font-body);
+  font-size: var(--blob-tv-body);
   line-height: 1;
   font-weight: 900;
 }
 
 .Tvmodulecss_name {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -3344,12 +3349,14 @@ ight is the :root default above) ────────
 
 .Tvmodulecss_hint {
   margin: 0;
-  font-size: var(--pb-font-body);
-  line-height: 1.2;
+  font-size: var(--blob-tv-body);
+  line-height: 1.25;
   color: var(--pb-text-muted);
 }
 
 .Tvmodulecss_offline {
+  flex: none;
+  white-space: nowrap;
   color: var(--pb-text-muted);
 }
 
@@ -3380,7 +3387,7 @@ ight is the :root default above) ────────
 .Controllermodulecss_headline {
   margin: 0;
   font-size: var(--pb-font-h2);
-  line-height: 1.2;
+  line-height: 1.4;
   font-weight: 900;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -3426,6 +3433,7 @@ ight is the :root default above) ────────
 }
 
 .Controllermodulecss_arena {
+  position: relative;
   flex: none;
   width: 100%;
   aspect-ratio: 160 / 100;
@@ -3433,6 +3441,77 @@ ight is the :root default above) ────────
   border: calc(var(--pb-space-1) / 2) solid var(--pb-text-muted);
   border-radius: var(--pb-radius);
   box-sizing: border-box;
+}
+
+/* The personal field gets the remaining gameplay region. Short visible
+   viewports shrink it first, while a full 154px steering region remains usable. */
+.Controllermodulecss_screen[data-controls='true'] .Controllermodulecss_arena {
+  flex: 1 1 0;
+  min-height: calc(var(--pb-touch) * 3.5);
+  aspect-ratio: auto;
+}
+
+.Controllermodulecss_gameHud {
+  position: absolute;
+  inset: var(--pb-space-2) var(--pb-space-2) auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--pb-space-2);
+  pointer-events: none;
+  z-index: 1;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.Controllermodulecss_score {
+  margin: 0;
+  padding: var(--pb-space-1) var(--pb-space-2);
+  background: color-mix(in srgb, var(--pb-bg) 72%, transparent);
+  font-size: var(--pb-font-body);
+  line-height: 1.25;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.Controllermodulecss_leaderboard {
+  width: calc(var(--pb-space-6) * 4);
+  max-width: 42%;
+  flex: none;
+  padding: var(--pb-space-1) var(--pb-space-2);
+  background: color-mix(in srgb, var(--pb-bg) 72%, transparent);
+  box-sizing: border-box;
+}
+
+.Controllermodulecss_leaderboard h3 {
+  margin: 0 0 var(--pb-space-1);
+  font-size: var(--pb-font-caption);
+  line-height: 1.2;
+  font-weight: 700;
+  text-align: center;
+}
+
+.Controllermodulecss_leaderboard ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.Controllermodulecss_leaderboard li {
+  display: flex;
+  gap: var(--pb-space-1);
+  font-size: calc(var(--pb-font-caption) * 0.9);
+  line-height: 1.25;
+}
+
+.Controllermodulecss_leaderboard li[data-me='true'] {
+  color: var(--pb-accent-2);
+}
+
+.Controllermodulecss_leaderboard li span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .Controllermodulecss_status {
@@ -3446,9 +3525,9 @@ ight is the :root default above) ────────
 
 .Controllermodulecss_controls {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(calc(var(--pb-touch) * 3.5), 1fr) auto;
   flex: 1;
-  min-height: 0;
+  min-height: min-content;
   gap: var(--pb-space-2);
 }
 
@@ -3460,7 +3539,7 @@ ight is the :root default above) ────────
   min-height: calc(var(--pb-touch) * 3.5);
   padding: var(--pb-space-4);
   border: calc(var(--pb-space-1) / 2) solid var(--blob-colour);
-  border-radius: var(--pb-radius-lg);
+  border-radius: var(--pb-radius);
   background: var(--pb-surface);
   color: var(--pb-text);
   font-family: var(--pb-font-family);
@@ -3470,14 +3549,21 @@ ight is the :root default above) ────────
 }
 
 .Controllermodulecss_pad:disabled {
-  opacity: 0.5;
+  border-color: var(--pb-text-muted);
 }
 
-.Controllermodulecss_padArrows {
-  color: var(--pb-text-muted);
-  font-size: var(--pb-font-display);
-  line-height: 1.2;
-  opacity: 0.35;
+.Controllermodulecss_stick {
+  position: absolute;
+  left: var(--stick-left);
+  top: var(--stick-top);
+  width: calc(var(--pb-touch) * 2);
+  height: calc(var(--pb-touch) * 2);
+  border: calc(var(--pb-space-1) / 2) solid var(--pb-text-muted);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--pb-bg) 42%, transparent);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-sizing: border-box;
 }
 
 .Controllermodulecss_thumb {
@@ -3488,12 +3574,13 @@ ight is the :root default above) ────────
   height: var(--pb-touch);
   border: calc(var(--pb-space-1) / 2) solid var(--pb-on-accent-2-fill);
   border-radius: 50%;
-  background: var(--blob-colour);
+  background: color-mix(in srgb, var(--blob-colour) 70%, transparent);
   transform: translate(
-    calc(-50% + var(--stick-x) * var(--pb-touch)),
-    calc(-50% + var(--stick-y) * var(--pb-touch))
+    calc(-50% + var(--stick-x) * var(--pb-touch) / 2),
+    calc(-50% + var(--stick-y) * var(--pb-touch) / 2)
   );
   pointer-events: none;
+  box-sizing: border-box;
 }
 
 .Controllermodulecss_padLabel {
@@ -3502,26 +3589,94 @@ ight is the :root default above) ────────
   left: var(--pb-space-2);
   font-size: var(--pb-font-caption);
   font-weight: 800;
+  padding: var(--pb-space-1);
+  background: color-mix(in srgb, var(--pb-bg) 72%, transparent);
 }
 
 .Controllermodulecss_splitArea {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: var(--pb-space-1) var(--pb-space-3);
+  grid-template-columns: calc(var(--pb-touch) * 1.5) minmax(0, 1fr);
+  gap: var(--pb-space-1) var(--pb-space-2);
   align-items: center;
 }
 
 .Controllermodulecss_split {
   grid-row: 1 / 3;
-  min-height: calc(var(--pb-touch) * 2);
+  width: calc(var(--pb-touch) * 1.5);
+  height: calc(var(--pb-touch) * 1.5);
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  padding: var(--pb-space-1);
   border: calc(var(--pb-space-1) / 2) solid var(--pb-accent);
-  border-radius: var(--pb-radius);
-  background: var(--pb-accent);
-  color: var(--pb-on-accent);
-  font-size: var(--pb-font-button);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--pb-bg) 72%, transparent);
+  color: var(--pb-text);
+  font-size: calc(var(--pb-font-caption) * 0.85);
   font-family: var(--pb-font-family);
   font-weight: 900;
   touch-action: manipulation;
+}
+
+.Controllermodulecss_split svg {
+  width: calc(var(--pb-touch) * 0.8);
+  height: calc(var(--pb-touch) * 0.8);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+}
+
+.Controllermodulecss_controls[data-controls-overlay='true'] {
+  position: absolute;
+  inset: 0;
+  display: block;
+  min-height: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.Controllermodulecss_controls[data-controls-overlay='true'] .Controllermodulecss_pad {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  pointer-events: auto;
+}
+
+.Controllermodulecss_controls[data-controls-overlay='true'] .Controllermodulecss_pad:focus-visible {
+  outline-offset: calc(var(--pb-space-1) * -1);
+}
+
+.Controllermodulecss_controls[data-controls-overlay='true'] .Controllermodulecss_padLabel {
+  max-width: calc(100% - var(--pb-space-8) * 3.4);
+}
+
+.Controllermodulecss_controls[data-controls-overlay='true'] .Controllermodulecss_splitArea {
+  position: absolute;
+  right: var(--pb-space-2);
+  bottom: var(--pb-space-2);
+  width: calc(var(--pb-space-8) * 3.1);
+  grid-template-columns: minmax(0, 1fr) calc(var(--pb-touch) * 1.5);
+}
+
+.Controllermodulecss_controls[data-controls-overlay='true'] .Controllermodulecss_split {
+  grid-column: 2;
+  pointer-events: auto;
+}
+
+.Controllermodulecss_controls[data-controls-overlay='true'] .Controllermodulecss_reason,
+.Controllermodulecss_controls[data-controls-overlay='true'] .Controllermodulecss_risk {
+  grid-column: 1;
+  text-align: right;
+  padding: 0 var(--pb-space-1);
+  background: color-mix(in srgb, var(--pb-bg) 72%, transparent);
+}
+
+.Controllermodulecss_controls[data-controls-overlay='true'] .Controllermodulecss_risk {
+  font-size: calc(var(--pb-font-caption) * 0.85);
 }
 
 .Controllermodulecss_split:disabled {
@@ -3592,6 +3747,11 @@ ight is the :root default above) ────────
   font-size: var(--pb-font-body);
 }
 
+.Controllermodulecss_screen[data-phase='score'] .Controllermodulecss_rows li,
+.Controllermodulecss_screen[data-phase='done'] .Controllermodulecss_rows li {
+  min-height: calc(var(--pb-space-5) + var(--pb-space-3));
+}
+
 .Controllermodulecss_rows li[data-me='true'] {
   outline: calc(var(--pb-space-1) / 2) solid var(--blob-colour);
 }
@@ -3634,7 +3794,7 @@ ight is the :root default above) ────────
   color: var(--pb-text-muted);
 }
 
-/* Eight standings and the same frozen stage fit together between rounds. */
+/* Live spectators get a supplementary overview above the complete standings. */
 .Controllermodulecss_screen:not([data-controls='true']) .Controllermodulecss_arena {
   width: min(100%, calc(var(--pb-space-8) * 3.5));
   align-self: center;
@@ -3662,9 +3822,11 @@ body {
   margin: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   background: var(--pb-bg);
   color: var(--pb-text);
   font-family: var(--pb-font-family);
+  line-height: 1.4;
 }
 .capture-header {
   height: var(--capture-top);
@@ -3675,17 +3837,35 @@ body {
   font-size: var(--pb-font-body);
 }
 main {
-  height: calc(100% - var(--capture-top) - var(--capture-bottom));
+  height: calc(100dvh - var(--capture-top) - var(--capture-bottom));
   display: flex;
   flex-direction: column;
   min-height: 0;
   width: 100%;
 }
+.capture-game {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  width: 100%;
+}
+.capture-banner {
+  position: relative;
+  padding: var(--pb-space-2) var(--pb-space-4);
+  background: var(--pb-surface-2);
+  color: var(--pb-text-muted);
+  text-align: center;
+  font-size: var(--pb-font-caption);
+}
+#root[data-host-paused='true'] {
+  opacity: 0.5;
+}
+html[data-surface='tv'] {
+  --pb-stage-top: 12px;
+  --pb-overscan-y: 54px;
+  --pb-overscan-x: 96px;
+}
 .capture-footer {
   height: var(--capture-bottom);
-  display: flex;
-  align-items: center;
-  padding: 0 var(--pb-space-4);
-  font-size: var(--pb-font-caption);
-  color: var(--pb-text-muted);
 }

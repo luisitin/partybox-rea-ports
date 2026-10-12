@@ -10,6 +10,7 @@ import {
 } from 'node:fs';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { format } from 'prettier';
 import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
 import { game } from '../../games/agar-io/server/index.ts';
 import { Tv } from '../../games/agar-io/client/Tv.tsx';
@@ -23,12 +24,16 @@ const archive = (name) => {
   if (existsSync(from) && !existsSync(to)) copyFileSync(from, to);
 };
 archive('screens.json');
+const prettierOptions = JSON.parse(
+  readFileSync(new URL('../../.prettierrc', import.meta.url), 'utf8'),
+);
 const tokens = readFileSync(new URL('../../design/tokens.css', import.meta.url), 'utf8');
 const css = [...globalThis.blobCaptureCss.values()].join('\n');
-writeFileSync(
-  new URL('screens.css', media),
+const stylesheet = await format(
   `${tokens}\n${css}\n*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family);line-height:1.4}.capture-header{height:var(--capture-top);display:flex;align-items:center;padding:0 var(--pb-space-5);font-weight:900;font-size:var(--pb-font-body)}main{height:calc(100dvh - var(--capture-top) - var(--capture-bottom));display:flex;flex-direction:column;min-height:0;width:100%}.capture-game{flex:1;display:flex;flex-direction:column;min-height:0;width:100%}.capture-banner{position:relative;padding:var(--pb-space-2) var(--pb-space-4);background:var(--pb-surface-2);color:var(--pb-text-muted);text-align:center;font-size:var(--pb-font-caption)}#root[data-host-paused=true]{opacity:.5}html[data-surface=tv]{--pb-stage-top:12px;--pb-overscan-y:54px;--pb-overscan-x:96px}.capture-footer{height:var(--capture-bottom)}\n`,
+  { ...prettierOptions, parser: 'css' },
 );
+writeFileSync(new URL('screens.css', media), stylesheet);
 const load = (name) =>
   JSON.parse(
     readFileSync(new URL(`../../games/agar-io/fixtures/${name}.json`, import.meta.url), 'utf8'),
@@ -257,7 +262,7 @@ for (const scenario of cases)
       // TV top: compact header133.2 +empty strip12 +quiet timer22; HostBar80 is below.
       // The actual game's Stage then owns its padding; do not subtract it twice.
       // Phone: ordinary header56 +quiet row27.6; the game owns its safe bottom.
-      top = isTv ? 167.2 : 83.6,
+      top = isTv ? (view.deadline === null ? 145.2 : 167.2) : 83.6,
       bottom = isTv ? 80 : 0;
     const name = `${scenario.name}-${surface}.html`;
     const payload = JSON.stringify({
@@ -271,7 +276,10 @@ for (const scenario of cases)
     const pausedHost = !isTv && Boolean(state.phase.paused);
     const vipName = Object.values(state.players).find((player) => player.isVip)?.name ?? 'VIP';
     const banner = `Paused — ${vipName} will resume the game`;
-    const document = `<!doctype html><html lang="en" data-surface="${isTv ? 'tv' : 'phone'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(scenario.name + ' ' + surface)}</title><link rel="stylesheet" href="screens.css"></head><body style="--capture-top:${top}px;--capture-bottom:${bottom}px"><header class="capture-header">${isTv ? 'TV · Agar.io' : `PB · AGAR · ${escape(spectator ? 'Spectator' : state.players.p1.name)}`}</header><main><div id="p05-owner-banner" class="capture-banner" ${pausedHost ? '' : 'hidden'}>${escape(banner)}</div><div id="root" class="capture-game" data-ready="false" data-host-paused="${pausedHost}" ${pausedHost ? 'inert' : ''}>${html}</div></main><footer class="capture-footer"></footer><script type="application/json" id="p05-source">${payload}</script><script type="module" src="/jobs/P05-blob-arena/interactive.tsx"></script></body></html>`;
+    const document = await format(
+      `<!doctype html><html lang="en" data-surface="${isTv ? 'tv' : 'phone'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(scenario.name + ' ' + surface)}</title><link rel="stylesheet" href="screens.css"></head><body style="--capture-top:${top}px;--capture-bottom:${bottom}px"><header class="capture-header">${isTv ? 'TV · Agar.io' : `PB · AGAR · ${escape(spectator ? 'Spectator' : state.players.p1.name)}`}</header><main><div id="p05-owner-banner" class="capture-banner" ${pausedHost ? '' : 'hidden'}>${escape(banner)}</div><div id="root" class="capture-game" data-ready="false" data-host-paused="${pausedHost}" ${pausedHost ? 'inert' : ''}>${html}</div></main><footer class="capture-footer"></footer><script type="application/json" id="p05-source">${payload}</script><script type="module" src="/jobs/P05-blob-arena/interactive.tsx"></script></body></html>`,
+      { ...prettierOptions, parser: 'html' },
+    );
     const file = new URL(name, media),
       bytes = readdirSync(media).reduce(
         (sum, entry) => sum + statSync(new URL(entry, media)).size,
@@ -299,6 +307,7 @@ for (const scenario of cases)
         authoredLocalFrame: true,
         phoneFooter: false,
         mountedBeforeCapture: true,
+        quietDeadlineRow: isTv && view.deadline !== null ? 22 : 0,
       },
       viewer,
       frozenServerNow: state.began + state.world.time,

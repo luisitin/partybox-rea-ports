@@ -228,6 +228,12 @@ function Preview() {
     window.__blobReady = true;
     rootElement.dataset.ready = 'true';
     rootElement.dataset.phase = state.phase.id;
+    if (isTv) {
+      document.body.style.setProperty(
+        '--capture-top',
+        game.tvView(state).deadline === null ? '145.2px' : '167.2px',
+      );
+    }
     const pausedHost = !isTv && Boolean(state.phase.paused);
     rootElement.dataset.hostPaused = String(pausedHost);
     rootElement.inert = pausedHost;

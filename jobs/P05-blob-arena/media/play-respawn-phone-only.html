@@ -6,819 +6,1261 @@
     <title>play-respawn phone-only</title>
     <link rel="stylesheet" href="screens.css" />
   </head>
-  <body style="--capture-top: 80px; --capture-bottom: 80px">
+  <body style="--capture-top: 83.6px; --capture-bottom: 0px">
     <header class="capture-header">PB · AGAR · Ana</header>
     <main>
-      <div
-        class="Controllermodulecss_screen"
-        style="--blob-colour: var(--pb-player-1)"
-        data-stage="true"
-        data-controls="true"
-        data-phase="play"
-      >
-        <header class="Controllermodulecss_header">
-          <div class="Controllermodulecss_heading">
-            <h2 class="Controllermodulecss_headline">Round 1 of 3</h2>
-            <p class="Controllermodulecss_identity">
-              <b class="Controllermodulecss_badge">1</b>Your blob · <b>0 mass</b>
-            </p>
+      <div id="p05-owner-banner" class="capture-banner" hidden>
+        Paused — VIP will resume the game
+      </div>
+      <div id="root" class="capture-game" data-ready="false" data-host-paused="false">
+        <div
+          class="Controllermodulecss_screen"
+          style="--blob-colour: var(--pb-player-1)"
+          data-stage="true"
+          data-controls="true"
+          data-phase="play"
+        >
+          <header class="Controllermodulecss_header">
+            <div class="Controllermodulecss_heading">
+              <h2 class="Controllermodulecss_headline">Round 1 of 3</h2>
+              <p class="Controllermodulecss_identity">
+                <b class="Controllermodulecss_badge">1</b>Your blob · <b>0 mass</b>
+              </p>
+            </div>
+            <p class="Controllermodulecss_clock" role="timer" aria-label="Time left">1:18</p>
+          </header>
+          <div class="Controllermodulecss_arena" data-player-arena="true">
+            <svg
+              class="Arenamodulecss_arena"
+              viewBox="0 0 160 100"
+              preserveAspectRatio="xMidYMid meet"
+              role="img"
+              aria-label="Shared arena: 7 blobs and 96 snacks"
+              data-arena="true"
+              data-camera="overview"
+              data-phone="true"
+            >
+              <defs>
+                <clipPath id="_R_a_"><rect width="160" height="100"></rect></clipPath>
+                <pattern id="_R_aH1_" width="2.75" height="2.75" patternUnits="userSpaceOnUse">
+                  <path class="Arenamodulecss_grid" d="M2.75 0H0V2.75"></path>
+                </pattern>
+              </defs>
+              <g class="Arenamodulecss_world" data-world-layer="true">
+                <rect
+                  class="Arenamodulecss_worldBounds"
+                  data-world-background="map"
+                  x="0"
+                  y="0"
+                  width="160"
+                  height="100"
+                ></rect>
+                <g clip-path="url(#_R_a_)">
+                  <rect
+                    data-grid-background="true"
+                    x="0"
+                    y="0"
+                    width="160"
+                    height="100"
+                    fill="url(#_R_aH1_)"
+                  ></rect>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="0"
+                    points="117.8,22.8 117.38541019662497,23.370633909777094 116.71458980337503,23.152671151375486 116.71458980337503,22.447328848624515 117.38541019662497,22.229366090222907"
+                    style="--blob-colour: var(--pb-player-1)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="1"
+                    points="45,48.5 44.58541019662497,49.070633909777094 43.91458980337503,48.85267115137548 43.91458980337503,48.14732884862452 44.58541019662497,47.929366090222906"
+                    style="--blob-colour: var(--pb-player-2)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="2"
+                    points="125.39999999999999,46.5 124.98541019662497,47.070633909777094 124.31458980337503,46.85267115137548 124.31458980337503,46.14732884862452 124.98541019662497,45.929366090222906"
+                    style="--blob-colour: var(--pb-player-3)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="3"
+                    points="147.29999999999998,34 146.88541019662495,34.570633909777094 146.21458980337502,34.35267115137548 146.21458980337502,33.64732884862452 146.88541019662495,33.429366090222906"
+                    style="--blob-colour: var(--pb-player-4)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="4"
+                    points="22.6,11.4 22.185410196624968,11.970633909777092 21.51458980337503,11.752671151375484 21.51458980337503,11.047328848624517 22.185410196624968,10.829366090222909"
+                    style="--blob-colour: var(--pb-player-5)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="5"
+                    points="16.2,34.6 15.785410196624968,35.170633909777095 15.114589803375031,34.95267115137548 15.114589803375031,34.24732884862452 15.785410196624968,34.02936609022291"
+                    style="--blob-colour: var(--pb-player-6)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="6"
+                    points="50.9,37.8 50.48541019662497,38.37063390977709 49.81458980337503,38.15267115137548 49.81458980337503,37.447328848624515 50.48541019662497,37.2293660902229"
+                    style="--blob-colour: var(--pb-player-7)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="7"
+                    points="5.5,68.2 5.085410196624969,68.77063390977709 4.414589803375032,68.55267115137549 4.414589803375032,67.84732884862451 5.085410196624968,67.62936609022292"
+                    style="--blob-colour: var(--pb-player-8)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="8"
+                    points="80.6,94 80.18541019662497,94.57063390977709 79.51458980337503,94.35267115137549 79.51458980337503,93.64732884862451 80.18541019662497,93.42936609022291"
+                    style="--blob-colour: var(--pb-player-1)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="9"
+                    points="46.800000000000004,59.8 46.385410196624974,60.37063390977709 45.714589803375034,60.15267115137548 45.714589803375034,59.447328848624515 46.385410196624974,59.2293660902229"
+                    style="--blob-colour: var(--pb-player-2)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="10"
+                    points="129.1,89.1 128.68541019662496,89.67063390977708 128.01458980337503,89.45267115137548 128.01458980337503,88.7473288486245 128.68541019662496,88.52936609022291"
+                    style="--blob-colour: var(--pb-player-3)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="11"
+                    points="42.4,55.4 41.98541019662497,55.97063390977709 41.31458980337503,55.75267115137548 41.31458980337503,55.04732884862452 41.98541019662497,54.829366090222905"
+                    style="--blob-colour: var(--pb-player-4)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="12"
+                    points="107,51.4 106.58541019662498,51.97063390977709 105.91458980337504,51.75267115137548 105.91458980337504,51.04732884862452 106.58541019662498,50.829366090222905"
+                    style="--blob-colour: var(--pb-player-5)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="13"
+                    points="43.4,85.4 42.98541019662497,85.97063390977709 42.31458980337503,85.7526711513755 42.31458980337503,85.04732884862452 42.98541019662497,84.82936609022292"
+                    style="--blob-colour: var(--pb-player-6)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="14"
+                    points="11.1,68.6 10.685410196624968,69.17063390977708 10.014589803375031,68.95267115137548 10.014589803375031,68.2473288486245 10.685410196624968,68.02936609022291"
+                    style="--blob-colour: var(--pb-player-7)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="15"
+                    points="89.39999999999999,4.6 88.98541019662497,5.1706339097770915 88.31458980337503,4.952671151375483 88.31458980337503,4.247328848624516 88.98541019662497,4.029366090222908"
+                    style="--blob-colour: var(--pb-player-8)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="16"
+                    points="146.1,78.7 145.68541019662496,79.27063390977709 145.01458980337503,79.05267115137549 145.01458980337503,78.34732884862451 145.68541019662496,78.12936609022292"
+                    style="--blob-colour: var(--pb-player-1)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="17"
+                    points="36.7,54.2 36.28541019662497,54.7706339097771 35.61458980337503,54.552671151375485 35.61458980337503,53.84732884862452 36.28541019662497,53.62936609022291"
+                    style="--blob-colour: var(--pb-player-2)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="18"
+                    points="104.6,39.7 104.18541019662497,40.2706339097771 103.51458980337503,40.052671151375485 103.51458980337503,39.34732884862452 104.18541019662497,39.12936609022291"
+                    style="--blob-colour: var(--pb-player-3)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="19"
+                    points="96.8,43.6 96.38541019662497,44.170633909777095 95.71458980337503,43.95267115137548 95.71458980337503,43.24732884862452 96.38541019662497,43.02936609022291"
+                    style="--blob-colour: var(--pb-player-4)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="20"
+                    points="118.6,67.3 118.18541019662497,67.87063390977708 117.51458980337503,67.65267115137549 117.51458980337503,66.94732884862451 118.18541019662497,66.72936609022291"
+                    style="--blob-colour: var(--pb-player-5)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="21"
+                    points="97.19999999999999,7.3 96.78541019662497,7.870633909777092 96.11458980337503,7.6526711513754835 96.11458980337503,6.947328848624516 96.78541019662497,6.729366090222908"
+                    style="--blob-colour: var(--pb-player-6)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="22"
+                    points="31.5,70.6 31.085410196624967,71.17063390977708 30.41458980337503,70.95267115137548 30.41458980337503,70.2473288486245 31.085410196624967,70.02936609022291"
+                    style="--blob-colour: var(--pb-player-7)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="23"
+                    points="132.4,49.4 131.98541019662497,49.97063390977709 131.31458980337504,49.75267115137548 131.31458980337504,49.04732884862452 131.98541019662497,48.829366090222905"
+                    style="--blob-colour: var(--pb-player-8)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="24"
+                    points="137.29999999999998,91.6 136.88541019662495,92.17063390977708 136.21458980337502,91.95267115137548 136.21458980337502,91.2473288486245 136.88541019662495,91.02936609022291"
+                    style="--blob-colour: var(--pb-player-1)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="25"
+                    points="55.300000000000004,9.5 54.885410196624974,10.070633909777092 54.214589803375034,9.852671151375484 54.214589803375034,9.147328848624516 54.885410196624974,8.929366090222908"
+                    style="--blob-colour: var(--pb-player-2)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="26"
+                    points="100.19999999999999,52.6 99.78541019662497,53.170633909777095 99.11458980337503,52.95267115137548 99.11458980337503,52.24732884862452 99.78541019662497,52.02936609022291"
+                    style="--blob-colour: var(--pb-player-3)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="27"
+                    points="33.300000000000004,45.7 32.885410196624974,46.2706339097771 32.214589803375034,46.052671151375485 32.214589803375034,45.34732884862452 32.885410196624974,45.12936609022291"
+                    style="--blob-colour: var(--pb-player-4)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="28"
+                    points="90.39999999999999,15.1 89.98541019662497,15.670633909777091 89.31458980337503,15.452671151375483 89.31458980337503,14.747328848624516 89.98541019662497,14.529366090222908"
+                    style="--blob-colour: var(--pb-player-5)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="29"
+                    points="54.7,54 54.28541019662497,54.570633909777094 53.61458980337503,54.35267115137548 53.61458980337503,53.64732884862452 54.28541019662497,53.429366090222906"
+                    style="--blob-colour: var(--pb-player-6)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="30"
+                    points="149,83 148.58541019662496,83.57063390977709 147.91458980337504,83.35267115137549 147.91458980337504,82.64732884862451 148.58541019662496,82.42936609022291"
+                    style="--blob-colour: var(--pb-player-7)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="31"
+                    points="10.299999999999999,16.2 9.885410196624967,16.770633909777093 9.21458980337503,16.552671151375485 9.21458980337503,15.847328848624516 9.885410196624967,15.629366090222907"
+                    style="--blob-colour: var(--pb-player-8)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="32"
+                    points="29.1,63.2 28.685410196624968,63.7706339097771 28.01458980337503,63.552671151375485 28.01458980337503,62.84732884862452 28.685410196624968,62.62936609022291"
+                    style="--blob-colour: var(--pb-player-1)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="33"
+                    points="86.5,4.7 86.08541019662498,5.270633909777092 85.41458980337504,5.052671151375484 85.41458980337504,4.3473288486245165 86.08541019662498,4.129366090222908"
+                    style="--blob-colour: var(--pb-player-2)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="34"
+                    points="58.800000000000004,33.7 58.385410196624974,34.2706339097771 57.714589803375034,34.052671151375485 57.714589803375034,33.34732884862452 58.385410196624974,33.12936609022291"
+                    style="--blob-colour: var(--pb-player-3)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="35"
+                    points="82.8,16.4 82.38541019662497,16.970633909777092 81.71458980337503,16.752671151375484 81.71458980337503,16.047328848624513 82.38541019662497,15.829366090222907"
+                    style="--blob-colour: var(--pb-player-4)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="36"
+                    points="86.69999999999999,17.5 86.28541019662497,18.070633909777094 85.61458980337503,17.852671151375485 85.61458980337503,17.147328848624515 86.28541019662497,16.929366090222906"
+                    style="--blob-colour: var(--pb-player-5)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="37"
+                    points="101.19999999999999,5.3 100.78541019662497,5.870633909777092 100.11458980337503,5.6526711513754835 100.11458980337503,4.947328848624516 100.78541019662497,4.729366090222908"
+                    style="--blob-colour: var(--pb-player-6)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="38"
+                    points="115.69999999999999,65.4 115.28541019662497,65.97063390977709 114.61458980337503,65.7526711513755 114.61458980337503,65.04732884862452 115.28541019662497,64.82936609022292"
+                    style="--blob-colour: var(--pb-player-7)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="39"
+                    points="98.39999999999999,35 97.98541019662497,35.570633909777094 97.31458980337503,35.35267115137548 97.31458980337503,34.64732884862452 97.98541019662497,34.429366090222906"
+                    style="--blob-colour: var(--pb-player-8)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="40"
+                    points="32.4,65.1 31.98541019662497,65.67063390977708 31.314589803375032,65.45267115137548 31.314589803375032,64.7473288486245 31.98541019662497,64.52936609022291"
+                    style="--blob-colour: var(--pb-player-1)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="41"
+                    points="12,81.7 11.585410196624968,82.27063390977709 10.914589803375032,82.05267115137549 10.914589803375032,81.34732884862451 11.585410196624968,81.12936609022292"
+                    style="--blob-colour: var(--pb-player-2)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="42"
+                    points="149.29999999999998,82 148.88541019662495,82.57063390977709 148.21458980337502,82.35267115137549 148.21458980337502,81.64732884862451 148.88541019662495,81.42936609022291"
+                    style="--blob-colour: var(--pb-player-3)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="43"
+                    points="33,65.6 32.58541019662497,66.17063390977708 31.91458980337503,65.95267115137548 31.91458980337503,65.2473288486245 32.58541019662497,65.02936609022291"
+                    style="--blob-colour: var(--pb-player-4)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="44"
+                    points="150,63.2 149.58541019662496,63.7706339097771 148.91458980337504,63.552671151375485 148.91458980337504,62.84732884862452 149.58541019662496,62.62936609022291"
+                    style="--blob-colour: var(--pb-player-5)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="45"
+                    points="70.8,95.1 70.38541019662497,95.67063390977708 69.71458980337503,95.45267115137548 69.71458980337503,94.7473288486245 70.38541019662497,94.52936609022291"
+                    style="--blob-colour: var(--pb-player-6)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="46"
+                    points="87,72.4 86.58541019662498,72.97063390977709 85.91458980337504,72.7526711513755 85.91458980337504,72.04732884862452 86.58541019662498,71.82936609022292"
+                    style="--blob-colour: var(--pb-player-7)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="47"
+                    points="125.69999999999999,40.5 125.28541019662497,41.070633909777094 124.61458980337503,40.85267115137548 124.61458980337503,40.14732884862452 125.28541019662497,39.929366090222906"
+                    style="--blob-colour: var(--pb-player-8)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="48"
+                    points="140.1,28.4 139.68541019662496,28.970633909777092 139.01458980337503,28.752671151375484 139.01458980337503,28.047328848624513 139.68541019662496,27.829366090222905"
+                    style="--blob-colour: var(--pb-player-1)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="49"
+                    points="98.89999999999999,36.6 98.48541019662497,37.170633909777095 97.81458980337503,36.95267115137548 97.81458980337503,36.24732884862452 98.48541019662497,36.02936609022291"
+                    style="--blob-colour: var(--pb-player-2)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="50"
+                    points="97.19999999999999,34.2 96.78541019662497,34.7706339097771 96.11458980337503,34.552671151375485 96.11458980337503,33.84732884862452 96.78541019662497,33.62936609022291"
+                    style="--blob-colour: var(--pb-player-3)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="51"
+                    points="117.39999999999999,18.1 116.98541019662497,18.670633909777095 116.31458980337503,18.452671151375487 116.31458980337503,17.747328848624516 116.98541019662497,17.529366090222908"
+                    style="--blob-colour: var(--pb-player-4)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="52"
+                    points="134.6,13.5 134.18541019662496,14.070633909777092 133.51458980337503,13.852671151375484 133.51458980337503,13.147328848624516 134.18541019662496,12.929366090222908"
+                    style="--blob-colour: var(--pb-player-5)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="53"
+                    points="113.5,54.4 113.08541019662498,54.97063390977709 112.41458980337504,54.75267115137548 112.41458980337504,54.04732884862452 113.08541019662498,53.829366090222905"
+                    style="--blob-colour: var(--pb-player-6)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="54"
+                    points="41.4,75.5 40.98541019662497,76.07063390977709 40.31458980337503,75.85267115137549 40.31458980337503,75.14732884862451 40.98541019662497,74.92936609022291"
+                    style="--blob-colour: var(--pb-player-7)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="55"
+                    points="151.79999999999998,77.1 151.38541019662495,77.67063390977708 150.71458980337502,77.45267115137548 150.71458980337502,76.7473288486245 151.38541019662495,76.52936609022291"
+                    style="--blob-colour: var(--pb-player-8)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="56"
+                    points="49.800000000000004,51.4 49.385410196624974,51.97063390977709 48.714589803375034,51.75267115137548 48.714589803375034,51.04732884862452 49.385410196624974,50.829366090222905"
+                    style="--blob-colour: var(--pb-player-1)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="57"
+                    points="15.799999999999999,41.4 15.385410196624967,41.97063390977709 14.71458980337503,41.75267115137548 14.71458980337503,41.04732884862452 15.385410196624967,40.829366090222905"
+                    style="--blob-colour: var(--pb-player-2)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="58"
+                    points="154,65.4 153.58541019662496,65.97063390977709 152.91458980337504,65.7526711513755 152.91458980337504,65.04732884862452 153.58541019662496,64.82936609022292"
+                    style="--blob-colour: var(--pb-player-3)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="59"
+                    points="9.299999999999999,45.6 8.885410196624967,46.170633909777095 8.21458980337503,45.95267115137548 8.21458980337503,45.24732884862452 8.885410196624967,45.02936609022291"
+                    style="--blob-colour: var(--pb-player-4)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="60"
+                    points="52.300000000000004,40.6 51.885410196624974,41.170633909777095 51.214589803375034,40.95267115137548 51.214589803375034,40.24732884862452 51.885410196624974,40.02936609022291"
+                    style="--blob-colour: var(--pb-player-5)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="61"
+                    points="92.69999999999999,11 92.28541019662497,11.570633909777092 91.61458980337503,11.352671151375484 91.61458980337503,10.647328848624516 92.28541019662497,10.429366090222908"
+                    style="--blob-colour: var(--pb-player-6)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="62"
+                    points="134.5,35.4 134.08541019662496,35.97063390977709 133.41458980337504,35.75267115137548 133.41458980337504,35.04732884862452 134.08541019662496,34.829366090222905"
+                    style="--blob-colour: var(--pb-player-7)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="63"
+                    points="47.9,89.8 47.48541019662497,90.37063390977708 46.81458980337503,90.15267115137549 46.81458980337503,89.44732884862451 47.48541019662497,89.22936609022291"
+                    style="--blob-colour: var(--pb-player-8)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="64"
+                    points="53.4,90.3 52.98541019662497,90.87063390977708 52.31458980337503,90.65267115137549 52.31458980337503,89.94732884862451 52.98541019662497,89.72936609022291"
+                    style="--blob-colour: var(--pb-player-1)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="65"
+                    points="119.6,8.7 119.18541019662497,9.270633909777091 118.51458980337503,9.052671151375483 118.51458980337503,8.347328848624516 119.18541019662497,8.129366090222907"
+                    style="--blob-colour: var(--pb-player-2)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="66"
+                    points="7.1,48 6.685410196624969,48.570633909777094 6.014589803375031,48.35267115137548 6.014589803375031,47.64732884862452 6.685410196624968,47.429366090222906"
+                    style="--blob-colour: var(--pb-player-3)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="67"
+                    points="117.89999999999999,6 117.48541019662497,6.570633909777092 116.81458980337503,6.352671151375484 116.81458980337503,5.647328848624516 117.48541019662497,5.429366090222908"
+                    style="--blob-colour: var(--pb-player-4)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="68"
+                    points="125.6,25.1 125.18541019662497,25.670633909777095 124.51458980337503,25.452671151375487 124.51458980337503,24.747328848624516 125.18541019662497,24.529366090222908"
+                    style="--blob-colour: var(--pb-player-5)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="69"
+                    points="5.199999999999999,77.5 4.7854101966249685,78.07063390977709 4.114589803375031,77.85267115137549 4.114589803375031,77.14732884862451 4.785410196624968,76.92936609022291"
+                    style="--blob-colour: var(--pb-player-6)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="70"
+                    points="156.29999999999998,52.7 155.88541019662495,53.2706339097771 155.21458980337502,53.052671151375485 155.21458980337502,52.34732884862452 155.88541019662495,52.12936609022291"
+                    style="--blob-colour: var(--pb-player-7)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="71"
+                    points="71.8,4.3 71.38541019662497,4.870633909777092 70.71458980337503,4.6526711513754835 70.71458980337503,3.947328848624516 71.38541019662497,3.7293660902229075"
+                    style="--blob-colour: var(--pb-player-8)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="72"
+                    points="110.3,80.2 109.88541019662497,80.77063390977709 109.21458980337503,80.55267115137549 109.21458980337503,79.84732884862451 109.88541019662497,79.62936609022292"
+                    style="--blob-colour: var(--pb-player-1)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="73"
+                    points="90.19999999999999,42.4 89.78541019662497,42.97063390977709 89.11458980337503,42.75267115137548 89.11458980337503,42.04732884862452 89.78541019662497,41.829366090222905"
+                    style="--blob-colour: var(--pb-player-2)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="74"
+                    points="100.1,44.3 99.68541019662497,44.87063390977709 99.01458980337503,44.65267115137548 99.01458980337503,43.947328848624515 99.68541019662497,43.7293660902229"
+                    style="--blob-colour: var(--pb-player-3)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="75"
+                    points="151.4,69.1 150.98541019662497,69.67063390977708 150.31458980337504,69.45267115137548 150.31458980337504,68.7473288486245 150.98541019662497,68.52936609022291"
+                    style="--blob-colour: var(--pb-player-4)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="76"
+                    points="144.6,34.5 144.18541019662496,35.070633909777094 143.51458980337503,34.85267115137548 143.51458980337503,34.14732884862452 144.18541019662496,33.929366090222906"
+                    style="--blob-colour: var(--pb-player-5)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="77"
+                    points="127.69999999999999,66.4 127.28541019662497,66.97063390977709 126.61458980337503,66.7526711513755 126.61458980337503,66.04732884862452 127.28541019662497,65.82936609022292"
+                    style="--blob-colour: var(--pb-player-6)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="78"
+                    points="87.5,34.1 87.08541019662498,34.670633909777095 86.41458980337504,34.45267115137548 86.41458980337504,33.74732884862452 87.08541019662498,33.52936609022291"
+                    style="--blob-colour: var(--pb-player-7)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="79"
+                    points="141.4,50.2 140.98541019662497,50.7706339097771 140.31458980337504,50.552671151375485 140.31458980337504,49.84732884862452 140.98541019662497,49.62936609022291"
+                    style="--blob-colour: var(--pb-player-8)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="80"
+                    points="78.3,8.3 77.88541019662497,8.870633909777093 77.21458980337503,8.652671151375484 77.21458980337503,7.947328848624517 77.88541019662497,7.729366090222909"
+                    style="--blob-colour: var(--pb-player-1)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="81"
+                    points="101.8,50.8 101.38541019662497,51.37063390977709 100.71458980337503,51.15267115137548 100.71458980337503,50.447328848624515 101.38541019662497,50.2293660902229"
+                    style="--blob-colour: var(--pb-player-2)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="82"
+                    points="11.5,88.2 11.085410196624968,88.77063390977709 10.414589803375032,88.55267115137549 10.414589803375032,87.84732884862451 11.085410196624968,87.62936609022292"
+                    style="--blob-colour: var(--pb-player-3)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="83"
+                    points="142.1,50 141.68541019662496,50.570633909777094 141.01458980337503,50.35267115137548 141.01458980337503,49.64732884862452 141.68541019662496,49.429366090222906"
+                    style="--blob-colour: var(--pb-player-4)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="84"
+                    points="21.6,90.2 21.185410196624968,90.77063390977709 20.51458980337503,90.55267115137549 20.51458980337503,89.84732884862451 21.185410196624968,89.62936609022292"
+                    style="--blob-colour: var(--pb-player-5)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="85"
+                    points="89,20.8 88.58541019662498,21.370633909777094 87.91458980337504,21.152671151375486 87.91458980337504,20.447328848624515 88.58541019662498,20.229366090222907"
+                    style="--blob-colour: var(--pb-player-6)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="86"
+                    points="48,85.7 47.58541019662497,86.27063390977709 46.91458980337503,86.05267115137549 46.91458980337503,85.34732884862451 47.58541019662497,85.12936609022292"
+                    style="--blob-colour: var(--pb-player-7)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="87"
+                    points="127.89999999999999,9.1 127.48541019662497,9.670633909777091 126.81458980337503,9.452671151375483 126.81458980337503,8.747328848624516 127.48541019662497,8.529366090222908"
+                    style="--blob-colour: var(--pb-player-8)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="88"
+                    points="11.799999999999999,87.6 11.385410196624967,88.17063390977708 10.71458980337503,87.95267115137548 10.71458980337503,87.2473288486245 11.385410196624967,87.02936609022291"
+                    style="--blob-colour: var(--pb-player-1)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="89"
+                    points="150.29999999999998,63.2 149.88541019662495,63.7706339097771 149.21458980337502,63.552671151375485 149.21458980337502,62.84732884862452 149.88541019662495,62.62936609022291"
+                    style="--blob-colour: var(--pb-player-2)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="90"
+                    points="123.6,5.4 123.18541019662497,5.970633909777092 122.51458980337503,5.752671151375484 122.51458980337503,5.047328848624517 123.18541019662497,4.8293660902229085"
+                    style="--blob-colour: var(--pb-player-3)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="91"
+                    points="141.5,26.4 141.08541019662496,26.970633909777092 140.41458980337504,26.752671151375484 140.41458980337504,26.047328848624513 141.08541019662496,25.829366090222905"
+                    style="--blob-colour: var(--pb-player-4)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="92"
+                    points="142.7,86.8 142.28541019662495,87.37063390977708 141.61458980337503,87.15267115137549 141.61458980337503,86.44732884862451 142.28541019662495,86.22936609022291"
+                    style="--blob-colour: var(--pb-player-5)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="93"
+                    points="44.9,44.5 44.48541019662497,45.070633909777094 43.81458980337503,44.85267115137548 43.81458980337503,44.14732884862452 44.48541019662497,43.929366090222906"
+                    style="--blob-colour: var(--pb-player-6)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="94"
+                    points="143.2,35.6 142.78541019662495,36.170633909777095 142.11458980337503,35.95267115137548 142.11458980337503,35.24732884862452 142.78541019662495,35.02936609022291"
+                    style="--blob-colour: var(--pb-player-7)"
+                  ></polygon>
+                  <polygon
+                    class="Arenamodulecss_snack"
+                    data-snack-id="95"
+                    points="42.6,85.7 42.18541019662497,86.27063390977709 41.51458980337503,86.05267115137549 41.51458980337503,85.34732884862451 42.18541019662497,85.12936609022292"
+                    style="--blob-colour: var(--pb-player-8)"
+                  ></polygon>
+                  <g
+                    data-cell-id="3"
+                    data-pose-cell="3"
+                    data-pose-layer="cell"
+                    class="undefined Arenamodulecss_pose"
+                    style="--blob-colour: var(--pb-player-3); transform: translate(60px, 85px)"
+                  >
+                    <title>Cy, blob 3, 63 mass</title>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-logical-radius="true"
+                      aria-hidden="true"
+                      r="4.365489663256575"
+                      style="r: 4.365489663256575px"
+                    ></circle>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-outline-radius="true"
+                      aria-hidden="true"
+                      r="4.365489663256575"
+                      style="r: 4.365489663256575px"
+                    ></circle>
+                    <path
+                      class="Arenamodulecss_body"
+                      data-cell-body="true"
+                      data-cell-outline="bounded-contact-path"
+                      d="M4.33588 0 L4.3052 0.56679 L4.20781 1.12748 L4.04185 1.67419 L3.80481 2.19671 L3.49597 2.68255 L3.11854 3.11854 L2.68053 3.49334 L2.19373 3.79965 L1.67135 4.035 L1.12554 4.20059 L0.56597 4.299 L0 4.33176 L-0.56586 4.29813 L-1.12422 4.19565 L-1.66595 4.02197 L-2.1806 3.77691 L-2.65784 3.46376 L-3.08893 3.08893 L-3.46738 2.66061 L-3.78833 2.18719 L-4.04725 1.67642 L-4.23874 1.13577 L-4.3566 0.57356 L-4.3951 0 L-4.35108 -0.57283 L-4.22567 -1.13226 L-4.02452 -1.66701 L-3.75644 -2.16878 L-3.43078 -2.63253 L-3.0552 -3.0552 L-2.63455 -3.43342 L-2.17176 -3.7616 L-1.66985 -4.03138 L-1.1342 -4.23289 L-0.57365 -4.35728 L0 -4.39922 L0.57376 -4.35815 L1.13552 -4.23782 L1.67525 -4.04441 L2.18489 -3.78434 L2.65725 -3.46299 L3.08481 -3.08481 L3.45938 -2.65447 L3.77292 -2.1783 L4.01913 -1.66478 L4.19473 -1.12398 L4.29968 -0.56606 Z"
+                    ></path>
+                    <text
+                      class="Arenamodulecss_name"
+                      data-name-owner="p3"
+                      data-cell-label-id="3"
+                      data-name-inside="true"
+                      font-size="1.2100000000000002"
+                      style="transform: translate(0px, 0.08500000000001023px)"
+                      x="0"
+                      y="0"
+                    >
+                      Cy
+                    </text>
+                  </g>
+                  <g
+                    data-cell-id="5"
+                    data-pose-cell="5"
+                    data-pose-layer="cell"
+                    class="undefined Arenamodulecss_pose"
+                    style="--blob-colour: var(--pb-player-5); transform: translate(90px, 85px)"
+                  >
+                    <title>Eli, blob 5, 69 mass</title>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-logical-radius="true"
+                      aria-hidden="true"
+                      r="4.568643124604941"
+                      style="r: 4.568643124604941px"
+                    ></circle>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-outline-radius="true"
+                      aria-hidden="true"
+                      r="4.568643124604941"
+                      style="r: 4.568643124604941px"
+                    ></circle>
+                    <path
+                      class="Arenamodulecss_body"
+                      data-cell-body="true"
+                      data-cell-outline="bounded-contact-path"
+                      d="M4.53245 0 L4.49766 0.59213 L4.39119 1.17661 L4.21045 1.74403 L3.95498 2.28341 L3.62778 2.78369 L3.23534 3.23534 L2.78628 3.63115 L2.28971 3.9659 L1.75421 4.23504 L1.18795 4.43348 L0.59972 4.55536 L0 4.59519 L-0.59899 4.54979 L-1.18434 4.42002 L-1.74436 4.21127 L-2.27022 3.93214 L-2.75633 3.59211 L-3.19915 3.19915 L-3.59505 2.75858 L-3.93828 2.27377 L-4.2203 1.74811 L-4.43098 1.18728 L-4.56108 0.60048 L-4.60483 0 L-4.56146 -0.60053 L-4.43475 -1.18829 L-4.2313 -1.75266 L-3.95814 -2.28523 L-3.62131 -2.77873 L-3.2257 -3.2257 L-2.77615 -3.61794 L-2.27893 -3.94722 L-1.74248 -4.20671 L-1.17696 -4.39246 L-0.59293 -4.50375 L0 -4.5421 L0.59366 -4.50933 L1.18056 -4.40592 L1.75232 -4.23049 L2.29842 -3.98098 L2.8061 -3.65698 L3.26189 -3.26189 L3.65404 -2.80385 L3.97484 -2.29488 L4.22145 -1.74858 L4.39496 -1.17763 L4.49804 -0.59218 Z"
+                    ></path>
+                    <text
+                      class="Arenamodulecss_name"
+                      data-name-owner="p5"
+                      data-cell-label-id="5"
+                      data-name-inside="true"
+                      font-size="1.2100000000000002"
+                      style="transform: translate(0px, 0.08500000000001023px)"
+                      x="0"
+                      y="0"
+                    >
+                      Eli
+                    </text>
+                  </g>
+                  <g
+                    data-cell-id="8"
+                    data-pose-cell="8"
+                    data-pose-layer="cell"
+                    class="undefined Arenamodulecss_pose"
+                    style="--blob-colour: var(--pb-player-8); transform: translate(135px, 85px)"
+                  >
+                    <title>Hal, blob 8, 75 mass</title>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-logical-radius="true"
+                      aria-hidden="true"
+                      r="4.763139720814413"
+                      style="r: 4.763139720814413px"
+                    ></circle>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-outline-radius="true"
+                      aria-hidden="true"
+                      r="4.763139720814413"
+                      style="r: 4.763139720814413px"
+                    ></circle>
+                    <path
+                      class="Arenamodulecss_body"
+                      data-cell-body="true"
+                      data-cell-outline="bounded-contact-path"
+                      d="M4.72005 0 L4.68693 0.61705 L4.58199 1.22774 L4.40185 1.82331 L4.14342 2.3922 L3.80656 2.92088 L3.39588 3.39588 L2.92066 3.80628 L2.39323 4.14519 L1.82653 4.40964 L1.2323 4.59902 L0.62049 4.71308 L0 4.75057 L-0.62 4.70938 L-1.22931 4.58784 L-1.81693 4.38645 L-2.37227 4.10889 L-2.88644 3.76168 L-3.35279 3.35279 L-3.76615 2.88987 L-4.12129 2.37943 L-4.41146 1.82729 L-4.62807 1.24009 L-4.76205 0.62694 L-4.80623 0 L-4.75785 -0.62638 L-4.61969 -1.23784 L-4.39928 -1.82224 L-4.10658 -2.37094 L-3.75114 -2.87835 L-3.34022 -3.34022 L-2.87857 -3.75143 L-2.36991 -4.10481 L-1.81902 -4.39149 L-1.23328 -4.60266 L-0.62294 -4.7317 L0 -4.77571 L0.62343 -4.7354 L1.23627 -4.61384 L1.82862 -4.41468 L2.39087 -4.14111 L2.91279 -3.79602 L3.38331 -3.38331 L3.79156 -2.90936 L4.12871 -2.38371 L4.38968 -1.81826 L4.5736 -1.22549 L4.68273 -0.61649 Z"
+                    ></path>
+                    <text
+                      class="Arenamodulecss_name"
+                      data-name-owner="p8"
+                      data-cell-label-id="8"
+                      data-name-inside="true"
+                      font-size="1.2650000000000001"
+                      style="transform: translate(0px, 0.14000000000001026px)"
+                      x="0"
+                      y="0"
+                    >
+                      Hal
+                    </text>
+                  </g>
+                  <g
+                    data-cell-id="6"
+                    data-pose-cell="6"
+                    data-pose-layer="cell"
+                    class="undefined Arenamodulecss_pose"
+                    style="--blob-colour: var(--pb-player-6); transform: translate(105px, 85px)"
+                  >
+                    <title>Fay, blob 6, 81 mass</title>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-logical-radius="true"
+                      aria-hidden="true"
+                      r="4.95"
+                      style="r: 4.95px"
+                    ></circle>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-outline-radius="true"
+                      aria-hidden="true"
+                      r="4.95"
+                      style="r: 4.95px"
+                    ></circle>
+                    <path
+                      class="Arenamodulecss_body"
+                      data-cell-body="true"
+                      data-cell-outline="bounded-contact-path"
+                      d="M4.95875 0 L4.91751 0.6474 L4.79263 1.28418 L4.58738 1.90015 L4.30449 2.4852 L3.94662 3.02835 L3.51781 3.51781 L3.02492 3.94215 L2.47815 4.29229 L1.89012 4.56315 L1.27384 4.75404 L0.6408 4.86733 L0 4.90598 L-0.6413 4.87119 L-1.27582 4.76142 L-1.8943 4.57325 L-2.48478 4.30376 L-3.0334 3.9532 L-3.52657 3.52657 L-3.95331 3.03348 L-4.30661 2.48643 L-4.58319 1.89842 L-4.7819 1.28131 L-4.90184 0.64534 L-4.94125 0 L-4.89779 -0.64481 L-4.77003 -1.27813 L-4.55903 -1.88841 L-4.26916 -2.4648 L-3.90757 -2.99839 L-3.48254 -3.48254 L-3.00182 -3.91205 L-2.47185 -4.28137 L-1.89845 -4.58326 L-1.28847 -4.80862 L-0.65141 -4.94797 L0 -4.99402 L0.65091 -4.94411 L1.28649 -4.80125 L1.89426 -4.57316 L2.46522 -4.26989 L2.99334 -3.901 L3.47379 -3.47379 L3.90089 -2.99326 L4.26704 -2.46357 L4.56321 -1.89014 L4.78076 -1.281 L4.91346 -0.64687 Z"
+                    ></path>
+                    <text
+                      class="Arenamodulecss_name"
+                      data-name-owner="p6"
+                      data-cell-label-id="6"
+                      data-name-inside="true"
+                      font-size="1.3750000000000002"
+                      style="transform: translate(0px, 0.19500000000001025px)"
+                      x="0"
+                      y="0"
+                    >
+                      Fay
+                    </text>
+                  </g>
+                  <g
+                    data-cell-id="7"
+                    data-pose-cell="7"
+                    data-pose-layer="cell"
+                    class="undefined Arenamodulecss_pose"
+                    style="--blob-colour: var(--pb-player-7); transform: translate(120px, 85px)"
+                  >
+                    <title>Gus, blob 7, 81 mass</title>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-logical-radius="true"
+                      aria-hidden="true"
+                      r="4.95"
+                      style="r: 4.95px"
+                    ></circle>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-outline-radius="true"
+                      aria-hidden="true"
+                      r="4.95"
+                      style="r: 4.95px"
+                    ></circle>
+                    <path
+                      class="Arenamodulecss_body"
+                      data-cell-body="true"
+                      data-cell-outline="bounded-contact-path"
+                      d="M4.97328 0 L4.92501 0.64839 L4.78645 1.28253 L4.56272 1.88994 L4.26236 2.46087 L3.89507 2.98879 L3.46935 3.46935 L2.99127 3.89829 L2.46496 4.26943 L1.89456 4.57387 L1.28644 4.80107 L0.65054 4.94131 L0 4.98837 L-0.65052 4.9412 L-1.28713 4.80365 L-1.89824 4.58274 L-2.47468 4.28627 L-3.00872 3.92104 L-3.49263 3.49263 L-3.91794 3.00634 L-4.27592 2.4687 L-4.55904 1.88842 L-4.76248 1.2761 L-4.8847 0.64308 L-4.92672 0 L-4.89029 -0.64382 L-4.77621 -1.27978 L-4.58369 -1.89863 L-4.31129 -2.48913 L-3.95913 -3.03795 L-3.53101 -3.53101 L-3.03547 -3.9559 L-2.48504 -4.30422 L-1.89401 -4.57254 L-1.27587 -4.7616 L-0.64167 -4.874 L0 -4.91163 L0.64169 -4.87411 L1.27517 -4.75902 L1.89033 -4.56366 L2.47532 -4.28739 L3.01802 -3.93316 L3.50772 -3.50772 L3.93626 -3.0204 L4.29773 -2.4813 L4.58736 -1.90015 L4.80019 -1.28621 L4.9306 -0.64913 Z"
+                    ></path>
+                    <text
+                      class="Arenamodulecss_name"
+                      data-name-owner="p7"
+                      data-cell-label-id="7"
+                      data-name-inside="true"
+                      font-size="1.3750000000000002"
+                      style="transform: translate(0px, 0.19500000000001025px)"
+                      x="0"
+                      y="0"
+                    >
+                      Gus
+                    </text>
+                  </g>
+                  <g
+                    data-cell-id="4"
+                    data-pose-cell="4"
+                    data-pose-layer="cell"
+                    class="undefined Arenamodulecss_pose"
+                    style="--blob-colour: var(--pb-player-4); transform: translate(75px, 85px)"
+                  >
+                    <title>Dee, blob 4, 93 mass</title>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-logical-radius="true"
+                      aria-hidden="true"
+                      r="5.304007918546126"
+                      style="r: 5.304007918546126px"
+                    ></circle>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-outline-radius="true"
+                      aria-hidden="true"
+                      r="5.304007918546126"
+                      style="r: 5.304007918546126px"
+                    ></circle>
+                    <path
+                      class="Arenamodulecss_body"
+                      data-cell-body="true"
+                      data-cell-outline="bounded-contact-path"
+                      d="M5.34863 0 L5.29582 0.69721 L5.1441 1.37836 L4.90146 2.03025 L4.57808 2.64315 L4.18366 3.21023 L3.72575 3.72575 L3.20985 4.18316 L2.6409 4.57417 L2.02527 4.88943 L1.37199 5.12032 L0.69261 5.26089 L0 5.30888 L-0.69319 5.26526 L-1.37533 5.13279 L-2.03561 4.91439 L-2.66302 4.61248 L-3.24555 4.22969 L-3.77037 3.77037 L-4.22524 3.24214 L-4.60057 2.65614 L-4.89112 2.02597 L-5.09614 1.36551 L-5.21796 0.68696 L-5.25939 0 L-5.22145 -0.68742 L-5.10245 -1.3672 L-4.89907 -2.02926 L-4.60874 -2.66085 L-4.23225 -3.24752 L-3.77524 -3.77524 L-3.2479 -4.23275 L-2.66311 -4.61264 L-2.03424 -4.9111 L-1.37357 -5.12623 L-0.69201 -5.25637 L0 -5.29914 L0.69144 -5.252 L1.37023 -5.11376 L2.0239 -4.88614 L2.64099 -4.57433 L3.2122 -4.18622 L3.73063 -3.73063 L4.19067 -3.21561 L4.58624 -2.64786 L4.90941 -2.03354 L5.15041 -1.38005 L5.2993 -0.69767 Z"
+                    ></path>
+                    <text
+                      class="Arenamodulecss_name"
+                      data-name-owner="p4"
+                      data-cell-label-id="4"
+                      data-name-inside="true"
+                      font-size="1.4300000000000002"
+                      style="transform: translate(0px, 0.19500000000001025px)"
+                      x="0"
+                      y="0"
+                    >
+                      Dee
+                    </text>
+                  </g>
+                  <g
+                    data-cell-id="2"
+                    data-pose-cell="2"
+                    data-pose-layer="cell"
+                    class="undefined Arenamodulecss_pose"
+                    style="--blob-colour: var(--pb-player-2); transform: translate(80px, 50px)"
+                  >
+                    <title>Ben, blob 2, 216 mass</title>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-logical-radius="true"
+                      aria-hidden="true"
+                      r="8.083316151184489"
+                      style="r: 8.083316151184489px"
+                    ></circle>
+                    <circle
+                      class="Arenamodulecss_logicalRadius"
+                      data-cell-outline-radius="true"
+                      aria-hidden="true"
+                      r="8.083316151184489"
+                      style="r: 8.083316151184489px"
+                    ></circle>
+                    <path
+                      class="Arenamodulecss_body"
+                      data-cell-body="true"
+                      data-cell-outline="bounded-contact-path"
+                      d="M8.08236 0 L8.01081 1.05464 L7.80022 2.09006 L7.45404 3.08757 L6.98001 4.02991 L6.38915 4.90257 L5.69381 5.69381 L4.90593 6.39354 L4.03656 6.99153 L3.09673 7.47617 L2.09929 7.83466 L1.06044 8.05488 L0 8.12819 L-1.06004 8.05178 L-2.0979 7.82946 L-3.09435 7.47043 L-4.0338 6.98675 L-4.9037 6.39062 L-5.69285 5.69285 L-6.38974 4.90302 L-6.98182 4.03096 L-7.45642 3.08855 L-7.80257 2.09069 L-8.01286 1.05491 L-8.08427 0 L-8.01752 -1.05553 L-7.81554 -2.09417 L-7.48198 -3.09914 L-7.0207 -4.0534 L-6.4367 -4.93905 L-5.73773 -5.73773 L-4.93569 -6.43231 L-4.04675 -7.00918 L-3.08997 -7.45985 L-2.08494 -7.78111 L-1.04972 -7.97345 L0 -8.03844 L1.05013 -7.97654 L2.08633 -7.78631 L3.09235 -7.46559 L4.04951 -7.01396 L4.93792 -6.43523 L5.73868 -5.73868 L6.43611 -4.9386 L7.01889 -4.05236 L7.4796 -3.09815 L7.8132 -2.09354 L8.01546 -1.05526 Z"
+                    ></path>
+                    <text
+                      class="Arenamodulecss_name"
+                      data-name-owner="p2"
+                      data-cell-label-id="2"
+                      data-name-inside="true"
+                      font-size="2.31"
+                      style="transform: translate(0px, 0.6550000000000046px)"
+                      x="0"
+                      y="0"
+                    >
+                      Ben
+                    </text>
+                  </g>
+                </g>
+              </g>
+            </svg>
+            <div class="Controllermodulecss_gameHud" data-game-hud="true">
+              <p class="Controllermodulecss_score">Score: 0</p>
+              <aside class="Controllermodulecss_leaderboard" aria-label="Live leaderboard">
+                <h3>Leaderboard</h3>
+                <ol>
+                  <li><b>1.</b><span title="Ben">Ben</span></li>
+                  <li><b>2.</b><span title="Dee">Dee</span></li>
+                  <li><b>3.</b><span title="Fay">Fay</span></li>
+                  <li><b>4.</b><span title="Gus">Gus</span></li>
+                  <li><b>5.</b><span title="Hal">Hal</span></li>
+                  <li><b>6.</b><span title="Eli">Eli</span></li>
+                  <li><b>7.</b><span title="Cy">Cy</span></li>
+                  <li data-me="true"><b>8.</b><span title="Ana">Ana</span></li>
+                </ol>
+              </aside>
+            </div>
+            <div class="Controllermodulecss_controls" data-controls-overlay="true">
+              <button
+                type="button"
+                class="Controllermodulecss_pad"
+                data-pad-primary="true"
+                data-floating-joystick="true"
+                disabled=""
+                aria-label="Steering pad. Drag or use arrow keys or W A S D."
+              >
+                <span class="Controllermodulecss_padLabel">Drag to steer</span>
+              </button>
+              <div class="Controllermodulecss_splitArea">
+                <button
+                  type="button"
+                  class="Controllermodulecss_split"
+                  disabled=""
+                  aria-label="Split"
+                  aria-describedby="blob-split-reason"
+                >
+                  <svg
+                    viewBox="0 0 48 48"
+                    aria-hidden="true"
+                    focusable="false"
+                    data-split-glyph="true"
+                  >
+                    <circle cx="11" cy="24" r="8"></circle>
+                    <path d="M24 8V40"></path>
+                    <circle cx="37" cy="24" r="8"></circle></svg
+                  ><span>SPLIT</span>
+                </button>
+                <p id="blob-split-reason" class="Controllermodulecss_reason" aria-live="polite">
+                  Returning soon
+                </p>
+                <p class="Controllermodulecss_risk">
+                  Hold steer + tap. Smaller halves are vulnerable.
+                </p>
+              </div>
+            </div>
           </div>
-          <p class="Controllermodulecss_clock" role="timer" aria-label="Time left">1:18</p>
-        </header>
-        <div class="Controllermodulecss_arena">
-          <svg
-            class="Arenamodulecss_arena"
-            viewBox="0 0 160 100"
-            role="img"
-            aria-label="Shared arena: 7 blobs and 96 snacks"
-            data-phone="true"
-          >
-            <path
-              class="Arenamodulecss_grid"
-              d="M20 0V100 M40 0V100 M60 0V100 M80 0V100 M100 0V100 M120 0V100 M140 0V100 M0 20H160 M0 40H160 M0 60H160 M0 80H160"
-            ></path>
-            <g class="Arenamodulecss_snack" data-snack-id="0" transform="translate(117.2 22.8)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="1" transform="translate(44.4 48.5)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="2" transform="translate(124.8 46.5)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="3" transform="translate(146.7 34)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="4" transform="translate(22 11.4)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="5" transform="translate(15.6 34.6)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="6" transform="translate(50.3 37.8)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="7" transform="translate(4.9 68.2)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="8" transform="translate(80 94)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="9" transform="translate(46.2 59.8)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="10" transform="translate(128.5 89.1)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="11" transform="translate(41.8 55.4)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="12" transform="translate(106.4 51.4)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="13" transform="translate(42.8 85.4)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="14" transform="translate(10.5 68.6)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="15" transform="translate(88.8 4.6)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="16" transform="translate(145.5 78.7)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="17" transform="translate(36.1 54.2)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="18" transform="translate(104 39.7)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="19" transform="translate(96.2 43.6)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="20" transform="translate(118 67.3)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="21" transform="translate(96.6 7.3)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="22" transform="translate(30.9 70.6)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="23" transform="translate(131.8 49.4)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="24" transform="translate(136.7 91.6)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="25" transform="translate(54.7 9.5)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="26" transform="translate(99.6 52.6)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="27" transform="translate(32.7 45.7)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="28" transform="translate(89.8 15.1)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="29" transform="translate(54.1 54)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="30" transform="translate(148.4 83)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="31" transform="translate(9.7 16.2)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="32" transform="translate(28.5 63.2)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="33" transform="translate(85.9 4.7)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="34" transform="translate(58.2 33.7)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="35" transform="translate(82.2 16.4)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="36" transform="translate(86.1 17.5)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="37" transform="translate(100.6 5.3)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="38" transform="translate(115.1 65.4)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="39" transform="translate(97.8 35)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="40" transform="translate(31.8 65.1)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="41" transform="translate(11.4 81.7)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="42" transform="translate(148.7 82)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="43" transform="translate(32.4 65.6)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="44" transform="translate(149.4 63.2)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="45" transform="translate(70.2 95.1)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="46" transform="translate(86.4 72.4)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="47" transform="translate(125.1 40.5)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="48" transform="translate(139.5 28.4)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="49" transform="translate(98.3 36.6)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="50" transform="translate(96.6 34.2)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="51" transform="translate(116.8 18.1)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="52" transform="translate(134 13.5)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="53" transform="translate(112.9 54.4)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="54" transform="translate(40.8 75.5)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="55" transform="translate(151.2 77.1)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="56" transform="translate(49.2 51.4)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="57" transform="translate(15.2 41.4)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="58" transform="translate(153.4 65.4)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="59" transform="translate(8.7 45.6)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="60" transform="translate(51.7 40.6)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="61" transform="translate(92.1 11)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="62" transform="translate(133.9 35.4)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="63" transform="translate(47.3 89.8)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="64" transform="translate(52.8 90.3)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="65" transform="translate(119 8.7)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="66" transform="translate(6.5 48)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="67" transform="translate(117.3 6)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="68" transform="translate(125 25.1)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="69" transform="translate(4.6 77.5)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="70" transform="translate(155.7 52.7)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="71" transform="translate(71.2 4.3)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="72" transform="translate(109.7 80.2)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="73" transform="translate(89.6 42.4)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="74" transform="translate(99.5 44.3)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="75" transform="translate(150.8 69.1)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="76" transform="translate(144 34.5)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="77" transform="translate(127.1 66.4)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="78" transform="translate(86.9 34.1)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="79" transform="translate(140.8 50.2)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="80" transform="translate(77.7 8.3)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="81" transform="translate(101.2 50.8)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="82" transform="translate(10.9 88.2)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="83" transform="translate(141.5 50)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="84" transform="translate(21 90.2)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="85" transform="translate(88.4 20.8)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="86" transform="translate(47.4 85.7)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="87" transform="translate(127.3 9.1)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="88" transform="translate(11.2 87.6)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="89" transform="translate(149.7 63.2)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="90" transform="translate(123 5.4)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="91" transform="translate(140.9 26.4)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="92" transform="translate(142.1 86.8)">
-              <circle r="0.8"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="93" transform="translate(44.3 44.5)">
-              <path d="M0 -0.85 0.85 0 0 0.85 -0.85 0Z"></path>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="94" transform="translate(142.6 35.6)">
-              <circle r="0.6"></circle>
-            </g>
-            <g class="Arenamodulecss_snack" data-snack-id="95" transform="translate(42 85.7)">
-              <circle r="0.8"></circle>
-            </g>
-            <g
-              data-cell-id="2"
-              data-pose-cell="2"
-              data-pose-layer="body"
-              class="Arenamodulecss_cell Arenamodulecss_pose"
-              style="--blob-colour: var(--pb-player-2); transform: translate(80px, 50px)"
-            >
-              <title>Ben, blob 2, 216 mass</title>
-              <circle class="Arenamodulecss_body" r="8.083316151184489"></circle>
-              <path
-                class="Arenamodulecss_shine"
-                d="M-4.445823883151469 -1.616663230236898Q-4.849989690710693 -5.6583213058291415 -0.4041658075592245 -5.4966549828054525"
-              ></path>
-            </g>
-            <g
-              data-cell-id="3"
-              data-pose-cell="3"
-              data-pose-layer="body"
-              class="Arenamodulecss_cell Arenamodulecss_pose"
-              style="--blob-colour: var(--pb-player-3); transform: translate(60px, 85px)"
-            >
-              <title>Cy, blob 3, 63 mass</title>
-              <circle class="Arenamodulecss_body" r="4.365489663256575"></circle>
-              <path
-                class="Arenamodulecss_shine"
-                d="M-2.4010193147911165 -0.8730979326513151Q-2.619293797953945 -3.0558427642796024 -0.21827448316282877 -2.9685329710144712"
-              ></path>
-            </g>
-            <g
-              data-cell-id="4"
-              data-pose-cell="4"
-              data-pose-layer="body"
-              class="Arenamodulecss_cell Arenamodulecss_pose"
-              style="--blob-colour: var(--pb-player-4); transform: translate(75px, 85px)"
-            >
-              <title>Dee, blob 4, 93 mass</title>
-              <circle class="Arenamodulecss_body" r="5.304007918546126"></circle>
-              <path
-                class="Arenamodulecss_shine"
-                d="M-2.9172043552003695 -1.0608015837092253Q-3.182404751127675 -3.712805542982288 -0.2652003959273063 -3.606725384611366"
-              ></path>
-            </g>
-            <g
-              data-cell-id="5"
-              data-pose-cell="5"
-              data-pose-layer="body"
-              class="Arenamodulecss_cell Arenamodulecss_pose"
-              style="--blob-colour: var(--pb-player-5); transform: translate(90px, 85px)"
-            >
-              <title>Eli, blob 5, 69 mass</title>
-              <circle class="Arenamodulecss_body" r="4.568643124604941"></circle>
-              <path
-                class="Arenamodulecss_shine"
-                d="M-2.512753718532718 -0.9137286249209883Q-2.7411858747629645 -3.198050187223459 -0.22843215623024707 -3.1066773247313604"
-              ></path>
-            </g>
-            <g
-              data-cell-id="6"
-              data-pose-cell="6"
-              data-pose-layer="body"
-              class="Arenamodulecss_cell Arenamodulecss_pose"
-              style="--blob-colour: var(--pb-player-6); transform: translate(105px, 85px)"
-            >
-              <title>Fay, blob 6, 81 mass</title>
-              <circle class="Arenamodulecss_body" r="4.95"></circle>
-              <path
-                class="Arenamodulecss_shine"
-                d="M-2.7225 -0.9900000000000001Q-2.97 -3.465 -0.24750000000000003 -3.3660000000000005"
-              ></path>
-            </g>
-            <g
-              data-cell-id="7"
-              data-pose-cell="7"
-              data-pose-layer="body"
-              class="Arenamodulecss_cell Arenamodulecss_pose"
-              style="--blob-colour: var(--pb-player-7); transform: translate(120px, 85px)"
-            >
-              <title>Gus, blob 7, 81 mass</title>
-              <circle class="Arenamodulecss_body" r="4.95"></circle>
-              <path
-                class="Arenamodulecss_shine"
-                d="M-2.7225 -0.9900000000000001Q-2.97 -3.465 -0.24750000000000003 -3.3660000000000005"
-              ></path>
-            </g>
-            <g
-              data-cell-id="8"
-              data-pose-cell="8"
-              data-pose-layer="body"
-              class="Arenamodulecss_cell Arenamodulecss_pose"
-              style="--blob-colour: var(--pb-player-8); transform: translate(135px, 85px)"
-            >
-              <title>Hal, blob 8, 75 mass</title>
-              <circle class="Arenamodulecss_body" r="4.763139720814413"></circle>
-              <path
-                class="Arenamodulecss_shine"
-                d="M-2.6197268464479273 -0.9526279441628827Q-2.857883832488648 -3.3341978045700893 -0.23815698604072066 -3.2389350101538015"
-              ></path>
-            </g>
-            <g data-name-owner="p2" style="--blob-colour: var(--pb-player-2)">
-              <title>Ben</title>
-              <line
-                class="Arenamodulecss_leader"
-                x1="80"
-                y1="50"
-                x2="80"
-                y2="38.91668384881551"
-              ></line>
-              <g transform="translate(80 38.91668384881551)">
-                <rect
-                  class="Arenamodulecss_tag"
-                  x="-18"
-                  y="-4.3"
-                  width="36"
-                  height="8.6"
-                  rx="2"
-                ></rect>
-                <text class="Arenamodulecss_name" font-size="6.4">Ben</text>
-              </g>
-            </g>
-            <g data-name-owner="p3" style="--blob-colour: var(--pb-player-3)">
-              <title>Cy</title>
-              <line class="Arenamodulecss_leader" x1="60" y1="85" x2="54.8" y2="70.1"></line>
-              <g transform="translate(54.8 70.1)">
-                <rect
-                  class="Arenamodulecss_tag"
-                  x="-18"
-                  y="-4.3"
-                  width="36"
-                  height="8.6"
-                  rx="2"
-                ></rect>
-                <text class="Arenamodulecss_name" font-size="6.4">Cy</text>
-              </g>
-            </g>
-            <g data-name-owner="p4" style="--blob-colour: var(--pb-player-4)">
-              <title>Dee</title>
-              <line class="Arenamodulecss_leader" x1="75" y1="85" x2="91.6" y2="70.1"></line>
-              <g transform="translate(91.6 70.1)">
-                <rect
-                  class="Arenamodulecss_tag"
-                  x="-18"
-                  y="-4.3"
-                  width="36"
-                  height="8.6"
-                  rx="2"
-                ></rect>
-                <text class="Arenamodulecss_name" font-size="6.4">Dee</text>
-              </g>
-            </g>
-            <g data-name-owner="p5" style="--blob-colour: var(--pb-player-5)">
-              <title>Eli</title>
-              <line
-                class="Arenamodulecss_leader"
-                x1="90"
-                y1="85"
-                x2="91.6"
-                y2="60.699999999999996"
-              ></line>
-              <g transform="translate(91.6 60.699999999999996)">
-                <rect
-                  class="Arenamodulecss_tag"
-                  x="-18"
-                  y="-4.3"
-                  width="36"
-                  height="8.6"
-                  rx="2"
-                ></rect>
-                <text class="Arenamodulecss_name" font-size="6.4">Eli</text>
-              </g>
-            </g>
-            <g data-name-owner="p6" style="--blob-colour: var(--pb-player-6)">
-              <title>Fay</title>
-              <line
-                class="Arenamodulecss_leader"
-                x1="105"
-                y1="85"
-                x2="128.39999999999998"
-                y2="70.1"
-              ></line>
-              <g transform="translate(128.39999999999998 70.1)">
-                <rect
-                  class="Arenamodulecss_tag"
-                  x="-18"
-                  y="-4.3"
-                  width="36"
-                  height="8.6"
-                  rx="2"
-                ></rect>
-                <text class="Arenamodulecss_name" font-size="6.4">Fay</text>
-              </g>
-            </g>
-            <g data-name-owner="p7" style="--blob-colour: var(--pb-player-7)">
-              <title>Gus</title>
-              <line
-                class="Arenamodulecss_leader"
-                x1="120"
-                y1="85"
-                x2="128.39999999999998"
-                y2="60.699999999999996"
-              ></line>
-              <g transform="translate(128.39999999999998 60.699999999999996)">
-                <rect
-                  class="Arenamodulecss_tag"
-                  x="-18"
-                  y="-4.3"
-                  width="36"
-                  height="8.6"
-                  rx="2"
-                ></rect>
-                <text class="Arenamodulecss_name" font-size="6.4">Gus</text>
-              </g>
-            </g>
-            <g data-name-owner="p8" style="--blob-colour: var(--pb-player-8)">
-              <title>Hal</title>
-              <line
-                class="Arenamodulecss_leader"
-                x1="135"
-                y1="85"
-                x2="128.39999999999998"
-                y2="51.3"
-              ></line>
-              <g transform="translate(128.39999999999998 51.3)">
-                <rect
-                  class="Arenamodulecss_tag"
-                  x="-18"
-                  y="-4.3"
-                  width="36"
-                  height="8.6"
-                  rx="2"
-                ></rect>
-                <text class="Arenamodulecss_name" font-size="6.4">Hal</text>
-              </g>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="2"
-              data-pose-layer="plate"
-              style="--blob-colour: var(--pb-player-2); transform: translate(80px, 50px)"
-            >
-              <line class="Arenamodulecss_leader" x1="0" y1="0" x2="0" y2="0"></line>
-              <circle
-                class="Arenamodulecss_numberPlate"
-                data-cell-label-backplate="2"
-                cx="0"
-                cy="0"
-                r="4.680000000000001"
-              ></circle>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="3"
-              data-pose-layer="plate"
-              style="--blob-colour: var(--pb-player-3); transform: translate(60px, 85px)"
-            >
-              <line class="Arenamodulecss_leader" x1="0" y1="0" x2="0" y2="0"></line>
-              <circle
-                class="Arenamodulecss_numberPlate"
-                data-cell-label-backplate="3"
-                cx="0"
-                cy="0"
-                r="4.680000000000001"
-              ></circle>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="4"
-              data-pose-layer="plate"
-              style="--blob-colour: var(--pb-player-4); transform: translate(75px, 85px)"
-            >
-              <line class="Arenamodulecss_leader" x1="0" y1="0" x2="0" y2="0"></line>
-              <circle
-                class="Arenamodulecss_numberPlate"
-                data-cell-label-backplate="4"
-                cx="0"
-                cy="0"
-                r="4.680000000000001"
-              ></circle>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="5"
-              data-pose-layer="plate"
-              style="--blob-colour: var(--pb-player-5); transform: translate(90px, 85px)"
-            >
-              <line class="Arenamodulecss_leader" x1="0" y1="0" x2="0" y2="0"></line>
-              <circle
-                class="Arenamodulecss_numberPlate"
-                data-cell-label-backplate="5"
-                cx="0"
-                cy="0"
-                r="4.680000000000001"
-              ></circle>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="6"
-              data-pose-layer="plate"
-              style="--blob-colour: var(--pb-player-6); transform: translate(105px, 85px)"
-            >
-              <line class="Arenamodulecss_leader" x1="0" y1="0" x2="0" y2="0"></line>
-              <circle
-                class="Arenamodulecss_numberPlate"
-                data-cell-label-backplate="6"
-                cx="0"
-                cy="0"
-                r="4.680000000000001"
-              ></circle>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="7"
-              data-pose-layer="plate"
-              style="--blob-colour: var(--pb-player-7); transform: translate(120px, 85px)"
-            >
-              <line class="Arenamodulecss_leader" x1="0" y1="0" x2="0" y2="0"></line>
-              <circle
-                class="Arenamodulecss_numberPlate"
-                data-cell-label-backplate="7"
-                cx="0"
-                cy="0"
-                r="4.680000000000001"
-              ></circle>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="8"
-              data-pose-layer="plate"
-              style="--blob-colour: var(--pb-player-8); transform: translate(135px, 85px)"
-            >
-              <line class="Arenamodulecss_leader" x1="0" y1="0" x2="0" y2="0"></line>
-              <circle
-                class="Arenamodulecss_numberPlate"
-                data-cell-label-backplate="8"
-                cx="0"
-                cy="0"
-                r="4.680000000000001"
-              ></circle>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="2"
-              data-pose-layer="number"
-              style="--blob-colour: var(--pb-player-2); transform: translate(80px, 50px)"
-            >
-              <title>Ben, blob 2, 216 mass</title>
-              <text
-                data-cell-label-id="2"
-                class="Arenamodulecss_number"
-                font-size="7.2"
-                x="0"
-                y="0.2"
-              >
-                2
-              </text>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="3"
-              data-pose-layer="number"
-              style="--blob-colour: var(--pb-player-3); transform: translate(60px, 85px)"
-            >
-              <title>Cy, blob 3, 63 mass</title>
-              <text
-                data-cell-label-id="3"
-                class="Arenamodulecss_number"
-                font-size="7.2"
-                x="0"
-                y="0.2"
-              >
-                3
-              </text>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="4"
-              data-pose-layer="number"
-              style="--blob-colour: var(--pb-player-4); transform: translate(75px, 85px)"
-            >
-              <title>Dee, blob 4, 93 mass</title>
-              <text
-                data-cell-label-id="4"
-                class="Arenamodulecss_number"
-                font-size="7.2"
-                x="0"
-                y="0.2"
-              >
-                4
-              </text>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="5"
-              data-pose-layer="number"
-              style="--blob-colour: var(--pb-player-5); transform: translate(90px, 85px)"
-            >
-              <title>Eli, blob 5, 69 mass</title>
-              <text
-                data-cell-label-id="5"
-                class="Arenamodulecss_number"
-                font-size="7.2"
-                x="0"
-                y="0.2"
-              >
-                5
-              </text>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="6"
-              data-pose-layer="number"
-              style="--blob-colour: var(--pb-player-6); transform: translate(105px, 85px)"
-            >
-              <title>Fay, blob 6, 81 mass</title>
-              <text
-                data-cell-label-id="6"
-                class="Arenamodulecss_number"
-                font-size="7.2"
-                x="0"
-                y="0.2"
-              >
-                6
-              </text>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="7"
-              data-pose-layer="number"
-              style="--blob-colour: var(--pb-player-7); transform: translate(120px, 85px)"
-            >
-              <title>Gus, blob 7, 81 mass</title>
-              <text
-                data-cell-label-id="7"
-                class="Arenamodulecss_number"
-                font-size="7.2"
-                x="0"
-                y="0.2"
-              >
-                7
-              </text>
-            </g>
-            <g
-              class="Arenamodulecss_pose"
-              data-pose-cell="8"
-              data-pose-layer="number"
-              style="--blob-colour: var(--pb-player-8); transform: translate(135px, 85px)"
-            >
-              <title>Hal, blob 8, 75 mass</title>
-              <text
-                data-cell-label-id="8"
-                class="Arenamodulecss_number"
-                font-size="7.2"
-                x="0"
-                y="0.2"
-              >
-                8
-              </text>
-            </g>
-          </svg>
+          <p class="Controllermodulecss_status" role="status">Swallowed! Back in 3s</p>
+          <p class="Controllermodulecss_footer">Your name above. Buzzer mass scores.</p>
         </div>
-        <p class="Controllermodulecss_status" role="status">Swallowed! Back in 3s</p>
-        <div class="Controllermodulecss_controls">
-          <button
-            type="button"
-            class="Controllermodulecss_pad"
-            data-pad-primary="true"
-            disabled=""
-            aria-label="Steering pad. Drag or use arrow keys or W A S D."
-          >
-            <span class="Controllermodulecss_padArrows" aria-hidden="true">↕<br />↔</span
-            ><span
-              class="Controllermodulecss_thumb"
-              style="--stick-x: 0; --stick-y: 0"
-              aria-hidden="true"
-            ></span
-            ><span class="Controllermodulecss_padLabel">Drag to steer</span>
-          </button>
-          <div class="Controllermodulecss_splitArea">
-            <button
-              type="button"
-              class="Controllermodulecss_split"
-              disabled=""
-              aria-describedby="blob-split-reason"
-            >
-              <span aria-hidden="true">↗</span> SPLIT
-            </button>
-            <p id="blob-split-reason" class="Controllermodulecss_reason" aria-live="polite">
-              Returning soon
-            </p>
-            <p class="Controllermodulecss_risk">Hold steer + tap. Smaller halves are vulnerable.</p>
-          </div>
-        </div>
-        <p class="Controllermodulecss_footer">Your number above. Buzzer mass scores.</p>
       </div>
     </main>
-    <footer class="capture-footer">Agar.io · phone shell reserved space</footer>
+    <footer class="capture-footer"></footer>
+    <script type="application/json" id="p05-source">
+      {
+        "state": {
+          "phase": { "id": "play", "startedAt": 1700000000000, "deadline": 1700000012400 },
+          "rng": { "seed": 17, "step": 578 },
+          "players": {
+            "p1": {
+              "id": "p1",
+              "name": "Ana",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p2": {
+              "id": "p2",
+              "name": "Ben",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p3": {
+              "id": "p3",
+              "name": "Cy",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p4": {
+              "id": "p4",
+              "name": "Dee",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p5": {
+              "id": "p5",
+              "name": "Eli",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p6": {
+              "id": "p6",
+              "name": "Fay",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p7": {
+              "id": "p7",
+              "name": "Gus",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p8": {
+              "id": "p8",
+              "name": "Hal",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            }
+          },
+          "world": {
+            "time": 12200,
+            "serial": 9,
+            "cells": [
+              {
+                "id": 2,
+                "owner": "p2",
+                "x": 80,
+                "y": 50,
+                "mass": 216,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 0
+              },
+              {
+                "id": 3,
+                "owner": "p3",
+                "x": 60,
+                "y": 85,
+                "mass": 63,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 0
+              },
+              {
+                "id": 4,
+                "owner": "p4",
+                "x": 75,
+                "y": 85,
+                "mass": 93,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 0
+              },
+              {
+                "id": 5,
+                "owner": "p5",
+                "x": 90,
+                "y": 85,
+                "mass": 69,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 0
+              },
+              {
+                "id": 6,
+                "owner": "p6",
+                "x": 105,
+                "y": 85,
+                "mass": 81,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 0
+              },
+              {
+                "id": 7,
+                "owner": "p7",
+                "x": 120,
+                "y": 85,
+                "mass": 81,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 0
+              },
+              {
+                "id": 8,
+                "owner": "p8",
+                "x": 135,
+                "y": 85,
+                "mass": 75,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 0
+              }
+            ],
+            "pellets": [
+              { "id": 0, "x": 117.2, "y": 22.8 },
+              { "id": 1, "x": 44.4, "y": 48.5 },
+              { "id": 2, "x": 124.8, "y": 46.5 },
+              { "id": 3, "x": 146.7, "y": 34 },
+              { "id": 4, "x": 22, "y": 11.4 },
+              { "id": 5, "x": 15.6, "y": 34.6 },
+              { "id": 6, "x": 50.3, "y": 37.8 },
+              { "id": 7, "x": 4.9, "y": 68.2 },
+              { "id": 8, "x": 80, "y": 94 },
+              { "id": 9, "x": 46.2, "y": 59.8 },
+              { "id": 10, "x": 128.5, "y": 89.1 },
+              { "id": 11, "x": 41.8, "y": 55.4 },
+              { "id": 12, "x": 106.4, "y": 51.4 },
+              { "id": 13, "x": 42.8, "y": 85.4 },
+              { "id": 14, "x": 10.5, "y": 68.6 },
+              { "id": 15, "x": 88.8, "y": 4.6 },
+              { "id": 16, "x": 145.5, "y": 78.7 },
+              { "id": 17, "x": 36.1, "y": 54.2 },
+              { "id": 18, "x": 104, "y": 39.7 },
+              { "id": 19, "x": 96.2, "y": 43.6 },
+              { "id": 20, "x": 118, "y": 67.3 },
+              { "id": 21, "x": 96.6, "y": 7.3 },
+              { "id": 22, "x": 30.9, "y": 70.6 },
+              { "id": 23, "x": 131.8, "y": 49.4 },
+              { "id": 24, "x": 136.7, "y": 91.6 },
+              { "id": 25, "x": 54.7, "y": 9.5 },
+              { "id": 26, "x": 99.6, "y": 52.6 },
+              { "id": 27, "x": 32.7, "y": 45.7 },
+              { "id": 28, "x": 89.8, "y": 15.1 },
+              { "id": 29, "x": 54.1, "y": 54 },
+              { "id": 30, "x": 148.4, "y": 83 },
+              { "id": 31, "x": 9.7, "y": 16.2 },
+              { "id": 32, "x": 28.5, "y": 63.2 },
+              { "id": 33, "x": 85.9, "y": 4.7 },
+              { "id": 34, "x": 58.2, "y": 33.7 },
+              { "id": 35, "x": 82.2, "y": 16.4 },
+              { "id": 36, "x": 86.1, "y": 17.5 },
+              { "id": 37, "x": 100.6, "y": 5.3 },
+              { "id": 38, "x": 115.1, "y": 65.4 },
+              { "id": 39, "x": 97.8, "y": 35 },
+              { "id": 40, "x": 31.8, "y": 65.1 },
+              { "id": 41, "x": 11.4, "y": 81.7 },
+              { "id": 42, "x": 148.7, "y": 82 },
+              { "id": 43, "x": 32.4, "y": 65.6 },
+              { "id": 44, "x": 149.4, "y": 63.2 },
+              { "id": 45, "x": 70.2, "y": 95.1 },
+              { "id": 46, "x": 86.4, "y": 72.4 },
+              { "id": 47, "x": 125.1, "y": 40.5 },
+              { "id": 48, "x": 139.5, "y": 28.4 },
+              { "id": 49, "x": 98.3, "y": 36.6 },
+              { "id": 50, "x": 96.6, "y": 34.2 },
+              { "id": 51, "x": 116.8, "y": 18.1 },
+              { "id": 52, "x": 134, "y": 13.5 },
+              { "id": 53, "x": 112.9, "y": 54.4 },
+              { "id": 54, "x": 40.8, "y": 75.5 },
+              { "id": 55, "x": 151.2, "y": 77.1 },
+              { "id": 56, "x": 49.2, "y": 51.4 },
+              { "id": 57, "x": 15.2, "y": 41.4 },
+              { "id": 58, "x": 153.4, "y": 65.4 },
+              { "id": 59, "x": 8.7, "y": 45.6 },
+              { "id": 60, "x": 51.7, "y": 40.6 },
+              { "id": 61, "x": 92.1, "y": 11 },
+              { "id": 62, "x": 133.9, "y": 35.4 },
+              { "id": 63, "x": 47.3, "y": 89.8 },
+              { "id": 64, "x": 52.8, "y": 90.3 },
+              { "id": 65, "x": 119, "y": 8.7 },
+              { "id": 66, "x": 6.5, "y": 48 },
+              { "id": 67, "x": 117.3, "y": 6 },
+              { "id": 68, "x": 125, "y": 25.1 },
+              { "id": 69, "x": 4.6, "y": 77.5 },
+              { "id": 70, "x": 155.7, "y": 52.7 },
+              { "id": 71, "x": 71.2, "y": 4.3 },
+              { "id": 72, "x": 109.7, "y": 80.2 },
+              { "id": 73, "x": 89.6, "y": 42.4 },
+              { "id": 74, "x": 99.5, "y": 44.3 },
+              { "id": 75, "x": 150.8, "y": 69.1 },
+              { "id": 76, "x": 144, "y": 34.5 },
+              { "id": 77, "x": 127.1, "y": 66.4 },
+              { "id": 78, "x": 86.9, "y": 34.1 },
+              { "id": 79, "x": 140.8, "y": 50.2 },
+              { "id": 80, "x": 77.7, "y": 8.3 },
+              { "id": 81, "x": 101.2, "y": 50.8 },
+              { "id": 82, "x": 10.9, "y": 88.2 },
+              { "id": 83, "x": 141.5, "y": 50 },
+              { "id": 84, "x": 21, "y": 90.2 },
+              { "id": 85, "x": 88.4, "y": 20.8 },
+              { "id": 86, "x": 47.4, "y": 85.7 },
+              { "id": 87, "x": 127.3, "y": 9.1 },
+              { "id": 88, "x": 11.2, "y": 87.6 },
+              { "id": 89, "x": 149.7, "y": 63.2 },
+              { "id": 90, "x": 123, "y": 5.4 },
+              { "id": 91, "x": 140.9, "y": 26.4 },
+              { "id": 92, "x": 142.1, "y": 86.8 },
+              { "id": 93, "x": 44.3, "y": 44.5 },
+              { "id": 94, "x": 142.6, "y": 35.6 },
+              { "id": 95, "x": 42, "y": 85.7 }
+            ],
+            "controls": {
+              "p1": { "x": 0, "y": 0, "at": 12100, "splitAt": -1000 },
+              "p2": { "x": 0, "y": 0, "at": 11050, "splitAt": -1000 },
+              "p3": { "x": 0, "y": 0, "at": 11050, "splitAt": -1000 },
+              "p4": { "x": 0, "y": 0, "at": 11050, "splitAt": -1000 },
+              "p5": { "x": 0, "y": 0, "at": 11050, "splitAt": -1000 },
+              "p6": { "x": 0, "y": 0, "at": 11050, "splitAt": -1000 },
+              "p7": { "x": 0, "y": 0, "at": 11050, "splitAt": -1000 },
+              "p8": { "x": 0, "y": 0, "at": 11050, "splitAt": -1000 }
+            },
+            "respawns": { "p1": 15100 }
+          },
+          "began": 1700000000000,
+          "endsAt": 1700000090000,
+          "round": 1,
+          "scores": { "p1": 0, "p2": 0, "p3": 0, "p4": 0, "p5": 0, "p6": 0, "p7": 0, "p8": 0 },
+          "lastPoints": {},
+          "left": [],
+          "phoneOnly": true
+        },
+        "surface": "phone-only",
+        "viewer": "p1",
+        "scenario": "play-respawn",
+        "provenance": "authored unshielded overlap; real timer resolves eating and schedules respawn",
+        "authoredStress": true
+      }
+    </script>
+    <script type="module" src="/jobs/P05-blob-arena/interactive.tsx"></script>
   </body>
 </html>

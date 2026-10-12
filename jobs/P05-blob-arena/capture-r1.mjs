@@ -1,5 +1,5 @@
 // One owned browser, real mounted components, reducer-driven native interaction proof.
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { readFile, writeFile, mkdir, mkdtemp, readdir, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
@@ -47,9 +47,15 @@ const harnessPaths = [
   'screens.json',
   'preview.mjs',
   'provenance.mjs',
+  'paint-mask.py',
 ]
   .map((name) => 'jobs/P05-blob-arena/' + name)
-  .concat(inputPaths);
+  .concat(inputPaths, [
+    '.prettierrc',
+    'design/tokens.css',
+    'jobs/P05-blob-arena/loader.mjs',
+    'jobs/P05-blob-arena/provenance.d.mts',
+  ]);
 const harnessBefore = hashes(harnessPaths);
 const chrome = process.env.PB_CHROME ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const report = {
@@ -81,13 +87,17 @@ const report = {
     vipPhoneTop: 87.6,
     phoneFooter: 0,
     tvTop: 167.2,
+    tvWithoutTimerTop: 145.2,
     tvBottom: 80,
     tvOuterHeight: 832.8,
     gameOwnsStagePadding: true,
+    tvTopRule:
+      '133.2compact header +12empty strip +22quiet deadline row when view.deadline is non-null',
   },
   mountedCaptures: [],
   nativeChecks: [],
   motion: [],
+  paintChecks: [],
   passed: false,
   incomplete: true,
   error: null,
@@ -184,19 +194,46 @@ function measure() {
   const clippedText = [],
     intentionalEllipsis = [];
   for (const node of html.filter(visible)) {
-    if (
-      ![...node.childNodes].some(
-        (child) => child.nodeType === Node.TEXT_NODE && child.textContent.trim(),
-      )
-    )
-      continue;
+    const textNodes = [...node.childNodes].filter(
+      (child) => child.nodeType === Node.TEXT_NODE && child.textContent.trim(),
+    );
+    if (!textNodes.length) continue;
     const s = getComputedStyle(node);
-    if (node.scrollWidth > node.clientWidth + 1 || node.scrollHeight > node.clientHeight + 1) {
+    const cuts = [];
+    for (const text of textNodes) {
+      const range = document.createRange();
+      range.selectNodeContents(text);
+      for (const ink of range.getClientRects()) {
+        for (let ancestor = node; ancestor; ancestor = ancestor.parentElement) {
+          const style = getComputedStyle(ancestor);
+          const clip = ancestor.getBoundingClientRect();
+          const left = clip.left + ancestor.clientLeft;
+          const top = clip.top + ancestor.clientTop;
+          const clipX = /^(hidden|clip)$/.test(style.overflowX);
+          const clipY = /^(hidden|clip)$/.test(style.overflowY);
+          if (
+            (clipX && (ink.left < left - 1 || ink.right > left + ancestor.clientWidth + 1)) ||
+            (clipY && (ink.top < top - 1 || ink.bottom > top + ancestor.clientHeight + 1))
+          ) {
+            cuts.push({
+              textRect: box(ink),
+              ancestor: ancestor.tagName,
+              clippingRect: box(clip),
+              overflowX: style.overflowX,
+              overflowY: style.overflowY,
+            });
+            break;
+          }
+        }
+      }
+    }
+    if (cuts.length) {
       const item = {
         ...describe(node),
         client: [node.clientWidth, node.clientHeight],
         scroll: [node.scrollWidth, node.scrollHeight],
         accessible: node.title || node.getAttribute('aria-label'),
+        cuts,
       };
       if (s.textOverflow === 'ellipsis' && item.accessible) intentionalEllipsis.push(item);
       else clippedText.push(item);
@@ -302,6 +339,66 @@ async function snapshot(name, metadata = {}) {
 async function status() {
   await settle();
   return evaluate('structuredClone(window.__blobStatus)');
+}
+async function productionPaint(at, png, supplemental = false) {
+  const expected = await evaluate(`(()=>{
+    const svg=document.querySelector('[data-arena]');
+    const world=svg.querySelector('[data-world-layer]');
+    const starts=[...world.children].filter(n=>n.tagName.toLowerCase()==='animatetransform').map(n=>n.getStartTime());
+    if(!starts.length)throw new Error('Production camera has no SVG-native transform timeline');
+    const start=Math.max(...starts);
+    svg.pauseAnimations();svg.setCurrentTime(start+${at}/1000);
+    for(const animation of svg.getAnimations({subtree:true})){animation.pause();animation.currentTime=${at};}
+    const label=svg.querySelector('[data-name-owner="p2"]');
+    const body=label.parentElement.querySelector('[data-cell-body]');
+    const b=body.getBBox(),m=body.getScreenCTM(),s=getComputedStyle(body);
+    const points=[[b.x,b.y],[b.x+b.width,b.y],[b.x,b.y+b.height],[b.x+b.width,b.y+b.height]].map(([x,y])=>({x:m.a*x+m.c*y+m.e,y:m.b*x+m.d*y+m.f}));
+    const stroke=Number.parseFloat(s.strokeWidth)/2;
+    const sx=stroke*Math.hypot(m.a,m.c),sy=stroke*Math.hypot(m.b,m.d);
+    const bbox=[Math.min(...points.map(p=>p.x))-sx,Math.min(...points.map(p=>p.y))-sy,Math.max(...points.map(p=>p.x))+sx,Math.max(...points.map(p=>p.y))+sy];
+    const a=svg.getBoundingClientRect();
+    const rgb=colour=>{const c=document.createElement('canvas');c.width=c.height=1;const ctx=c.getContext('2d');ctx.fillStyle=colour;ctx.fillRect(0,0,1,1);return[...ctx.getImageData(0,0,1,1).data]};
+    return{seekMs:${at},svgStartTime:start,svgCurrentTime:svg.getCurrentTime(),owner:'p2',name:label.textContent,bbox,roi:[a.left,a.top,a.right,a.bottom],fillRgb:rgb(s.fill),strokeRgb:rgb(s.stroke),geometry:{tag:body.tagName,bbox:{x:b.x,y:b.y,width:b.width,height:b.height},matrix:{a:m.a,b:m.b,c:m.c,d:m.d,e:m.e,f:m.f},strokeWidth:s.strokeWidth}};
+  })()`);
+  await settle();
+  const target = supplemental ? join(directory, png) : join(media, png);
+  if (supplemental) {
+    const shot = await cdp.send(
+      'Page.captureScreenshot',
+      { format: 'png', fromSurface: true, captureBeyondViewport: false },
+      sessionId,
+    );
+    await writeFile(target, Buffer.from(shot.data, 'base64'));
+  } else
+    await snapshot(png.replace(/\.png$/, ''), {
+      provenance:
+        'Actual native split, public production SVG/WAAPI seek at400ms; no transform patch',
+      paintSeekMs: at,
+    });
+  const checked = spawnSync(
+    'python',
+    [join(directory, 'paint-mask.py'), target, JSON.stringify(expected)],
+    { cwd: directory, windowsHide: true, encoding: 'utf8', timeout: 15000 },
+  );
+  let result;
+  try {
+    result = JSON.parse(checked.stdout);
+  } catch {
+    result = { passed: false, error: checked.stderr || 'Pixel mask returned no JSON' };
+  }
+  report.paintChecks.push({ png, supplemental, expected, ...result });
+  console.log(
+    JSON.stringify({
+      stage: 'actual-paint',
+      png,
+      passed: result.passed,
+      worstErrorPx: result.worstErrorPx,
+    }),
+  );
+  assert(
+    checked.status === 0 && result.passed,
+    png + ': actual Ben paint disagrees with public projected geometry: ' + JSON.stringify(result),
+  );
 }
 async function mouse(type, x, y, button = 'left', buttons = type === 'mouseReleased' ? 0 : 1) {
   await cdp.send(
@@ -502,7 +599,7 @@ try {
     assert((await status()).canSplit, 'Authored eligible split precondition failed');
     const count = await evaluate('window.__blobState.world.cells.filter(c=>c.owner==="p1").length');
     const point = await evaluate(
-      '(()=>{const r=document.querySelector("button[aria-label=\"Split\"]").getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2}})()',
+      '(()=>{const r=document.querySelector("button[aria-label=Split]").getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2}})()',
     );
     await mouse('mousePressed', point.x, point.y);
     await mouse('mouseReleased', point.x, point.y);
@@ -511,9 +608,6 @@ try {
     );
     assert(afterCount > count, 'Native split did not create reducer pieces');
     assert(!(await status()).canSplit, 'Real cooldown/cell state did not disable split');
-    await snapshot('native-split-phone-only', {
-      provenance: 'authored eligible setup followed by native split reduced by actual game',
-    });
   });
   await check('VIP pause/resume and player disconnect cancel live controls', async () => {
     const point = await pad();
@@ -585,6 +679,18 @@ try {
       provenance: 'actual third-round fixture deadline reduced to done',
     });
   });
+  // A fresh native split isolates actual raster paint from earlier interaction history.
+  await load(playPath, 390, 844, false);
+  await evaluate('window.__blobSetup("eligible-split")');
+  await settle();
+  const paintSplit = await evaluate(
+    '(()=>{const r=document.querySelector("button[aria-label=Split]").getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2}})()',
+  );
+  await mouse('mousePressed', paintSplit.x, paintSplit.y);
+  await mouse('mouseReleased', paintSplit.x, paintSplit.y);
+  await settle();
+  await productionPaint(400, 'native-split-phone-only.png');
+  await productionPaint(2200, 'r1-native-split-settled-paint.png', true);
   for (const reduced of [false, true]) {
     await load(playPath, 390, 844, reduced);
     await key('keyDown', 'ArrowRight', 'ArrowRight', 39);
@@ -595,8 +701,11 @@ try {
         const cell=arena.querySelector('[data-mine="true"]');
         const bodyNode=cell.querySelector('[data-cell-body]');
         const body=bodyNode.getBoundingClientRect();
+        const bodyGeometry=bodyNode.getBBox();
+        const world=arena.querySelector('[data-world-layer]');
+        const m=arena.getCTM().inverse().multiply(world.getCTM());
         const label=cell.querySelector('[data-cell-label-id]').getBoundingClientRect();
-        return {at:performance.now(),body:{x:body.x,y:body.y,width:body.width,height:body.height},bodyRadius:getComputedStyle(bodyNode).getPropertyValue('r'),bodyRadiusTarget:bodyNode.getAttribute('r'),label:{x:label.x,y:label.y,width:label.width,height:label.height},camera:getComputedStyle(arena.querySelector('[data-world-layer]')).transform,pose:getComputedStyle(cell).transform,cameraCenter:arena.dataset.cameraCenter,animations:arena.querySelector('[data-world-layer]').getAnimations().map(animation=>({playState:animation.playState,currentTime:animation.currentTime,duration:animation.effect.getTiming().duration}))};
+        return {at:performance.now(),body:{x:body.x,y:body.y,width:body.width,height:body.height},bodyGeometry:{tag:bodyNode.tagName,x:bodyGeometry.x,y:bodyGeometry.y,width:bodyGeometry.width,height:bodyGeometry.height},label:{x:label.x,y:label.y,width:label.width,height:label.height},camera:JSON.stringify([m.a,m.b,m.c,m.d,m.e,m.f]),pose:getComputedStyle(cell).transform,cameraCenter:arena.dataset.cameraCenter,svgTime:arena.getCurrentTime(),nativeAnimations:[...world.children].filter(n=>n.tagName.toLowerCase()==='animatetransform').map(n=>({type:n.getAttribute('type'),duration:n.getAttribute('dur'),keyTimes:n.getAttribute('keyTimes')}))};
       };
       frames.push(read());window.__blobAdvance(200);
       const until=performance.now()+2200;

@@ -6,59 +6,355 @@
     <title>play-paused phone</title>
     <link rel="stylesheet" href="screens.css" />
   </head>
-  <body style="--capture-top: 80px; --capture-bottom: 80px">
+  <body style="--capture-top: 83.6px; --capture-bottom: 0px">
     <header class="capture-header">PB · AGAR · Ana</header>
     <main>
-      <div
-        class="Controllermodulecss_screen"
-        style="--blob-colour: var(--pb-player-1)"
-        data-controls="true"
-        data-phase="play"
-      >
-        <header class="Controllermodulecss_header">
-          <div class="Controllermodulecss_heading">
-            <h2 class="Controllermodulecss_headline">Round 1 of 3</h2>
-            <p class="Controllermodulecss_identity">
-              <b class="Controllermodulecss_badge">1</b>Your blob · <b>60 mass</b>
-            </p>
-          </div>
-          <p class="Controllermodulecss_clock" role="timer" aria-label="Time left">1:18</p>
-        </header>
-        <p class="Controllermodulecss_status" role="status">Paused — steering stopped</p>
-        <div class="Controllermodulecss_controls">
-          <button
-            type="button"
-            class="Controllermodulecss_pad"
-            data-pad-primary="true"
-            disabled=""
-            aria-label="Steering pad. Drag or use arrow keys or W A S D."
-          >
-            <span class="Controllermodulecss_padArrows" aria-hidden="true">↕<br />↔</span
-            ><span
-              class="Controllermodulecss_thumb"
-              style="--stick-x: 0; --stick-y: 0"
-              aria-hidden="true"
-            ></span
-            ><span class="Controllermodulecss_padLabel">Drag to steer</span>
-          </button>
-          <div class="Controllermodulecss_splitArea">
+      <div id="p05-owner-banner" class="capture-banner">Paused — VIP will resume the game</div>
+      <div id="root" class="capture-game" data-ready="false" data-host-paused="true" inert>
+        <div
+          class="Controllermodulecss_screen"
+          style="--blob-colour: var(--pb-player-1)"
+          data-controls="true"
+          data-phase="play"
+        >
+          <header class="Controllermodulecss_header">
+            <div class="Controllermodulecss_heading">
+              <h2 class="Controllermodulecss_headline">Round 1 of 3</h2>
+              <p class="Controllermodulecss_identity">
+                <b class="Controllermodulecss_badge">1</b>Your blob · <b>60 mass</b>
+              </p>
+            </div>
+            <p class="Controllermodulecss_clock" role="timer" aria-label="Time left">1:18</p>
+          </header>
+          <p class="Controllermodulecss_status" role="status">Paused — steering stopped</p>
+          <div class="Controllermodulecss_controls">
             <button
               type="button"
-              class="Controllermodulecss_split"
+              class="Controllermodulecss_pad"
+              data-pad-primary="true"
+              data-floating-joystick="true"
               disabled=""
-              aria-describedby="blob-split-reason"
+              aria-label="Steering pad. Drag or use arrow keys or W A S D."
             >
-              <span aria-hidden="true">↗</span> SPLIT
+              <span class="Controllermodulecss_padLabel">Drag to steer</span>
             </button>
-            <p id="blob-split-reason" class="Controllermodulecss_reason" aria-live="polite">
-              Round held
-            </p>
-            <p class="Controllermodulecss_risk">Hold steer + tap. Smaller halves are vulnerable.</p>
+            <div class="Controllermodulecss_splitArea">
+              <button
+                type="button"
+                class="Controllermodulecss_split"
+                disabled=""
+                aria-label="Split"
+                aria-describedby="blob-split-reason"
+              >
+                <svg
+                  viewBox="0 0 48 48"
+                  aria-hidden="true"
+                  focusable="false"
+                  data-split-glyph="true"
+                >
+                  <circle cx="11" cy="24" r="8"></circle>
+                  <path d="M24 8V40"></path>
+                  <circle cx="37" cy="24" r="8"></circle></svg
+                ><span>SPLIT</span>
+              </button>
+              <p id="blob-split-reason" class="Controllermodulecss_reason" aria-live="polite">
+                Round held
+              </p>
+              <p class="Controllermodulecss_risk">
+                Hold steer + tap. Smaller halves are vulnerable.
+              </p>
+            </div>
           </div>
+          <p class="Controllermodulecss_footer">Your name on the TV. Buzzer mass scores.</p>
         </div>
-        <p class="Controllermodulecss_footer">Your number on the TV. Buzzer mass scores.</p>
       </div>
     </main>
-    <footer class="capture-footer">Agar.io · phone shell reserved space</footer>
+    <footer class="capture-footer"></footer>
+    <script type="application/json" id="p05-source">
+      {
+        "state": {
+          "phase": {
+            "id": "play",
+            "startedAt": 1700000000000,
+            "deadline": 1700000012200,
+            "paused": { "at": 1700000012000 }
+          },
+          "rng": { "seed": 17, "step": 576 },
+          "players": {
+            "p1": {
+              "id": "p1",
+              "name": "Ana",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p2": {
+              "id": "p2",
+              "name": "Ben",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p3": {
+              "id": "p3",
+              "name": "Cy",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p4": {
+              "id": "p4",
+              "name": "Dee",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p5": {
+              "id": "p5",
+              "name": "Eli",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p6": {
+              "id": "p6",
+              "name": "Fay",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p7": {
+              "id": "p7",
+              "name": "Gus",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            },
+            "p8": {
+              "id": "p8",
+              "name": "Hal",
+              "avatarId": "fox",
+              "connected": true,
+              "canSeeTv": true
+            }
+          },
+          "world": {
+            "time": 12000,
+            "serial": 9,
+            "cells": [
+              {
+                "id": 1,
+                "owner": "p1",
+                "x": 4.2603,
+                "y": 56.2399,
+                "mass": 60,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 1000
+              },
+              {
+                "id": 2,
+                "owner": "p2",
+                "x": 19.7002,
+                "y": 68.8474,
+                "mass": 57,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 1000
+              },
+              {
+                "id": 3,
+                "owner": "p3",
+                "x": 39.4255,
+                "y": 36.9299,
+                "mass": 63,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 1000
+              },
+              {
+                "id": 4,
+                "owner": "p4",
+                "x": 83.7683,
+                "y": 40.809,
+                "mass": 93,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 1000
+              },
+              {
+                "id": 5,
+                "owner": "p5",
+                "x": 85.6755,
+                "y": 60.8681,
+                "mass": 69,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 1000
+              },
+              {
+                "id": 6,
+                "owner": "p6",
+                "x": 69.1328,
+                "y": 49.6645,
+                "mass": 81,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 1000
+              },
+              {
+                "id": 7,
+                "owner": "p7",
+                "x": 139.8163,
+                "y": 4.95,
+                "mass": 81,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 1000
+              },
+              {
+                "id": 8,
+                "owner": "p8",
+                "x": 103.5408,
+                "y": 12.1531,
+                "mass": 72,
+                "vx": 0,
+                "vy": 0,
+                "mergeAt": 0,
+                "shieldUntil": 1000
+              }
+            ],
+            "pellets": [
+              { "id": 0, "x": 117.2, "y": 22.8 },
+              { "id": 1, "x": 44.4, "y": 48.5 },
+              { "id": 2, "x": 124.8, "y": 46.5 },
+              { "id": 3, "x": 146.7, "y": 34 },
+              { "id": 4, "x": 22, "y": 11.4 },
+              { "id": 5, "x": 15.6, "y": 34.6 },
+              { "id": 6, "x": 50.3, "y": 37.8 },
+              { "id": 7, "x": 4.9, "y": 68.2 },
+              { "id": 8, "x": 80, "y": 94 },
+              { "id": 9, "x": 46.2, "y": 59.8 },
+              { "id": 10, "x": 128.5, "y": 89.1 },
+              { "id": 11, "x": 41.8, "y": 55.4 },
+              { "id": 12, "x": 106.4, "y": 51.4 },
+              { "id": 13, "x": 42.8, "y": 85.4 },
+              { "id": 14, "x": 10.5, "y": 68.6 },
+              { "id": 15, "x": 88.8, "y": 4.6 },
+              { "id": 16, "x": 145.5, "y": 78.7 },
+              { "id": 17, "x": 36.1, "y": 54.2 },
+              { "id": 18, "x": 104, "y": 39.7 },
+              { "id": 19, "x": 96.2, "y": 43.6 },
+              { "id": 20, "x": 118, "y": 67.3 },
+              { "id": 21, "x": 96.6, "y": 7.3 },
+              { "id": 22, "x": 30.9, "y": 70.6 },
+              { "id": 23, "x": 131.8, "y": 49.4 },
+              { "id": 24, "x": 136.7, "y": 91.6 },
+              { "id": 25, "x": 54.7, "y": 9.5 },
+              { "id": 26, "x": 99.6, "y": 52.6 },
+              { "id": 27, "x": 32.7, "y": 45.7 },
+              { "id": 28, "x": 89.8, "y": 15.1 },
+              { "id": 29, "x": 54.1, "y": 54 },
+              { "id": 30, "x": 148.4, "y": 83 },
+              { "id": 31, "x": 9.7, "y": 16.2 },
+              { "id": 32, "x": 28.5, "y": 63.2 },
+              { "id": 33, "x": 85.9, "y": 4.7 },
+              { "id": 34, "x": 58.2, "y": 33.7 },
+              { "id": 35, "x": 82.2, "y": 16.4 },
+              { "id": 36, "x": 86.1, "y": 17.5 },
+              { "id": 37, "x": 100.6, "y": 5.3 },
+              { "id": 38, "x": 115.1, "y": 65.4 },
+              { "id": 39, "x": 97.8, "y": 35 },
+              { "id": 40, "x": 31.8, "y": 65.1 },
+              { "id": 41, "x": 11.4, "y": 81.7 },
+              { "id": 42, "x": 148.7, "y": 82 },
+              { "id": 43, "x": 32.4, "y": 65.6 },
+              { "id": 44, "x": 149.4, "y": 63.2 },
+              { "id": 45, "x": 70.2, "y": 95.1 },
+              { "id": 46, "x": 86.4, "y": 72.4 },
+              { "id": 47, "x": 125.1, "y": 40.5 },
+              { "id": 48, "x": 139.5, "y": 28.4 },
+              { "id": 49, "x": 98.3, "y": 36.6 },
+              { "id": 50, "x": 96.6, "y": 34.2 },
+              { "id": 51, "x": 116.8, "y": 18.1 },
+              { "id": 52, "x": 134, "y": 13.5 },
+              { "id": 53, "x": 112.9, "y": 54.4 },
+              { "id": 54, "x": 40.8, "y": 75.5 },
+              { "id": 55, "x": 151.2, "y": 77.1 },
+              { "id": 56, "x": 49.2, "y": 51.4 },
+              { "id": 57, "x": 133.5, "y": 84.8 },
+              { "id": 58, "x": 153.4, "y": 65.4 },
+              { "id": 59, "x": 8.7, "y": 45.6 },
+              { "id": 60, "x": 51.7, "y": 40.6 },
+              { "id": 61, "x": 92.1, "y": 11 },
+              { "id": 62, "x": 133.9, "y": 35.4 },
+              { "id": 63, "x": 47.3, "y": 89.8 },
+              { "id": 64, "x": 52.8, "y": 90.3 },
+              { "id": 65, "x": 119, "y": 8.7 },
+              { "id": 66, "x": 6.5, "y": 48 },
+              { "id": 67, "x": 117.3, "y": 6 },
+              { "id": 68, "x": 125, "y": 25.1 },
+              { "id": 69, "x": 4.6, "y": 77.5 },
+              { "id": 70, "x": 155.7, "y": 52.7 },
+              { "id": 71, "x": 71.2, "y": 4.3 },
+              { "id": 72, "x": 109.7, "y": 80.2 },
+              { "id": 73, "x": 89.6, "y": 42.4 },
+              { "id": 74, "x": 99.5, "y": 44.3 },
+              { "id": 75, "x": 150.8, "y": 69.1 },
+              { "id": 76, "x": 144, "y": 34.5 },
+              { "id": 77, "x": 127.1, "y": 66.4 },
+              { "id": 78, "x": 86.9, "y": 34.1 },
+              { "id": 79, "x": 140.8, "y": 50.2 },
+              { "id": 80, "x": 77.7, "y": 8.3 },
+              { "id": 81, "x": 101.2, "y": 50.8 },
+              { "id": 82, "x": 10.9, "y": 88.2 },
+              { "id": 83, "x": 141.5, "y": 50 },
+              { "id": 84, "x": 21, "y": 90.2 },
+              { "id": 85, "x": 88.4, "y": 20.8 },
+              { "id": 86, "x": 47.4, "y": 85.7 },
+              { "id": 87, "x": 127.3, "y": 9.1 },
+              { "id": 88, "x": 11.2, "y": 87.6 },
+              { "id": 89, "x": 149.7, "y": 63.2 },
+              { "id": 90, "x": 123, "y": 5.4 },
+              { "id": 91, "x": 140.9, "y": 26.4 },
+              { "id": 92, "x": 142.1, "y": 86.8 },
+              { "id": 93, "x": 44.3, "y": 44.5 },
+              { "id": 94, "x": 142.6, "y": 35.6 },
+              { "id": 95, "x": 42, "y": 85.7 }
+            ],
+            "controls": {
+              "p1": { "x": 0, "y": 0, "at": 12000, "splitAt": -1000 },
+              "p2": { "x": 0, "y": 0, "at": 12000, "splitAt": -1000 },
+              "p3": { "x": 0, "y": 0, "at": 12000, "splitAt": -1000 },
+              "p4": { "x": 0, "y": 0, "at": 12000, "splitAt": -1000 },
+              "p5": { "x": 0, "y": 0, "at": 12000, "splitAt": -1000 },
+              "p6": { "x": 0, "y": 0, "at": 12000, "splitAt": -1000 },
+              "p7": { "x": 0, "y": 0, "at": 12000, "splitAt": -1000 },
+              "p8": { "x": 0, "y": 0, "at": 12000, "splitAt": -1000 }
+            },
+            "respawns": {}
+          },
+          "began": 1700000000000,
+          "endsAt": 1700000090000,
+          "round": 1,
+          "scores": { "p1": 0, "p2": 0, "p3": 0, "p4": 0, "p5": 0, "p6": 0, "p7": 0, "p8": 0 },
+          "lastPoints": {},
+          "left": []
+        },
+        "surface": "phone",
+        "viewer": "p1",
+        "scenario": "play-paused",
+        "provenance": "real reducer vip event",
+        "authoredStress": false
+      }
+    </script>
+    <script type="module" src="/jobs/P05-blob-arena/interactive.tsx"></script>
   </body>
 </html>
