@@ -6,6 +6,7 @@ import type { GameTvProps } from '@partybox/game-sdk/ui';
 import type { TankTroubleTvView } from '../server/index';
 import { Arena } from './Arena';
 import { Standings } from './Standings';
+import { RoundResult } from './RoundResult';
 import { STRINGS } from './strings';
 import { clockText } from './timing';
 import styles from './Tv.module.css';
@@ -36,20 +37,31 @@ export function Tv({ view }: GameTvProps<TankTroubleTvView>): JSX.Element {
     previous.current = { round: view.round, alive: view.aliveCount };
   }, [view.round, view.aliveCount, view.paused, phase, seconds, sound]);
 
+  if (phase === 'ready')
+    return (
+      <Stage className={styles.stage}>
+        <div className={styles.interlude}>
+          <h2 className={styles.headline}>{L('Round {n}', { n: view.round })}</h2>
+          <div className={styles.readyArena}>
+            <Arena arena={view.arena} players={view.players} />
+            <div className={styles.countdown} role="timer">
+              {Math.max(1, seconds)}
+            </div>
+          </div>
+          <p className={styles.line}>{L('Find your tank')}</p>
+        </div>
+      </Stage>
+    );
+  if (phase === 'score')
+    return (
+      <Stage className={styles.stage}>
+        <RoundResult view={view} seconds={seconds} />
+      </Stage>
+    );
+
   let headline = L('Round {n} of {m}', { n: view.round, m: view.rounds });
   let line = L('Last tank standing wins. Your shells can hit you.');
-  if (phase === 'ready') line = L('Find your numbered tank. Follow its barrel to aim.');
-  else if (phase === 'score') {
-    headline = L('Round {n} complete', { n: view.round });
-    line =
-      view.reason === 'time'
-        ? L('Time up — no round points')
-        : view.reason === 'draw'
-          ? L('No survivors — no round points')
-          : view.reason === 'skip'
-            ? L('Round skipped')
-            : L('Last tank wins one point');
-  } else if (phase === 'done') {
+  if (phase === 'done') {
     headline = L('Final standings');
     line =
       view.winnerIds.length === 1
@@ -65,11 +77,6 @@ export function Tv({ view }: GameTvProps<TankTroubleTvView>): JSX.Element {
         <div className={styles.main}>
           <div className={styles.arena}>
             <Arena arena={view.arena} players={view.players} />
-            {phase === 'ready' ? (
-              <div className={styles.countdown} role="timer">
-                {Math.max(1, seconds)}
-              </div>
-            ) : null}
           </div>
           <p className={styles.line}>{line}</p>
           <p className={styles.legend}>
@@ -92,13 +99,6 @@ export function Tv({ view }: GameTvProps<TankTroubleTvView>): JSX.Element {
               : L('Round wins')}
           </p>
           <Standings view={view} />
-          {phase === 'score' ? (
-            <p className={styles.next}>
-              {view.round >= view.rounds
-                ? L('Final standings in {n}s', { n: seconds })
-                : L('Next maze in {n}s', { n: seconds })}
-            </p>
-          ) : null}
         </aside>
       </div>
     </Stage>

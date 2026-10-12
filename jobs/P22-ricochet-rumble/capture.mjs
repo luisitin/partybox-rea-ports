@@ -145,6 +145,91 @@ function measure() {
   const unstyled = [...localClasses].filter(
     (name) => !rules.some((rule) => rule.includes(`.${name}`)),
   );
+  // Computed RGB colours are in sRGB. Composite transparency and element opacity over
+  // ancestor surfaces before applying the WCAG luminance formula; this is diagnostic only.
+  const rgb = (value) => {
+    if (value === 'transparent') return [0, 0, 0, 0];
+    const match = value.match(/^rgba?\(([^)]+)\)$/);
+    if (!match) return null;
+    const parts = match[1].trim().split(/[\s,/]+/);
+    const channels = parts
+      .slice(0, 3)
+      .map((part) => (part.endsWith('%') ? (parseFloat(part) * 255) / 100 : parseFloat(part)));
+    const alpha = parts[3] ? parseFloat(parts[3]) / (parts[3].endsWith('%') ? 100 : 1) : 1;
+    return channels.length === 3 && [...channels, alpha].every(Number.isFinite)
+      ? [...channels, alpha]
+      : null;
+  };
+  const over = (front, back) => {
+    const alpha = front[3] + back[3] * (1 - front[3]);
+    return alpha === 0
+      ? [0, 0, 0, 0]
+      : [
+          ...front
+            .slice(0, 3)
+            .map(
+              (channel, index) =>
+                (channel * front[3] + back[index] * back[3] * (1 - front[3])) / alpha,
+            ),
+          alpha,
+        ];
+  };
+  const luminance = (colour) => {
+    const linear = colour.slice(0, 3).map((channel) => {
+      const value = channel / 255;
+      return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+  };
+  const buttonContrast = (el, style) => {
+    let text = rgb(style.color);
+    let background = [0, 0, 0, 0];
+    let hasBackgroundImage = false;
+    for (let node = el; node && text; node = node.parentElement) {
+      const surface = getComputedStyle(node);
+      const colour = rgb(surface.backgroundColor);
+      hasBackgroundImage ||=
+        surface.backgroundImage !== 'none' && (text[3] < 1 || background[3] < 1);
+      if (!colour) {
+        text = null;
+        break;
+      }
+      text = over(text, colour);
+      background = over(background, colour);
+      const opacity = parseFloat(surface.opacity);
+      text[3] *= opacity;
+      background[3] *= opacity;
+    }
+    if (!text)
+      return {
+        contrastRatio: null,
+        minimumNormalTextContrast: 4.5,
+        passesNormalTextContrast: null,
+        contrastBasis: 'unparsed computed colour',
+      };
+    text = over(text, [255, 255, 255, 1]);
+    background = over(background, [255, 255, 255, 1]);
+    const foregroundLuminance = luminance(text);
+    const backgroundLuminance = luminance(background);
+    const ratio =
+      (Math.max(foregroundLuminance, backgroundLuminance) + 0.05) /
+      (Math.min(foregroundLuminance, backgroundLuminance) + 0.05);
+    const colourText = (colour) =>
+      `rgb(${colour
+        .slice(0, 3)
+        .map((channel) => Number(channel.toFixed(2)))
+        .join(', ')})`;
+    return {
+      effectiveTextColor: colourText(text),
+      effectiveBackgroundColor: colourText(background),
+      contrastRatio: Number(ratio.toFixed(3)),
+      minimumNormalTextContrast: 4.5,
+      passesNormalTextContrast: ratio >= 4.5,
+      contrastBasis: hasBackgroundImage
+        ? 'solid colours; background images omitted'
+        : 'solid colours',
+    };
+  };
   return {
     horizontalOverflow: document.documentElement.scrollWidth - innerWidth,
     verticalOverflow: document.documentElement.scrollHeight - innerHeight,
@@ -154,10 +239,18 @@ function measure() {
     unstyled,
     touchTargets: [...main.querySelectorAll('button')].map((el) => {
       const r = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      const disabled = el.matches(':disabled') || el.getAttribute('aria-disabled') === 'true';
       return {
         label: el.getAttribute('aria-label') ?? el.textContent,
         width: r.width,
         height: r.height,
+        enabled: !disabled,
+        disabled,
+        textColor: style.color,
+        backgroundColor: style.backgroundColor,
+        opacity: parseFloat(style.opacity),
+        ...buttonContrast(el, style),
       };
     }),
     textSizes: content.map((el) => ({

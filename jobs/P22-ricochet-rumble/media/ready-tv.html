@@ -482,6 +482,19 @@ ight is the :root default above) ────────
         gap: var(--pb-space-3);
         min-width: 0;
       }
+      ._interlude_06ce35 {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-4);
+        container-type: size;
+      }
+      ._readyArena_06ce35 {
+        position: relative;
+        width: min(100%, calc((100cqh - var(--pb-font-display) * 1.6) * 5 / 3));
+      }
       ._arena_06ce35 {
         position: relative;
         width: min(100%, calc((100cqh - var(--pb-font-body) * 4) * 5 / 3));
@@ -764,11 +777,13 @@ ight is the :root default above) ────────
         flex: none;
         width: 100%;
       }
-      ._stage_fc2e17[data-phase='ready'] ._stageArena_fc2e17,
       ._stage_fc2e17[data-phase='score'] ._stageArena_fc2e17,
       ._stage_fc2e17[data-phase='done'] ._stageArena_fc2e17 {
         width: calc(var(--pb-touch) * 4);
         align-self: center;
+      }
+      ._stage_fc2e17[data-phase='ready'] ._stageArena_fc2e17 {
+        width: 100%;
       }
       ._stage_fc2e17 > ol {
         gap: var(--pb-space-1);
@@ -808,6 +823,58 @@ ight is the :root default above) ────────
         ._play_fc2e17[data-stage='true'] > ol {
           display: none;
         }
+      }
+
+      /* games/tank-trouble/client/RoundResult.module.css */
+      ._result_c42a52 {
+        flex: 1;
+        height: 100%;
+        min-height: 0;
+        padding: var(--pb-space-4);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--pb-space-3);
+        text-align: center;
+        font-size: var(--pb-font-body);
+      }
+      ._result_c42a52 h2,
+      ._result_c42a52 p {
+        margin: 0;
+        line-height: 1.2;
+      }
+      ._result_c42a52 h2 {
+        font-size: var(--pb-font-h2);
+      }
+      ._winner_c42a52 {
+        font-size: var(--pb-font-h1);
+        font-weight: 1000;
+        text-wrap: balance;
+      }
+      ._gain_c42a52 {
+        font-size: var(--pb-font-display);
+        color: var(--pb-accent-2);
+        line-height: 1;
+      }
+      ._receipt_c42a52 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-2);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface);
+        padding: var(--pb-space-3) var(--pb-space-6);
+      }
+      ._next_c42a52 {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-3);
+        font-variant-numeric: tabular-nums;
+      }
+      ._next_c42a52 b {
+        font-size: calc(var(--pb-font-display) * 0.75);
+        line-height: 1;
       }
 
       ._stage_262f13 {
@@ -1182,593 +1249,542 @@ ight is the :root default above) ────────
       <header class="evidence-header"><b>PartyBox</b><span>RUMB</span></header>
       <main class="evidence-main" aria-label="Game stage">
         <div class="_stage_262f13 _stage_06ce35">
-          <div class="_board_06ce35">
-            <div class="_main_06ce35">
-              <div class="_arena_06ce35">
-                <div class="_scene_f62b00">
-                  <svg
-                    class="_svg_f62b00"
-                    viewBox="0 0 160 96"
-                    role="img"
-                    aria-label="Maze arena: 8 of 8 tanks still in"
+          <div class="_interlude_06ce35">
+            <h2 class="_headline_06ce35">Round 2</h2>
+            <div class="_readyArena_06ce35">
+              <div class="_scene_f62b00">
+                <svg
+                  class="_svg_f62b00"
+                  viewBox="0 0 160 96"
+                  role="img"
+                  aria-label="Maze arena: 8 of 8 tanks still in"
+                >
+                  <title>Maze arena: 8 of 8 tanks still in</title>
+                  <rect x="0" y="0" width="160" height="96" class="_floor_f62b00"></rect>
+                  <path
+                    d="M0 16H160M0 32H160M0 48H160M0 64H160M0 80H160M16 0V96M32 0V96M48 0V96M64 0V96M80 0V96M96 0V96M112 0V96M128 0V96M144 0V96"
+                    class="_grid_f62b00"
+                  ></path>
+                  <g class="_walls_f62b00">
+                    <line x1="0" y1="0" x2="160" y2="0"></line>
+                    <line x1="160" y1="0" x2="160" y2="96"></line>
+                    <line x1="0" y1="96" x2="160" y2="96"></line>
+                    <line x1="0" y1="0" x2="0" y2="96"></line>
+                    <line x1="16" y1="0" x2="16" y2="16"></line>
+                    <line x1="16" y1="16" x2="32" y2="16"></line>
+                    <line x1="48" y1="16" x2="64" y2="16"></line>
+                    <line x1="112" y1="16" x2="128" y2="16"></line>
+                    <line x1="0" y1="32" x2="16" y2="32"></line>
+                    <line x1="32" y1="16" x2="32" y2="32"></line>
+                    <line x1="48" y1="16" x2="48" y2="32"></line>
+                    <line x1="48" y1="32" x2="64" y2="32"></line>
+                    <line x1="80" y1="32" x2="96" y2="32"></line>
+                    <line x1="96" y1="32" x2="112" y2="32"></line>
+                    <line x1="128" y1="16" x2="128" y2="32"></line>
+                    <line x1="144" y1="16" x2="144" y2="32"></line>
+                    <line x1="16" y1="32" x2="16" y2="48"></line>
+                    <line x1="32" y1="32" x2="32" y2="48"></line>
+                    <line x1="32" y1="48" x2="48" y2="48"></line>
+                    <line x1="48" y1="48" x2="64" y2="48"></line>
+                    <line x1="80" y1="32" x2="80" y2="48"></line>
+                    <line x1="96" y1="48" x2="112" y2="48"></line>
+                    <line x1="128" y1="32" x2="128" y2="48"></line>
+                    <line x1="144" y1="48" x2="160" y2="48"></line>
+                    <line x1="16" y1="48" x2="16" y2="64"></line>
+                    <line x1="16" y1="64" x2="32" y2="64"></line>
+                    <line x1="64" y1="48" x2="64" y2="64"></line>
+                    <line x1="80" y1="48" x2="80" y2="64"></line>
+                    <line x1="64" y1="64" x2="80" y2="64"></line>
+                    <line x1="96" y1="48" x2="96" y2="64"></line>
+                    <line x1="96" y1="64" x2="112" y2="64"></line>
+                    <line x1="128" y1="64" x2="144" y2="64"></line>
+                    <line x1="16" y1="64" x2="16" y2="80"></line>
+                    <line x1="48" y1="64" x2="48" y2="80"></line>
+                    <line x1="48" y1="80" x2="64" y2="80"></line>
+                    <line x1="80" y1="64" x2="80" y2="80"></line>
+                    <line x1="80" y1="80" x2="96" y2="80"></line>
+                    <line x1="112" y1="64" x2="112" y2="80"></line>
+                    <line x1="112" y1="80" x2="128" y2="80"></line>
+                    <line x1="144" y1="64" x2="144" y2="80"></line>
+                    <line x1="32" y1="80" x2="32" y2="96"></line>
+                    <line x1="112" y1="80" x2="112" y2="96"></line>
+                  </g>
+                  <g transform="translate(120 56)" class="_pickup_f62b00">
+                    <title>Burst</title>
+                    <path d="M0-4 4 0 0 4-4 0Z" class="_crate_f62b00"></path>
+                    <path d="M-2 0H2M-1.5-1.5 1.5 1.5M-1.5 1.5 1.5-1.5" class="_mark_f62b00"></path>
+                  </g>
+                  <g transform="translate(24 88)" class="_pickup_f62b00">
+                    <title>Beam</title>
+                    <path d="M0-4 4 0 0 4-4 0Z" class="_crate_f62b00"></path>
+                    <path d="M-2 1 0-1H2M0-1 0 1" class="_mark_f62b00"></path>
+                  </g>
+                  <g transform="translate(56 8)" class="_pickup_f62b00">
+                    <title>Seeker</title>
+                    <path d="M0-4 4 0 0 4-4 0Z" class="_crate_f62b00"></path>
+                    <path d="M-2 1Q-2-2 1-1M0-2 2-1 0 0" class="_mark_f62b00"></path>
+                  </g>
+                  <g
+                    transform="translate(8 8) rotate(90)"
+                    class="_tank_f62b00"
+                    style="color: var(--pb-player-1)"
                   >
-                    <title>Maze arena: 8 of 8 tanks still in</title>
-                    <rect x="0" y="0" width="160" height="96" class="_floor_f62b00"></rect>
-                    <path
-                      d="M0 16H160M0 32H160M0 48H160M0 64H160M0 80H160M16 0V96M32 0V96M48 0V96M64 0V96M80 0V96M96 0V96M112 0V96M128 0V96M144 0V96"
-                      class="_grid_f62b00"
-                    ></path>
-                    <g class="_walls_f62b00">
-                      <line x1="0" y1="0" x2="160" y2="0"></line>
-                      <line x1="160" y1="0" x2="160" y2="96"></line>
-                      <line x1="0" y1="96" x2="160" y2="96"></line>
-                      <line x1="0" y1="0" x2="0" y2="96"></line>
-                      <line x1="16" y1="0" x2="16" y2="16"></line>
-                      <line x1="16" y1="16" x2="32" y2="16"></line>
-                      <line x1="48" y1="16" x2="64" y2="16"></line>
-                      <line x1="112" y1="16" x2="128" y2="16"></line>
-                      <line x1="0" y1="32" x2="16" y2="32"></line>
-                      <line x1="32" y1="16" x2="32" y2="32"></line>
-                      <line x1="48" y1="16" x2="48" y2="32"></line>
-                      <line x1="48" y1="32" x2="64" y2="32"></line>
-                      <line x1="80" y1="32" x2="96" y2="32"></line>
-                      <line x1="96" y1="32" x2="112" y2="32"></line>
-                      <line x1="128" y1="16" x2="128" y2="32"></line>
-                      <line x1="144" y1="16" x2="144" y2="32"></line>
-                      <line x1="16" y1="32" x2="16" y2="48"></line>
-                      <line x1="32" y1="32" x2="32" y2="48"></line>
-                      <line x1="32" y1="48" x2="48" y2="48"></line>
-                      <line x1="48" y1="48" x2="64" y2="48"></line>
-                      <line x1="80" y1="32" x2="80" y2="48"></line>
-                      <line x1="96" y1="48" x2="112" y2="48"></line>
-                      <line x1="128" y1="32" x2="128" y2="48"></line>
-                      <line x1="144" y1="48" x2="160" y2="48"></line>
-                      <line x1="16" y1="48" x2="16" y2="64"></line>
-                      <line x1="16" y1="64" x2="32" y2="64"></line>
-                      <line x1="64" y1="48" x2="64" y2="64"></line>
-                      <line x1="80" y1="48" x2="80" y2="64"></line>
-                      <line x1="64" y1="64" x2="80" y2="64"></line>
-                      <line x1="96" y1="48" x2="96" y2="64"></line>
-                      <line x1="96" y1="64" x2="112" y2="64"></line>
-                      <line x1="128" y1="64" x2="144" y2="64"></line>
-                      <line x1="16" y1="64" x2="16" y2="80"></line>
-                      <line x1="48" y1="64" x2="48" y2="80"></line>
-                      <line x1="48" y1="80" x2="64" y2="80"></line>
-                      <line x1="80" y1="64" x2="80" y2="80"></line>
-                      <line x1="80" y1="80" x2="96" y2="80"></line>
-                      <line x1="112" y1="64" x2="112" y2="80"></line>
-                      <line x1="112" y1="80" x2="128" y2="80"></line>
-                      <line x1="144" y1="64" x2="144" y2="80"></line>
-                      <line x1="32" y1="80" x2="32" y2="96"></line>
-                      <line x1="112" y1="80" x2="112" y2="96"></line>
-                    </g>
-                    <g transform="translate(120 56)" class="_pickup_f62b00">
-                      <title>Burst</title>
-                      <path d="M0-4 4 0 0 4-4 0Z" class="_crate_f62b00"></path>
-                      <path
-                        d="M-2 0H2M-1.5-1.5 1.5 1.5M-1.5 1.5 1.5-1.5"
-                        class="_mark_f62b00"
-                      ></path>
-                    </g>
-                    <g transform="translate(24 88)" class="_pickup_f62b00">
-                      <title>Beam</title>
-                      <path d="M0-4 4 0 0 4-4 0Z" class="_crate_f62b00"></path>
-                      <path d="M-2 1 0-1H2M0-1 0 1" class="_mark_f62b00"></path>
-                    </g>
-                    <g transform="translate(56 8)" class="_pickup_f62b00">
-                      <title>Seeker</title>
-                      <path d="M0-4 4 0 0 4-4 0Z" class="_crate_f62b00"></path>
-                      <path d="M-2 1Q-2-2 1-1M0-2 2-1 0 0" class="_mark_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(8 8) rotate(90)"
-                      class="_tank_f62b00"
-                      style="color: var(--pb-player-1)"
-                    >
-                      <title>Tank 1: Ana</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <rect
-                        x="1"
-                        y="-0.55"
-                        width="5.1"
-                        height="1.1"
-                        rx="0.3"
-                        class="_barrel_f62b00"
-                      ></rect>
-                      <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(40 24) rotate(-90)"
-                      class="_tank_f62b00"
-                      style="color: var(--pb-player-2)"
-                    >
-                      <title>Tank 2: Ben</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <rect
-                        x="1"
-                        y="-0.55"
-                        width="5.1"
-                        height="1.1"
-                        rx="0.3"
-                        class="_barrel_f62b00"
-                      ></rect>
-                      <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(120 88) rotate(0)"
-                      class="_tank_f62b00"
-                      style="color: var(--pb-player-3)"
-                    >
-                      <title>Tank 3: Cy</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <rect
-                        x="1"
-                        y="-0.55"
-                        width="5.1"
-                        height="1.1"
-                        rx="0.3"
-                        class="_barrel_f62b00"
-                      ></rect>
-                      <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(8 40) rotate(90)"
-                      class="_tank_f62b00"
-                      style="color: var(--pb-player-4)"
-                    >
-                      <title>Tank 4: Dee</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <rect
-                        x="1"
-                        y="-0.55"
-                        width="5.1"
-                        height="1.1"
-                        rx="0.3"
-                        class="_barrel_f62b00"
-                      ></rect>
-                      <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(104 88) rotate(180)"
-                      class="_tank_f62b00"
-                      style="color: var(--pb-player-5)"
-                    >
-                      <title>Tank 5: Eli</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <rect
-                        x="1"
-                        y="-0.55"
-                        width="5.1"
-                        height="1.1"
-                        rx="0.3"
-                        class="_barrel_f62b00"
-                      ></rect>
-                      <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(152 8) rotate(180)"
-                      class="_tank_f62b00"
-                      style="color: var(--pb-player-6)"
-                    >
-                      <title>Tank 6: Fay</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <rect
-                        x="1"
-                        y="-0.55"
-                        width="5.1"
-                        height="1.1"
-                        rx="0.3"
-                        class="_barrel_f62b00"
-                      ></rect>
-                      <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(104 56) rotate(0)"
-                      class="_tank_f62b00"
-                      style="color: var(--pb-player-7)"
-                    >
-                      <title>Tank 7: Gus</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <rect
-                        x="1"
-                        y="-0.55"
-                        width="5.1"
-                        height="1.1"
-                        rx="0.3"
-                        class="_barrel_f62b00"
-                      ></rect>
-                      <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(88 24) rotate(180)"
-                      class="_tank_f62b00"
-                      style="color: var(--pb-player-8)"
-                    >
-                      <title>Tank 8: Hal</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <rect
-                        x="1"
-                        y="-0.55"
-                        width="5.1"
-                        height="1.1"
-                        rx="0.3"
-                        class="_barrel_f62b00"
-                      ></rect>
-                      <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
-                    </g></svg
-                  ><span
-                    class="_number_f62b00"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        5%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        8.333333333333332%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-1);
-                    "
-                    >1</span
-                  ><span
-                    class="_number_f62b00"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        25%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        25%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-2);
-                    "
-                    >2</span
-                  ><span
-                    class="_number_f62b00"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        75%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        91.66666666666666%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-3);
-                    "
-                    >3</span
-                  ><span
-                    class="_number_f62b00"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        5%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        41.66666666666667%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-4);
-                    "
-                    >4</span
-                  ><span
-                    class="_number_f62b00"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        65%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        91.66666666666666%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-5);
-                    "
-                    >5</span
-                  ><span
-                    class="_number_f62b00"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        95%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        8.333333333333332%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-6);
-                    "
-                    >6</span
-                  ><span
-                    class="_number_f62b00"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        65%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        58.333333333333336%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-7);
-                    "
-                    >7</span
-                  ><span
-                    class="_number_f62b00"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        55.00000000000001%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        25%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-8);
-                    "
-                    >8</span
+                    <title>Tank 1: Ana</title>
+                    <rect
+                      x="-3.7"
+                      y="-3.4"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.7"
+                      y="2.2"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.1"
+                      y="-2.4"
+                      width="6.2"
+                      height="4.8"
+                      rx="1.1"
+                      class="_chassis_f62b00"
+                    ></rect>
+                    <rect
+                      x="1"
+                      y="-0.55"
+                      width="5.1"
+                      height="1.1"
+                      rx="0.3"
+                      class="_barrel_f62b00"
+                    ></rect>
+                    <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
+                  </g>
+                  <g
+                    transform="translate(40 24) rotate(-90)"
+                    class="_tank_f62b00"
+                    style="color: var(--pb-player-2)"
                   >
-                </div>
-                <div class="_countdown_06ce35" role="timer">25</div>
+                    <title>Tank 2: Ben</title>
+                    <rect
+                      x="-3.7"
+                      y="-3.4"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.7"
+                      y="2.2"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.1"
+                      y="-2.4"
+                      width="6.2"
+                      height="4.8"
+                      rx="1.1"
+                      class="_chassis_f62b00"
+                    ></rect>
+                    <rect
+                      x="1"
+                      y="-0.55"
+                      width="5.1"
+                      height="1.1"
+                      rx="0.3"
+                      class="_barrel_f62b00"
+                    ></rect>
+                    <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
+                  </g>
+                  <g
+                    transform="translate(120 88) rotate(0)"
+                    class="_tank_f62b00"
+                    style="color: var(--pb-player-3)"
+                  >
+                    <title>Tank 3: Cy</title>
+                    <rect
+                      x="-3.7"
+                      y="-3.4"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.7"
+                      y="2.2"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.1"
+                      y="-2.4"
+                      width="6.2"
+                      height="4.8"
+                      rx="1.1"
+                      class="_chassis_f62b00"
+                    ></rect>
+                    <rect
+                      x="1"
+                      y="-0.55"
+                      width="5.1"
+                      height="1.1"
+                      rx="0.3"
+                      class="_barrel_f62b00"
+                    ></rect>
+                    <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
+                  </g>
+                  <g
+                    transform="translate(8 40) rotate(90)"
+                    class="_tank_f62b00"
+                    style="color: var(--pb-player-4)"
+                  >
+                    <title>Tank 4: Dee</title>
+                    <rect
+                      x="-3.7"
+                      y="-3.4"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.7"
+                      y="2.2"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.1"
+                      y="-2.4"
+                      width="6.2"
+                      height="4.8"
+                      rx="1.1"
+                      class="_chassis_f62b00"
+                    ></rect>
+                    <rect
+                      x="1"
+                      y="-0.55"
+                      width="5.1"
+                      height="1.1"
+                      rx="0.3"
+                      class="_barrel_f62b00"
+                    ></rect>
+                    <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
+                  </g>
+                  <g
+                    transform="translate(104 88) rotate(180)"
+                    class="_tank_f62b00"
+                    style="color: var(--pb-player-5)"
+                  >
+                    <title>Tank 5: Eli</title>
+                    <rect
+                      x="-3.7"
+                      y="-3.4"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.7"
+                      y="2.2"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.1"
+                      y="-2.4"
+                      width="6.2"
+                      height="4.8"
+                      rx="1.1"
+                      class="_chassis_f62b00"
+                    ></rect>
+                    <rect
+                      x="1"
+                      y="-0.55"
+                      width="5.1"
+                      height="1.1"
+                      rx="0.3"
+                      class="_barrel_f62b00"
+                    ></rect>
+                    <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
+                  </g>
+                  <g
+                    transform="translate(152 8) rotate(180)"
+                    class="_tank_f62b00"
+                    style="color: var(--pb-player-6)"
+                  >
+                    <title>Tank 6: Fay</title>
+                    <rect
+                      x="-3.7"
+                      y="-3.4"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.7"
+                      y="2.2"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.1"
+                      y="-2.4"
+                      width="6.2"
+                      height="4.8"
+                      rx="1.1"
+                      class="_chassis_f62b00"
+                    ></rect>
+                    <rect
+                      x="1"
+                      y="-0.55"
+                      width="5.1"
+                      height="1.1"
+                      rx="0.3"
+                      class="_barrel_f62b00"
+                    ></rect>
+                    <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
+                  </g>
+                  <g
+                    transform="translate(104 56) rotate(0)"
+                    class="_tank_f62b00"
+                    style="color: var(--pb-player-7)"
+                  >
+                    <title>Tank 7: Gus</title>
+                    <rect
+                      x="-3.7"
+                      y="-3.4"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.7"
+                      y="2.2"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.1"
+                      y="-2.4"
+                      width="6.2"
+                      height="4.8"
+                      rx="1.1"
+                      class="_chassis_f62b00"
+                    ></rect>
+                    <rect
+                      x="1"
+                      y="-0.55"
+                      width="5.1"
+                      height="1.1"
+                      rx="0.3"
+                      class="_barrel_f62b00"
+                    ></rect>
+                    <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
+                  </g>
+                  <g
+                    transform="translate(88 24) rotate(180)"
+                    class="_tank_f62b00"
+                    style="color: var(--pb-player-8)"
+                  >
+                    <title>Tank 8: Hal</title>
+                    <rect
+                      x="-3.7"
+                      y="-3.4"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.7"
+                      y="2.2"
+                      width="7.4"
+                      height="1.2"
+                      rx="0.3"
+                      class="_track_f62b00"
+                    ></rect>
+                    <rect
+                      x="-3.1"
+                      y="-2.4"
+                      width="6.2"
+                      height="4.8"
+                      rx="1.1"
+                      class="_chassis_f62b00"
+                    ></rect>
+                    <rect
+                      x="1"
+                      y="-0.55"
+                      width="5.1"
+                      height="1.1"
+                      rx="0.3"
+                      class="_barrel_f62b00"
+                    ></rect>
+                    <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
+                  </g></svg
+                ><span
+                  class="_number_f62b00"
+                  aria-hidden="true"
+                  style="
+                    left: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      5%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    top: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      8.333333333333332%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    --tank-color: var(--pb-player-1);
+                  "
+                  >1</span
+                ><span
+                  class="_number_f62b00"
+                  aria-hidden="true"
+                  style="
+                    left: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      25%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    top: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      25%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    --tank-color: var(--pb-player-2);
+                  "
+                  >2</span
+                ><span
+                  class="_number_f62b00"
+                  aria-hidden="true"
+                  style="
+                    left: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      75%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    top: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      91.66666666666666%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    --tank-color: var(--pb-player-3);
+                  "
+                  >3</span
+                ><span
+                  class="_number_f62b00"
+                  aria-hidden="true"
+                  style="
+                    left: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      5%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    top: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      41.66666666666667%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    --tank-color: var(--pb-player-4);
+                  "
+                  >4</span
+                ><span
+                  class="_number_f62b00"
+                  aria-hidden="true"
+                  style="
+                    left: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      65%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    top: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      91.66666666666666%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    --tank-color: var(--pb-player-5);
+                  "
+                  >5</span
+                ><span
+                  class="_number_f62b00"
+                  aria-hidden="true"
+                  style="
+                    left: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      95%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    top: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      8.333333333333332%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    --tank-color: var(--pb-player-6);
+                  "
+                  >6</span
+                ><span
+                  class="_number_f62b00"
+                  aria-hidden="true"
+                  style="
+                    left: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      65%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    top: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      58.333333333333336%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    --tank-color: var(--pb-player-7);
+                  "
+                  >7</span
+                ><span
+                  class="_number_f62b00"
+                  aria-hidden="true"
+                  style="
+                    left: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      55.00000000000001%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    top: clamp(
+                      calc(var(--pb-font-body) * 0.7),
+                      25%,
+                      calc(100% - var(--pb-font-body) * 0.7)
+                    );
+                    --tank-color: var(--pb-player-8);
+                  "
+                  >8</span
+                >
               </div>
-              <p class="_line_06ce35">Find your numbered tank. Follow its barrel to aim.</p>
-              <p class="_legend_06ce35">✦ Burst<span>━ Beam</span><span>◈ Seeker</span></p>
+              <div class="_countdown_06ce35" role="timer">8</div>
             </div>
-            <aside class="_rail_06ce35">
-              <h2 class="_headline_06ce35">Round 2 of 5</h2>
-              <p class="_alive_06ce35">Round wins</p>
-              <ol class="_rows_866f43" aria-label="Tanks">
-                <li style="--tank-color: var(--pb-player-1)">
-                  <span class="_badge_866f43" aria-label="Tank 1">1</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Ana</b></span
-                  ><span class="_score_866f43"><b>0</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-2)">
-                  <span class="_badge_866f43" aria-label="Tank 2">2</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Ben</b></span
-                  ><span class="_score_866f43"><b>1</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-3)">
-                  <span class="_badge_866f43" aria-label="Tank 3">3</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Cy</b></span
-                  ><span class="_score_866f43"><b>0</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-4)">
-                  <span class="_badge_866f43" aria-label="Tank 4">4</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Dee</b></span
-                  ><span class="_score_866f43"><b>0</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-5)">
-                  <span class="_badge_866f43" aria-label="Tank 5">5</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Eli</b></span
-                  ><span class="_score_866f43"><b>0</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-6)">
-                  <span class="_badge_866f43" aria-label="Tank 6">6</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Fay</b></span
-                  ><span class="_score_866f43"><b>0</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-7)">
-                  <span class="_badge_866f43" aria-label="Tank 7">7</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Gus</b></span
-                  ><span class="_score_866f43"><b>0</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-8)">
-                  <span class="_badge_866f43" aria-label="Tank 8">8</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Hal</b></span
-                  ><span class="_score_866f43"><b>0</b></span>
-                </li>
-              </ol>
-            </aside>
+            <p class="_line_06ce35">Find your tank</p>
           </div>
         </div>
       </main>

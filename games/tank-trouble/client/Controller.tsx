@@ -14,6 +14,7 @@ import type { TankTroubleControllerView } from '../server/index';
 import type { Input } from '../server/world';
 import { Arena } from './Arena';
 import { Standings } from './Standings';
+import { RoundResult } from './RoundResult';
 import { useControls } from './controls';
 import type { ControlAction } from './controls';
 import { STRINGS } from './strings';
@@ -178,16 +179,25 @@ export function Controller({
   if (phase === 'ready' && player && !stage) {
     return (
       <div className={styles.ready} style={tint}>
-        <h2>{rounds}</h2>
+        <h2>{L('Round {n}', { n: view.round })}</h2>
         <span className={styles.identity}>{view.slot + 1}</span>
-        <p className={styles.mainLine}>{L('You are tank {n}', { n: view.slot + 1 })}</p>
-        <p>{L('Find your number on the TV. Forward, reverse, turn and fire.')}</p>
+        <p className={styles.mainLine}>{L('Your tank {n}', { n: view.slot + 1 })}</p>
+        <p>{L('Ready')}</p>
         <span className={styles.countdown} role="timer">
           {Math.max(1, Math.ceil(left / 1000))}
         </span>
       </div>
     );
   }
+
+  if (phase === 'score')
+    return (
+      <RoundResult
+        view={view}
+        seconds={Math.ceil(left / 1000)}
+        me={player ? view.me.id : undefined}
+      />
+    );
 
   if (phase === 'play' && player && !stage) {
     return (
@@ -199,21 +209,11 @@ export function Controller({
     );
   }
 
-  let title = rounds;
-  let line = player ? L('You are tank {n}', { n: view.slot + 1 }) : L('Spectating');
+  let title = L('Round {n}', { n: view.round });
+  let line = player ? L('Tank {n}', { n: view.slot + 1 }) : L('Spectating');
   if (phase === 'play') {
     title = player ? L('Your tank is out') : L('Spectating');
     line = aliveLine;
-  } else if (phase === 'score') {
-    title = L('Round {n} complete', { n: view.round });
-    line =
-      view.reason === 'time'
-        ? L('Time up — no round points')
-        : view.reason === 'draw'
-          ? L('No survivors — no round points')
-          : view.reason === 'skip'
-            ? L('Round skipped')
-            : L('Last tank wins one point');
   } else if (phase === 'done') {
     title = L('Final standings');
     line =
@@ -238,24 +238,11 @@ export function Controller({
       ) : null}
       {phase === 'ready' ? (
         <p className={styles.status}>
-          {L('Find your numbered tank · {n}s', { n: Math.max(1, Math.ceil(left / 1000)) })}
+          {L('Get ready')} <span role="timer">{Math.max(1, Math.ceil(left / 1000))}</span>
         </p>
       ) : null}
-      {phase === 'score' && player ? (
-        <p className={styles.status}>
-          {L('+{n} this round · {m} wins so far', { n: view.lastPoints[view.me.id] ?? 0, m: mine })}
-        </p>
-      ) : null}
-      <Standings view={view} me={player ? view.me.id : undefined} compact={phase === 'play'} />
-      {phase === 'score' ? (
-        <p className={styles.status}>
-          {view.round >= view.rounds
-            ? L('Final standings in {n}s', { n: Math.max(0, Math.ceil(left / 1000)) })
-            : L('Next maze in {n}s', { n: Math.max(0, Math.ceil(left / 1000)) })}
-        </p>
-      ) : null}
-      {phase === 'ready' ? (
-        <p className={styles.help}>{L('Forward, reverse, turn and fire. Shots can hit you.')}</p>
+      {phase !== 'ready' ? (
+        <Standings view={view} me={player ? view.me.id : undefined} compact={phase === 'play'} />
       ) : null}
     </div>
   );

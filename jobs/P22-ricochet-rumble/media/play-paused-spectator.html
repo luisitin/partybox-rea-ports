@@ -482,6 +482,19 @@ ight is the :root default above) ────────
         gap: var(--pb-space-3);
         min-width: 0;
       }
+      ._interlude_06ce35 {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-4);
+        container-type: size;
+      }
+      ._readyArena_06ce35 {
+        position: relative;
+        width: min(100%, calc((100cqh - var(--pb-font-display) * 1.6) * 5 / 3));
+      }
       ._arena_06ce35 {
         position: relative;
         width: min(100%, calc((100cqh - var(--pb-font-body) * 4) * 5 / 3));
@@ -764,11 +777,13 @@ ight is the :root default above) ────────
         flex: none;
         width: 100%;
       }
-      ._stage_fc2e17[data-phase='ready'] ._stageArena_fc2e17,
       ._stage_fc2e17[data-phase='score'] ._stageArena_fc2e17,
       ._stage_fc2e17[data-phase='done'] ._stageArena_fc2e17 {
         width: calc(var(--pb-touch) * 4);
         align-self: center;
+      }
+      ._stage_fc2e17[data-phase='ready'] ._stageArena_fc2e17 {
+        width: 100%;
       }
       ._stage_fc2e17 > ol {
         gap: var(--pb-space-1);
@@ -808,6 +823,58 @@ ight is the :root default above) ────────
         ._play_fc2e17[data-stage='true'] > ol {
           display: none;
         }
+      }
+
+      /* games/tank-trouble/client/RoundResult.module.css */
+      ._result_c42a52 {
+        flex: 1;
+        height: 100%;
+        min-height: 0;
+        padding: var(--pb-space-4);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--pb-space-3);
+        text-align: center;
+        font-size: var(--pb-font-body);
+      }
+      ._result_c42a52 h2,
+      ._result_c42a52 p {
+        margin: 0;
+        line-height: 1.2;
+      }
+      ._result_c42a52 h2 {
+        font-size: var(--pb-font-h2);
+      }
+      ._winner_c42a52 {
+        font-size: var(--pb-font-h1);
+        font-weight: 1000;
+        text-wrap: balance;
+      }
+      ._gain_c42a52 {
+        font-size: var(--pb-font-display);
+        color: var(--pb-accent-2);
+        line-height: 1;
+      }
+      ._receipt_c42a52 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-2);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface);
+        padding: var(--pb-space-3) var(--pb-space-6);
+      }
+      ._next_c42a52 {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-3);
+        font-variant-numeric: tabular-nums;
+      }
+      ._next_c42a52 b {
+        font-size: calc(var(--pb-font-display) * 0.75);
+        line-height: 1;
       }
 
       ._stage_262f13 {

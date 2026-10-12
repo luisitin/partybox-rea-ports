@@ -482,6 +482,19 @@ ight is the :root default above) ────────
         gap: var(--pb-space-3);
         min-width: 0;
       }
+      ._interlude_06ce35 {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-4);
+        container-type: size;
+      }
+      ._readyArena_06ce35 {
+        position: relative;
+        width: min(100%, calc((100cqh - var(--pb-font-display) * 1.6) * 5 / 3));
+      }
       ._arena_06ce35 {
         position: relative;
         width: min(100%, calc((100cqh - var(--pb-font-body) * 4) * 5 / 3));
@@ -764,11 +777,13 @@ ight is the :root default above) ────────
         flex: none;
         width: 100%;
       }
-      ._stage_fc2e17[data-phase='ready'] ._stageArena_fc2e17,
       ._stage_fc2e17[data-phase='score'] ._stageArena_fc2e17,
       ._stage_fc2e17[data-phase='done'] ._stageArena_fc2e17 {
         width: calc(var(--pb-touch) * 4);
         align-self: center;
+      }
+      ._stage_fc2e17[data-phase='ready'] ._stageArena_fc2e17 {
+        width: 100%;
       }
       ._stage_fc2e17 > ol {
         gap: var(--pb-space-1);
@@ -808,6 +823,58 @@ ight is the :root default above) ────────
         ._play_fc2e17[data-stage='true'] > ol {
           display: none;
         }
+      }
+
+      /* games/tank-trouble/client/RoundResult.module.css */
+      ._result_c42a52 {
+        flex: 1;
+        height: 100%;
+        min-height: 0;
+        padding: var(--pb-space-4);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--pb-space-3);
+        text-align: center;
+        font-size: var(--pb-font-body);
+      }
+      ._result_c42a52 h2,
+      ._result_c42a52 p {
+        margin: 0;
+        line-height: 1.2;
+      }
+      ._result_c42a52 h2 {
+        font-size: var(--pb-font-h2);
+      }
+      ._winner_c42a52 {
+        font-size: var(--pb-font-h1);
+        font-weight: 1000;
+        text-wrap: balance;
+      }
+      ._gain_c42a52 {
+        font-size: var(--pb-font-display);
+        color: var(--pb-accent-2);
+        line-height: 1;
+      }
+      ._receipt_c42a52 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-2);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface);
+        padding: var(--pb-space-3) var(--pb-space-6);
+      }
+      ._next_c42a52 {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-3);
+        font-variant-numeric: tabular-nums;
+      }
+      ._next_c42a52 b {
+        font-size: calc(var(--pb-font-display) * 0.75);
+        line-height: 1;
       }
 
       ._stage_262f13 {
@@ -1183,8 +1250,8 @@ ight is the :root default above) ────────
       <main class="evidence-main" aria-label="Game stage">
         <div class="_stage_fc2e17" data-phase="ready" style="--tank-color: var(--pb-player-1)">
           <header class="_header_fc2e17">
-            <h2>Round 2 of 5</h2>
-            <p>You are tank 1</p>
+            <h2>Round 2</h2>
+            <p>Tank 1</p>
           </header>
           <div class="_stageArena_fc2e17">
             <div class="_scene_f62b00">
@@ -1720,50 +1787,7 @@ ight is the :root default above) ────────
               >
             </div>
           </div>
-          <p class="_status_fc2e17">Find your numbered tank · 25s</p>
-          <ol class="_rows_866f43" aria-label="Tanks">
-            <li style="--tank-color: var(--pb-player-1)" data-me="true">
-              <span class="_badge_866f43" aria-label="Tank 1">1</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Ana</b></span
-              ><span class="_score_866f43"><b>0</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-2)">
-              <span class="_badge_866f43" aria-label="Tank 2">2</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Ben</b></span
-              ><span class="_score_866f43"><b>1</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-3)">
-              <span class="_badge_866f43" aria-label="Tank 3">3</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Cy</b></span
-              ><span class="_score_866f43"><b>0</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-4)">
-              <span class="_badge_866f43" aria-label="Tank 4">4</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Dee</b></span
-              ><span class="_score_866f43"><b>0</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-5)">
-              <span class="_badge_866f43" aria-label="Tank 5">5</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Eli</b></span
-              ><span class="_score_866f43"><b>0</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-6)">
-              <span class="_badge_866f43" aria-label="Tank 6">6</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Fay</b></span
-              ><span class="_score_866f43"><b>0</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-7)">
-              <span class="_badge_866f43" aria-label="Tank 7">7</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Gus</b></span
-              ><span class="_score_866f43"><b>0</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-8)">
-              <span class="_badge_866f43" aria-label="Tank 8">8</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Hal</b></span
-              ><span class="_score_866f43"><b>0</b></span>
-            </li>
-          </ol>
-          <p class="_help_fc2e17">Forward, reverse, turn and fire. Shots can hit you.</p>
+          <p class="_status_fc2e17">Get ready <span role="timer">8</span></p>
         </div>
       </main>
       <footer class="evidence-footer">

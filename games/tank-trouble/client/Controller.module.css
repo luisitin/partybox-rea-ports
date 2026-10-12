@@ -199,11 +199,13 @@
   flex: none;
   width: 100%;
 }
-.stage[data-phase='ready'] .stageArena,
 .stage[data-phase='score'] .stageArena,
 .stage[data-phase='done'] .stageArena {
   width: calc(var(--pb-touch) * 4);
   align-self: center;
+}
+.stage[data-phase='ready'] .stageArena {
+  width: 100%;
 }
 .stage > ol {
   gap: var(--pb-space-1);

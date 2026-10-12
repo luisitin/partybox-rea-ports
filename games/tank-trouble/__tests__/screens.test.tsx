@@ -9,6 +9,7 @@ import { Controller } from '../client/Controller';
 import { Tv } from '../client/Tv';
 import { game } from '../server/index';
 import type { State } from '../server/types';
+import { enterScore } from '../server/phases/score';
 import { MEDIA, standalone, writeFrames } from './screen-evidence';
 import type { Frame, Surface } from './screen-evidence';
 
@@ -122,7 +123,7 @@ describe.each(fixtures)('screen: $name', ({ name, state }) => {
       expect(html).toMatch(/<h[23]/);
       if (surface === 'spectator') expect(html).not.toContain('<button');
       if (surface === 'phone-only' || surface === 'spectator') {
-        expect(html).toContain('<svg');
+        if (state.phase.id !== 'score') expect(html).toContain('<svg');
         expect(html).not.toMatch(/on the TV|Look at the TV|Find your number on the TV/);
       }
       const frame = {
@@ -137,14 +138,53 @@ describe.each(fixtures)('screen: $name', ({ name, state }) => {
     }
   });
 
-  it('score/done stages retain every name, score and tied rank', () => {
-    if (state.phase.id !== 'score' && state.phase.id !== 'done') return;
+  it('finale retains every name, score and tied rank', () => {
+    if (state.phase.id !== 'done') return;
     for (const surface of ['tv', 'phone-only', 'spectator'] as const) {
       const html = render(state, surface);
       for (const player of Object.values(state.players)) expect(html).toContain(player.name);
       if (name === 'done-tied-long') expect(html.match(/#1/g)).toHaveLength(8);
     }
   });
+});
+
+it('compact round receipts show the winner, own gain and current rank within an honest short beat', () => {
+  expect(score).toBeDefined();
+  if (!score) return;
+  for (const reason of [null, 'time', 'draw', 'skip'] as const) {
+    const fixture = longNames(score);
+    const state = enterScore(
+      {
+        ...fixture,
+        reason,
+        world: {
+          ...fixture.world,
+          tanks: fixture.world.tanks.map((tank) => ({
+            ...tank,
+            alive: reason === null && tank.id === 'p1',
+            died: null,
+          })),
+        },
+      },
+      fixture.phase.startedAt,
+    );
+    const duration = state.phase.deadline! - state.phase.startedAt;
+    expect(duration).toBeLessThanOrEqual(11_000);
+    for (const surface of ['tv', 'phone-tv', 'phone-only', 'spectator'] as const) {
+      const html = render(state, surface);
+      const visible = html.replace(/<[^>]+>/g, ' ').replace(/&[^;]+;/g, ' ');
+      expect(duration, visible).toBeGreaterThanOrEqual(readingMs(wordCount(visible), { ui: true }));
+      if (reason === null) expect(html).toContain(`${names[0]} wins`);
+      else expect(html).toContain('No round points');
+      if (surface === 'phone-tv' || surface === 'phone-only') {
+        const total = state.scores.p1!;
+        const rank = 1 + Object.values(state.scores).filter((value) => value > total).length;
+        expect(html).toContain(`Your rank #${rank}`);
+        expect(html).toContain(`+${state.lastPoints.p1} this round`);
+      }
+      expect(html).not.toContain('<ol');
+    }
+  }
 });
 
 it('remote phones render the same public stage and connected living players get five usable pads', () => {

@@ -6,6 +6,7 @@ import arena from '../client/Arena.module.css';
 import standings from '../client/Standings.module.css';
 import tv from '../client/Tv.module.css';
 import phone from '../client/Controller.module.css';
+import result from '../client/RoundResult.module.css';
 import stage from '../../../packages/game-sdk/src/tv/Stage.module.css';
 import screen from '../../../packages/game-sdk/src/controller/Screen.module.css';
 import waiting from '../../../packages/game-sdk/src/controller/WaitingScreen.module.css';
@@ -26,6 +27,7 @@ const MODULES: [string, Record<string, string>][] = [
   ['Standings', standings],
   ['Tv', tv],
   ['Controller', phone],
+  ['RoundResult', result],
 ];
 const SDK_MODULES: [string, Record<string, string>][] = [
   ['tv/Stage', stage],

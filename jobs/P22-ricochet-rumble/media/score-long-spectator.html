@@ -482,6 +482,19 @@ ight is the :root default above) ────────
         gap: var(--pb-space-3);
         min-width: 0;
       }
+      ._interlude_06ce35 {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-4);
+        container-type: size;
+      }
+      ._readyArena_06ce35 {
+        position: relative;
+        width: min(100%, calc((100cqh - var(--pb-font-display) * 1.6) * 5 / 3));
+      }
       ._arena_06ce35 {
         position: relative;
         width: min(100%, calc((100cqh - var(--pb-font-body) * 4) * 5 / 3));
@@ -764,11 +777,13 @@ ight is the :root default above) ────────
         flex: none;
         width: 100%;
       }
-      ._stage_fc2e17[data-phase='ready'] ._stageArena_fc2e17,
       ._stage_fc2e17[data-phase='score'] ._stageArena_fc2e17,
       ._stage_fc2e17[data-phase='done'] ._stageArena_fc2e17 {
         width: calc(var(--pb-touch) * 4);
         align-self: center;
+      }
+      ._stage_fc2e17[data-phase='ready'] ._stageArena_fc2e17 {
+        width: 100%;
       }
       ._stage_fc2e17 > ol {
         gap: var(--pb-space-1);
@@ -808,6 +823,58 @@ ight is the :root default above) ────────
         ._play_fc2e17[data-stage='true'] > ol {
           display: none;
         }
+      }
+
+      /* games/tank-trouble/client/RoundResult.module.css */
+      ._result_c42a52 {
+        flex: 1;
+        height: 100%;
+        min-height: 0;
+        padding: var(--pb-space-4);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--pb-space-3);
+        text-align: center;
+        font-size: var(--pb-font-body);
+      }
+      ._result_c42a52 h2,
+      ._result_c42a52 p {
+        margin: 0;
+        line-height: 1.2;
+      }
+      ._result_c42a52 h2 {
+        font-size: var(--pb-font-h2);
+      }
+      ._winner_c42a52 {
+        font-size: var(--pb-font-h1);
+        font-weight: 1000;
+        text-wrap: balance;
+      }
+      ._gain_c42a52 {
+        font-size: var(--pb-font-display);
+        color: var(--pb-accent-2);
+        line-height: 1;
+      }
+      ._receipt_c42a52 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-2);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface);
+        padding: var(--pb-space-3) var(--pb-space-6);
+      }
+      ._next_c42a52 {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-3);
+        font-variant-numeric: tabular-nums;
+      }
+      ._next_c42a52 b {
+        font-size: calc(var(--pb-font-display) * 0.75);
+        line-height: 1;
       }
 
       ._stage_262f13 {
@@ -1181,553 +1248,12 @@ ight is the :root default above) ────────
     <div class="evidence-shell">
       <header class="evidence-header"><b>PartyBox</b><span>RUMB</span></header>
       <main class="evidence-main" aria-label="Game stage">
-        <div class="_stage_fc2e17" data-phase="score" style="--tank-color: var(--pb-player-1)">
-          <header class="_header_fc2e17">
-            <h2>Round 1 complete</h2>
-            <p>Last tank wins one point</p>
-          </header>
-          <div class="_stageArena_fc2e17">
-            <div class="_scene_f62b00">
-              <svg
-                class="_svg_f62b00"
-                viewBox="0 0 160 96"
-                role="img"
-                aria-label="Maze arena: 1 of 8 tanks still in"
-              >
-                <title>Maze arena: 1 of 8 tanks still in</title>
-                <rect x="0" y="0" width="160" height="96" class="_floor_f62b00"></rect>
-                <path
-                  d="M0 16H160M0 32H160M0 48H160M0 64H160M0 80H160M16 0V96M32 0V96M48 0V96M64 0V96M80 0V96M96 0V96M112 0V96M128 0V96M144 0V96"
-                  class="_grid_f62b00"
-                ></path>
-                <g class="_walls_f62b00">
-                  <line x1="0" y1="0" x2="160" y2="0"></line>
-                  <line x1="160" y1="0" x2="160" y2="96"></line>
-                  <line x1="0" y1="96" x2="160" y2="96"></line>
-                  <line x1="0" y1="0" x2="0" y2="96"></line>
-                  <line x1="16" y1="0" x2="16" y2="16"></line>
-                  <line x1="16" y1="16" x2="32" y2="16"></line>
-                  <line x1="32" y1="16" x2="48" y2="16"></line>
-                  <line x1="48" y1="16" x2="64" y2="16"></line>
-                  <line x1="64" y1="16" x2="80" y2="16"></line>
-                  <line x1="80" y1="16" x2="96" y2="16"></line>
-                  <line x1="112" y1="16" x2="128" y2="16"></line>
-                  <line x1="128" y1="16" x2="144" y2="16"></line>
-                  <line x1="0" y1="32" x2="16" y2="32"></line>
-                  <line x1="16" y1="32" x2="32" y2="32"></line>
-                  <line x1="48" y1="16" x2="48" y2="32"></line>
-                  <line x1="96" y1="16" x2="96" y2="32"></line>
-                  <line x1="112" y1="16" x2="112" y2="32"></line>
-                  <line x1="96" y1="32" x2="112" y2="32"></line>
-                  <line x1="144" y1="16" x2="144" y2="32"></line>
-                  <line x1="16" y1="32" x2="16" y2="48"></line>
-                  <line x1="48" y1="32" x2="48" y2="48"></line>
-                  <line x1="32" y1="48" x2="48" y2="48"></line>
-                  <line x1="64" y1="32" x2="64" y2="48"></line>
-                  <line x1="96" y1="48" x2="112" y2="48"></line>
-                  <line x1="128" y1="32" x2="128" y2="48"></line>
-                  <line x1="112" y1="48" x2="128" y2="48"></line>
-                  <line x1="128" y1="48" x2="144" y2="48"></line>
-                  <line x1="32" y1="48" x2="32" y2="64"></line>
-                  <line x1="32" y1="64" x2="48" y2="64"></line>
-                  <line x1="64" y1="48" x2="64" y2="64"></line>
-                  <line x1="80" y1="48" x2="80" y2="64"></line>
-                  <line x1="96" y1="64" x2="112" y2="64"></line>
-                  <line x1="128" y1="48" x2="128" y2="64"></line>
-                  <line x1="144" y1="64" x2="160" y2="64"></line>
-                  <line x1="0" y1="80" x2="16" y2="80"></line>
-                  <line x1="16" y1="80" x2="32" y2="80"></line>
-                  <line x1="32" y1="80" x2="48" y2="80"></line>
-                  <line x1="48" y1="80" x2="64" y2="80"></line>
-                  <line x1="96" y1="64" x2="96" y2="80"></line>
-                  <line x1="80" y1="80" x2="96" y2="80"></line>
-                  <line x1="112" y1="64" x2="112" y2="80"></line>
-                  <line x1="128" y1="64" x2="128" y2="80"></line>
-                  <line x1="144" y1="64" x2="144" y2="80"></line>
-                  <line x1="112" y1="80" x2="112" y2="96"></line>
-                </g>
-                <g
-                  transform="translate(143.732316 92.700011) rotate(103.91298056873185)"
-                  class="_projectile_f62b00"
-                  style="color: var(--pb-player-4)"
-                >
-                  <title>Shell</title>
-                  <circle r="0.85" class="_shell_f62b00"></circle>
-                </g>
-                <g
-                  transform="translate(141.974951 40.686012) rotate(-99.220457088102)"
-                  class="_projectile_f62b00"
-                  style="color: var(--pb-player-4)"
-                >
-                  <title>Shell</title>
-                  <circle r="0.85" class="_shell_f62b00"></circle>
-                </g>
-                <g
-                  transform="translate(67.334744 73.659247) rotate(-100.50642295690459)"
-                  class="_tank_f62b00"
-                  data-out="true"
-                  style="color: var(--pb-player-1)"
-                >
-                  <title>Tank 1: Maximiliano Guadalupe</title>
-                  <rect
-                    x="-3.7"
-                    y="-3.4"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.7"
-                    y="2.2"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.1"
-                    y="-2.4"
-                    width="6.2"
-                    height="4.8"
-                    rx="1.1"
-                    class="_chassis_f62b00"
-                  ></rect>
-                  <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                </g>
-                <g
-                  transform="translate(140.737409 21.67485) rotate(178.85221349685727)"
-                  class="_tank_f62b00"
-                  style="color: var(--pb-player-2)"
-                >
-                  <title>Tank 2: Alexandria Montgomery</title>
-                  <rect
-                    x="-3.7"
-                    y="-3.4"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.7"
-                    y="2.2"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.1"
-                    y="-2.4"
-                    width="6.2"
-                    height="4.8"
-                    rx="1.1"
-                    class="_chassis_f62b00"
-                  ></rect>
-                  <rect
-                    x="1"
-                    y="-0.55"
-                    width="5.1"
-                    height="1.1"
-                    rx="0.3"
-                    class="_barrel_f62b00"
-                  ></rect>
-                  <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
-                </g>
-                <g
-                  transform="translate(94.374293 43.237026) rotate(5.087636037643658)"
-                  class="_tank_f62b00"
-                  data-out="true"
-                  style="color: var(--pb-player-3)"
-                >
-                  <title>Tank 3: Christopher Alexander</title>
-                  <rect
-                    x="-3.7"
-                    y="-3.4"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.7"
-                    y="2.2"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.1"
-                    y="-2.4"
-                    width="6.2"
-                    height="4.8"
-                    rx="1.1"
-                    class="_chassis_f62b00"
-                  ></rect>
-                  <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                </g>
-                <g
-                  transform="translate(152.06655 24.875943) rotate(-94.07353931207328)"
-                  class="_tank_f62b00"
-                  data-out="true"
-                  style="color: var(--pb-player-4)"
-                >
-                  <title>Tank 4: Valentina Rodriguez</title>
-                  <rect
-                    x="-3.7"
-                    y="-3.4"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.7"
-                    y="2.2"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.1"
-                    y="-2.4"
-                    width="6.2"
-                    height="4.8"
-                    rx="1.1"
-                    class="_chassis_f62b00"
-                  ></rect>
-                  <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                </g>
-                <g
-                  transform="translate(96.347448 43.836253) rotate(-9.78354083075637)"
-                  class="_tank_f62b00"
-                  data-out="true"
-                  style="color: var(--pb-player-5)"
-                >
-                  <title>Tank 5: Sebastian Washington</title>
-                  <rect
-                    x="-3.7"
-                    y="-3.4"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.7"
-                    y="2.2"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.1"
-                    y="-2.4"
-                    width="6.2"
-                    height="4.8"
-                    rx="1.1"
-                    class="_chassis_f62b00"
-                  ></rect>
-                  <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                </g>
-                <g
-                  transform="translate(68.505331 69.744558) rotate(11.917522138721122)"
-                  class="_tank_f62b00"
-                  data-out="true"
-                  style="color: var(--pb-player-6)"
-                >
-                  <title>Tank 6: Anastasia Wellington</title>
-                  <rect
-                    x="-3.7"
-                    y="-3.4"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.7"
-                    y="2.2"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.1"
-                    y="-2.4"
-                    width="6.2"
-                    height="4.8"
-                    rx="1.1"
-                    class="_chassis_f62b00"
-                  ></rect>
-                  <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                </g>
-                <g
-                  transform="translate(96.730099 85.111448) rotate(-173.17013374676537)"
-                  class="_tank_f62b00"
-                  data-out="true"
-                  style="color: var(--pb-player-7)"
-                >
-                  <title>Tank 7: Constantine Benjamin</title>
-                  <rect
-                    x="-3.7"
-                    y="-3.4"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.7"
-                    y="2.2"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.1"
-                    y="-2.4"
-                    width="6.2"
-                    height="4.8"
-                    rx="1.1"
-                    class="_chassis_f62b00"
-                  ></rect>
-                  <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                </g>
-                <g
-                  transform="translate(20.357617 39.576094) rotate(-71.63582450539607)"
-                  class="_tank_f62b00"
-                  data-out="true"
-                  style="color: var(--pb-player-8)"
-                >
-                  <title>Tank 8: Penelope Fitzgerald</title>
-                  <rect
-                    x="-3.7"
-                    y="-3.4"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.7"
-                    y="2.2"
-                    width="7.4"
-                    height="1.2"
-                    rx="0.3"
-                    class="_track_f62b00"
-                  ></rect>
-                  <rect
-                    x="-3.1"
-                    y="-2.4"
-                    width="6.2"
-                    height="4.8"
-                    rx="1.1"
-                    class="_chassis_f62b00"
-                  ></rect>
-                  <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                </g></svg
-              ><span
-                class="_number_f62b00"
-                data-out="true"
-                aria-hidden="true"
-                style="
-                  left: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    42.084215%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  top: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    76.72838229166666%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  --tank-color: var(--pb-player-1);
-                "
-                >1</span
-              ><span
-                class="_number_f62b00"
-                aria-hidden="true"
-                style="
-                  left: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    87.960880625%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  top: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    22.57796875%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  --tank-color: var(--pb-player-2);
-                "
-                >2</span
-              ><span
-                class="_number_f62b00"
-                data-out="true"
-                aria-hidden="true"
-                style="
-                  left: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    58.983933125%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  top: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    45.03856875%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  --tank-color: var(--pb-player-3);
-                "
-                >3</span
-              ><span
-                class="_number_f62b00"
-                data-out="true"
-                aria-hidden="true"
-                style="
-                  left: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    95.04159375%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  top: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    25.912440625%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  --tank-color: var(--pb-player-4);
-                "
-                >4</span
-              ><span
-                class="_number_f62b00"
-                data-out="true"
-                aria-hidden="true"
-                style="
-                  left: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    60.217155%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  top: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    45.66276354166667%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  --tank-color: var(--pb-player-5);
-                "
-                >5</span
-              ><span
-                class="_number_f62b00"
-                data-out="true"
-                aria-hidden="true"
-                style="
-                  left: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    42.815831875%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  top: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    72.65058125%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  --tank-color: var(--pb-player-6);
-                "
-                >6</span
-              ><span
-                class="_number_f62b00"
-                data-out="true"
-                aria-hidden="true"
-                style="
-                  left: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    60.456311875000004%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  top: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    88.65775833333332%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  --tank-color: var(--pb-player-7);
-                "
-                >7</span
-              ><span
-                class="_number_f62b00"
-                data-out="true"
-                aria-hidden="true"
-                style="
-                  left: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    12.723510625000001%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  top: clamp(
-                    calc(var(--pb-font-body) * 0.7),
-                    41.22509791666666%,
-                    calc(100% - var(--pb-font-body) * 0.7)
-                  );
-                  --tank-color: var(--pb-player-8);
-                "
-                >8</span
-              >
-            </div>
-          </div>
-          <ol class="_rows_866f43" aria-label="Standings" data-ranked="true">
-            <li style="--tank-color: var(--pb-player-2)" data-winner="true">
-              <span class="_badge_866f43" aria-label="Tank 2">2</span
-              ><span class="_identity_866f43"
-                ><b class="_name_866f43">Alexandria Montgomery</b></span
-              ><span class="_score_866f43"
-                ><span class="_rank_866f43">#1</span><b>1</b
-                ><span class="_gain_866f43">+1</span></span
-              >
-            </li>
-            <li style="--tank-color: var(--pb-player-1)">
-              <span class="_badge_866f43" aria-label="Tank 1">1</span
-              ><span class="_identity_866f43"
-                ><b class="_name_866f43">Maximiliano Guadalupe</b></span
-              ><span class="_score_866f43"><span class="_rank_866f43">#2</span><b>0</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-3)">
-              <span class="_badge_866f43" aria-label="Tank 3">3</span
-              ><span class="_identity_866f43"
-                ><b class="_name_866f43">Christopher Alexander</b></span
-              ><span class="_score_866f43"><span class="_rank_866f43">#2</span><b>0</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-4)">
-              <span class="_badge_866f43" aria-label="Tank 4">4</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Valentina Rodriguez</b></span
-              ><span class="_score_866f43"><span class="_rank_866f43">#2</span><b>0</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-5)">
-              <span class="_badge_866f43" aria-label="Tank 5">5</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Sebastian Washington</b></span
-              ><span class="_score_866f43"><span class="_rank_866f43">#2</span><b>0</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-6)">
-              <span class="_badge_866f43" aria-label="Tank 6">6</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Anastasia Wellington</b></span
-              ><span class="_score_866f43"><span class="_rank_866f43">#2</span><b>0</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-7)">
-              <span class="_badge_866f43" aria-label="Tank 7">7</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Constantine Benjamin</b></span
-              ><span class="_score_866f43"><span class="_rank_866f43">#2</span><b>0</b></span>
-            </li>
-            <li style="--tank-color: var(--pb-player-8)">
-              <span class="_badge_866f43" aria-label="Tank 8">8</span
-              ><span class="_identity_866f43"><b class="_name_866f43">Penelope Fitzgerald</b></span
-              ><span class="_score_866f43"><span class="_rank_866f43">#2</span><b>0</b></span>
-            </li>
-          </ol>
-          <p class="_status_fc2e17">Next maze in 28s</p>
+        <div class="_result_c42a52">
+          <h2>Round 1</h2>
+          <p class="_winner_c42a52">Alexandria Montgomery wins</p>
+          <b class="_gain_c42a52">+1</b>
+          <p>1 total wins</p>
+          <div class="_next_c42a52"><span>Next</span><b role="timer">9s</b></div>
         </div>
       </main>
       <footer class="evidence-footer">

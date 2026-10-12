@@ -18,7 +18,7 @@ Spectators watch the stage with no controls.
 | ------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `play`  | Shared maze, numbered tanks, shells, weapon crates and round clock | Your tank, held movement/turn pad, Fire and weapon/ammunition feedback | Last survivor, mutual elimination, 45-second cap or VIP skip |
 | `ready` | New maze and tank identities between rounds                        | Find your tank, concise next-round status                              | Reading-safe automatic start or VIP skip                     |
-| `score` | Frozen maze, round winner/draw and all totals                      | Your round outcome and match points                                    | Reading-safe next maze, or done after round five             |
+| `score` | Winner/draw and round point, brief automatic countdown             | Your round gain, current rank and total wins                           | Reading-safe next maze, or done after round five             |
 | `done`  | Winner/tie, final maze and all standings                           | Your final rank and points                                             | Terminal                                                     |
 
 The first round starts after the shell's instructions and countdown; later mazes have an
@@ -33,7 +33,7 @@ Nothing directs them to a TV. A temporarily eliminated player keeps watching the
 | ------- | ----------------------------------------------------------------------------- |
 | `play`  | Full-width maze above your pad; spectators and eliminated players have no pad |
 | `ready` | New maze, numbered identity and next-round status                             |
-| `score` | Compact frozen maze and all eight standings with round additions              |
+| `score` | Public winner/draw plus your current rank, round gain and total wins          |
 | `done`  | Final maze and full tied ranking                                              |
 
 ## Inputs

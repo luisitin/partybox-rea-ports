@@ -482,6 +482,19 @@ ight is the :root default above) ────────
         gap: var(--pb-space-3);
         min-width: 0;
       }
+      ._interlude_06ce35 {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-4);
+        container-type: size;
+      }
+      ._readyArena_06ce35 {
+        position: relative;
+        width: min(100%, calc((100cqh - var(--pb-font-display) * 1.6) * 5 / 3));
+      }
       ._arena_06ce35 {
         position: relative;
         width: min(100%, calc((100cqh - var(--pb-font-body) * 4) * 5 / 3));
@@ -764,11 +777,13 @@ ight is the :root default above) ────────
         flex: none;
         width: 100%;
       }
-      ._stage_fc2e17[data-phase='ready'] ._stageArena_fc2e17,
       ._stage_fc2e17[data-phase='score'] ._stageArena_fc2e17,
       ._stage_fc2e17[data-phase='done'] ._stageArena_fc2e17 {
         width: calc(var(--pb-touch) * 4);
         align-self: center;
+      }
+      ._stage_fc2e17[data-phase='ready'] ._stageArena_fc2e17 {
+        width: 100%;
       }
       ._stage_fc2e17 > ol {
         gap: var(--pb-space-1);
@@ -808,6 +823,58 @@ ight is the :root default above) ────────
         ._play_fc2e17[data-stage='true'] > ol {
           display: none;
         }
+      }
+
+      /* games/tank-trouble/client/RoundResult.module.css */
+      ._result_c42a52 {
+        flex: 1;
+        height: 100%;
+        min-height: 0;
+        padding: var(--pb-space-4);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--pb-space-3);
+        text-align: center;
+        font-size: var(--pb-font-body);
+      }
+      ._result_c42a52 h2,
+      ._result_c42a52 p {
+        margin: 0;
+        line-height: 1.2;
+      }
+      ._result_c42a52 h2 {
+        font-size: var(--pb-font-h2);
+      }
+      ._winner_c42a52 {
+        font-size: var(--pb-font-h1);
+        font-weight: 1000;
+        text-wrap: balance;
+      }
+      ._gain_c42a52 {
+        font-size: var(--pb-font-display);
+        color: var(--pb-accent-2);
+        line-height: 1;
+      }
+      ._receipt_c42a52 {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-2);
+        border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+        border-radius: var(--pb-radius-lg);
+        background: var(--pb-surface);
+        padding: var(--pb-space-3) var(--pb-space-6);
+      }
+      ._next_c42a52 {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-3);
+        font-variant-numeric: tabular-nums;
+      }
+      ._next_c42a52 b {
+        font-size: calc(var(--pb-font-display) * 0.75);
+        line-height: 1;
       }
 
       ._stage_262f13 {
@@ -1182,596 +1249,12 @@ ight is the :root default above) ────────
       <header class="evidence-header"><b>PartyBox</b><span>RUMB</span></header>
       <main class="evidence-main" aria-label="Game stage">
         <div class="_stage_262f13 _stage_06ce35">
-          <div class="_board_06ce35">
-            <div class="_main_06ce35">
-              <div class="_arena_06ce35">
-                <div class="_scene_f62b00">
-                  <svg
-                    class="_svg_f62b00"
-                    viewBox="0 0 160 96"
-                    role="img"
-                    aria-label="Maze arena: 1 of 8 tanks still in"
-                  >
-                    <title>Maze arena: 1 of 8 tanks still in</title>
-                    <rect x="0" y="0" width="160" height="96" class="_floor_f62b00"></rect>
-                    <path
-                      d="M0 16H160M0 32H160M0 48H160M0 64H160M0 80H160M16 0V96M32 0V96M48 0V96M64 0V96M80 0V96M96 0V96M112 0V96M128 0V96M144 0V96"
-                      class="_grid_f62b00"
-                    ></path>
-                    <g class="_walls_f62b00">
-                      <line x1="0" y1="0" x2="160" y2="0"></line>
-                      <line x1="160" y1="0" x2="160" y2="96"></line>
-                      <line x1="0" y1="96" x2="160" y2="96"></line>
-                      <line x1="0" y1="0" x2="0" y2="96"></line>
-                      <line x1="16" y1="16" x2="32" y2="16"></line>
-                      <line x1="32" y1="16" x2="48" y2="16"></line>
-                      <line x1="64" y1="0" x2="64" y2="16"></line>
-                      <line x1="112" y1="0" x2="112" y2="16"></line>
-                      <line x1="112" y1="16" x2="128" y2="16"></line>
-                      <line x1="128" y1="16" x2="144" y2="16"></line>
-                      <line x1="0" y1="32" x2="16" y2="32"></line>
-                      <line x1="16" y1="32" x2="32" y2="32"></line>
-                      <line x1="80" y1="16" x2="80" y2="32"></line>
-                      <line x1="96" y1="16" x2="96" y2="32"></line>
-                      <line x1="96" y1="32" x2="112" y2="32"></line>
-                      <line x1="112" y1="32" x2="128" y2="32"></line>
-                      <line x1="16" y1="48" x2="32" y2="48"></line>
-                      <line x1="32" y1="48" x2="48" y2="48"></line>
-                      <line x1="64" y1="32" x2="64" y2="48"></line>
-                      <line x1="80" y1="32" x2="80" y2="48"></line>
-                      <line x1="96" y1="32" x2="96" y2="48"></line>
-                      <line x1="96" y1="48" x2="112" y2="48"></line>
-                      <line x1="128" y1="48" x2="144" y2="48"></line>
-                      <line x1="144" y1="48" x2="160" y2="48"></line>
-                      <line x1="16" y1="48" x2="16" y2="64"></line>
-                      <line x1="32" y1="64" x2="48" y2="64"></line>
-                      <line x1="80" y1="48" x2="80" y2="64"></line>
-                      <line x1="80" y1="64" x2="96" y2="64"></line>
-                      <line x1="112" y1="48" x2="112" y2="64"></line>
-                      <line x1="112" y1="64" x2="128" y2="64"></line>
-                      <line x1="16" y1="64" x2="16" y2="80"></line>
-                      <line x1="32" y1="64" x2="32" y2="80"></line>
-                      <line x1="64" y1="64" x2="64" y2="80"></line>
-                      <line x1="64" y1="80" x2="80" y2="80"></line>
-                      <line x1="96" y1="64" x2="96" y2="80"></line>
-                      <line x1="80" y1="80" x2="96" y2="80"></line>
-                      <line x1="112" y1="64" x2="112" y2="80"></line>
-                      <line x1="144" y1="64" x2="144" y2="80"></line>
-                      <line x1="48" y1="80" x2="48" y2="96"></line>
-                      <line x1="112" y1="80" x2="112" y2="96"></line>
-                      <line x1="128" y1="80" x2="128" y2="96"></line>
-                    </g>
-                    <g transform="translate(120 88)" class="_pickup_f62b00">
-                      <title>Burst</title>
-                      <path d="M0-4 4 0 0 4-4 0Z" class="_crate_f62b00"></path>
-                      <path
-                        d="M-2 0H2M-1.5-1.5 1.5 1.5M-1.5 1.5 1.5-1.5"
-                        class="_mark_f62b00"
-                      ></path>
-                    </g>
-                    <g transform="translate(152 88)" class="_pickup_f62b00">
-                      <title>Beam</title>
-                      <path d="M0-4 4 0 0 4-4 0Z" class="_crate_f62b00"></path>
-                      <path d="M-2 1 0-1H2M0-1 0 1" class="_mark_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(78.479965 10.156781) rotate(172.95935633503586)"
-                      class="_projectile_f62b00"
-                      style="color: var(--pb-player-1)"
-                    >
-                      <title>Seeker</title>
-                      <path d="M-1.6-0.8 1.5 0-1.6 0.8Z" class="_shell_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(119.146047 2.324996) rotate(-154.29757165840076)"
-                      class="_projectile_f62b00"
-                      style="color: var(--pb-player-1)"
-                    >
-                      <title>Shell</title>
-                      <circle r="0.85" class="_shell_f62b00"></circle>
-                    </g>
-                    <g
-                      transform="translate(32.765827 32.388628) rotate(-100.79248034319487)"
-                      class="_projectile_f62b00"
-                      style="color: var(--pb-player-6)"
-                    >
-                      <title>Shell</title>
-                      <circle r="0.85" class="_shell_f62b00"></circle>
-                    </g>
-                    <g
-                      transform="translate(51.362269 74.447277) rotate(-85.15073261312797)"
-                      class="_projectile_f62b00"
-                      style="color: var(--pb-player-6)"
-                    >
-                      <title>Shell</title>
-                      <circle r="0.85" class="_shell_f62b00"></circle>
-                    </g>
-                    <g
-                      transform="translate(51.026812 47.014194) rotate(-100.59355009991158)"
-                      class="_projectile_f62b00"
-                      style="color: var(--pb-player-4)"
-                    >
-                      <title>Shell</title>
-                      <circle r="0.85" class="_shell_f62b00"></circle>
-                    </g>
-                    <g
-                      transform="translate(109.987957 9.824549) rotate(-35.15667042481743)"
-                      class="_projectile_f62b00"
-                      style="color: var(--pb-player-1)"
-                    >
-                      <title>Shell</title>
-                      <circle r="0.85" class="_shell_f62b00"></circle>
-                    </g>
-                    <g
-                      transform="translate(109.995149 28.976452) rotate(-150.3730025152026)"
-                      class="_tank_f62b00"
-                      data-out="true"
-                      style="color: var(--pb-player-1)"
-                    >
-                      <title>Tank 1: Ana</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(37.565476 73.091895) rotate(18.111654270321427)"
-                      class="_tank_f62b00"
-                      data-out="true"
-                      style="color: var(--pb-player-2)"
-                    >
-                      <title>Tank 2: Ben</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(67.066511 11.566396) rotate(4.04485285050556)"
-                      class="_tank_f62b00"
-                      style="color: var(--pb-player-3)"
-                    >
-                      <title>Tank 3: Cy</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <rect
-                        x="1"
-                        y="-0.55"
-                        width="5.1"
-                        height="1.1"
-                        rx="0.3"
-                        class="_barrel_f62b00"
-                      ></rect>
-                      <path d="M7.5 0 5.8-1.2V1.2Z" class="_heading_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(51.039523 11.462519) rotate(82.24877904038382)"
-                      class="_tank_f62b00"
-                      data-out="true"
-                      style="color: var(--pb-player-4)"
-                    >
-                      <title>Tank 4: Dee</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(149.565476 22.908105) rotate(-168.84292729481933)"
-                      class="_tank_f62b00"
-                      data-out="true"
-                      style="color: var(--pb-player-5)"
-                    >
-                      <title>Tank 5: Eli</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(57.266447 38.873657) rotate(-103.9304187406064)"
-                      class="_tank_f62b00"
-                      data-out="true"
-                      style="color: var(--pb-player-6)"
-                    >
-                      <title>Tank 6: Fay</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(55.945296 58.193395) rotate(-22.61418580757749)"
-                      class="_tank_f62b00"
-                      data-out="true"
-                      style="color: var(--pb-player-7)"
-                    >
-                      <title>Tank 7: Gus</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                    </g>
-                    <g
-                      transform="translate(141.005307 25.017331) rotate(-6.147149592399576)"
-                      class="_tank_f62b00"
-                      data-out="true"
-                      style="color: var(--pb-player-8)"
-                    >
-                      <title>Tank 8: Hal</title>
-                      <rect
-                        x="-3.7"
-                        y="-3.4"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.7"
-                        y="2.2"
-                        width="7.4"
-                        height="1.2"
-                        rx="0.3"
-                        class="_track_f62b00"
-                      ></rect>
-                      <rect
-                        x="-3.1"
-                        y="-2.4"
-                        width="6.2"
-                        height="4.8"
-                        rx="1.1"
-                        class="_chassis_f62b00"
-                      ></rect>
-                      <path d="M-3-3 3 3M3-3-3 3" class="_wreck_f62b00"></path>
-                    </g></svg
-                  ><span
-                    class="_number_f62b00"
-                    data-out="true"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        68.746968125%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        30.18380416666667%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-1);
-                    "
-                    >1</span
-                  ><span
-                    class="_number_f62b00"
-                    data-out="true"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        23.478422499999997%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        76.137390625%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-2);
-                    "
-                    >2</span
-                  ><span
-                    class="_number_f62b00"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        41.916569375%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        12.048329166666665%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-3);
-                    "
-                    >3</span
-                  ><span
-                    class="_number_f62b00"
-                    data-out="true"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        31.899701875%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        11.940123958333333%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-4);
-                    "
-                    >4</span
-                  ><span
-                    class="_number_f62b00"
-                    data-out="true"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        93.4784225%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        23.862609374999998%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-5);
-                    "
-                    >5</span
-                  ><span
-                    class="_number_f62b00"
-                    data-out="true"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        35.791529374999996%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        40.49339270833334%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-6);
-                    "
-                    >6</span
-                  ><span
-                    class="_number_f62b00"
-                    data-out="true"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        34.96581%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        60.61811979166667%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-7);
-                    "
-                    >7</span
-                  ><span
-                    class="_number_f62b00"
-                    data-out="true"
-                    aria-hidden="true"
-                    style="
-                      left: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        88.128316875%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      top: clamp(
-                        calc(var(--pb-font-body) * 0.7),
-                        26.059719791666662%,
-                        calc(100% - var(--pb-font-body) * 0.7)
-                      );
-                      --tank-color: var(--pb-player-8);
-                    "
-                    >8</span
-                  >
-                </div>
-              </div>
-              <p class="_line_06ce35">Last tank wins one point</p>
-              <p class="_legend_06ce35">✦ Burst<span>━ Beam</span><span>◈ Seeker</span></p>
-            </div>
-            <aside class="_rail_06ce35">
-              <h2 class="_headline_06ce35">Round 5 complete</h2>
-              <p class="_alive_06ce35">Round wins</p>
-              <ol class="_rows_866f43" aria-label="Standings" data-ranked="true">
-                <li style="--tank-color: var(--pb-player-3)" data-winner="true">
-                  <span class="_badge_866f43" aria-label="Tank 3">3</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Cy</b></span
-                  ><span class="_score_866f43"
-                    ><span class="_rank_866f43">#1</span><b>2</b
-                    ><span class="_gain_866f43">+1</span></span
-                  >
-                </li>
-                <li style="--tank-color: var(--pb-player-4)">
-                  <span class="_badge_866f43" aria-label="Tank 4">4</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Dee</b></span
-                  ><span class="_score_866f43"><span class="_rank_866f43">#1</span><b>2</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-2)">
-                  <span class="_badge_866f43" aria-label="Tank 2">2</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Ben</b></span
-                  ><span class="_score_866f43"><span class="_rank_866f43">#3</span><b>1</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-1)">
-                  <span class="_badge_866f43" aria-label="Tank 1">1</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Ana</b></span
-                  ><span class="_score_866f43"><span class="_rank_866f43">#4</span><b>0</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-5)">
-                  <span class="_badge_866f43" aria-label="Tank 5">5</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Eli</b></span
-                  ><span class="_score_866f43"><span class="_rank_866f43">#4</span><b>0</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-6)">
-                  <span class="_badge_866f43" aria-label="Tank 6">6</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Fay</b></span
-                  ><span class="_score_866f43"><span class="_rank_866f43">#4</span><b>0</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-7)">
-                  <span class="_badge_866f43" aria-label="Tank 7">7</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Gus</b></span
-                  ><span class="_score_866f43"><span class="_rank_866f43">#4</span><b>0</b></span>
-                </li>
-                <li style="--tank-color: var(--pb-player-8)">
-                  <span class="_badge_866f43" aria-label="Tank 8">8</span
-                  ><span class="_identity_866f43"><b class="_name_866f43">Hal</b></span
-                  ><span class="_score_866f43"><span class="_rank_866f43">#4</span><b>0</b></span>
-                </li>
-              </ol>
-              <p class="_next_06ce35">Final standings in 28s</p>
-            </aside>
+          <div class="_result_c42a52">
+            <h2>Round 5</h2>
+            <p class="_winner_c42a52">Cy wins</p>
+            <b class="_gain_c42a52">+1</b>
+            <p>2 total wins</p>
+            <div class="_next_c42a52"><span>Results</span><b role="timer">9s</b></div>
           </div>
         </div>
       </main>

@@ -21,6 +21,19 @@
   gap: var(--pb-space-3);
   min-width: 0;
 }
+.interlude {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-4);
+  container-type: size;
+}
+.readyArena {
+  position: relative;
+  width: min(100%, calc((100cqh - var(--pb-font-display) * 1.6) * 5 / 3));
+}
 .arena {
   position: relative;
   width: min(100%, calc((100cqh - var(--pb-font-body) * 4) * 5 / 3));
