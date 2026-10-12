@@ -10,9 +10,15 @@ import '../../design/tokens.css';
 const scene =
   scenes.find((entry) => entry.id === new URLSearchParams(location.search).get('scene')) ??
   scenes[0]!;
-const players = ['Ana', 'Ben', 'Cy'].map((name, index) => ({
-  id: `p${index + 1}`,
-  name,
+const names: Record<string, string> = {
+  p1: 'Ana',
+  p2: 'Ben',
+  p3: 'Cy',
+  ...('names' in scene ? scene.names : {}),
+};
+const players = ['p1', 'p2', 'p3'].map((id) => ({
+  id,
+  name: names[id] ?? id,
   avatarId: 'fox',
   connected: true,
   status: 'active' as const,

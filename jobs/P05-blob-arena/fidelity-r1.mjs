@@ -31,6 +31,8 @@ const source = () => ({
     'jobs/P05-blob-arena/fidelity-reference.mjs',
     'jobs/P05-blob-arena/fidelity-r1.mjs',
     'jobs/P05-blob-arena/fidelity-cdp.mjs',
+    'jobs/P05-blob-arena/provenance.mjs',
+    'design/tokens.css',
   ]),
   ...dependencySources(),
 });
@@ -44,7 +46,7 @@ const report = {
   originalSha,
   sources: before,
   method:
-    'Authored matched states in the archived May1 original canvas renderer and the actual shipped Arena; settled camera. Not a live original match or a current2026 renderer claim.',
+    'Authored matched states in the archived May1 original canvas renderer and the actual shipped Arena; actual rendered settled camera and50/100/150ms movement/growth. Not a live original match or a current2026 renderer claim.',
   network:
     'Original normal bootstrap and parser run through a fake WebSocket; CSP connect-src none; no original assets/fonts/skins loaded.',
   scope:
@@ -182,6 +184,8 @@ try {
     throw new Error('Matched scene readiness timed out');
   };
   for (const scene of scenes) {
+    report.stage = `original-${scene.id}`;
+    console.log(JSON.stringify({ stage: report.stage }));
     await send('Emulation.setDeviceMetricsOverride', {
       width: scene.width,
       height: scene.height,
@@ -198,9 +202,11 @@ try {
       join(fidelity, `original-${scene.id}.png`),
       Buffer.from(originalPng.data, 'base64'),
     );
+    report.stage = `ours-${scene.id}`;
+    console.log(JSON.stringify({ stage: report.stage }));
     await navigate(`http://127.0.0.1:${port}/jobs/P05-blob-arena/fidelity.html?scene=${scene.id}`);
     const ours = await evaluate(
-      `(()=>{const svg=document.querySelector('[data-camera="personal"]');const r=svg?.getBoundingClientRect();const name=svg.querySelector('[data-name-inside]');return {center:svg?.dataset.cameraCenter,zoom:Number(svg?.dataset.cameraZoom),viewBox:svg?.getAttribute('viewBox'),width:r?.width,height:r?.height,names:[...svg.querySelectorAll('[data-name-inside]')].map(n=>n.textContent),font:name?getComputedStyle(name).fontFamily:null};})()`,
+      `(()=>{const svg=document.querySelector('[data-camera="personal"]');const r=svg.getBoundingClientRect();const world=svg.querySelector('[data-world-layer]');const m=new DOMMatrix(getComputedStyle(world).transform);const name=svg.querySelector('[data-name-inside]');return {center:[(r.width/2-m.e)/m.a,(r.height/2-m.f)/m.d].join(' '),zoom:m.a,targetCenter:svg.dataset.cameraCenter,targetZoom:Number(svg.dataset.cameraZoom),matrix:{a:m.a,e:m.e,f:m.f},viewBox:svg.getAttribute('viewBox'),width:r.width,height:r.height,names:[...svg.querySelectorAll('[data-name-inside]')].map(n=>n.textContent),font:name?getComputedStyle(name).fontFamily:null};})()`,
     );
     const oursPng = await send('Page.captureScreenshot', {
       format: 'png',
@@ -227,14 +233,32 @@ try {
   }
   // One received movement/growth update, sampled through both actual renderers.
   const motionScene = scenes[0];
+  report.stage = 'motion-original';
+  console.log(JSON.stringify({ stage: report.stage }));
   const nextCells = motionScene.cells.map((cell) =>
     cell.owner === 'p1' ? { ...cell, x: cell.x + 4, mass: cell.mass * 4 } : cell,
   );
   await navigate(`http://localhost:${port}/__r1_original?scene=${motionScene.id}`);
   await evaluate(`window.__referenceMove(${JSON.stringify(nextCells)})`);
   const referenceMotion = [];
-  for (let frame = 0; frame < 3; frame++)
-    referenceMotion.push(await evaluate('window.__referenceFrames(3)'));
+  const sampleTimes = [50, 100, 150, 300, 600];
+  let previousFrame = 0;
+  for (const ms of sampleTimes) {
+    const frame = Math.round((ms / 1000) * 60);
+    const reference = await evaluate(`window.__referenceFrames(${frame - previousFrame})`);
+    const png = await send('Page.captureScreenshot', {
+      format: 'png',
+      captureBeyondViewport: false,
+    });
+    await writeFile(
+      join(fidelity, `original-motion-${String(ms).padStart(3, '0')}.png`),
+      Buffer.from(png.data, 'base64'),
+    );
+    referenceMotion.push({ ...reference, pngSha256: digest(Buffer.from(png.data, 'base64')) });
+    previousFrame = frame;
+  }
+  report.stage = 'motion-ours';
+  console.log(JSON.stringify({ stage: report.stage }));
   await navigate(
     `http://127.0.0.1:${port}/jobs/P05-blob-arena/fidelity.html?scene=${motionScene.id}`,
   );
@@ -243,19 +267,56 @@ try {
   );
   report.motion = [];
   for (const [index, reference] of referenceMotion.entries()) {
-    const ms = (index + 1) * 50;
+    const ms = sampleTimes[index];
     const ours = await evaluate(
-      `(()=>{document.getAnimations().forEach(a=>{a.pause();a.currentTime=${ms};});const svg=document.querySelector('[data-camera="personal"]');const world=svg.querySelector('[data-world-layer]');const m=new DOMMatrix(getComputedStyle(world).transform);const box=svg.getBoundingClientRect();return{x:(box.width/2-m.e)/m.a,y:(box.height/2-m.f)/m.d,zoom:m.a,animations:document.getAnimations().length,matrix:{a:m.a,e:m.e,f:m.f}};})()`,
+      `(()=>{document.getAnimations().forEach(a=>{a.pause();a.currentTime=${ms};});const svg=document.querySelector('[data-camera="personal"]');const world=svg.querySelector('[data-world-layer]');const m=new DOMMatrix(getComputedStyle(world).transform);const box=svg.getBoundingClientRect();const poses=[...svg.querySelectorAll('[data-mine="true"][data-cell-id]')].map(g=>{const b=g.querySelector('[data-cell-body]');const n=g.querySelector('[data-name-inside]');const p=new DOMMatrix(getComputedStyle(g).transform);return{id:Number(g.dataset.cellId),name:n.textContent,x:p.e,y:p.f,radius:parseFloat(getComputedStyle(b).r),fontSize:parseFloat(getComputedStyle(n).fontSize),font:getComputedStyle(n).fontFamily};});return{x:(box.width/2-m.e)/m.a,y:(box.height/2-m.f)/m.d,zoom:m.a,poses,animations:document.getAnimations().length,matrix:{a:m.a,e:m.e,f:m.f}};})()`,
     );
     const centerErrorPx = Math.hypot(ours.x - reference.x, ours.y - reference.y) * reference.zoom;
     const zoomError = Math.abs(ours.zoom - reference.zoom);
+    const png = await send('Page.captureScreenshot', {
+      format: 'png',
+      captureBeyondViewport: false,
+    });
+    await writeFile(
+      join(fidelity, `ours-motion-${String(ms).padStart(3, '0')}.png`),
+      Buffer.from(png.data, 'base64'),
+    );
+    const bodies = ours.poses.map((pose) => {
+      const original = reference.ownedBodies.find((body) => body.name === pose.name);
+      if (!original) throw new Error(`Original owned body trace missing for ${pose.name}`);
+      const centerErrorPx =
+        Math.hypot(pose.x - original.labelCenter.x, pose.y - original.labelCenter.y) *
+        reference.zoom;
+      const radiusErrorPx = Math.abs(pose.radius - original.radius) * reference.zoom;
+      const originalFontPx = Number.parseFloat(original.nameFont);
+      const fontErrorPx =
+        Math.abs(pose.fontSize * (10 / 0.55) - originalFontPx) * reference.worldMatrix.a;
+      return {
+        ours: pose,
+        original,
+        centerErrorPx,
+        radiusErrorPx,
+        fontErrorPx,
+        matched: centerErrorPx < 1 && radiusErrorPx < 2 && fontErrorPx < 1,
+      };
+    });
+    // One-pixel label rounding and up-to-two-pixel original edge wobble are observed
+    // canvas raster geometry, not permission for a body to jump to its final target.
+    const bodiesPassed =
+      bodies.length === reference.ownPieces &&
+      reference.ownedBodies.length === reference.ownPieces &&
+      bodies.length > 0 &&
+      bodies.every((body) => body.matched);
     report.motion.push({
       ms,
       reference,
       ours,
       centerErrorPx,
       zoomError,
-      matched: centerErrorPx < 1 && zoomError < 0.01,
+      oursPngSha256: digest(Buffer.from(png.data, 'base64')),
+      bodies,
+      bodiesPassed,
+      matched: centerErrorPx < 1 && zoomError < 0.01 && bodiesPassed,
     });
     console.log(JSON.stringify({ stage: 'camera-motion', ms, centerErrorPx, zoomError }));
   }

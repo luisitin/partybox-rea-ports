@@ -32,5 +32,28 @@
       { "id": 2, "owner": "p2", "x": 112, "y": 70, "mass": 60 },
       { "id": 3, "owner": "p3", "x": 65, "y": 67, "mass": 32 }
     ]
+  },
+  {
+    "id": "edge",
+    "description": "owned cell near the top-left map edge; original viewport grid continues beyond map bounds",
+    "width": 390,
+    "height": 500,
+    "cells": [
+      { "id": 1, "owner": "p1", "x": 4, "y": 5, "mass": 24 },
+      { "id": 2, "owner": "p2", "x": 16, "y": 7, "mass": 60 },
+      { "id": 3, "owner": "p3", "x": 13, "y": 24, "mass": 32 }
+    ]
+  },
+  {
+    "id": "long-name",
+    "description": "a legal16-character wide name remains full and centered on its original-sized cell",
+    "width": 390,
+    "height": 500,
+    "names": { "p1": "WWWWWWWWWWWWWWWW" },
+    "cells": [
+      { "id": 1, "owner": "p1", "x": 80, "y": 50, "mass": 24 },
+      { "id": 2, "owner": "p2", "x": 96, "y": 54, "mass": 60 },
+      { "id": 3, "owner": "p3", "x": 64, "y": 62, "mass": 32 }
+    ]
   }
 ]

@@ -68,15 +68,28 @@ function installEnvironment() {
   };
 
   let worldMatrix = null;
+  let renderedBodies = [];
+  const cachedNames = new WeakMap();
   const getContext = HTMLCanvasElement.prototype.getContext;
   HTMLCanvasElement.prototype.getContext = function (...args) {
     const context = Reflect.apply(getContext, this, args);
-    if (this.id !== 'canvas' || args[0] !== '2d' || !context || context.__referenceObserved)
-      return context;
+    if (args[0] !== '2d' || !context || context.__referenceObserved) return context;
     context.__referenceObserved = true;
+    if (this.id !== 'canvas') {
+      // The original caches each name on its own canvas. Associate that public canvas with
+      // its actual forwarded text, rather than accessing the client's private cell array.
+      const image = this;
+      const fillText = context.fillText;
+      context.fillText = function (text, ...values) {
+        const result = Reflect.apply(fillText, this, [text, ...values]);
+        cachedNames.set(image, { text: String(text), font: this.font });
+        return result;
+      };
+      return context;
+    }
     // Observe the ORIGINAL renderer's transform after forwarding every operation unchanged.
     // Its last translate/scale in each frame is the cell-world transform, before save/restore
-    // returns the canvas to identity. Cached name/leaderboard canvases are deliberately ignored.
+    // returns the canvas to identity. Cached name canvases never contribute a camera matrix.
     for (const operation of ['translate', 'scale']) {
       const original = context[operation];
       context[operation] = function (...values) {
@@ -93,11 +106,65 @@ function installEnvironment() {
         return result;
       };
     }
+    let points = [];
+    let closed = false;
+    let filledBody = null;
+    const forward = (operation, observe) => {
+      const original = context[operation];
+      context[operation] = function (...values) {
+        const result = Reflect.apply(original, this, values);
+        observe(values);
+        return result;
+      };
+    };
+    forward('clearRect', () => {
+      renderedBodies = [];
+      points = [];
+      closed = false;
+      filledBody = null;
+    });
+    forward('beginPath', () => {
+      points = [];
+      closed = false;
+    });
+    for (const operation of ['moveTo', 'lineTo'])
+      forward(operation, ([x, y]) => points.push({ x, y }));
+    forward('closePath', () => {
+      closed = true;
+    });
+    forward('fill', () => {
+      if (!closed || points.length < 4) return;
+      const xs = points.map((point) => point.x);
+      const ys = points.map((point) => point.y);
+      filledBody = {
+        bounds: {
+          left: Math.min(...xs),
+          top: Math.min(...ys),
+          right: Math.max(...xs),
+          bottom: Math.max(...ys),
+        },
+        vertexCount: points.length - 1,
+      };
+    });
+    forward('drawImage', ([image, x, y]) => {
+      const cachedName = cachedNames.get(image);
+      if (!cachedName?.text || !filledBody) return;
+      // A body's original polygon is filled immediately before its cached name is drawn.
+      // These are observed path bounds (excluding stroke), not a reconstructed radius formula.
+      renderedBodies.push({
+        name: cachedName.text,
+        nameFont: cachedName.font,
+        ...filledBody,
+        labelCenter: { x: x + image.width / 2, y: y + image.height / 2 },
+      });
+      filledBody = null;
+    });
     return context;
   };
   window.__referenceEnvironment = {
     sockets,
     worldMatrix: () => worldMatrix,
+    renderedBodies: () => renderedBodies,
     frame() {
       clock += 1000 / 60;
       const callbacks = [...frames.values()];
@@ -144,6 +211,13 @@ function replayScene(scene) {
   }
 
   const names = { p1: 'Ana', p2: 'Ben', p3: 'Cy', ...scene.names };
+  const ownerNames = new Set(owned.map((cell) => cell.name ?? names[cell.owner] ?? cell.owner));
+  if (
+    scene.cells.some(
+      (cell) => cell.owner !== 'p1' && ownerNames.has(cell.name ?? names[cell.owner] ?? cell.owner),
+    )
+  )
+    throw new Error('Original owned-body tracing requires distinct rival and owned names');
   let currentCells = scene.cells.map((cell) => ({ ...cell }));
   const food = Array.from({ length: 96 }, (_, index) => ({
     id: index + 101,
@@ -227,6 +301,31 @@ function replayScene(scene) {
       worldMatrix: matrix,
       motionFrames,
       motionElapsedMs: motionAt === null ? null : Date.now() - motionAt,
+      ownedBodies: environment
+        .renderedBodies()
+        .filter((body) => ownerNames.has(body.name))
+        .map((body) => {
+          const { left, top, right, bottom } = body.bounds;
+          return {
+            name: body.name,
+            nameFont: body.nameFont,
+            x: (left + right) / 2 / units,
+            y: (top + bottom) / 2 / units,
+            radius: (right - left + bottom - top) / 4 / units,
+            bounds: {
+              left: left / units,
+              top: top / units,
+              right: right / units,
+              bottom: bottom / units,
+            },
+            labelCenter: {
+              x: body.labelCenter.x / units,
+              y: body.labelCenter.y / units,
+            },
+            vertexCount: body.vertexCount,
+            geometrySource: 'forwarded original filled polygon bounds, excluding stroke',
+          };
+        }),
     };
     return window.__originalMetrics;
   };
@@ -278,6 +377,10 @@ export function referenceMetadata(originalBytes, quadBytes) {
     originalSourceUnmodified: true,
     originalBootstrap: 'normal load handler, public connect, original binary message parser',
     cameraSource: 'forwarded original canvas translate/scale world matrix',
+    ownedBodySource:
+      'forwarded original filled polygon bounds associated with cached-name fillText/drawImage; no private model reads',
+    ownedBodyRadius: 'mean of observed horizontal/vertical path half-extents, excluding stroke',
+    nameFontSource: 'actual cached-name canvas font at forwarded fillText',
     countSource: 'fixture binary packets; original private model remains unexposed',
     settleFrames: 240,
     fixedReferenceRandomSeed: 17,

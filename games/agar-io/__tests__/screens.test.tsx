@@ -337,7 +337,11 @@ describe('stable identity and results', () => {
     }
     expect(html).not.toContain('<name>');
     expect(html).toContain('&lt;name&gt; &amp; friends');
-    expect(html).toContain('…s</text>');
+    expect(
+      [...html.matchAll(/<text[^>]*data-name-owner="p1"[^>]*>([^<]*)<\/text>/g)].map(
+        (match) => match[1],
+      ),
+    ).toEqual(['A very long &lt;name&gt; &amp; friends', 'A very long &lt;name&gt; &amp; friends']);
     expect(html).not.toContain('data-cell-label-backplate=');
     expect(html).not.toContain('data-name-leader=');
   });

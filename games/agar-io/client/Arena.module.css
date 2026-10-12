@@ -10,6 +10,9 @@
   stroke: var(--pb-text-muted);
   stroke-width: 0.2;
 }
+.background {
+  fill: var(--pb-bg);
+}
 .grid {
   fill: none;
   stroke: var(--pb-surface-2);
@@ -17,11 +20,20 @@
 }
 .snack {
   fill: var(--blob-colour);
+  stroke: var(--blob-colour);
+  stroke-width: 0.55;
+  stroke-linejoin: round;
 }
 .body {
   fill: var(--blob-colour);
   stroke: color-mix(in srgb, var(--blob-colour) 75%, var(--pb-bg));
   stroke-width: 0.55;
+}
+.logicalRadius {
+  fill: none;
+  stroke: none;
+  visibility: hidden;
+  pointer-events: none;
 }
 .shield {
   fill: none;
@@ -32,7 +44,7 @@
 .name {
   text-anchor: middle;
   dominant-baseline: central;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Ubuntu, serif;
   font-weight: 400;
   fill: var(--pb-text);
   stroke: var(--pb-bg);
@@ -41,18 +53,13 @@
   paint-order: stroke fill;
 }
 /* Classic received poses use 120ms smoothstep: x(t)=t, y(t)=3t²−2t³.
-   The camera uses this CSS approximation instead of the archive's per-frame
-   feedback smoothing; its settled target is the same. No per-frame client JS. */
-.world,
+   World camera filtering is a bounded native transform animation, authored once
+   per received snapshot; no per-frame JavaScript or extrapolated game physics. */
+.world {
+  transform-origin: 0 0;
+}
 .pose {
   transform-origin: 0 0;
-  transition: transform calc(var(--pb-motion-fast) * 0.8)
-    cubic-bezier(0.3333333333, 0, 0.6666666667, 1);
-}
-
-.body,
-.shield {
-  transition: r calc(var(--pb-motion-fast) * 0.8) cubic-bezier(0.3333333333, 0, 0.6666666667, 1);
 }
 .arena[data-frozen='true'] .world,
 .arena[data-frozen='true'] .pose,

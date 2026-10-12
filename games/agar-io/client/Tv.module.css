@@ -10,6 +10,7 @@
   flex: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) * 8);
+  grid-template-rows: minmax(0, 1fr);
   gap: var(--pb-space-5);
   align-items: center;
   min-height: 0;
@@ -27,9 +28,11 @@
 }
 
 .side {
+  --blob-tv-body: calc(var(--pb-font-body) - var(--pb-space-1));
   display: grid;
-  gap: var(--pb-space-3);
-  align-content: center;
+  gap: var(--pb-space-2);
+  align-content: safe center;
+  align-self: stretch;
   min-width: 0;
   min-height: 0;
 }
@@ -48,7 +51,7 @@
 .headline {
   margin: 0;
   font-size: var(--pb-font-h2);
-  line-height: 1.1;
+  line-height: 1.2;
   font-weight: 900;
 }
 
@@ -57,7 +60,7 @@
   flex: none;
   margin: 0;
   font-size: var(--pb-font-h2);
-  line-height: 1.1;
+  line-height: 1.2;
   font-weight: 900;
   text-align: center;
 }
@@ -74,14 +77,15 @@
 }
 
 .clockLabel {
-  font-size: var(--pb-font-body);
+  font-size: var(--blob-tv-body);
+  line-height: 1.25;
   font-weight: 800;
   color: var(--pb-text-muted);
 }
 
 .clockValue {
   font-size: calc(var(--pb-font-display) * 0.75);
-  line-height: 1;
+  line-height: 1.2;
   font-weight: 900;
   font-variant-numeric: tabular-nums;
 }
@@ -96,14 +100,15 @@
   grid-template-columns: minmax(0, 1fr) 6ch 6ch;
   align-items: center;
   gap: var(--pb-space-2);
-  font-size: var(--pb-font-body);
+  font-size: var(--blob-tv-body);
+  line-height: 1.25;
   font-variant-numeric: tabular-nums;
 }
 
 .legend {
   color: var(--pb-text-muted);
   font-weight: 800;
-  padding: var(--pb-space-2);
+  padding: var(--pb-space-1) var(--pb-space-2);
 }
 
 .legend span:not(:first-child) {
@@ -113,14 +118,14 @@
 
 .rows {
   display: grid;
-  gap: var(--pb-space-2);
+  gap: var(--pb-space-1);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .rows li {
-  min-height: calc(var(--pb-space-8) - var(--pb-space-2));
+  min-height: var(--pb-space-7);
   padding: var(--pb-space-1) var(--pb-space-2);
   box-sizing: border-box;
   border-radius: var(--pb-radius);
@@ -137,18 +142,20 @@
 .badge {
   display: grid;
   place-items: center;
-  width: var(--pb-space-7);
-  height: var(--pb-space-7);
+  width: calc(var(--pb-space-7) - var(--pb-space-2));
+  height: calc(var(--pb-space-7) - var(--pb-space-2));
   flex: none;
   border-radius: 50%;
   color: var(--pb-on-accent-2-fill);
   background: var(--blob-colour);
-  font-size: var(--pb-font-body);
+  font-size: var(--blob-tv-body);
   line-height: 1;
   font-weight: 900;
 }
 
 .name {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -169,11 +176,13 @@
 
 .hint {
   margin: 0;
-  font-size: var(--pb-font-body);
-  line-height: 1.2;
+  font-size: var(--blob-tv-body);
+  line-height: 1.25;
   color: var(--pb-text-muted);
 }
 
 .offline {
+  flex: none;
+  white-space: nowrap;
   color: var(--pb-text-muted);
 }
