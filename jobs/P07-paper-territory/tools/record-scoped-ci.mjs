@@ -26,7 +26,7 @@ const files = clean.match(/Test Files\s+(\d+) passed\s*\((\d+)\)/);
 const duration = clean.match(/Duration\s+([\d.]+)s/);
 if (!tests || tests[1] !== tests[2] || !files || files[1] !== files[2] || !duration)
   throw new Error('Complete passing test summary missing');
-if (!clean.includes('Run pnpm vitest run games/paper-territory --maxWorkers=1'))
+if (!clean.includes('Run pnpm vitest run games/paper-io --maxWorkers=1'))
   throw new Error('CI command is not scoped to P07');
 if (!/property\.test\.ts.*4 tests/.test(clean)) throw new Error('Property checks missing');
 const metrics = {};
@@ -40,7 +40,7 @@ for (const count of ['2', '3', '4', '5', '6', '7', '8']) {
     throw new Error(`Incomplete or over-budget ${count}-player simulation batch`);
 }
 const digest = (source) => createHash('sha256').update(source.replace(/\r\n/g, '\n')).digest('hex');
-const sources = execute('git', ['ls-files', 'games/paper-territory'])
+const sources = execute('git', ['ls-files', 'games/paper-io'])
   .trim()
   .split(/\r?\n/)
   .map((file) => {
@@ -56,7 +56,7 @@ const sources = execute('git', ['ls-files', 'games/paper-territory'])
 const result = {
   recordedAtUtc: new Date().toISOString(),
   ...run,
-  command: 'pnpm vitest run games/paper-territory --maxWorkers=1',
+  command: 'pnpm vitest run games/paper-io --maxWorkers=1',
   files: Number(files[1]),
   tests: Number(tests[1]),
   failed: 0,

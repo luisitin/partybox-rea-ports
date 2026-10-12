@@ -42,7 +42,7 @@ if (process.argv[2] === 'snapshot') {
     JSON.stringify(
       {
         recordedAtUtc: new Date().toISOString(),
-        sources: codeFiles(resolve(repo, 'games/paper-territory')),
+        sources: codeFiles(resolve(repo, 'games/paper-io')),
       },
       null,
       2,

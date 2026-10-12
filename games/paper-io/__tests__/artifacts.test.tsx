@@ -59,7 +59,7 @@ function adjacentFixture(fixture: State, horizontal: boolean): State {
 function pageHtml(body: string, title: string, css: string, tv: boolean): string {
   return `<!doctype html><html lang="en" data-surface="${tv ? 'tv' : 'phone'}"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>${css}
       *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family);font-size:16px}body{display:flex;flex-direction:column}main{display:flex;min-height:0;flex:1}button,input{font-family:inherit}h1,h2,h3,p{line-height:1.25}.shell{height:${tv ? 0 : 80}px;flex:none;padding:var(--pb-space-4);font-size:var(--pb-font-body);color:var(--pb-text-muted)}
-      </style><body>${tv ? '' : '<div class="shell">PB · TERRITORY · Connected</div>'}<main>${body}</main>${tv ? '' : '<div class="shell">Paper Territory · phone shell reserved space</div>'}</body></html>`;
+      </style><body>${tv ? '' : '<div class="shell">PB · TERRITORY · Connected</div>'}<main>${body}</main>${tv ? '' : '<div class="shell">Paper.io 2 · phone shell reserved space</div>'}</body></html>`;
 }
 
 it('renders every phase for TV, player, stage, remote and spectator from a real match', async () => {
@@ -97,7 +97,7 @@ it('renders every phase for TV, player, stage, remote and spectator from a real 
       await Promise.all(
         cssPaths.map(async (path) => {
           const names = (await import(path)).default as Record<string, string>;
-          return readFileSync(resolve('games/paper-territory/__tests__', path), 'utf8')
+          return readFileSync(resolve('games/paper-io/__tests__', path), 'utf8')
             .replace(/\.([a-zA-Z][\w-]*)/g, (match, name: string) =>
               names[name] ? `.${names[name]}` : match,
             )
@@ -109,13 +109,13 @@ it('renders every phase for TV, player, stage, remote and spectator from a real 
   const media = resolve('jobs/P07-paper-territory/media');
   if (build) {
     mkdirSync(media, { recursive: true });
-    mkdirSync(resolve('games/paper-territory/fixtures'), { recursive: true });
+    mkdirSync(resolve('games/paper-io/fixtures'), { recursive: true });
   }
   for (const [phase, fixture] of Object.entries(states)) {
     expect(fixture.phase.id).toBe(phase);
     if (build)
       writeFileSync(
-        resolve(`games/paper-territory/fixtures/${phase}.json`),
+        resolve(`games/paper-io/fixtures/${phase}.json`),
         JSON.stringify(fixture, null, 2) + '\n',
       );
     for (const mode of [
@@ -126,7 +126,14 @@ it('renders every phase for TV, player, stage, remote and spectator from a real 
       'phone-spectator',
       'phone-only-spectator',
       ...(phase === 'play'
-        ? ['phone-out', 'phone-only-out', 'phone-paused', 'phone-only-paused']
+        ? [
+            'phone-out',
+            'phone-only-out',
+            'phone-paused',
+            'phone-only-paused',
+            'phone-left',
+            'phone-only-left',
+          ]
         : []),
     ]) {
       const only = mode.includes('only');
@@ -143,6 +150,8 @@ it('renders every phase for TV, player, stage, remote and spectator from a real 
             : fixture.players,
       };
       if (mode.includes('paused')) staged = kit.vip(staged, 'pause', staged.began + staged.checked);
+      if (mode.endsWith('left'))
+        staged = kit.player(staged, id, false, 'left', staged.began + staged.checked);
       const view = { ...game.controllerView(staged, id), vip: null };
       const now = phase === 'play' ? fixture.began + fixture.checked : fixture.phase.startedAt;
       const body = renderToStaticMarkup(
@@ -163,7 +172,8 @@ it('renders every phase for TV, player, stage, remote and spectator from a real 
         </ServerClockProvider>,
       );
       expect(body).toContain('<h2');
-      if (mode.includes('spectator')) expect(body).not.toContain('<button');
+      if (mode.includes('spectator') || mode.endsWith('left'))
+        expect(body).not.toContain('<button');
       if (only || mode === 'phone-remote') expect(body).not.toContain('on the TV');
       if (!build) continue;
       const tv = mode === 'tv';

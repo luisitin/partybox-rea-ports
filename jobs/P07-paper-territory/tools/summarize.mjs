@@ -62,13 +62,13 @@ if (
 )
   throw new Error('Mutation evidence is incomplete');
 const fastFiles = ['contract', 'world', 'game', 'presence', 'bot'].map(
-  (name) => `games/paper-territory/__tests__/${name}.test.ts`,
+  (name) => `games/paper-io/__tests__/${name}.test.ts`,
 );
 const summary = {
   recordedAtUtc: new Date().toISOString(),
-  scope: 'games/paper-territory only; maxWorkers=1; no browser launched by verification',
+  scope: 'games/paper-io only; maxWorkers=1; no browser launched by verification',
   fullRun: {
-    command: 'PB_RECORD_VERIFY=1 pnpm.cmd vitest run games/paper-territory --maxWorkers=1',
+    command: 'PB_RECORD_VERIFY=1 pnpm.cmd vitest run games/paper-io --maxWorkers=1',
     benchmarkOverride: false,
     passed: Number(fullCounts[2]),
     failed: Number(fullCounts[1]),
@@ -113,7 +113,7 @@ const summary = {
     sourceRestoration: mutations.sourceRestoration,
     evidence: 'mutation-results.json',
   },
-  sourceSnapshotAfterBotFix: serverSources(resolve(repo, 'games/paper-territory/server')),
+  sourceSnapshotAfterBotFix: serverSources(resolve(repo, 'games/paper-io/server')),
 };
 writeFileSync(
   resolve(folder, 'verification-results.json'),

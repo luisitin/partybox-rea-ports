@@ -1,8 +1,8 @@
-# Paper Territory
+# Paper.io 2
 
 ## Overview
 
-An original PartyBox map race inspired by the classic browser territory loop. Two to eight players move continuously across one 40 × 28 map. Tap a direction on your phone, leave your land to draw an exposed trail, and return to any of your land to capture the enclosed cells. Cut a rival's trail to send them home. After two minutes, the most owned tiles wins. Everyone has a numbered, protected 3 × 3 home and returns there three seconds after a crash, so nobody spends the match watching.
+An original PartyBox map race inspired by the classic browser territory loop. Two to eight players move continuously across one 40 × 28 map. Tap a direction on your phone, leave your land to draw an exposed trail, and return to any of your land to capture the enclosed cells. Cut a rival's trail to send them home. After two minutes, the most owned tiles wins. Everyone has a numbered, protected 3 × 3 home and returns there three seconds after a crash, so a crash keeps everyone involved.
 
 ## Players
 
@@ -57,7 +57,7 @@ Bots read the same public ownership, exposed trails and head positions. Easy bot
 
 ## Edge cases
 
-Pause freezes all physics and return timers. Resume moves `began` and `endsAt` by the exact paused duration while world ticks remain relative. No client decides movement or scoring. A temporary disconnect clears that player's trail and land outside home without adding a gameplay crash; their return runs only after reconnect. A permanent leave/kick never respawns, even after repeated connection changes, and stable slot numbers and final results retain their seat. The TV distinguishes disconnected seats, timed returns and permanent departures, and names gameplay crash causes in the existing status rows. Drops during pause cannot move the map. Host/VIP changes are owned by the SDK. No game phase waits for input from a disconnected player; an all-disconnected room still reaches the timed result.
+Pause freezes all physics and return timers. Resume moves `began` and `endsAt` by the exact paused duration while world ticks remain relative. No client decides movement or scoring. A temporary disconnect clears that player's trail and land outside home without adding a gameplay crash; their return runs only after reconnect. A permanent leave/kick never respawns, even after repeated connection changes, and stable slot numbers and final results retain their seat. A departed phone switches to the public map and standings, says it has left and offers no controls or return promise. The TV distinguishes disconnected seats, timed returns and permanent departures, and names gameplay crash causes in the existing status rows. Drops during pause cannot move the map. Host/VIP changes are owned by the SDK. No game phase waits for input from a disconnected player; an all-disconnected room still reaches the timed result.
 
 The state is JSON, bounded by 1,120 ownership cells and unique exposed trail cells per player. Views have no secret gameplay information; public paths, land and scores are intentionally visible to everyone. The server is deterministic and uses only event time; runtime imports are the real SDK. Art is original inline SVG and CSS using PartyBox tokens, numbered markers, dashed trails and reduced-motion support.
 
@@ -71,6 +71,6 @@ No packs. The board has fixed protected homes; bot choices use the match's seede
 
 ## Sources
 
-Read [the job research](../../jobs/P07-paper-territory/RESEARCH.md) and [source register](../../jobs/P07-paper-territory/SOURCES.md) for source-by-source findings. Voodoo's official support and independent browser guides corroborate leave/return/capture/cut. Apple's official mobile version notes say version 4.33 permits self-crossing; older browser guides describe self-trail death. This port deliberately uses the older browser rule. A historical public client was inspected read-only for polygon/cut structure; no code, assets, sounds, names or branding were copied.
+Read [the job research](../../jobs/P07-paper-territory/RESEARCH.md) and [source register](../../jobs/P07-paper-territory/SOURCES.md) for source-by-source findings. Voodoo's official support and independent browser guides corroborate leave/return/capture/cut. Apple's official mobile version notes say version 4.33 permits self-crossing; older browser guides describe self-trail death. This port deliberately uses the older browser rule. A historical public client was inspected read-only for polygon/cut structure; no code, assets, sounds or trademarked artwork were copied. The official name follows the owner's 10-11 naming table; all art remains original.
 
 The grid, protected homes, fixed movement rate, two-minute match, respawns, head collisions and neutral simultaneous claims are authored living-room adaptations, not undocumented claims about the original. All unknowns are recorded in ASSUMPTIONS.md.

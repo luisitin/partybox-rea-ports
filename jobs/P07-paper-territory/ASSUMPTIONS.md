@@ -33,3 +33,6 @@
   plus explicitly marked deterministic bots and one shared full-arena view.
 - Source timing/speed/audio were not measured. Game tuning must be documented as
   authored values in the final README, and simulation measurements in VERIFY.md.
+
+- Main JOBS/RULES owner update 10-11 (pulled at e351af0) requires the official name Paper.io 2 and id `paper-io`. The game folder, manifest, rendered strings, SDK id and active commands follow that update. The existing branch/job-folder slug is retained for PR/claim continuity. Historical verification files retain their tested `paper-territory` paths and hashes.
+- Read-only overlap check on 2026-10-12: `C:/dev/partybox` contains 110 game manifests and 110 generated server-registry ids. No Paper.io, Paper Territory or matching id occurs in games, docs/games or either generated registry. Curve Fever has survival trails rather than territory capture, so P07 remains a new port.

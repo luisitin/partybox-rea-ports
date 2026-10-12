@@ -1,7 +1,7 @@
-# P07 research: Paper Territory
+# P07 research: Paper.io 2
 
 Research date: 2026-10-11. The subject is Paper.io 2's land-capture loop. The
-PartyBox game is **Paper Territory**. Mechanics are studied; code, artwork,
+PartyBox game is **Paper.io 2**. Mechanics are studied; code, artwork,
 branding, sound files, skins and progression content are not copied.
 
 ## Sources and method

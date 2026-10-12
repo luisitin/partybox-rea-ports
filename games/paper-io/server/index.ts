@@ -181,7 +181,10 @@ function controllerView(state: State, playerId: string): PaperTerritoryControlle
   const runner = state.world.runners.find((r) => r.id === playerId);
   const view = matchView(state);
   const stage =
-    state.phoneOnly || !hasPlayer(state, playerId) || state.players[playerId]?.canSeeTv === false;
+    state.phoneOnly ||
+    !hasPlayer(state, playerId) ||
+    state.left.includes(playerId) ||
+    state.players[playerId]?.canSeeTv === false;
   const over = state.phase.id === 'done' && hasPlayer(state, playerId);
   const score = view.scores[playerId] ?? 0;
   return {

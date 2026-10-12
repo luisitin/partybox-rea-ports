@@ -16,7 +16,7 @@ type TvSnapshot = PaperTerritoryTvView & { vip: null };
 
 function snapshot(areas = [30, 20, 20, 19, 18, 17, 16, 15]): TvSnapshot {
   return {
-    gameId: 'paper-territory',
+    gameId: 'paper-io',
     phaseId: 'play',
     phaseAt: NOW - 2000,
     deadline: NOW + 118_000,
@@ -137,6 +137,23 @@ describe('TV departure feedback', () => {
       const html = tv({ ...game.tvView(state), vip: null });
       expect(html).toContain(gone ? '>Left</span>' : '>Disconnected</span>');
       expect(html).not.toContain('>Returning</span>');
+      if (gone) {
+        for (const only of [false, true]) {
+          const controller = { ...game.controllerView(state, 'p1'), vip: null };
+          const leftPhone = renderToStaticMarkup(
+            <PhoneOnlyProvider value={only}>
+              <Controller view={controller} me={state.players['p1']!} send={() => undefined} />
+            </PhoneOnlyProvider>,
+          );
+          expect(leftPhone).toContain('You left the race');
+          expect(leftPhone).toContain('Watching now — this seat will not return');
+          expect(leftPhone).toContain('role="img"');
+          expect(leftPhone).toContain('Live standings');
+          expect(leftPhone).not.toContain('<button');
+          expect(leftPhone).not.toContain('Back home soon');
+          expect(leftPhone).not.toContain('waiting to return home');
+        }
+      }
       if (!gone) {
         state = game.reduce(state, {
           type: 'player',

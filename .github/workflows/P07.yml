@@ -1,8 +1,8 @@
-name: P07 Paper Territory
+name: P07 Paper.io 2
 on:
   pull_request:
     paths:
-      - 'games/paper-territory/**'
+      - 'games/paper-io/**'
       - 'jobs/P07-paper-territory/**'
       - '.github/workflows/P07.yml'
 permissions:
@@ -23,4 +23,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm format
-      - run: pnpm vitest run games/paper-territory --maxWorkers=1
+      - run: pnpm vitest run games/paper-io --maxWorkers=1

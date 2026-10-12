@@ -4,9 +4,9 @@ import { listGameIds, shardIds } from '../../../packages/game-sdk/src/contract-t
 // game's targeted test command must never simulate another runner's game.
 const ids = listGameIds();
 const shard = ids.findIndex((_, index) =>
-  shardIds(ids, `${index + 1}/${ids.length}`).includes('paper-territory'),
+  shardIds(ids, `${index + 1}/${ids.length}`).includes('paper-io'),
 );
-if (shard < 0) throw new Error('Paper Territory was not discovered by the SDK contract loader');
+if (shard < 0) throw new Error('Paper.io 2 was not discovered by the SDK contract loader');
 const previous = process.env['PB_CONTRACT_SHARD'];
 process.env['PB_CONTRACT_SHARD'] = `${shard + 1}/${ids.length}`;
 try {

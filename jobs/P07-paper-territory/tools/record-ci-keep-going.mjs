@@ -16,9 +16,7 @@ const clean = raw.replace(/\x1b\[[0-9;]*m/g, '').replace(/\^\[\[[0-9;]*m/g, '');
 const tests = clean.match(/Tests\s+(\d+) passed\s*\((\d+)\)/);
 const files = clean.match(/Test Files\s+(\d+) passed\s*\((\d+)\)/);
 const duration = clean.match(/Duration\s+([\d.]+)s/);
-const command = clean.match(
-  /##\[group\]Run (pnpm vitest run games\/paper-territory --maxWorkers=1)/,
-);
+const command = clean.match(/##\[group\]Run (pnpm vitest run games\/paper-io --maxWorkers=1)/);
 if (!tests || !files || !duration || !command) throw new Error('Scoped CI result is missing');
 if (
   !/property\.test\.ts.*4 tests/.test(clean) ||

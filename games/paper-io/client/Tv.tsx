@@ -37,7 +37,7 @@ export function Tv({ view }: GameTvProps<PaperTerritoryTvView>): JSX.Element {
     <Stage className={styles.stage}>
       <header className={styles.header}>
         <div className={styles.heading}>
-          <p className={styles.kicker}>{L('Paper Territory')}</p>
+          <p className={styles.kicker}>{L('Paper.io 2')}</p>
           <h2 className={styles.title}>{title}</h2>
         </div>
         {!over ? (

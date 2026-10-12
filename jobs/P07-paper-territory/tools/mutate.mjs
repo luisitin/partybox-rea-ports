@@ -9,7 +9,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
-const prefix = 'games/paper-territory/server/';
+const prefix = 'games/paper-io/server/';
 const trials = [
   ['M01', 'inflate area scores', 'scoring.ts', '[r.id, r.area]', '[r.id, r.area + 1]'],
   ['M02', 'score timer never finishes', 'phases/score.ts', 'next(state, event.now)', 'state'],
@@ -141,7 +141,7 @@ const trials = [
   after,
 }));
 const tests = ['world', 'game', 'presence', 'bot'].map(
-  (name) => `games/paper-territory/__tests__/${name}.test.ts`,
+  (name) => `games/paper-io/__tests__/${name}.test.ts`,
 );
 const scratch = mkdtempSync(resolve(tmpdir(), 'p07-mutations-'));
 const originals = new Map(

@@ -36,7 +36,8 @@ export function Controller({
   }, [view.phaseId, view.captures, view.deaths, play]);
   const phoneOnly = usePhoneOnly();
   const player = view.me.role === 'player';
-  const stage = phoneOnly || view.owners !== undefined || !player;
+  const departed = !view.alive && view.cause === 'connection' && view.respawnAt === null;
+  const stage = phoneOnly || view.owners !== undefined || !player || departed;
   const now = useServerNow(200, view.paused, view.clockHeldAt);
   const left = view.deadline === null ? 0 : Math.max(0, view.deadline - now);
   const seconds = Math.ceil(left / 1000);
@@ -68,17 +69,19 @@ export function Controller({
     ? leaders.length === 1
       ? L('{name} takes the map!', { name: leaders[0]?.name ?? '' })
       : L('A tie at the top!')
-    : view.phaseId === 'ready'
-      ? player
-        ? L('Find your number')
-        : L('The race starts soon')
-      : !player
-        ? L('Watch the land grow')
-        : !view.alive
-          ? L('Back home soon')
-          : exposed
-            ? L('Close your loop')
-            : L('Make some territory');
+    : departed
+      ? L('You left the race')
+      : view.phaseId === 'ready'
+        ? player
+          ? L('Find your number')
+          : L('The race starts soon')
+        : !player
+          ? L('Watch the land grow')
+          : !view.alive
+            ? L('Back home soon')
+            : exposed
+              ? L('Close your loop')
+              : L('Make some territory');
   const cause =
     view.cause === 'wall'
       ? L('Wall hit')
@@ -91,19 +94,21 @@ export function Controller({
             : view.cause === 'connection'
               ? L('Rejoining')
               : L('Returning');
-  const status = view.paused
-    ? L('Paused — your trail is safe for now')
-    : !view.alive
-      ? returning === null
-        ? `${cause} · ${L('waiting to return home')}`
-        : returning === 0
-          ? `${cause} · ${L('waiting for home to clear')}`
-          : `${cause} · ${L('home in {n}s', { n: returning })}`
-      : exposed
-        ? L('{n} trail cells — return to your land', { n: mine?.trail.length ?? 0 })
-        : view.lastCapture > 0
-          ? L('Loop closed · +{n} cells', { n: view.lastCapture })
-          : L('Inside your land · safe trail');
+  const status = departed
+    ? L('Watching now — this seat will not return')
+    : view.paused
+      ? L('Paused — your trail is safe for now')
+      : !view.alive
+        ? returning === null
+          ? `${cause} · ${L('waiting to return home')}`
+          : returning === 0
+            ? `${cause} · ${L('waiting for home to clear')}`
+            : `${cause} · ${L('home in {n}s', { n: returning })}`
+        : exposed
+          ? L('{n} trail cells — return to your land', { n: mine?.trail.length ?? 0 })
+          : view.lastCapture > 0
+            ? L('Loop closed · +{n} cells', { n: view.lastCapture })
+            : L('Inside your land · safe trail');
   const ink = { ['--seat-ink' as string]: playerInk(view.slot) } as CSSProperties;
   return (
     <Screen className={styles.screen} ghost={false}>
@@ -116,7 +121,7 @@ export function Controller({
         <header className={styles.header}>
           {player ? <SeatBadge className={styles.seat} slot={view.slot} /> : null}
           <div className={styles.heading}>
-            <p>{view.phaseId === 'play' && player ? standing : L('Paper Territory')}</p>
+            <p>{view.phaseId === 'play' && player ? standing : L('Paper.io 2')}</p>
             <h2>{title}</h2>
           </div>
           {!over ? (
@@ -219,7 +224,7 @@ export function Controller({
               </p>
             ) : null}
           </>
-        ) : player ? (
+        ) : player && !departed ? (
           <>
             <DirectionPad view={view} send={send} />
             <p className={styles.hint}>

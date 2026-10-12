@@ -1,4 +1,4 @@
-# Paper Territory
+# Paper.io 2
 
 Read README.md as the rules. Only SDK imports in server code; all movement and collision decisions are pure and use event time. Never change slot numbers when a player leaves. World cells use four-neighbour adjacency; home ownership is protected. Judge every simultaneous tick against one snapshot, then cuts and crashes, then flood-fill captures. Same-tick contested claims become neutral.
 

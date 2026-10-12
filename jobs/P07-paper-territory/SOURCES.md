@@ -1,7 +1,8 @@
 # P07 sources and provenance
 
-All sources accessed 2026-10-11. The delivered game is **Paper Territory**;
-source-game product names identify research subjects only.
+All sources accessed 2026-10-11. The delivered game is **Paper.io 2**, id
+`paper-io`, under the owner's official-name instruction added to main on 10-11.
+The artwork, code and sound assets remain original; no trademarked art is used.
 
 | Source                                                                                                                                  | Authority / independence                                                       | Used for                                                                                                                                                                                        |
 | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

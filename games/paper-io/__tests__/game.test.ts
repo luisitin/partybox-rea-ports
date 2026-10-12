@@ -9,7 +9,7 @@ const T0 = 1_000_000;
 const players = testPlayers(4);
 const kit = testKit(game, { t0: T0, players });
 
-describe('Paper Territory lifecycle', () => {
+describe('Paper.io 2 lifecycle', () => {
   it('opens a four-second ready stage with every numbered home and no results', () => {
     const state = kit.start();
     expect(PHASES).toEqual(['ready', 'play', 'score', 'done']);
