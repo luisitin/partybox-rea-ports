@@ -16,4 +16,4 @@ Install once: `corepack enable`, `pnpm install` (already completed by r4-local).
 
 The spec is `games/bonk-io/README.md`. RESEARCH/SOURCES separate observed mechanics from authored physics, layouts and timing. VERIFY records exact checks; LOOP records the post-green convergence audits. Media stays below 10 MB and every file is hashed in SHA256SUMS.txt.
 
-CI `.github/workflows/P23.yml` runs install, typecheck, format and only this game's tests on Ubuntu with read-only permissions. No runtime requests, copied assets or new dependencies.
+CI `.github/workflows/P23.yml` runs install, typecheck, format and only this game's tests on Ubuntu with read-only permissions. No runtime requests, copied assets or new dependencies. Verification includes every player count 2-8, SDK contracts, seeded properties, serial mutations and 46 phase/role captures; exact current results are in VERIFY.md.

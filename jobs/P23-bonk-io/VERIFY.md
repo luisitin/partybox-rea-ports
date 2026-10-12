@@ -1,5 +1,34 @@
 # Verification
 
+## Current combined source (R8)
+
+Full [CI 38206111467](https://github.com/luisitin/partybox-rea-ports/actions/runs/38206111467), head `02a9dfe00b1dc1bc78ec520c3babb9830950358a`: **143/143 tests in 10 files**, **199.80 s**. Install, `pnpm typecheck`, `pnpm format` and `PB_RECORD_VERIFY=1 pnpm vitest run games/bonk-io --maxWorkers=1` all passed. The record was collected after local mutation restoration: **every game file matches the tested head**, with LF-normalized SHA-256 hashes in `tools/latest-scoped-ci.json`.
+
+- **7,000 matches / 35,000 rounds:** 1,000 seeds at each player count 2-8, with easy/normal/sharp counts 334/333/333. All finite complete rankings; maximum match 176,920 ms, below the manifest budget of 480,000 ms. Actual bot scheduled spacing is 160/240 ms on 80 ms snapshots, targeting 200 ms buckets.
+- **1,003 property traces / 128,384 events:** seeds 1,2,3 plus 1,000 reproducibly generated seeds. Pure frozen-state replay, finite/bounded motion and scores, pause, reconnect, departure, stale/invalid/outsider input pass.
+- **20 real SDK contracts:** purity, deterministic replay, lifecycle/presence/phone-only combinations, fast/random/idle/skipper scheduling and bounded phase exits pass without changing the SDK's 5,000-event budget.
+- **20/20 semantic mutations caught by failed assertions**, zero compiler-only catches. Clean current baselines before/after pass **134/134**; all original bytes and restoration hashes match. `node jobs/P23-bonk-io/tools/mutate.mjs` first caught 19/20; case 6 timed out at process startup (`ETIMEDOUT`, zero tests/output). `node jobs/P23-bonk-io/tools/mutate.mjs --retry-infrastructure` retried only that unresolved case with a longer startup allowance and caught it. The tool pins restored source hashes and refuses semantic misses as infrastructure retries. `r8-mutation-first-pass.json` and the final case's `firstAttempt` retain the original result. No leftover own test process remains.
+- **46 static browser captures / 100 media files / 5,037,728 bytes:** TV 1920x1080; phones 390x844 with 80 px top/bottom shell reservations, all phases/roles plus stress and lifecycle states. Zero outside/overflow/internal-scroll findings; active controls at least 88 px and captured ball digits at least 16.775 px. Root and independent audits reviewed fit by hand; all exact media hashes match. One isolated cached Chromium per capture, closed in finally; no browser installed or left running. R7/R8 changed strategy/input handling without changing visual layout, so existing captures remain applicable.
+- **Browser motion probe:** body and number layers interpolate together at the exact 40 ms midpoint of an 80 ms received-pose transition. Pause, app motion-off and OS reduced motion use zero duration. This is browser CSS verification, not original live play or a device FPS claim.
+
+| Players | Matches | Median round ms | Maximum match ms | Last standing / draw / timeout | Shared match wins |
+| ------- | ------- | --------------- | ---------------- | ------------------------------ | ----------------- |
+| 2       | 1,000   | 26,120          | 176,200          | 4,957 / 43 / 0                 | 16                |
+| 3       | 1,000   | 25,880          | 173,880          | 4,966 / 34 / 0                 | 367               |
+| 4       | 1,000   | 26,440          | 176,120          | 4,967 / 33 / 0                 | 357               |
+| 5       | 1,000   | 26,640          | 175,880          | 4,969 / 31 / 0                 | 338               |
+| 6       | 1,000   | 26,760          | 176,440          | 4,966 / 34 / 0                 | 340               |
+| 7       | 1,000   | 26,920          | 176,600          | 4,968 / 32 / 0                 | 321               |
+| 8       | 1,000   | 27,000          | 176,920          | 4,950 / 50 / 0                 | 353               |
+
+Current minimum published alive y at 2-8 seats: 182.9619, 160.5004, 94.9622, 119.4815, 113.2725, 80.5817, 38.3014. No clipped or fully off-top pose occurred in this changed-bot batch. The R5 six-seat partial clip at y17.6074 is historical verified evidence from that strategy revision; the fully off-top captures are authored legal stress states. Physics bounds and the identity-marker regression remain unchanged. Per-seat wins are observations, not an equal-win-rate guarantee or controlled causal test.
+
+Root used only own-game tests with one worker; no whole-suite/browser run. Local R8 client command `pnpm.cmd vitest run games/bonk-io/client --maxWorkers=1` passed 68/68 in four files, 2.99 s; `pnpm.cmd typecheck` passed. New combined full CI supplies current all-size coverage. The job workflow is Ubuntu, read-only, 30-minute timeout, actions/* only and paths-scoped. Original play/audio/timing and live WebSocket/remount behavior are unavailable and explicitly unclaimed in ASSUMPTIONS.md.
+
+## Earlier checks and milestone history
+
+The following records preserve commands, failures, observations and pending statements as they stood at each milestone. Current status and hashes are above; older results do not establish changed-source behavior.
+
 Install once completed during P07: `corepack.cmd enable`; `pnpm.cmd install`. Windows script policy requires cmd shims. P23 adds no dependency.
 
 Root ran only `games/bonk-io` tests with one worker. No whole-suite tests/browser run. Expanded all-size simulations run in scoped CI after local pilots to preserve desktop CPU. Baseline through R5 full batches are green. R5 current-source mutations pass; further gameplay changes require fresh evidence before readiness or convergence.

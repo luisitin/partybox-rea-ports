@@ -5,6 +5,12 @@ import { readFileSync, writeFileSync, existsSync, unlinkSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const folder = resolve('jobs/P23-bonk-io/tools');
+const retryInfrastructure = process.argv.includes('--retry-infrastructure');
+if (process.argv.slice(2).some((arg) => arg !== '--retry-infrastructure'))
+  throw new Error('Unknown mutation option');
+const previous = retryInfrastructure
+  ? JSON.parse(readFileSync(resolve(folder, 'mutation-results.json'), 'utf8'))
+  : null;
 const definitions = JSON.parse(readFileSync(resolve(folder, 'mutations.json'), 'utf8'));
 if (definitions.length !== 20) throw new Error('Exactly twenty mutations are required');
 const originals = new Map();
@@ -15,6 +21,14 @@ for (const bug of definitions) {
   if (!originals.has(bug.file)) originals.set(bug.file, readFileSync(resolve(bug.file)));
   const text = originals.get(bug.file).toString('utf8');
   if (text.split(bug.from).length !== 2) throw new Error(`Replacement is not unique: ${bug.name}`);
+}
+if (previous) {
+  if (previous.cases.length !== 20) throw new Error('Previous run must contain twenty cases');
+  for (const [file, bytes] of originals) {
+    const prior = previous.sources.find((source) => source.file === file);
+    if (!prior?.restored || prior.afterSha256 !== sha(bytes))
+      throw new Error(`Retry source differs from restored first pass: ${file}`);
+  }
 }
 const active = resolve(folder, 'mutation-active.json');
 const args = [
@@ -35,10 +49,14 @@ function check(label) {
       ? spawnSync('cmd.exe', ['/d', '/c', 'pnpm.cmd', ...args], {
           encoding: 'utf8',
           windowsHide: true,
-          timeout: 120_000,
+          timeout: retryInfrastructure ? 240_000 : 120_000,
           maxBuffer: 8 * 1024 * 1024,
         })
-      : spawnSync('pnpm', args, { encoding: 'utf8', timeout: 120_000, maxBuffer: 8 * 1024 * 1024 });
+      : spawnSync('pnpm', args, {
+          encoding: 'utf8',
+          timeout: retryInfrastructure ? 240_000 : 120_000,
+          maxBuffer: 8 * 1024 * 1024,
+        });
   writeFileSync(resolve(folder, `${label}.log`), (result.stdout ?? '') + (result.stderr ?? ''));
   const report = existsSync(active) ? JSON.parse(readFileSync(active, 'utf8')) : null;
   const failures = (report?.testResults ?? []).flatMap((suite) =>
@@ -59,13 +77,20 @@ function check(label) {
     compileError,
   };
 }
-const cases = [];
+const cases = previous ? [...previous.cases] : [];
 let before, after;
 try {
   before = check('mutation-baseline-before');
   if (before.exitCode !== 0 || before.failed || !before.tests)
     throw new Error('Clean baseline must pass');
   for (const [index, bug] of definitions.entries()) {
+    const prior = previous?.cases[index];
+    if (prior?.caught) continue;
+    if (
+      prior &&
+      (prior.name !== bug.name || !prior.error || prior.tests !== 0 || prior.failures.length !== 0)
+    )
+      throw new Error('Only an infrastructure failure with zero test results may be retried');
     const original = originals.get(bug.file);
     try {
       writeFileSync(resolve(bug.file), original.toString('utf8').replace(bug.from, bug.to), 'utf8');
@@ -76,7 +101,9 @@ try {
         checkResult.failures.length > 0 &&
         !checkResult.compileError &&
         !checkResult.error;
-      cases.push({ ...bug, caught, ...checkResult });
+      const result = { ...bug, caught, ...checkResult, ...(prior ? { firstAttempt: prior } : {}) };
+      if (previous) cases[index] = result;
+      else cases.push(result);
       console.log(`${index + 1}/20 ${caught ? 'CAUGHT' : 'MISSED'}: ${bug.name}`);
     } finally {
       writeFileSync(resolve(bug.file), original);
@@ -92,7 +119,7 @@ try {
     restored: bytes.equals(readFileSync(resolve(file))),
   }));
   const report = {
-    command: 'node jobs/P23-bonk-io/tools/mutate.mjs',
+    command: `node jobs/P23-bonk-io/tools/mutate.mjs${retryInfrastructure ? ' --retry-infrastructure' : ''}`,
     scope: args,
     recordedAtUtc: new Date().toISOString(),
     baselineBefore: before,
@@ -101,6 +128,15 @@ try {
     caught: cases.filter((c) => c.caught).length,
     sources,
     cases,
+    ...(previous
+      ? {
+          firstPass: {
+            recordedAtUtc: previous.recordedAtUtc,
+            caught: previous.caught,
+            attempted: previous.attempted,
+          },
+        }
+      : {}),
   };
   writeFileSync(resolve(folder, 'mutation-results.json'), JSON.stringify(report, null, 2) + '\n');
   if (existsSync(active)) unlinkSync(active);

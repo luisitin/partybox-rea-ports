@@ -1,5 +1,5 @@
 {
-  "command": "node jobs/P23-bonk-io/tools/mutate.mjs",
+  "command": "node jobs/P23-bonk-io/tools/mutate.mjs --retry-infrastructure",
   "scope": [
     "vitest",
     "run",
@@ -11,12 +11,12 @@
     "--reporter=json",
     "--outputFile=C:\\dev\\rea-runs\\r4\\jobs\\P23-bonk-io\\tools\\mutation-active.json"
   ],
-  "recordedAtUtc": "2026-10-12T04:38:44.912Z",
+  "recordedAtUtc": "2026-10-12T05:10:56.530Z",
   "baselineBefore": {
     "exitCode": 0,
     "error": null,
-    "tests": 128,
-    "passed": 128,
+    "tests": 134,
+    "passed": 134,
     "failed": 0,
     "failures": [],
     "compileError": false
@@ -24,8 +24,8 @@
   "baselineAfter": {
     "exitCode": 0,
     "error": null,
-    "tests": 128,
-    "passed": 128,
+    "tests": 134,
+    "passed": 134,
     "failed": 0,
     "failures": [],
     "compileError": false
@@ -73,8 +73,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 125,
+      "tests": 134,
+      "passed": 131,
       "failed": 3,
       "failures": [
         {
@@ -106,8 +106,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 127,
+      "tests": 134,
+      "passed": 133,
       "failed": 1,
       "failures": [
         {
@@ -127,8 +127,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 126,
+      "tests": 134,
+      "passed": 132,
       "failed": 2,
       "failures": [
         {
@@ -154,8 +154,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 127,
+      "tests": 134,
+      "passed": 133,
       "failed": 1,
       "failures": [
         {
@@ -175,8 +175,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 126,
+      "tests": 134,
+      "passed": 132,
       "failed": 2,
       "failures": [
         {
@@ -186,9 +186,9 @@
           ]
         },
         {
-          "name": "contract: games/bonk-io terminates with skipper bots within the estimate × 3, results complete",
+          "name": "contract: games/bonk-io terminates with random bots within the estimate × 3, results complete",
           "messages": [
-            "AssertionError: skipper n=8 settings={}: stuck in phase play after 5000 events / 169 s: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/packages/game-sdk/src/contract-tests/contract.test.ts:266:17\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+            "AssertionError: random n=8 settings={}: stuck in phase play after 5000 events / 171 s: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/packages/game-sdk/src/contract-tests/contract.test.ts:266:17\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
           ]
         }
       ],
@@ -202,8 +202,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 127,
+      "tests": 134,
+      "passed": 133,
       "failed": 1,
       "failures": [
         {
@@ -213,7 +213,21 @@
           ]
         }
       ],
-      "compileError": false
+      "compileError": false,
+      "firstAttempt": {
+        "name": "Shrinking starts ten seconds late",
+        "file": "games/bonk-io/server/world.ts",
+        "from": "SHRINK_MS = 15_000",
+        "to": "SHRINK_MS = 25_000",
+        "caught": false,
+        "exitCode": null,
+        "error": "spawnSync cmd.exe ETIMEDOUT",
+        "tests": 0,
+        "passed": 0,
+        "failed": 0,
+        "failures": [],
+        "compileError": false
+      }
     },
     {
       "name": "The bottom fall plane kills balls inside the arena and spares fallen balls",
@@ -223,8 +237,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 110,
+      "tests": 134,
+      "passed": 116,
       "failed": 18,
       "failures": [
         {
@@ -332,7 +346,7 @@
         {
           "name": "controls, lifecycle and view contract bot decision buckets suppress intermediate retries and permit asynchronous 240/400 ms samples",
           "messages": [
-            "AssertionError: expected null not to be null\n    at C:/dev/rea-runs/r4/games/bonk-io/__tests__/game.test.ts:447:27\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+            "AssertionError: expected null not to be null\n    at C:/dev/rea-runs/r4/games/bonk-io/__tests__/game.test.ts:509:27\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
           ]
         }
       ],
@@ -346,8 +360,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 114,
+      "tests": 134,
+      "passed": 120,
       "failed": 14,
       "failures": [
         {
@@ -431,7 +445,7 @@
         {
           "name": "controls, lifecycle and view contract bot decision buckets suppress intermediate retries and permit asynchronous 240/400 ms samples",
           "messages": [
-            "AssertionError: expected { id: 'a', slot: +0, x: 104, …(12) } to match object { move: +0, controlAt: +0 }\n(13 matching properties omitted from actual)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1283:10)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r4/games/bonk-io/__tests__/game.test.ts:440:41\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+            "AssertionError: expected { id: 'a', slot: +0, x: 104, …(12) } to match object { move: +0, controlAt: +0 }\n(13 matching properties omitted from actual)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1283:10)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r4/games/bonk-io/__tests__/game.test.ts:502:41\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
           ]
         }
       ],
@@ -445,8 +459,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 126,
+      "tests": 134,
+      "passed": 132,
       "failed": 2,
       "failures": [
         {
@@ -472,8 +486,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 124,
+      "tests": 134,
+      "passed": 130,
       "failed": 4,
       "failures": [
         {
@@ -511,8 +525,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 127,
+      "tests": 134,
+      "passed": 133,
       "failed": 1,
       "failures": [
         {
@@ -532,8 +546,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 127,
+      "tests": 134,
+      "passed": 133,
       "failed": 1,
       "failures": [
         {
@@ -553,26 +567,26 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 124,
+      "tests": 134,
+      "passed": 130,
       "failed": 4,
       "failures": [
         {
           "name": "contract: games/bonk-io terminates with random bots within the estimate × 3, results complete",
           "messages": [
-            "AssertionError: random n=8 settings={}: stuck in phase play after 5000 events / 184 s: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/packages/game-sdk/src/contract-tests/contract.test.ts:266:17\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+            "AssertionError: random n=8 settings={}: stuck in phase play after 5000 events / 202 s: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/packages/game-sdk/src/contract-tests/contract.test.ts:266:17\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
           ]
         },
         {
           "name": "contract: games/bonk-io terminates with fast bots within the estimate × 3, results complete",
           "messages": [
-            "AssertionError: fast n=8 settings={}: stuck in phase play after 5000 events / 188 s: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/packages/game-sdk/src/contract-tests/contract.test.ts:266:17\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+            "AssertionError: fast n=8 settings={}: stuck in phase play after 5000 events / 196 s: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/packages/game-sdk/src/contract-tests/contract.test.ts:266:17\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
           ]
         },
         {
           "name": "contract: games/bonk-io terminates with skipper bots within the estimate × 3, results complete",
           "messages": [
-            "AssertionError: skipper n=8 settings={}: stuck in phase play after 5000 events / 190 s: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/packages/game-sdk/src/contract-tests/contract.test.ts:266:17\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+            "AssertionError: skipper n=8 settings={}: stuck in phase play after 5000 events / 198 s: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/packages/game-sdk/src/contract-tests/contract.test.ts:266:17\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
           ]
         },
         {
@@ -592,8 +606,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 127,
+      "tests": 134,
+      "passed": 133,
       "failed": 1,
       "failures": [
         {
@@ -613,8 +627,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 126,
+      "tests": 134,
+      "passed": 132,
       "failed": 2,
       "failures": [
         {
@@ -640,8 +654,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 126,
+      "tests": 134,
+      "passed": 132,
       "failed": 2,
       "failures": [
         {
@@ -667,8 +681,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 126,
+      "tests": 134,
+      "passed": 132,
       "failed": 2,
       "failures": [
         {
@@ -694,8 +708,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 125,
+      "tests": 134,
+      "passed": 131,
       "failed": 3,
       "failures": [
         {
@@ -727,8 +741,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 127,
+      "tests": 134,
+      "passed": 133,
       "failed": 1,
       "failures": [
         {
@@ -748,8 +762,8 @@
       "caught": true,
       "exitCode": 1,
       "error": null,
-      "tests": 128,
-      "passed": 122,
+      "tests": 134,
+      "passed": 128,
       "failed": 6,
       "failures": [
         {
@@ -791,5 +805,10 @@
       ],
       "compileError": false
     }
-  ]
+  ],
+  "firstPass": {
+    "recordedAtUtc": "2026-10-12T05:08:25.259Z",
+    "caught": 19,
+    "attempted": 20
+  }
 }
