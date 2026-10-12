@@ -9,7 +9,7 @@ An original PartyBox drawing race inspired by the choose, draw and recognize flo
 
 ## Overview
 
-The seeded turn order gives each seat one artist turn per lap. The artist chooses one of three words in eight seconds; no choice selects the first word. Mixed difficulty offers one word from each level in shuffled order. The drawing clock then begins, with 60 seconds by default. Guessers see blank letters and the drawing. Hints uncover one letter after one third and another after two thirds of the turn. Correct guesses score immediately; the turn ends when every connected guesser solves or time expires. The completed picture, word and gains share a reveal before the next artist. Highest total wins.
+The seeded turn order gives each seat one artist turn per lap. The artist chooses one of three words in eight seconds. Mixed difficulty offers one word from each level in shuffled order; a timed-out choice selects its easy word. Single-level decks select the first word on timeout. The drawing clock then begins, with 60 seconds by default. Guessers see blank letters and the drawing. Hints uncover one letter after one third and another after two thirds of the turn. Correct guesses score immediately; the turn ends when every connected guesser solves or time expires. The completed picture, word and gains share a reveal before the next artist. Highest total wins.
 
 ## Players
 

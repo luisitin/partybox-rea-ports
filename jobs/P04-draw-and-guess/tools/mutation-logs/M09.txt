@@ -1,24 +1,24 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 1 failed) 25ms
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 1 failed) 25ms
      × choices and the answer stay off every public surface until reveal, even after a correct guess 5ms
 
  Test Files  1 failed (1)
       Tests  1 failed | 23 passed (24)
-   Start at  20:46:15
-   Duration  621ms (transform 280ms, setup 0ms, import 434ms, tests 25ms, environment 0ms)
+   Start at  21:57:20
+   Duration  498ms (transform 193ms, setup 0ms, import 333ms, tests 25ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > secrets, lifecycle and determinism > choices and the answer stay off every public surface until reveal, even after a correct guess
-AssertionError: expected '{"gameId":"draw-and-guess","phaseId":…' not to contain 'zzzchoiceone'
+ FAIL  games/skribbl/__tests__/game.test.ts > secrets, lifecycle and determinism > choices and the answer stay off every public surface until reveal, even after a correct guess
+AssertionError: expected '{"gameId":"skribbl","phaseId":"choose…' not to contain 'zzzchoiceone'
 
 Expected: "zzzchoiceone"
-Received: "{"gameId":"draw-and-guess","phaseId":"choose","phaseAt":1000000,"deadline":1008000,"paused":false,"players":[{"id":"p1","name":"Ana","avatarId":"fox","connected":true,"status":"waiting","score":0},{"id":"p2","name":"Ben","avatarId":"owl","connected":true,"status":"waiting","score":0},{"id":"p3","name":"Cy","avatarId":"frog","connected":true,"status":"waiting","score":0},{"id":"p4","name":"Dee","avatarId":"cat","connected":true,"status":"active","score":0}],"me":{"id":"p2","role":"player"},"turn":1,"turns":4,"drawer":"p4","drawerName":"Dee","mask":"","strokes":[],"inkRevision":0,"scores":{"p1":0,"p2":0,"p3":0,"p4":0},"gains":{},"solvedIds":[],"solvedCount":0,"guesserCount":3,"endsAt":1008000,"hintCount":0,"isDrawer":false,"choices":["zzzchoiceone","zzzchoicetwo","zzzchoicethree"],"solved":false,"myPoints":0,"feedback":"","lastGuess":"","guessReceipt":{"revision":0,"accepted":true},"phoneStage":false,"canGuess":false}"
+Received: "{"gameId":"skribbl","phaseId":"choose","phaseAt":1000000,"deadline":1008000,"paused":false,"players":[{"id":"p1","name":"Ana","avatarId":"fox","connected":true,"status":"waiting","score":0},{"id":"p2","name":"Ben","avatarId":"owl","connected":true,"status":"waiting","score":0},{"id":"p3","name":"Cy","avatarId":"frog","connected":true,"status":"waiting","score":0},{"id":"p4","name":"Dee","avatarId":"cat","connected":true,"status":"active","score":0}],"me":{"id":"p2","role":"player"},"turn":1,"turns":4,"drawer":"p4","drawerName":"Dee","mask":"","strokes":[],"inkRevision":0,"scores":{"p1":0,"p2":0,"p3":0,"p4":0},"gains":{},"solvedIds":[],"solvedCount":0,"guesserCount":3,"endsAt":1008000,"hintCount":0,"isDrawer":false,"choices":["zzzchoiceone","zzzchoicetwo","zzzchoicethree"],"solved":false,"myPoints":0,"feedback":"","lastGuess":"","guessReceipt":{"revision":0,"accepted":true},"phoneStage":false,"canGuess":false}"
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:285:83
+ ❯ games/skribbl/__tests__/game.test.ts:285:83
     283|       ]) {
     284|         const text = JSON.stringify(view);
     285|         for (const secret of [altered.word, ...altered.choices]) expec…
@@ -27,4 +27,3 @@ Received: "{"gameId":"draw-and-guess","phaseId":"choose","phaseAt":1000000,"dead
     287|       for (const id of ['spectator', '__proto__', 'constructor', '']) {
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
-

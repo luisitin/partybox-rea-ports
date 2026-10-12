@@ -1,21 +1,21 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 2 failed) 25ms
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 2 failed) 26ms
      × awards 300 base plus 700 times remaining time, only once; the artist also earns points 3ms
      × adds points to earlier turns instead of replacing either player total 2ms
 
  Test Files  1 failed (1)
       Tests  2 failed | 22 passed (24)
-   Start at  20:45:13
-   Duration  614ms (transform 274ms, setup 0ms, import 427ms, tests 25ms, environment 0ms)
+   Start at  21:57:15
+   Duration  530ms (transform 203ms, setup 0ms, import 350ms, tests 26ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > awards 300 base plus 700 times remaining time, only once; the artist also earns points
+ FAIL  games/skribbl/__tests__/game.test.ts > guesses and points > awards 300 base plus 700 times remaining time, only once; the artist also earns points
 AssertionError: expected 0 to be greater than 0
- ❯ games/draw-and-guess/__tests__/game.test.ts:199:35
+ ❯ games/skribbl/__tests__/game.test.ts:199:35
     197|     expect(next.scores[id]).toBe(300 + Math.floor((700 * 24_000) / 30_…
     198|     expect(next.gains[id]).toBe(next.scores[id]);
     199|     expect(next.scores[s.drawer]).toBeGreaterThan(0);
@@ -25,7 +25,7 @@ AssertionError: expected 0 to be greater than 0
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > adds points to earlier turns instead of replacing either player total
+ FAIL  games/skribbl/__tests__/game.test.ts > guesses and points > adds points to earlier turns instead of replacing either player total
 AssertionError: expected 2300 to be 2550 // Object.is equality
 
 - Expected
@@ -34,7 +34,7 @@ AssertionError: expected 2300 to be 2550 // Object.is equality
 - 2550
 + 2300
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:245:35
+ ❯ games/skribbl/__tests__/game.test.ts:245:35
     243|     const next = kit.input(prior, id, { type: 'guess', text: s.word },…
     244|     expect(next.scores[id]).toBe(1200 + 860);
     245|     expect(next.scores[s.drawer]).toBe(2300 + 250);
@@ -43,7 +43,3 @@ AssertionError: expected 2300 to be 2550 // Object.is equality
     247|
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
-
-close timed out after 10000ms
-Tests closed successfully but something prevents Vite server from exiting
-You can try to identify the cause by enabling "hanging-process" reporter. See https://vitest.dev/guide/reporters.html#hanging-process-reporter

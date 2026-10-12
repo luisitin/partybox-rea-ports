@@ -3,6 +3,7 @@ import { enterPhase, hasPlayer, isTimerFor, shuffle } from '@partybox/game-sdk';
 import type { GameEvent } from '@partybox/game-sdk';
 import { normalize as normalizeAnswer } from '@partybox/game-sdk/match';
 import { guessPoints } from '../scoring';
+import { vocabulary } from '../content';
 import { answerCompact, answerSpellings } from '../answerMatch';
 import { appendInk, continuesInk, undoInk } from '../ink';
 import { BEAT_MS, MAX_STROKES } from '../types';
@@ -44,7 +45,11 @@ export function allSolved(state: State): boolean {
   return guessers(state).every((id) => Object.hasOwn(state.solved, id));
 }
 export function enterDraw(state: State, now: number): State {
-  const word = state.word || state.choices[0] || 'cat';
+  const fallback =
+    state.settings.difficulty === 'mixed'
+      ? state.choices.find((candidate) => vocabulary('easy').includes(candidate))
+      : undefined;
+  const word = state.word || fallback || state.choices[0] || 'cat';
   const positions = [...word].flatMap((c, i) => (c === ' ' ? [] : [i]));
   const [hintOrder, rng] = shuffle(state.rng, positions);
   const endsAt = now + state.settings.drawSeconds * 1000;

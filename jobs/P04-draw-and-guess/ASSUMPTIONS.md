@@ -50,3 +50,7 @@ The research proposal mentioned an eraser. The shipped small toolset uses comple
   upgrade, retain the existing core identity/telephone mode, and never copy
   private source or add a second core game card. Core deployment is outside
   this authorized public-clone task; UPGRADE.md records integration boundaries.
+- R23 changes mixed-mode timeout fallback to the balanced hand's easy word.
+  Choosing deliberately still selects exactly that button; single-level decks
+  retain their first-option fallback. This bounded policy change reduces
+  newcomer frustration without extending the choice clock or consuming RNG.

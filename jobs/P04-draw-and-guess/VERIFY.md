@@ -189,3 +189,16 @@ The20repeat, nonasserting benchmark was unnecessary in every test run and is
 removed. The same deviation, corner, wire, endpoint, immutability and determinism
 assertions retain a bounded60s deadline. Earlier isolated performance measurements
 remain historical evidence; the focused rerun and full final results follow.
+
+Final release evidence for89baf2d:
+
+- CI38196617993 passes36s: install, typecheck, format and `pnpm vitest run games/skribbl --maxWorkers=1`;276tests in27files pass in14.98s, including all7,000bot matches, real SDK contracts and seeded properties. Worst8-seat match remains401s. This is the complete green final-source suite.
+- The duplicate local one-worker run was stopped after its old geometry timeout and after logging all21strength/count summaries. It is not reported as a green run. The corrected `pnpm.cmd vitest run games/skribbl/__tests__/ink-geometry.test.ts --maxWorkers=1 --pool=threads` passes all3checks, exit0,1.12s. No geometric assertion was removed.
+- Final local typecheck passes, exit0. Scoped Prettier follows evidence output, `git diff --check` passes, and66media files are hashed (2,076,820bytes). Both live browser scripts completed before a new one was launched; the successful capture closes its only browser in finally.
+
+R23 timeout choice:
+
+- `pnpm.cmd vitest run games/skribbl/__tests__/choice-timeout.test.ts games/skribbl/__tests__/game.test.ts --maxWorkers=1 --pool=threads`:35checks pass, exit0,1.23s. `pnpm.cmd typecheck`:pass, exit0.
+- `pnpm.cmd vitest run games/skribbl/__tests__/choice-timeout.test.ts --maxWorkers=1 --pool=threads --disableConsoleIntercept`:11checks pass, exit0,771ms; printed1,000seed measurements show human medium/hard automatic choices340/338→0/0 and bots331/345→0/0. Timeout uses the same hint shuffle/RNG as explicitly selecting that easy word; no extra randomness or deadline changes.
+- Existing fixtures/captures use explicit selections or an easy deck, so rendered evidence is unchanged. The mutation campaign is refreshed against the updated phase source with a single thread worker per invocation; it runs sequentially and restores every source in finally.
+- `node jobs/P04-draw-and-guess/tools/mutate.mjs`:20/20fresh mutants caught by assertions, exit0; all current sources restored in finally and restored baseline green. Logs and source hashes now use the renamed game and R23phase source. Each child command is scoped to this game's game.test.ts with one thread worker.

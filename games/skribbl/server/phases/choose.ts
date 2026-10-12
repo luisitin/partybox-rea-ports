@@ -1,4 +1,4 @@
-// The artist privately chooses a word. Eight seconds later the first option is selected.
+// The artist privately chooses a word; timeout takes the mixed hand's easy word or first option.
 import { enterPhase, shuffle, isTimerFor, hasPlayer } from '@partybox/game-sdk';
 import type { GameEvent } from '@partybox/game-sdk';
 import { vocabulary } from '../content';

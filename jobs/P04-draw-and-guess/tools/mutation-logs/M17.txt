@@ -1,25 +1,25 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 2 failed) 40ms
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 2 failed) 38ms
      × timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer 4ms
      × every player draws once per lap and the final reveal continues into stable complete results 16ms
 
  Test Files  1 failed (1)
       Tests  2 failed | 22 passed (24)
-   Start at  20:46:44
-   Duration  607ms (transform 265ms, setup 0ms, import 415ms, tests 40ms, environment 0ms)
+   Start at  21:57:28
+   Duration  522ms (transform 202ms, setup 0ms, import 339ms, tests 38ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer
+ FAIL  games/skribbl/__tests__/game.test.ts > choice and drawing turns > timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer
 AssertionError: expected 'draw' to be 'reveal' // Object.is equality
 
 Expected: "reveal"
 Received: "draw"
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:164:24
+ ❯ games/skribbl/__tests__/game.test.ts:164:24
     162|     const secret = s.word;
     163|     s = kit.finish(s, 40);
     164|     expect(s.phase.id).toBe('reveal');
@@ -29,13 +29,13 @@ Received: "draw"
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > every player draws once per lap and the final reveal continues into stable complete results
+ FAIL  games/skribbl/__tests__/game.test.ts > choice and drawing turns > every player draws once per lap and the final reveal continues into stable complete results
 AssertionError: expected 'draw' to be 'done' // Object.is equality
 
 Expected: "done"
 Received: "draw"
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:178:26
+ ❯ games/skribbl/__tests__/game.test.ts:178:26
     176|         else s = kit.timer(s);
     177|       }
     178|       expect(s.phase.id).toBe('done');
@@ -44,4 +44,3 @@ Received: "draw"
     180|       for (const id of Object.keys(s.players))
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
-

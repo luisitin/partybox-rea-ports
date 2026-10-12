@@ -1,19 +1,19 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 2 failed) 25ms
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 2 failed) 25ms
      × awards 300 base plus 700 times remaining time, only once; the artist also earns points 4ms
      × adds points to earlier turns instead of replacing either player total 0ms
 
  Test Files  1 failed (1)
       Tests  2 failed | 22 passed (24)
-   Start at  20:45:09
-   Duration  621ms (transform 278ms, setup 0ms, import 430ms, tests 25ms, environment 0ms)
+   Start at  21:57:12
+   Duration  496ms (transform 191ms, setup 0ms, import 331ms, tests 25ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > awards 300 base plus 700 times remaining time, only once; the artist also earns points
+ FAIL  games/skribbl/__tests__/game.test.ts > guesses and points > awards 300 base plus 700 times remaining time, only once; the artist also earns points
 AssertionError: expected 560 to be 860 // Object.is equality
 
 - Expected
@@ -22,7 +22,7 @@ AssertionError: expected 560 to be 860 // Object.is equality
 - 860
 + 560
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:197:29
+ ❯ games/skribbl/__tests__/game.test.ts:197:29
     195|     const now = s.began + 6000;
     196|     const next = kit.input(s, id, { type: 'guess', text: s.word }, now…
     197|     expect(next.scores[id]).toBe(300 + Math.floor((700 * 24_000) / 30_…
@@ -32,7 +32,7 @@ AssertionError: expected 560 to be 860 // Object.is equality
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > adds points to earlier turns instead of replacing either player total
+ FAIL  games/skribbl/__tests__/game.test.ts > guesses and points > adds points to earlier turns instead of replacing either player total
 AssertionError: expected 1760 to be 2060 // Object.is equality
 
 - Expected
@@ -41,7 +41,7 @@ AssertionError: expected 1760 to be 2060 // Object.is equality
 - 2060
 + 1760
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:244:29
+ ❯ games/skribbl/__tests__/game.test.ts:244:29
     242|     const prior = { ...s, scores: { ...s.scores, [id]: 1200, [s.drawer…
     243|     const next = kit.input(prior, id, { type: 'guess', text: s.word },…
     244|     expect(next.scores[id]).toBe(1200 + 860);
@@ -50,4 +50,3 @@ AssertionError: expected 1760 to be 2060 // Object.is equality
     246|   });
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
-

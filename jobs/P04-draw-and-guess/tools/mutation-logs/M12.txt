@@ -1,19 +1,19 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 2 failed) 41ms
-     × only the connected drawer may paint, clear or undo, and undo preserves earlier strokes 8ms
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 2 failed) 29ms
+     × only the connected drawer may paint, clear or undo, and undo preserves earlier strokes 6ms
      × a faster guess scores more, and the drawer, disconnected seats and unknown ids cannot guess 1ms
 
  Test Files  1 failed (1)
       Tests  2 failed | 22 passed (24)
-   Start at  20:46:38
-   Duration  699ms (transform 321ms, setup 0ms, import 493ms, tests 41ms, environment 0ms)
+   Start at  21:57:23
+   Duration  503ms (transform 189ms, setup 0ms, import 324ms, tests 29ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > only the connected drawer may paint, clear or undo, and undo preserves earlier strokes
+ FAIL  games/skribbl/__tests__/game.test.ts > choice and drawing turns > only the connected drawer may paint, clear or undo, and undo preserves earlier strokes
 AssertionError: expected [ { points: [ …(2) ], …(2) }, …(1) ] to deeply equal [ { …(3) } ]
 
 - Expected
@@ -41,7 +41,7 @@ AssertionError: expected [ { points: [ …(2) ], …(2) }, …(1) ] to deeply eq
 +   },
   ]
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:96:55
+ ❯ games/skribbl/__tests__/game.test.ts:96:55
      94|         { type: 'clear' },
      95|       ] as const) {
      96|         expect(kit.input(painted, id, input).strokes).toEqual([stroke]…
@@ -51,7 +51,7 @@ AssertionError: expected [ { points: [ …(2) ], …(2) }, …(1) ] to deeply eq
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > a faster guess scores more, and the drawer, disconnected seats and unknown ids cannot guess
+ FAIL  games/skribbl/__tests__/game.test.ts > guesses and points > a faster guess scores more, and the drawer, disconnected seats and unknown ids cannot guess
 AssertionError: expected { p1: +0, p2: +0, p3: +0, p4: 250 } to deeply equal { p1: +0, p2: +0, p3: +0, p4: +0 }
 
 - Expected
@@ -65,7 +65,7 @@ AssertionError: expected { p1: +0, p2: +0, p3: +0, p4: 250 } to deeply equal { p
 +   "p4": 250,
   }
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:233:78
+ ❯ games/skribbl/__tests__/game.test.ts:233:78
     231|     expect(early.scores[id]).toBeGreaterThan(late.scores[id]!);
     232|     for (const playerId of [s.drawer, 'spectator', '__proto__', 'const…
     233|       expect(kit.input(s, playerId, { type: 'guess', text: s.word }).s…
@@ -74,4 +74,3 @@ AssertionError: expected { p1: +0, p2: +0, p3: +0, p4: 250 } to deeply equal { p
     235|     const dropped = kit.player(s, id, false, undefined, s.began + 500);
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
-

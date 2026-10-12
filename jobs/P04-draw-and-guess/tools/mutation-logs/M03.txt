@@ -1,20 +1,20 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 3 failed) 28ms
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 3 failed) 27ms
      × awards 300 base plus 700 times remaining time, only once; the artist also earns points 4ms
-     × a faster guess scores more, and the drawer, disconnected seats and unknown ids cannot guess 0ms
+     × a faster guess scores more, and the drawer, disconnected seats and unknown ids cannot guess 1ms
      × adds points to earlier turns instead of replacing either player total 0ms
 
  Test Files  1 failed (1)
       Tests  3 failed | 21 passed (24)
-   Start at  20:45:12
-   Duration  683ms (transform 311ms, setup 0ms, import 486ms, tests 28ms, environment 0ms)
+   Start at  21:57:14
+   Duration  517ms (transform 195ms, setup 0ms, import 338ms, tests 27ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > awards 300 base plus 700 times remaining time, only once; the artist also earns points
+ FAIL  games/skribbl/__tests__/game.test.ts > guesses and points > awards 300 base plus 700 times remaining time, only once; the artist also earns points
 AssertionError: expected 440 to be 860 // Object.is equality
 
 - Expected
@@ -23,7 +23,7 @@ AssertionError: expected 440 to be 860 // Object.is equality
 - 860
 + 440
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:197:29
+ ❯ games/skribbl/__tests__/game.test.ts:197:29
     195|     const now = s.began + 6000;
     196|     const next = kit.input(s, id, { type: 'guess', text: s.word }, now…
     197|     expect(next.scores[id]).toBe(300 + Math.floor((700 * 24_000) / 30_…
@@ -33,9 +33,9 @@ AssertionError: expected 440 to be 860 // Object.is equality
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > a faster guess scores more, and the drawer, disconnected seats and unknown ids cannot guess
+ FAIL  games/skribbl/__tests__/game.test.ts > guesses and points > a faster guess scores more, and the drawer, disconnected seats and unknown ids cannot guess
 AssertionError: expected 323 to be greater than 976
- ❯ games/draw-and-guess/__tests__/game.test.ts:231:30
+ ❯ games/skribbl/__tests__/game.test.ts:231:30
     229|     const early = kit.input(s, id, { type: 'guess', text: s.word }, s.…
     230|     const late = kit.input(s, id, { type: 'guess', text: s.word }, s.b…
     231|     expect(early.scores[id]).toBeGreaterThan(late.scores[id]!);
@@ -45,7 +45,7 @@ AssertionError: expected 323 to be greater than 976
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > guesses and points > adds points to earlier turns instead of replacing either player total
+ FAIL  games/skribbl/__tests__/game.test.ts > guesses and points > adds points to earlier turns instead of replacing either player total
 AssertionError: expected 1640 to be 2060 // Object.is equality
 
 - Expected
@@ -54,7 +54,7 @@ AssertionError: expected 1640 to be 2060 // Object.is equality
 - 2060
 + 1640
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:244:29
+ ❯ games/skribbl/__tests__/game.test.ts:244:29
     242|     const prior = { ...s, scores: { ...s.scores, [id]: 1200, [s.drawer…
     243|     const next = kit.input(prior, id, { type: 'guess', text: s.word },…
     244|     expect(next.scores[id]).toBe(1200 + 860);
@@ -63,4 +63,3 @@ AssertionError: expected 1640 to be 2060 // Object.is equality
     246|   });
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
-

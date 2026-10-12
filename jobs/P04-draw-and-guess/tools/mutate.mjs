@@ -143,7 +143,11 @@ const bugs = [
   ],
 ];
 
-const command = 'pnpm.cmd vitest run games/skribbl/__tests__/game.test.ts --maxWorkers=1';
+const command =
+  'pnpm.cmd vitest run games/skribbl/__tests__/game.test.ts --maxWorkers=1 --pool=threads';
+function writeLog(name, output) {
+  writeFileSync(join(logDir, name), output.trimEnd() + '\n', 'utf8');
+}
 function runTests() {
   const result =
     process.platform === 'win32'
@@ -156,7 +160,13 @@ function runTests() {
         })
       : spawnSync(
           'pnpm',
-          ['vitest', 'run', 'games/skribbl/__tests__/game.test.ts', '--maxWorkers=1'],
+          [
+            'vitest',
+            'run',
+            'games/skribbl/__tests__/game.test.ts',
+            '--maxWorkers=1',
+            '--pool=threads',
+          ],
           { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024, timeout: 120_000 },
         );
   if (result.error) throw result.error;
@@ -164,7 +174,7 @@ function runTests() {
 }
 
 const baseline = runTests();
-writeFileSync(join(logDir, 'baseline.txt'), baseline.text, 'utf8');
+writeLog('baseline.txt', baseline.text);
 if (baseline.exitCode !== 0)
   throw new Error('Baseline tests fail; mutation check refused to start.');
 
@@ -186,7 +196,7 @@ try {
     try {
       writeFileSync(full, mutated, 'utf8');
       result = runTests();
-      writeFileSync(join(logDir, `${id}.txt`), result.text, 'utf8');
+      writeLog(`${id}.txt`, result.text);
     } finally {
       writeFileSync(full, original, 'utf8');
     }
@@ -214,7 +224,7 @@ try {
   );
 }
 const restored = runTests();
-writeFileSync(join(logDir, 'restored.txt'), restored.text, 'utf8');
+writeLog('restored.txt', restored.text);
 if (restored.exitCode !== 0) throw new Error('Restored baseline failed.');
 const caught = results.filter((r) => r.caught).length;
 console.log(

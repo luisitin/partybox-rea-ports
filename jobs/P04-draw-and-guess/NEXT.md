@@ -1,35 +1,28 @@
 # P04 continuation
 
-Branch: job/P04-draw-and-guess. Runner: r2-local.
+Runner: r2-local. Branch: job/P04-draw-and-guess.
+Game: games/skribbl (Skribbl.io). PR: https://github.com/luisitin/partybox-rea-ports/pull/1
 
-PR #1 is draft while refreshed CI runs. R15-R20 finish balanced mixed hands,
-normalized private spelling feedback, compact canvas/release endpoints,
-Safari keyboard fit, Offline labels, regional spelling pairs and paced ink.
-Earlier full scoped verification passes246tests in23files with one thread worker;
-all 7,000 seeded matches terminate. Typecheck passes. The native browser
-passes 24 interaction checks; all 33 captures fit; 20/20 mutants are caught.
+The complete public game and injected Broken Pencil live-mode upgrade are built.
+UPGRADE.md records the core installation handoff; no private deployment is claimed.
+The original telephone mode remains the injected default under the existing card.
 
-Refreshed CI is the remaining release check. The browser
-harness bounds close RPCs and cleans its unique Windows profile to handle
-launcher PID handoff. Never launch another browser before current cleanup.
+CI38196617993 passed276tests in27files, including7,000seeded matches,
+SDK contracts and properties. Local typecheck and format pass.24native browser
+checks,33captures and66media hashes (2,076,820bytes) are current; no browsers
+remain running. The old dense geometry benchmark deadline was fixed; its3
+functional checks pass locally without removing any geometric assertion.
 
-R21 shortens artist choice copy to fit the worst hand's7,578ms SDK reading
-budget within8s;14focused reading/evidence checks and typecheck pass. All33
-recaptured screens fit, and all66media hashes are current (2,076,820bytes).
-CI38194685918 passed38s (250checks). Origin/main then added the owner's
-official name/duplicate-upgrade requirement. Folder/id/name are now
-games/skribbl / skribbl / Skribbl.io. The original injected-base adapters for
-Broken Pencil's opt-in live mode are complete (UPGRADE.md);26focused checks
-and typecheck pass. Refreshed24live checks and33captures pass. The full276-check
-run is still finishing; a dense-ink geometry test exceeded its5s default under
-desktop load. All geometry assertions passed before timeout. Its unnecessary
-20-repeat timing benchmark is removed, and its bounded assertion deadline is
-60s. Rerun that file after the current one-worker suite closes. Final format/hash,
-CI and three
-consecutive KEEP GOING reviews and log their five
-remaining candidates. Current candidates are extreme synthetic tap backlog,
-broader synonym policy, general bot image understanding, extra drawing tools
-and cosmetic label styling. No-gain count is zero until these reviews finish.
-Then mark ready, refresh PR body from the job README and mark the claim DONE.
+R23 is the latest gameplay improvement: mixed timeout chooses the offered easy
+word. Human medium/hard automatic choices340/338 become0/0 across1,000seeds;
+bots331/345 become0/0. Explicit choices, other decks, hint RNG and8s timing stay
+intact.35focused choice/game checks and typecheck pass; refreshed20/20mutants
+are caught and restored baseline passes. No fixture or screen change is needed.
+
+PR remains draft until refreshed CI and three consecutive no-gain KEEP GOING
+rounds pass. No-gain count:0. Log each review's five ranked remaining weaknesses,
+push and refresh the claim. Then refresh PR body from this job README, mark ready
+on green CI and mark CLAIMS DONE. Current candidates: extended disconnect
+forfeits, exact synonym policy, general bot vision, extra tools and cosmetic labels.
 
 Original interactive play was unavailable through CUA; see RESEARCH.md.

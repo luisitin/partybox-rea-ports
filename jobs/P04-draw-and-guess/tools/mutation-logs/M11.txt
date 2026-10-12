@@ -1,19 +1,19 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 2 failed) 30ms
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 2 failed) 29ms
      × ignores choices from guessers and spectators, including prototype names 6ms
      × ignores an old chooser packet after rotation, even if that artist has reconnected 2ms
 
  Test Files  1 failed (1)
       Tests  2 failed | 22 passed (24)
-   Start at  20:46:37
-   Duration  680ms (transform 302ms, setup 0ms, import 473ms, tests 30ms, environment 0ms)
+   Start at  21:57:22
+   Duration  472ms (transform 177ms, setup 0ms, import 307ms, tests 29ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > ignores choices from guessers and spectators, including prototype names
+ FAIL  games/skribbl/__tests__/game.test.ts > choice and drawing turns > ignores choices from guessers and spectators, including prototype names
 AssertionError: expected { phase: { id: 'draw', …(2) }, …(25) } to deeply equal { Object (phase, players, ...) }
 
 - Expected
@@ -94,7 +94,7 @@ AssertionError: expected { phase: { id: 'draw', …(2) }, …(25) } to deeply eq
 +   "word": "leaf",
   }
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:37:62
+ ❯ games/skribbl/__tests__/game.test.ts:37:62
      35|     const s = kit.start();
      36|     for (const id of [guesser(s), 'spectator', '__proto__', 'construct…
      37|       expect(kit.input(s, id, { type: 'choose', index: 0 })).toEqual(s…
@@ -104,7 +104,7 @@ AssertionError: expected { phase: { id: 'draw', …(2) }, …(25) } to deeply eq
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
 
- FAIL  games/draw-and-guess/__tests__/game.test.ts > choice and drawing turns > ignores an old chooser packet after rotation, even if that artist has reconnected
+ FAIL  games/skribbl/__tests__/game.test.ts > choice and drawing turns > ignores an old chooser packet after rotation, even if that artist has reconnected
 AssertionError: expected { phase: { id: 'draw', …(2) }, …(25) } to deeply equal { Object (phase, players, ...) }
 
 - Expected
@@ -186,7 +186,7 @@ AssertionError: expected { phase: { id: 'draw', …(2) }, …(25) } to deeply eq
 +   "word": "grape",
   }
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:76:84
+ ❯ games/skribbl/__tests__/game.test.ts:76:84
      74|     const rotated = kit.player(s, s.drawer, false, undefined, T0 + 100…
      75|     const rejoined = kit.player(rotated, s.drawer, true, undefined, T0…
      76|     expect(kit.input(rejoined, s.drawer, { type: 'choose', index: 0 },…
@@ -195,4 +195,3 @@ AssertionError: expected { phase: { id: 'draw', …(2) }, …(25) } to deeply eq
      78|     );
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
-
