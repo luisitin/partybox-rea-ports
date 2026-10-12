@@ -1,0 +1,102 @@
+.stage {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  padding: var(--pb-space-4) var(--pb-space-6);
+}
+.board {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) calc(var(--pb-font-body) * 11);
+  gap: var(--pb-space-6);
+  align-items: center;
+  container-type: size;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-3);
+  min-width: 0;
+}
+.arena {
+  position: relative;
+  width: min(100%, calc((100cqh - var(--pb-font-body) * 4) * 5 / 3));
+}
+.line {
+  margin: 0;
+  text-align: center;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: var(--pb-space-5);
+  flex-wrap: wrap;
+  margin: 0;
+  font-size: var(--pb-font-body);
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--pb-accent-2);
+}
+.rail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--pb-space-3);
+  min-width: 0;
+}
+.headline {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  font-weight: 1000;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+.clock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-1);
+  align-items: center;
+  padding: var(--pb-space-2);
+  border: calc(var(--pb-space-1) / 4) solid var(--pb-border);
+  border-radius: var(--pb-radius-lg);
+  background: var(--pb-surface);
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+}
+.clock b {
+  font-size: calc(var(--pb-font-display) * 0.75);
+  line-height: 1;
+  font-weight: 1000;
+  font-variant-numeric: tabular-nums;
+}
+.clock[data-low='true'] b {
+  color: var(--pb-accent-2);
+}
+.alive,
+.next {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.countdown {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--pb-text);
+  font-size: var(--pb-font-display);
+  font-weight: 1000;
+  pointer-events: none;
+}
+
+/* Between fights, the result is the focal point and the maze remains as round context. */
+.board:has([data-ranked='true']) {
+  grid-template-columns: minmax(0, 1fr) calc(var(--pb-font-body) * 25);
+}

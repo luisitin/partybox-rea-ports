@@ -59,8 +59,9 @@ ranks, including a match in which no round had a winner. Results retain every in
 - A drop releases held movement/fire. A permanent leave eliminates the tank and removes it
   from later rounds; returning after leaving is a spectator. A temporary reconnect continues
   the same tank if it survived. No disconnected player blocks a phase.
-- All combat information is public. Playing phones beside a TV omit the arena for bandwidth;
-  remote, phone-only and spectator phones keep it. No private state or future seeded plans leak.
+- All combat information is public. Every controller carries the current arena; phones beside
+  a TV use a focused pad while remote, phone-only and spectator phones draw the stage. No private
+  state or future seeded plans leak.
 - VIP skip scores the current fight as it stands. VIP end ends with already earned points.
   Late/stale timers and unknown player inputs cannot advance combat.
 

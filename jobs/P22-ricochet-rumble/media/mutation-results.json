@@ -1,0 +1,350 @@
+{
+  "command": "node jobs/P22-ricochet-rumble/mutate.mjs",
+  "baselineCommand": "pnpm vitest run games/ricochet-rumble/__tests__/game.test.ts games/ricochet-rumble/__tests__/physics.test.ts --maxWorkers=1 --pool=threads",
+  "mutationTestCommand": "node node_modules/vitest/vitest.mjs run <listed target> --maxWorkers=1 --pool=threads --reporter=json --outputFile=<temporary report>",
+  "baselineTests": 53,
+  "mutations": 20,
+  "killed": 19,
+  "invalidMutations": 0,
+  "sourceHashes": {
+    "games/ricochet-rumble/server/collision.ts": "f40e5e83fa92719101c1a5273ef595b12ea9270ea39e355c6fb14b5aabc1f47b",
+    "games/ricochet-rumble/server/world.ts": "2bd709c4ffc3a3ca26458a1f314cf106fb510b84111bc1364874234f8039c195",
+    "games/ricochet-rumble/server/world-core.ts": "4b3307cc987acda35006132554c220b232a5c0ae66a6b3041cb0309fda0d1e5b",
+    "games/ricochet-rumble/server/scoring.ts": "09ee914bc244d3b8c2a8c58890e3c9ec4a81cab9b7646d25c8aeefbc5cea6504",
+    "games/ricochet-rumble/server/phases/play.ts": "8e9d5d1d482179c507e587d9d2fcf26945e57fecfbcfce0287f022f61acb85f5",
+    "games/ricochet-rumble/server/index.ts": "17bd474c8d10f13c0d830a17c2b283073138c2a4bf72192dcfafaf21c58e47a0"
+  },
+  "results": [
+    {
+      "id": "M01",
+      "description": "Vertical wall leaves X velocity unchanged",
+      "file": "games/ricochet-rumble/server/collision.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "wall ricochets and swept collisions reflects X at a vertical wall without changing Y or speed",
+          "message": "AssertionError: expected 43 to be -43 // Object.is equality"
+        },
+        {
+          "name": "wall ricochets and swept collisions reflects both tied axes once at a corner and preserves speed",
+          "message": "AssertionError: expected { Object (id, owner, ...) } to match object { vx: -30, vy: -30, bounces: 1 }"
+        },
+        {
+          "name": "damage fairness and the final-death lock a real returning ricochet destroys its owner after clearance",
+          "message": "AssertionError: expected true to be false // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M02",
+      "description": "Horizontal wall leaves Y velocity unchanged",
+      "file": "games/ricochet-rumble/server/collision.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "wall ricochets and swept collisions reflects Y at a horizontal wall without changing X or speed",
+          "message": "AssertionError: expected 43 to be -43 // Object.is equality"
+        },
+        {
+          "name": "wall ricochets and swept collisions reflects both tied axes once at a corner and preserves speed",
+          "message": "AssertionError: expected { Object (id, owner, ...) } to match object { vx: -30, vy: -30, bounces: 1 }"
+        }
+      ]
+    },
+    {
+      "id": "M03",
+      "description": "Tank movement ignores a blocking wall",
+      "file": "games/ricochet-rumble/server/world.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "wall ricochets and swept collisions stops a moving tank at a wall and allows reversing away",
+          "message": "AssertionError: expected 55 to be less than or equal to 37"
+        }
+      ]
+    },
+    {
+      "id": "M04",
+      "description": "Owner loses the muzzle-clearance grace period",
+      "file": "games/ricochet-rumble/server/collision.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "damage fairness and the final-death lock protects an owner only for muzzle clearance, then permits owner damage",
+          "message": "AssertionError: expected false to be true // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M05",
+      "description": "A sixth simultaneous shell is allowed",
+      "file": "games/ricochet-rumble/server/world-core.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "ammunition, reload and collectible weapons allows a fifth shot but never a sixth simultaneous owner projectile",
+          "message": "AssertionError: expected 1 to be +0 // Object.is equality"
+        },
+        {
+          "name": "ammunition, reload and collectible weapons expires ordinary shells at ten seconds and releases all five capacity slots",
+          "message": "AssertionError: expected 5 to be 4 // Object.is equality"
+        },
+        {
+          "name": "ammunition, reload and collectible weapons an unused pickup reverts to ordinary shells after its twelve-second window",
+          "message": "AssertionError: expected { id: 'a', slot: +0, x: 20, …(14) } to match object { weapon: 'shell', ammo: 5, …(1) }"
+        }
+      ]
+    },
+    {
+      "id": "M06",
+      "description": "Normal shells live twenty seconds instead of ten",
+      "file": "games/ricochet-rumble/server/world-core.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "ammunition, reload and collectible weapons expires ordinary shells at ten seconds and releases all five capacity slots",
+          "message": "AssertionError: expected [ { id: 1, owner: 'a', x: 60, …(6) } ] to have a length of +0 but got 1"
+        }
+      ]
+    },
+    {
+      "id": "M07",
+      "description": "Held fire ignores the ordinary reload",
+      "file": "games/ricochet-rumble/server/world-core.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "ammunition, reload and collectible weapons holding fire observes the 420 ms reload and accepts the boundary shot",
+          "message": "AssertionError: expected 20 to be 440 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M08",
+      "description": "Beam ricochets instead of being absorbed by a wall",
+      "file": "games/ricochet-rumble/server/collision.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "wall ricochets and swept collisions keeps a fast Beam on the near side of a wall and absorbs it",
+          "message": "AssertionError: expected [ { id: 1, owner: 'a', …(7) } ] to have a length of +0 but got 1"
+        }
+      ]
+    },
+    {
+      "id": "M09",
+      "description": "Burst loses both spread projectiles",
+      "file": "games/ricochet-rumble/server/world.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "ammunition, reload and collectible weapons Burst fires three distinct angles, consumes one volley and waits 700 ms",
+          "message": "AssertionError: expected [ { id: 100, owner: 'a', …(7) } ] to have a length of 3 but got 1"
+        }
+      ]
+    },
+    {
+      "id": "M10",
+      "description": "Beam travels at ordinary shell speed",
+      "file": "games/ricochet-rumble/server/world.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "ammunition, reload and collectible weapons Beam is faster than a shell, consumes its one use and expires after one second",
+          "message": "AssertionError: expected { id: 100, owner: 'a', x: 24.66, …(6) } to match object { kind: 'beam', vx: 130, vy: +0 }"
+        }
+      ]
+    },
+    {
+      "id": "M11",
+      "description": "Seeker never activates before its projectile expires",
+      "file": "games/ricochet-rumble/server/collision.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "ammunition, reload and collectible weapons Seeker turns toward a rival after activation while preserving its speed",
+          "message": "AssertionError: expected 0 to be greater than 0"
+        }
+      ]
+    },
+    {
+      "id": "M12",
+      "description": "An exactly contested pickup favors the first roster seat",
+      "file": "games/ricochet-rumble/server/world.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "ammunition, reload and collectible weapons a tied pickup remains contested instead of favoring roster order",
+          "message": "AssertionError: expected [] to have a length of 1 but got +0"
+        }
+      ]
+    },
+    {
+      "id": "M13",
+      "description": "Catch-up continues past the locked final-survivor sample",
+      "file": "games/ricochet-rumble/server/world.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "damage fairness and the final-death lock locks the survivor before another flying shot could kill the round winner",
+          "message": "AssertionError: expected { …(7) } to deeply equal { …(7) }"
+        }
+      ]
+    },
+    {
+      "id": "M14",
+      "description": "A round win earns two points instead of one",
+      "file": "games/ricochet-rumble/server/scoring.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "damage fairness and the final-death lock locks the survivor before another flying shot could kill the round winner",
+          "message": "AssertionError: expected { a: +0, b: +0, c: 2 } to deeply equal { a: +0, b: +0, c: 1 }"
+        },
+        {
+          "name": "connected seeded mazes and win scoring only the sole survivor gets exactly one round-win point",
+          "message": "AssertionError: expected { a: +0, b: 2, c: +0 } to deeply equal { a: +0, b: 1, c: +0 }"
+        }
+      ]
+    },
+    {
+      "id": "M15",
+      "description": "Multiple cap survivors each earn a win point",
+      "file": "games/ricochet-rumble/server/scoring.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "connected seeded mazes and win scoring multiple survivors at the cap earn zero, and mutual elimination earns zero",
+          "message": "AssertionError: expected { a: 1, b: 1 } to deeply equal { a: +0, b: +0 }"
+        }
+      ]
+    },
+    {
+      "id": "M16",
+      "description": "Eliminated tanks earn a point in every round",
+      "file": "games/ricochet-rumble/server/scoring.ts",
+      "target": "games/ricochet-rumble/__tests__/physics.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 36,
+      "failed": [
+        {
+          "name": "damage fairness and the final-death lock resolves simultaneous final deaths as a draw regardless of tank or shell order",
+          "message": "AssertionError: expected { a: 1, b: 1 } to deeply equal { a: +0, b: +0 }"
+        },
+        {
+          "name": "damage fairness and the final-death lock locks the survivor before another flying shot could kill the round winner",
+          "message": "AssertionError: expected { a: 1, b: 1, c: 1 } to deeply equal { a: +0, b: +0, c: 1 }"
+        },
+        {
+          "name": "connected seeded mazes and win scoring only the sole survivor gets exactly one round-win point",
+          "message": "AssertionError: expected { a: 1, b: 1, c: 1 } to deeply equal { a: +0, b: 1, c: +0 }"
+        },
+        {
+          "name": "connected seeded mazes and win scoring multiple survivors at the cap earn zero, and mutual elimination earns zero",
+          "message": "AssertionError: expected { a: 1, b: 1 } to deeply equal { a: +0, b: +0 }"
+        }
+      ]
+    },
+    {
+      "id": "M17",
+      "description": "A stale timer can end the present fight",
+      "file": "games/ricochet-rumble/server/phases/play.ts",
+      "target": "games/ricochet-rumble/__tests__/game.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 17,
+      "failed": [
+        {
+          "name": "input and clock boundaries rejects stale phase instances, incorrect phase ids and premature timers",
+          "message": "AssertionError: expected { phase: { id: 'score', …(2) }, …(13) } to be { phase: { id: 'play', …(2) }, …(13) } // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M18",
+      "description": "A disconnected player can resume steering and firing",
+      "file": "games/ricochet-rumble/server/phases/play.ts",
+      "target": "games/ricochet-rumble/__tests__/game.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 17,
+      "failed": [
+        {
+          "name": "pause and presence a drop releases controls, rejects offline input, and a temporary reconnect keeps the same tank",
+          "message": "AssertionError: expected { phase: { id: 'play', …(2) }, …(13) } to be { phase: { id: 'play', …(2) }, …(13) } // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M19",
+      "description": "Inputs from before judged combat time are accepted",
+      "file": "games/ricochet-rumble/server/phases/play.ts",
+      "target": "games/ricochet-rumble/__tests__/game.test.ts",
+      "status": "survived",
+      "exitCode": 0,
+      "tests": 17,
+      "failed": []
+    },
+    {
+      "id": "M20",
+      "description": "Public views leak internal projectile and spawn counters",
+      "file": "games/ricochet-rumble/server/index.ts",
+      "target": "games/ricochet-rumble/__tests__/game.test.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 17,
+      "failed": [
+        {
+          "name": "public views and terminal outcomes all surfaces share the present public arena and omit rng/config/future metadata",
+          "message": "AssertionError: expected { …(7) } to not have property \"nextBullet\""
+        }
+      ]
+    }
+  ]
+}

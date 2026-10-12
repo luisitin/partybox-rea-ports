@@ -4,7 +4,7 @@
 - Pure server, time only from events, randomness only from state.rng. One file per phase.
 - Input controls latch until release or expiry. Player drops cancel controls; permanent leaves do not respawn.
 - Shells can hurt their owner; simultaneous impacts and a locked survivor cannot depend on roster order.
-- All combat information is public. Only omit the world for a playing phone with a visible TV.
+- All combat information is public. Every controller carries the current arena for immediate stage/reconnect use.
 - Phone-only, remote and spectator phones show the public stage; spectators have no controls.
 - Colors, sizes and motion use --pb-* tokens; tank numbers and weapon letters supplement color.
 - Use only SDK imports (React allowed in client), no new dependencies or runtime network requests.
