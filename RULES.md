@@ -4,7 +4,7 @@ Be extremely aggressive about quality and verification: research the original de
 
 ## Public repo hygiene
 
-- Public repo. Never commit ripped assets (sprites, sounds, music, fonts, logos) from the original game or any trademarked art. Rules and mechanics are not copyrightable; a real product name is never used as the game name. Art is yours (inline SVG, canvas drawing, CSS) or CC0 with the licence recorded in SOURCES.md.
+- Public repo. Never commit ripped assets (sprites, sounds, music, fonts, logos) from the original game or any trademarked art. Owner 10-11 (personal use): the game uses the ORIGINAL's official name (manifest name and id, e.g. "Kahoot!" / `kahoot`, "Agar.io" / `agar-io`); see the name table at the top of JOBS.md. Art is yours (inline SVG, canvas drawing, CSS) or CC0 with the licence recorded in SOURCES.md.
 - Zero secrets, zero tracking, zero network calls at runtime. No new dependencies unless the job names one.
 
 ## What a job delivers (games/<id>/)

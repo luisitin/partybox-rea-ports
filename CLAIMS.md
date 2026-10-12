@@ -5,12 +5,12 @@
 
 P01 r1-local 2026-10-11T22:54:02Z job/P01-quiz-rush DONE
 P02 r2-local 2026-10-11T20:44:31Z job/P02-quiz-rush-teams BLOCKED jobs/P02-quiz-rush-teams/BLOCKED.md
-P03 r3-local 2026-10-11T22:31:04Z job/P03-trivia-lightning
-P04 r2-local 2026-10-11T22:26:36Z job/P04-draw-and-guess
+P03 r3-local 2026-10-12T02:29:35Z job/P03-trivia-lightning
+P04 r2-local 2026-10-12T02:09:32Z job/P04-draw-and-guess
 P05 r5-local 2026-10-11T22:33:37Z job/P05-blob-arena
 P06 r6-local 2026-10-11T22:35:43Z job/P06-snake-royale
 
-P07 r4-local 2026-10-11T22:09:22Z job/P07-paper-territory
+P07 r4-local 2026-10-12T02:27:12Z job/P07-paper-territory DONE
 
 P08 r7-local 2026-10-11T22:25:22Z job/P08-hole-swallow
 
@@ -39,6 +39,8 @@ P20 r19-local 2026-10-11T22:31:04Z job/P20-fruit-slice
 
 P21 r20-local 2026-10-11T22:34:58Z job/P21-pong-party
 
-P22 r1-local 2026-10-12T01:21:07Z job/P22-ricochet-rumble
+P22 r1-local 2026-10-12T02:30:01Z job/P22-ricochet-rumble
+
+P23 r4-local 2026-10-12T02:27:28Z job/P23-bonk-io
 
 <!-- prettier-ignore-end -->
