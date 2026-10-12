@@ -5,8 +5,8 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRng } from '@partybox/game-sdk';
 import type { BotSkill, Rng } from '@partybox/game-sdk';
-import { game } from '../../games/hole-swallow/server/index';
-import type { State } from '../../games/hole-swallow/server/types';
+import { game } from '../../games/hole-io/server/index';
+import type { State } from '../../games/hole-io/server/types';
 
 export const T0 = 1_000_000;
 const skills: BotSkill[] = ['easy', 'normal', 'sharp'];

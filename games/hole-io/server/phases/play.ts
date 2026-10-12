@@ -2,7 +2,7 @@
 import { hasPlayer, isTimerFor, nextStep } from '@partybox/game-sdk';
 import type { GameEvent } from '@partybox/game-sdk';
 import { scoresOf } from '../scoring';
-import { TICK_MS } from '../types';
+import { TICK_MS, isParticipating } from '../types';
 import type { Input, State } from '../types';
 import { applyMove, tick } from '../world';
 
@@ -31,12 +31,15 @@ export function reducePlay(
   if (
     event.type !== 'input' ||
     !hasPlayer(state, event.playerId) ||
+    !isParticipating(state, event.playerId) ||
     !state.players[event.playerId]?.connected ||
-    event.now < state.began + state.world.elapsed
+    event.now < state.began + state.world.elapsed ||
+    event.now - state.began <
+      (state.world.holes.find((hole) => hole.id === event.playerId)?.lastMoveAt ?? -1)
   )
     return state;
   const s = settle(state, event.now);
   if (event.now >= s.endsAt) return next(s, event.now);
-  const world = applyMove(s.world, event.playerId, event.input);
+  const world = applyMove(s.world, event.playerId, event.input, event.now - s.began);
   return world === s.world ? s : { ...s, world };
 }

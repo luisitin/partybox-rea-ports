@@ -8,7 +8,7 @@ vi.setConfig({ testTimeout: 240_000 });
 
 vi.mock('../../../packages/game-sdk/src/contract-tests/load', async (importOriginal) => ({
   ...(await importOriginal<typeof import('../../../packages/game-sdk/src/contract-tests/load')>()),
-  listGameIds: () => ['hole-swallow'],
+  listGameIds: () => ['hole-io'],
   // This wrapper always runs the entire contract for its one game, even in a sharded shell.
   shardIds: (ids: readonly string[]) => [...ids],
 }));

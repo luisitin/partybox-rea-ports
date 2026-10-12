@@ -57,6 +57,15 @@ export function standings(
         x: 0,
         y: 0,
         radius: 0,
+        alive: false,
+        level: 1,
+        growth: 0,
+        levelProgress: 0,
+        nextLevelAt: null,
+        eliminatedAt: null,
+        eliminatedBy: null,
+        connected: p.connected,
+        left: false,
         score: scores[p.id] ?? 0,
         swallowed: 0,
         respawnIn: 0,
@@ -129,4 +138,15 @@ export function holeLabels(holes: readonly HoleView[]): {
     if (!moved) break;
   }
   return labels;
+}
+
+/** Only surviving participants receive a camera; disconnection does not erase their hole. */
+export function liveStandings(rows: readonly Standing[]): Standing[] {
+  return rows.filter((row) => row.hole.alive !== false && !row.hole.left);
+}
+
+/** A watcher follows the highest-scoring connected survivor, then an away survivor. */
+export function watchingLeader(rows: readonly Standing[]): Standing | undefined {
+  const live = liveStandings(rows);
+  return live.find((row) => row.connected) ?? live[0];
 }

@@ -1,4 +1,4 @@
-// Points survive respawns; a player's accumulated intake is the final score.
+// Eliminated and departed players keep banked intake; accumulated points determine rank.
 import { rank } from '@partybox/game-sdk';
 import type { GameResults } from '@partybox/game-sdk';
 import type { State, World } from './types';

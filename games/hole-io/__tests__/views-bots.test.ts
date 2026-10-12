@@ -4,23 +4,25 @@ import { game } from '../server/index';
 import { freeze, hole, move, prop, start, timer, T0, world } from './helpers';
 
 describe('public stage and personal phone payloads', () => {
-  it('shows every hole on the TV, only your hole on a nearby phone, and never simulation bookkeeping', () => {
+  it('always supplies the shared city and own hole, and never simulation bookkeeping', () => {
     const s = move(start(8), 'p1', 0.6, 0.8);
     const tv = game.tvView(s);
     const p1 = game.controllerView(s, 'p1');
     const p2 = game.controllerView(s, 'p2');
     expect(tv.city.holes).toHaveLength(8);
-    expect(p1.city).toBeUndefined();
-    expect(p2.city).toBeUndefined();
+    expect(p1.city).toEqual(tv.city);
+    expect(p2.city).toEqual(tv.city);
+    expect(p1.stage).toBe(false);
+    expect(p1.participating).toBe(true);
     expect(p1.mine!.id).toBe('p1');
     expect(p2.mine!.id).toBe('p2');
     expect(p1.scores).toEqual(p2.scores);
     for (const view of [tv, p1, p2]) {
       expect(JSON.parse(JSON.stringify(view))).toEqual(view);
       expect(JSON.stringify(view)).not.toMatch(
-        /"(rng|cells|mass|dx|dy|inputAt|immuneUntil|respawnAt)":/,
+        /"(rng|cells|mass|dx|dy|inputAt|lastMoveAt|immuneUntil|respawnAt)":/,
       );
-      expect(Buffer.byteLength(JSON.stringify(view))).toBeLessThan(64 * 1024);
+      expect(Buffer.byteLength(JSON.stringify(view))).toBeLessThan(128 * 1024);
     }
   });
   it('phone-only and remote players get the same public city as the TV, and spectators get a stage', () => {
@@ -37,21 +39,36 @@ describe('public stage and personal phone payloads', () => {
       players: { ...s.players, p1: { ...s.players['p1']!, canSeeTv: false } },
     };
     expect(game.controllerView(remote, 'p1').city).toEqual(game.tvView(remote).city);
-    expect(game.controllerView(remote, 'p2').city).toBeUndefined();
+    expect(game.controllerView(remote, 'p2').city).toEqual(game.tvView(remote).city);
+    expect(game.controllerView(remote, 'p2').stage).toBe(false);
   });
-  it('omits swallowed props, names comeback duration and shield, and expires gain feedback after a second', () => {
+  it('publishes recent prop sinks and permanent loss without a comeback, then expires gain feedback', () => {
     const base = {
       ...start(),
-      world: world([hole(), hole('p2', { slot: 1, x: 120, respawnAt: 3100 })], [prop()]),
+      world: world(
+        [
+          hole(),
+          hole('p2', { slot: 1, x: 120, alive: false, eliminatedAt: 100, eliminatedBy: 'p1' }),
+        ],
+        [prop()],
+      ),
     };
     const s = timer(base, T0 + 200);
     expect(game.tvView(s).city.props).toHaveLength(0);
     expect(game.controllerView(s, 'p1').mine!.lastGain).toBe(2);
-    expect(game.controllerView(s, 'p2').mine!.respawnIn).toBe(2900);
+    expect(game.tvView(s).city.sinks).toMatchObject([{ id: 0, by: 'p1', consumedAt: 100 }]);
+    expect(game.controllerView(s, 'p2').mine).toMatchObject({ alive: false, respawnIn: 0 });
+    expect(game.controllerView(s, 'p2').participating).toBe(false);
+    expect(game.controllerView(s, 'p2').stage).toBe(true);
     const later = timer(s, T0 + 1200);
     expect(game.controllerView(later, 'p1').mine!.lastGain).toBe(0);
-    const returned = timer(later, T0 + 3200);
-    expect(game.controllerView(returned, 'p2').mine).toMatchObject({ respawnIn: 0, shield: true });
+    const stillOut = timer(later, T0 + 3200);
+    expect(game.controllerView(stillOut, 'p2').mine).toMatchObject({
+      alive: false,
+      respawnIn: 0,
+      shield: false,
+    });
+    expect(game.tvView(stillOut).city.sinks).toEqual([]);
   });
 });
 
@@ -117,7 +134,7 @@ describe('three honest bot strengths', () => {
     };
     expect(game.bot.sampleInput(altered, 'p1', createRng(1), 'normal')).toEqual(honest);
   });
-  it('does not act twice on one sample, while paused, disconnected, respawning, or after play', () => {
+  it('does not act twice on one sample, while paused, disconnected, eliminated, or after play', () => {
     const s = start();
     const sampled = move(s, 'p1', 1, 0);
     expect(game.bot.sampleInput(sampled, 'p1', createRng(1))).toBeNull();
@@ -133,7 +150,10 @@ describe('three honest bot strengths', () => {
     ).toBeNull();
     expect(
       game.bot.sampleInput(
-        { ...s, world: world([hole('p1', { respawnAt: 3000 })]) },
+        {
+          ...s,
+          world: world([hole('p1', { alive: false, eliminatedAt: 100, eliminatedBy: 'p2' })]),
+        },
         'p1',
         createRng(1),
       ),

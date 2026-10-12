@@ -2,7 +2,7 @@ import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { game } from '../server/index';
 import { scoresOf } from '../server/scoring';
-import { HEIGHT, WIDTH } from '../server/types';
+import { HEIGHT, MAX_SINKS, WIDTH } from '../server/types';
 import { radiusOf, tick } from '../server/world';
 import { freeze, move, start } from './helpers';
 
@@ -29,6 +29,8 @@ describe('seeded city properties', () => {
             expect(JSON.stringify(s)).toBe(before);
             expect(single.elapsed).toBe(Math.floor(elapsed / 100) * 100);
             expect(JSON.parse(JSON.stringify(single))).toEqual(single);
+            expect(single.sinks.length).toBeLessThanOrEqual(MAX_SINKS);
+            expect(single.sinks.every((sink) => single.elapsed - sink.consumedAt < 700)).toBe(true);
             for (const h of single.holes) {
               const r = radiusOf(h.mass);
               expect(h.x).toBeGreaterThanOrEqual(r - 0.0001);
@@ -37,6 +39,10 @@ describe('seeded city properties', () => {
               expect(h.y).toBeLessThanOrEqual(HEIGHT - r + 0.0001);
               expect(Number.isInteger(h.score) && h.score >= 0).toBe(true);
               expect(h.mass).toBeLessThanOrEqual(h.score);
+              if (!h.alive) {
+                expect(h.dx).toBe(0);
+                expect(h.dy).toBe(0);
+              }
             }
             const settled = { ...s, world: single, scores: scoresOf(single) };
             expect(Buffer.byteLength(JSON.stringify(settled))).toBeLessThan(256 * 1024);

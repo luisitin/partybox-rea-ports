@@ -1,17 +1,10 @@
-// The city is the focal point; the rail keeps identities, scores and the 90-second clock readable.
+// Each live player has a close native-style city camera on the shared television.
 import type { JSX } from 'react';
 import { Stage, useSecondsLeft, useT } from '@partybox/game-sdk/ui';
 import type { GameTvProps } from '@partybox/game-sdk/ui';
 import type { HoleTvView } from '../server/types';
-import { City, PropArt } from './City';
-import {
-  clockText,
-  playerStyle,
-  PROP_ART_EXTENT,
-  standings,
-  TARGETS,
-  winnerLine,
-} from './presentation';
+import { City } from './City';
+import { clockText, liveStandings, playerStyle, standings } from './presentation';
 import { STRINGS } from './strings';
 import styles from './Tv.module.css';
 
@@ -19,90 +12,100 @@ export function Tv({ view }: GameTvProps<HoleTvView>): JSX.Element {
   const L = useT(STRINGS);
   const seconds = useSecondsLeft(view.deadline, view.paused, 250, view.clockHeldAt) ?? 0;
   const rows = standings(view.city, view.players);
+  const live = liveStandings(rows);
   const playing = view.phaseId === 'play';
+  const winners = rows.filter((row) => row.rank === 1);
   return (
     <Stage className={styles.stage}>
-      <div className={styles.layout}>
-        <section className={styles.citySide} aria-label={L('City')}>
-          <div className={styles.heading}>
-            <h2>
-              {playing
-                ? L('Small bites. Big city.')
-                : view.phaseId === 'reveal'
-                  ? L('City closed!')
-                  : L(winnerLine(rows))}
-            </h2>
+      <div className={styles.page} data-phase={view.phaseId}>
+        <header className={styles.header}>
+          <div>
+            <h2>{playing ? 'Hole.io' : L(winners.length > 1 ? 'Tied winners' : 'Winner')}</h2>
             <p>
-              {playing
-                ? L('Eat what fits. Grow. Swallow smaller rivals.')
-                : L('Most points wins · Your score survives a swallow')}
+              {L(playing ? 'Swallow the city. Watch out for bigger holes.' : 'Final standings')}
             </p>
           </div>
-          <div className={styles.map}>
-            <City city={view.city} />
-          </div>
-          <ol className={styles.progression} aria-label={L('Grow to swallow larger objects')}>
-            {TARGETS.map((t) => (
-              <li key={t.kind}>
-                <svg
-                  viewBox={`${-PROP_ART_EXTENT[t.kind]} ${-PROP_ART_EXTENT[t.kind]} ${PROP_ART_EXTENT[t.kind] * 2} ${PROP_ART_EXTENT[t.kind] * 2}`}
-                  aria-hidden="true"
-                >
-                  <PropArt kind={t.kind} />
-                </svg>
-                <span>{L(t.label)}</span>
-              </li>
-            ))}
-          </ol>
-        </section>
-        <aside className={styles.rail}>
           {playing ? (
             <div className={styles.clock} data-low={seconds <= 5 || undefined}>
-              <span>{view.paused ? L('Paused') : L('Time left')}</span>
+              <span>{L(view.paused ? 'Paused' : 'Time left')}</span>
               <strong role="timer" aria-label={L('{n} seconds left', { n: seconds })}>
                 {clockText(seconds)}
               </strong>
             </div>
-          ) : (
-            <p className={styles.resultsLabel}>
-              {view.phaseId === 'reveal' ? L('Final standings') : L('The city champions')}
-            </p>
-          )}
-          <ol className={styles.rows} aria-label={L('Player scores')}>
-            {rows.map((r) => (
-              <li
-                key={r.hole.id}
-                style={playerStyle(r.hole.slot)}
-                data-leader={(!playing && r.rank === 1) || undefined}
-              >
-                <span
-                  className={styles.identity}
-                  aria-label={L('Hole {n}', { n: r.hole.slot + 1 })}
+          ) : null}
+        </header>
+        {playing ? (
+          live.length > 0 ? (
+            <div className={styles.cameras} data-count={live.length} data-close-cameras="true">
+              {live.map((row) => (
+                <section
+                  className={styles.camera}
+                  key={row.hole.id}
+                  style={playerStyle(row.hole.slot)}
+                  data-camera-id={row.hole.id}
+                  aria-label={L('Close city view following {name}', { name: row.name })}
                 >
-                  {r.hole.slot + 1}
-                </span>
-                <div className={styles.player}>
-                  <b title={r.name}>{r.name}</b>
-                  <span>
-                    {!playing
-                      ? L('Place {n}', { n: r.rank })
-                      : !r.connected
-                        ? L('Disconnected')
-                        : r.hole.respawnIn > 0
-                          ? L('Back in {n}s', { n: Math.ceil(r.hole.respawnIn / 1000) })
-                          : r.hole.shield
-                            ? L('Protected')
-                            : L('Swallowing')}
-                  </span>
-                </div>
-                <strong className={styles.score}>{r.hole.score}</strong>
+                  <City
+                    city={view.city}
+                    mine={row.hole.id}
+                    compact
+                    players={view.players}
+                    elapsed={view.elapsed}
+                    label={L('Close city view following {name}', { name: row.name })}
+                  />
+                  <div className={styles.cameraHud}>
+                    <h3>{row.name}</h3>
+                    <div className={styles.cameraStats}>
+                      <span>{L('{n} points', { n: row.hole.score })}</span>
+                      <span>{L('Size {n}', { n: row.hole.level ?? 1 })}</span>
+                    </div>
+                    <meter
+                      className={styles.growth}
+                      min={0}
+                      max={1}
+                      value={row.hole.levelProgress ?? 0}
+                      aria-label={L('Growth to the next size')}
+                    />
+                  </div>
+                  {!row.connected ? (
+                    <p className={styles.connection} role="status">
+                      {L('Disconnected')}
+                    </p>
+                  ) : null}
+                </section>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.empty} role="status">
+              <h3>{L('No holes left in the city')}</h3>
+              <p>{L('Banked points are safe. Final scores at the end of the clock.')}</p>
+            </div>
+          )
+        ) : (
+          <ol className={styles.rows} aria-label={L('Final standings')}>
+            {rows.map((row) => (
+              <li
+                key={row.hole.id}
+                style={playerStyle(row.hole.slot)}
+                data-player-id={row.hole.id}
+                data-winner={row.rank === 1 || undefined}
+                aria-label={L('{name}, place {rank}, {score} points', {
+                  name: row.name,
+                  rank: row.rank,
+                  score: row.hole.score,
+                })}
+              >
+                <b className={styles.rowName}>{row.name}</b>
+                <span className={styles.rank}>{L('Place {n}', { n: row.rank })}</span>
+                <strong>{row.hole.score}</strong>
+                {row.rank === 1 ? <span className={styles.winner}>{L('Winner')}</span> : null}
               </li>
             ))}
           </ol>
-          {rows.length === 0 ? (
-            <p className={styles.empty}>{L('The city is waiting for players.')}</p>
-          ) : null}
-        </aside>
+        )}
+        {!playing && rows.length === 0 ? (
+          <p className={styles.empty}>{L('The city is waiting for players.')}</p>
+        ) : null}
       </div>
     </Stage>
   );

@@ -6,6 +6,65 @@ Every job also delivers: `games/<id>/README.md` as the spec (phases table for TV
 
 Manifest `category`: `arcade` for the P-jobs, `party` for the Q-jobs; `tags` from the reference manifest; English only.
 
+**Fidelity (owner 10-12, binding, see RULES.md):** near-identical to the original game (camera, models, HUD, names, feel); only the PartyBox palette and the party plumbing differ. Ship games/<id>/fidelity/ (original vs ours shots, GAPS.md, side-by-side.png).
+
+## Names (owner 10-11: official names, personal use; overrides the working titles below)
+
+Use these as the manifest `name` and the game `id`. A PR already open under a working title renames its folder, id and strings on its next push. Before building, check the PartyBox monorepo game list for the same game (Quiz Rush = Lightning Round and Draw and Guess = Broken Pencil turned out to be duplicates): an overlap becomes an upgrade of the existing game, not a new one.
+
+| Job | Name                               | id                     |
+| --- | ---------------------------------- | ---------------------- |
+| P01 | Kahoot!                            | `kahoot`               |
+| P02 | Kahoot! team mode                  | `kahoot (mode)`        |
+| P03 | Quizizz                            | `quizizz`              |
+| P04 | Skribbl.io                         | `skribbl`              |
+| P05 | Agar.io                            | `agar-io`              |
+| P06 | Slither.io                         | `slither-io`           |
+| P07 | Paper.io 2                         | `paper-io`             |
+| P08 | Hole.io                            | `hole-io`              |
+| P09 | 2048                               | `2048`                 |
+| P10 | Wordle                             | `wordle`               |
+| P11 | Tetris                             | `tetris`               |
+| P12 | Flappy Bird                        | `flappy-bird`          |
+| P13 | Chrome Dino                        | `chrome-dino`          |
+| P14 | Crossy Road                        | `crossy-road`          |
+| P15 | Doodle Jump                        | `doodle-jump`          |
+| P16 | Stack                              | `stack`                |
+| P17 | Helix Jump                         | `helix-jump`           |
+| P18 | Color Switch                       | `color-switch`         |
+| P19 | Piano Tiles                        | `piano-tiles`          |
+| P20 | Fruit Ninja                        | `fruit-ninja`          |
+| P21 | Pong                               | `pong`                 |
+| P22 | Tank Trouble                       | `tank-trouble`         |
+| P23 | Bonk.io                            | `bonk-io`              |
+| P24 | Haxball                            | `haxball`              |
+| P25 | Worms                              | `worms`                |
+| P26 | Mini Golf (Golf With Your Friends) | `mini-golf`            |
+| P27 | Wii Sports Bowling                 | `bowling`              |
+| P28 | Darts 301                          | `darts`                |
+| P29 | Air Hockey                         | `air-hockey`           |
+| P30 | TypeRacer                          | `typeracer`            |
+| P31 | Minesweeper                        | `minesweeper`          |
+| P32 | Dots and Boxes                     | `dots-and-boxes`       |
+| P33 | Connect Four                       | `connect-four`         |
+| P34 | Othello                            | `othello`              |
+| P35 | Ultimate Tic-Tac-Toe               | `ultimate-tic-tac-toe` |
+| P36 | Checkers                           | `checkers`             |
+| P37 | Liar's Dice                        | `liars-dice`           |
+| P38 | Blackjack                          | `blackjack`            |
+| P39 | Texas Hold'em                      | `texas-holdem`         |
+| P40 | Werewolf                           | `werewolf`             |
+| P41 | Spyfall                            | `spyfall`              |
+| P42 | Word Association                   | `word-association`     |
+| P43 | Would You Rather                   | `would-you-rather`     |
+| P44 | Jeopardy!                          | `jeopardy`             |
+| P45 | Family Feud                        | `family-feud`          |
+| P46 | Wheel of Fortune                   | `wheel-of-fortune`     |
+| P47 | The Price Is Right                 | `price-is-right`       |
+| P48 | Deal or No Deal                    | `deal-or-no-deal`      |
+| P49 | Who Wants to Be a Millionaire      | `millionaire`          |
+| P50 | Heads Up!                          | `heads-up`             |
+
 ## P01 Quiz Rush (Kahoot-style live quiz as the PartyBox house quiz)
 
 Study the Kahoot live-quiz flow end to end (join by code on a phone, the TV lobby with names popping in, the countdown, the question shown on the TV while phones show only four coloured shape buttons, the speed-weighted score, the per-question podium beat, the music that rises and cuts, the streak bonus, the final podium). Build it as PartyBox's general quiz engine: `content/schema.ts` holds question packs (ship 3 packs of 20 original questions: general knowledge, movies, science); TV = question + timer + answer bar chart reveal; phone = the four shape buttons only, then "correct / too slow" with points and rank; speed scoring, streaks, a results podium with a top-3 reveal beat. Phone-only mode shows the question on the phone. Make the pacing the best thing about it: no dead air between questions.

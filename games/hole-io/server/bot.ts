@@ -1,7 +1,8 @@
 // Bots use only the public city: farm edible props, flee larger rims, sharp bots hunt safely.
 import type { BotSkill, Rng } from '@partybox/game-sdk';
+import { isParticipating } from './types';
 import type { Input, State } from './types';
-import { radiusOf } from './world';
+import { isAlive, radiusOf } from './world';
 
 export function botInput(
   state: State,
@@ -9,14 +10,20 @@ export function botInput(
   rng: Rng,
   skill: BotSkill = 'normal',
 ): Input | null {
-  if (state.phase.id !== 'play' || state.phase.paused || !state.players[id]?.connected) return null;
+  if (
+    state.phase.id !== 'play' ||
+    state.phase.paused ||
+    !isParticipating(state, id) ||
+    !state.players[id]?.connected
+  )
+    return null;
   const me = state.world.holes.find((h) => h.id === id);
-  if (!me || me.respawnAt !== null || me.inputAt === state.world.elapsed) return null;
+  if (!me || !isAlive(me) || me.inputAt === state.world.elapsed) return null;
   const radius = radiusOf(me.mass);
   const threats = state.world.holes.filter(
     (h) =>
       h.id !== id &&
-      h.respawnAt === null &&
+      isAlive(h) &&
       radiusOf(h.mass) >= radius * 1.25 &&
       Math.hypot(h.x - me.x, h.y - me.y) < radiusOf(h.mass) + 14,
   );
@@ -36,7 +43,7 @@ export function botInput(
       for (const h of state.world.holes) {
         if (
           h.id !== id &&
-          h.respawnAt === null &&
+          isAlive(h) &&
           h.immuneUntil <= state.world.elapsed &&
           radius >= radiusOf(h.mass) * 1.25
         )

@@ -14,18 +14,21 @@ const candidates = process.env.CHROME_PATH
     ];
 const executable = candidates.find(existsSync);
 if (!executable) throw new Error('Chrome not found; set CHROME_PATH to an installed browser.');
-const profile = resolve(`.git/r7-chrome-${process.pid}`);
+const profile = resolve(`.git/r2-p08-chrome-${process.pid}`);
 mkdirSync(profile, { recursive: true });
 const media = resolve('jobs/P08-hole-swallow/media');
 const files = JSON.parse(readFileSync(resolve(media, 'index.json'), 'utf8'));
-const allowed = new Set([...files, 'styles.css']);
+const allowed = new Set([...files, 'styles.css', 'nunito-latin-wght-normal.woff2']);
 const server = createServer((req, res) => {
   const name = req.url?.slice(1);
   if (!allowed.has(name)) {
     res.writeHead(404).end();
     return;
   }
-  res.setHeader('Content-Type', name.endsWith('.css') ? 'text/css' : 'text/html');
+  res.setHeader(
+    'Content-Type',
+    name.endsWith('.css') ? 'text/css' : name.endsWith('.woff2') ? 'font/woff2' : 'text/html',
+  );
   res.end(readFileSync(resolve(media, name)));
 });
 await new Promise((res) => server.listen(0, '127.0.0.1', res));

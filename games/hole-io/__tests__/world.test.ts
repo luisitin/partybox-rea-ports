@@ -1,18 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { seedRng } from '@partybox/game-sdk';
 import { PROP_RULES } from '../server/content';
-import { HEIGHT, IMMUNE_MS, RECYCLE_MS, RESPAWN_MS, ROUND_MS, WIDTH } from '../server/types';
+import { HEIGHT, IMMUNE_MS, RECYCLE_MS, ROUND_MS, WIDTH } from '../server/types';
 import { applyMove, makeWorld, radiusOf, speedOf, tick } from '../server/world';
 import { freeze, hole, prop, world } from './helpers';
 
 describe('city growth and motion', () => {
-  it('pins original size, capped square-root growth, and slower large holes', () => {
-    expect(radiusOf(0)).toBe(3.4);
-    expect(radiusOf(100)).toBe(9.4);
+  it('pins discrete port growth and slower large holes without one-bin car access', () => {
+    expect(radiusOf(0)).toBe(2.2);
+    expect(radiusOf(9)).toBe(2.2);
+    expect(radiusOf(10)).toBe(3.3);
+    expect(radiusOf(100)).toBe(7.8);
     expect(radiusOf(1000)).toBe(14);
     expect(speedOf(0)).toBe(19);
-    expect(speedOf(100)).toBe(15.5);
-    expect(speedOf(1000)).toBe(11);
+    expect(speedOf(100)).toBeCloseTo(16.2);
+    expect(speedOf(1000)).toBeCloseTo(13.4);
   });
   it('normalizes diagonal steering without increasing travel speed; release stops', () => {
     const base = world([hole()]);
@@ -28,8 +30,8 @@ describe('city growth and motion', () => {
     for (const direction of [-1, 1]) {
       const h = tick(world([hole('p1', { dx: direction, dy: direction, mass: 100 })]), ROUND_MS)
         .holes[0]!;
-      expect(h.x).toBe(direction < 0 ? 9.4 : WIDTH - 9.4);
-      expect(h.y).toBe(direction < 0 ? 9.4 : HEIGHT - 9.4);
+      expect(h.x).toBe(direction < 0 ? 7.8 : WIDTH - 7.8);
+      expect(h.y).toBe(direction < 0 ? 7.8 : HEIGHT - 7.8);
     }
   });
   it('judges at fixed 100 ms steps, caps the round and is chunk invariant', () => {
@@ -54,10 +56,10 @@ describe('city growth and motion', () => {
     );
     expect(a).toEqual(b);
     expect(rng.step).toBeGreaterThan(0);
-    expect(a.props).toHaveLength(152);
+    expect(a.props).toHaveLength(592);
     expect(new Set(a.holes.map((h) => `${h.x},${h.y}`)).size).toBe(8);
     expect(a.holes.every((h) => h.immuneUntil === 2000)).toBe(true);
-    expect(a.props.filter((p) => p.kind === 'tower')).toHaveLength(8);
+    expect(a.props.filter((p) => p.kind === 'tower')).toHaveLength(24);
   });
 });
 
@@ -75,16 +77,18 @@ describe('swallowing city objects', () => {
     },
   );
   it('requires a strictly wider rim and enough footprint overlap', () => {
-    const tower = prop({ kind: 'tower', radius: 10, points: 60 });
-    expect(tick(world([hole('p1', { mass: 121 })], [tower]), 100).holes[0]!.score).toBe(0);
-    expect(tick(world([hole('p1', { mass: 144 })], [tower]), 100).holes[0]!.score).toBe(60);
-    expect(tick(world([hole()], [prop({ x: 52.9 })]), 100).holes[0]!.score).toBe(2);
-    expect(tick(world([hole()], [prop({ x: 53 })]), 100).holes[0]!.score).toBe(0);
+    const tower = prop({ kind: 'tower', ...PROP_RULES.tower });
+    expect(tick(world([hole('p1', { mass: 164 })], [tower]), 100).holes[0]!.score).toBe(0);
+    expect(tick(world([hole('p1', { mass: 165 })], [tower]), 100).holes[0]!.score).toBe(
+      PROP_RULES.tower.points,
+    );
+    expect(tick(world([hole()], [prop({ x: 51.69 })]), 100).holes[0]!.score).toBe(2);
+    expect(tick(world([hole()], [prop({ x: 51.71 })]), 100).holes[0]!.score).toBe(0);
   });
   it('recycles small props after twenty seconds and never recycles buildings', () => {
     const first = tick(
       world(
-        [hole('p1', { mass: 144 })],
+        [hole('p1', { mass: 165 })],
         [prop(), prop({ id: 1, kind: 'tower', radius: 10, points: 60 })],
       ),
       100,
@@ -110,19 +114,19 @@ describe('swallowing city objects', () => {
   });
 });
 
-describe('predation and a fair comeback', () => {
+describe('predation and permanent elimination', () => {
   it('requires 25 percent wider size; equal holes cannot swallow each other', () => {
+    expect(tick(world([hole(), hole('p2', { slot: 1 })]), 100).holes.every((h) => h.alive)).toBe(
+      true,
+    );
     expect(
-      tick(world([hole(), hole('p2', { slot: 1 })]), 100).holes.every((h) => h.respawnAt === null),
+      tick(world([hole('p1', { mass: 9 }), hole('p2', { slot: 1 })]), 100).holes[1]!.alive,
     ).toBe(true);
     expect(
-      tick(world([hole('p1', { mass: 1 }), hole('p2', { slot: 1 })]), 100).holes[1]!.respawnAt,
-    ).toBeNull();
-    expect(
-      tick(world([hole('p1', { mass: 3 }), hole('p2', { slot: 1 })]), 100).holes[1]!.respawnAt,
-    ).toBe(3100);
+      tick(world([hole('p1', { mass: 10 }), hole('p2', { slot: 1 })]), 100).holes[1]!.alive,
+    ).toBe(false);
   });
-  it('credits the hunter, resets victim growth, retains victim points, and waits exactly three seconds', () => {
+  it('credits the hunter once and permanently retains the swallowed victim’s bank and growth', () => {
     const base = freeze(
       world([hole('p1', { mass: 100 }), hole('p2', { slot: 1, mass: 10, score: 37, dx: 1 })]),
     );
@@ -131,29 +135,30 @@ describe('predation and a fair comeback', () => {
     expect(eaten.holes[0]!.mass).toBe(115);
     expect(eaten.holes[0]!.swallowed).toBe(1);
     expect(eaten.holes[1]).toMatchObject({
-      mass: 0,
+      mass: 10,
       score: 37,
+      alive: false,
+      eliminatedAt: 100,
+      eliminatedBy: 'p1',
       dx: 0,
       dy: 0,
-      respawnAt: 100 + RESPAWN_MS,
+      respawnAt: null,
     });
     expect(applyMove(eaten, 'p2', { type: 'move', x: 1, y: 1 })).toBe(eaten);
-    expect(tick(eaten, 3000).holes[1]!.respawnAt).toBe(3100);
-    const returned = tick(eaten, 3100).holes[1]!;
-    expect(returned.respawnAt).toBeNull();
-    expect(returned.immuneUntil).toBe(3100 + IMMUNE_MS);
-    expect(returned.score).toBe(37);
-    expect(Math.hypot(returned.x - 50, returned.y - 50)).toBeGreaterThan(60);
+    const final = tick(eaten, ROUND_MS);
+    expect(final.holes[1]).toEqual(eaten.holes[1]);
+    expect(final.holes[0]!.swallowed).toBe(1);
+    expect(final.holes[0]!.score).toBe(15);
   });
   it('a shield prevents both eating and being eaten and expires on its exact tick', () => {
     const defended = world([hole('p1', { mass: 100 }), hole('p2', { slot: 1, immuneUntil: 200 })]);
-    expect(tick(defended, 100).holes[1]!.respawnAt).toBeNull();
-    expect(tick(defended, 200).holes[1]!.respawnAt).toBe(3200);
+    expect(tick(defended, 100).holes[1]!.alive).toBe(true);
+    expect(tick(defended, 200).holes[1]).toMatchObject({ alive: false, eliminatedAt: 200 });
     const protectedHunter = world([
       hole('p1', { mass: 100, immuneUntil: 200 }),
       hole('p2', { slot: 1 }),
     ]);
-    expect(tick(protectedHunter, 100).holes[1]!.respawnAt).toBeNull();
+    expect(tick(protectedHunter, 100).holes[1]!.alive).toBe(true);
   });
   it('resolves a simultaneous swarm largest first, so an eaten hole cannot eat another', () => {
     const swarm = tick(
@@ -165,7 +170,12 @@ describe('predation and a fair comeback', () => {
       100,
     );
     expect(swarm.holes[0]).toMatchObject({ score: 45, mass: 245, swallowed: 2 });
-    expect(swarm.holes[1]).toMatchObject({ score: 0, swallowed: 0, respawnAt: 3100 });
-    expect(swarm.holes[2]!.respawnAt).toBe(3100);
+    expect(swarm.holes[1]).toMatchObject({
+      score: 0,
+      swallowed: 0,
+      alive: false,
+      eliminatedBy: 'large',
+    });
+    expect(swarm.holes[2]).toMatchObject({ alive: false, eliminatedAt: 100 });
   });
 });

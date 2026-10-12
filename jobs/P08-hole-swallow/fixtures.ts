@@ -2,10 +2,10 @@
 // The reveal and done snapshots continue the same played city, including every score.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { createRng } from '@partybox/game-sdk';
-import { game } from '../../games/hole-swallow/server/index';
+import { game } from '../../games/hole-io/server/index';
 import { driveTo, initial } from './simulate';
 
-const dir = new URL('../../games/hole-swallow/fixtures/', import.meta.url);
+const dir = new URL('../../games/hole-io/fixtures/', import.meta.url);
 mkdirSync(dir, { recursive: true });
 const rng = createRng(8);
 const play = driveTo(initial(8, 8), 60_000, rng, 'normal');

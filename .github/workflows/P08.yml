@@ -1,8 +1,8 @@
-name: P08 Hole Swallow
+name: P08 Hole.io
 on:
   pull_request:
     paths:
-      - 'games/hole-swallow/**'
+      - 'games/hole-io/**'
       - 'jobs/P08-hole-swallow/**'
       - '.github/workflows/P08.yml'
 permissions:
@@ -20,4 +20,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm format
-      - run: pnpm vitest run games/hole-swallow --maxWorkers=1
+      - run: pnpm vitest run games/hole-io --maxWorkers=1

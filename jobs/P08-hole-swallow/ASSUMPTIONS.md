@@ -1,37 +1,15 @@
 # P08 assumptions
 
-- The owner's explicit public REA-runner instruction controls this clone's
-  queue, branch, claims and GitHub workflow. The core private PartyBox board
-  workflow does not apply to this separately authorized public job.
-- P08 requires 90 seconds. The researched original classic mode used two
-  minutes; 90 seconds is a deliberate adaptation, not a measured original
-  constant.
-- The original's current numeric radii, speed curve, swallow containment,
-  growth curve and exact respawn seconds were not measured. The port owns
-  these tuning values and documents them in its game spec.
-- Historical threshold values beyond the first 10-point growth have only
-  one exact indexed source. Use them as research context, not a claim of
-  current-version fidelity. Two independent firsthand sources agree on
-  the order of edible city classes.
-- Live original play was not performed in this research pass. The developer
-  listing, several independent firsthand play reports and a public client
-  comparison substitute for unavailable native play; no measurement is
-  presented as direct observation by this runner.
-- https://hole.io was not accessible through web open. https://holeio.com
-  was fetched directly, but its Unity loader names DRA.RU. Ownership is not
-  assumed, and the browser variant is not treated as canonical VOODOO code.
-- Direct web opens of the Jed Hartman article failed. Search-indexed text
-  remained available; a direct HTTP retry was attempted. The independently
-  reachable Japanese and Korean firsthand reports cover the core mechanics.
-- Exact scoring penalties, rival size margin and spawn protection are
-  PartyBox fairness choices so all eight players remain engaged for 90 s.
-  They should be labeled as adaptation rules in the game README.
-- Art is original schematic city geometry. No trademarks, original maps,
-  sounds, sprites, fonts or compiled bundles are included.
-
-- The inherited games/AGENTS.md references docs/ADDING_A_GAME.md, pnpm gen-registry
-  and pnpm verify from the private shell. Those are absent in this public workshop;
-  use its README, RULES and actual SDK contract suite rather than inventing registry files.
-- The computer-use inventory returned no available surfaces. Static React renders and
-  one own headless Edge supplied game-screen verification. Chrome navigation stalled,
-  so its own instance was closed before Edge was tried. No live original play occurred.
+- Owner authorization controls this public r2 clone, r2-local queue/CLAIMS work and gh PRs, overriding the private board/worktree process. Root owns git/CI. This evidence agent makes no owner edits/deployment and uses no other checkout.
+- Root's checked resume checkpoint says the owner imported this same port as T-1141, current game commit 4c5eb99e8. This is the existing-card upgrade documented in UPGRADE.md; this agent did not inspect the private owner checkout.
+- Latest origin/main official-name/fidelity/Party-format rules were read during queue audit and override this resumed branch's older local RULES prose. Official identity is Hole.io/hole-io; fidelity includes camera/models/HUD/feel and permanent losers watch live leaders. Root reconciles stale branch-level rule text.
+- P08 requires a shared 90-second round. Historical Classic used two minutes; Battle developer-origin notes describe elimination/last survivor. The selected cap is job/PartyBox plumbing, not a native Battle constant.
+- Mirrored Voodoo 1.2.0 notes plus independent 2020 firsthand play support last-survivor Battle. Original historical publisher hosting is unavailable. Classic's controllable resurrection is a different mode.
+- Historical first ten-point increase, ordinary car three points and narrow one-column building four points have two firsthand sources. The full higher cumulative table has one exact indexed source. Current radii/speed/containment/rival margin, growth table and animation/audio timing are unmeasured; adopted historical values are reconstruction.
+- Frozen scoring/ranking/growth must match the game README. Battle elimination with banked-score victory is a hybrid party rule, not native last-survivor victory. No rubber-band scoring or source-exact fairness constant is invented.
+- Official PC originals are from an edition released in 2024, with screenshot creation dates unknown. Current mobile originals are marketing compositions, not 2018 playthroughs. No complete official 2018 mobile play image was recovered.
+- Original screenshots live only under fidelity/original for authorized documentation, with attribution/hashes. Runtime models/art are independently authored. No original executable/map/logo/skin/font/audio/code is used at runtime.
+- No native live session was played or timed. Follow/zoom motion, original audio, network feel and live eight-person enjoyment remain unmeasured; static research is not owner approval.
+- hole.io failed; unauthenticated holeio.com loader metadata named DRA.RU. Historical archive/video attempts failed. Kith was restricted and HTTPS-www/bare/HTTP retries timed out after ten seconds; indexed text/reachable firsthand reports supplied fallbacks.
+- Old 6aeffe2 SVG/respawn captures, 90-test run, seven-thousand-match simulation and 20-mutation campaign are historical baseline evidence, not verification of the camera/elimination/growth upgrade. Root refreshes NEXT/VERIFY/LOOP and final checks.
+- Inherited private-shell generators are absent from this public SDK workshop; use available game/contract checks. Only own-game tests and at most one headless browser closed in finally are authorized.

@@ -1,180 +1,153 @@
+.frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
 .city {
   display: block;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   font-family: var(--pb-font-family);
 }
-
-.hole {
-  transition: transform var(--pb-motion-fast) linear;
+.water {
+  fill: color-mix(in srgb, var(--pb-info) 60%, var(--pb-bg));
 }
-
-.hole[data-respawn='true'],
-.hole[data-shield='true'] {
-  transition: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hole {
-    transition: none;
-  }
-}
-
-:global(:root[data-motion='off']) .hole {
-  transition: none;
-}
-
 .ground {
-  fill: var(--pb-surface-2);
+  fill: color-mix(in srgb, var(--pb-surface-2) 80%, var(--pb-text-muted));
 }
 .blocks {
-  fill: var(--pb-surface);
+  fill: color-mix(in srgb, var(--pb-surface) 75%, var(--pb-text-muted));
   stroke: var(--pb-border);
-  stroke-width: 0.2;
+  stroke-width: 1.2;
 }
 .parks {
-  fill: color-mix(in srgb, var(--pb-accent-3) 14%, var(--pb-surface));
+  fill: color-mix(in srgb, var(--pb-accent-3) 50%, var(--pb-surface));
 }
 .roadLines {
   fill: none;
   stroke: var(--pb-text-muted);
-  stroke-width: 0.3;
-  stroke-dasharray: 1 2;
-  opacity: 0.5;
+  stroke-width: 2;
+  stroke-dasharray: 14 12;
 }
 .crossings {
-  fill: none;
-  stroke: var(--pb-text-muted);
-  stroke-width: 0.8;
-  opacity: 0.5;
+  fill: var(--pb-text-muted);
 }
-.props {
-  stroke-width: 0.2;
-  stroke-linecap: round;
+.shadow {
+  fill: var(--pb-bg);
+  opacity: 0.24;
+}
+.object {
+  --model-body: var(--pb-info);
+  --model-roof: var(--pb-surface-2);
+  stroke: color-mix(in srgb, var(--pb-bg) 38%, transparent);
+  stroke-width: 0.6;
   stroke-linejoin: round;
 }
-.bin {
-  fill: var(--pb-info);
-  stroke: var(--pb-bg);
-  stroke-width: 0.2;
-}
-.tree {
-  fill: var(--pb-accent-3);
-  stroke: var(--pb-bg);
-  stroke-width: 0.35;
-}
-.treeLight {
-  fill: color-mix(in srgb, var(--pb-accent-3) 65%, var(--pb-text));
-  stroke: none;
-}
-.bench {
-  fill: var(--pb-accent-2-fill);
-  stroke: var(--pb-bg);
-  stroke-width: 0.3;
-}
-.car {
-  fill: var(--pb-info);
-  stroke: var(--pb-bg);
-  stroke-width: 0.3;
-}
-.tyres {
-  stroke: var(--pb-bg);
-  stroke-width: 1;
-}
-.glass {
-  fill: var(--pb-bg);
-  stroke: none;
-}
-.headlights {
-  stroke: var(--pb-text);
-  stroke-width: 0.5;
-}
 .house {
-  fill: var(--pb-accent-2-fill);
-  stroke: var(--pb-bg);
-  stroke-width: 0.35;
-}
-.roof {
-  fill: var(--pb-surface-2);
-}
-.roofLine {
-  fill: none;
-  stroke: var(--pb-text-muted);
-  stroke-width: 0.3;
-}
-.window {
-  fill: var(--pb-info);
-  stroke: var(--pb-info);
-  stroke-width: 1;
+  --model-body: var(--pb-accent-2-fill);
 }
 .tower {
-  fill: var(--pb-text-muted);
-  stroke: var(--pb-bg);
-  stroke-width: 0.4;
+  --model-body: var(--pb-text-muted);
 }
-.towerSide {
-  fill: color-mix(in srgb, var(--pb-text-muted) 60%, var(--pb-bg));
+.bin {
+  --model-body: var(--pb-info);
+}
+.car {
+  --model-body: var(--pb-accent);
+}
+.body {
+  fill: var(--model-body);
+}
+.side {
+  fill: color-mix(in srgb, var(--model-body) 68%, var(--pb-bg));
+}
+.roof {
+  fill: var(--model-roof);
+}
+.glass {
+  fill: color-mix(in srgb, var(--pb-info) 62%, var(--pb-text));
+  stroke: var(--pb-border);
+  stroke-width: 0.7;
+}
+.dark {
+  fill: var(--pb-bg);
+}
+.light {
+  fill: var(--pb-text-muted);
+}
+.wood {
+  fill: var(--pb-accent-2-fill);
+}
+.leaf {
+  fill: var(--pb-accent-3);
+}
+.leafLight {
+  fill: color-mix(in srgb, var(--pb-accent-3) 70%, var(--pb-text));
 }
 .rim {
   fill: var(--pb-hole-color);
-  stroke: var(--pb-hole-color);
-  stroke-width: 0.35;
+  stroke: color-mix(in srgb, var(--pb-hole-color) 75%, var(--pb-text));
+  stroke-width: 2;
 }
 .void {
   fill: var(--pb-bg);
 }
 .shine {
   fill: none;
-  stroke: var(--pb-hole-color);
-  stroke-width: 0.3;
+  stroke: var(--pb-text);
+  stroke-width: 2;
+  opacity: 0.35;
 }
 .shield {
   fill: none;
   stroke: var(--pb-text);
-  stroke-width: 0.3;
-  stroke-dasharray: 0.8 0.6;
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
 }
-.number {
-  fill: var(--pb-text);
-  font-weight: 1000;
+.nativeLabel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  max-width: 58%;
+  pointer-events: none;
+  color: var(--pb-text);
+  font-size: var(--pb-font-body);
+  font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
+  text-shadow: 0 2px 3px var(--pb-bg);
 }
-.labelRing {
-  fill: var(--pb-bg);
-  stroke: var(--pb-hole-color);
-  stroke-width: 0.4;
+.name {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
-.callout {
-  fill: none;
-  stroke: var(--pb-hole-color);
-  stroke-width: 0.3;
-}
-.you {
-  fill: var(--pb-text);
-  stroke: var(--pb-bg);
-  stroke-width: 0.3;
+.nativeLabel[data-me='true'] {
+  z-index: 2;
 }
 .gain {
-  fill: var(--pb-text);
-  stroke: var(--pb-bg);
-  stroke-width: 0.55;
-  paint-order: stroke;
-  font-weight: 900;
+  position: absolute;
+  bottom: calc(100% + var(--pb-space-2));
+  font-size: inherit;
+  white-space: nowrap;
 }
-.returning {
-  fill: var(--pb-text);
-  stroke: var(--pb-bg);
-  stroke-width: 0.5;
-  paint-order: stroke;
-  font-weight: 900;
+.frame[data-compact='true'] .nativeLabel {
+  font-size: var(--pb-font-body);
 }
-.hole[data-respawn='true'] .rim {
-  fill: none;
-  stroke-dasharray: 0.7 0.7;
+@media (prefers-reduced-motion: reduce) {
+  .frame * {
+    transition: none;
+    animation: none;
+  }
 }
-.hole[data-respawn='true'] .void {
-  fill: var(--pb-surface);
-}
-.hole[data-me='true'] .rim {
-  stroke-width: 0.6;
+:global(:root[data-motion='off']) .frame * {
+  transition: none;
+  animation: none;
 }

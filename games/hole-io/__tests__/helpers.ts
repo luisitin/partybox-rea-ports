@@ -27,6 +27,9 @@ export const hole = (id = 'p1', extra: Partial<Hole> = {}): Hole => ({
   dx: 0,
   dy: 0,
   mass: 0,
+  alive: true,
+  eliminatedAt: null,
+  eliminatedBy: null,
   score: 0,
   swallowed: 0,
   respawnAt: null,
@@ -34,6 +37,7 @@ export const hole = (id = 'p1', extra: Partial<Hole> = {}): Hole => ({
   lastGain: 0,
   gainAt: -2000,
   inputAt: -1,
+  lastMoveAt: -1,
   ...extra,
 });
 export const prop = (extra: Partial<CityProp> = {}): CityProp => ({
@@ -50,6 +54,7 @@ export const world = (holes: Hole[], props: CityProp[] = [], elapsed = 0): World
   holes,
   props,
   elapsed,
+  sinks: [],
   cells: indexProps(props),
 });
 export const timer = (state: State, now = state.phase.deadline ?? T0): State =>

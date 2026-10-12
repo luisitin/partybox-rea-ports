@@ -1,72 +1,84 @@
-// Original top-down city art. SVG remains visible in static renders and needs no graphics runtime.
+// Player-following software 3D scene, with original low-poly geometry and public state only.
 import { useId } from 'react';
 import type { JSX } from 'react';
-import { useT } from '@partybox/game-sdk/ui';
-import type { CityView, PropKind } from '../server/types';
-import { CITY_HEIGHT, CITY_WIDTH, holeLabels, playerStyle } from './presentation';
-import { STRINGS } from './strings';
+import type { CityView, HoleView } from '../server/types';
+import { playerStyle } from './presentation';
+import { cameraFor, inFrame, liveHole, MODEL_HEIGHT, objectFaces, polygon, project } from './scene';
+import type { Camera, Vec3 } from './scene';
 import styles from './City.module.css';
 
-export function PropArt({ kind }: { kind: PropKind }): JSX.Element {
-  switch (kind) {
-    case 'bin':
-      return (
-        <g className={styles.bin}>
-          <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2" />
-          <path d="M-.85-.7H.85M-.25-1H.25" />
-          <path d="M-.2-.4V.5M.2-.4V.5" />
-        </g>
-      );
-    case 'tree':
-      return (
-        <g className={styles.tree}>
-          <path d="M0 .2V1.5" />
-          <circle r="1.45" />
-          <circle cx="-.45" cy="-.35" r=".6" className={styles.treeLight} />
-        </g>
-      );
-    case 'bench':
-      return (
-        <g className={styles.bench}>
-          <path d="M-1.7-.65V1.4M1.7-.65V1.4" />
-          <rect x="-2.3" y="-1" width="4.6" height=".8" rx=".2" />
-          <rect x="-2.3" y=".25" width="4.6" height=".7" rx=".2" />
-        </g>
-      );
-    case 'car':
-      return (
-        <g className={styles.car}>
-          <path className={styles.tyres} d="M-2.6-2.2V-1M2.6-2.2V-1M-2.6 1V2.2M2.6 1V2.2" />
-          <rect x="-2.5" y="-3.7" width="5" height="7.4" rx="1.1" />
-          <path
-            className={styles.glass}
-            d="M-1.8-1.7-1.4-2.7H1.4L1.8-1.7ZM-1.8 1.4H1.8L1.5 2.5H-1.5Z"
-          />
-          <path d="M-1.7-3.2H-1M1-3.2H1.7" className={styles.headlights} />
-        </g>
-      );
-    case 'house':
-      return (
-        <g className={styles.house}>
-          <rect x="-5.4" y="-4.5" width="10.8" height="9" rx=".6" />
-          <path className={styles.roof} d="M-6-2.2 0-6.5 6-2.2 0 2Z" />
-          <path className={styles.roofLine} d="M0-6.5V2M-6-2.2H6" />
-          <rect x="2.4" y="2" width="1.5" height="2.5" className={styles.glass} />
-          <rect x="-4" y="2.2" width="2.5" height="1.4" className={styles.window} />
-        </g>
-      );
-    case 'tower':
-      return (
-        <g className={styles.tower}>
-          <path className={styles.towerSide} d="M-6.5-6.5H6.5V7.5H-6.5Z" />
-          <rect x="-6.5" y="-8" width="13" height="12" rx=".6" />
-          <rect x="-4.7" y="-6.2" width="9.4" height="8.4" className={styles.roof} />
-          <path className={styles.window} d="M-4 5V6.5M-1.4 5V6.5M1.4 5V6.5M4 5V6.5" />
-          <rect x="-1.4" y="-4.3" width="2.8" height="2.8" className={styles.glass} />
-          <path d="M3.5-4.5V-.5M2.5-3.5H4.5" className={styles.roofLine} />
-        </g>
-      );
-  }
+interface NamedPlayer {
+  id: string;
+  name: string;
+}
+function groundRect(x: number, y: number, w: number, h: number, camera: Camera): string {
+  return polygon(
+    [
+      { x, y, z: 0 },
+      { x: x + w, y, z: 0 },
+      { x: x + w, y: y + h, z: 0 },
+      { x, y: y + h, z: 0 },
+    ].map((p) => project(p, camera)),
+  );
+}
+
+function Building({
+  kind,
+  x,
+  y,
+  camera,
+  tilt = 0,
+  sink = 0,
+}: {
+  kind: keyof typeof MODEL_HEIGHT;
+  x: number;
+  y: number;
+  camera: Camera;
+  tilt?: number;
+  sink?: number;
+}): JSX.Element {
+  return (
+    <g data-kind={kind} data-mesh="3d" className={`${styles.object} ${styles[kind]}`}>
+      {objectFaces(kind, x, y, tilt, sink).map((face, i) => (
+        <polygon
+          key={i}
+          points={polygon(face.points.map((p) => project(p, camera)))}
+          className={styles[face.material]}
+        />
+      ))}
+    </g>
+  );
+}
+
+function nameLabels(
+  holes: HoleView[],
+  camera: Camera,
+  players: NamedPlayer[],
+): {
+  hole: HoleView;
+  x: number;
+  y: number;
+  name: string;
+}[] {
+  const occupied: { x: number; y: number }[] = [];
+  const ordered = [...holes].sort(
+    (a, b) => Number(b.id === camera.target) - Number(a.id === camera.target) || a.slot - b.slot,
+  );
+  return ordered.flatMap((h) => {
+    const p = project({ x: h.x, y: h.y, z: 0 }, camera);
+    if (p.x < 64 || p.x > camera.width - 64 || p.y < 32 || p.y > camera.height - 26) return [];
+    // Native names stay attached to the mouth. A coincident rival label yields to the camera owner.
+    if (occupied.some((o) => Math.abs(p.x - o.x) < 190 && Math.abs(p.y - o.y) < 48)) return [];
+    occupied.push(p);
+    return [
+      {
+        hole: h,
+        x: p.x,
+        y: p.y,
+        name: players.find((player) => player.id === h.id)?.name ?? `#${h.slot + 1}`,
+      },
+    ];
+  });
 }
 
 export function City({
@@ -74,133 +86,169 @@ export function City({
   mine,
   compact = false,
   label,
+  players = [],
+  elapsed = 0,
 }: {
   city: CityView;
   mine?: string;
   compact?: boolean;
   label?: string;
+  players?: NamedPlayer[];
+  elapsed?: number;
 }): JSX.Element {
-  const L = useT(STRINGS);
   const titleId = useId();
+  const camera = cameraFor(city, mine, compact);
+  const holes = city.holes.filter((h) => liveHole(h) && inFrame(h.x, h.y, h.radius, 0, camera));
+  const objects = [
+    ...city.props
+      .filter((p) => inFrame(p.x, p.y, p.radius, MODEL_HEIGHT[p.kind], camera))
+      .map((p) => ({ ...p, sinking: false, consumedAt: 0, by: '' })),
+    ...(city.sinks ?? [])
+      .filter(
+        (p) =>
+          elapsed >= p.consumedAt &&
+          elapsed - p.consumedAt < 700 &&
+          inFrame(p.x, p.y, p.radius, MODEL_HEIGHT[p.kind], camera),
+      )
+      .map((p) => ({ ...p, sinking: true })),
+  ].sort((a, b) => a.y + a.x * 0.12 - (b.y + b.x * 0.12) || a.id - b.id);
+  const ground = (p: Vec3) => project(p, camera);
   return (
-    <svg
-      className={styles.city}
+    <div
+      className={styles.frame}
+      data-camera={camera.target ?? 'none'}
       data-compact={compact || undefined}
-      viewBox={`0 0 ${CITY_WIDTH} ${CITY_HEIGHT}`}
-      role="img"
-      aria-labelledby={titleId}
     >
-      <title id={titleId}>{label ?? L('City with numbered player holes')}</title>
-      <rect className={styles.ground} width={CITY_WIDTH} height={CITY_HEIGHT} />
-      <g className={styles.blocks}>
-        {[0, 1, 2, 3].flatMap((col) =>
-          [0, 1].map((row) => (
-            <rect
-              key={`${col}-${row}`}
-              x={col * 45 + 3}
-              y={row * 55 + 3}
-              width="39"
-              height="49"
-              rx="3"
-            />
-          )),
-        )}
-      </g>
-      <g className={styles.parks}>
-        <rect x="9" y="10" width="12" height="13" rx="3" />
-        <rect x="148" y="66" width="14" height="13" rx="3" />
-        <rect x="59" y="67" width="12" height="13" rx="3" />
-      </g>
-      <g className={styles.roadLines}>
-        {[45, 90, 135].map((x) => (
-          <path key={x} d={`M${x} 3V107`} />
-        ))}
-        <path d="M3 55H177" />
-      </g>
-      <g className={styles.crossings}>
-        {[45, 90, 135].flatMap((x) =>
-          [-3, -1, 1, 3].map((dx) => (
-            <path key={`${x}-${dx}`} d={`M${x + dx} 49V51M${x + dx} 59V61`} />
-          )),
-        )}
-      </g>
-      <g className={styles.props}>
-        {city.props.map((p) => (
-          <g key={p.id} transform={`translate(${p.x} ${p.y})`} data-kind={p.kind}>
-            <PropArt kind={p.kind} />
-          </g>
-        ))}
-      </g>
-      {city.holes.map((h) => (
-        <g
+      <svg
+        className={styles.city}
+        viewBox={`0 0 ${camera.width} ${camera.height}`}
+        role="img"
+        aria-labelledby={titleId}
+      >
+        <title id={titleId}>{label ?? 'Hole.io local city camera'}</title>
+        <rect className={styles.water} width={camera.width} height={camera.height} />
+        <polygon className={styles.ground} points={groundRect(0, 0, 180, 110, camera)} />
+        <g className={styles.blocks}>
+          {[0, 1, 2, 3].flatMap((col) =>
+            [0, 1].map((row) => (
+              <polygon
+                key={`${col}-${row}`}
+                points={groundRect(col * 45 + 3, row * 55 + 3, 39, 49, camera)}
+              />
+            )),
+          )}
+        </g>
+        <g className={styles.parks}>
+          {[0, 1, 2, 3].flatMap((col) =>
+            [0, 1].map((row) => (
+              <polygon
+                key={`${col}-${row}`}
+                points={groundRect(col * 45 + 6, row * 55 + 7, 12, 17, camera)}
+              />
+            )),
+          )}
+        </g>
+        <g className={styles.roadLines}>
+          {[45, 90, 135].map((x) => {
+            const a = ground({ x, y: 0, z: 0 }),
+              b = ground({ x, y: 110, z: 0 });
+            return <path key={x} d={`M${a.x} ${a.y}L${b.x} ${b.y}`} />;
+          })}
+          {[55].map((y) => {
+            const a = ground({ x: 0, y, z: 0 }),
+              b = ground({ x: 180, y, z: 0 });
+            return <path key={y} d={`M${a.x} ${a.y}L${b.x} ${b.y}`} />;
+          })}
+        </g>
+        <g className={styles.crossings}>
+          {[45, 90, 135].flatMap((x) =>
+            [-3, -1, 1, 3].map((dx) => (
+              <polygon key={`${x}-${dx}`} points={groundRect(x + dx, 49, 0.7, 3, camera)} />
+            )),
+          )}
+        </g>
+        {holes.map((h) => {
+          const p = ground({ x: h.x, y: h.y, z: 0 }),
+            r = h.radius * camera.scale;
+          return (
+            <g
+              key={h.id}
+              className={styles.hole}
+              style={playerStyle(h.slot)}
+              data-me={h.id === camera.target || undefined}
+            >
+              <ellipse
+                className={styles.shadow}
+                cx={p.x + 3}
+                cy={p.y + 3}
+                rx={r + 3}
+                ry={r * 0.72 + 3}
+              />
+              {h.shield ? (
+                <ellipse className={styles.shield} cx={p.x} cy={p.y} rx={r + 5} ry={r * 0.72 + 4} />
+              ) : null}
+              <ellipse className={styles.rim} cx={p.x} cy={p.y} rx={r} ry={r * 0.72} />
+              <ellipse
+                className={styles.void}
+                cx={p.x}
+                cy={p.y}
+                rx={Math.max(1, r - 5)}
+                ry={Math.max(1, r * 0.72 - 4)}
+              />
+              <path
+                className={styles.shine}
+                d={`M${p.x - r * 0.67} ${p.y - r * 0.42}Q${p.x} ${p.y - r * 0.89} ${p.x + r * 0.67} ${p.y - r * 0.42}`}
+              />
+            </g>
+          );
+        })}
+        {objects.map((p) => {
+          const progress = p.sinking ? Math.min(1, (elapsed - p.consumedAt) / 700) : 0;
+          const eater = city.holes.find((h) => h.id === p.by);
+          const x = p.x + (eater ? eater.x - p.x : 0) * progress * 0.65;
+          const y = p.y + (eater ? eater.y - p.y : 0) * progress * 0.65;
+          const location = ground({ x, y, z: 0 });
+          return (
+            <g key={`${p.sinking ? 'sink' : 'prop'}-${p.id}`} data-sinking={p.sinking || undefined}>
+              {!p.sinking ? (
+                <ellipse
+                  className={styles.shadow}
+                  cx={location.x + MODEL_HEIGHT[p.kind] * camera.scale * 0.22}
+                  cy={location.y + camera.scale * 0.4}
+                  rx={p.radius * camera.scale * 0.9}
+                  ry={p.radius * camera.scale * 0.3}
+                />
+              ) : null}
+              <Building
+                kind={p.kind}
+                x={x}
+                y={y}
+                camera={camera}
+                tilt={progress * 0.78}
+                sink={progress * (MODEL_HEIGHT[p.kind] + p.radius)}
+              />
+            </g>
+          );
+        })}
+      </svg>
+      {nameLabels(holes, camera, players).map(({ hole: h, x, y, name }) => (
+        <div
           key={h.id}
-          className={styles.hole}
-          transform={`translate(${h.x} ${h.y})`}
-          style={{ ...playerStyle(h.slot), transform: `translate(${h.x}px, ${h.y}px)` }}
-          data-me={mine === h.id || undefined}
-          data-respawn={h.respawnIn > 0 || undefined}
-          data-shield={h.shield || undefined}
+          className={styles.nativeLabel}
+          style={{
+            ...playerStyle(h.slot),
+            left: `${(x / camera.width) * 100}%`,
+            top: `${(y / camera.height) * 100}%`,
+          }}
+          data-me={h.id === camera.target || undefined}
+          title={`${h.slot + 1} · ${name}`}
         >
-          <title>{L('Hole {n}, {score} points', { n: h.slot + 1, score: h.score })}</title>
-          {h.shield && h.respawnIn === 0 ? (
-            <circle className={styles.shield} r={h.radius + 1.5} />
-          ) : null}
-          <circle className={styles.rim} r={h.radius} />
-          <circle className={styles.void} r={Math.max(0.5, h.radius - 0.65)} />
-          <path
-            className={styles.shine}
-            d={`M${-h.radius * 0.65} ${-h.radius * 0.45}Q0 ${-h.radius * 1.05} ${h.radius * 0.65} ${-h.radius * 0.45}`}
-          />
-        </g>
+          <span className={styles.name}>
+            {h.slot + 1} · {name}
+          </span>
+          {h.lastGain > 0 ? <span className={styles.gain}>+{h.lastGain}</span> : null}
+        </div>
       ))}
-      {city.holes.map((h) => (
-        <g key={`feedback-${h.id}`}>
-          {h.lastGain > 0 && !compact ? (
-            <text
-              className={styles.gain}
-              fontSize={6}
-              x={h.x}
-              y={Math.max(6, h.y - h.radius - 2.2)}
-              textAnchor="middle"
-            >
-              +{h.lastGain}
-            </text>
-          ) : null}
-          {h.respawnIn > 0 ? (
-            <text
-              className={styles.returning}
-              fontSize={6}
-              x={h.x}
-              y={Math.min(CITY_HEIGHT - 3, h.y + h.radius + 5)}
-              textAnchor="middle"
-            >
-              {Math.ceil(h.respawnIn / 1000)}s
-            </text>
-          ) : null}
-        </g>
-      ))}
-      {holeLabels(city.holes).map(({ hole: h, x, y, callout }) => (
-        <g
-          key={`label-${h.id}`}
-          className={styles.hole}
-          transform={`translate(${x} ${y})`}
-          style={{ ...playerStyle(h.slot), transform: `translate(${x}px, ${y}px)` }}
-          data-respawn={h.respawnIn > 0 || undefined}
-          data-shield={h.shield || undefined}
-        >
-          {callout ? <path className={styles.callout} d={`M${h.x - x} ${h.y - y}L0 0`} /> : null}
-          {callout ? <circle className={styles.labelRing} r={3.3} /> : null}
-          <text
-            className={styles.number}
-            fontSize={compact ? 6.4 : 6}
-            textAnchor="middle"
-            dominantBaseline="central"
-          >
-            {h.slot + 1}
-          </text>
-          {mine === h.id ? <path className={styles.you} d="M-1.6-5.5H1.6L0-3.7Z" /> : null}
-        </g>
-      ))}
-    </svg>
+    </div>
   );
 }

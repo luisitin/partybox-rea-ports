@@ -6,7 +6,7 @@ import { resolve } from 'node:path';
 
 const require = createRequire(import.meta.resolve('tsx'));
 const { build } = require('esbuild');
-const outdir = resolve('.git/r7-render');
+const outdir = resolve('.git/r2-p08-render');
 mkdirSync(outdir, { recursive: true });
 await build({
   entryPoints: ['jobs/P08-hole-swallow/render.tsx'],
@@ -19,4 +19,5 @@ await build({
   loader: { '.module.css': 'local-css', '.css': 'css' },
   logLevel: 'warning',
 });
+process.env.PB_P08_CSS = resolve(outdir, 'render.css');
 await import(pathToFileURL(resolve(outdir, 'render.mjs')).href);

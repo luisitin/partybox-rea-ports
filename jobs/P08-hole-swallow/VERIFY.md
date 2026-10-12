@@ -1,13 +1,13 @@
 # P08 verification
 
-Runner r7-local; local evidence recorded on2026-10-11. All local checks pass. CI is pending until the draft PR runs.
+Historical baseline only: runner r7-local recorded the following on 2026-10-11 at 6aeffe2. It does not verify the r2-local upgrade, renamed game, new elimination/growth rules or 3D renderer. Current verification is in progress; draft PR6 stays draft until all renewed checks and CI pass.
 
 | Check                          | Exact command                                                                                                | Result                                                                                 |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | Install                        | `corepack enable`; `pnpm.cmd install`                                                                        | Passed; pnpm12.4.2, lockfile unchanged                                                 |
 | TypeScript                     | `pnpm.cmd typecheck`                                                                                         | Passed, exit0                                                                          |
 | Formatting                     | `pnpm.cmd format`                                                                                            | Passed, exit0                                                                          |
-| Own game + actual SDK contract | `pnpm.cmd vitest run games/hole-swallow --maxWorkers=1`                                                      | Passed90/90 (6 files),150.71s, exit0; includes20 actual SDK checks                     |
+| Own game + actual SDK contract | `pnpm.cmd vitest run games/hole-io --maxWorkers=1`                                                           | Passed90/90 (6 files),150.71s, exit0; includes20 actual SDK checks                     |
 | Bots                           | `pnpm.cmd tsx jobs/P08-hole-swallow/simulate.ts`                                                             | 7,000 passed; 1,000 each for2,3,4,5,6,7,8 players, seed1-1000, three strengths         |
 | Duration                       | Same simulation                                                                                              | All counts: median90,000ms play, max97,000ms including reveal; budget240,000ms         |
 | Properties                     | Own-game properties.test.ts, fast-check seeds1,2,3                                                           | 1,000 generated cases each; 3,000 total pass                                           |

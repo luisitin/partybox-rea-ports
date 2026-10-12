@@ -1,13 +1,13 @@
-// Hole Swallow: pure city simulation, composed phase transitions, compact public views.
+// Hole.io: pure city simulation, composed phase transitions, compact public views.
 import {
   composeReduce,
   controllerEnvelope,
   envelope,
   gameManifestSchema,
   hasPlayer,
+  onPlayerEvent,
   pausedFor,
   seedRng,
-  setConnected,
 } from '@partybox/game-sdk';
 import type { GameDefinition, InitContext, PlayerStatus } from '@partybox/game-sdk';
 import manifestJson from '../manifest.json' with { type: 'json' };
@@ -16,9 +16,9 @@ import { enterDone } from './phases/done';
 import { advancePlay, reducePlay, settle } from './phases/play';
 import { enterReveal, reduceReveal } from './phases/reveal';
 import { results } from './scoring';
-import { PHASES, ROUND_MS, TICK_MS, inputSchema } from './types';
+import { PHASES, ROUND_MS, SINK_MS, TICK_MS, inputSchema, isParticipating } from './types';
 import type { CityView, HoleControllerView, HoleTvView, Input, State } from './types';
-import { applyMove, makeWorld, radiusOf, stopAll } from './world';
+import { growthOf, isAlive, makeWorld, radiusOf, stopAll } from './world';
 
 const manifest = gameManifestSchema.parse(manifestJson);
 function init(ctx: InitContext): State {
@@ -28,6 +28,7 @@ function init(ctx: InitContext): State {
     phase: { id: 'play', startedAt: ctx.now, deadline: ctx.now + TICK_MS },
     rng,
     players,
+    left: [],
     began: ctx.now,
     endsAt: ctx.now + ROUND_MS,
     world,
@@ -61,10 +62,22 @@ const reduce = composeReduce<State, Input>({
   onPlayer: (s, e) => {
     if (!hasPlayer(s, e.playerId)) return s;
     const settled = settle(s, e.now);
-    const connected = setConnected(settled, e);
+    const connected = onPlayerEvent({ ...settled, left: settled.left ?? [] }, e);
     return {
       ...connected,
-      world: applyMove(connected.world, e.playerId, { type: 'move', x: 0, y: 0 }),
+      world: {
+        ...connected.world,
+        holes: connected.world.holes.map((hole) =>
+          hole.id === e.playerId
+            ? {
+                ...hole,
+                dx: 0,
+                dy: 0,
+                ...(connected.left?.includes(e.playerId) ? { alive: false } : {}),
+              }
+            : hole,
+        ),
+      },
     };
   },
 });
@@ -77,21 +90,27 @@ function cityView(s: State): CityView {
       x: h.x,
       y: h.y,
       radius: radiusOf(h.mass),
+      alive: isAlive(h) && !s.left?.includes(h.id),
+      growth: h.mass,
+      ...growthOf(h.mass),
+      eliminatedAt: h.eliminatedAt ?? null,
+      eliminatedBy: h.eliminatedBy ?? null,
+      connected: s.players[h.id]?.connected === true,
+      left: s.left?.includes(h.id) === true,
       score: h.score,
       swallowed: h.swallowed,
-      respawnIn: h.respawnAt === null ? 0 : Math.max(0, h.respawnAt - s.world.elapsed),
-      shield: h.immuneUntil > s.world.elapsed,
-      lastGain: s.world.elapsed - h.gainAt < 1000 ? h.lastGain : 0,
+      respawnIn: 0,
+      shield: isAlive(h) && h.immuneUntil > s.world.elapsed,
+      lastGain: isAlive(h) && s.world.elapsed - h.gainAt < 1000 ? h.lastGain : 0,
     })),
     props: s.world.props.filter((p) => p.availableAt <= s.world.elapsed),
+    sinks: (s.world.sinks ?? []).filter((sink) => s.world.elapsed - sink.consumedAt < SINK_MS),
   };
 }
 const statusOf =
   (s: State) =>
   (id: string): PlayerStatus =>
-    s.phase.id === 'play' &&
-    s.players[id]?.connected &&
-    s.world.holes.some((h) => h.id === id && h.respawnAt === null)
+    s.phase.id === 'play' && s.players[id]?.connected && isParticipating(s, id)
       ? 'active'
       : 'waiting';
 function tvView(s: State): HoleTvView {
@@ -106,11 +125,14 @@ function tvView(s: State): HoleTvView {
 function controllerView(s: State, id: string): HoleControllerView {
   const city = cityView(s);
   const mine = city.holes.find((h) => h.id === id) ?? null;
-  const stage = s.phoneOnly || !hasPlayer(s, id) || s.players[id]?.canSeeTv === false;
+  const participating = isParticipating(s, id);
+  const stage = s.phoneOnly || !participating || s.players[id]?.canSeeTv === false;
   return {
     ...controllerEnvelope(s, manifest.id, id, { statusOf: statusOf(s) }),
     deadline: s.phase.id === 'play' ? s.endsAt : s.phase.deadline,
-    ...(stage ? { city } : {}),
+    city,
+    elapsed: s.world.elapsed,
+    participating,
     mine,
     scores: s.scores,
     slots: Object.fromEntries(city.holes.map((h) => [h.id, h.slot])),

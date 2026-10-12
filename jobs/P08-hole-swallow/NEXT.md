@@ -1,10 +1,15 @@
-# P08 resume
+# P08 continuation
 
-Runner r7-local, branch job/P08-hole-swallow. Milestones12debb7 and9525aed pushed.
-Main claim refreshed2098110. Research/server/client/fixtures and all12 captures complete.
-7,000 seeded simulations passed (all counts2-8,90s median/97s total);20/20 mutations caught.
-Typecheck passes. Final90 tests pass, exit0 in150.71s, including all20SDK checks.
-Game-local240s contract test timeout accommodates desktop contention; virtual limits unchanged.
-Next: format check, push final validation, refresh claim and open draft PR from this README.
-After green CI: ready PR, KEEP GOING until three consecutive no-player-gain rounds, next job.
-No new dependencies, source assets, runtime network, other-game or whole-suite browser tests.
+Runner r2-local; branch job/P08-hole-swallow; draft PR6. Claimed the lowest eligible stale active job at2026-10-12T17:41:41Z after P02 DONE/readyPR18. Main claim e286ce5. Prior P08 claim was10h old and branch6aeffe2 had no commit in6h; terminal DONE/BLOCKED lines are retained/skipped.
+
+Read current public main owner naming/fidelity/party rules, the old branch README/RULES/JOBS and all applicable game instructions. The old branch's prohibition on official names is superseded by current main's owner table. Renamed to games/hole-io and Hole.io; job/branch slug stays P08-hole-swallow.
+
+Owner C:/dev/partybox already imports this public P08 as Hole.io (T-1141, current game commit4c5eb99e8). This work upgrades that same module/card; no second game or owner deployment. Preserve owner's always-available controller city payload for live TV-visibility changes and overflow-visible joystick knob. Core world/content/bot/City match the public lineage apart from a harmless RNG const refactor.
+
+Prior reports (90tests,7000matches,20mutations,12screens) are historical baseline only. Original inspection found close oblique3D cameras, name/progress HUDs, physical sinking/toppling, and gated street-prop→car→building progression. Current code uses a whole-city flat map, instant removals and unlocks cars after one bin. Research distinguishes2018mobile and2024PC; exact current constants/motion/audio remain unmeasured. P08's90seconds overrides classic120seconds.
+
+Research checkpoint: five complete publisher screenshots are preserved with edition/source/dimensions/SHA; root inspected the PC city and two-player views. Battle elimination and classic resurrection are distinguished. Two independent historical reports support car3/thin-building4 rewards; the full growth table remains one exact source and is labelled inferred tuning.
+
+Implementation checkpoint: official Hole.io name/id, permanent swallowed elimination with banked score and live-leader spectating, discrete growth gates, equal 267-point districts, always-available local controller city, original perspective XYZ meshes, roofs/walls/windows, ground-clipped sinking, and split TV cameras. Preserve owner always-city payload and visible joystick knob. New lifecycle/property tooling and semantic mutation definitions are being prepared. Initial scene test found a test-fixture assignment typo, now fixed. Initial typecheck found fixture avatar ids and wrapper/test leftovers, being fixed. No renewed verification pass is claimed.
+
+Next: finish focused own-game/SDK tests and typecheck; rebuild fixtures and capture all role/lifecycle/count/40-character-name states in one finally-closed browser; inspect and correct camera fit, model visibility and HUD overlap; run 7,000 bot matches, 1,003-seed lifecycle traces, 20+ semantic mutations with source restoration, format and CI; publish matched complete-image fidelity comparisons. After green PR6, KEEP GOING until three consecutive rounds yield only cosmetic gains. Root owns commands, browser, git/claims/PR/CI. Push at least every30minutes and refresh CLAIMS after pull --rebase. Never run other games or a whole browser suite.

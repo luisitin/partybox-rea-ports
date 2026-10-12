@@ -1,60 +1,53 @@
-# P08 Hole Swallow research
+# P08 Hole.io research
 
-Checked 2026-10-11. Sources are linked in SOURCES.md. No original code, art,
-sound, font, logo or map was copied. This is source research; a live session
-of the original was not played or timed during this research pass.
+Checked 2026-10-12, r2-local. This upgrades the same public port imported as T-1141; see UPGRADE.md. Sources S1–S11 are in SOURCES.md. No native session was played or timed. Official screenshots are documentation-only; runtime artwork/code is independently authored.
 
-## Evidence and limits
+## Evidence by edition
 
-| Mechanic                                                               | Evidence                                                                                   | PartyBox decision                                                                            |
-| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| Swallow city props to grow; growth unlocks larger objects              | Developer App Store description [S1], independent firsthand city walkthrough [S3]          | Keep the readable progression from tiny props to trees, cars and buildings                   |
-| Larger holes can swallow smaller rivals                                | Official PC publisher description [S2], firsthand play reports [S3, S5]                    | Keep PvP, with an explicit size margin so ties never eat each other                          |
-| Original classic round lasts two minutes and final score ranks players | Two independent 2018 firsthand reviews [S3, S6]                                            | The binding P08 job changes this to exactly 90 seconds                                       |
-| Dense clusters matter more than chasing isolated targets               | Two independent firsthand strategy reports [S3, S4]                                        | Give every starting sector a reachable small-prop cluster; vary city routes by seed          |
-| Being swallowed temporarily stops eating                               | Independent firsthand reports [S3, S5] describe a few seconds                              | Short respawn with a clear countdown and brief protection; exact duration is original tuning |
-| Cars become useful before buildings                                    | Independent firsthand reports [S3, S4] place cars at levels 3–4, thin buildings at level 5 | Use discrete tiers and show the next edible class on the phone                               |
+| Evidence                                      | What it establishes                                                                   | Limit                                                                                        |
+| --------------------------------------------- | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| S1/S9: current Voodoo mobile listings/site    | Small-to-large city consumption, swipe/glide, detailed 3D worlds                      | Current marketing; no precise original-era constants or camera formula                       |
+| S2: official PC publisher listing/full images | Close oblique city, model depth, partly submerged props, local split views, names/HUD | PC edition released 2024; image dates unknown; stills cannot prove follow/zoom motion        |
+| S3/S6: independent 2018 firsthand reports     | Two-minute Classic and progressively larger consumption                               | Historical Classic, not current Battle                                                       |
+| S10: mirrored Voodoo 1.2.0 notes              | Battle ends when eaten or last survivor; Solo Speed is separate                       | Primary-origin text on unofficial hosting; original historical publisher hosting unavailable |
+| S11: independent firsthand report, 2020-11-06 | Timed Classic/Solo differs from Battle Royale eating opponents until one remains      | Corroborates objective, not an exact engine implementation                                   |
 
-## Size thresholds studied
+S3's cropped images were inspected, including a resurrection countdown. Its author reports movement during Classic's temporary swallowing penalty to choose an escape position. This is Classic behavior and must not justify a retry in the chosen Battle-style party round. A complete uncropped official 2018 mobile frame has not been recovered.
 
-[S4] reports historical cumulative growth thresholds of 10, 27, 51, 82,
-120, 165, 217 and 246 points for levels 2–9. These exact values have only
-one verified indexed source, so they are historical observations, not an
-assertion about the current product. [S3] independently confirms 10 points
-for level 2, cars at levels 3–4 and thin buildings at level 5. It reports
-roughly 3 points for cars and 4 for a narrow building segment; [S4] agrees.
+## Historical growth and rewards
 
-The important threshold behavior is a change in what fits, not a merely
-larger drawing. A just-too-large target wastes time; growing opens a richer
-route. Original 3D objects can catch or topple [S3, S4]. The port should use
-deterministic footprint containment instead of reproducing a physics engine.
-Its exact radii, reward curve and rival margin are PartyBox balancing choices.
+S4's indexed firsthand notes supply the following cumulative table; zero is the starting-score convention. Beyond the first ten-point increase, exact thresholds have one source and are not verified current constants.
 
-## Round feel and living-room adaptation
+| Size | Cumulative points | Confidence                       |
+| ---- | ----------------- | -------------------------------- |
+| 1    | 0                 | Starting convention              |
+| 2    | 10                | Independently corroborated by S3 |
+| 3    | 27                | S4 only                          |
+| 4    | 51                | S4 only                          |
+| 5    | 82                | S4 only                          |
+| 6    | 120               | S4 only                          |
+| 7    | 165               | S4 only                          |
+| 8    | 217               | S4 only                          |
+| 9    | 246               | S4 only                          |
 
-Start with quick clusters that immediately teach steering and collection.
-Then switch the valuable targets from street furniture to parked cars to
-buildings. A visible size increase, target disappearing into the hole and
-short points feedback make every gain legible. Keep the whole shared city
-on the TV; each hole needs a number or letter as well as a player color.
-The phone needs one joystick, score, size, next target and respawn status.
-Phone-only rooms need the city above the joystick; spectators get the city
-without controls. Instructions must make sense without mentioning a TV.
+S3 and S4 independently report ordinary cars worth about three points and narrow one-column apartment segments worth four; cars become useful at sizes 3–4 and narrow buildings at size 5. Four points is not a universal building reward. Current promotional progress bars do not replace a historical table.
 
-Source [S1] describes increasing crunch feedback; no sound sample or timing
-was measured. Use only SDK cues, preferably a quiet swallow cue and a
-clearer growth cue, with reduced-motion-friendly visual feedback.
+The old 6aeffe2 port began at radius 3.4 and gave two points per bin, making cars edible after one bin and bins/trees/benches initially edible. That is the historical baseline, not a finding against the unfinished resumed source. Final source/captures must prove the corrected progression; tests matching chosen constants alone do not establish fidelity.
 
-## Public client inspection
+## Camera, models and swallowing
 
-The public https://holeio.com page was fetched read-only and its
-https://holeio.com/b/4/gameWebGL.js loader inspected. It loads Unity data,
-framework and WASM bundles; loader metadata identifies DRA.RU, not VOODOO.
-No size algorithm is exposed there, so this browser variant is not treated
-as the canonical original or as a threshold source. No bundle assets were
-downloaded into the repo.
+Complete official files, exact URLs, dimensions and hashes are in fidelity/originals.json. The PC city frame shows extruded walls, roofs/windows, sidewalks/shadows and partly submerged buildings. Local split frames preserve close views rather than a distant whole-world map. Current mobile growth artwork shows an elliptical rim, recessed opening and name/progress above it; it is a marketing collage.
 
-A separate public educational implementation [S7] was read for comparison:
-objects carry a required level, scoring is a separate table, and swallowed
-objects shrink while moving to the hole. Its values and code were not used.
-It demonstrates an approachable 2D implementation, not original behavior.
+Historical reports describe buildings catching/toppling. Numeric containment alone does not establish the original feel. Compare authored sink/tilt/ground masking and growth feedback with an actual source moment. Precise camera pitch/zoom easing, physics, animation and audio timing remain unmeasured; original assets are not runtime art.
+
+## Party layer selected by root
+
+P08 requires one shared 90-second round. Root selected permanent swallowing elimination with leader spectating, using Battle's loss consequence instead of Classic resurrection. Phones and close local TV views are PartyBox plumbing. The clock cap is explicit: native Battle could stall when capped survivors could not swallow each other; no native 90-second Battle claim is made.
+
+Frozen growth/rewards/winner/ranks/presence and catch-up behavior remain implementation/spec checkpoints. A banked-score winner with Battle elimination is a hybrid timed-score rule, not native last-survivor victory. Eliminated seats must have no movement, collection or retry controls and watch live leaders; active trailers need useful routes while credit remains, without invented rubber-band scoring.
+
+## Access attempts and fallbacks
+
+hole.io web open failed; Kith was restricted. Fresh HTTPS-www, HTTPS-bare and HTTP-www retries all timed out after ten seconds, while indexed text remained available. Reachable Japanese/iPhoneSoft reports supply independent historical observations. Direct HTTPS downloads recovered official Framer images after web fetch errors, with unchanged complete bytes.
+
+Earlier holeio.com loader inspection found Unity/DRA.RU metadata; it and educational S7 are excluded from Voodoo constants. Historical archive/video attempts did not yield authenticated original-era playback. APKMirror's 1.2.0 gallery explicitly contains later-version screenshots. No APK, original executable, map, font, audio or source bundle was imported.
