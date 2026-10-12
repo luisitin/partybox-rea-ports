@@ -1,6 +1,7 @@
 // One temporary real reducer/controller room. Public DOM/CSS animation evidence only.
 import { spawn } from 'node:child_process';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
@@ -9,6 +10,28 @@ const directory = fileURLToPath(new URL('../../../games/2048/fidelity/', import.
 const temporary = join(tmpdir(), 'r1-local-p09-interactive.html');
 const profile = await mkdtemp(join(tmpdir(), 'partybox-p09-capture-motion-'));
 const delay = (ms) => new Promise((done) => setTimeout(done, ms));
+async function sourceHashes(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const pairs = await Promise.all(
+    entries.map(async (entry) => {
+      const path = `${directory}/${entry.name}`;
+      if (entry.isDirectory()) return Object.entries(await sourceHashes(path));
+      return [
+        [
+          path,
+          createHash('sha256')
+            .update(await readFile(path))
+            .digest('hex'),
+        ],
+      ];
+    }),
+  );
+  return Object.fromEntries(pairs.flat().sort(([a], [b]) => a.localeCompare(b)));
+}
+const sources = {
+  ...(await sourceHashes('games/2048/client')),
+  ...(await sourceHashes('games/2048/server')),
+};
 let cdp;
 let pausedFrame = null;
 let onPaused = null;
@@ -72,8 +95,10 @@ try {
     receipt:Number(document.querySelector('dd [role="status"]')?.textContent || 0),
     moving:document.querySelector('[role="grid"]')?.dataset.moving === 'true',
     buttons:document.querySelectorAll('button').length,
+    finalRows:document.querySelectorAll('ol[aria-label="Final standings"]>li').length,
     text:document.querySelector('#game-frame').innerText,
-    animations:document.getAnimations().map(animation=>({name:animation.animationName??animation.transitionProperty,target:animation.effect.target.dataset.motion??animation.effect.target.className,timing:animation.effect.getTiming(),keyframes:animation.effect.getKeyframes()}))
+    receiptStyle:(()=>{const el=document.querySelector('dd [role="status"]'); if(!el)return null;const css=getComputedStyle(el);return {className:el.className,animation:css.animation,motion:getComputedStyle(document.documentElement).getPropertyValue('--pb-motion-slow'),mode:document.documentElement.dataset.motion}})(),
+    animations:document.getAnimations().map(animation=>({name:animation.animationName??animation.transitionProperty,target:animation.effect.target.dataset.motion??(animation.effect.target.matches('dd [role="status"]')?'gain':animation.effect.target.className),timing:animation.effect.getTiming(),keyframes:animation.effect.getKeyframes()}))
   }))()`);
   const photograph = async (name) => {
     const { data } = await cdp.send(
@@ -85,19 +110,7 @@ try {
   };
   const reports = [];
   for (const target of [false, true]) {
-    if (target) {
-      await cdp.send('Target.closeTarget', { targetId });
-      ({ targetId } = await cdp.send('Target.createTarget', { url: 'about:blank' }));
-      ({ sessionId } = await cdp.send('Target.attachToTarget', { targetId, flatten: true }));
-      for (const domain of ['Page', 'Runtime', 'Network', 'Animation', 'Debugger'])
-        await cdp.send(`${domain}.enable`, {}, sessionId);
-      await cdp.send('Network.setBlockedURLs', { urls: ['http://*', 'https://*'] }, sessionId);
-      await cdp.send(
-        'Emulation.setDeviceMetricsOverride',
-        { width: 390, height: 844, deviceScaleFactor: 1, mobile: false },
-        sessionId,
-      );
-    }
+    console.log(JSON.stringify({ stage: 'navigate', target }));
     const navigation = await cdp.send(
       'Page.navigate',
       { url: `${pathToFileURL(temporary).href}${target ? '?target' : ''}` },
@@ -124,7 +137,7 @@ try {
         'Runtime.evaluate',
         {
           expression: `new Promise(resolve=>{document.querySelector('button[aria-label="Move ${target ? 'left' : 'up'}"]').click(); setTimeout(()=>{document.getAnimations().forEach(animation=>{animation.pause();animation.currentTime=50}); debugger; resolve();},0);})`,
-          awaitPromise: true,
+          awaitPromise: false,
           returnByValue: true,
         },
         sessionId,
@@ -139,6 +152,14 @@ try {
       }),
     ]);
     const accepted = await read();
+    console.log(
+      JSON.stringify({
+        stage: 'accepted',
+        target,
+        score: accepted.score,
+        receipt: accepted.receipt,
+      }),
+    );
     if (!accepted.moving || accepted.score <= before.score)
       throw new Error(`No actual merge motion: ${JSON.stringify({ target, before, accepted })}`);
     const prefix = target ? 'ours-target' : 'ours-merge';
@@ -165,7 +186,7 @@ try {
       !gains.some((a) => near(a.timing.duration, 600))
     )
       throw new Error(
-        `Original motion timings differ: ${JSON.stringify({ receipt: accepted.receipt, gain: accepted.score - before.score, gains: gains.map((a) => a.timing), travel: travel.map((a) => a.timing), merges: merges.map((a) => a.timing), spawns: spawns.map((a) => a.timing) })}`,
+        `Original motion timings differ: ${JSON.stringify({ receipt: accepted.receipt, receiptStyle: accepted.receiptStyle, animations: accepted.animations.map((a) => ({ name: a.name, target: a.target, timing: a.timing })), gain: accepted.score - before.score, gains: gains.map((a) => a.timing), travel: travel.map((a) => a.timing), merges: merges.map((a) => a.timing), spawns: spawns.map((a) => a.timing) })}`,
       );
     if (target && (accepted.buttons !== 0 || !accepted.text.includes('You win!')))
       throw new Error('Target payoff erased personal board or retained controls');
@@ -176,13 +197,29 @@ try {
     if (executionError) throw executionError;
     await delay(target ? 3200 : 400);
     const settled = await read();
-    if (target && (!settled.text.includes('Final standings') || settled.board.length))
+    console.log(
+      JSON.stringify({
+        stage: 'settled',
+        target,
+        boardCells: settled.board.length,
+        finalStandings: settled.finalRows,
+      }),
+    );
+    if (target && (settled.finalRows !== 2 || settled.board.length || settled.buttons))
       throw new Error('Target payoff did not hand off to complete standings');
     reports.push({ scenario: prefix, before, accepted, settled });
   }
+  if (
+    JSON.stringify(sources) !==
+    JSON.stringify({
+      ...(await sourceHashes('games/2048/client')),
+      ...(await sourceHashes('games/2048/server')),
+    })
+  )
+    throw new Error('Motion source drift');
   await writeFile(
     join(directory, 'motion.json'),
-    `${JSON.stringify({ method: 'Actual own-game reducer/controller button input; JavaScript debugger holds layer cleanup while public CSS clocks seek50/200ms (target overlay2500ms). Compositor runs normally. Original timings checked against pinned CSS; these transient PNGs are ours-only.', scenarios: reports }, null, 2)}\n`,
+    `${JSON.stringify({ passed: true, sources, sourcesStable: true, capturedAt: new Date().toISOString(), frames: 5, method: 'Actual own-game reducer/controller button input; JavaScript debugger holds layer cleanup while public CSS clocks seek50/200ms (target overlay2500ms). Compositor runs normally. Original timings checked against pinned CSS; these transient PNGs are ours-only.', scenarios: reports }, null, 2)}\n`,
     'utf8',
   );
   console.log(
@@ -201,11 +238,9 @@ try {
   }
   const absolute = ownedProfile(profile);
   await closeProfileProcesses(absolute);
-  await rm(absolute, { recursive: true, force: true, maxRetries: 10, retryDelay: 250 }).catch(
-    (error) => {
-      if (!['EBUSY', 'EPERM'].includes(error.code)) throw error;
-    },
-  );
+  // Antivirus can hold profile files after the browser is gone. Keep the unique
+  // temporary profile for later cleanup; zero owned browser PIDs is the lifetime gate.
+  console.log(JSON.stringify({ retainedTemporaryProfile: absolute, ownedBrowserPids: 0 }));
   await rm(temporary, { force: true });
   await rm(join(tmpdir(), 'r1-local-p09-interactive.js'), { force: true });
 }

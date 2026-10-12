@@ -1,8 +1,9 @@
 # P09 2048 sources and provenance
 
-Current resume (2026-10-12): canonical product/id 2048 replaces Merge Sprint. Root freshly
-opened the creator hosted page and confirmed the independently authored pinned raw engine;
-no interactive live play/audio session is claimed. Fresh independent access used the
+Current resume (2026-10-12): canonical product/id 2048 replaces Merge Sprint. The
+pinned classic original was played in a fresh Chrome profile using ordinary keys.
+The hosted URL redirects to the redesigned 2026 play2048.co site; the studied
+classic revision is the explicit reference. Fresh independent access used the
 [pinned raw engine](https://raw.githubusercontent.com/nneonneo/2048-ai/41e298f4571a9505e421e3a19af7a1cb372a368c/2048.cpp). Original access/probes below date from
 2026-10-11. Only mechanics/behavior were studied; no original-game or solver code/assets ship.
 
@@ -20,10 +21,14 @@ was inspected at `478b6ec346e3787f589e4af751378d06ded4cbbc` (master, verified wi
 - [Application entry](https://github.com/gabrielecirulli/2048/blob/478b6ec346e3787f589e4af751378d06ded4cbbc/js/application.js): original 4 by 4 initialization.
 - [Creator's license](https://github.com/gabrielecirulli/2048/blob/478b6ec346e3787f589e4af751378d06ded4cbbc/LICENSE.txt): MIT; no upstream implementation or asset was copied despite its availability.
 
-The creator's hosted URL, `https://gabrielecirulli.github.io/2048/`, was the
-target of the failed browser-play attempt. Browser inventory was empty. The
-upstream engine was then exercised in memory through a Node VM; its transcript
-and limitations are in [RESEARCH.md](RESEARCH.md).
+The first browser-provider attempt was unavailable; the engine VM transcript is
+historical research. On October 12, native headless Chrome played a temporary,
+read-only checkout of the pinned original outside this public repository.
+Two fresh-profile starting tiles and 12 arrow inputs (11 accepted) produced
+score24. Public DOM reads and PNGs are retained in games/2048/fidelity/. The
+port comparison uses those same visible boards/scores as fixtures. No original
+runtime code or assets were copied into this repository. Original PNGs are
+required review evidence; the original font is absent from the shipped game.
 
 ## Independent primary implementation
 
@@ -47,11 +52,12 @@ termination and the 180-second cap come directly from this repository's P09 job.
 - Tiles: numeric text and CSS; no external artwork, logos, sprites, font files, or audio.
 - Runtime: local SDK only; no calls to the original game, external research sites, or tracking services.
 
-No third-party asset license is required because no third-party asset is used.
+No third-party runtime asset is used. The capture-only host font below has its
+own recorded license.
 
 ## Current capture provenance
 
-The current 27 captures replace the old fake-host/spectator-misrouting baseline.
+The phase and stress captures replace the old fake-host/spectator-misrouting baseline.
 They use published SDK components, correct public roles/providers and reconstructed pinned
 PartyBox host chrome/global rules at `6ce46e613d3705624a56647592979613c4d6e468`.
 TV Stage is 854.8 px (788.8 px inner); phone header/counter are 60/27.6 px.
@@ -62,8 +68,11 @@ Capture-only Nunito Variable 5.3.0 bytes and full SIL OFL in `media/NUNITO-LICEN
 come from the pinned PartyBox host via completed P01 evidence. They are not original 2048 assets
 or a new runtime dependency. Source/media hashes are in `media/current-source.json` and
 `SHA256SUMS.txt`. The labelled receipt stress frame supplies text to the actual SSR status slot;
-effects are verified by behavioral tests. No running-room or interactive capture is claimed.
+effects are verified by behavioral tests and the actual accepted-move motion room.
+The29 current static frames and10 fidelity PNGs were individually reviewed;
+all media/fidelity hashes share the job's combined10MB budget. Motion comes from
+a temporary real own-game reducer/controller room, not a PartyBox server session.
 
-Live-original research was retried: no enabled browser/app and in-app tab creation unavailable.
-The original hosted page and independent pinned engine were freshly readable through web access;
-prior VM play remains engine evidence, not browser/audio observation.
+Native Chrome research superseded the unavailable in-app provider: the pinned
+classic original was played with ordinary keys in a fresh profile. VM probes
+remain historical engine evidence. No original audio was heard.

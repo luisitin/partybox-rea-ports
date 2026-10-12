@@ -1,5 +1,5 @@
 // Build phase fixtures from one genuine seeded eight-player match.
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRng } from '@partybox/game-sdk';
 import { game } from '../../../games/2048/server/index';
 import type { State } from '../../../games/2048/server/types';
@@ -48,9 +48,15 @@ captured.done = game.reduce(state, {
 });
 if (captured.done.phase.id !== 'done' || game.results(captured.done) === null)
   throw new Error('Fixture game did not reach complete results');
-mkdirSync('games/2048/fixtures', { recursive: true });
-for (const [name, snapshot] of Object.entries(captured))
-  writeFileSync(`games/2048/fixtures/${name}.json`, `${JSON.stringify(snapshot, null, 2)}\n`);
+const check = process.argv.includes('--check');
+if (!check) mkdirSync('games/2048/fixtures', { recursive: true });
+for (const [name, snapshot] of Object.entries(captured)) {
+  const path = `games/2048/fixtures/${name}.json`;
+  if (check) {
+    if (JSON.stringify(JSON.parse(readFileSync(path, 'utf8'))) !== JSON.stringify(snapshot))
+      throw new Error(`Fixture differs from the genuine current seeded match: ${name}`);
+  } else writeFileSync(path, `${JSON.stringify(snapshot, null, 2)}\n`);
+}
 console.log(
   JSON.stringify(
     Object.fromEntries(

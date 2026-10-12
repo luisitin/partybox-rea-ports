@@ -9,21 +9,28 @@ Target AND final-blocked players retain the private board through1200ms delay,
 800ms fade and1000ms fully-visible overlay, then all final standings. Public
 terminalPayoffUntil survives pause/resume/reload; full ranking reading time follows.
 
-Fresh generalized-clock21k simulation is finishing;20new behavior mutants and
-current full baseline follow sequentially. Earlier114-test and21k results are
-historical. Source guards reject drift. Do not mark DONE using them.
+Final behavior evidence passes119/119tests,21,000/21,000bot games (max220,911ms)
+and20/20semantic mutation kills. All server/manifest/client/test hashes match
+the restored correct merge equality. A planted mutant accidentally entered
+milestone1a5afda; root diff audit caught it and the final push restores equality.
+That milestone CI stopped at format before tests; corrected final CI is required.
 
 Original classic478b6ec was played in a fresh profile; start/midgame screenshots
 and visible states are games/2048/fidelity/. Hosted URL now redirects to the2026
 redesign. No upstream code/assets ship. Arial is the declared original fallback;
 Clear Sans glyph differences are explicit in GAPS.md.
 
-Remaining: finish own interactive motion probe (CSS timing float tolerance and
-600ms score receipt; JS debugger freezes cleanup while compositor captures),
-refresh29 static HTML/PNG captures and original/ours comparison after HUD repairs,
-manually review them, update GAPS/VERIFY/README/LOOP, regenerate combined media
-checksums and current-source evidence, pass typecheck/format/current CI. Then do
-three consecutive post-green no-gain reviews, mark PR ready and claim DONE.
+Final visual evidence:29 fresh static frames pass viewport/clipping/overlap,
+essentialTVtype and touch checks, individually reviewed alongside the historical
+negative baseline. Root viewed all10fidelityPNG; pairedstart/midgame semantic
+boards/scores match,280px squares. Actual button-driven motion passes100/200/600ms
+timings and winning-board→complete-ranking handoff across5frames, stable hashes.
+Fixturecheck reproduces the genuine current seeded match exactly. Typecheckpasses.
+All79media/fidelity checksums and combined~8.25MB budget are independently checked.
+
+Remaining: final format/evidence refresh, push repaired milestone and wait for
+P09/kit CI green. Then three consecutive post-green no-gain reviews, log/push,
+refreshPRbody fromjobREADME, verifyheadCI, markPRready and claimDONE.
 
 Every own browser closes in finally with exact-profile zero-PID verification.
 Do not run captures concurrently. During mutation planting, do not import or

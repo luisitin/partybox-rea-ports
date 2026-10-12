@@ -1,0 +1,711 @@
+{
+  "passed": true,
+  "sources": {
+    "games/2048/client/Board.module.css": "5fe2ee3836928c2445c9bfb3a2b85baad14ef2438d525eb107ba7a72cdb0fd25",
+    "games/2048/client/Board.test.tsx": "88ee76653e5aecd1ca1b91919c8d68f17fde13346ed5bae774fd70b9d09fecac",
+    "games/2048/client/Board.tsx": "2f40f229042a7f6c10145fbfbbab99e8d8022553ff5dc16d7a62ca1e862b35a8",
+    "games/2048/client/Controller.module.css": "17984566460fb6526f681010d1dd52f18fdd90d08f565a3719c1b8d8b4439e94",
+    "games/2048/client/Controller.test.tsx": "cf3bccaa0912417a62d694f92568f8bcbdd6145165020631ab5cabca1130f289",
+    "games/2048/client/Controller.tsx": "224caaf02d76da7e02aedd5afc57b6c1a8bfbba76a1468d4e9efe3aa9c53c7f4",
+    "games/2048/client/move-feedback.test.ts": "c4e11a498a9c4102cfee43e4af5424ea7631a5b869f45b54a8eabdcba0defd8e",
+    "games/2048/client/move-feedback.ts": "c0c956dce55879a4fba7249d875b415ffd558bad570ae3deebf1bd7cf5881186",
+    "games/2048/client/phone-entry.ts": "21369590b54f7bfb4061b134585093896cc1465c7e9cc3762e2d3695731a6b83",
+    "games/2048/client/presentation.test.ts": "29600f788bd282ac05c43c2c4cc2543a13a3f94ea67a44d0ac18ff9448cd8c06",
+    "games/2048/client/presentation.ts": "0ef7b291ab2bb1b361bf1fac3fb1dc2a5870854154230813686b3f800d09fa0e",
+    "games/2048/client/RaceStage.module.css": "89cd523f08c959c8bd0659db24a64a48d75f105d7daabe9c06a05160ba3d0a35",
+    "games/2048/client/RaceStage.tsx": "476359dc82303dbe463e6facd1d825db9aab9e8b4b4e5f2f09cd319b0701cd70",
+    "games/2048/client/shared.ts": "a9a3eeaf1a22a3a1e38d0f2454fb5925b77c42c39db184faf8cc5147c9978844",
+    "games/2048/client/StandingsStrip.module.css": "44d4e1bf6e163aa67f3e458379c888689c69509b819d97e784240d073f0ea36c",
+    "games/2048/client/StandingsStrip.tsx": "a3a0f93e02102803974b18f8b93510ce1c910285426896a87e84400d94186d9a",
+    "games/2048/client/strings.ts": "054a4594278a68b101e056d589472779f92509c9d85e8ef53f30966d38f0ea9d",
+    "games/2048/client/tv-entry.ts": "e485b930c9b4cf747ae6f3cb1ac39ea15bd4b65cfc1d171db79689f9de290996",
+    "games/2048/client/Tv.module.css": "bef0de87d53e4e205ac8e291c2449459548bbed376e07a57d6a4cbf63d6e3fa9",
+    "games/2048/client/Tv.tsx": "81829a4010b67927f497d9cce4476519462a8e4b4a05c3f47f2aead81d28e1ad",
+    "games/2048/server/board.ts": "5386d4d95af48afa71f5b5995f52714d541c99dcec8a4dda63bc18addb142ffb",
+    "games/2048/server/bot.ts": "2a79b9eb21a14a744b1dbe0bf41459438b8d506eac9894988e61f74d273c40d3",
+    "games/2048/server/content.ts": "ef76a220503916b90b768744c275a7fc8b48e389e164f891f07ba8a75783f529",
+    "games/2048/server/index.ts": "635747fd24da66e6c7f07ec6bbb4173b398e42f215f47f99159dd0dd00d782f2",
+    "games/2048/server/phases/done.ts": "82620e0d92c95584831f265f89fd68c536f52e705fe3c333e44b092100cffaf5",
+    "games/2048/server/phases/play.ts": "4bb3ae123d2153570ba6ff82ad8e96562771ff0f03e8bd06002544589179d76f",
+    "games/2048/server/phases/reveal.ts": "cdd9442821961aa52dcbe112904f89d6db2dd435ff5f64d3e02bca08fab5664a",
+    "games/2048/server/reveal-reading.ts": "e1df5cfe9c2762d3300c534eca404c42a8a2d5499bfcfa20f0ca47d4866045de",
+    "games/2048/server/scoring.ts": "fb2c8d564637a61881d5cd88bc265971eb3dc03c6ae3c9dd9bc77ed3049ad0c0",
+    "games/2048/server/types.ts": "5e3552759806715c8fd877a6a412d18d2291bd637776b48b377f21a619bc2c21"
+  },
+  "sourcesStable": true,
+  "capturedAt": "2026-10-12T15:15:56.862Z",
+  "frames": 5,
+  "method": "Actual own-game reducer/controller button input; JavaScript debugger holds layer cleanup while public CSS clocks seek50/200ms (target overlay2500ms). Compositor runs normally. Original timings checked against pinned CSS; these transient PNGs are ours-only.",
+  "scenarios": [
+    {
+      "scenario": "ours-merge",
+      "before": {
+        "board": [0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
+        "score": 0,
+        "receipt": 0,
+        "moving": false,
+        "buttons": 4,
+        "finalRows": 0,
+        "text": "2048\nSCORE\n0\nBEST\n0\n\nJoin the numbers and get to the 2048 tile!\n\nTime left\n2:20\nBest tile 2 · Place #1\n2\n2\n\nSwipe the board or tap a direction.\n\n←\n↑\n↓\n→\n\nEqual tiles merge once per move.",
+        "receiptStyle": {
+          "className": "ja",
+          "animation": "0.6s ease-in both Qe",
+          "motion": "600ms",
+          "mode": "on"
+        },
+        "animations": [
+          {
+            "name": "Qe",
+            "target": "gain",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 600,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease-in",
+                "composite": "auto",
+                "opacity": "1",
+                "transform": "translateY(25px)",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "ease-in",
+                "composite": "auto",
+                "opacity": "0",
+                "transform": "translateY(-50px)",
+                "computedOffset": 1
+              }
+            ]
+          }
+        ]
+      },
+      "accepted": {
+        "board": [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+        "score": 4,
+        "receipt": 4,
+        "moving": true,
+        "buttons": 4,
+        "finalRows": 0,
+        "text": "2048\nSCORE\n4\n+4\nBEST\n4\n\nJoin the numbers and get to the 2048 tile!\n\nTime left\n2:20\nBest tile 4 · Place #1\n4\n2\n2\n2\n4\n2\n\nSwipe the board or tap a direction.\n\n←\n↑\n↓\n→\n\nEqual tiles merge once per move.",
+        "receiptStyle": {
+          "className": "ja",
+          "animation": "0.6s ease-in both Qe",
+          "motion": "600ms",
+          "mode": "on"
+        },
+        "animations": [
+          {
+            "name": "Qe",
+            "target": "gain",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 600,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease-in",
+                "composite": "auto",
+                "opacity": "1",
+                "transform": "translateY(25px)",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "ease-in",
+                "composite": "auto",
+                "opacity": "0",
+                "transform": "translateY(-50px)",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "xa",
+            "target": "travel",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 99.99999999999999,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease-in-out",
+                "composite": "auto",
+                "transform": "translate(0%, calc(100% + 10px))",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "ease-in-out",
+                "composite": "auto",
+                "transform": "translate(0px)",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "Je",
+            "target": "travel",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 99.99999999999999,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "steps(1)",
+                "composite": "auto",
+                "opacity": "1",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "steps(1)",
+                "composite": "auto",
+                "opacity": "0",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "xa",
+            "target": "travel",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 99.99999999999999,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease-in-out",
+                "composite": "auto",
+                "transform": "translate(0%, calc(200% + 20px))",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "ease-in-out",
+                "composite": "auto",
+                "transform": "translate(0px)",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "Je",
+            "target": "travel",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 99.99999999999999,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "steps(1)",
+                "composite": "auto",
+                "opacity": "1",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "steps(1)",
+                "composite": "auto",
+                "opacity": "0",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "Le",
+            "target": "merge",
+            "timing": {
+              "delay": 99.99999999999999,
+              "direction": "normal",
+              "duration": 199.99999999999997,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease",
+                "composite": "auto",
+                "transform": "scale(0)",
+                "computedOffset": 0
+              },
+              {
+                "offset": 0.5,
+                "easing": "ease",
+                "composite": "auto",
+                "transform": "scale(1.2)",
+                "computedOffset": 0.5
+              },
+              {
+                "offset": 1,
+                "easing": "ease",
+                "composite": "auto",
+                "transform": "scale(1)",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "Ke",
+            "target": "spawn",
+            "timing": {
+              "delay": 99.99999999999999,
+              "direction": "normal",
+              "duration": 199.99999999999997,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease",
+                "composite": "auto",
+                "opacity": "0",
+                "transform": "scale(0)",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "ease",
+                "composite": "auto",
+                "opacity": "1",
+                "transform": "scale(1)",
+                "computedOffset": 1
+              }
+            ]
+          }
+        ]
+      },
+      "settled": {
+        "board": [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+        "score": 4,
+        "receipt": 4,
+        "moving": false,
+        "buttons": 4,
+        "finalRows": 0,
+        "text": "2048\nSCORE\n4\n+4\nBEST\n4\n\nJoin the numbers and get to the 2048 tile!\n\nTime left\n2:20\nBest tile 4 · Place #1\n4\n2\n\nSwipe the board or tap a direction.\n\n←\n↑\n↓\n→\n\nEqual tiles merge once per move.",
+        "receiptStyle": {
+          "className": "ja",
+          "animation": "0.6s ease-in both Qe",
+          "motion": "600ms",
+          "mode": "on"
+        },
+        "animations": [
+          {
+            "name": "Qe",
+            "target": "gain",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 600,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease-in",
+                "composite": "auto",
+                "opacity": "1",
+                "transform": "translateY(25px)",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "ease-in",
+                "composite": "auto",
+                "opacity": "0",
+                "transform": "translateY(-50px)",
+                "computedOffset": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "ours-target",
+      "before": {
+        "board": [1024, 1024, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        "score": 0,
+        "receipt": 0,
+        "moving": false,
+        "buttons": 4,
+        "finalRows": 0,
+        "text": "2048\nSCORE\n0\nBEST\n4\n\nJoin the numbers and get to the 2048 tile!\n\nTime left\n2:20\nBest tile 1024 · Place #1\n1024\n1024\n\nSwipe the board or tap a direction.\n\n←\n↑\n↓\n→\n\nEqual tiles merge once per move.",
+        "receiptStyle": {
+          "className": "ja",
+          "animation": "0.6s ease-in both Qe",
+          "motion": "600ms",
+          "mode": "on"
+        },
+        "animations": [
+          {
+            "name": "Qe",
+            "target": "gain",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 600,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease-in",
+                "composite": "auto",
+                "opacity": "1",
+                "transform": "translateY(25px)",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "ease-in",
+                "composite": "auto",
+                "opacity": "0",
+                "transform": "translateY(-50px)",
+                "computedOffset": 1
+              }
+            ]
+          }
+        ]
+      },
+      "accepted": {
+        "board": [2048, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+        "score": 2048,
+        "receipt": 2048,
+        "moving": true,
+        "buttons": 0,
+        "finalRows": 0,
+        "text": "2048\nSCORE\n2048\n+2048\nBEST\n2048\n\nJoin the numbers and get to the 2048 tile!\n\nRace complete\n—\nBest tile 2048 · Place #1\n2048\n2\n1024\n1024\n2048\n2\nYou win!\n2048 reached!\n\nYou won! · 2048 points\n\nFinal standings follow.",
+        "receiptStyle": {
+          "className": "ja",
+          "animation": "0.6s ease-in both Qe",
+          "motion": "600ms",
+          "mode": "on"
+        },
+        "animations": [
+          {
+            "name": "Qe",
+            "target": "gain",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 600,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease-in",
+                "composite": "auto",
+                "opacity": "1",
+                "transform": "translateY(25px)",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "ease-in",
+                "composite": "auto",
+                "opacity": "0",
+                "transform": "translateY(-50px)",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "xa",
+            "target": "travel",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 99.99999999999999,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease-in-out",
+                "composite": "auto",
+                "transform": "translate(0%, 0%)",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "ease-in-out",
+                "composite": "auto",
+                "transform": "translate(0px)",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "Je",
+            "target": "travel",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 99.99999999999999,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "steps(1)",
+                "composite": "auto",
+                "opacity": "1",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "steps(1)",
+                "composite": "auto",
+                "opacity": "0",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "xa",
+            "target": "travel",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 99.99999999999999,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease-in-out",
+                "composite": "auto",
+                "transform": "translate(calc(100% + 10px), 0%)",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "ease-in-out",
+                "composite": "auto",
+                "transform": "translate(0px)",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "Je",
+            "target": "travel",
+            "timing": {
+              "delay": 0,
+              "direction": "normal",
+              "duration": 99.99999999999999,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "steps(1)",
+                "composite": "auto",
+                "opacity": "1",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "steps(1)",
+                "composite": "auto",
+                "opacity": "0",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "Le",
+            "target": "merge",
+            "timing": {
+              "delay": 99.99999999999999,
+              "direction": "normal",
+              "duration": 199.99999999999997,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease",
+                "composite": "auto",
+                "transform": "scale(0)",
+                "computedOffset": 0
+              },
+              {
+                "offset": 0.5,
+                "easing": "ease",
+                "composite": "auto",
+                "transform": "scale(1.2)",
+                "computedOffset": 0.5
+              },
+              {
+                "offset": 1,
+                "easing": "ease",
+                "composite": "auto",
+                "transform": "scale(1)",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "Ke",
+            "target": "spawn",
+            "timing": {
+              "delay": 99.99999999999999,
+              "direction": "normal",
+              "duration": 199.99999999999997,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "both",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease",
+                "composite": "auto",
+                "opacity": "0",
+                "transform": "scale(0)",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "ease",
+                "composite": "auto",
+                "opacity": "1",
+                "transform": "scale(1)",
+                "computedOffset": 1
+              }
+            ]
+          },
+          {
+            "name": "Se",
+            "target": "J",
+            "timing": {
+              "delay": 1200,
+              "direction": "normal",
+              "duration": 799.9999999999999,
+              "easing": "linear",
+              "endDelay": 0,
+              "fill": "backwards",
+              "iterationStart": 0,
+              "iterations": 1
+            },
+            "keyframes": [
+              {
+                "offset": 0,
+                "easing": "ease",
+                "composite": "auto",
+                "opacity": "0",
+                "computedOffset": 0
+              },
+              {
+                "offset": 1,
+                "easing": "ease",
+                "composite": "auto",
+                "opacity": "1",
+                "computedOffset": 1
+              }
+            ]
+          }
+        ]
+      },
+      "settled": {
+        "board": [],
+        "score": 0,
+        "receipt": 0,
+        "moving": false,
+        "buttons": 0,
+        "finalRows": 2,
+        "text": "You wins!\n\n2048 reached!\n\nYou won! · 2048 points\n#1\nYou\nBest tile 2048\n2048\n★\n#2\nPeer\nBest tile 2\n0\n\nFirst to 2048 wins. Reaching the target beats merge score.",
+        "receiptStyle": null,
+        "animations": []
+      }
+    }
+  ]
+}

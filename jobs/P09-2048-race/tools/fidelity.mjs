@@ -141,6 +141,8 @@ try {
   } else {
     await cdp.send('Network.enable', {}, sessionId);
     await cdp.send('Network.setBlockedURLs', { urls: ['http://*', 'https://*'] }, sessionId);
+    const reference = JSON.parse(await readFile(join(directory, 'original-states.json'), 'utf8'));
+    const states = [];
     for (const moment of ['start', 'midgame']) {
       await cdp.send(
         'Page.navigate',
@@ -150,12 +152,29 @@ try {
       await delay(100);
       await evaluate('document.fonts.ready');
       await delay(200);
-      const board = await evaluate(
-        "(() => {const r=document.querySelector('[role=grid]').getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height}})()",
+      const visible = await evaluate(
+        "(() => {const r=document.querySelector('[role=grid]').getBoundingClientRect();return {board:Array.from(document.querySelectorAll('[role=gridcell]'),cell=>Number(cell.dataset.value)),score:Number(document.querySelector('dd').firstChild.textContent),boardRect:{x:r.x,y:r.y,width:r.width,height:r.height}}})()",
       );
+      const expected = reference.states.find((state) => state.moment === moment);
+      if (
+        JSON.stringify(visible.board) !== JSON.stringify(expected.board) ||
+        visible.score !== expected.score
+      )
+        throw new Error(`Matched visible board/score differs: ${moment}`);
+      if (
+        Math.abs(visible.boardRect.width - 280) > 1 ||
+        Math.abs(visible.boardRect.height - 280) > 1
+      )
+        throw new Error(`Original phone board geometry differs: ${moment}`);
       await screenshot(`ours-${moment}.png`);
-      console.log(JSON.stringify({ moment, board }));
+      states.push({ moment, ...visible, matched: true });
+      console.log(JSON.stringify({ moment, ...visible, matched: true }));
     }
+    await writeFile(
+      join(directory, 'ours-states.json'),
+      `${JSON.stringify({ capturedAt: new Date().toISOString(), viewport: reference.viewport, reference: reference.reference, captureMethod: 'Real Controller SSR with the original visible board/score supplied as a comparison fixture; no claim of identical random draws or original code reuse.', states }, null, 2)}\n`,
+      'utf8',
+    );
     await cdp.send(
       'Emulation.setDeviceMetricsOverride',
       { width: 1560, height: 920, deviceScaleFactor: 1, mobile: false },
@@ -191,18 +210,7 @@ try {
   }
   const absolute = ownedProfile(profile);
   await closeProfileProcesses(absolute);
-  await rm(absolute, { recursive: true, force: true, maxRetries: 10, retryDelay: 250 }).catch(
-    (error) => {
-      // Zero owned browser PIDs above is the lifetime gate; antivirus may retain a
-      // temporary file handle after Chrome exits. Preserve the path for later cleanup.
-      if (error.code !== 'EBUSY' && error.code !== 'EPERM') throw error;
-      console.log(
-        JSON.stringify({
-          retainedTemporaryProfile: absolute,
-          reason: error.code,
-          ownedBrowserPids: 0,
-        }),
-      );
-    },
-  );
+  // Windows antivirus can retain profile handles after Chrome exits. Keep this
+  // uniquely owned temporary path; zero browser PIDs above is the lifetime gate.
+  console.log(JSON.stringify({ retainedTemporaryProfile: absolute, ownedBrowserPids: 0 }));
 }

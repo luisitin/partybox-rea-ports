@@ -17,24 +17,26 @@ are covered by seeded completion simulations. Spectators see the public race.
 
 ## Phases
 
-| Phase    | TV                                                                     | Phone with TV                                                      | Exit                                                   |
-| -------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
-| `play`   | All boards, names, merge scores, large best tiles, race clock and goal | Own board, score, best tile, rank, timer; swipe and arrow controls | First 2048, deadline, every board blocked, or VIP skip |
-| `reveal` | Ranked name, score and best-tile summaries; winner and reason          | Own final result and full ranking, no controls                     | Reading-safe hold (at least 8 s) or VIP skip           |
-| `done`   | Final score and best-tile summaries, winner and ranking                | Final result and ranking                                           | Terminal; `results()` available                        |
+| Phase    | TV                                                                     | Phone with TV                                                                                               | Exit                                                   |
+| -------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `play`   | All boards, names, merge scores, large best tiles, race clock and goal | Own board, SCORE/BEST, best tile, place, timer; swipe and arrow controls                                    | First 2048, deadline, every board blocked, or VIP skip |
+| `reveal` | Ranked name, score and best-tile summaries; winner and reason          | Target/all-blocked racers retain their final board and overlay for 3 s, then every final place; no controls | Full reading-safe hold after the payoff or VIP skip    |
+| `done`   | Final score and best-tile summaries, winner and ranking                | Final result and ranking                                                                                    | Terminal; `results()` available                        |
 
 The SDK shell gives rules, readiness and its opening countdown. Play begins
 immediately; the game does not add another countdown.
 Final TV summaries replace board maps, keeping all places, scores and best tiles
 visible with Bot/Away identity. The result hold covers the complete TV and phone
 copy without counting tile cells that are no longer on screen.
+The 3-second terminal beat preserves the original 1,200 ms overlay delay and
+800 ms fade, followed by a visible second. Pause and refresh preserve its deadline.
 
 ### Phone only
 
 | Phase    | Phone is the stage                                                                                      |
 | -------- | ------------------------------------------------------------------------------------------------------- |
 | `play`   | Own board and controls with clock, goal, rank and race standings; spectator sees boards without buttons |
-| `reveal` | Winner, reason, own result and all eight standings                                                      |
+| `reveal` | Own terminal board payoff where applicable, then winner, reason, own result and all eight standings     |
 | `done`   | Final result and all eight standings                                                                    |
 
 The SDK `usePhoneOnly` hook selects stage context. Remote and phone-only play
@@ -48,7 +50,7 @@ original-timed Game over overlay and retains their score in the race.
 disconnected, stale, paused, late and too-fast inputs are ignored. Changed moves
 are separated by at least 150 ms; no-ops spend no move, draw or score.
 The server computes every merge; the phone sends only direction and version.
-Phone input accepts arrows/WASD, arrow buttons and dominant-axis swipes longer
+Phone input accepts arrows/WASD/HJKL, arrow buttons and dominant-axis swipes longer
 than 10 px. The main phone board stays 280 px square in both room modes.
 SCORE and BEST retain the original top-right slots; BEST is a device-local
 personal merge-score record, independent of authoritative race scoring.
@@ -76,7 +78,8 @@ actual merge points and include every original player, even one who left.
 - Refresh restores board and move number. Disconnect never resets score or
   holds the race; a return resumes that seat until the deadline.
 - Pause shifts the deadline and accepted-move clocks. Old timer instances do
-  nothing. Inputs at the exact deadline close the race without accepting a move.
+  nothing. Terminal payoff time also pauses. Inputs at the exact deadline close
+  the race without accepting a move.
 - 1,200 accepted moves bounds play; with the cooldown, normal 3-minute play
   reaches the clock first. A first accepted target merge freezes the whole race.
 

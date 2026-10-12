@@ -2,17 +2,21 @@
 
 ## Current resume evidence (2026-10-12, r1-local)
 
-The product is now canonically 2048; Merge Sprint is a superseded working name. Root checked
-126 current core manifests at `e73c6a2fb776ae355769ffa8074a24ace996b6d6` with no overlap. Fresh access reopened the creator's hosted original page
-and confirmed the independent engine at its pinned raw URL. This confirms source/page access,
-not an interactive live playthrough; no live movement, audio or transition timing is claimed.
+The canonical product is 2048. A read-only scan found no overlap among126 core
+manifests at `e73c6a2fb776ae355769ffa8074a24ace996b6d6`.
+Native headless Chrome played the pinned classic original on October12 at14:28UTC
+from a temporary read-only checkout outside this repository. A fresh profile began
+with two2tiles. Twelve ordinary arrow inputs produced11accepted moves and24points.
+The saved public board/score reads and original start/midgame PNGs are in
+games/2048/fidelity/. The port uses those identical visible states as comparison
+fixtures; this establishes matched geometry/HUD moments, not identical RNG.
 
-The browser retry in this session again found no enabled apps/browsers; opening a visible
-in-app tab returned `Browser is not available: iab`. Engine play and targeted probes below
-remain the reproducible fallback, with UI timing observations attributed to authored source.
-The original and independent mechanics/probe evidence below is retained as historical research.
-Current work adds actual-host capture, correct spectator routing, feedback and reading-safe
-reveal pacing; old fake-chrome/spectator SSR evidence is not current fit proof.
+The hosted creator URL redirects to play2048.co's2026 redesign. Classic revision
+478b6ec remains the studied reference. No original code/fonts/assets ship; review
+PNGs are the fidelity evidence required by RULES. The own-game reducer/controller
+capture room exercises actual accepted merges and checks public CSS clocks against
+the pinned source timings. Original audio was not heard. The provider-unavailable
+attempt and engine VM transcript below are historical, superseded where noted.
 
 ## Historical reconstruction (2026-10-11)
 
@@ -94,7 +98,9 @@ The original has no timed round: a move resolves when the player acts. Its
 [stylesheet](https://github.com/gabrielecirulli/2048/blob/478b6ec346e3787f589e4af751378d06ded4cbbc/style/main.scss)
 specifies 100 ms tile travel, 200 ms spawn/merge effects with 100 ms delay, a
 600 ms score-rise effect, and an 800 ms ending overlay after a 1200 ms delay.
-These are source-specific measurements, not live-browser measurements.
+These are original source-specific measurements. The port's own live reducer/
+controller room checks public CSS clocks against those durations; its transient
+frames are labeled ours-only rather than paired original frames.
 The [input adapter](https://github.com/gabrielecirulli/2048/blob/478b6ec346e3787f589e4af751378d06ded4cbbc/js/keyboard_input_manager.js)
 accepts arrows, WASD, and one-finger dominant-axis swipes longer than 10 px.
 Its input is immediate rather than turn-paced.
@@ -110,15 +116,15 @@ audio was not directly heard. Use PartyBox's own cues only.
 
 The phone owns its board, score, goal, and swipe surface. Visible direction
 buttons provide a discoverable equivalent for players who cannot swipe; arrows
-or WASD support keyboard play. All four controls need accessible direction
+or WASD/HJKL support keyboard play. All four controls need accessible direction
 names, one visible focus state, and a disabled state after a board jams.
 
 The TV shows every board together, with each name, score, and enlarged best
 tile. Eight boards can sit in two rows of four; the clock and race goal remain
 the focal header. The best tile is display information, while timeout standings
 follow the job's highest-score rule. Equal scores share a place. A player who
-jams keeps their earned score and sees the ongoing race rather than an unexplained
-dead control panel. Ending all-jammed play early avoids dead air.
+jams keeps their earned score and final board under the original Game over
+overlay. Ending all-jammed play early avoids dead air.
 
 The shell already owns rules, readiness, and countdown; enter play immediately.
 At the first accepted 2048 merge, freeze the race and clearly name that winner.

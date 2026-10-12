@@ -55,8 +55,9 @@ function publicCards(html: string): string[] {
 
 describe('2048 phone surfaces', () => {
   it('keeps the winner own board through the complete payoff, then shows every final place', () => {
+    const deviceNow = Date.now() + 1000;
     vi.useFakeTimers();
-    vi.setSystemTime(50000);
+    vi.setSystemTime(deviceNow);
     try {
       const s = state();
       s.phase = { id: 'reveal', startedAt: 20000, deadline: 40000 };

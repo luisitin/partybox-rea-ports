@@ -25,7 +25,7 @@ export function slide(board: number[], dir: Direction): Slide {
     const out: number[] = [];
     for (let i = 0; i < values.length; i++) {
       const a = values[i] ?? 0;
-      if (i + 1 < values.length && a !== values[i + 1]) {
+      if (i + 1 < values.length && a === values[i + 1]) {
         out.push(a * 2);
         gain += a * 2;
         i++;

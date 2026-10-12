@@ -2,6 +2,14 @@
 
 ## Current canonical resume (2026-10-12, r1-local)
 
+- October12 14:28UTC native Chrome research supersedes the unavailable browser-provider record below: the pinned classic release was played in a fresh profile with12 arrow inputs,11 accepted moves and24points. Original visible states and review screenshots are in games/2048/fidelity/. The hosted URL now redirects to a 2026 redesign, so classic478b6ec is the explicit studied reference.
+- The original checkout and fonts remain outside the public repository. The game uses authored numeric CSS and the original declared Arial fallback; Clear Sans glyph differences are recorded in GAPS.md because RULES forbids shipping original fonts. Capture-only Nunito belongs to the reconstructed PartyBox host, with its OFL license recorded separately.
+- Current final behavior evidence:119/119tests,21,000/21,000bot games and20/20 semantic mutant kills. Source hashes belong to the restored correct merge equality, independent of the temporary mutation accidentally included in a milestone commit; final CI must pass the repaired source.
+- A temporary own-game reducer/controller room captures actual button-driven travel, spawn, merge, score receipt and target-overlay CSS. These are ours-only transient frames checked against pinned original timings; the paired original/ours frames compare identical visible start/midgame boards and scores, without claiming identical RNG.
+- Earlier access and27-frame records below are historical. Fresh29 static frames and fidelity evidence replace them in the final evidence report. Neither reconstructed-host SSR nor the own-game capture room is a running PartyBox server session; original audio was not heard.
+
+### Earlier resume record (superseded where contradicted above)
+
 - Fresh 13:35 UTC overlap scan: 126 owner-core manifests at `e73c6a2fb776ae355769ffa8074a24ace996b6d6`, no 2048/merge-sprint match. Read-only comparison found no changes to the capture's pinned host geometry/reset/font CSS since `6ce46e613d3705624a56647592979613c4d6e468`; owner checkout was not edited.
 - Browser research was retried in this session: inventory had no apps/browsers, and creating the in-app tab returned `Browser is not available: iab`. Original hosted page and independent engine were readable through web access. Preserve the prior reproducible engine play/probes; no live visual/audio play claim.
 - The current 27 static captures use the real SDK components with reconstructed pinned host chrome, not a running PartyBox room. Standard fixtures cover every phase/TV/phone/presence/spectator combination. Twelve stress frames cover long valid 16-code-point names, 2048, five-digit scores, blocked/pause/tie/receipt states and two/three TV seats. Receipt text is explicitly supplied to SSR's real status slot because effects do not run there; behavioral confirmation comes from feedback tests.
