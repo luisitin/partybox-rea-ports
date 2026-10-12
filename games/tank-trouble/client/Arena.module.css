@@ -1,0 +1,134 @@
+.scene {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 3;
+  overflow: hidden;
+  border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+  border-radius: var(--pb-radius);
+  background: var(--pb-bg);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.floor {
+  fill: var(--pb-surface);
+}
+.grid {
+  fill: none;
+  stroke: var(--pb-surface-2);
+  stroke-width: 0.15;
+}
+.walls {
+  stroke: var(--pb-text-muted);
+  stroke-width: 0.9;
+  stroke-linecap: square;
+}
+.crate {
+  fill: var(--pb-accent-2-fill);
+  stroke: var(--pb-on-accent-2-fill);
+  stroke-width: 0.35;
+}
+.mark {
+  fill: none;
+  stroke: var(--pb-on-accent-2-fill);
+  stroke-width: 0.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pickup {
+  stroke-linejoin: round;
+}
+.projectile {
+  stroke-linecap: round;
+}
+.shell {
+  fill: var(--pb-accent-2-fill);
+  stroke: currentColor;
+  stroke-width: 0.5;
+}
+.beam {
+  stroke: var(--pb-accent-2-fill);
+  stroke-width: 0.8;
+  stroke-linecap: round;
+}
+.track {
+  fill: var(--pb-bg);
+  stroke: currentColor;
+  stroke-width: 0.4;
+}
+.chassis {
+  fill: currentColor;
+  stroke: var(--pb-bg);
+  stroke-width: 0.35;
+}
+.barrel {
+  fill: var(--pb-text);
+  stroke: var(--pb-bg);
+  stroke-width: 0.25;
+}
+.heading {
+  fill: var(--pb-text);
+}
+.mine {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: 0.35;
+  stroke-dasharray: 1.3 1;
+}
+.tank[data-out='true'] .chassis {
+  fill: var(--pb-surface-2);
+  stroke: var(--pb-text-muted);
+}
+.tank[data-out='true'] .track {
+  stroke: var(--pb-text-muted);
+}
+.wreck {
+  fill: none;
+  stroke: var(--pb-text-muted);
+  stroke-width: 0.8;
+}
+
+/* Real CSS font sizes survive SVG fitting: the tank identities never shrink below the device's body scale. */
+.number {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  min-width: 1.05em;
+  line-height: 1;
+  font-size: var(--pb-font-body);
+  font-weight: 1000;
+  color: var(--pb-on-accent-2-fill);
+  background: var(--tank-color);
+  border-radius: calc(var(--pb-radius) / 3);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.number[data-out='true'] {
+  color: var(--pb-text-muted);
+  background: var(--pb-surface-2);
+  text-decoration: line-through;
+}
+.number[data-me='true'] {
+  outline: calc(var(--pb-space-1) / 2) solid var(--pb-text);
+}
+
+/* Match the 200 ms snapshot cadence; stopped phases paint their exact server pose. */
+.scene[data-animated='true'] .tank,
+.scene[data-animated='true'] .projectile {
+  transition: transform calc(var(--pb-motion-base) * 2 / 3) linear;
+}
+.scene[data-animated='true'] .number {
+  transition:
+    left calc(var(--pb-motion-base) * 2 / 3) linear,
+    top calc(var(--pb-motion-base) * 2 / 3) linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene[data-animated='true'] .tank,
+  .scene[data-animated='true'] .projectile,
+  .scene[data-animated='true'] .number {
+    transition: none;
+  }
+}

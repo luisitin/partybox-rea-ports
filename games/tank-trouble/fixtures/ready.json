@@ -1,0 +1,599 @@
+{
+  "phase": {
+    "id": "ready",
+    "startedAt": 1700000028542,
+    "deadline": 1700000036986
+  },
+  "rng": {
+    "seed": 42,
+    "step": 326
+  },
+  "players": {
+    "p1": {
+      "id": "p1",
+      "name": "Ana",
+      "avatarId": "fox",
+      "connected": true,
+      "bot": true
+    },
+    "p2": {
+      "id": "p2",
+      "name": "Ben",
+      "avatarId": "owl",
+      "connected": true,
+      "bot": true
+    },
+    "p3": {
+      "id": "p3",
+      "name": "Cy",
+      "avatarId": "frog",
+      "connected": true,
+      "bot": true
+    },
+    "p4": {
+      "id": "p4",
+      "name": "Dee",
+      "avatarId": "cat",
+      "connected": true,
+      "bot": true
+    },
+    "p5": {
+      "id": "p5",
+      "name": "Eli",
+      "avatarId": "panda",
+      "connected": true,
+      "bot": true
+    },
+    "p6": {
+      "id": "p6",
+      "name": "Fay",
+      "avatarId": "koala",
+      "connected": true,
+      "bot": true
+    },
+    "p7": {
+      "id": "p7",
+      "name": "Gus",
+      "avatarId": "penguin",
+      "connected": true,
+      "bot": true
+    },
+    "p8": {
+      "id": "p8",
+      "name": "Hal",
+      "avatarId": "octopus",
+      "connected": true,
+      "bot": true
+    }
+  },
+  "began": 1700000028542,
+  "endsAt": 1700000028542,
+  "checked": 0,
+  "world": {
+    "maze": {
+      "cols": 10,
+      "rows": 6,
+      "cell": 16,
+      "walls": [
+        {
+          "x1": 0,
+          "y1": 0,
+          "x2": 160,
+          "y2": 0
+        },
+        {
+          "x1": 160,
+          "y1": 0,
+          "x2": 160,
+          "y2": 96
+        },
+        {
+          "x1": 0,
+          "y1": 96,
+          "x2": 160,
+          "y2": 96
+        },
+        {
+          "x1": 0,
+          "y1": 0,
+          "x2": 0,
+          "y2": 96
+        },
+        {
+          "x1": 16,
+          "y1": 0,
+          "x2": 16,
+          "y2": 16
+        },
+        {
+          "x1": 16,
+          "y1": 16,
+          "x2": 32,
+          "y2": 16
+        },
+        {
+          "x1": 48,
+          "y1": 16,
+          "x2": 64,
+          "y2": 16
+        },
+        {
+          "x1": 112,
+          "y1": 16,
+          "x2": 128,
+          "y2": 16
+        },
+        {
+          "x1": 0,
+          "y1": 32,
+          "x2": 16,
+          "y2": 32
+        },
+        {
+          "x1": 32,
+          "y1": 16,
+          "x2": 32,
+          "y2": 32
+        },
+        {
+          "x1": 48,
+          "y1": 16,
+          "x2": 48,
+          "y2": 32
+        },
+        {
+          "x1": 48,
+          "y1": 32,
+          "x2": 64,
+          "y2": 32
+        },
+        {
+          "x1": 80,
+          "y1": 32,
+          "x2": 96,
+          "y2": 32
+        },
+        {
+          "x1": 96,
+          "y1": 32,
+          "x2": 112,
+          "y2": 32
+        },
+        {
+          "x1": 128,
+          "y1": 16,
+          "x2": 128,
+          "y2": 32
+        },
+        {
+          "x1": 144,
+          "y1": 16,
+          "x2": 144,
+          "y2": 32
+        },
+        {
+          "x1": 16,
+          "y1": 32,
+          "x2": 16,
+          "y2": 48
+        },
+        {
+          "x1": 32,
+          "y1": 32,
+          "x2": 32,
+          "y2": 48
+        },
+        {
+          "x1": 32,
+          "y1": 48,
+          "x2": 48,
+          "y2": 48
+        },
+        {
+          "x1": 48,
+          "y1": 48,
+          "x2": 64,
+          "y2": 48
+        },
+        {
+          "x1": 80,
+          "y1": 32,
+          "x2": 80,
+          "y2": 48
+        },
+        {
+          "x1": 96,
+          "y1": 48,
+          "x2": 112,
+          "y2": 48
+        },
+        {
+          "x1": 128,
+          "y1": 32,
+          "x2": 128,
+          "y2": 48
+        },
+        {
+          "x1": 144,
+          "y1": 48,
+          "x2": 160,
+          "y2": 48
+        },
+        {
+          "x1": 16,
+          "y1": 48,
+          "x2": 16,
+          "y2": 64
+        },
+        {
+          "x1": 16,
+          "y1": 64,
+          "x2": 32,
+          "y2": 64
+        },
+        {
+          "x1": 64,
+          "y1": 48,
+          "x2": 64,
+          "y2": 64
+        },
+        {
+          "x1": 80,
+          "y1": 48,
+          "x2": 80,
+          "y2": 64
+        },
+        {
+          "x1": 64,
+          "y1": 64,
+          "x2": 80,
+          "y2": 64
+        },
+        {
+          "x1": 96,
+          "y1": 48,
+          "x2": 96,
+          "y2": 64
+        },
+        {
+          "x1": 96,
+          "y1": 64,
+          "x2": 112,
+          "y2": 64
+        },
+        {
+          "x1": 128,
+          "y1": 64,
+          "x2": 144,
+          "y2": 64
+        },
+        {
+          "x1": 16,
+          "y1": 64,
+          "x2": 16,
+          "y2": 80
+        },
+        {
+          "x1": 48,
+          "y1": 64,
+          "x2": 48,
+          "y2": 80
+        },
+        {
+          "x1": 48,
+          "y1": 80,
+          "x2": 64,
+          "y2": 80
+        },
+        {
+          "x1": 80,
+          "y1": 64,
+          "x2": 80,
+          "y2": 80
+        },
+        {
+          "x1": 80,
+          "y1": 80,
+          "x2": 96,
+          "y2": 80
+        },
+        {
+          "x1": 112,
+          "y1": 64,
+          "x2": 112,
+          "y2": 80
+        },
+        {
+          "x1": 112,
+          "y1": 80,
+          "x2": 128,
+          "y2": 80
+        },
+        {
+          "x1": 144,
+          "y1": 64,
+          "x2": 144,
+          "y2": 80
+        },
+        {
+          "x1": 32,
+          "y1": 80,
+          "x2": 32,
+          "y2": 96
+        },
+        {
+          "x1": 112,
+          "y1": 80,
+          "x2": 112,
+          "y2": 96
+        }
+      ],
+      "passages": [
+        [10],
+        [2],
+        [3, 1, 12],
+        [4, 2],
+        [5, 3, 14],
+        [6, 4, 15],
+        [7, 5, 16],
+        [8, 6],
+        [18, 7, 9],
+        [8, 19],
+        [0, 11],
+        [10, 21],
+        [2, 22],
+        [14],
+        [24, 13, 15, 4],
+        [14, 16, 5],
+        [15, 17, 6],
+        [16, 27],
+        [28, 8],
+        [9, 29],
+        [30],
+        [11, 31],
+        [12, 23],
+        [22, 24],
+        [23, 34, 14],
+        [35, 26],
+        [25, 27],
+        [26, 37, 17],
+        [38, 18, 29],
+        [19, 28],
+        [40, 20],
+        [21, 32],
+        [31, 33, 42],
+        [32, 43],
+        [24],
+        [45, 25],
+        [37],
+        [27, 47, 36, 38],
+        [39, 28, 37],
+        [49, 38],
+        [50, 30],
+        [42, 51],
+        [52, 41, 32],
+        [33, 44],
+        [43, 54],
+        [46, 35],
+        [56, 45],
+        [37, 48],
+        [47, 58],
+        [59, 39],
+        [51, 40],
+        [41, 50],
+        [53, 42],
+        [54, 52],
+        [44, 55, 53],
+        [54, 56],
+        [55, 46],
+        [58],
+        [48, 57, 59],
+        [58, 49]
+      ]
+    },
+    "tanks": [
+      {
+        "id": "p1",
+        "slot": 0,
+        "x": 8,
+        "y": 8,
+        "angle": 1.5707963267948966,
+        "alive": true,
+        "died": null,
+        "drive": 0,
+        "turn": 0,
+        "fire": false,
+        "firePulse": false,
+        "controlAt": -600,
+        "inputUntil": 0,
+        "reloadAt": 0,
+        "weapon": "shell",
+        "weaponAmmo": 0,
+        "weaponUntil": 0,
+        "ammo": 5
+      },
+      {
+        "id": "p2",
+        "slot": 1,
+        "x": 40,
+        "y": 24,
+        "angle": -1.5707963267948966,
+        "alive": true,
+        "died": null,
+        "drive": 0,
+        "turn": 0,
+        "fire": false,
+        "firePulse": false,
+        "controlAt": -600,
+        "inputUntil": 0,
+        "reloadAt": 0,
+        "weapon": "shell",
+        "weaponAmmo": 0,
+        "weaponUntil": 0,
+        "ammo": 5
+      },
+      {
+        "id": "p3",
+        "slot": 2,
+        "x": 120,
+        "y": 88,
+        "angle": 0,
+        "alive": true,
+        "died": null,
+        "drive": 0,
+        "turn": 0,
+        "fire": false,
+        "firePulse": false,
+        "controlAt": -600,
+        "inputUntil": 0,
+        "reloadAt": 0,
+        "weapon": "shell",
+        "weaponAmmo": 0,
+        "weaponUntil": 0,
+        "ammo": 5
+      },
+      {
+        "id": "p4",
+        "slot": 3,
+        "x": 8,
+        "y": 40,
+        "angle": 1.5707963267948966,
+        "alive": true,
+        "died": null,
+        "drive": 0,
+        "turn": 0,
+        "fire": false,
+        "firePulse": false,
+        "controlAt": -600,
+        "inputUntil": 0,
+        "reloadAt": 0,
+        "weapon": "shell",
+        "weaponAmmo": 0,
+        "weaponUntil": 0,
+        "ammo": 5
+      },
+      {
+        "id": "p5",
+        "slot": 4,
+        "x": 104,
+        "y": 88,
+        "angle": 3.141592653589793,
+        "alive": true,
+        "died": null,
+        "drive": 0,
+        "turn": 0,
+        "fire": false,
+        "firePulse": false,
+        "controlAt": -600,
+        "inputUntil": 0,
+        "reloadAt": 0,
+        "weapon": "shell",
+        "weaponAmmo": 0,
+        "weaponUntil": 0,
+        "ammo": 5
+      },
+      {
+        "id": "p6",
+        "slot": 5,
+        "x": 152,
+        "y": 8,
+        "angle": 3.141592653589793,
+        "alive": true,
+        "died": null,
+        "drive": 0,
+        "turn": 0,
+        "fire": false,
+        "firePulse": false,
+        "controlAt": -600,
+        "inputUntil": 0,
+        "reloadAt": 0,
+        "weapon": "shell",
+        "weaponAmmo": 0,
+        "weaponUntil": 0,
+        "ammo": 5
+      },
+      {
+        "id": "p7",
+        "slot": 6,
+        "x": 104,
+        "y": 56,
+        "angle": 0,
+        "alive": true,
+        "died": null,
+        "drive": 0,
+        "turn": 0,
+        "fire": false,
+        "firePulse": false,
+        "controlAt": -600,
+        "inputUntil": 0,
+        "reloadAt": 0,
+        "weapon": "shell",
+        "weaponAmmo": 0,
+        "weaponUntil": 0,
+        "ammo": 5
+      },
+      {
+        "id": "p8",
+        "slot": 7,
+        "x": 88,
+        "y": 24,
+        "angle": 3.141592653589793,
+        "alive": true,
+        "died": null,
+        "drive": 0,
+        "turn": 0,
+        "fire": false,
+        "firePulse": false,
+        "controlAt": -600,
+        "inputUntil": 0,
+        "reloadAt": 0,
+        "weapon": "shell",
+        "weaponAmmo": 0,
+        "weaponUntil": 0,
+        "ammo": 5
+      }
+    ],
+    "bullets": [],
+    "pickups": [
+      {
+        "id": 0,
+        "x": 120,
+        "y": 56,
+        "kind": "scatter"
+      },
+      {
+        "id": 1,
+        "x": 24,
+        "y": 88,
+        "kind": "beam"
+      },
+      {
+        "id": 2,
+        "x": 56,
+        "y": 8,
+        "kind": "guided"
+      }
+    ],
+    "stepped": 0,
+    "nextBullet": 1,
+    "safeUntil": 700
+  },
+  "round": 2,
+  "scores": {
+    "p1": 0,
+    "p2": 0,
+    "p3": 0,
+    "p4": 0,
+    "p5": 1,
+    "p6": 0,
+    "p7": 0,
+    "p8": 0
+  },
+  "lastPoints": {},
+  "winnerIds": [],
+  "reason": null,
+  "left": [],
+  "settings": {
+    "powerups": true
+  }
+}

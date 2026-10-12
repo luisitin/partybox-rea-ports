@@ -1,0 +1,296 @@
+{
+  "label": "baseline",
+  "assertExpected": false,
+  "artifact": "feedback-harness-baseline.html",
+  "harnessSha256": "a90855fb8c25b9bb910e510a1553653fbf631db0ec6f038fe8162bcd335336ce",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "recorder": {
+    "activated": true,
+    "haptics": true
+  },
+  "pass": false,
+  "cases": [
+    {
+      "name": "Terminal own knockout",
+      "expected": {
+        "thud": 1,
+        "buzz90": 1
+      },
+      "observed": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "pending": {
+        "phase": "play",
+        "round": 1,
+        "checked": 1080,
+        "paused": false,
+        "alive": true,
+        "participating": true,
+        "aliveCount": 2,
+        "left": [],
+        "winnerIds": [],
+        "bullets": [
+          {
+            "owner": "input-seat-2",
+            "born": 720,
+            "x": 27.86,
+            "y": 23.999979
+          }
+        ]
+      },
+      "sounds": [],
+      "vibrations": [],
+      "state": {
+        "phase": "score",
+        "round": 1,
+        "checked": 1100,
+        "paused": false,
+        "alive": false,
+        "participating": true,
+        "aliveCount": 1,
+        "left": [],
+        "winnerIds": ["input-seat-2"],
+        "bullets": []
+      },
+      "pass": false
+    },
+    {
+      "name": "own: later Score push/clock does not repeat",
+      "expected": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "observed": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "sounds": [],
+      "vibrations": [],
+      "state": {
+        "phase": "score",
+        "round": 1,
+        "checked": 1100,
+        "paused": false,
+        "alive": false,
+        "participating": true,
+        "aliveCount": 1,
+        "left": [],
+        "winnerIds": ["input-seat-2"],
+        "bullets": []
+      },
+      "pass": true
+    },
+    {
+      "name": "own: actual next round does not replay knockout",
+      "expected": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "observed": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "sounds": [],
+      "vibrations": [],
+      "state": {
+        "phase": "play",
+        "round": 2,
+        "checked": 0,
+        "paused": false,
+        "alive": true,
+        "participating": true,
+        "aliveCount": 8,
+        "left": [],
+        "winnerIds": [],
+        "bullets": []
+      },
+      "pass": true
+    },
+    {
+      "name": "Terminal rival knockout, phone survives",
+      "expected": {
+        "thud": 1,
+        "buzz90": 0
+      },
+      "observed": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "pending": {
+        "phase": "play",
+        "round": 1,
+        "checked": 1080,
+        "paused": false,
+        "alive": true,
+        "participating": true,
+        "aliveCount": 2,
+        "left": [],
+        "winnerIds": [],
+        "bullets": [
+          {
+            "owner": "input-seat-1",
+            "born": 720,
+            "x": 44.14,
+            "y": 24
+          }
+        ]
+      },
+      "sounds": [],
+      "vibrations": [],
+      "state": {
+        "phase": "score",
+        "round": 1,
+        "checked": 1100,
+        "paused": false,
+        "alive": true,
+        "participating": true,
+        "aliveCount": 1,
+        "left": [],
+        "winnerIds": ["input-seat-1"],
+        "bullets": []
+      },
+      "pass": false
+    },
+    {
+      "name": "survivor: later Score push/clock does not repeat",
+      "expected": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "observed": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "sounds": [],
+      "vibrations": [],
+      "state": {
+        "phase": "score",
+        "round": 1,
+        "checked": 1100,
+        "paused": false,
+        "alive": true,
+        "participating": true,
+        "aliveCount": 1,
+        "left": [],
+        "winnerIds": ["input-seat-1"],
+        "bullets": []
+      },
+      "pass": true
+    },
+    {
+      "name": "survivor: actual next round does not replay knockout",
+      "expected": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "observed": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "sounds": [],
+      "vibrations": [],
+      "state": {
+        "phase": "play",
+        "round": 2,
+        "checked": 0,
+        "paused": false,
+        "alive": true,
+        "participating": true,
+        "aliveCount": 8,
+        "left": [],
+        "winnerIds": [],
+        "bullets": []
+      },
+      "pass": true
+    },
+    {
+      "name": "Paused permanent leave suppresses loss feedback",
+      "expected": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "observed": {
+        "thud": 0,
+        "buzz90": 1
+      },
+      "pending": {
+        "phase": "play",
+        "round": 1,
+        "checked": 1080,
+        "paused": false,
+        "alive": true,
+        "participating": true,
+        "aliveCount": 2,
+        "left": [],
+        "winnerIds": [],
+        "bullets": [
+          {
+            "owner": "input-seat-2",
+            "born": 720,
+            "x": 27.86,
+            "y": 23.999979
+          }
+        ]
+      },
+      "sounds": [],
+      "vibrations": [90],
+      "state": {
+        "phase": "play",
+        "round": 1,
+        "checked": 1080,
+        "paused": true,
+        "alive": false,
+        "participating": false,
+        "aliveCount": 1,
+        "left": ["input-seat-1"],
+        "winnerIds": [],
+        "bullets": [
+          {
+            "owner": "input-seat-2",
+            "born": 720,
+            "x": 27.86,
+            "y": 23.999979
+          }
+        ]
+      },
+      "pass": false
+    },
+    {
+      "name": "Resume into actual Score does not replay the paused loss",
+      "expected": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "observed": {
+        "thud": 0,
+        "buzz90": 0
+      },
+      "sounds": [],
+      "vibrations": [],
+      "state": {
+        "phase": "score",
+        "round": 1,
+        "checked": 1080,
+        "paused": false,
+        "alive": false,
+        "participating": false,
+        "aliveCount": 1,
+        "left": ["input-seat-1"],
+        "winnerIds": ["input-seat-2"],
+        "bullets": [
+          {
+            "owner": "input-seat-2",
+            "born": 720,
+            "x": 27.86,
+            "y": 23.999979
+          }
+        ]
+      },
+      "pass": true
+    }
+  ]
+}
