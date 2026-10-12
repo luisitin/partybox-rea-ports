@@ -1,0 +1,462 @@
+{
+  "id": "kahoot",
+  "name": "Kahoot!",
+  "icon": "⚡",
+  "tagline": "Fast fingers, sharp minds. Bet big on the last one.",
+  "description": "Speed trivia. Every question has four choices: answer fast for more points, keep a streak for a bonus, then wager part of your score on one final question. Highest score wins.",
+  "howToPlay": [
+    "A question and four choices go up. Tap your answer on your phone.",
+    "Answer fast for more points; a streak of right answers earns a bonus.",
+    "Wager part of your score on one final question. Highest score wins."
+  ],
+  "version": "1.1.0",
+  "minPlayers": 1,
+  "maxPlayers": 16,
+  "estimatedMinutes": 8,
+  "estimate": {
+    "fixedSeconds": 25,
+    "perRoundSeconds": 24,
+    "perPlayerPerRoundSeconds": 1,
+    "roundsSetting": "questions"
+  },
+  "tags": ["trivia"],
+  "category": "arcade",
+  "presence": {
+    "needs": "anywhere"
+  },
+  "addedOn": "2026-01-01",
+  "settings": [
+    {
+      "key": "questions",
+      "label": "Questions",
+      "description": "Regular questions before the final wager question",
+      "type": "number",
+      "default": 10,
+      "min": 5,
+      "max": 20,
+      "step": 1
+    },
+    {
+      "key": "answerSeconds",
+      "label": "Answer time",
+      "description": "Seconds to answer each question",
+      "type": "number",
+      "default": 15,
+      "min": 5,
+      "max": 30,
+      "step": 5
+    },
+    {
+      "key": "category",
+      "label": "Category",
+      "description": "Draw questions from one category only (falls back to all when it is too small)",
+      "type": "select",
+      "default": "all",
+      "options": [
+        {
+          "value": "all",
+          "label": "All categories"
+        },
+        {
+          "value": "geography",
+          "label": "Geography"
+        },
+        {
+          "value": "stem",
+          "label": "STEM"
+        },
+        {
+          "value": "history",
+          "label": "History"
+        },
+        {
+          "value": "arts-and-literature",
+          "label": "Arts & Literature"
+        },
+        {
+          "value": "sports",
+          "label": "Sports"
+        },
+        {
+          "value": "food-and-drink",
+          "label": "Food & Drink"
+        },
+        {
+          "value": "nature",
+          "label": "Nature"
+        },
+        {
+          "value": "language",
+          "label": "Language"
+        },
+        {
+          "value": "entertainment",
+          "label": "Entertainment"
+        },
+        {
+          "value": "everyday-life",
+          "label": "Everyday Life"
+        },
+        {
+          "value": "board-and-card-games",
+          "label": "Board & Card Games"
+        },
+        {
+          "value": "world-heritage",
+          "label": "World Heritage"
+        },
+        {
+          "value": "museum-collections",
+          "label": "Museum Collections"
+        },
+        {
+          "value": "ig-nobel-science",
+          "label": "Ig Nobel Science"
+        }
+      ]
+    },
+    {
+      "key": "subcategories",
+      "label": "Topics",
+      "description": "Tick the topics to play inside the category; nothing ticked plays the whole category",
+      "type": "multiselect",
+      "default": "",
+      "groupBy": "category",
+      "options": [
+        {
+          "value": "capitals",
+          "label": "Capitals",
+          "group": "geography"
+        },
+        {
+          "value": "cities-and-landmarks",
+          "label": "Cities & Landmarks",
+          "group": "geography"
+        },
+        {
+          "value": "physical-geography",
+          "label": "Physical Geography",
+          "group": "geography"
+        },
+        {
+          "value": "flags-and-borders",
+          "label": "Flags & Borders",
+          "group": "geography"
+        },
+        {
+          "value": "world-regions",
+          "label": "World Regions",
+          "group": "geography"
+        },
+        {
+          "value": "physics",
+          "label": "Physics",
+          "group": "stem"
+        },
+        {
+          "value": "chemistry",
+          "label": "Chemistry",
+          "group": "stem"
+        },
+        {
+          "value": "biology",
+          "label": "Biology",
+          "group": "stem"
+        },
+        {
+          "value": "astronomy-and-space",
+          "label": "Astronomy & Space",
+          "group": "stem"
+        },
+        {
+          "value": "math",
+          "label": "Math",
+          "group": "stem"
+        },
+        {
+          "value": "engineering-and-technology",
+          "label": "Engineering & Technology",
+          "group": "stem"
+        },
+        {
+          "value": "computing",
+          "label": "Computing",
+          "group": "stem"
+        },
+        {
+          "value": "ancient-world",
+          "label": "Ancient World",
+          "group": "history"
+        },
+        {
+          "value": "medieval-and-renaissance",
+          "label": "Medieval & Renaissance",
+          "group": "history"
+        },
+        {
+          "value": "modern-history",
+          "label": "Modern History",
+          "group": "history"
+        },
+        {
+          "value": "us-history",
+          "label": "US History",
+          "group": "history"
+        },
+        {
+          "value": "leaders-and-royals",
+          "label": "Leaders & Royals",
+          "group": "history"
+        },
+        {
+          "value": "wars-and-revolutions",
+          "label": "Wars & Revolutions",
+          "group": "history"
+        },
+        {
+          "value": "inventions-and-discoveries",
+          "label": "Inventions & Discoveries",
+          "group": "history"
+        },
+        {
+          "value": "painting-and-sculpture",
+          "label": "Painting & Sculpture",
+          "group": "arts-and-literature"
+        },
+        {
+          "value": "novels-and-authors",
+          "label": "Novels & Authors",
+          "group": "arts-and-literature"
+        },
+        {
+          "value": "poetry-and-plays",
+          "label": "Poetry & Plays",
+          "group": "arts-and-literature"
+        },
+        {
+          "value": "mythology-and-folklore",
+          "label": "Mythology & Folklore",
+          "group": "arts-and-literature"
+        },
+        {
+          "value": "architecture-and-design",
+          "label": "Architecture & Design",
+          "group": "arts-and-literature"
+        },
+        {
+          "value": "classical-music-and-dance",
+          "label": "Classical Music & Dance",
+          "group": "arts-and-literature"
+        },
+        {
+          "value": "basketball",
+          "label": "Basketball",
+          "group": "sports"
+        },
+        {
+          "value": "football",
+          "label": "Football",
+          "group": "sports"
+        },
+        {
+          "value": "baseball",
+          "label": "Baseball",
+          "group": "sports"
+        },
+        {
+          "value": "soccer",
+          "label": "Soccer",
+          "group": "sports"
+        },
+        {
+          "value": "olympics",
+          "label": "Olympics",
+          "group": "sports"
+        },
+        {
+          "value": "tennis-and-golf",
+          "label": "Tennis & Golf",
+          "group": "sports"
+        },
+        {
+          "value": "hockey",
+          "label": "Hockey",
+          "group": "sports"
+        },
+        {
+          "value": "motorsport-and-more",
+          "label": "Motorsport & More",
+          "group": "sports"
+        },
+        {
+          "value": "world-cuisines",
+          "label": "World Cuisines",
+          "group": "food-and-drink"
+        },
+        {
+          "value": "ingredients",
+          "label": "Ingredients",
+          "group": "food-and-drink"
+        },
+        {
+          "value": "cooking-and-kitchen",
+          "label": "Cooking & Kitchen",
+          "group": "food-and-drink"
+        },
+        {
+          "value": "drinks",
+          "label": "Drinks",
+          "group": "food-and-drink"
+        },
+        {
+          "value": "sweets-and-desserts",
+          "label": "Sweets & Desserts",
+          "group": "food-and-drink"
+        },
+        {
+          "value": "mammals",
+          "label": "Mammals",
+          "group": "nature"
+        },
+        {
+          "value": "birds-reptiles-and-fish",
+          "label": "Birds, Reptiles & Fish",
+          "group": "nature"
+        },
+        {
+          "value": "insects-and-sea-life",
+          "label": "Insects & Sea Life",
+          "group": "nature"
+        },
+        {
+          "value": "plants-and-trees",
+          "label": "Plants & Trees",
+          "group": "nature"
+        },
+        {
+          "value": "earth-and-weather",
+          "label": "Earth & Weather",
+          "group": "nature"
+        },
+        {
+          "value": "human-body",
+          "label": "Human Body",
+          "group": "nature"
+        },
+        {
+          "value": "vocabulary",
+          "label": "Vocabulary",
+          "group": "language"
+        },
+        {
+          "value": "grammar-and-spelling",
+          "label": "Grammar & Spelling",
+          "group": "language"
+        },
+        {
+          "value": "idioms-and-phrases",
+          "label": "Idioms & Phrases",
+          "group": "language"
+        },
+        {
+          "value": "world-languages",
+          "label": "World Languages",
+          "group": "language"
+        },
+        {
+          "value": "word-origins",
+          "label": "Word Origins",
+          "group": "language"
+        },
+        {
+          "value": "movies",
+          "label": "Movies",
+          "group": "entertainment"
+        },
+        {
+          "value": "tv-shows",
+          "label": "TV Shows",
+          "group": "entertainment"
+        },
+        {
+          "value": "pop-music",
+          "label": "Pop Music",
+          "group": "entertainment"
+        },
+        {
+          "value": "video-games",
+          "label": "Video Games",
+          "group": "entertainment"
+        },
+        {
+          "value": "comics-and-animation",
+          "label": "Comics & Animation",
+          "group": "entertainment"
+        },
+        {
+          "value": "brands-and-logos",
+          "label": "Brands & Logos",
+          "group": "everyday-life"
+        },
+        {
+          "value": "holidays-and-traditions",
+          "label": "Holidays & Traditions",
+          "group": "everyday-life"
+        },
+        {
+          "value": "money-and-business",
+          "label": "Money & Business",
+          "group": "everyday-life"
+        },
+        {
+          "value": "travel-and-transport",
+          "label": "Travel & Transport",
+          "group": "everyday-life"
+        },
+        {
+          "value": "units-and-measures",
+          "label": "Units & Measures",
+          "group": "everyday-life"
+        },
+        {
+          "value": "tabletop-rules",
+          "label": "Tabletop Rules",
+          "group": "board-and-card-games"
+        },
+        {
+          "value": "heritage-sites",
+          "label": "Heritage Sites",
+          "group": "world-heritage"
+        },
+        {
+          "value": "collection-artists",
+          "label": "Collection Artists",
+          "group": "museum-collections"
+        },
+        {
+          "value": "unlikely-research",
+          "label": "Unlikely Research",
+          "group": "ig-nobel-science"
+        }
+      ]
+    }
+  ],
+  "supportsBots": true,
+  "minigame": {
+    "modes": ["ffa", "duel"],
+    "seconds": 100,
+    "settings": {
+      "questions": 4,
+      "answerSeconds": 5,
+      "category": "all",
+      "subcategories": ""
+    },
+    "controls": ["Tap A, B, C or D", "Answer fast for more points"],
+    "howTo": [
+      "A question and four choices go up. Tap your answer.",
+      "Faster right answers score more. Wager on the last one."
+    ],
+    "practice": false
+  },
+  "contentLangs": ["en", "es"]
+}

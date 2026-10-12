@@ -1,5 +1,18 @@
 # P01 handoff
 
+## Current owner-required upgrade
+
+- P22 completed first: PR15 ready, head9ea55b4 passed CI38212237338, claimDONE. P01 reopened r1-local on main at 2026-10-12; PR2 returned to draft. Branchjob/P01-quiz-rush merged fresh main for official naming/overlap requirements.
+- Canonical module games/kahoot now derives from existing core games/lightning-round, frozen core HEAD6ce46e613d3705624a56647592979613c4d6e468, game commit d0b89e3a89f40250349e2233fffe056960febb94. Source/change/migration provenance in core-base/. Owner core checkout remains read-only.
+- Former Quiz Rush module is archived locally at C:/Users/luisi_xlnbc7h/AppData/Local/Temp/pb-p01-legacy-58d0f91e6672498bb69db8becd391260/quiz-rush and in git at 1c8d264284d13ea7d35f58bf63f7708df04e1de2. Reuse its 60 authored questions/shape assets, not its duplicate engine.
+- Imported baseline typecheckPASS. First game-only run108/109 tests passed; sole failure expected old recap title. Corrected title expectation, then 8/8 Spanish tests passed. No complete upgraded-game result claimed. No owned browser or test worker remains.
+- Implement additive quizMode:wager(default/legacy)|classic and classicPack:general|movies|science, preserving1–16/wager/EN+ES/streak 300/custom bets/minigame. Add stamped answers, exactly requested classic questions, mode-aware final predicates, partial3→2→1 podium and spectator/remote stage. Hide future podium scores/rows/ranks by omission, including generic envelope chips.
+- Server agent owns server/content/manifest and classic-server tests; client agent owns client and classic-screens/stage-screens tests after shared view contract. Root owns docs/workflow/contract/property/simulation/fixture/evidence tools and all executions. One worker; root owns at most one browser closed in finally.
+- CI path now games/kahoot. Fresh verification must cover 1000 matches at every count 1–16 in both modes (32000), three strengths, 1003 property seeds, 20 meaningful mutations, all-phase/adversarial screens and fresh hashes. Old 116-test/7000-match/media/loop results below are historical and do not verify the replacement.
+- New KEEP GOING loop starts after upgraded PR is green; old three no-gain rounds cannot release this reopened claim. Push milestones within 30 minutes and refresh P01 claim after every push with pull--rebase.
+
+## Historical standalone port
+
 - Run: r1-local; branch job/P01-quiz-rush.
 - Claim committed on main. corepack enable and pnpm install completed (Windows uses pnpm.cmd).
 - Reference and contract/design docs read. Original research complete from paired official and independent sources; live play unavailable and documented.

@@ -1,14 +1,14 @@
-name: P01 Quiz Rush
+name: P01 Kahoot!
 on:
   pull_request:
     paths:
-      - 'games/quiz-rush/**'
+      - 'games/kahoot/**'
       - 'jobs/P01-quiz-rush/**'
       - '.github/workflows/P01.yml'
 permissions:
   contents: read
 jobs:
-  quiz-rush:
+  kahoot:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -20,4 +20,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm format
-      - run: pnpm vitest run games/quiz-rush --maxWorkers=1
+      - run: pnpm vitest run games/kahoot --maxWorkers=1

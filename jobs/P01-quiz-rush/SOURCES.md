@@ -1,5 +1,7 @@
 # P01 sources and asset provenance
 
+The 2026-10-12 owner-required upgrade reuses owner-authorized PartyBox Lightning Round code and attributed legacy libraries. See core-base/SOURCE.json, core-base/CHANGE_NOTES.md, core-base/HOST_MIGRATION.md, games/kahoot/content/SOURCES.md and reports/content/lightning-round-sources.md for pinned provenance/licences. All 12 inherited art files and the licensed file-music track are excluded; existing authored inline SVG/CSS and P01 shapes form the public visuals. The following research/asset notes describe the original standalone P01, whose60 newly authored questions are retained for classic mode. No Kahoot publisher code or assets are copied.
+
 All sources accessed 2026-10-11. Links are research inputs only; the shipped game makes no
 network requests. No questions, screenshots, logos, music, code or other assets were copied.
 

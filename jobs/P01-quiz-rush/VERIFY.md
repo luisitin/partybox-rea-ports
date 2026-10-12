@@ -1,5 +1,13 @@
 # P01 verification
 
+## Owner-required upgrade baseline (2026-10-12)
+
+The results below this section describe the superseded standalone Quiz Rush at 1c8d264. They do not verify the replacement Lightning Round upgrade in games/kahoot. Provenance is pinned in core-base/SOURCE.json and CHANGE_NOTES.md. No new install/dependency was needed.
+
+`pnpm.cmd typecheck` passed on the imported 74-file baseline. `pnpm.cmd vitest run games/kahoot --maxWorkers=1 --pool=threads --reporter=dot` passed 108 tests and failed one expected old recap-name assertion (17 files, 15.37 s); this is not a green suite. Updated that assertion to official Kahoot! and ran `pnpm.cmd vitest run games/kahoot/__tests__/content-es.test.ts --maxWorkers=1 --pool=threads --reporter=dot`:8/8 passed, 2.15 s, exit 0. Existing libraries and wagering are not yet claimed verified after classic changes. Fresh full contract/property/simulation/mutation/screen checks follow implementation.
+
+## Historical standalone verification
+
 Run r1-local on Windows 11, Node 24 and pnpm 12.4.2. `pnpm.cmd` is the Windows entry point
 because this desktop blocks PowerShell shim scripts. No complete repository test suite was run.
 

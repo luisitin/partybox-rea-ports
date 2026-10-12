@@ -1,5 +1,7 @@
 # KEEP GOING
 
+Owner naming/overlap instructions reopened this job on 2026-10-12. The current module upgrades existing Lightning Round; all rounds below describe the superseded standalone engine. A new loop must run after upgraded-game CI is green. The previous no-gain streak does not complete the upgrade.
+
 Started after PR #2 passed CI run 38176682177 and left draft.
 
 1. Five weaknesses: departed-seat reconnect controls; phone-only locked-answer waiting cue; animated-film-heavy movie pool; bot reaction realism; replay overlap within the required twenty-question packs. Fixed the worst: answers and retries now require a connected active roster seat, with explicit watching/disconnect text. Measured gain: enabled pads for left/reconnected-left/disconnected seats fell from 4 to 0; active seats retain 4; all 51 SSR assertions pass. No server, scoring or visual fixture changes.

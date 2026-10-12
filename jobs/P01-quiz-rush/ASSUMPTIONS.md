@@ -27,3 +27,10 @@
   [CONTENT_SOURCES.md](CONTENT_SOURCES.md).
 - English-only arcade content follows the job brief and the reference port. No new dependency,
   runtime external API or downloaded asset is required.
+
+- The owner naming/overlap instruction supersedes the initial standalone Quiz Rush: use canonical Kahoot!/kahoot and upgrade existing Lightning Round. The public branch carries that engine and a core host migration handoff; it does not mutate the owner's checkout or register a second game.
+- Existing Lightning Round already integrated P01 answer charts, reading floors and connected/open/deadline guards through T-1117. Those are retained baseline behavior, not new upgrade gains.
+- Preserve existing wager default, absent-mode legacy behavior,1–16 seats, EN 6153/ES 5561 libraries,300-point streak cap, custom/preset bets, awards/recap and minigame. Classic is additive. The generic English-only brief is interpreted as the scope of its three newly authored classic packs; retained inherited Spanish support is an explicit preservation exception, not a claim of literal English-only compliance. Public category becomes arcade as required.
+- Classic uses the existing regular 500–1000 scoring and 300-point streak cap rather than the old standalone 500-point bonus cap; this is a PartyBox adaptation. The wager finale stays unchanged. Question language is exposed separately from host-controlled contentLang.
+- Core source/provenance is pinned in core-base. Its inventory hashes describe the prepared input snapshot, not the final modified game. Licensed original/core media are excluded; question-library attribution and licenses remain attached.
+- Old standalone 116-test/7000-match/screens/mutation/loop evidence is historical. Fresh upgraded verification and a new three no-gain loop are required before READY/DONE. Public kit lacks inherited gen-registry/verify commands; its SDK discovery, typecheck,format and game contract checks validate the canonical module.

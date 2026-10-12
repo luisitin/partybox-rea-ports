@@ -1,0 +1,418 @@
+/* Phone-only pieces for Lightning Round. Tokens only (docs/DESIGN_SYSTEM.md). */
+/* ── I-790 C: the reveal band under the question — verdict, "+n this round", "n total" on one
+   line (it wraps at 200 % text), tinted by the verdict; it rises a beat after the tiles' marks
+   land (tokens: 0 ms under reduced motion). Never colour alone: the verdict is a word. */
+.band {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--pb-space-2);
+  row-gap: var(--pb-space-1);
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  font-variant-numeric: tabular-nums;
+  animation: global(pb-rise) var(--pb-motion-base) var(--pb-ease) var(--pb-motion-fast) both;
+}
+
+/* The final reveal's band before its beat: laid out, unseen (Controller.tsx) */
+.bandHeld {
+  visibility: hidden;
+}
+
+.band.good {
+  background: color-mix(in oklab, var(--pb-accent-3) 18%, var(--pb-surface));
+}
+
+.band.bad {
+  background: color-mix(in oklab, var(--pb-danger) 18%, var(--pb-surface));
+}
+
+.bandVerdict {
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+}
+
+.bandStreak {
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+}
+
+.bandDelta {
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+}
+
+.good .bandDelta {
+  color: var(--pb-accent-3);
+}
+
+.bad .bandDelta {
+  color: color-mix(in srgb, var(--pb-danger) 55%, var(--pb-text));
+}
+
+.bandTotal {
+  margin-left: auto;
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  color: var(--pb-text-muted);
+}
+
+.footnote {
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+  text-align: center;
+}
+
+/* Wager screen (R-064): the rule under the prompt, the amount-led option rows, the stake card. */
+.rule {
+  display: block;
+  margin-top: var(--pb-space-2);
+  font-size: var(--pb-font-caption);
+  font-weight: 600;
+  color: var(--pb-text-muted);
+}
+
+.wagerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--pb-space-3);
+}
+
+.amount {
+  font-size: var(--pb-font-h1);
+  font-weight: 900;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.pct {
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  color: var(--pb-text-muted);
+}
+
+.stake {
+  text-align: center;
+  padding: var(--pb-space-3) var(--pb-space-4);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  border: 3px solid var(--pb-border);
+  font-size: var(--pb-font-body);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* only the number is pink: "✓ Locked in — look at the TV" (green, above) stays the strongest line */
+.stake b {
+  color: var(--pb-accent);
+}
+
+/* ── I-026 A: chips on the wager row — a stack of discs, one per 25 % of the share, in the
+   game's gold; the 0 row's single chip is hollow. */
+.chips {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--pb-space-2);
+}
+.chip {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  margin-left: -8px;
+  background: var(--pb-accent-2-fill);
+  border: 3px solid var(--pb-on-accent-2-fill);
+  box-sizing: border-box;
+}
+.chip:first-child {
+  margin-left: 0;
+}
+.chipEmpty {
+  background: transparent;
+  /* the muted ink, not the border token: on Night / Daylight / Arcade / Cabin the border is the
+     row's own surface and the hollow chip vanished (pass 864) */
+  border: 3px dashed var(--pb-text-muted);
+}
+
+/* ── I-026 B: the pick settles — the chosen row's chips bump, the other rows step back. */
+.pot {
+  display: inline-block;
+  color: var(--pb-accent-2);
+}
+.placed [role='radio'][aria-checked='true'] .chip,
+.placed .customOn .chip {
+  animation: global(pb-bump) var(--pb-motion-base) var(--pb-ease) both;
+}
+.placed [role='radio']:not([aria-checked='true']),
+.placed .customOff {
+  opacity: 0.6;
+  transition: opacity var(--pb-motion-base) var(--pb-ease);
+}
+
+/* ── I-026 C: a live bet breathes (the lobby's idle keyframe; absent under reduced motion). */
+.stakeLive {
+  animation: global(pb-breathe) calc(var(--pb-motion-pulse) * 2) ease-in-out infinite;
+}
+:global(:root[data-motion='off']) .stakeLive {
+  animation: none;
+}
+
+/* ── I-026 (the owner): the custom row — the presets' row shape over a number, a unit switch
+   and Place; ✓ and the pot line say it landed (never colour alone). */
+.custom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-3) var(--pb-space-4);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  border: 3px solid var(--pb-border);
+}
+.customOn {
+  border-color: var(--pb-accent);
+}
+.customForm {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: var(--pb-space-2);
+}
+.customInput {
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 var(--pb-space-3);
+  border-radius: var(--pb-radius);
+  border: 3px solid var(--pb-border);
+  background: var(--pb-bg);
+  color: var(--pb-text);
+  font: inherit;
+  font-size: var(--pb-font-h2);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.customInput:focus {
+  outline: none;
+  border-color: var(--pb-accent);
+}
+.unit,
+.place {
+  min-height: 48px;
+  min-width: 56px;
+  padding: 0 var(--pb-space-3);
+  border-radius: var(--pb-radius);
+  border: 3px solid var(--pb-border);
+  background: var(--pb-surface-2);
+  color: var(--pb-text);
+  font: inherit;
+  font-weight: 800;
+}
+.unit[aria-pressed='true'] {
+  border-color: var(--pb-accent-2);
+}
+.place {
+  background: var(--pb-accent);
+  border-color: var(--pb-accent);
+  color: var(--pb-on-accent);
+}
+/* review 6c24ba (3): Place with no value reads as off — flat, outlined, muted, no accent — and
+   turns accent-filled the moment a stake is typed (never opacity alone). */
+.place:disabled {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--pb-border);
+  color: var(--pb-text-muted);
+  cursor: not-allowed;
+}
+
+/* A "phone only" room (S-005, the owner): the TV's reveal rows on the phone — one line each,
+   the correct ones lit, under the player's own outcome. */
+.roomRows {
+  list-style: none;
+  margin: var(--pb-space-3) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--pb-space-1);
+}
+.roomRow {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 1.2em 3.5em 3em;
+  align-items: center;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-1) var(--pb-space-2);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  color: var(--pb-text-muted);
+}
+.roomRowOk {
+  color: var(--pb-text);
+  background: color-mix(in oklab, var(--pb-accent-3) 18%, var(--pb-surface));
+}
+.roomName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.roomVerdict {
+  text-align: center;
+}
+.roomDelta,
+.roomScore {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.roomScore {
+  color: var(--pb-text);
+}
+
+/* ── I-288 B: the live worth of a right answer, under the question. */
+.worth {
+  display: block;
+  margin-top: var(--pb-space-1);
+  font-size: var(--pb-font-caption);
+  font-weight: 900;
+  color: var(--pb-accent-2);
+  font-variant-numeric: tabular-nums;
+}
+/* I-789 B: locked in, the line keeps its space (the answers below never move on a tap) */
+.worthHeld {
+  visibility: hidden;
+}
+
+/* ── I-550 (the owner's note: the bet page was "a bit cramped and visually unappealing" — on an
+   SE one preset showed, the rest sat under the ▾ behind a half-screen custom row). The presets go
+   two by two, amount over share with the chips beside it; an odd one out (the 0 of five, or a
+   lone 0) spans the row on one line; the open custom row is one line. */
+.wagerScreen [role='radiogroup'] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--pb-space-2);
+  align-content: start;
+}
+.wagerScreen [role='radio'] {
+  position: relative;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 48px;
+  padding: var(--pb-space-2) var(--pb-space-2) var(--pb-space-2) var(--pb-space-3);
+}
+/* the ✓ of a taken stake sits in the tile's corner, so the row's width goes to amount and chips
+   and nothing shifts when it lands */
+.wagerScreen [role='radio'] > span[aria-hidden] {
+  position: absolute;
+  right: var(--pb-space-2);
+  bottom: var(--pb-space-1);
+}
+.wagerScreen [role='radio'] .wagerRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: 'amount chips' 'pct pct';
+  align-items: center;
+  column-gap: var(--pb-space-2);
+}
+.wagerScreen [role='radio'] .amount {
+  grid-area: amount;
+  font-size: var(--pb-font-h2);
+  white-space: nowrap;
+}
+.wagerScreen [role='radio'] .chips {
+  grid-area: chips;
+  margin-right: 0;
+}
+/* in a tile the stack is smaller: four chips fit beside a four-digit amount on a 320 px phone */
+.wagerScreen [role='radio'] .chip {
+  width: 16px;
+  height: 16px;
+  margin-left: -6px;
+  border-width: 2px;
+}
+.wagerScreen [role='radio'] .chip:first-child {
+  margin-left: 0;
+}
+.wagerScreen [role='radio'] .pct {
+  grid-area: pct;
+}
+.wagerPrompt {
+  display: block;
+}
+.wagerScreen [role='radio']:first-child:nth-last-child(odd) {
+  grid-column: 1 / -1;
+}
+.wagerScreen [role='radio']:first-child:nth-last-child(odd) .wagerRow {
+  grid-template-columns: auto auto minmax(0, 1fr);
+  grid-template-areas: 'chips amount pct';
+}
+.customOpen {
+  flex-direction: row;
+  flex-wrap: wrap; /* at 200 % text the form drops under "Custom" instead of crushing the field */
+  align-items: center;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+}
+.customOpen .customForm {
+  flex: 1 1 0;
+}
+.customOpen .customInput {
+  min-width: 3.2em;
+  padding: 0 var(--pb-space-2);
+  font-size: var(--pb-font-body);
+}
+.customOpen .customInput::placeholder {
+  font-size: var(--pb-font-caption);
+}
+.customOpen .unit {
+  min-width: 44px;
+}
+/* never narrower than its word: a crushed row wraps instead of clipping "Place" */
+.customOpen .place {
+  min-width: max-content;
+  padding: 0 var(--pb-space-2);
+}
+.customLead {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.customLead .amount {
+  font-size: var(--pb-font-h2);
+  line-height: 1;
+}
+
+/* The wager's presets never resize, so it needs no held status line (I-789 B holds one under
+   every fill grid): on an SE that space is the last row of stakes. The line itself still lands. */
+.wagerScreen > div:first-child > p[aria-hidden] {
+  display: none;
+}
+
+/* A short phone (a 568 px SE): the head tightens so the presets and the custom row share one look. */
+@media (max-height: 600px) {
+  .wagerScreen > div:first-child {
+    gap: var(--pb-space-2);
+    padding-block: var(--pb-space-2);
+  }
+  .wagerScreen [role='radio'] {
+    padding-block: 6px;
+  }
+  .wagerScreen .rule {
+    margin-top: var(--pb-space-1);
+  }
+  .wagerPrompt {
+    font-size: var(--pb-font-body);
+  }
+}
+
+/* The content-language marker (the SDK's ContentLang): a quiet pill under English deck text on a phone
+   in another language. */
+.englishNote {
+  display: block;
+  width: fit-content;
+  margin: var(--pb-space-1) auto 0;
+  padding: 0 var(--pb-space-2);
+  border-radius: 999px;
+  background: var(--pb-surface-2);
+  color: var(--pb-text-muted);
+  font-size: var(--pb-font-caption);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
