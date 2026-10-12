@@ -119,15 +119,19 @@ describe.each(['teams', 'tv-vote'] as const)('%s discussion and answer screens',
         [PLAYERS[0]!.id]: { ...talking.players[PLAYERS[0]!.id]!, canSeeTv: false },
       },
     };
-    for (const html of [
-      paint(talking, 'tv'),
-      paint(talking, 'stage'),
-      paint(remote, 'phone'),
-      paint(talking, 'phone', 'audience'),
-    ]) {
+    for (const [html, ownRoster] of [
+      [paint(talking, 'tv'), false],
+      [paint(talking, 'stage'), mode === 'teams'],
+      [paint(remote, 'phone'), mode === 'teams'],
+      [paint(talking, 'phone', 'audience'), false],
+    ] as const) {
       expect(html).toContain(escape(q.text));
       for (const choice of q.choices) expect(html).toContain(escape(choice));
-      for (const player of PLAYERS) expect(html).not.toContain(escape(player.name));
+      for (const player of PLAYERS) {
+        if (ownRoster && ownTeam.members.includes(player.id))
+          expect(html).toContain(escape(player.name));
+        else expect(html).not.toContain(escape(player.name));
+      }
       expect(buttons(html)).toHaveLength(0);
       expect(html).not.toMatch(/Look at the TV|Tap your answer|Tap your vote/);
     }

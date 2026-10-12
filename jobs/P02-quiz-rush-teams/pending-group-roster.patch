@@ -1,0 +1,624 @@
+diff --git a/games/kahoot/client/GroupParts.tsx b/games/kahoot/client/GroupParts.tsx
+--- a/games/kahoot/client/GroupParts.tsx
++++ b/games/kahoot/client/GroupParts.tsx
+@@ -17,14 +17,17 @@
+   group,
+   players,
+   mine = false,
++  presence = false,
+ }: {
+   group: Group;
+   players: Players;
+   mine?: boolean;
++  presence?: boolean;
+ }): JSX.Element {
+   const L = useT(STRINGS);
++  const teams = mine
++    ? group.teams.filter((team) => team.id === group.myTeamId)
++    : group.teams;
+-  const teams =
+-    mine && group.myTeamId ? group.teams.filter((team) => team.id === group.myTeamId) : group.teams;
+   return (
+     <ul
+       className={styles.roster}
+@@ -36,9 +39,28 @@
+         <li key={team.id} data-mine={team.id === group.myTeamId || undefined}>
+           <b>{team.name}</b>
+           <span className={styles.members}>
++            {team.members.map((id) => {
++              const player = players.find((candidate) => candidate.id === id);
++              const marker = !presence
++                ? null
++                : group.leftMembers?.includes(id)
++                  ? 'Left'
++                  : !player
++                    ? 'Unavailable'
++                    : player.connected === false
++                      ? 'Away'
++                      : null;
++              return (
++                <span key={id} data-group-member={presence ? id : undefined}>
++                  <span className={styles.memberName}>{player?.name ?? id}</span>
++                  {marker ? (
++                    <span className={styles.memberPresence} data-presence={marker.toLowerCase()}>
++                      {L(marker)}
++                    </span>
++                  ) : null}
++                </span>
++              );
++            })}
+-            {team.members.map((id) => (
+-              <span key={id}>{players.find((player) => player.id === id)?.name ?? id}</span>
+-            ))}
+           </span>
+         </li>
+       ))}
+diff --git a/games/kahoot/client/GroupTalk.tsx b/games/kahoot/client/GroupTalk.tsx
+--- a/games/kahoot/client/GroupTalk.tsx
++++ b/games/kahoot/client/GroupTalk.tsx
+@@ -1,9 +1,9 @@
++// Discussion has no answer controls; staged phones can discover only their own fixed teammates.
+-// Discussion is a timed public beat with no input controls, including on spectator phones.
+ import type { JSX } from 'react';
+ import { Screen, useT } from '@partybox/game-sdk/ui';
+ import type { LightningControllerView } from '../server/views';
+ import { QuestionOptions } from './ClassicParts';
++import { GroupIdentity, GroupRoster } from './GroupParts';
+-import { GroupIdentity, GroupRoster, groupTitle } from './GroupParts';
+ import { STRINGS } from './strings';
+ import classic from './Classic.module.css';
+ import styles from './Group.module.css';
+@@ -19,12 +19,28 @@
+ }): JSX.Element {
+   const L = useT(STRINGS);
+   const group = view.group;
++  const ownTeam =
++    view.participating && group?.mode === 'teams'
++      ? group.teams.find(
++          (team) => team.id === group.myTeamId && team.members.includes(view.me.id),
++        )
++      : undefined;
+   const question = showStage ? (view.stage?.question ?? view.question) : null;
+   return (
++    <Screen className={[classic.phoneScreen, styles.phone].join(' ')} ghost={false}>
+-    <Screen className={`${classic.phoneScreen} ${styles.phone}`} ghost={false}>
+       <div className={styles.talk} data-stage={showStage || undefined}>
+         <header className={classic.phoneHeader}>
++          <h2>
++            {L(
++              view.participating
++                ? group?.mode === 'teams'
++                  ? 'Talk with your team'
++                  : 'Discuss the room answer'
++                : group?.mode === 'teams'
++                  ? 'Watching team discussion'
++                  : 'Watching room discussion',
++            )}
++          </h2>
+-          <h2>{L(group?.mode === 'teams' ? 'Talk with your team' : 'Discuss the room answer')}</h2>
+           {seconds !== null ? (
+             <span
+               className={classic.phoneClock}
+@@ -35,22 +51,38 @@
+             </span>
+           ) : null}
+         </header>
++        {group && ownTeam ? (
++          showStage ? (
++            <details className={styles.teamDisclosure} data-team-discovery="true">
++              <summary>
++                <span className={styles.disclosureClosed}>
++                  {L('{team} · Teammates', { team: ownTeam.name })}
++                </span>
++                <span className={styles.disclosureOpen}>{L('Back to question')}</span>
++              </summary>
++              <GroupRoster group={group} players={view.players} mine presence />
++            </details>
++          ) : (
++            <GroupRoster group={group} players={view.players} mine presence />
++          )
+-        {group && !showStage && group.mode === 'teams' ? (
+-          <GroupRoster group={group} players={view.players} mine={view.participating} />
+         ) : group ? (
+           <GroupIdentity group={group} />
+         ) : null}
+         {question ? (
++          <div className={styles.talkQuestion} data-talk-question="true">
++            <h3 className={[classic.phonePrompt, styles.talkPrompt].join(' ')}>{question.text}</h3>
++            <div className={styles.talkChoices}>
++              <QuestionOptions question={question} />
++            </div>
++          </div>
+-          <>
+-            <h3 className={classic.phonePrompt}>{question.text}</h3>
+-            <QuestionOptions question={question} />
+-          </>
+         ) : null}
+         <p className={styles.rule}>
+           {L(
++            !view.participating
++              ? 'Players discuss now. Answers open when the clock ends.'
++              : group?.mode === 'teams'
++                ? 'Discuss now. Everyone answers when the clock ends.'
++                : 'Discuss now. Each vote helps choose one room answer.',
+-            group?.mode === 'teams'
+-              ? 'Discuss now. Everyone answers when the clock ends.'
+-              : 'Discuss now. Each vote helps choose one room answer.',
+           )}
+         </p>
+         <p className={classic.status} role="status">
+@@ -60,9 +92,6 @@
+               ? L('Answers open after discussion')
+               : L('Watching the quiz')}
+         </p>
+-        {group && !view.participating ? (
+-          <p className={classic.status}>{L(groupTitle(group))}</p>
+-        ) : null}
+       </div>
+     </Screen>
+   );
+diff --git a/games/kahoot/client/Group.module.css b/games/kahoot/client/Group.module.css
+--- a/games/kahoot/client/Group.module.css
++++ b/games/kahoot/client/Group.module.css
+@@ -203,6 +203,87 @@
+   gap: var(--pb-space-3);
+   justify-content: center;
+ }
++/* Own-team discovery stays readable beside the question on staged phones. */
++.phone .talk {
++  gap: var(--pb-space-2);
++}
++.phone .talk .members {
++  display: grid;
++  gap: var(--pb-space-1);
++}
++.phone .talk .members > span {
++  display: flex;
++  align-items: baseline;
++  gap: var(--pb-space-1);
++}
++.phone .talk .members > span::after {
++  content: none;
++}
++.memberName {
++  min-width: 0;
++  overflow-wrap: anywhere;
++}
++.memberPresence {
++  flex: none;
++  color: var(--pb-text-muted);
++  white-space: nowrap;
++}
++.teamDisclosure {
++  width: 100%;
++}
++.teamDisclosure summary {
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  min-height: var(--pb-touch);
++  padding: var(--pb-space-2) var(--pb-space-3);
++  border: calc(var(--pb-space-1) / 4) solid var(--pb-border);
++  border-radius: var(--pb-radius);
++  background: var(--pb-surface);
++  color: var(--pb-text);
++  font-size: var(--pb-font-button);
++  line-height: 1.2;
++  font-weight: 800;
++  text-align: center;
++  list-style: none;
++  cursor: pointer;
++}
++.teamDisclosure summary::-webkit-details-marker {
++  display: none;
++}
++.teamDisclosure summary:focus-visible {
++  outline: var(--pb-space-1) solid var(--pb-focus);
++  outline-offset: calc(var(--pb-space-1) / 2);
++}
++.teamDisclosure .disclosureOpen,
++.teamDisclosure[open] .disclosureClosed {
++  display: none;
++}
++.teamDisclosure[open] .disclosureOpen {
++  display: inline;
++}
++.teamDisclosure .roster {
++  margin-top: var(--pb-space-2);
++}
++/* A native disclosure keeps the two maximum-sized panes separate, with no play scrolling. */
++.talk:has(.teamDisclosure[open]) .talkQuestion {
++  display: none;
++}
++.talkQuestion {
++  display: grid;
++  gap: var(--pb-space-2);
++}
++.phone .talk[data-stage] .talkPrompt {
++  font-size: var(--pb-font-body);
++}
++.talkChoices ol {
++  gap: var(--pb-space-2);
++}
++.talkChoices li {
++  font-size: var(--pb-font-caption);
++  gap: var(--pb-space-2);
++  padding: var(--pb-space-2);
++}
+ .decision {
+   display: flex;
+   flex-wrap: wrap;
+diff --git a/games/kahoot/client/strings-es.ts b/games/kahoot/client/strings-es.ts
+--- a/games/kahoot/client/strings-es.ts
++++ b/games/kahoot/client/strings-es.ts
+@@ -183,6 +183,15 @@
+   Teams: 'Equipos',
+   'Room vote': 'Voto de la sala',
+   'Teams and players': 'Equipos y jugadores',
++  '{team} · Teammates': '{team} · Compañeros',
++  'Back to question': 'Volver a la pregunta',
++  Away: 'Ausente',
++  Left: 'Salió',
++  Unavailable: 'No disponible',
++  'Watching team discussion': 'Viendo la conversación del equipo',
++  'Watching room discussion': 'Viendo la conversación de la sala',
++  'Players discuss now. Answers open when the clock ends.':
++    'Los jugadores conversan. Las respuestas se abren cuando termine el reloj.',
+   'Team scoreboard': 'Marcador de equipos',
+   'Room score': 'Puntuación de la sala',
+   'Talk with your team': 'Habla con tu equipo',
+diff --git a/games/kahoot/server/views.ts b/games/kahoot/server/views.ts
+--- a/games/kahoot/server/views.ts
++++ b/games/kahoot/server/views.ts
+@@ -75,11 +75,16 @@
+   if (state.phase.id === 'reveal' && isLastIndex(state, state.index)) teams = [];
+   if (state.phase.id === 'podium')
+     teams = teams.filter((team) => team.rank >= (state.podiumRank ?? 1) && team.rank <= 3);
++  const leftMembers =
++    mode === 'teams'
++      ? teams.flatMap((team) => team.members.filter((id) => state.left?.includes(id)))
++      : [];
+   const own = playerId === undefined ? undefined : teamOf(state, playerId);
+   return {
+     mode,
+     teams,
+     ...(own ? { myTeamId: own.id } : {}),
++    ...(leftMembers.length > 0 ? { leftMembers } : {}),
+     ...(mode === 'tv-vote' ? { roomStreak: state.roomStreak ?? 0 } : {}),
+     ...(['reveal', 'podium', 'done'].includes(state.phase.id) && state.roomDecision !== undefined
+       ? { decision: state.roomDecision }
+diff --git a/games/kahoot/server/view-types.ts b/games/kahoot/server/view-types.ts
+--- a/games/kahoot/server/view-types.ts
++++ b/games/kahoot/server/view-types.ts
+@@ -71,6 +71,8 @@
+     correctPercent?: number;
+   }[];
+   myTeamId?: string;
++  /** Departures among only the fixed members already public in teams; distinct from connection. */
++  leftMembers?: string[];
+   /** Only present after reveal and when at least one room vote was cast. */
+   decision?: number;
+   roomStreak?: number;
+diff --git a/games/kahoot/server/pacing.ts b/games/kahoot/server/pacing.ts
+--- a/games/kahoot/server/pacing.ts
++++ b/games/kahoot/server/pacing.ts
+@@ -36,52 +36,79 @@
+   );
+ }
+ 
++/** Budget the largest actual discussion screen, including only its own fixed team roster. */
+-/** Budget the largest actual discussion screen, never an invisible whole-room roster. */
+ export function groupTalkMs(state: State): number {
+   const vote = groupModeOf(state) === 'tv-vote';
++  const title = vote ? ['Room vote', 'Voto de la sala'] : ['Teams', 'Equipos'];
++  const wordsIn = (spanish: boolean): number => {
++    const ui = (en: string, es = en): number => wordCount(spanish ? es : en);
++    const identity = Math.max(
++      wordCount(title[spanish ? 1 : 0]!),
++      ...(state.teams ?? []).map((team) => wordCount(team.name)),
++    );
++    const ownRoster = vote
++      ? identity
++      : Math.max(
++          identity,
++          ...(state.teams ?? [])
++            .filter((team) => team.members.some((id) => isParticipating(state, id)))
++            .map(
++              (team) =>
++                wordCount(team.name) +
++                team.members.reduce((n, id) => {
++                  const player = state.players[id];
++                  const marker = state.left?.includes(id)
++                    ? ui('Left', 'Salió')
++                    : !player
++                      ? ui('Unavailable', 'No disponible')
++                      : player.connected === false
++                        ? ui('Away', 'Ausente')
++                        : 0;
++                  return n + wordCount(player?.name ?? id) + marker;
++                }, 0),
++            ),
++        );
++    // The TV remains roster-free: prompt/options, four marks, clock/label,
++    // response count, discussion cue and ordinal/mode footer.
++    const tv =
++      questionWords(state) +
++      4 +
++      1 +
++      (vote ? ui('Room talk', 'Conversación de la sala') : ui('Team talk', 'Conversación de equipo')) +
++      (vote ? ui('0 of 8 votes', '0 de 8 votos') : ui('0 of 8 answers', '0 de 8 respuestas')) +
++      (vote
++        ? ui('Discuss the room answer · then everyone votes', 'Conversen sobre la respuesta · luego todos votan')
++        : ui('Talk with your team · then everyone answers', 'Habla con tu equipo · luego todos responden')) +
++      ui('Question 1 of 20', 'Pregunta 1 de 20') +
++      wordCount(title[spanish ? 1 : 0]!);
++    const paused = ui('Paused', 'En pausa');
++    const participantCopy =
++      (vote
++        ? ui('Discuss the room answer', 'Conversen sobre la respuesta de la sala')
++        : ui('Talk with your team', 'Habla con tu equipo')) +
++      (vote
++        ? ui('Discuss now. Each vote helps choose one room answer.', 'Conversen ahora. Cada voto ayuda a elegir una respuesta de la sala.')
++        : ui('Discuss now. Everyone answers when the clock ends.', 'Conversen ahora. Todos responden cuando termine el reloj.')) +
++      Math.max(1 + ui('Answers open after discussion', 'Las respuestas se abren después de conversar'), paused * 2);
++    const spectatorCopy =
++      (vote
++        ? ui('Watching room discussion', 'Viendo la conversación de la sala')
++        : ui('Watching team discussion', 'Viendo la conversación del equipo')) +
++      ui('Players discuss now. Answers open when the clock ends.', 'Los jugadores conversan. Las respuestas se abren cuando termine el reloj.') +
++      Math.max(1 + ui('Watching the quiz', 'Viendo el cuestionario'), paused * 2);
++    // A stage/remote team phone swaps the question pane for its own roster through
++    // a native disclosure. Never sum both panes. Spectators have no roster disclosure.
++    const question = questionWords(state) + 4;
++    const discovery = Math.max(0, ...(state.teams ?? []).map((team) => wordCount(team.name))) + ui('· Teammates', '· Compañeros');
++    return Math.max(
++      tv,
++      participantCopy + question + (vote ? identity : Math.max(identity, discovery)),
++      participantCopy + ownRoster + (vote ? 0 : ui('Back to question', 'Volver a la pregunta')),
++      participantCopy + ownRoster,
++      spectatorCopy + question + identity,
++    );
++  };
++  return readMs(Math.max(wordsIn(false), wordsIn(true)));
+-  const title = vote ? 'Room vote' : 'Teams';
+-  const identity = Math.max(
+-    wordCount(title),
+-    ...(state.teams ?? []).map((team) => wordCount(team.name)),
+-  );
+-  const ownRoster = vote
+-    ? identity
+-    : Math.max(
+-        identity,
+-        ...(state.teams ?? []).map(
+-          (team) =>
+-            wordCount(team.name) +
+-            team.members.reduce((n, id) => n + wordCount(state.players[id]?.name ?? ''), 0),
+-        ),
+-      );
+-  // The TV shows the prompt/options, four marks, a circular clock/label, answer count,
+-  // discussion cue and ordinal/mode footer. It no longer shows any player names.
+-  const tv =
+-    questionWords(state) +
+-    4 +
+-    1 +
+-    wordCount(vote ? 'Room talk' : 'Team talk') +
+-    wordCount(vote ? '0 of 8 votes' : '0 of 8 answers') +
+-    wordCount(
+-      vote
+-        ? 'Discuss the room answer · then everyone votes'
+-        : 'Talk with your team · then everyone answers',
+-    ) +
+-    wordCount(`Question 1 of 20 ${title}`);
+-  const phoneCopy =
+-    wordCount(vote ? 'Discuss the room answer' : 'Talk with your team') +
+-    1 +
+-    wordCount(
+-      vote
+-        ? 'Discuss now. Each vote helps choose one room answer.'
+-        : 'Discuss now. Everyone answers when the clock ends.',
+-    ) +
+-    wordCount('Answers open after discussion');
+-  // A staged phone adds the question/options and only its team identity. Beside the
+-  // TV, a team phone instead reads its own roster; a room-vote phone has no roster.
+-  const stagedPhone = phoneCopy + questionWords(state) + 4 + identity;
+-  const besideTvPhone = phoneCopy + ownRoster;
+-  return readMs(Math.max(tv, stagedPhone, besideTvPhone));
+ }
+ function uiWords(en: string, es = en): number {
+   return Math.max(wordCount(en), wordCount(es));
+diff --git a/games/kahoot/__tests__/group-screens.test.tsx b/games/kahoot/__tests__/group-screens.test.tsx
+--- a/games/kahoot/__tests__/group-screens.test.tsx
++++ b/games/kahoot/__tests__/group-screens.test.tsx
+@@ -119,15 +119,18 @@
+         [PLAYERS[0]!.id]: { ...talking.players[PLAYERS[0]!.id]!, canSeeTv: false },
+       },
+     };
++    for (const [html, ownRoster] of [
++      [paint(talking, 'tv'), false],
++      [paint(talking, 'stage'), mode === 'teams'],
++      [paint(remote, 'phone'), mode === 'teams'],
++      [paint(talking, 'phone', 'audience'), false],
++    ] as const) {
+-    for (const html of [
+-      paint(talking, 'tv'),
+-      paint(talking, 'stage'),
+-      paint(remote, 'phone'),
+-      paint(talking, 'phone', 'audience'),
+-    ]) {
+       expect(html).toContain(escape(q.text));
+       for (const choice of q.choices) expect(html).toContain(escape(choice));
++      for (const player of PLAYERS) {
++        if (ownRoster && ownTeam.members.includes(player.id)) expect(html).toContain(escape(player.name));
++        else expect(html).not.toContain(escape(player.name));
++      }
+-      for (const player of PLAYERS) expect(html).not.toContain(escape(player.name));
+       expect(buttons(html)).toHaveLength(0);
+       expect(html).not.toMatch(/Look at the TV|Tap your answer|Tap your vote/);
+     }
+diff --git a/games/kahoot/__tests__/group-roster.test.tsx b/games/kahoot/__tests__/group-roster.test.tsx
+new file mode 100644
+--- /dev/null
++++ b/games/kahoot/__tests__/group-roster.test.tsx
+@@ -0,0 +1,162 @@
++// Discussion discovery uses public fixed membership and factual presence, never answer controls.
++import { renderToStaticMarkup } from 'react-dom/server';
++import { describe, expect, it } from 'vitest';
++import { testKit } from '@partybox/game-sdk/testing';
++import { translate } from '@partybox/game-sdk/ui';
++import { GroupTalk } from '../client/GroupTalk';
++import { GroupRoster } from '../client/GroupParts';
++import { STRINGS } from '../client/strings';
++import { game } from '../server/index';
++import { groupTalkMs } from '../server/pacing';
++import { readMs, wordCount } from '../server/types';
++import type { State } from '../server/types';
++import { controllerView, tvView } from '../server/views';
++import type { LightningControllerView } from '../server/views';
++
++const kit = testKit(game, { t0: 100_000 });
++const names = Array.from({ length: 8 }, (_, i) =>
++  String(i + 1).padStart(2, '0') + ' Maximiliana Guadalupe Washington XIII',
++);
++const escaped = (text: string): string => renderToStaticMarkup(<>{text}</>);
++function talking(): State {
++  const initial = game.init({
++    players: names.map((name, i) => ({
++      id: 'p' + i, name, avatarId: 'fox', connected: true, canSeeTv: true,
++    })),
++    settings: { quizMode: 'teams', classicPack: 'sports', teamCount: 2, questions: 5, talkSeconds: 5 },
++    seed: 41,
++    now: 100_000,
++  });
++  return {
++    ...kit.timer(initial),
++    index: 0,
++    questionIds: Array(5).fill('sports-09'),
++    teams: [
++      { id: 'team-1', name: 'Team 1', members: ['p0', 'p1', 'p2', 'p3'] },
++      { id: 'team-2', name: 'Team 2', members: ['p4', 'p5', 'p6', 'p7'] },
++    ],
++    teamScores: { 'team-1': 0, 'team-2': 0 },
++  };
++}
++function paint(view: LightningControllerView, stage = view.showStage): string {
++  return renderToStaticMarkup(<GroupTalk view={view} showStage={stage} seconds={5} />);
++}
++function withPresence(): State {
++  let state = talking();
++  state = kit.player(state, 'p1', false, undefined, state.phase.startedAt + 100);
++  state = kit.player(state, 'p2', false, 'left', state.phase.startedAt + 200);
++  return kit.player(state, 'p2', true, undefined, state.phase.startedAt + 300);
++}
++
++describe('discussion discovers only the participating phone’s own fixed team', () => {
++  it.each(['beside-tv', 'phone-only', 'remote'] as const)('%s can recover teammates after missing intro', (surface) => {
++    const original = talking();
++    expect(names.every((name) => name.length === 40)).toBe(true);
++    const state: State = surface === 'phone-only'
++      ? { ...original, phoneOnly: true }
++      : surface === 'remote'
++        ? { ...original, players: { ...original.players, p0: { ...original.players.p0!, canSeeTv: false } } }
++        : original;
++    const view = controllerView(state, 'kahoot', 'p0');
++    const html = paint(view);
++    for (let i = 0; i < 4; i++) expect(html).toContain(escaped(names[i]!));
++    for (let i = 4; i < 8; i++) expect(html).not.toContain(escaped(names[i]!));
++    expect(html).toContain('Team 1');
++    expect(html).not.toContain('Team 2');
++    expect(html).not.toContain('<button');
++    expect(view).not.toHaveProperty('answerStamp');
++    expect(view).not.toHaveProperty('correctIndex');
++    expect(view.group).not.toHaveProperty('decision');
++    if (surface === 'beside-tv') {
++      expect(html).not.toContain('<details');
++      expect(html).not.toContain(escaped(view.question!.text));
++    } else {
++      expect(html).toMatch(/<details[^>]*data-team-discovery="true"/);
++      expect(html).not.toMatch(/<details[^>]*\bopen(?:=|\s|>)/);
++      expect(html).toContain('Team 1 · Teammates');
++      expect(html).toContain('Back to question');
++      expect(html).toContain('data-talk-question="true"');
++      expect(html).toContain(escaped(view.question!.text));
++    }
++  });
++  it('does not fall back to all rosters when myTeamId is absent, invalid or mismatched', () => {
++    const view = controllerView(talking(), 'kahoot', 'p0');
++    const { myTeamId: _id, ...withoutId } = view.group!;
++    for (const group of [withoutId, { ...withoutId, myTeamId: 'missing' }, { ...withoutId, myTeamId: 'team-2' }]) {
++      const html = paint({ ...view, group }, true);
++      for (const name of names) expect(html).not.toContain(escaped(name));
++      expect(html).not.toContain('<details');
++    }
++    const missingMine = renderToStaticMarkup(<GroupRoster group={withoutId} players={view.players} mine presence />);
++    for (const name of names) expect(missingMine).not.toContain(escaped(name));
++    expect(missingMine).toContain('data-count="0"');
++  });
++  it('labels temporary absence and reconnected permanent departure from distinct public facts', () => {
++    const state = withPresence();
++    expect(state.teams).toEqual(talking().teams);
++    const view = controllerView(state, 'kahoot', 'p0');
++    expect(view.players.find((p) => p.id === 'p2')?.connected).toBe(true);
++    expect(view.group?.leftMembers).toEqual(['p2']);
++    const html = paint(view, true);
++    expect(html).toMatch(/data-group-member="p1"[\s\S]*?data-presence="away"/);
++    expect(html).toMatch(/data-group-member="p2"[\s\S]*?data-presence="left"/);
++    expect(html).toContain('Away');
++    expect(html).toContain('Left');
++    expect(html).not.toContain('<button');
++    const missing = { ...view, players: view.players.filter((p) => p.id !== 'p3') };
++    expect(paint(missing, true)).toContain('Unavailable');
++    expect(translate(STRINGS, 'es', 'Away')).toBe('Ausente');
++    expect(translate(STRINGS, 'es', 'Left')).toBe('Salió');
++    expect(translate(STRINGS, 'es', 'Unavailable')).toBe('No disponible');
++    expect(translate(STRINGS, 'es', '{team} · Teammates', { team: 'Team 1' })).toBe('Team 1 · Compañeros');
++    expect(translate(STRINGS, 'es', 'Back to question')).toBe('Volver a la pregunta');
++  });
++  it('spectators and departed phones watch instead of being told to answer', () => {
++    const state = withPresence();
++    for (const id of ['audience', 'p2']) {
++      const view = controllerView(state, 'kahoot', id);
++      expect(view.participating).toBe(false);
++      const html = paint(view);
++      expect(html).toContain('Watching team discussion');
++      expect(html).toContain('Players discuss now.');
++      expect(html).not.toContain('Talk with your team');
++      expect(html).not.toContain('Everyone answers when the clock ends.');
++      expect(html).not.toContain('<details');
++      expect(html).not.toContain('<button');
++      for (const name of names) expect(html).not.toContain(escaped(name));
++    }
++    const room: State = { ...state, settings: { ...state.settings, quizMode: 'tv-vote' } };
++    expect(paint(controllerView(room, 'kahoot', 'audience'))).toContain('Watching room discussion');
++    expect(translate(STRINGS, 'es', 'Watching team discussion')).toBe('Viendo la conversación del equipo');
++    expect(translate(STRINGS, 'es', 'Watching room discussion')).toBe('Viendo la conversación de la sala');
++  });
++  it('publishes departure metadata only for already public teams, never future final or podium rows', () => {
++    const state = withPresence();
++    expect(tvView(state, 'kahoot').group?.leftMembers).toEqual(['p2']);
++    const final: State = {
++      ...state, index: 4, phase: { id: 'reveal', startedAt: 200_000, deadline: 250_000 },
++      teamScores: { 'team-1': 2000, 'team-2': 1000 },
++    };
++    expect(tvView(final, 'kahoot').group?.teams).toEqual([]);
++    expect(tvView(final, 'kahoot').group).not.toHaveProperty('leftMembers');
++    expect(controllerView(final, 'kahoot', 'p0').group).not.toHaveProperty('leftMembers');
++    const podium: State = { ...final, phase: { id: 'podium', startedAt: 250_000, deadline: 300_000 }, podiumRank: 2 };
++    expect(tvView(podium, 'kahoot').group?.teams.map((team) => team.id)).toEqual(['team-2']);
++    expect(tvView(podium, 'kahoot').group).not.toHaveProperty('leftMembers');
++  });
++  it('budgets the largest visible pane instead of summing the question and hidden roster', () => {
++    const state = withPresence();
++    // Actual sports-09 question/options contribute 12 words and four answer-shape marks.
++    // Spanish open pane: header 4 + clock 1 + Back 4 + team 2 + four five-word
++    // names + two presence markers + rule 8 + waiting status 7 = 48 words.
++    // Closed question pane = 40, English open = 44, and both TV variants are shorter.
++    expect(groupTalkMs(state)).toBe(readMs(48));
++    expect(groupTalkMs(state)).toBeGreaterThan(groupTalkMs(talking()));
++    const duplicatedQuestionAndRoster = wordCount(
++      'Habla con tu equipo 5 Volver a la pregunta Team 1 ' +
++      names.slice(0, 4).join(' ') +
++      ' Ausente Salió Conversen ahora. Todos responden cuando termine el reloj. Las respuestas se abren después de conversar',
++    ) + 16;
++    expect(groupTalkMs(state)).toBeLessThan(readMs(duplicatedQuestionAndRoster));
++  });
++});

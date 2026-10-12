@@ -71,6 +71,8 @@ export interface GroupView {
     correctPercent?: number;
   }[];
   myTeamId?: string;
+  /** Departures among only the fixed members already public in teams; distinct from connection. */
+  leftMembers?: string[];
   /** Only present after reveal and when at least one room vote was cast. */
   decision?: number;
   roomStreak?: number;

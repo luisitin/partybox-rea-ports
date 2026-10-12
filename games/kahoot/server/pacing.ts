@@ -36,52 +36,101 @@ function groupRosterWords(state: State, numbers: number): number {
   );
 }
 
-/** Budget the largest actual discussion screen, never an invisible whole-room roster. */
+/** Budget the largest actual discussion screen, including only its own fixed team roster. */
 export function groupTalkMs(state: State): number {
   const vote = groupModeOf(state) === 'tv-vote';
-  const title = vote ? 'Room vote' : 'Teams';
-  const identity = Math.max(
-    wordCount(title),
-    ...(state.teams ?? []).map((team) => wordCount(team.name)),
-  );
-  const ownRoster = vote
-    ? identity
-    : Math.max(
-        identity,
-        ...(state.teams ?? []).map(
-          (team) =>
-            wordCount(team.name) +
-            team.members.reduce((n, id) => n + wordCount(state.players[id]?.name ?? ''), 0),
-        ),
+  const title = vote ? ['Room vote', 'Voto de la sala'] : ['Teams', 'Equipos'];
+  const wordsIn = (spanish: boolean): number => {
+    const ui = (en: string, es = en): number => wordCount(spanish ? es : en);
+    const identity = Math.max(
+      wordCount(title[spanish ? 1 : 0]!),
+      ...(state.teams ?? []).map((team) => wordCount(team.name)),
+    );
+    const ownRoster = vote
+      ? identity
+      : Math.max(
+          identity,
+          ...(state.teams ?? [])
+            .filter((team) => team.members.some((id) => isParticipating(state, id)))
+            .map(
+              (team) =>
+                wordCount(team.name) +
+                team.members.reduce((n, id) => {
+                  const player = state.players[id];
+                  const marker = state.left?.includes(id)
+                    ? ui('Left', 'Salió')
+                    : !player
+                      ? ui('Unavailable', 'No disponible')
+                      : player.connected === false
+                        ? ui('Away', 'Ausente')
+                        : 0;
+                  return n + wordCount(player?.name ?? id) + marker;
+                }, 0),
+            ),
+        );
+    // The TV remains roster-free: prompt/options, four marks, clock/label,
+    // response count, discussion cue and ordinal/mode footer.
+    const tv =
+      questionWords(state) +
+      4 +
+      1 +
+      (vote
+        ? ui('Room talk', 'Conversación de la sala')
+        : ui('Team talk', 'Conversación de equipo')) +
+      (vote ? ui('0 of 8 votes', '0 de 8 votos') : ui('0 of 8 answers', '0 de 8 respuestas')) +
+      (vote
+        ? ui(
+            'Discuss the room answer · then everyone votes',
+            'Conversen sobre la respuesta · luego todos votan',
+          )
+        : ui(
+            'Talk with your team · then everyone answers',
+            'Habla con tu equipo · luego todos responden',
+          )) +
+      ui('Question 1 of 20', 'Pregunta 1 de 20') +
+      wordCount(title[spanish ? 1 : 0]!);
+    const paused = ui('Paused', 'En pausa');
+    const participantCopy =
+      (vote
+        ? ui('Discuss the room answer', 'Conversen sobre la respuesta de la sala')
+        : ui('Talk with your team', 'Habla con tu equipo')) +
+      (vote
+        ? ui(
+            'Discuss now. Each vote helps choose one room answer.',
+            'Conversen ahora. Cada voto ayuda a elegir una respuesta de la sala.',
+          )
+        : ui(
+            'Discuss now. Everyone answers when the clock ends.',
+            'Conversen ahora. Todos responden cuando termine el reloj.',
+          )) +
+      Math.max(
+        1 + ui('Answers open after discussion', 'Las respuestas se abren después de conversar'),
+        paused * 2,
       );
-  // The TV shows the prompt/options, four marks, a circular clock/label, answer count,
-  // discussion cue and ordinal/mode footer. It no longer shows any player names.
-  const tv =
-    questionWords(state) +
-    4 +
-    1 +
-    wordCount(vote ? 'Room talk' : 'Team talk') +
-    wordCount(vote ? '0 of 8 votes' : '0 of 8 answers') +
-    wordCount(
-      vote
-        ? 'Discuss the room answer · then everyone votes'
-        : 'Talk with your team · then everyone answers',
-    ) +
-    wordCount(`Question 1 of 20 ${title}`);
-  const phoneCopy =
-    wordCount(vote ? 'Discuss the room answer' : 'Talk with your team') +
-    1 +
-    wordCount(
-      vote
-        ? 'Discuss now. Each vote helps choose one room answer.'
-        : 'Discuss now. Everyone answers when the clock ends.',
-    ) +
-    wordCount('Answers open after discussion');
-  // A staged phone adds the question/options and only its team identity. Beside the
-  // TV, a team phone instead reads its own roster; a room-vote phone has no roster.
-  const stagedPhone = phoneCopy + questionWords(state) + 4 + identity;
-  const besideTvPhone = phoneCopy + ownRoster;
-  return readMs(Math.max(tv, stagedPhone, besideTvPhone));
+    const spectatorCopy =
+      (vote
+        ? ui('Watching room discussion', 'Viendo la conversación de la sala')
+        : ui('Watching team discussion', 'Viendo la conversación del equipo')) +
+      ui(
+        'Players discuss now. Answers open when the clock ends.',
+        'Los jugadores conversan. Las respuestas se abren cuando termine el reloj.',
+      ) +
+      Math.max(1 + ui('Watching the quiz', 'Viendo el cuestionario'), paused * 2);
+    // A stage/remote team phone swaps the question pane for its own roster through
+    // a native disclosure. Never sum both panes. Spectators have no roster disclosure.
+    const question = questionWords(state) + 4;
+    const discovery =
+      Math.max(0, ...(state.teams ?? []).map((team) => wordCount(team.name))) +
+      ui('· Teammates', '· Compañeros');
+    return Math.max(
+      tv,
+      participantCopy + question + (vote ? identity : Math.max(identity, discovery)),
+      participantCopy + ownRoster + (vote ? 0 : ui('Back to question', 'Volver a la pregunta')),
+      participantCopy + ownRoster,
+      spectatorCopy + question + identity,
+    );
+  };
+  return readMs(Math.max(wordsIn(false), wordsIn(true)));
 }
 function uiWords(en: string, es = en): number {
   return Math.max(wordCount(en), wordCount(es));

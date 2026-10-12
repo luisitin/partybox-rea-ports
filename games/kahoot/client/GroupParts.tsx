@@ -17,14 +17,15 @@ export function GroupRoster({
   group,
   players,
   mine = false,
+  presence = false,
 }: {
   group: Group;
   players: Players;
   mine?: boolean;
+  presence?: boolean;
 }): JSX.Element {
   const L = useT(STRINGS);
-  const teams =
-    mine && group.myTeamId ? group.teams.filter((team) => team.id === group.myTeamId) : group.teams;
+  const teams = mine ? group.teams.filter((team) => team.id === group.myTeamId) : group.teams;
   return (
     <ul
       className={styles.roster}
@@ -36,9 +37,28 @@ export function GroupRoster({
         <li key={team.id} data-mine={team.id === group.myTeamId || undefined}>
           <b>{team.name}</b>
           <span className={styles.members}>
-            {team.members.map((id) => (
-              <span key={id}>{players.find((player) => player.id === id)?.name ?? id}</span>
-            ))}
+            {team.members.map((id) => {
+              const player = players.find((candidate) => candidate.id === id);
+              const marker = !presence
+                ? null
+                : group.leftMembers?.includes(id)
+                  ? 'Left'
+                  : !player
+                    ? 'Unavailable'
+                    : player.connected === false
+                      ? 'Away'
+                      : null;
+              return (
+                <span key={id} data-group-member={presence ? id : undefined}>
+                  <span className={styles.memberName}>{player?.name ?? id}</span>
+                  {marker ? (
+                    <span className={styles.memberPresence} data-presence={marker.toLowerCase()}>
+                      {L(marker)}
+                    </span>
+                  ) : null}
+                </span>
+              );
+            })}
           </span>
         </li>
       ))}

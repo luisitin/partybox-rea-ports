@@ -75,11 +75,16 @@ function groupOf(state: State, playerId?: string): GroupView | undefined {
   if (state.phase.id === 'reveal' && isLastIndex(state, state.index)) teams = [];
   if (state.phase.id === 'podium')
     teams = teams.filter((team) => team.rank >= (state.podiumRank ?? 1) && team.rank <= 3);
+  const leftMembers =
+    mode === 'teams'
+      ? teams.flatMap((team) => team.members.filter((id) => state.left?.includes(id)))
+      : [];
   const own = playerId === undefined ? undefined : teamOf(state, playerId);
   return {
     mode,
     teams,
     ...(own ? { myTeamId: own.id } : {}),
+    ...(leftMembers.length > 0 ? { leftMembers } : {}),
     ...(mode === 'tv-vote' ? { roomStreak: state.roomStreak ?? 0 } : {}),
     ...(['reveal', 'podium', 'done'].includes(state.phase.id) && state.roomDecision !== undefined
       ? { decision: state.roomDecision }

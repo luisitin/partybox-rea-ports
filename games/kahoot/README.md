@@ -7,37 +7,38 @@ A speed quiz upgrading the existing Lightning Round engine. Wager remains the de
 ## Players
 
 Wager/Classic: 1–16; Teams/Room vote: 2–8. Late joiners spectate. Disconnections never hold the room; reconnect restores accepted input and the current beat. Permanent leavers retain their score and fixed team but cannot answer again. Spectators see a read-only stage.
-Bots have easy/normal/sharp strengths and seeded choices. Classic/group bots use a separate public answer-text knowledge map; unknown custom facts are guesses. Phones download no question library or answer keys.
+Bots have easy/normal/sharp strengths and seeded choices. Classic/group bots use separate public answer-text facts; exact custom prompts can reuse independent standard facts, with narrow word/digit equivalence for count prompts. Unknown/edited/conflicting prompts and multiple equivalent choices remain guesses; owner keys/explanations never teach the bot. Phones download no question library or answer keys.
 
 ## Phases
 
-| Phase    | TV                                                                                 | Phone                                                                                    | Exit                                                                     |
-| -------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| intro    | Title, selected pack; group identities                                             | First-question notice; own team or public stage                                          | Reading budget; Wager also has a 2 s floor                               |
-| talk     | Groups only: question/options, team members and discussion clock                   | Own team and discussion cue; stage phones also show question/options; no answer controls | max(configured discussion, visible-text reading budget), or VIP skip     |
-| question | Prompt/options, clock and accepted count                                           | One stamped shape answer or vote; Wager retains labelled choices                         | All connected answers after reading hold, original deadline, or VIP skip |
-| reveal   | Chart/explanation then standings; final Classic/group chart withholds final totals | Personal contribution/team mean or shared room verdict; chart/standings on staged phones | Reading budgets, VIP Next/skip; last Classic/group → podium              |
-| wager    | Wager only: final topic, placed count and standings; no private stakes             | Preset share/custom points and own receipt                                               | All bets after reading hold, max(15 s, reading budget), or VIP skip      |
-| podium   | Classic/groups: occupied tiers descending 3 → 2 → 1                                | Public tiers; own group rank/total only when unveiled                                    | Tier reading budget or VIP skip; empty tiers skipped                     |
-| done     | Complete standings and shell results                                               | Final group/individual board and personal place                                          | Terminal; results is non-null                                            |
+| Phase    | TV                                                                                     | Phone                                                                                    | Exit                                                                         |
+| -------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| intro    | Title, selected pack; group identities                                                 | First-question notice; own team or public stage                                          | Reading budget; Wager also has a 2 s floor                                   |
+| talk     | Groups only: question/options, circular discussion clock and accepted count; no roster | Own roster beside TV; staged team phones toggle question/teammates; no answer controls   | max(configured discussion, largest visible-pane reading budget), or VIP skip |
+| question | Prompt/options, clock and accepted count                                               | One stamped shape answer or vote; Wager retains labelled choices                         | All connected answers after reading hold, original deadline, or VIP skip     |
+| reveal   | Chart/explanation then standings; final Classic/group chart withholds final totals     | Personal contribution/team mean or shared room verdict; chart/standings on staged phones | Reading budgets, VIP Next/skip; last Classic/group → podium                  |
+| wager    | Wager only: final topic, placed count and standings; no private stakes                 | Preset share/custom points and own receipt                                               | All bets after reading hold, max(15 s, reading budget), or VIP skip          |
+| podium   | Classic/groups: occupied tiers descending 3 → 2 → 1                                    | Public tiers; own group rank/total only when unveiled                                    | Tier reading budget or VIP skip; empty tiers skipped                         |
+| done     | Complete standings and shell results                                                   | Final group/individual board and personal place                                          | Terminal; results is non-null                                                |
 
 Wager draws the requested regular count plus one hardest-available final. Non-wager modes draw the requested count, capped by the selected pack, without a wager finale. Equal scores share competition ranks. Reveals/podium own their roster; hidden future team totals are omitted from both envelopes and nested stage views.
 
 ### Phone-only and remote rooms
 
-Room presence is captured at init; canSeeTv=false also supplies that player the stage. SDK PhoneOnlyProvider/usePhoneOnly preserve device context. Stage phones never point at a TV.
+Room presence is captured at init; canSeeTv=false also supplies that player the stage. SDK PhoneOnlyProvider/usePhoneOnly preserve device context. Stage phones never point at a TV. During team discussion, Teammates opens only the participating player’s own fixed roster and Back to question restores prompt/options. This local disclosure does not send a game input; timers, discussion rules and pause status remain visible. Maximum-legal-text fit and actual native pointer/keyboard behavior remain pending verification.
 
-| Beat        | Phone-only/remote player                                                          | Spectator/departed player                   |
-| ----------- | --------------------------------------------------------------------------------- | ------------------------------------------- |
-| intro/talk  | Public title/question/options, team membership and discussion; talk has no inputs | Same public stage without personal controls |
-| question    | Prompt/options above shape pads; pending/confirmed receipt                        | Prompt/options and accepted count, no pads  |
-| reveal      | Own contribution/shared verdict plus public chart/standings                       | Public chart/standings and explanation      |
-| wager       | Topic/stakes controls; absent wager defaults to zero                              | Topic/rules/standings without stakes        |
-| podium/done | Unveiled tiers, then complete board and own place                                 | Same public stage                           |
+| Beat        | Phone-only/remote player                                                                             | Spectator/departed player                                                                     |
+| ----------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| intro       | Public title and group identities                                                                    | Same public stage without personal controls                                                   |
+| talk        | Public question/options; Teams has a native own-teammates disclosure that replaces the question pane | Public question/options with watching instructions; no teammate disclosure or answer controls |
+| question    | Prompt/options above shape pads; pending/confirmed receipt                                           | Prompt/options and accepted count, no pads                                                    |
+| reveal      | Own contribution/shared verdict plus public chart/standings                                          | Public chart/standings and explanation                                                        |
+| wager       | Topic/stakes controls; absent wager defaults to zero                                                 | Topic/rules/standings without stakes                                                          |
+| podium/done | Unveiled tiers, then complete board and own place                                                    | Same public stage                                                                             |
 
 ## Inputs
 
-Wager answer: {type:'pick',index:0..3}. Classic/group answer: {type:'answer',questionId,questionStartedAt,index:0..3}; both stamps must match the open answer window. Discussion accepts no answers and publishes no stamp. Room votes use the same immutable packet.
+Wager answer: {type:'pick',index:0..3}. Classic/group answer: {type:'answer',questionId,questionStartedAt,index:0..3}; both stamps must match the open answer window. Discussion accepts no answers and publishes no stamp; its native teammate disclosure changes only local presentation. Room votes use the same immutable packet.
 Bet: {type:'wager',percent:0|25|50|75|100} or integer amount 0–1,000,000; amount wins, clamps to current score and rounds below-all-in stakes down to tens.
 Only the first connected participant input at/after opening and strictly before the original deadline is accepted. Unknown/spectator/left/stale/duplicate packets are ignored. Sending can retry the same pending choice until authoritative confirmation; reconnect restores that choice.
 
@@ -49,6 +50,8 @@ Room vote uses plurality of accepted votes, seeded ties independent of the answe
 Wager final: correct adds stake, wrong/missing subtracts it, never below zero; no regular points. This is the only score decrease. Reveal credits once; VIP end keeps already banked totals. Awards retain canonical speed/streak/wager rules; ties use lowest id. Recaps distinguish group gains/room decisions from personal choices.
 
 ## Edge cases
+
+Discussion shows Away for publicly disconnected teammates and Left for permanent departures, including a later connected reconnect. The optional teams-only leftMembers metadata contains only members of currently public group rows; hidden final/future podium teams publish none. A missing public player row is Unavailable. Spectators/departed phones receive watching instructions and no own-roster disclosure. Fixed membership preserves PartyBox presence/reconnect continuity; this does not claim native automatic rebalancing.
 
 Every reducer is pure/total; time is event.now, randomness is state.rng. Stale timers and spectators cannot alter play. Missing mode in a saved state means legacy Wager; no new group state is inferred.
 Reading time uses the SDK readingMs/wordCount floor and actual visible question, roster, instructions, verdict and podium copy. Discussion starts a fresh answer clock. An all-answered hold can shorten the phase to its reading floor while retaining the original speed deadline; an eligible reconnect restores its pending window.

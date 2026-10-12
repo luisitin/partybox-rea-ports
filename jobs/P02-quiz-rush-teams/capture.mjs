@@ -157,6 +157,28 @@ function measure() {
   const scrollers = all
     .filter((el) => el instanceof HTMLElement && /auto|scroll/.test(getComputedStyle(el).overflowY))
     .map((el) => ({ element: named(el), overflow: el.scrollHeight - el.clientHeight }));
+  const choiceOverflow = all
+    .filter(
+      (el) =>
+        el instanceof HTMLElement &&
+        visible(el) &&
+        el.matches('[class*="_pad_"],[class*="_option_"],[class*="_chartRow_"]'),
+    )
+    .flatMap((card) => {
+      const limit = card.getBoundingClientRect();
+      return [...card.querySelectorAll('span,b,svg')]
+        .filter(visible)
+        .filter((child) => {
+          const r = child.getBoundingClientRect();
+          return (
+            r.top < limit.top - 1 ||
+            r.bottom > limit.bottom + 1 ||
+            r.left < limit.left - 1 ||
+            r.right > limit.right + 1
+          );
+        })
+        .map((child) => `${named(card)} contains overflowing ${named(child)}`);
+    });
   const rules = [];
   const walk = (list) => {
     for (const rule of list) {
@@ -340,8 +362,38 @@ function measure() {
       failures,
     };
   }
+  function teamDiscovery() {
+    const disclosure = main.querySelector('[data-team-discovery="true"]');
+    if (!disclosure) return null;
+    const summary = disclosure.querySelector('summary');
+    const question = main.querySelector('[data-talk-question="true"]');
+    const roster = disclosure.querySelector('ul');
+    const r = summary.getBoundingClientRect();
+    const questionVisible = !!question && visible(question);
+    const rosterVisible = !!roster && visible(roster);
+    const failures = [];
+    if (r.width < 44 || r.height < 44) failures.push('Teammate target is below 44 px');
+    if (disclosure.open ? questionVisible || !rosterVisible : !questionVisible || rosterVisible)
+      failures.push('Question and teammate panes do not switch exclusively');
+    return {
+      open: disclosure.open,
+      label: summary.innerText.trim(),
+      questionVisible,
+      rosterVisible,
+      target: { width: r.width, height: r.height },
+      members: [...disclosure.querySelectorAll('[data-group-member]')].map((el) => ({
+        id: el.dataset.groupMember,
+        text: el.textContent.trim(),
+        visible: visible(el),
+        requiredWidth: el.scrollWidth,
+        availableWidth: el.clientWidth,
+      })),
+      failures,
+    };
+  }
   return {
     receiptGeometry: receiptPlacement(),
+    teamDiscovery: teamDiscovery(),
     horizontalOverflow: document.documentElement.scrollWidth - innerWidth,
     verticalOverflow: document.documentElement.scrollHeight - innerHeight,
     main: {
@@ -352,6 +404,7 @@ function measure() {
     },
     safeBounds: bounds,
     scrollers,
+    choiceOverflow,
     clipped,
     unstyled,
     nameVisibility: [
@@ -368,7 +421,7 @@ function measure() {
         requiredWidth: el.scrollWidth,
         truncated: el.scrollWidth > el.clientWidth + 1,
       })),
-    touchTargets: [...main.querySelectorAll('button')].map((el) => {
+    touchTargets: [...main.querySelectorAll('button,summary')].filter(visible).map((el) => {
       const r = el.getBoundingClientRect();
       return {
         label: el.getAttribute('aria-label') ?? el.textContent,
@@ -502,6 +555,66 @@ try {
       fromSurface: true,
     });
     writeFileSync(resolve(media, `${frame.name}.png`), Buffer.from(shot.data, 'base64'));
+    if (result.result.value.teamDiscovery) {
+      const target = await dev.call('Runtime.evaluate', {
+        expression: `(()=>{const r=document.querySelector('[data-team-discovery="true"] summary').getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2}})()`,
+        returnByValue: true,
+      });
+      for (const type of ['mousePressed', 'mouseReleased'])
+        await dev.call('Input.dispatchMouseEvent', {
+          type,
+          ...target.result.value,
+          button: 'left',
+          clickCount: 1,
+        });
+      const opened = await dev.call('Runtime.evaluate', {
+        expression: `(${measure.toString()})()`,
+        returnByValue: true,
+      });
+      if (opened.exceptionDetails || !opened.result.value.teamDiscovery?.open)
+        throw new Error('Native pointer did not open teammates: ' + frame.name);
+      const alternate = `${frame.name}-teammates`;
+      metrics.push({
+        name: alternate,
+        sourceFrame: frame.name,
+        interaction: 'native pointer open; Enter close',
+        ...opened.result.value,
+      });
+      const openShot = await dev.call('Page.captureScreenshot', {
+        format: 'png',
+        captureBeyondViewport: false,
+        fromSurface: true,
+      });
+      writeFileSync(resolve(media, `${alternate}.png`), Buffer.from(openShot.data, 'base64'));
+      // Preserve the original standalone bundle; only the browser's native open attribute differs.
+      const openHTML = readFileSync(resolve(media, `${frame.name}.html`), 'utf8').replace(
+        /<details\b[^>]*data-team-discovery="true"[^>]*>/,
+        (tag) => tag.replace(/>$/, ' open="">'),
+      );
+      writeFileSync(resolve(media, `${alternate}.html`), openHTML, 'utf8');
+      await dev.call('Runtime.evaluate', {
+        expression: `document.querySelector('[data-team-discovery="true"] summary').focus()`,
+      });
+      for (const type of ['keyDown', 'keyUp'])
+        await dev.call('Input.dispatchKeyEvent', {
+          type,
+          key: 'Enter',
+          code: 'Enter',
+          windowsVirtualKeyCode: 13,
+          nativeVirtualKeyCode: 13,
+        });
+      const closed = await dev.call('Runtime.evaluate', {
+        expression: `(${measure.toString()})()`,
+        returnByValue: true,
+      });
+      if (
+        closed.exceptionDetails ||
+        closed.result.value.teamDiscovery?.open ||
+        closed.result.value.teamDiscovery?.failures.length
+      )
+        throw new Error('Native Enter did not restore the question pane: ' + frame.name);
+      metrics.at(-1).closedAgain = closed.result.value.teamDiscovery;
+    }
     if ((index + 1) % 9 === 0) console.log(`Captured ${index + 1}/${cases.length} screens.`);
   }
   writeFileSync(
@@ -595,6 +708,27 @@ try {
   }
 }
 
+writeFileSync(
+  resolve(media, 'capture-lifecycle.json'),
+  JSON.stringify(
+    {
+      capturedAtUtc: new Date().toISOString(),
+      browserPid: browser?.pid ?? null,
+      closureVerified: browserClosed,
+      nativeVerifierTimeoutMs: 45000,
+      baseScreens: cases.length,
+      screensCaptured: metrics.length,
+      nativeDisclosurePairs: metrics.filter((row) => row.closedAgain).length,
+      nativeDisclosureMethod: 'pointer press/release opens; focused Enter down/up closes',
+      allNativeDisclosuresRestored: metrics
+        .filter((row) => row.closedAgain)
+        .every((row) => !row.closedAgain.open && row.closedAgain.failures.length === 0),
+    },
+    null,
+    2,
+  ) + '\n',
+  'utf8',
+);
 const files = readdirSync(media).sort();
 const bytes = files.reduce((sum, file) => sum + statSync(resolve(media, file)).size, 0);
 if (bytes >= 10 * 1024 * 1024) throw new Error(`Evidence budget exceeded: ${bytes} bytes.`);
@@ -648,9 +782,11 @@ const failed = metrics.filter(
     (m.horizontalOverflow > 1 ||
       m.verticalOverflow > 1 ||
       m.clipped.length ||
+      m.choiceOverflow.length ||
       m.unstyled.length ||
       !m.nunitoLoaded ||
       m.receiptGeometry?.failures.length ||
+      m.teamDiscovery?.failures.length ||
       m.scrollers.some((s) => s.overflow > 1)),
 );
 console.log(
@@ -667,7 +803,9 @@ console.log(
         clipped: m.clipped,
         unstyled: m.unstyled,
         scrollers: m.scrollers,
+        choiceOverflow: m.choiceOverflow,
         receiptGeometry: m.receiptGeometry,
+        teamDiscovery: m.teamDiscovery,
       })),
     },
     null,

@@ -203,6 +203,87 @@
   gap: var(--pb-space-3);
   justify-content: center;
 }
+/* Own-team discovery stays readable beside the question on staged phones. */
+.phone .talk {
+  gap: var(--pb-space-2);
+}
+.phone .talk .members {
+  display: grid;
+  gap: var(--pb-space-1);
+}
+.phone .talk .members > span {
+  display: flex;
+  align-items: baseline;
+  gap: var(--pb-space-1);
+}
+.phone .talk .members > span::after {
+  content: none;
+}
+.memberName {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.memberPresence {
+  flex: none;
+  color: var(--pb-text-muted);
+  white-space: nowrap;
+}
+.teamDisclosure {
+  width: 100%;
+}
+.teamDisclosure summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--pb-touch);
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border: calc(var(--pb-space-1) / 4) solid var(--pb-border);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  color: var(--pb-text);
+  font-size: var(--pb-font-button);
+  line-height: 1.2;
+  font-weight: 800;
+  text-align: center;
+  list-style: none;
+  cursor: pointer;
+}
+.teamDisclosure summary::-webkit-details-marker {
+  display: none;
+}
+.teamDisclosure summary:focus-visible {
+  outline: var(--pb-space-1) solid var(--pb-focus);
+  outline-offset: calc(var(--pb-space-1) / 2);
+}
+.teamDisclosure .disclosureOpen,
+.teamDisclosure[open] .disclosureClosed {
+  display: none;
+}
+.teamDisclosure[open] .disclosureOpen {
+  display: inline;
+}
+.teamDisclosure .roster {
+  margin-top: var(--pb-space-2);
+}
+/* A native disclosure keeps the two maximum-sized panes separate, with no play scrolling. */
+.talk:has(.teamDisclosure[open]) .talkQuestion {
+  display: none;
+}
+.talkQuestion {
+  display: grid;
+  gap: var(--pb-space-2);
+}
+.phone .talk[data-stage] .talkPrompt {
+  font-size: var(--pb-font-body);
+}
+.talkChoices ol {
+  gap: var(--pb-space-2);
+}
+.talkChoices li {
+  font-size: var(--pb-font-caption);
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+}
 .decision {
   display: flex;
   flex-wrap: wrap;
