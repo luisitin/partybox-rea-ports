@@ -3,7 +3,7 @@
 # DONE lines stay; BLOCKED lines point at BLOCKED.md in the job folder.
 <!-- prettier-ignore-start -->
 
-P01 r1-local 2026-10-11T22:54:02Z job/P01-quiz-rush DONE
+P01 r1-local 2026-10-12T06:28:03Z job/P01-quiz-rush
 P02 r2-local 2026-10-12T06:17:19Z job/P02-quiz-rush-teams
 P03 r3-local 2026-10-12T02:31:08Z job/P03-trivia-lightning DONE
 P04 r2-local 2026-10-12T05:06:32Z job/P04-draw-and-guess DONE
