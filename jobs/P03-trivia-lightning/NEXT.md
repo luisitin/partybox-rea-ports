@@ -22,7 +22,12 @@
 - Round 5 adds score-derived leader/tied-leader cues; 29 screen tests pass.
 - Round 6 mounted React audit passes all 49 checks and 11 capture layouts, including delayed
   power/Next retries, duplicate suppression and target disconnect; Chrome closure proven in finally.
-- Remaining: final verification/mutations; permanent-leaver watching mode on return, named freeze
-  attribution and verdict cue deduplication across phases; final captures/hashes; three
-  stable audit passes and final green CI. The real React interaction harness is ready to integrate.
+- Resume pass: permanent-leaver watching mode, named freeze attribution and stable own-answer
+  cue identity implemented. Focused rules/screens/SSR: 65 tests pass (3 files, 1.96 s).
+- Current: 143 full-game tests and types passed before round 8; 20/20 mutation faults caught.
+  Round 8 focused rules/screens/SSR: 75 tests pass (1.66 s).
+- Capture session 71042 stopped responding in Chrome; exact private profile closure is being
+  recovered by session 9686. Do not open another browser until closure is verified.
+- Remaining: final game/type check, one GPU-disabled combined capture, media formatting/hashes,
+  VERIFY refresh, milestone push/CLAIMS refresh, green CI and three stable audit passes.
 - Install completed using corepack enable and pnpm.cmd install (PowerShell blocks pnpm.ps1).

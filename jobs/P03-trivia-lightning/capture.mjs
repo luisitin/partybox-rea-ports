@@ -21,6 +21,7 @@ let profile;
 let exited = false;
 let chromeError;
 let debuggingUrl;
+let privateBrowserClosed = false;
 
 function interrupt() {
   stopping = true;
@@ -310,6 +311,9 @@ async function main() {
         '--no-default-browser-check',
         '--disable-background-networking',
         '--disable-component-update',
+        ...(process.env.P03_CPU_CAPTURE === '1'
+          ? ['--disable-gpu', '--renderer-process-limit=1']
+          : []),
         'about:blank',
       ],
       { windowsHide: true, stdio: 'ignore' },
@@ -329,10 +333,12 @@ async function main() {
     const { sessionId } = await cdp.send('Target.attachToTarget', { targetId, flatten: true });
     await cdp.send('Page.enable', {}, sessionId);
     await cdp.send('Runtime.enable', {}, sessionId);
+    let consecutiveFailures = 0;
     for (const name of files) {
       if (stopping) throw new Error('Capture interrupted.');
       try {
         const page = await captureWithRetry(name, sessionId);
+        consecutiveFailures = 0;
         report.pages.push(page);
         if (
           page.overflow.horizontal ||
@@ -350,6 +356,10 @@ async function main() {
         report.pages.push({ file: name, error: String(error), attempts: error.attempts ?? [] });
         process.exitCode = 1;
         console.error(`${name}: ${String(error)}`);
+        if (++consecutiveFailures >= 2)
+          throw new Error(
+            'Stopping after two consecutive capture failures; browser cleanup follows.',
+          );
       }
     }
     if (stopping) throw new Error('Capture interrupted.');
@@ -359,6 +369,7 @@ async function main() {
   } finally {
     try {
       report.cleanup = await stopBrowser();
+      privateBrowserClosed = report.cleanup?.browser?.verifiedClosed === true;
     } catch (error) {
       report.cleanup = { browser: { verifiedClosed: false }, error: String(error) };
       throw error;
@@ -380,4 +391,7 @@ try {
 } finally {
   process.off('SIGINT', interrupt);
   process.off('SIGTERM', interrupt);
+  // Vite's optional build can retain worker handles on Windows. All evidence writes and the
+  // browser's native exit proof completed before terminating this private CLI and its workers.
+  if (privateBrowserClosed) process.stdout.write('', () => process.exit(process.exitCode ?? 0));
 }

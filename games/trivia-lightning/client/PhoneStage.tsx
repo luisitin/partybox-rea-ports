@@ -22,10 +22,14 @@ export function PhoneStage({
   const heading =
     view.phaseId === 'race'
       ? player
-        ? L('You finished!')
+        ? view.departed
+          ? L('You left this race')
+          : L('You finished!')
         : L('The race is on')
       : !final
-        ? L('The podium')
+        ? view.podiumStep === 1
+          ? L('Third place')
+          : L('Second place')
         : winners.length > 1
           ? L('Shared first place!')
           : L('{name} wins!', { name: winners[0]?.name ?? '' });
@@ -62,7 +66,7 @@ export function PhoneStage({
       ) : (
         <Podium lanes={view.lanes} step={view.phaseId === 'done' ? 3 : view.podiumStep} compact />
       )}
-      {view.phaseId !== 'done' && player && view.feedback ? (
+      {player && view.feedback && !view.departed ? (
         <p className={styles.lastAnswer}>
           <b>
             {view.feedback.correct ? L('✓ Final answer correct') : L('✗ Final answer incorrect')}
@@ -75,7 +79,9 @@ export function PhoneStage({
       ) : null}
       <p className={styles.stageHint}>
         {view.phaseId === 'race'
-          ? L('Track = answered questions · Highest score wins')
+          ? player && view.departed
+            ? L('Your score stays · Watch the race here')
+            : L('Track = answered questions · Highest score wins')
           : final
             ? L('Same score? Same place.')
             : L('Third, second… then the winner.')}

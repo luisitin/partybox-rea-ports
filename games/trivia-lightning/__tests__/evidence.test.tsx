@@ -142,6 +142,31 @@ function fixtures(): Record<string, State> {
       ]),
     ),
   };
+  const question = ranking.deck[3]!;
+  const lastAnswer = kit.input(
+    ranking,
+    'p2',
+    { type: 'answer', index: 3, questionId: question.id, choice: question.correctIndex },
+    ranking.clock + 50,
+  );
+  const departed = kit.player(
+    kit.player(lastAnswer, 'p2', false, 'left', ranking.clock + 100),
+    'p2',
+    true,
+    undefined,
+    ranking.clock + 150,
+  );
+  const frozen = kit.input(
+    ranking,
+    'p7',
+    { type: 'power', power: 'freeze', target: 'p2', charge: 2 },
+    ranking.clock + 50,
+  );
+  const frozenLong: State = {
+    ...frozen,
+    players: { ...frozen.players, p7: { ...frozen.players['p7']!, name: 'W'.repeat(64) } },
+  };
+  const doneFeedback = kit.vip(lastAnswer, 'end', ranking.clock + 100);
   return {
     race,
     podium,
@@ -156,6 +181,10 @@ function fixtures(): Record<string, State> {
     stress,
     'stress-feedback': stressFeedback,
     ranking,
+    departed,
+    frozen,
+    'frozen-long': frozenLong,
+    'done-feedback': doneFeedback,
   };
 }
 // Static content is imported once, so fixture generation has no filesystem dependency on questions.
@@ -244,6 +273,8 @@ it('renders every phase and input substate, spectators, phone-only and ties', ()
       { type: 'next', index: answerAccepted.runners['p2']!.answered },
       ranking.clock + 4550,
     );
+    const podiumAccepted = kit.vip(answerAccepted, 'skip', ranking.clock + 100);
+    const doneAccepted = kit.vip(podiumAccepted, 'end', ranking.clock + 150);
     writeFileSync(
       resolve(dir, 'interaction-views.json'),
       JSON.stringify(
@@ -256,6 +287,10 @@ it('renders every phase and input substate, spectators, phone-only and ties', ()
             freezeAccepted,
             answerAccepted,
             nextAccepted,
+            departed: states['departed']!,
+            freezeVictim: states['frozen-long']!,
+            podiumAccepted,
+            doneAccepted,
           }).map(([name, state]) => [
             name,
             { ...game.controllerView({ ...state, phoneOnly: true }, 'p2'), vip: null },
@@ -276,10 +311,16 @@ it('renders every phase and input substate, spectators, phone-only and ties', ()
     }
     const tv = render(<Tv view={{ ...game.tvView(s), vip: null }} />, s);
     expect(tv).not.toContain('correctIndex');
-    if (write)
+    if (write && name !== 'frozen-long')
       writeFileSync(resolve(dir, `tv-${name}.html`), html(tv, 'tv', `TV ${name}`, 'Public stage'));
     for (const phoneOnly of [false, true]) {
-      for (const id of [name === 'feedback' || name === 'ranking' ? 'p2' : 'p1', 'spectator']) {
+      for (const id of [
+        ['feedback', 'ranking', 'departed', 'frozen', 'frozen-long', 'done-feedback'].includes(name)
+          ? 'p2'
+          : 'p1',
+        'spectator',
+      ]) {
+        if (name === 'frozen-long' && id === 'spectator') continue;
         const state = { ...s, phoneOnly };
         const view = { ...game.controllerView(state, id), vip: null };
         const phone = render(

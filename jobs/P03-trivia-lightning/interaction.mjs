@@ -100,7 +100,8 @@ export async function runInteractionAudit(cdp, sessionId, { writeHtml = false } 
       const target = power?.querySelector('select');
       const next = document.querySelector('[role="status"][data-correct] button');
       return {
-        sent: window.harness.sent, now: window.harness.now, kind: window.harness.kind,
+        sent: window.harness.sent, cues: window.harness.cues,
+        vibrations: window.harnessVibrations, now: window.harness.now, kind: window.harness.kind,
         text: document.body.innerText,
         header: document.querySelector('header')?.innerText ?? '',
         statuses: [...document.querySelectorAll('[role="status"]')].map(node => node.textContent.trim()),
@@ -190,7 +191,9 @@ export async function runInteractionAudit(cdp, sessionId, { writeHtml = false } 
       { frameId: frameTree.frame.id, html: documentHtml(css) },
       sessionId,
     );
-    await evaluate(`window.harnessViews=${JSON.stringify(views)};window.harnessPhoneOnly=true;`);
+    await evaluate(`window.harnessViews=${JSON.stringify(views)};window.harnessPhoneOnly=true;
+      window.harnessVibrations=[];
+      Object.defineProperty(navigator,'vibrate',{configurable:true,value:pattern=>{window.harnessVibrations.push(pattern);return true;}});`);
     await evaluate(script);
     await evaluate('document.fonts.ready.then(() => true)');
     await waitFor(

@@ -56,7 +56,7 @@ function usePower(
     runners: {
       ...state.runners,
       [id]: { ...runner, energy: 0 },
-      [target]: { ...rival, freezeUntil: now + FREEZE_MS },
+      [target]: { ...rival, freezeUntil: now + FREEZE_MS, frozenBy: id },
     },
   };
 }

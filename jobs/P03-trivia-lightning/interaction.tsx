@@ -2,7 +2,8 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { createRoot } from 'react-dom/client';
-import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
+import { PhoneOnlyProvider, ServerClockProvider, SoundProvider } from '@partybox/game-sdk/ui';
+import type { SoundCue } from '@partybox/game-sdk/ui';
 import type { TriviaControllerView } from '../../games/trivia-lightning/server/index';
 import type { Input } from '../../games/trivia-lightning/server/types';
 import { Controller } from '../../games/trivia-lightning/client/Controller';
@@ -15,6 +16,7 @@ interface Harness {
   setClock(serverNow?: number): void;
   dispose(): void;
   sent: Input[];
+  cues: SoundCue[];
   readonly currentView: TriviaControllerView;
   readonly now: number;
   readonly kind: string;
@@ -36,6 +38,8 @@ function suppliedView(kind: Kind): { kind: string; view: TriviaControllerView } 
 }
 const initial = suppliedView(Object.hasOwn(window.harnessViews, 'ranking') ? 'ranking' : 0);
 const sent: Input[] = [];
+const cues: SoundCue[] = [];
+const recordCue = (cue: SoundCue) => cues.push(cue);
 const root = createRoot(document.getElementById('root')!);
 
 function HarnessApp() {
@@ -55,6 +59,7 @@ function HarnessApp() {
       reset(kind = initial.kind) {
         const next = suppliedView(kind);
         sent.length = 0;
+        cues.length = 0;
         flushSync(() =>
           setState((before) => ({
             ...next,
@@ -71,6 +76,7 @@ function HarnessApp() {
         flushSync(() => root.unmount());
       },
       sent,
+      cues,
       get currentView() {
         return current.current.view;
       },
@@ -86,17 +92,19 @@ function HarnessApp() {
   return (
     <ServerClockProvider offsetMs={state.offsetMs}>
       <PhoneOnlyProvider value={window.harnessPhoneOnly ?? true}>
-        <Controller
-          key={state.generation}
-          view={state.view}
-          me={{
-            id: state.view.me.id,
-            name: lane?.name ?? 'Harness spectator',
-            avatarId: lane?.avatarId ?? 'fox',
-            connected: lane?.connected ?? true,
-          }}
-          send={(input) => sent.push(structuredClone(input))}
-        />
+        <SoundProvider play={recordCue}>
+          <Controller
+            key={state.generation}
+            view={state.view}
+            me={{
+              id: state.view.me.id,
+              name: lane?.name ?? 'Harness spectator',
+              avatarId: lane?.avatarId ?? 'fox',
+              connected: lane?.connected ?? true,
+            }}
+            send={(input) => sent.push(structuredClone(input))}
+          />
+        </SoundProvider>
       </PhoneOnlyProvider>
     </ServerClockProvider>
   );

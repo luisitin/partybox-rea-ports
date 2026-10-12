@@ -188,7 +188,190 @@ describe('independent cursors and hidden information', () => {
   });
 });
 
+describe('semantic screens and stable racer identity', () => {
+  it('announces only the viewer’s accepted answer and next question', () => {
+    const before = kit.start();
+    const mine = game.controllerView(before, 'p1');
+    const otherScreen = game.controllerView(before, 'p2').screen;
+    expect(mine.screen).toBe('question-0');
+    const answered = answer(before);
+    const verdict = game.controllerView(answered, 'p1');
+    expect(verdict.screen).toBe('feedback-1');
+    expect(verdict.question).toBeNull();
+    expect(verdict.feedback!.correct).toBe(true);
+    expect(game.controllerView(answered, 'p2').screen).toBe(otherScreen);
+    const advanced = next(answered);
+    const question = game.controllerView(advanced, 'p1');
+    expect(question.screen).toBe('question-1');
+    expect(question.question!.id).not.toBe(mine.question!.id);
+    expect(question.feedback).toBeNull();
+    expect(game.controllerView(advanced, 'p2').screen).toBe(otherScreen);
+    expect(game.controllerView(answer(advanced), 'p1').screen).toBe('feedback-2');
+  });
+
+  it.each([false, true])(
+    'keeps a question or verdict screen stable through clock, rival score and pause pushes (feedback=%s)',
+    (feedback) => {
+      const before = feedback ? answer(kit.start()) : kit.start();
+      const expected = game.controllerView(before, 'p1');
+      const beat = kit.timer(before);
+      expect(beat.clock - before.phase.startedAt).toBe(500);
+      const scored = answer(beat, 'p2');
+      expect(scored.runners.p2!.score).toBe(100);
+      const paused = kit.vip(scored, 'pause', scored.clock + 10);
+      expect(game.controllerView(paused, 'p1').paused).toBe(true);
+      const resumed = kit.vip(paused, 'resume', scored.clock + 1010);
+      expect(resumed.endsAt).toBe(before.endsAt + 1000);
+      for (const state of [beat, scored, paused, resumed]) {
+        const view = game.controllerView(state, 'p1');
+        expect(view.screen).toBe(expected.screen);
+        expect(view.question).toEqual(expected.question);
+        expect(view.feedback).toEqual(expected.feedback);
+      }
+    },
+  );
+
+  it('distinguishes finished players, permanent leavers and spectators while others still race', () => {
+    const leftEarly = kit.player(kit.start(), 'p1', false, 'left', 1100);
+    expect(game.controllerView(leftEarly, 'p1')).toMatchObject({
+      screen: 'departed',
+      finished: false,
+      departed: true,
+      question: null,
+    });
+    let finished = kit.start();
+    for (let n = 0; n < 6; n++) {
+      finished = answer(finished);
+      if (n < 5) finished = next(finished);
+    }
+    expect(finished.phase.id).toBe('race');
+    expect(game.controllerView(finished, 'p1')).toMatchObject({
+      screen: 'finished',
+      finished: true,
+      departed: false,
+    });
+    expect(game.controllerView(finished, 'p2').screen).toBe('question-0');
+    expect(game.controllerView(finished, 'spectator').screen).toBe('watch-race');
+    const departed = kit.player(finished, 'p1', false, 'left', finished.clock + 10);
+    const returned = kit.player(departed, 'p1', true, undefined, finished.clock + 20);
+    expect(returned.phase.id).toBe('race');
+    expect(game.controllerView(returned, 'p1')).toMatchObject({
+      screen: 'departed',
+      finished: true,
+      departed: true,
+      question: null,
+    });
+    expect(game.controllerView(returned, 'p2').screen).toBe('question-0');
+    expect(game.controllerView(returned, 'spectator').screen).toBe('watch-race');
+  });
+
+  it('announces each occupied podium beat even though its phase instance stays the same', () => {
+    let race = next(answer(next(answer(kit.start({ players: testPlayers(3) })))));
+    race = next(answer(race, 'p2'), 'p2');
+    let podium = kit.vip(race, 'skip', race.clock + 10);
+    const phaseAt = game.controllerView(podium, 'p1').phaseAt;
+    for (const step of [1, 2, 3]) {
+      expect(podium.phase.id).toBe('podium');
+      expect(podium.podiumStep).toBe(step);
+      for (const id of ['p1', 'p2', 'spectator']) {
+        const view = game.controllerView(podium, id);
+        expect(view.phaseAt).toBe(phaseAt);
+        expect(view.screen).toBe(`podium-${step}`);
+      }
+      podium = kit.timer(podium);
+    }
+    expect(podium.phase.id).toBe('done');
+    expect(game.controllerView(podium, 'p1').screen).toBe('done');
+    expect(game.controllerView(podium, 'spectator').screen).toBe('done');
+  });
+
+  it('retains all eight original color slots when final standings reverse the race order', () => {
+    const players = testPlayers(8);
+    let race = kit.start({ players, settings: { questions: 12 } });
+    expect(game.tvView(race).lanes.map((lane) => lane.colorSlot)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+    for (let seat = 0; seat < players.length; seat++) {
+      const id = players[seat]!.id;
+      for (let n = 0; n <= seat; n++) race = next(answer(race, id), id);
+    }
+    const podium = kit.vip(race, 'skip', race.clock + 10);
+    const done = kit.vip(podium, 'end', race.clock + 20);
+    expect(done.phase.id).toBe('done');
+    for (const state of [race, podium, done]) {
+      for (const view of [game.tvView(state), game.controllerView(state, 'p1')]) {
+        const ranked = [...view.lanes].sort((a, b) => b.score - a.score);
+        expect(ranked.map((lane) => lane.id)).toEqual([...players].reverse().map((p) => p.id));
+        expect(ranked.map((lane) => lane.colorSlot)).toEqual([8, 7, 6, 5, 4, 3, 2, 1]);
+      }
+    }
+  });
+});
+
 describe('fair freeze and reconnect', () => {
+  it('attributes a freeze only to its victim using the source public name', () => {
+    let s = kit.start({ players: testPlayers(3) });
+    expect(Object.values(s.runners).map((runner) => runner.frozenBy)).toEqual([null, null, null]);
+    for (let n = 0; n < 3; n++) s = next(answer(s));
+    s = power(s, 'freeze', 'p2');
+    expect(s.runners.p2!.frozenBy).toBe('p1');
+    expect(game.controllerView(s, 'p2').frozenBy).toBe('Ana');
+    for (const id of ['p1', 'p3', 'spectator', '__proto__'])
+      expect(game.controllerView(s, id).frozenBy).toBeNull();
+    const tv = game.tvView(s);
+    expect(JSON.stringify(tv)).not.toMatch(/frozenBy|freezeUntil|runners|energy|feedback/);
+    for (const view of [tv, game.controllerView(s, 'p1'), game.controllerView(s, 'p2')]) {
+      for (const lane of view.lanes) {
+        expect(lane).not.toHaveProperty('frozenBy');
+        expect(lane).not.toHaveProperty('freezeUntil');
+      }
+    }
+  });
+  it('hides attribution at expiry and outside the race even with a remaining freeze', () => {
+    const s = power(three(), 'freeze', 'p2');
+    const until = s.runners.p2!.freezeUntil;
+    const near = kit.timer(s, until - 1);
+    expect(game.controllerView(near, 'p2').frozenBy).toBe('Ana');
+    const expired = answer(near, 'p2', true, until);
+    expect(expired.runners.p2!.score).toBe(100);
+    expect(game.controllerView(expired, 'p2').frozenBy).toBeNull();
+    expect(game.tvView(expired).lanes.find((lane) => lane.id === 'p2')!.frozen).toBe(false);
+    const podium = kit.vip(s, 'skip', s.clock + 100);
+    expect(podium.clock).toBeLessThan(until);
+    expect(game.controllerView(podium, 'p2').frozenBy).toBeNull();
+    const done = kit.vip(s, 'end', s.clock + 100);
+    expect(game.controllerView(done, 'p2').frozenBy).toBeNull();
+  });
+  it('preserves attribution and its deadline when the victim and source reconnect', () => {
+    const s = power(three(), 'freeze', 'p2');
+    const droppedVictim = kit.player(s, 'p2', false, undefined, s.clock + 10);
+    const returnedVictim = kit.player(droppedVictim, 'p2', true, undefined, s.clock + 100);
+    const droppedSource = kit.player(returnedVictim, 'p1', false, undefined, s.clock + 110);
+    const returnedSource = kit.player(droppedSource, 'p1', true, undefined, s.clock + 200);
+    expect(returnedSource.runners.p2).toEqual(s.runners.p2);
+    expect(game.controllerView(returnedSource, 'p2')).toMatchObject({
+      frozenBy: 'Ana',
+      freezeUntil: s.runners.p2!.freezeUntil,
+    });
+    expect(answer(returnedSource, 'p2', true, s.runners.p2!.freezeUntil - 1)).toBe(returnedSource);
+  });
+  it('refuses to replace an active freeze but replaces the source after it expires', () => {
+    let s = kit.start({ players: testPlayers(3) });
+    for (const id of ['p1', 'p3']) for (let n = 0; n < 3; n++) s = next(answer(s, id), id);
+    s = power(s, 'freeze', 'p2');
+    const request = { type: 'power' as const, power: 'freeze' as const, charge: 1, target: 'p2' };
+    expect(kit.input(s, 'p3', request, s.clock + 10)).toBe(s);
+    expect(s.runners.p3!.energy).toBe(1);
+    expect(game.controllerView(s, 'p2').frozenBy).toBe('Ana');
+    const expired = kit.timer(s, s.runners.p2!.freezeUntil);
+    expect(game.controllerView(expired, 'p2').frozenBy).toBeNull();
+    const refrozen = kit.input(expired, 'p3', request, expired.clock + 10);
+    expect(refrozen.runners.p2).toMatchObject({
+      frozenBy: 'p3',
+      freezeUntil: refrozen.clock + 3000,
+    });
+    expect(refrozen.runners.p3!.energy).toBe(0);
+    expect(game.controllerView(refrozen, 'p2').frozenBy).toBe('Cy');
+    expect(game.controllerView(refrozen, 'p1').frozenBy).toBeNull();
+  });
   it('freezes for exactly three seconds, spends one energy, never removes points', () => {
     const s = power(three(), 'freeze', 'p2');
     const until = s.runners.p2!.freezeUntil;
@@ -201,6 +384,7 @@ describe('fair freeze and reconnect', () => {
   });
   it('refuses self, stranger, finished, offline and already frozen targets without spending', () => {
     const s = three();
+    expect(s.runners.p2!.frozenBy).toBeNull();
     for (const target of ['p1', 'ghost', '__proto__']) expect(power(s, 'freeze', target)).toBe(s);
     expect(power(s, 'freeze')).toBe(s);
     const offline = kit.player(s, 'p2', false, undefined, s.clock + 1);
@@ -208,19 +392,26 @@ describe('fair freeze and reconnect', () => {
     const finished = { ...s, runners: { ...s.runners, p2: { ...s.runners.p2!, answered: 6 } } };
     expect(power(finished, 'freeze', 'p2')).toBe(finished);
     const frozen = power(s, 'freeze', 'p2');
-    const armed = {
+    const armed: State = {
       ...frozen,
       runners: { ...frozen.runners, p1: { ...frozen.runners.p1!, energy: 1 } },
     };
     expect(power(armed, 'freeze', 'p2')).toBe(armed);
+    expect(armed.runners.p2!.frozenBy).toBe('p1');
   });
   it('pause shifts both clocks and freezes and never changes timer identity', () => {
     const s = power(three(), 'freeze', 'p2');
     const paused = kit.vip(s, 'pause', s.clock + 100);
     expect(answer(paused, 'p2', true, s.clock + 9999)).toBe(paused);
+    expect(game.controllerView(paused, 'p2').frozenBy).toBe('Ana');
     const resumed = kit.vip(paused, 'resume', s.clock + 5100);
     expect(resumed.endsAt).toBe(s.endsAt + 5000);
     expect(resumed.runners.p2!.freezeUntil).toBe(s.runners.p2!.freezeUntil + 5000);
+    expect(resumed.runners.p2!.frozenBy).toBe('p1');
+    expect(game.controllerView(resumed, 'p2').frozenBy).toBe('Ana');
+    const expiry = resumed.runners.p2!.freezeUntil;
+    expect(answer(resumed, 'p2', true, expiry - 1)).toBe(resumed);
+    expect(game.controllerView(answer(resumed, 'p2', true, expiry), 'p2').frozenBy).toBeNull();
     expect(resumed.phase.startedAt).toBe(s.phase.startedAt);
     expect(game.tvView(resumed).phaseAt).toBe(game.tvView(s).phaseAt);
     expect(kit.vip(paused, 'skip', s.clock + 5100).phase.id).toBe('podium');
@@ -243,6 +434,74 @@ describe('fair freeze and reconnect', () => {
         s.clock + 60,
       ).runners.p1,
     ).toEqual(s.runners.p1);
+  });
+  it('a permanent leaver returns as departed, retains results and cannot resume input', () => {
+    let feedback = kit.start();
+    for (let n = 0; n < 3; n++) {
+      feedback = answer(feedback);
+      if (n < 2) feedback = next(feedback);
+    }
+    const feedbackReturn = kit.player(
+      kit.player(feedback, 'p1', false, 'left', feedback.clock + 10),
+      'p1',
+      true,
+      undefined,
+      feedback.clock + 50,
+    );
+    expect(game.controllerView(feedbackReturn, 'p1').feedback).toEqual(
+      feedback.runners.p1!.feedback,
+    );
+    expect(kit.input(feedbackReturn, 'p1', { type: 'next', index: 3 }, feedback.clock + 60)).toBe(
+      feedbackReturn,
+    );
+
+    const before = next(feedback);
+    const q = game.controllerView(before, 'p1').question!;
+    expect(q).not.toBeNull();
+    const returned = kit.player(
+      kit.player(before, 'p1', false, 'left', before.clock + 10),
+      'p1',
+      true,
+      undefined,
+      before.clock + 50,
+    );
+    expect(returned.phase.id).toBe('race');
+    const view = game.controllerView(returned, 'p1');
+    expect(view).toMatchObject({
+      me: { role: 'player' },
+      departed: true,
+      question: null,
+      score: 360,
+      finished: false,
+    });
+    expect(view.lanes.find((lane) => lane.id === 'p1')).toMatchObject({
+      departed: true,
+      connected: false,
+      score: 360,
+    });
+    expect(view.players.find((player) => player.id === 'p1')!.status).toBe('waiting');
+    expect(view.players.find((player) => player.id === 'p2')!.status).toBe('active');
+    expect(game.controllerView(returned, 'p2').departed).toBe(false);
+    expect(game.controllerView(returned, 'spectator').departed).toBe(false);
+    expect(
+      kit.input(
+        returned,
+        'p1',
+        { type: 'answer', questionId: q.id, index: q.index, choice: before.deck[3]!.correctIndex },
+        before.clock + 60,
+      ),
+    ).toBe(returned);
+    expect(power(returned, 'double')).toBe(returned);
+    expect(power(returned, 'freeze', 'p2')).toBe(returned);
+    const done = finishGame(game, returned, 600) as State | null;
+    expect(done?.phase.id).toBe('done');
+    expect(game.controllerView(done!, 'p1')).toMatchObject({
+      me: { role: 'player' },
+      departed: true,
+      score: 360,
+      rank: 1,
+    });
+    expect(game.results(done!)!.scores.p1).toBe(360);
   });
 });
 

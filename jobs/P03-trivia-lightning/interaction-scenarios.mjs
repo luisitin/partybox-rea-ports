@@ -339,4 +339,72 @@ export async function runInteractionScenarios(tools) {
     { statuses: state.statuses, sent: state.sent },
   );
   await snapshot('next-accepted');
+
+  await evaluate('window.harness.reset("departed")');
+  state = await readUi();
+  check(
+    'returned permanent leaver watches retained score without input controls',
+    state.text.includes('You left this race') &&
+      state.text.includes('Left race') &&
+      state.text.includes(String(views.departed.score)) &&
+      state.answers.length === 0 &&
+      state.powers.length === 0 &&
+      state.target === null &&
+      state.next === null &&
+      state.sent.length === 0 &&
+      state.cues.length === 0,
+    { header: state.header, sent: state.sent, cues: state.cues },
+  );
+  await snapshot('departed');
+
+  await evaluate('window.harness.reset("freezeVictim")');
+  state = await readUi();
+  check(
+    'victim sees the named rival and cannot answer while frozen',
+    status(state).includes(views.freezeVictim.frozenBy) &&
+      status(state).includes('froze you') &&
+      state.answers.length === 4 &&
+      state.answers.every((button) => button.disabled),
+    state.statuses,
+  );
+  await snapshot('freeze-victim');
+
+  await reset();
+  await click('[aria-label="Choose an answer"] button', answer);
+  await waitFor((next) => next.sent.length === 1, 'answer before cue audit');
+  await evaluate('new Promise(resolve=>setTimeout(resolve,150))');
+  await setView('answerAccepted');
+  state = await waitFor((next) => next.cues.length === 1, 'own correct verdict cue');
+  const vibrationCount = state.vibrations.length;
+  check('one accepted correct answer cues once', state.cues[0] === 'correct', state.cues);
+  for (const name of ['answerAccepted', 'podiumAccepted', 'doneAccepted']) {
+    // Space pushes beyond the SDK haptic dedup window, so it cannot mask a replay.
+    await evaluate('new Promise(resolve=>setTimeout(resolve,150))');
+    await setView(name);
+    state = await readUi();
+    check(
+      `${name}: retained verdict does not replay sound or haptics`,
+      state.cues.length === 1 && state.vibrations.length === vibrationCount,
+      { cues: state.cues, vibrations: state.vibrations },
+    );
+  }
+  check(
+    'terminal stage keeps the last answer and explanation available',
+    state.text.includes(views.doneAccepted.feedback.answer) &&
+      state.text.includes(views.doneAccepted.feedback.explanation),
+    state.text,
+  );
+  await snapshot('terminal-feedback');
+
+  await reset();
+  await setView('podiumAccepted');
+  state = await waitFor((next) => next.cues.length === 1, 'direct answer-to-podium verdict');
+  check(
+    'a verdict first received with podium still cues once',
+    state.cues[0] === 'correct' && state.text.includes(views.podiumAccepted.feedback.answer),
+    state.cues,
+  );
+  await setView('doneAccepted');
+  state = await readUi();
+  check('direct podium verdict stays single on done', state.cues.length === 1, state.cues);
 }

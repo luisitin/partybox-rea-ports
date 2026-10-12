@@ -31,28 +31,36 @@ export function RaceTrack({ lanes, total, compact, meId, ranked }: RaceTrackProp
         const leading = !ranked && top > 0 && lane.score === top;
         const status = ranked
           ? tied
-            ? L('Tied {rank} · {n} correct', { rank, n: lane.correct })
-            : L('Place {rank} · {n} correct', { rank, n: lane.correct })
+            ? lane.departed
+              ? L('Tied {rank} · Left race', { rank })
+              : L('Tied {rank} · {n} correct', { rank, n: lane.correct })
+            : lane.departed
+              ? L('Place {rank} · Left race', { rank })
+              : L('Place {rank} · {n} correct', { rank, n: lane.correct })
           : leading
             ? L('{lead} · {status}', {
-                lead: tied ? L('★ Tied lead') : L('★ Leader'),
-                status: lane.finished
-                  ? L('Finished')
-                  : lane.frozen
-                    ? L('Frozen')
-                    : !lane.connected
-                      ? L('Offline')
-                      : L('{n}/{total}', { n: lane.answered, total }),
+                lead: tied ? (lane.departed ? L('★ Tied') : L('★ Tied lead')) : L('★ Leader'),
+                status: lane.departed
+                  ? L('Left race')
+                  : lane.finished
+                    ? L('Finished')
+                    : lane.frozen
+                      ? L('Frozen')
+                      : !lane.connected
+                        ? L('Offline')
+                        : L('{n}/{total}', { n: lane.answered, total }),
               })
-            : lane.finished
-              ? L('✓ Finished')
-              : lane.frozen
-                ? L('❄ Frozen')
-                : !lane.connected
-                  ? L('↻ Reconnecting')
-                  : L('{n} / {total} answered', { n: lane.answered, total });
+            : lane.departed
+              ? L('Left race')
+              : lane.finished
+                ? L('✓ Finished')
+                : lane.frozen
+                  ? L('❄ Frozen')
+                  : !lane.connected
+                    ? L('↻ Reconnecting')
+                    : L('{n} / {total} answered', { n: lane.answered, total });
         const css: CSSProperties = {
-          ['--pb-lane-color' as string]: `var(--pb-player-${(slot % 8) + 1})`,
+          ['--pb-lane-color' as string]: `var(--pb-player-${lane.colorSlot ?? (slot % 8) + 1})`,
           ['--pb-runner-progress' as string]: progress,
         };
         return (

@@ -30,6 +30,32 @@ function phone(value: TriviaControllerView, phoneOnly: boolean): string {
   );
 }
 
+function threeCorrect(): ReturnType<typeof game.init> {
+  let current = state;
+  for (let i = 0; i < 3; i++) {
+    const question = current.deck[current.runners.p1!.answered]!;
+    current = game.reduce(current, {
+      type: 'input',
+      now: 1100 + i * 200,
+      playerId: 'p1',
+      input: {
+        type: 'answer',
+        questionId: question.id,
+        index: current.runners.p1!.answered,
+        choice: question.correctIndex,
+      },
+    });
+    if (i < 2)
+      current = game.reduce(current, {
+        type: 'input',
+        now: 1200 + i * 200,
+        playerId: 'p1',
+        input: { type: 'next', index: current.runners.p1!.answered },
+      });
+  }
+  return current;
+}
+
 describe('Trivia Lightning screens', () => {
   it.each([false, true])('questions are on active phones (phone-only=%s)', (phoneOnly) => {
     const html = phone(view, phoneOnly);
@@ -151,6 +177,99 @@ describe('Trivia Lightning screens', () => {
     );
     expect(html).toContain('No rival available');
     expect(html).toMatch(/<select[^>]+disabled=""/);
+  });
+
+  it('a permanent leaver who returns sees retained points and the whole race without controls', () => {
+    const before = threeCorrect();
+    const prompt = before.deck[3]!.prompt;
+    const left = game.reduce(before, {
+      type: 'player',
+      now: 1800,
+      playerId: 'p1',
+      connected: false,
+      gone: 'left',
+    });
+    const returned = game.reduce(left, {
+      type: 'player',
+      now: 1900,
+      playerId: 'p1',
+      connected: true,
+    });
+    const value = game.controllerView(returned, 'p1');
+    expect(value.departed).toBe(true);
+    expect(value.question).toBeNull();
+    const html = phone(value, true);
+    expect(html).toContain('You left this race');
+    expect(html).toContain('360 points');
+    expect(html).toContain('Your score stays · Watch the race here');
+    expect(html).toContain('★ Leader · Left race');
+    expect(html).not.toContain('Final answer');
+    expect(html).not.toContain(renderToStaticMarkup(<h2>{prompt}</h2>));
+    expect(html).not.toContain('<button');
+    expect(html).not.toContain('<select');
+    expect(html.match(/role="progressbar"/g)).toHaveLength(8);
+    for (const player of players) expect(html).toContain(player.name);
+  });
+
+  it('a temporary disconnect returns to playable controls', () => {
+    const before = game.reduce(threeCorrect(), {
+      type: 'input',
+      now: 1700,
+      playerId: 'p1',
+      input: { type: 'next', index: 3 },
+    });
+    const disconnected = game.reduce(before, {
+      type: 'player',
+      now: 1800,
+      playerId: 'p1',
+      connected: false,
+    });
+    const returned = game.reduce(disconnected, {
+      type: 'player',
+      now: 1900,
+      playerId: 'p1',
+      connected: true,
+    });
+    const value = game.controllerView(returned, 'p1');
+    expect(value.departed).toBe(false);
+    expect(value.question).not.toBeNull();
+    const html = phone(value, true);
+    expect(html).toContain(renderToStaticMarkup(<h2>{value.question!.prompt}</h2>));
+    expect(html).toContain('<button');
+    expect(html).toContain('<select');
+    expect(html).not.toContain('You left this race');
+  });
+
+  it.each([false, true])(
+    'a frozen phone names its rival without exposing a private answer (phone-only=%s)',
+    (phoneOnly) => {
+      const ready = threeCorrect();
+      const frozen = game.reduce(ready, {
+        type: 'input',
+        now: 1700,
+        playerId: 'p1',
+        input: { type: 'power', power: 'freeze', target: 'p2', charge: 1 },
+      });
+      const value = game.controllerView(frozen, 'p2');
+      const html = phone({ ...value, paused: true, clockHeldAt: 1700 }, phoneOnly);
+      expect(html).toContain('Racer 1 froze you · 3s');
+      expect(html.match(/<button[^>]+disabled=""/g)).toHaveLength(6);
+      expect(html).not.toContain('Final answer');
+      expect(html).toContain(renderToStaticMarkup(<h2>{value.question!.prompt}</h2>));
+    },
+  );
+
+  it('permanent departure takes priority over frozen and reconnecting labels', () => {
+    const lanes = rankingLanes.map((lane) =>
+      lane.id === 'p3'
+        ? { ...lane, score: 840, departed: true, connected: false, frozen: true }
+        : lane,
+    );
+    const html = renderToStaticMarkup(<RaceTrack lanes={lanes} total={12} compact />);
+    expect(html).toContain('★ Tied · Left race');
+    const row = html.slice(html.indexOf('title="Racer 3"'), html.indexOf('title="Racer 4"'));
+    expect(row).not.toContain('Frozen');
+    expect(row).not.toContain('Reconnecting');
   });
 
   it.each([false, true])(
@@ -315,6 +434,38 @@ describe('Trivia Lightning screens', () => {
     expect(html).not.toContain('<button');
     expect(html.match(/role="progressbar"/g)).toHaveLength(8);
   });
+
+  it.each([false, true])(
+    'terminal standings retain the last explanation without a reading deadline (phone-only=%s)',
+    (phoneOnly) => {
+      const value = game.controllerView(threeCorrect(), 'p1');
+      const html = phone({ ...value, phaseId: 'done', podiumStep: 3, rank: 1 }, phoneOnly);
+      expect(html).toContain(value.feedback!.answer);
+      expect(html).toContain(value.feedback!.explanation);
+      expect(html).toContain('Final answer correct');
+      expect(html.match(/role="progressbar"/g)).toHaveLength(8);
+      expect(html).not.toContain('<button');
+    },
+  );
+
+  it.each([false, true])(
+    'track colours follow seats when scores reorder the final board (compact=%s)',
+    (compact) => {
+      const lanes = rankingLanes.map((lane) => ({ ...lane, frozen: false }));
+      const colors = (items: typeof lanes) =>
+        [
+          ...renderToStaticMarkup(
+            <RaceTrack lanes={items} total={12} compact={compact} ranked />,
+          ).matchAll(
+            /style="--pb-lane-color:var\(--pb-player-(\d+)\)[^"]*"[^>]*>.*?title="([^"]+)"/g,
+          ),
+        ]
+          .map((entry) => [entry[2], entry[1]])
+          .sort();
+      expect(colors(lanes)).toHaveLength(8);
+      expect(colors([...lanes].sort((a, b) => b.score - a.score))).toEqual(colors(lanes));
+    },
+  );
 
   it('a powers-disabled game promises no unavailable powers', () => {
     const html = phone({ ...view, powersEnabled: false }, true);

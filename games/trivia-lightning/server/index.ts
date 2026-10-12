@@ -33,6 +33,7 @@ import type { Feedback, Input, Runner, State } from './types';
 const manifest = gameManifestSchema.parse(manifestJson);
 export interface Lane {
   id: string;
+  colorSlot: number;
   name: string;
   avatarId: string;
   score: number;
@@ -40,6 +41,7 @@ export interface Lane {
   correct: number;
   finished: boolean;
   connected: boolean;
+  departed: boolean;
   frozen: boolean;
 }
 interface RaceView {
@@ -60,7 +62,9 @@ export interface TriviaControllerView extends ControllerView, RaceView {
   energy: number;
   double: boolean;
   freezeUntil: number;
+  frozenBy: string | null;
   finished: boolean;
+  departed: boolean;
   rank: number | null;
 }
 
@@ -82,6 +86,7 @@ function init(ctx: InitContext): State {
         energy: 0,
         double: false,
         freezeUntil: 0,
+        frozenBy: null,
         feedback: null,
       },
     ]),
@@ -139,7 +144,7 @@ const reduce = composeReduce<State, Input>({
 const statusOf =
   (state: State) =>
   (id: string): PlayerStatus =>
-    state.phase.id !== 'race'
+    state.left.includes(id) || state.phase.id !== 'race'
       ? 'waiting'
       : (state.runners[id]?.answered ?? 0) >= state.deck.length
         ? 'submitted'
@@ -150,10 +155,11 @@ function common(state: State): RaceView {
     packTitle: PACKS[state.cfg.pack]?.title ?? PACKS.general!.title,
     podiumStep: state.podiumStep,
     powersEnabled: state.cfg.powers,
-    lanes: Object.values(state.players).map((p) => {
+    lanes: Object.values(state.players).map((p, slot) => {
       const r = state.runners[p.id]!;
       return {
         id: p.id,
+        colorSlot: (slot % 8) + 1,
         name: p.name,
         avatarId: p.avatarId,
         score: r.score,
@@ -161,6 +167,7 @@ function common(state: State): RaceView {
         correct: r.correct,
         finished: r.answered >= state.deck.length,
         connected: p.connected && !state.left.includes(p.id),
+        departed: state.left.includes(p.id),
         frozen: state.phase.id === 'race' && r.freezeUntil > state.clock,
       };
     }),
@@ -176,12 +183,27 @@ function tvView(state: State): TriviaTvView {
 function controllerView(state: State, id: string): TriviaControllerView {
   const player = hasPlayer(state, id);
   const r = player ? state.runners[id] : undefined;
+  const departed = player && state.left.includes(id);
   const q =
-    r && !r.feedback && r.answered < state.deck.length && state.phase.id === 'race'
+    r && !departed && !r.feedback && r.answered < state.deck.length && state.phase.id === 'race'
       ? state.deck[r.answered]
       : undefined;
+  const screen =
+    state.phase.id === 'race'
+      ? departed
+        ? 'departed'
+        : !r
+          ? 'watch-race'
+          : r.answered >= state.deck.length
+            ? 'finished'
+            : r.feedback
+              ? `feedback-${r.answered}`
+              : `question-${r.answered}`
+      : state.phase.id === 'podium'
+        ? `podium-${state.podiumStep}`
+        : 'done';
   return {
-    ...controllerEnvelope(state, manifest.id, id, { statusOf: statusOf(state) }),
+    ...controllerEnvelope(state, manifest.id, id, { statusOf: statusOf(state), screen }),
     ...common(state),
     deadline: state.phase.id === 'race' ? state.endsAt : state.phase.deadline,
     question: q
@@ -195,7 +217,12 @@ function controllerView(state: State, id: string): TriviaControllerView {
     energy: r?.energy ?? 0,
     double: r?.double ?? false,
     freezeUntil: r?.freezeUntil ?? 0,
+    frozenBy:
+      r && !departed && state.phase.id === 'race' && r.freezeUntil > state.clock && r.frozenBy
+        ? (state.players[r.frozenBy]?.name ?? null)
+        : null,
     finished: r ? r.answered >= state.deck.length : false,
+    departed,
     rank:
       r && state.phase.id !== 'race'
         ? 1 + Object.values(state.runners).filter((other) => other.score > r.score).length

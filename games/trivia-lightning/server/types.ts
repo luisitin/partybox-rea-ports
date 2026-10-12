@@ -37,6 +37,7 @@ export interface Runner {
   energy: number;
   double: boolean;
   freezeUntil: number;
+  frozenBy: string | null;
   feedback: Feedback | null;
 }
 export interface State extends GameStateBase {

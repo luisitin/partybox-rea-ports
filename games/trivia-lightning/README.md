@@ -52,6 +52,7 @@ does not end another connected player's race and gives no extra points.
 
 - State survives reconnect with cursor, verdict, points and power intact; dropped seats are excluded from the completion gate.
 - Permanent leavers retain results and cannot return to input. All seats gone ends the race immediately.
+- A permanent leaver who returns watches the public race with retained points and a Left race label, without answer or power controls.
 - Timer beats every 500 ms; the visible clock is the race cap. Early/stale timers do nothing.
   An input overtaking a queued beat rearms the next deadline; resume closes an already expired cap.
 - At or after the cap an input closes the race without scoring. Unanswered questions score zero.
@@ -62,6 +63,11 @@ does not end another connected player's race and gives no extra points.
 - Repeated power requests cannot spend twice or consume a later earned charge. Held energy stays capped at one and uses the latest earning milestone.
   Finished, offline, self and already frozen targets are refused without spending energy.
 - The freeze picker lists eligible rivals by points, showing place, score and full name; a chosen rival stays selected while eligible.
+- A frozen phone names the rival who froze it and counts down the remaining wait. Pause and reconnect preserve that attribution; expiry clears it from the view.
+- An own-answer verdict cues once while the controller stays mounted, including retained feedback through podium and results.
+- The last own-answer explanation remains on the terminal phone stage for reading at the player's pace.
+- Question, feedback, finished/departed and podium-step screens have semantic announcement keys; clock ticks do not trigger fresh question announcements.
+- Each player's track colour stays with their original seat when final standings reorder the lanes.
 - The track measures answers, while positive-score leaders carry a Leader or Tied lead label; finishing with zero points never marks a leader.
 
 ## Settings

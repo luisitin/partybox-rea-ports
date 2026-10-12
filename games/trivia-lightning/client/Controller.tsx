@@ -34,15 +34,17 @@ export function Controller({
   const livePlace = 1 + view.lanes.filter((lane) => lane.score > view.score).length;
   const liveTied = view.lanes.filter((lane) => lane.score === view.score).length > 1;
   useEffect(() => {
-    if (!view.feedback || view.me.role !== 'player') return;
-    const feedbackKey = `${view.phaseAt}:${view.answered}`;
+    if (view.phaseId === 'race' && view.answered === 0) cued.current = '';
+    if (!view.feedback || view.me.role !== 'player' || view.departed) return;
+    // A retained verdict is the same answer through pause, podium and results pushes.
+    const feedbackKey = `${view.me.id}:${view.answered}`;
     if (cued.current === feedbackKey) return;
     cued.current = feedbackKey;
     buzz(view.feedback.correct ? [30, 40, 30] : 120);
     if (view.feedback.correct) play('correct');
-  }, [view.phaseAt, view.answered, view.feedback, view.me.role, play]);
+  }, [view.phaseId, view.answered, view.feedback, view.me.id, view.me.role, view.departed, play]);
 
-  if (view.me.role !== 'player' || view.phaseId !== 'race' || view.finished)
+  if (view.me.role !== 'player' || view.phaseId !== 'race' || view.finished || view.departed)
     return <PhoneStage view={view} seconds={seconds} />;
 
   return (
@@ -132,7 +134,9 @@ export function Controller({
       </div>
       <p className={styles.status} role="status">
         {freeze > 0
-          ? L('❄ Frozen · Back in {n}s', { n: freeze })
+          ? view.frozenBy
+            ? L('❄ {name} froze you · {n}s', { name: view.frozenBy, n: freeze })
+            : L('❄ Frozen · Back in {n}s', { n: freeze })
           : nextWaiting
             ? L('Sending Next…')
             : nextRetry
