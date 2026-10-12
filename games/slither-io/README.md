@@ -1,8 +1,8 @@
-# Snake Royale
+# Slither.io
 
 ## Overview
 
-An original PartyBox snake arena inspired by browser growth-and-cutoff games. Everyone moves continuously on the same 160 × 100 map. Eat sparks, spend size to sprint past rivals, and make them hit your body. A crashed snake becomes food and returns after two seconds. Three 90-second rounds; size at each round end becomes match points. No original assets, code or product name are used.
+The PartyBox Slither.io port uses original implementation and art. Everyone moves continuously on the same 160 × 100 map. Eat sparks, spend size to sprint past rivals, and make them hit your body. A crashed snake becomes food and returns after two seconds. Three 90-second rounds; size at each round end becomes match points. The official name follows the owner's naming table; no original assets or code are used.
 
 ## Players
 
@@ -18,7 +18,13 @@ An original PartyBox snake arena inspired by browser growth-and-cutoff games. Ev
 
 ### Phone only
 
-Every phase includes the public arena on the phone. Play puts controls beneath it; score and done show all eight standings. Remote players who cannot see the TV receive the same stage. Spectators see the arena and standings without controls, including in TV rooms. No phone-only text directs a player to a TV.
+| Phase | Player phone                                                                       | Spectator phone                                  |
+| ----- | ---------------------------------------------------------------------------------- | ------------------------------------------------ |
+| play  | Public arena, eight numbered sizes, round clock and steering/boost below the stage | Public arena, eight sizes and clock; no controls |
+| score | Frozen arena, your banked gain and all eight match standings                       | Same public arena and standings                  |
+| done  | Winner or tie, final arena, all standings and your shared rank                     | Same public result without a personal rank       |
+
+Remote players who cannot see the TV receive this same stage. Spectators receive the stage in every room. No phone-only text directs a player to a TV.
 
 ## Inputs
 

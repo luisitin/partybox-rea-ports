@@ -1,4 +1,4 @@
-﻿# P06 Snake Royale research
+﻿# P06 Slither.io research
 
 Research date: 2026-10-11. Mechanics research only; no original code, artwork, audio, or fonts were copied.
 
@@ -10,7 +10,7 @@ Independent factual sources include the original developer's App Store descripti
 
 ## Mechanics established by two independent sources
 
-| Finding                                                                                                      | Independent evidence                                                                 | Consequence for Snake Royale                                                                 |
+| Finding                                                                                                      | Independent evidence                                                                 | Consequence for Slither.io                                                                   |
 | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
 | Eating pellets increases snake length; length is the objective.                                              | S3 introduction and methods; S4 sections 2 and 3.2.                                  | Keep food, growth, and visible current mass central.                                         |
 | A head hitting another snake's body dies; large size does not make a snake immune to a small rival's cutoff. | S1 developer description; S3 introduction; S4 sections 2 and 3.5.                    | No mass-comparison eating rule. A small snake can win a cutoff.                              |
@@ -25,7 +25,7 @@ Self-crossing is safe in S4's original-mechanics discussion. S1 describes the le
 
 The official public client sends boost-on or boost-off intent, then receives server-authoritative speed and body-size changes. It does not expose an authoritative boost mass-loss rate or minimum mass. Its onboarding says a longer snake can boost. Default movement constants are replaced by the server's initial setup message; the older independent protocol study confirms this. Consequently neither client defaults nor a clone's numerical rates are evidence for an exact current original boost multiplier or cost.
 
-Do not import S4's half-second loss interval: that number belongs to its AR implementation. Snake Royale's speed multiplier, drain rate, minimum mass, turn rate, and corpse conversion are explicit tuning choices. A roughly twofold boost with a visible continuous mass cost is a reasonable starting point for short cutoffs; test with 2, 4, and 8 players. Showing the minimum and cost on the phone makes the trade understandable.
+Do not import S4's half-second loss interval: that number belongs to its AR implementation. Slither.io's speed multiplier, drain rate, minimum mass, turn rate, and corpse conversion are explicit tuning choices. A roughly twofold boost with a visible continuous mass cost is a reasonable starting point for short cutoffs; test with 2, 4, and 8 players. Showing the minimum and cost on the phone makes the trade understandable.
 
 Precise original head-head ordering is not established by these primary sources. Public discussions disagree and the current browser client delegates deaths to its server. Use symmetric mutual death for simultaneous head-head contact, computed from the same pre-collision step, as an intentional fairness adaptation. Do not claim that this reproduces original arbitration. Test exchanged player order, crossing trajectories, and simultaneous food/death events.
 

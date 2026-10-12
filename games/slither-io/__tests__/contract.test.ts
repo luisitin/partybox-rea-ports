@@ -6,7 +6,7 @@ vi.mock('../../../packages/game-sdk/src/contract-tests/load', async (importOrigi
     await importOriginal<typeof import('../../../packages/game-sdk/src/contract-tests/load')>();
   return {
     ...actual,
-    listGameIds: () => ['snake-royale'],
+    listGameIds: () => ['slither-io'],
     shardIds: (ids: readonly string[]) => [...ids],
   };
 });

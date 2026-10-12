@@ -1,5 +1,7 @@
 // Seeded event chains exercise steering, clocks, connection changes and VIP controls.
-import { expect, it } from 'vitest';
+import { ok, strictEqual } from 'node:assert/strict';
+import { performance } from 'node:perf_hooks';
+import { it } from 'vitest';
 import fc from 'fast-check';
 import type { GameEvent } from '@partybox/game-sdk';
 import { game } from '../server/index';
@@ -21,6 +23,8 @@ const lifecycle = [
 it.each([1, 2, 3])(
   'seed %i plus 1000 generated seeds preserves JSON, purity and replay',
   (propertySeed) => {
+    const begun = performance.now();
+    let traces = 0;
     fc.assert(
       fc.property(
         fc.integer({ min: 1, max: 0x7fffffff }),
@@ -87,28 +91,39 @@ it.each([1, 2, 3])(
             const originalB = b;
             a = game.reduce(a, event);
             b = game.reduce(b, event);
-            expect(JSON.stringify(original)).toBe(before);
-            expect(JSON.stringify(originalB)).toBe(beforeB);
-            expect(JSON.stringify(event)).toBe(eventBefore);
+            strictEqual(JSON.stringify(original), before, 'First source is immutable');
+            strictEqual(JSON.stringify(originalB), beforeB, 'Replay source is immutable');
+            strictEqual(JSON.stringify(event), eventBefore, 'Event is immutable');
             const serialized = JSON.stringify(a);
-            expect(serialized).toBe(JSON.stringify(b));
-            expect(JSON.stringify(JSON.parse(serialized))).toBe(serialized);
-            expect(JSON.stringify(game.tvView(a)).length).toBeLessThan(64 * 1024);
+            strictEqual(serialized, JSON.stringify(b), 'Byte-identical deterministic replay');
+            strictEqual(JSON.stringify(JSON.parse(serialized)), serialized, 'JSON state roundtrip');
+            ok(Buffer.byteLength(serialized, 'utf8') < 256 * 1024, 'State byte budget');
+            ok(
+              Buffer.byteLength(JSON.stringify(game.tvView(a)), 'utf8') < 64 * 1024,
+              'TV byte budget',
+            );
             for (const id of ['p0', 'p7', 'spectator', '__proto__']) {
               const view = JSON.stringify(game.controllerView(a, id));
-              expect(JSON.stringify(JSON.parse(view))).toBe(view);
+              strictEqual(JSON.stringify(JSON.parse(view)), view, 'Controller JSON roundtrip');
+              ok(Buffer.byteLength(view, 'utf8') < 64 * 1024, 'Controller byte budget');
             }
-            expect(a.world.food.length).toBeLessThanOrEqual(240);
-            expect(
+            ok(a.world.food.length <= 240, 'Food count remains bounded');
+            ok(
               a.world.snakes.every(
                 (s) =>
                   Number.isFinite(s.mass) && s.mass >= 8 && s.mass <= 90 && s.body.length <= 90,
               ),
-            ).toBe(true);
+              'Finite mass and bounded bodies',
+            );
           }
+          traces++;
         },
       ),
       { seed: propertySeed, numRuns: 1000 },
+    );
+    strictEqual(traces, 1000, 'All generated traces completed');
+    console.log(
+      `Slither.io properties seed ${propertySeed}: ${traces} complete traces in ${Math.round(performance.now() - begun)} ms.`,
     );
   },
   120_000,

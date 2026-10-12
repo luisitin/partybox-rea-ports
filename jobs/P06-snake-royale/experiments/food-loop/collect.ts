@@ -1,7 +1,7 @@
 // Reproduction collectors: frozen original and the current allocation-only optimization.
-import { distance2, rounded } from '../../../../games/snake-royale/server/geometry';
-import { MAX_MASS, RADIUS } from '../../../../games/snake-royale/server/types';
-import type { Food, Snake } from '../../../../games/snake-royale/server/types';
+import { distance2, rounded } from '../../../../games/slither-io/server/geometry';
+import { MAX_MASS, RADIUS } from '../../../../games/slither-io/server/types';
+import type { Food, Snake } from '../../../../games/slither-io/server/types';
 
 export function collectFoodFast(snakes: Snake[], items: Food[]): Food[] {
   const food: Food[] = [];

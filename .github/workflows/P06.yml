@@ -1,8 +1,8 @@
-name: P06 Snake Royale
+name: P06 Slither.io
 on:
   pull_request:
     paths:
-      - 'games/snake-royale/**'
+      - 'games/slither-io/**'
       - 'jobs/P06-snake-royale/**'
       - '.github/workflows/P06.yml'
 jobs:
@@ -20,4 +20,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm format
-      - run: pnpm vitest run games/snake-royale --maxWorkers=1
+      - run: pnpm vitest run games/slither-io --maxWorkers=1

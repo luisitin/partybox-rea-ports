@@ -1,4 +1,4 @@
-// Snake Royale's pure match definition and public stage/controller projections.
+// Slither.io's pure match definition and public stage/controller projections.
 import {
   composeReduce,
   controllerEnvelope,

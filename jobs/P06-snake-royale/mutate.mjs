@@ -1,7 +1,7 @@
 // Plant twenty semantic faults separately. Restore the exact source in finally after each run.
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-const base = 'games/snake-royale/server/';
+const base = 'games/slither-io/server/';
 const mutations = [
   ['ceil mass scores', 'scoring.ts', 'Math.floor(s.mass)', 'Math.ceil(s.mass)'],
   ['double round points', 'phases/score.ts', '(lastPoints[id] ?? 0)', '(lastPoints[id] ?? 0) * 2'],
@@ -64,8 +64,8 @@ for (const [name, path, from, to] of mutations) {
     const args = [
       'vitest',
       'run',
-      'games/snake-royale/server/rules.test.ts',
-      'games/snake-royale/__tests__/artifacts.test.tsx',
+      'games/slither-io/server/rules.test.ts',
+      'games/slither-io/__tests__/artifacts.test.tsx',
       '--maxWorkers=1',
       '--silent',
     ];

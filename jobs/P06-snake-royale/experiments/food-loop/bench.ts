@@ -1,7 +1,7 @@
 // Collector microbenchmark. Run sequentially with simulations and browsers closed.
 import assert from 'node:assert/strict';
 import { performance } from 'node:perf_hooks';
-import type { Food, Snake } from '../../../../games/snake-royale/server/types';
+import type { Food, Snake } from '../../../../games/slither-io/server/types';
 import { collectFoodFast, collectFoodReference } from './collect';
 
 const iterations = Number(process.env['REA_FOOD_BENCH_ITERATIONS'] ?? 1000);

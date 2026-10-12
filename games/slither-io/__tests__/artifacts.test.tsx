@@ -58,12 +58,12 @@ const css = (): string =>
   readFileSync('design/tokens.css', 'utf8') +
   mappedCss(readFileSync('packages/game-sdk/src/tv/Stage.module.css', 'utf8'), stageStyles) +
   modules
-    .map(([name, map]) => mappedCss(readFileSync(`games/snake-royale/client/${name}`, 'utf8'), map))
+    .map(([name, map]) => mappedCss(readFileSync(`games/slither-io/client/${name}`, 'utf8'), map))
     .join('\n');
 
 function documentHtml(body: string, surface: string): string {
   const tv = surface === 'tv';
-  return `<!doctype html><html lang="en" data-surface="${tv ? 'tv' : 'phone'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Snake Royale ${surface}</title><style>${css()}\n*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family)}#root{width:100%;height:100%;display:flex;flex-direction:column}button{font:inherit;color:inherit}</style></head><body><div id="root">${body}</div></body></html>`;
+  return `<!doctype html><html lang="en" data-surface="${tv ? 'tv' : 'phone'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Slither.io ${surface}</title><style>${css()}\n*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family)}#root{width:100%;height:100%;display:flex;flex-direction:column}button{font:inherit;color:inherit}</style></head><body><div id="root">${body}</div></body></html>`;
 }
 
 it('every phase renders a real arena for TV, phone-only and spectators', () => {
@@ -72,11 +72,11 @@ it('every phase renders a real arena for TV, phone-only and spectators', () => {
   const write = process.env['SNAKE_WRITE_ARTIFACTS'] === '1';
   if (write) {
     mkdirSync(dir, { recursive: true });
-    mkdirSync('games/snake-royale/fixtures', { recursive: true });
+    mkdirSync('games/slither-io/fixtures', { recursive: true });
   }
   for (const [phase, s] of Object.entries(states)) {
     if (write)
-      writeFileSync(`games/snake-royale/fixtures/${phase}.json`, JSON.stringify(s, null, 2) + '\n');
+      writeFileSync(`games/slither-io/fixtures/${phase}.json`, JSON.stringify(s, null, 2) + '\n');
     const offset =
       (s.phase.id === 'play' ? s.began + s.world.elapsed : s.phase.startedAt) - Date.now();
     const tv = renderToStaticMarkup(

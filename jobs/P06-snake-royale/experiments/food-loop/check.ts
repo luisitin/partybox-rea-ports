@@ -4,16 +4,16 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { seedRng } from '@partybox/game-sdk';
-import { rounded } from '../../../../games/snake-royale/server/geometry';
+import { rounded } from '../../../../games/slither-io/server/geometry';
 import {
   MAX_FOOD,
   MAX_MASS,
   MIN_MASS,
   RADIUS,
   STEP_MS,
-} from '../../../../games/snake-royale/server/types';
-import type { Food, Point, Snake, State, World } from '../../../../games/snake-royale/server/types';
-import { tick } from '../../../../games/snake-royale/server/world';
+} from '../../../../games/slither-io/server/types';
+import type { Food, Point, Snake, State, World } from '../../../../games/slither-io/server/types';
+import { tick } from '../../../../games/slither-io/server/world';
 import {
   ORIGINAL_FOOD_BLOCK,
   OPTIMIZED_FOOD_BLOCK,
@@ -149,7 +149,7 @@ function synthetic(seed: number): World {
 }
 
 // Revert only the current exact food block; retain all other current physics and rules.
-const sourceURL = new URL('../../../../games/snake-royale/server/world.ts', import.meta.url);
+const sourceURL = new URL('../../../../games/slither-io/server/world.ts', import.meta.url);
 const reportsURL = new URL('../../../../reports/r6-food-loop/', import.meta.url);
 const generatedURL = new URL('world-reference.generated.ts', reportsURL);
 const source = (await readFile(sourceURL, 'utf8')).replaceAll('\r\n', '\n');
@@ -177,7 +177,7 @@ await mkdir(reportsURL, { recursive: true });
 await writeFile(generatedURL, replacement, 'utf8');
 const reference = (await import(
   generatedURL.href
-)) as typeof import('../../../../games/snake-royale/server/world');
+)) as typeof import('../../../../games/slither-io/server/world');
 const runs = Number(process.env['REA_FOOD_DIFF_WORLDS'] ?? 10_000);
 assert.ok(Number.isInteger(runs) && runs > 0);
 let worldChecks = 0;
@@ -198,7 +198,7 @@ for (let seed = 1; seed <= runs; seed++) {
   worldChecks++;
 }
 
-const fixturesURL = new URL('../../../../games/snake-royale/fixtures/', import.meta.url);
+const fixturesURL = new URL('../../../../games/slither-io/fixtures/', import.meta.url);
 const fixtures: Record<string, { originalHash: string; tickHashes: Record<string, string> }> = {};
 for (const name of (await readdir(fixturesURL)).filter((f) => f.endsWith('.json')).sort()) {
   const fixtureURL = new URL(name, fixturesURL),
