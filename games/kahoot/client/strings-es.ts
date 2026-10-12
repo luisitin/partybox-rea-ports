@@ -206,6 +206,7 @@ export const SCREENS_ES: Readonly<Record<string, string>> = {
   'Vote choices': 'Opciones de voto',
   'No room answer — nobody voted': 'La sala no respondió — nadie votó',
   'Room answer:': 'Respuesta de la sala:',
+  'Tie — random choice among tied answers': 'Empate — elección al azar entre respuestas empatadas',
   'The room got it right!': '¡La sala acertó!',
   'No room answer': 'La sala no respondió',
   'The room got it wrong': 'La sala se equivocó',

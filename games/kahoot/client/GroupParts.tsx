@@ -126,6 +126,25 @@ export function GroupStandings({
   );
 }
 
+/** Public aggregate counts explain a closed vote; individual votes and open phases stay private. */
+function hasRoomVoteTie(
+  view: Pick<LightningTvView, 'phaseId' | 'group' | 'answerDistribution'>,
+): boolean {
+  if (
+    view.phaseId !== 'reveal' ||
+    view.group?.mode !== 'tv-vote' ||
+    view.group.decision === undefined
+  )
+    return false;
+  const counts = view.answerDistribution?.counts ?? [];
+  const most = Math.max(0, ...counts);
+  return (
+    most > 0 &&
+    counts[view.group.decision] === most &&
+    counts.filter((count) => count === most).length > 1
+  );
+}
+
 export function GroupDecision({ view }: { view: LightningTvView }): JSX.Element | null {
   const L = useT(STRINGS);
   const group = view.group;
@@ -143,6 +162,9 @@ export function GroupDecision({ view }: { view: LightningTvView }): JSX.Element 
           </span>
           <b>{view.question?.choices[decision] ?? L(SHAPES[decision] ?? '')}</b>
           <span>{decision === view.correctIndex ? L('✓ Correct') : L('Wrong')}</span>
+          {hasRoomVoteTie(view) ? (
+            <span data-room-tie="true">{L('Tie — random choice among tied answers')}</span>
+          ) : null}
         </>
       )}
     </p>
@@ -241,6 +263,9 @@ export function GroupVerdict({
       ) : (
         <p>{L('+{n} personal points', { n: outcome?.delta ?? 0 })}</p>
       )}
+      {besideTv && hasRoomVoteTie(view) ? (
+        <p data-room-tie="true">{L('Tie — random choice among tied answers')}</p>
+      ) : null}
       <GroupReceipt view={view} besideTv={besideTv} />
       {besideTv && view.myRank !== undefined ? (
         <p className={styles.rankStatus}>

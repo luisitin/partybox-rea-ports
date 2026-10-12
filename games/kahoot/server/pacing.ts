@@ -271,9 +271,30 @@ function groupRevealBeats(state: State): ClassicRevealBeats {
   const longestName = Math.max(0, ...Object.values(state.players).map((p) => wordCount(p.name)));
   const explanation = q && 'explanation' in q ? wordCount(q.explanation) : 0;
   const missed = Object.keys(state.players).length - Object.keys(state.picks).length;
+  // Mirror the public reveal distribution; the cue never names a voter's choice.
+  const voteCounts = [0, 0, 0, 0];
+  if (vote) {
+    for (const id of Object.keys(state.players)) {
+      const pick = state.picks[id];
+      if (pick) voteCounts[pick.index] = (voteCounts[pick.index] ?? 0) + 1;
+    }
+  }
+  const mostVotes = Math.max(0, ...voteCounts);
+  const tied =
+    vote &&
+    state.roomDecision !== undefined &&
+    mostVotes > 0 &&
+    voteCounts[state.roomDecision] === mostVotes &&
+    voteCounts.filter((count) => count === mostVotes).length > 1;
   const copies = (lang: 'en' | 'es') => {
     const words = (en: string, es = en) => wordCount(lang === 'es' ? es : en);
     const ordinal = words('Question 1 of 20', 'Pregunta 1 de 20');
+    const tie = tied
+      ? words(
+          'Tie — random choice among tied answers',
+          'Empate — elección al azar entre respuestas empatadas',
+        )
+      : 0;
     const decision = !vote
       ? 0
       : state.roomDecision === undefined
@@ -284,7 +305,8 @@ function groupRevealBeats(state: State): ClassicRevealBeats {
           words(
             state.roomDecision === q?.answerIndex ? '✓ Correct' : 'Wrong',
             state.roomDecision === q?.answerIndex ? '✓ Correcta' : 'Incorrecto',
-          );
+          ) +
+          tie;
     // Four shape marks plus four counts; choices appear once in ClassicChart.
     const chart =
       ordinal +
@@ -323,6 +345,8 @@ function groupRevealBeats(state: State): ClassicRevealBeats {
             ? words('Your vote: Diamond', 'Tu voto: Rombo')
             : words('You did not vote', 'No votaste')
           : words('+1300 personal points', '+1300 puntos personales'));
+      // Staged phones already read the cue in GroupDecision; only near-TV receipts add it.
+      if (besideTv) total += tie;
       if (last) total += words('The podium is next', 'Ahora viene el podio');
       // The final envelope withholds the complete team receipt, gauge and rank.
       if (!last && team) {
