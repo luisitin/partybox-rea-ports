@@ -148,3 +148,8 @@ The first seven new bot-shot cases plus existing routing/physics/lifecycle/SDK c
 
 `PB_WRITE_EVIDENCE=1 pnpm.cmd vitest run games/tank-trouble/__tests__/screens.test.tsx --maxWorkers=1 --pool=threads --reporter=dot` passed 33 tests, exit 0, 1.10 s; `pnpm.cmd typecheck` passed. The eight-seat Burst fixture pre-equips the weapon and lifts the spawn shield, then actual reducer inputs settle the first 20 ms sample: three owned shells, one volley, reloadAt 720. It verifies ownership, held Fire availability and pause/offline priority.
 `node jobs/P22-ricochet-rumble/capture.mjs` passed all 52 captures, exit 0, zero fit failures; PID 108380 closed in finally, temp cleanup deferred after EPERM. Root inspected the Burst phone-only image: volley count, waiting message and controls fit with the shell header/footer reserved.
+
+## KEEP GOING R7 verification
+
+`PB_WRITE_EVIDENCE=1 pnpm.cmd vitest run games/tank-trouble/__tests__/screens.test.tsx --maxWorkers=1 --pool=threads --reporter=dot` passed 33 tests, exit 0, 1.66 s. `node jobs/P22-ricochet-rumble/capture.mjs` passed 52 fits, exit 0; PID 21940 closed in finally, temp cleanup deferred after EPERM. Actual computed-style contrast in play-paused-phone-only is 12.674:1 for all five disabled pads; the previous disabled Fire baseline was 1.482:1.
+Read-only calculations from design/tokens.css (opacity 1) for before→after Fire: night 1.482→12.674, daylight 1.402→14.419, arcade 1.535→16.158, cabin 1.396→11.803, contrast 2.439→15.523. These other-theme ratios are token-derived, not browser measurements. The disabled selector beats the Fire selector; inactive controls immediately omit data-held, so the held-Fire rule cannot override it.
