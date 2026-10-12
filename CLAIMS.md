@@ -12,7 +12,7 @@ P06 r2-local 2026-10-12T13:26:28Z job/P06-snake-royale DONE
 
 P07 r4-local 2026-10-12T02:27:12Z job/P07-paper-territory DONE
 
-P08 r2-local 2026-10-12T18:10:19Z job/P08-hole-swallow
+P08 r2-local 2026-10-12T18:10:19Z job/P08-hole-swallow DONE (superseded: the imported hole-io is polished locally as T-1209; branch kept as a donor for its perspective camera work)
 
 P09 r1-local 2026-10-12T15:34:31Z job/P09-2048-race DONE
 P10 r9-local 2026-10-11T22:32:02Z job/P10-word-guess-race
