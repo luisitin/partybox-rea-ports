@@ -12,7 +12,7 @@ export function Tv({ view }: GameTvProps<HoleTvView>): JSX.Element {
   const L = useT(STRINGS);
   const seconds = useSecondsLeft(view.deadline, view.paused, 250, view.clockHeldAt) ?? 0;
   const rows = standings(view.city, view.players);
-  const live = liveStandings(rows);
+  const live = liveStandings(rows).sort((a, b) => a.hole.slot - b.hole.slot);
   const playing = view.phaseId === 'play';
   const winners = rows.filter((row) => row.rank === 1);
   return (

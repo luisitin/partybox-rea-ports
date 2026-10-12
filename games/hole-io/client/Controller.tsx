@@ -18,7 +18,8 @@ export function Controller({
   const playing = view.phaseId === 'play';
   const mine = view.mine;
   const player = view.me.role === 'player' && mine !== null;
-  const steering = player && view.participating && mine.alive && !mine.left;
+  const ownCamera = player && mine.alive && !mine.left;
+  const steering = ownCamera && view.participating && mine.connected;
   const rows = standings(view.city, view.players, view.scores, view.slots);
   const leader = watchingLeader(rows);
   const score = mine?.score ?? view.scores[view.me.id] ?? 0;
@@ -26,9 +27,9 @@ export function Controller({
   const target = targetsFor(mine?.radius ?? 0);
   const disconnected = mine?.connected === false;
   const status = view.paused ? L('Paused') : disconnected ? L('Disconnected') : '';
-  const cameraId = steering ? view.me.id : leader?.hole.id;
+  const cameraId = ownCamera ? view.me.id : leader?.hole.id;
 
-  if (playing && steering) {
+  if (playing && ownCamera) {
     return (
       <div
         className={styles.screen}
@@ -77,13 +78,20 @@ export function Controller({
             <span>{mine.shield ? L('Protected briefly') : L('Bigger holes can swallow you')}</span>
           </div>
         </div>
-        <Joystick send={send} disabled={view.paused || disconnected} status={status} />
+        {steering ? (
+          <Joystick send={send} disabled={view.paused} status={status} />
+        ) : (
+          <div className={styles.offline} role="status">
+            <strong>{L(disconnected ? 'Disconnected' : 'Watching your hole')}</strong>
+            <p>{L('Reconnect to steer. Your points are safe.')}</p>
+          </div>
+        )}
       </div>
     );
   }
 
   if (playing) {
-    const lost = player && mine !== null;
+    const lost = player && mine !== null && (!mine.alive || mine.left);
     const headline = lost
       ? L(mine.left ? 'You left the round' : 'You were swallowed!')
       : L('Watching the city');

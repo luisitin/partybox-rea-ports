@@ -2,93 +2,84 @@
 
 ## Overview
 
-A shared city for hungry holes: steer, swallow street furniture, grow into cars and buildings,
-then threaten smaller rivals. One 90-second round, no elimination, most accumulated points wins.
-The shell handles joining, READY and the opening countdown; this game starts directly in play.
-Original schematic SVG city, numbered rims, PartyBox tokens and synthesized SDK sound cues.
+Steer a growing hole through an authored projected 3D city, swallow objects that fit, and threaten smaller rivals. One shared 90-second round serves 2–8 phones. Every active phone has its own close camera; the TV shows close local views of the live holes. Models, projection and art are independently authored with React/SDK and PartyBox tokens.
 
-## Players
+This upgrades the existing Hole.io card imported as T-1141. The shell handles joining, READY and the opening countdown; the module begins directly in play. No owner-core deployment or duplicate picker card is part of this public upgrade.
 
-2–8, including bots. Every district has identical resources; the seed varies their positions.
-Numbers on the city, score rail and phone identify each player independently of color.
-Easy bots choose among six useful props; normal bots maximize reward per travel distance and flee;
-sharp bots also hunt vulnerable rivals. Bots act from public information only.
+## Players and party rules
+
+- A swallowed player is permanently out of active play, keeps banked points and watches a live leader without movement or retry controls. Leaving is also permanent; refreshing/reconnecting does not resurrect a swallowed or departed seat. Spectators watch the same live city.
+- Active trailing players can grow along remaining/recycled small-object routes, unlock cars/buildings and swallow vulnerable rivals to catch a banked lead. No rubber-band points are granted. When a lead is mathematically unreachable in the remaining time, remaining collection/predation still changes other places; the finite shared clock limits that situation. Eliminated players follow the live leaders.
+- Everyone shares the same clock and phase transitions. Play ends at 90 seconds or a VIP skip/end; one surviving hole or no holes remaining does not create an individual retry or separate race.
+- Highest accumulated points wins, including points banked before elimination or departure. Equal totals share the same competition rank and every rank-1 player is a joint winner. Survival alone does not determine victory: this is a timed-score party game with Battle-style elimination, not a claim to native last-survivor Battle scoring.
+
+Easy bots choose among useful nearby props; normal bots seek reward per travel distance and flee; sharp bots also hunt vulnerable rivals. Three strengths act from game information, with seeded decisions.
 
 ## Phases
 
-| Phase  | TV                                                     | Phone with TV                                                      | Exit                        |
-| ------ | ------------------------------------------------------ | ------------------------------------------------------------------ | --------------------------- |
-| play   | Shared live city, 90-second clock, numbered score rail | Your number, points, edible size, drag joystick; respawn countdown | 90 s or VIP skip            |
-| reveal | Frozen city and complete ranking                       | Your points and place                                              | 7 s or VIP skip             |
-| done   | Winner or tied winners and ranking                     | Your final place and points                                        | Terminal; results available |
+| Phase | TV | Phone, beside TV or phone-only | Exit |
+| --- | --- | --- | --- |
+| play | Shared 90-second clock; close cameras for live holes, names, points, size/growth | Active: own close city, score/size/growth, edible class and thumb joystick. Swallowed/left/spectator: live leader camera without controls | Shared 90 seconds or VIP skip/end |
+| reveal | Named final standings and clearly marked winner/tied winners | Complete standings, own banked score/place for former participants | 7 seconds or VIP skip/end |
+| done | Final named ranking and winner/tied winners | Final results and own place/score | Terminal; results available |
 
-### Phone-only rooms
-
-| Phase  | Phone stage                                                             |
-| ------ | ----------------------------------------------------------------------- |
-| play   | Full shared city above joystick; your number and score, size, countdown |
-| reveal | Frozen city, complete ranking, your result                              |
-| done   | Winner, final city and ranking                                          |
-
-The controller uses `usePhoneOnly()` and the server's `stage` flag. Players who cannot see the TV
-receive the stage too. Spectators receive the stage without controls. A TV-room controller omits
-the city to keep updates small. No secrets exist: every active object, hole and score is public.
+Phone-only and remote players receive the same complete local stage rather than instructions pointing at a TV. Every participating phone gets the city even beside the TV. A temporarily disconnected live seat retains its view but its joystick is disabled; reconnect resumes it only if still alive and not permanently left. Spectators and eliminated seats never receive a retry control.
 
 ## Inputs
 
-`{ type: 'move', x, y }`: each axis finite and between -1 and 1. Drag the pad or hold arrow keys;
-release, cancel, loss of pointer capture, blur or a hidden document sends zero. Diagonals normalize.
-Spectators, unknown ids, disconnected players and past inputs are ignored. Reopening a controller
-stops its old direction. The server also stops a seat on disconnect/reconnect and all seats on pause.
+Move payload: { type: 'move', x, y }, each axis finite and within -1..1. Drag the thumb pad or hold arrow keys. Release, pointer cancellation/capture loss, blur and hidden-document transitions send zero; diagonals normalize.
 
-## Scoring
+Unknown/spectator/disconnected/eliminated/departed identities cannot steer. Earlier packets are ignored. Reopening a controller stops its previous direction; the server stops steering on connectivity changes and pause. Input payloads pass inputSchema before reducer dispatch.
 
-| Object | Footprint radius | Points |
-| ------ | ---------------- | ------ |
-| Bin    | 1                | 2      |
-| Tree   | 1.7              | 3      |
-| Bench  | 2.6              | 5      |
-| Car    | 4.2              | 12     |
-| House  | 7                | 28     |
-| Tower  | 10               | 60     |
+## Growth and scoring
 
-Radius = `min(14, 3.4 + 0.6 × sqrt(growth points))`; speed =
-`max(11, 19 - 0.35 × sqrt(growth points))` city units/second. An object's footprint must be smaller
-than the rim and its center within `rim radius - 0.5 × footprint radius`.
-A rival needs a rim at least 1.25 times the prey's and center distance at most
-`big radius - 0.35 × small radius`; reward is `10 + floor(prey's growth points / 2)`.
-Points persist through respawns. Growth resets; the highest total wins, exact ties share rank.
+| Size | Cumulative growth points | Rim radius |
+| --- | --- | --- |
+| 1 | 0 | 2.2 |
+| 2 | 10 | 3.3 |
+| 3 | 27 | 4.8 |
+| 4 | 51 | 6.2 |
+| 5 | 82 | 7.8 |
+| 6 | 120 | 9.2 |
+| 7 | 165 | 10.8 |
+| 8 | 217 | 12.4 |
+| 9 | 246 | 14 |
 
-## Edge cases
+The cumulative table reconstructs one historical firsthand source; only the first ten-point increase has independent exact corroboration. Radii and speed are port tuning, not measured current-native constants. Speed is max(11, 19 - 0.7 × (size - 1)) city units/second.
 
-- Being swallowed gives a 3 s respawn, then 2 s protection: neither eats nor is eaten by rivals.
-  Respawns choose the district farthest from active opponents; no phone tap is needed.
-- Small props recycle after 20 s; cars/buildings are finite. Each district starts with 19 objects.
-- Fixed 100 ms steps, 200 ms engine deadlines. Late timers catch up to 90 s; input ordering is
-  monotonic. No hidden wall clock, mutable global state or runtime network requests.
-- A contested object goes to the closest center; equal distances rotate priority by tick/object.
-  Predation resolves largest first; a swallowed hole cannot eat another on that step.
-- Pause settles time first, stops all motion, then shifts the round clocks on resume. Respawn and
-  recycle clocks remain relative to play time. VIP skip/end credits play up to the event's time.
-- Disconnected seats stop and remain in results; nobody is awaited. Refresh restores the same seat.
-- State is JSON. RNG, spatial cells and steering histories are omitted from views.
+| Object | Footprint radius | Points | District supply |
+| --- | --- | --- | --- |
+| Bin | 1 | 1 | 16 |
+| Tree | 1.7 | 2 | 14 |
+| Bench | 2.6 | 3 | 13 |
+| Car | 4.2 | 3 | 18 |
+| Narrow house | 7 | 4 | 10 |
+| Tower | 10 | 30 | 3 |
 
-## Settings
+Bins/trees fit initially, benches at size 2, cars at size 3, narrow houses at size 5 and towers at size 7. Each of eight districts has 74 objects, with seeded positions and equal budgets. Available pre-house credit is 137 points; pre-tower credit is 177, exceeding the required 82/165 gates before any recycling or rival gains.
 
-None. The binding P08 experience is one 90-second round. English only; Arcade category.
+An object's footprint must be smaller than the rim, with center distance at most rim radius - 0.5 × footprint radius. A rival needs a rim at least 1.25 times the prey's and distance at most big radius - 0.35 × small radius. The hunter earns 10 + floor(prey's growth / 2); the prey permanently stops acting and keeps its banked score/growth.
 
-## Content
+Historical ordinary-car three-point and narrow one-column building four-point rewards have two firsthand sources. Other rewards, supply, containment, predation margin and radii are original reconstruction/tuning. A wide/tall building is not assumed to have the narrow-house reward.
 
-Eight generated districts with equal object budgets. Seeded jitter gives fresh routes.
-No card packs; `content/schema.ts` exports an empty `packs`. All art is original SVG/CSS.
+## Edge cases and public views
 
-## Sources
+- Initial two-second protection prevents predation in either direction; protected holes can collect city props. There is no respawn or post-death immunity loop.
+- Bins/trees/benches recycle after 20 seconds; cars/buildings are finite. Closest center wins a contested object; exact ties rotate among actual alive contenders rather than all roster seats.
+- Predation resolves largest first; a hole swallowed during a step cannot also eat. Eliminated/departed seats cannot collect, move or revive after later timers/reconnects.
+- Fixed 100 ms physics and 200 ms engine deadlines use event.now. Late timers clip simulation to the 90-second round. Pause settles prior play, stops steering, freezes relative physics and shifts shared clocks on resume. VIP skip/end settles only unpaused elapsed play.
+- Departures remain in final results with banked points. Temporary disconnect stops movement without resetting progress; its live hole remains vulnerable after initial protection. No disconnected player blocks a phase.
+- Views expose current holes, names, scores, size/progress, connectivity/departure and elimination state. Current visible props and up to 96 recent consumed-prop records support authored sinking; private RNG, spatial cells and steering/timestamps are omitted.
+- The authored sink/tilt/ground-clipping beat lasts 700 ms. That duration is an inferred visual reconstruction, not measured native timing. Reduced motion is honored; state/identity never relies only on color.
 
-The [official developer listing](https://apps.apple.com/us/app/hole-io-original-hole-game/id1389111413)
-and independent firsthand [city walkthrough](https://tech.blog.aerie.jp/entry/2018/06/21/091300)
-agree on small props → cars → buildings growth. The [PC publisher listing](https://store.steampowered.com/app/2751230/Hole_io/)
-and [independent play report](https://grace8snorlax.tistory.com/entry/Holeio-%EA%B3%B5%EB%9E%B5?category=746957)
-describe rival consumption. The original classic timer was two minutes; P08 specifies 90 s.
-Numeric radii, speed, scoring, containment, recycling and respawn protection are original port tuning,
-not claims about canonical source constants. Research and source-access limits are recorded in
-`jobs/P08-hole-swallow/{RESEARCH,SOURCES,ASSUMPTIONS}.md`. No original assets or code were copied.
+## Settings and content
+
+No game settings. One 90-second round, English only, Arcade category. content/schema.ts exports an empty packs list; the city is generated from eight equal-resource districts. No runtime networking/file reads or new dependencies. The renderer uses independently authored geometry; original screenshots are documentation-only.
+
+## Sources and limits
+
+[Official Voodoo](https://voodoo.io/games/hole-io) and [independent 2018 play](https://tech.blog.aerie.jp/entry/2018/06/21/091300) establish progressively larger city consumption. [Official PC screenshots](https://store.steampowered.com/app/2751230/Hole_io/) supply close oblique models/local split geometry; they are a separate edition released in 2024. Current mobile promotional images are marketing compositions.
+
+[Mirrored developer 1.2.0 notes](https://www.apkmirror.com/apk/voodoo/hole-io/hole-io-1-2-0-release/) and an [independent firsthand Battle report](https://note.com/hcg_laboratory/n/n71d63a619215) distinguish permanent Battle loss from Classic resurrection. [Historical size notes](https://www.kith.org/jed/2018/06/23/some-hole-io-strategy-tips/) inform growth reconstruction; higher exact thresholds remain uncorroborated.
+
+No native live session, camera/zoom formula, full original flow or audio timing was measured. [Fidelity references](fidelity/REFERENCES.md) preserve complete official files and ranked pending comparisons. jobs/P08-hole-swallow/{RESEARCH,SOURCES,ASSUMPTIONS,UPGRADE}.md records provenance and allowed party adaptations. Current captures/tests/CI are recorded by root in VERIFY.md; this spec alone does not certify near-identity.

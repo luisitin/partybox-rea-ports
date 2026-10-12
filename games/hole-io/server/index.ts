@@ -63,6 +63,10 @@ const reduce = composeReduce<State, Input>({
     if (!hasPlayer(s, e.playerId)) return s;
     const settled = settle(s, e.now);
     const connected = onPlayerEvent({ ...settled, left: settled.left ?? [] }, e);
+    const stop =
+      !e.connected ||
+      s.players[e.playerId]?.connected !== e.connected ||
+      connected.left?.includes(e.playerId);
     return {
       ...connected,
       world: {
@@ -71,8 +75,7 @@ const reduce = composeReduce<State, Input>({
           hole.id === e.playerId
             ? {
                 ...hole,
-                dx: 0,
-                dy: 0,
+                ...(stop ? { dx: 0, dy: 0 } : {}),
                 ...(connected.left?.includes(e.playerId) ? { alive: false } : {}),
               }
             : hole,

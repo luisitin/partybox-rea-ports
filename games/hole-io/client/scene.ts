@@ -26,7 +26,12 @@ export interface Camera {
   depth: number;
 }
 
-export function cameraFor(city: CityView, mine: string | undefined, compact: boolean): Camera {
+export function cameraFor(
+  city: CityView,
+  mine: string | undefined,
+  compact: boolean,
+  viewport?: { width: number; height: number },
+): Camera {
   const live = city.holes.filter((h) => h.alive !== false && !h.left);
   const own = live.find((h) => h.id === mine);
   const leader = [...live].sort(
@@ -36,9 +41,9 @@ export function cameraFor(city: CityView, mine: string | undefined, compact: boo
   return {
     x: focus?.x ?? 90,
     y: focus?.y ?? 55,
-    scale: 640 / (40 + (focus?.radius ?? 2.2) * 3.2),
-    width: 640,
-    height: compact ? 480 : 360,
+    scale: (viewport?.width ?? 640) / (40 + (focus?.radius ?? 2.2) * 3.2),
+    width: viewport?.width ?? 640,
+    height: viewport?.height ?? (compact ? 480 : 360),
     target: focus?.id ?? null,
     depth: (40 + (focus?.radius ?? 2.2) * 3.2) * 2,
   };
@@ -111,9 +116,9 @@ function box(
     e = { x: x - w / 2, y: y + d / 2, z };
   const up = (p: Vec3): Vec3 => ({ ...p, z: p.z + h });
   return [
-    { points: [a, e, up(e), up(a)], material: 'side' },
-    { points: [e, c, up(c), up(e)], material: body },
-    { points: [c, b, up(b), up(c)], material: 'side' },
+    { points: [a, up(a), up(e), e], material: 'side' },
+    { points: [e, up(e), up(c), c], material: body },
+    { points: [c, up(c), up(b), b], material: 'side' },
     { points: [up(a), up(b), up(c), up(e)], material: top },
   ];
 }
@@ -122,35 +127,35 @@ function frontWindow(x: number, y: number, z: number, w: number, h: number): Fac
   return {
     points: [
       { x: x - w / 2, y, z },
-      { x: x + w / 2, y, z },
-      { x: x + w / 2, y, z: z + h },
       { x: x - w / 2, y, z: z + h },
+      { x: x + w / 2, y, z: z + h },
+      { x: x + w / 2, y, z },
     ],
     material: 'glass',
   };
 }
 
 function building(tall: boolean): Face[] {
-  const w = tall ? 12 : 10.8,
-    d = tall ? 11 : 9,
-    h = tall ? 17 : 7.2;
+  const w = tall ? 12 : 5.4,
+    d = tall ? 11 : 6,
+    h = tall ? 17 : 9;
   const faces = box(0, 0, 0, w, d, h);
   faces.push(...box(1.2, -0.7, h, tall ? 4 : 2.4, 2.5, 1.5, 'side', 'light'));
   const rows = tall ? 6 : 3,
     columns = tall ? 4 : 3;
   for (let r = 0; r < rows; r++)
     for (let c = 0; c < columns; c++) {
-      const x = -w / 2 + 1.6 + (c * (w - 3.2)) / (columns - 1),
+      const x = -w / 2 + 0.85 + (c * (w - 1.7)) / (columns - 1),
         z = 1.1 + r * 2.4;
-      faces.push(frontWindow(x, d / 2 + 0.025, z, 1.35, 1.55));
+      faces.push(frontWindow(x, d / 2 + 0.025, z, tall ? 1.35 : 0.9, 1.55));
       // Windows on the visible side, with XYZ rather than painted top-down symbols.
       faces.push({
         points: [
-          { x: -w / 2 - 0.025, y: -d / 2 + 1.3 + c * 2.3, z },
-          { x: -w / 2 - 0.025, y: -d / 2 + 2.6 + c * 2.3, z },
-          { x: -w / 2 - 0.025, y: -d / 2 + 2.6 + c * 2.3, z: z + 1.55 },
-          { x: -w / 2 - 0.025, y: -d / 2 + 1.3 + c * 2.3, z: z + 1.55 },
-        ],
+          { x: -w / 2 - 0.025, y: -d / 2 + 0.7 + (c * (d - 2)) / (columns - 1), z },
+          { x: -w / 2 - 0.025, y: -d / 2 + 1.6 + (c * (d - 2)) / (columns - 1), z },
+          { x: -w / 2 - 0.025, y: -d / 2 + 1.6 + (c * (d - 2)) / (columns - 1), z: z + 1.55 },
+          { x: -w / 2 - 0.025, y: -d / 2 + 0.7 + (c * (d - 2)) / (columns - 1), z: z + 1.55 },
+        ].reverse(),
         material: 'glass',
       });
     }
@@ -174,14 +179,14 @@ export function mesh(kind: PropKind): Face[] {
       ];
     case 'car':
       return [
-        ...box(-2.35, -2.1, 0.1, 0.65, 1.1, 0.85, 'dark', 'dark'),
-        ...box(2.35, -2.1, 0.1, 0.65, 1.1, 0.85, 'dark', 'dark'),
-        ...box(-2.35, 2.1, 0.1, 0.65, 1.1, 0.85, 'dark', 'dark'),
-        ...box(2.35, 2.1, 0.1, 0.65, 1.1, 0.85, 'dark', 'dark'),
-        ...box(0, 0, 0.6, 4.7, 7, 1.2),
-        ...box(0, 0.15, 1.8, 3.8, 3.6, 1.25, 'glass', 'body'),
-        frontWindow(-1.6, 3.53, 1, 0.9, 0.4),
-        frontWindow(1.6, 3.53, 1, 0.9, 0.4),
+        ...box(-2.35, -1.9, 0.1, 0.65, 1.1, 0.85, 'dark', 'dark'),
+        ...box(2.35, -1.9, 0.1, 0.65, 1.1, 0.85, 'dark', 'dark'),
+        ...box(-2.35, 1.9, 0.1, 0.65, 1.1, 0.85, 'dark', 'dark'),
+        ...box(2.35, 1.9, 0.1, 0.65, 1.1, 0.85, 'dark', 'dark'),
+        ...box(0, 0, 0.6, 4.7, 6.2, 1.2),
+        ...box(0, 0.15, 1.8, 3.8, 3.1, 1.25, 'glass', 'body'),
+        frontWindow(-1.6, 3.13, 1, 0.9, 0.4),
+        frontWindow(1.6, 3.13, 1, 0.9, 0.4),
       ];
     case 'house':
       return building(false);
@@ -215,7 +220,7 @@ export const MODEL_HEIGHT: Record<PropKind, number> = {
   tree: 5.1,
   bench: 2.5,
   car: 3.1,
-  house: 8.7,
+  house: 10.5,
   tower: 18.5,
 };
 const MODELS: Record<PropKind, Face[]> = {

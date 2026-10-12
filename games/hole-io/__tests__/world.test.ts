@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { seedRng } from '@partybox/game-sdk';
 import { PROP_RULES } from '../server/content';
-import { HEIGHT, IMMUNE_MS, RECYCLE_MS, ROUND_MS, WIDTH } from '../server/types';
+import { HEIGHT, RECYCLE_MS, ROUND_MS, WIDTH } from '../server/types';
 import { applyMove, makeWorld, radiusOf, speedOf, tick } from '../server/world';
 import { freeze, hole, prop, world } from './helpers';
 

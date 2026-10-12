@@ -6,7 +6,7 @@
   },
   "rng": {
     "seed": 8,
-    "step": 305
+    "step": 1185
   },
   "players": {
     "p1": {
@@ -66,6 +66,7 @@
       "bot": true
     }
   },
+  "left": [],
   "began": 1000000,
   "endsAt": 1090000,
   "world": {
@@ -73,130 +74,162 @@
       {
         "id": "p1",
         "slot": 0,
-        "x": 117.0474,
-        "y": 14.5438,
-        "dx": 1,
-        "dy": 0.0039,
-        "mass": 266,
-        "score": 266,
+        "x": 35.3479,
+        "y": 21.1329,
+        "dx": 0,
+        "dy": 0,
+        "mass": 165,
+        "alive": false,
+        "eliminatedAt": 24500,
+        "eliminatedBy": "p4",
+        "score": 165,
         "swallowed": 0,
         "respawnAt": null,
         "immuneUntil": 2000,
-        "lastGain": 5,
-        "gainAt": 56400,
-        "inputAt": 60000
+        "lastGain": 1,
+        "gainAt": 23600,
+        "inputAt": 24000,
+        "lastMoveAt": 24000
       },
       {
         "id": "p2",
         "slot": 1,
-        "x": 92.9258,
-        "y": 79.7712,
-        "dx": -0.9606,
-        "dy": -0.2778,
-        "mass": 166,
-        "score": 166,
+        "x": 120.5,
+        "y": 96,
+        "dx": -0.9958,
+        "dy": 0.0911,
+        "mass": 662,
+        "alive": true,
+        "eliminatedAt": null,
+        "eliminatedBy": null,
+        "score": 662,
         "swallowed": 0,
         "respawnAt": null,
         "immuneUntil": 2000,
-        "lastGain": 2,
-        "gainAt": 56300,
-        "inputAt": 60000
+        "lastGain": 3,
+        "gainAt": 55200,
+        "inputAt": 60000,
+        "lastMoveAt": 60000
       },
       {
         "id": "p3",
         "slot": 2,
-        "x": 116.0105,
-        "y": 14.6179,
-        "dx": 1,
-        "dy": 0.0017,
-        "mass": 279,
-        "score": 279,
+        "x": 119.615,
+        "y": 74.907,
+        "dx": -0.9304,
+        "dy": -0.3666,
+        "mass": 408,
+        "alive": true,
+        "eliminatedAt": null,
+        "eliminatedBy": null,
+        "score": 408,
         "swallowed": 0,
         "respawnAt": null,
         "immuneUntil": 2000,
-        "lastGain": 5,
-        "gainAt": 54700,
-        "inputAt": 60000
+        "lastGain": 1,
+        "gainAt": 60000,
+        "inputAt": 60000,
+        "lastMoveAt": 60000
       },
       {
         "id": "p4",
         "slot": 3,
-        "x": 110.501,
-        "y": 15.0424,
-        "dx": -0.4513,
-        "dy": 0.8924,
+        "x": 122.381,
+        "y": 26.6665,
+        "dx": -0.3104,
+        "dy": 0.9506,
+        "mass": 709,
+        "alive": true,
+        "eliminatedAt": null,
+        "eliminatedBy": null,
+        "score": 709,
+        "swallowed": 2,
+        "respawnAt": null,
+        "immuneUntil": 2000,
+        "lastGain": 3,
+        "gainAt": 59900,
+        "inputAt": 60000,
+        "lastMoveAt": 60000
+      },
+      {
+        "id": "p5",
+        "slot": 4,
+        "x": 120.498,
+        "y": 96,
+        "dx": -0.9958,
+        "dy": 0.0911,
         "mass": 365,
+        "alive": true,
+        "eliminatedAt": null,
+        "eliminatedBy": null,
         "score": 365,
         "swallowed": 0,
         "respawnAt": null,
         "immuneUntil": 2000,
         "lastGain": 3,
-        "gainAt": 51100,
-        "inputAt": 60000
+        "gainAt": 60000,
+        "inputAt": 60000,
+        "lastMoveAt": 60000
       },
       {
-        "id": "p5",
-        "slot": 4,
-        "x": 117.2071,
-        "y": 14.5319,
-        "dx": 1,
-        "dy": 0.0043,
-        "mass": 269,
-        "score": 269,
+        "id": "p6",
+        "slot": 5,
+        "x": 120.498,
+        "y": 96,
+        "dx": -0.9958,
+        "dy": 0.0911,
+        "mass": 290,
+        "alive": true,
+        "eliminatedAt": null,
+        "eliminatedBy": null,
+        "score": 290,
+        "swallowed": 0,
+        "respawnAt": null,
+        "immuneUntil": 2000,
+        "lastGain": 3,
+        "gainAt": 59600,
+        "inputAt": 60000,
+        "lastMoveAt": 60000
+      },
+      {
+        "id": "p7",
+        "slot": 6,
+        "x": 78.6497,
+        "y": 18.6627,
+        "dx": 0,
+        "dy": 0,
+        "mass": 50,
+        "alive": false,
+        "eliminatedAt": 13700,
+        "eliminatedBy": "p4",
+        "score": 50,
+        "swallowed": 0,
+        "respawnAt": null,
+        "immuneUntil": 2000,
+        "lastGain": 3,
+        "gainAt": 12800,
+        "inputAt": 13000,
+        "lastMoveAt": 13000
+      },
+      {
+        "id": "p8",
+        "slot": 7,
+        "x": 119.615,
+        "y": 74.907,
+        "dx": -0.9304,
+        "dy": -0.3666,
+        "mass": 548,
+        "alive": true,
+        "eliminatedAt": null,
+        "eliminatedBy": null,
+        "score": 548,
         "swallowed": 0,
         "respawnAt": null,
         "immuneUntil": 2000,
         "lastGain": 2,
         "gainAt": 59800,
-        "inputAt": 60000
-      },
-      {
-        "id": "p6",
-        "slot": 5,
-        "x": 117.1037,
-        "y": 14.5386,
-        "dx": 1,
-        "dy": 0.0041,
-        "mass": 272,
-        "score": 272,
-        "swallowed": 0,
-        "respawnAt": null,
-        "immuneUntil": 2000,
-        "lastGain": 5,
-        "gainAt": 58800,
-        "inputAt": 60000
-      },
-      {
-        "id": "p7",
-        "slot": 6,
-        "x": 115.3596,
-        "y": 14.6662,
-        "dx": 1,
-        "dy": 0.0003,
-        "mass": 290,
-        "score": 290,
-        "swallowed": 1,
-        "respawnAt": null,
-        "immuneUntil": 2000,
-        "lastGain": 3,
-        "gainAt": 54600,
-        "inputAt": 60000
-      },
-      {
-        "id": "p8",
-        "slot": 7,
-        "x": 92.3995,
-        "y": 79.3152,
-        "dx": -0.9672,
-        "dy": -0.2541,
-        "mass": 134,
-        "score": 229,
-        "swallowed": 0,
-        "respawnAt": null,
-        "immuneUntil": 12700,
-        "lastGain": 2,
-        "gainAt": 57300,
-        "inputAt": 60000
+        "inputAt": 60000,
+        "lastMoveAt": 60000
       }
     ],
     "props": [
@@ -204,1441 +237,6276 @@
         "id": 0,
         "kind": "bin",
         "radius": 1,
-        "points": 2,
-        "x": 29,
+        "points": 1,
+        "x": 28,
         "y": 27.2,
-        "availableAt": 68300
+        "availableAt": 67900
       },
       {
         "id": 1,
         "kind": "bin",
         "radius": 1,
-        "points": 2,
-        "x": 29.0282,
-        "y": 30.6,
-        "availableAt": 68000
+        "points": 1,
+        "x": 14.7263,
+        "y": 33.3549,
+        "availableAt": 68300
       },
       {
         "id": 2,
         "kind": "bin",
         "radius": 1,
-        "points": 2,
-        "x": 27.5,
-        "y": 34.9282,
-        "availableAt": 67400
+        "points": 1,
+        "x": 24.6365,
+        "y": 15.0498,
+        "availableAt": 69900
       },
       {
         "id": 3,
         "kind": "bin",
         "radius": 1,
-        "points": 2,
-        "x": 23.3,
-        "y": 34.1,
-        "availableAt": 67400
+        "points": 1,
+        "x": 27.5591,
+        "y": 31.6552,
+        "availableAt": 67600
       },
       {
         "id": 4,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 18.4,
-        "y": 37.5263,
-        "availableAt": 67300
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 14.0529,
+        "y": 26.2582,
+        "availableAt": 58300
       },
       {
         "id": 5,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 12.4737,
-        "y": 32.7,
-        "availableAt": 67900
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 32.9688,
+        "y": 20.2225,
+        "availableAt": 55200
       },
       {
         "id": 6,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 12.4,
-        "y": 28.6,
-        "availableAt": 71100
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 21.5828,
+        "y": 35.36,
+        "availableAt": 56800
       },
       {
         "id": 7,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 12.8737,
-        "y": 22.2,
-        "availableAt": 70400
-      },
-      {
-        "id": 8,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 15.6,
-        "y": 15.1756,
-        "availableAt": 70200
-      },
-      {
-        "id": 9,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 23.1,
-        "y": 14.8,
-        "availableAt": 69300
-      },
-      {
-        "id": 10,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 30.4,
-        "y": 15.2756,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 17.7909,
+        "y": 18.8255,
         "availableAt": 69200
       },
       {
+        "id": 8,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 34.8112,
+        "y": 31.7595,
+        "availableAt": 67700
+      },
+      {
+        "id": 9,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 16.6296,
+        "y": 31.4709,
+        "availableAt": 57600
+      },
+      {
+        "id": 10,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 27.6385,
+        "y": 18.3427,
+        "availableAt": 55600
+      },
+      {
         "id": 11,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 33.6244,
-        "y": 22,
-        "availableAt": 68800
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 25.3907,
+        "y": 41.4041,
+        "availableAt": 66800
       },
       {
         "id": 12,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 39.1,
-        "y": 26.7,
-        "availableAt": 90001
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 16.0435,
+        "y": 23.1901,
+        "availableAt": 58600
       },
       {
         "id": 13,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 36.0224,
-        "y": 35.9,
-        "availableAt": 90001
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 31.0668,
+        "y": 25.2528,
+        "availableAt": 55200
       },
       {
         "id": 14,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 30.1,
-        "y": 41.6224,
-        "availableAt": 90001
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 14.1233,
+        "y": 37.5348,
+        "availableAt": 57600
       },
       {
         "id": 15,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 21.2,
-        "y": 44.2,
-        "availableAt": 90001
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 20.3004,
+        "y": 20.258,
+        "availableAt": 69100
       },
       {
         "id": 16,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 15,
-        "y": 42.5224,
-        "availableAt": 90001
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 33.4404,
+        "y": 36.1778,
+        "availableAt": 67400
       },
       {
         "id": 17,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 7,
-        "y": 36.4,
-        "availableAt": 90001
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 5.3137,
+        "y": 28.5611,
+        "availableAt": 69100
       },
       {
         "id": 18,
-        "kind": "tower",
-        "radius": 10,
-        "points": 60,
-        "x": 10,
-        "y": 27.4,
-        "availableAt": 90001
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 29.8883,
+        "y": 20.3462,
+        "availableAt": 55400
       },
       {
         "id": 19,
-        "kind": "bin",
-        "radius": 1,
+        "kind": "tree",
+        "radius": 1.7,
         "points": 2,
-        "x": 76.1,
-        "y": 26.7,
-        "availableAt": 76400
+        "x": 22.4995,
+        "y": 39.6861,
+        "availableAt": 57000
       },
       {
         "id": 20,
-        "kind": "bin",
-        "radius": 1,
+        "kind": "tree",
+        "radius": 1.7,
         "points": 2,
-        "x": 75.2282,
-        "y": 30.7,
-        "availableAt": 76800
+        "x": 13.0487,
+        "y": 14.4155,
+        "availableAt": 69600
       },
       {
         "id": 21,
-        "kind": "bin",
-        "radius": 1,
+        "kind": "tree",
+        "radius": 1.7,
         "points": 2,
-        "x": 71.1,
-        "y": 34.7282,
-        "availableAt": 47200
+        "x": 32.0107,
+        "y": 29.1335,
+        "availableAt": 67800
       },
       {
         "id": 22,
-        "kind": "bin",
-        "radius": 1,
+        "kind": "tree",
+        "radius": 1.7,
         "points": 2,
-        "x": 66,
-        "y": 34,
-        "availableAt": 46400
+        "x": 10.3288,
+        "y": 33.4247,
+        "availableAt": 58100
       },
       {
         "id": 23,
         "kind": "tree",
         "radius": 1.7,
-        "points": 3,
-        "x": 62.9,
-        "y": 36.3263,
-        "availableAt": 46500
+        "points": 2,
+        "x": 26.9117,
+        "y": 11.1901,
+        "availableAt": 56000
       },
       {
         "id": 24,
         "kind": "tree",
         "radius": 1.7,
-        "points": 3,
-        "x": 57.9737,
-        "y": 33.9,
-        "availableAt": 46700
+        "points": 2,
+        "x": 27.4718,
+        "y": 37.0765,
+        "availableAt": 56400
       },
       {
         "id": 25,
         "kind": "tree",
         "radius": 1.7,
-        "points": 3,
-        "x": 57,
-        "y": 27.2,
-        "availableAt": 74600
+        "points": 2,
+        "x": 10.615,
+        "y": 23.2488,
+        "availableAt": 58700
       },
       {
         "id": 26,
         "kind": "tree",
         "radius": 1.7,
-        "points": 3,
-        "x": 57.3737,
-        "y": 22.4,
-        "availableAt": 74500
+        "points": 2,
+        "x": 36.4247,
+        "y": 21.1892,
+        "availableAt": 55000
       },
       {
         "id": 27,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 59.7,
-        "y": 16.7756,
-        "availableAt": 74700
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 17.8394,
+        "y": 38.1247,
+        "availableAt": 57300
       },
       {
         "id": 28,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 68.9,
-        "y": 13.3,
-        "availableAt": 75500
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 19.5001,
+        "y": 15.0672,
+        "availableAt": 69600
       },
       {
         "id": 29,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 74.6,
-        "y": 14.9756,
-        "availableAt": 75900
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 36.763,
+        "y": 34.5437,
+        "availableAt": 67600
       },
       {
         "id": 30,
         "kind": "bench",
         "radius": 2.6,
-        "points": 5,
-        "x": 80.2244,
-        "y": 20.3,
-        "availableAt": 76400
+        "points": 3,
+        "x": 10.5294,
+        "y": 30.6136,
+        "availableAt": 68700
       },
       {
         "id": 31,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 84.5,
-        "y": 28.4,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 31.1534,
+        "y": 14.942,
+        "availableAt": 55600
       },
       {
         "id": 32,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 82.1224,
-        "y": 36.6,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 25.6181,
+        "y": 46.8255,
+        "availableAt": 66500
       },
       {
         "id": 33,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 74.5,
-        "y": 43.1224,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 10.7219,
+        "y": 20.4401,
+        "availableAt": 69200
       },
       {
         "id": 34,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 66.1,
-        "y": 44,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 37.0454,
+        "y": 25.679,
+        "availableAt": 54800
       },
       {
         "id": 35,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 60.5,
-        "y": 42.9224,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 11.0975,
+        "y": 42.1472,
+        "availableAt": 57900
       },
       {
         "id": 36,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 51.2776,
-        "y": 35.5,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 21.0634,
+        "y": 14.0002,
+        "availableAt": 69800
       },
       {
         "id": 37,
-        "kind": "tower",
-        "radius": 10,
-        "points": 60,
-        "x": 51.1,
-        "y": 28.3,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 33.8502,
+        "y": 40.1505,
+        "availableAt": 56500
       },
       {
         "id": 38,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 119.2,
-        "y": 26.4,
-        "availableAt": 79800
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 2.6,
+        "y": 24.6466,
+        "availableAt": 69500
       },
       {
         "id": 39,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 120.2282,
-        "y": 32.1,
-        "availableAt": 27800
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 33.6553,
+        "y": 20.2407,
+        "availableAt": 55200
       },
       {
         "id": 40,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 115.3,
-        "y": 33.6282,
-        "availableAt": 28200
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 18.4363,
+        "y": 42.4416,
+        "availableAt": 57400
       },
       {
         "id": 41,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 111.8,
-        "y": 36.1,
-        "availableAt": 23100
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 11.6805,
+        "y": 12.0191,
+        "availableAt": 69800
       },
       {
         "id": 42,
-        "kind": "tree",
-        "radius": 1.7,
+        "kind": "bench",
+        "radius": 2.6,
         "points": 3,
-        "x": 106.1,
-        "y": 37.5263,
-        "availableAt": 23300
+        "x": 34.1377,
+        "y": 31.4361,
+        "availableAt": 67800
       },
       {
         "id": 43,
-        "kind": "tree",
-        "radius": 1.7,
+        "kind": "car",
+        "radius": 4.2,
         "points": 3,
-        "x": 101.8737,
-        "y": 32.1,
-        "availableAt": 23900
+        "x": 5.3856,
+        "y": 34.8183,
+        "availableAt": 90001
       },
       {
         "id": 44,
-        "kind": "tree",
-        "radius": 1.7,
+        "kind": "car",
+        "radius": 4.2,
         "points": 3,
-        "x": 103,
-        "y": 27.3,
-        "availableAt": 78600
+        "x": 31.3,
+        "y": 7.6096,
+        "availableAt": 90001
       },
       {
         "id": 45,
-        "kind": "tree",
-        "radius": 1.7,
+        "kind": "car",
+        "radius": 4.2,
         "points": 3,
-        "x": 102.7737,
-        "y": 22.6,
-        "availableAt": 78100
+        "x": 27.9556,
+        "y": 41.9929,
+        "availableAt": 90001
       },
       {
         "id": 46,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 104.6,
-        "y": 15.2756,
-        "availableAt": 78200
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 5.3342,
+        "y": 19.6913,
+        "availableAt": 90001
       },
       {
         "id": 47,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 111.8,
-        "y": 14.1,
-        "availableAt": 78800
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 41.8679,
+        "y": 21.9129,
+        "availableAt": 90001
       },
       {
         "id": 48,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 118.1,
-        "y": 14.4756,
-        "availableAt": 79200
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 13.5157,
+        "y": 39.5413,
+        "availableAt": 90001
       },
       {
         "id": 49,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 123.7244,
-        "y": 20.2,
-        "availableAt": 79700
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 17.8209,
+        "y": 9.6012,
+        "availableAt": 90001
       },
       {
         "id": 50,
         "kind": "car",
         "radius": 4.2,
-        "points": 12,
-        "x": 130,
-        "y": 26.6,
+        "points": 3,
+        "x": 40.1202,
+        "y": 38.7614,
         "availableAt": 90001
       },
       {
         "id": 51,
         "kind": "car",
         "radius": 4.2,
-        "points": 12,
-        "x": 127.4224,
-        "y": 36.6,
+        "points": 3,
+        "x": 7.8152,
+        "y": 29.9551,
         "availableAt": 90001
       },
       {
         "id": 52,
         "kind": "car",
         "radius": 4.2,
-        "points": 12,
-        "x": 120.4,
-        "y": 42.9224,
+        "points": 3,
+        "x": 33.5671,
+        "y": 14.4931,
         "availableAt": 90001
       },
       {
         "id": 53,
         "kind": "car",
         "radius": 4.2,
-        "points": 12,
-        "x": 112.9,
-        "y": 44.2,
+        "points": 3,
+        "x": 23.6653,
+        "y": 48.1861,
         "availableAt": 90001
       },
       {
         "id": 54,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 103.8,
-        "y": 42.8224,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 11.7713,
+        "y": 17.4161,
         "availableAt": 90001
       },
       {
         "id": 55,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 96.6776,
-        "y": 35.4,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 39.3765,
+        "y": 27.8192,
         "availableAt": 90001
       },
       {
         "id": 56,
-        "kind": "tower",
-        "radius": 10,
-        "points": 60,
-        "x": 95.6,
-        "y": 28.2,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 6.4111,
+        "y": 41.5761,
         "availableAt": 90001
       },
       {
         "id": 57,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 165.9,
-        "y": 27.9,
-        "availableAt": 55200
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 24.9727,
+        "y": 13.0439,
+        "availableAt": 90001
       },
       {
         "id": 58,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 163.6282,
-        "y": 30.1,
-        "availableAt": 55400
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 31.9082,
+        "y": 40.9254,
+        "availableAt": 90001
       },
       {
         "id": 59,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 160,
-        "y": 35.5282,
-        "availableAt": 55800
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 4.2,
+        "y": 23.891,
+        "availableAt": 90001
       },
       {
         "id": 60,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 156.8,
-        "y": 35.7,
-        "availableAt": 56000
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 34.8509,
+        "y": 20.3059,
+        "availableAt": 90001
       },
       {
         "id": 61,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 150.7,
-        "y": 36.4263,
-        "availableAt": 56400
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 14.4113,
+        "y": 47.8264,
+        "availableAt": 90001
       },
       {
         "id": 62,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 147.0737,
-        "y": 31.8,
-        "availableAt": 56700
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 13.7152,
+        "y": 9.0133,
+        "availableAt": 90001
       },
       {
         "id": 63,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 146.7,
-        "y": 28.8,
-        "availableAt": 56900
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 42.9527,
+        "y": 37.3922,
+        "availableAt": 90001
       },
       {
         "id": 64,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 146.8737,
-        "y": 21.3,
-        "availableAt": 52800
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 7,
+        "y": 33.1433,
+        "availableAt": 90001
       },
       {
         "id": 65,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 150.9,
-        "y": 14.6756,
-        "availableAt": 53100
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 33.23,
+        "y": 7.376,
+        "availableAt": 90001
       },
       {
         "id": 66,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 157.3,
-        "y": 12.1,
-        "availableAt": 53600
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 27.0532,
+        "y": 44.4958,
+        "availableAt": 90001
       },
       {
         "id": 67,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 164.9,
-        "y": 14.8756,
-        "availableAt": 54100
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 7,
+        "y": 15.0114,
+        "availableAt": 90001
       },
       {
         "id": 68,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 170.7244,
-        "y": 21.7,
-        "availableAt": 54700
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 42.341,
+        "y": 25.5732,
+        "availableAt": 90001
       },
       {
         "id": 69,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 173.8,
-        "y": 26.8,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 8.2446,
+        "y": 44.1278,
         "availableAt": 90001
       },
       {
         "id": 70,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 172.4224,
-        "y": 34.9,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 21.2237,
+        "y": 7.4574,
         "availableAt": 90001
       },
       {
         "id": 71,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 165.4,
-        "y": 42.0224,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 37.9764,
+        "y": 42.3183,
         "availableAt": 90001
       },
       {
         "id": 72,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 157.8,
-        "y": 43.4,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 10,
+        "y": 26.2146,
         "availableAt": 90001
       },
       {
         "id": 73,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 149.5,
-        "y": 43.7224,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 39.3663,
+        "y": 14.2982,
         "availableAt": 90001
       },
       {
         "id": 74,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 143.0776,
-        "y": 36.8,
-        "availableAt": 90001
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 74.8,
+        "y": 28.3,
+        "availableAt": 74600
       },
       {
         "id": 75,
-        "kind": "tower",
-        "radius": 10,
-        "points": 60,
-        "x": 141.3,
-        "y": 28.6,
-        "availableAt": 90001
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 60.9263,
+        "y": 35.3549,
+        "availableAt": 72900
       },
       {
         "id": 76,
         "kind": "bin",
         "radius": 1,
-        "points": 2,
-        "x": 29,
-        "y": 83.4,
-        "availableAt": 49900
+        "points": 1,
+        "x": 67.1365,
+        "y": 15.4498,
+        "availableAt": 50000
       },
       {
         "id": 77,
         "kind": "bin",
         "radius": 1,
-        "points": 2,
-        "x": 30.9282,
-        "y": 87.4,
-        "availableAt": 63600
+        "points": 1,
+        "x": 73.2591,
+        "y": 33.9552,
+        "availableAt": 74000
       },
       {
         "id": 78,
         "kind": "bin",
         "radius": 1,
-        "points": 2,
-        "x": 25.6,
-        "y": 88.8282,
-        "availableAt": 63200
+        "points": 1,
+        "x": 56.7529,
+        "y": 25.1582,
+        "availableAt": 35900
       },
       {
         "id": 79,
         "kind": "bin",
         "radius": 1,
-        "points": 2,
-        "x": 22.1,
-        "y": 91.8,
-        "availableAt": 63300
+        "points": 1,
+        "x": 78.0688,
+        "y": 21.8225,
+        "availableAt": 75400
       },
       {
         "id": 80,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 17.5,
-        "y": 91.0263,
-        "availableAt": 63200
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 66.1828,
+        "y": 33.26,
+        "availableAt": 73500
       },
       {
         "id": 81,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 13.8737,
-        "y": 87.6,
-        "availableAt": 62900
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 63.7909,
+        "y": 18.2255,
+        "availableAt": 49700
       },
       {
         "id": 82,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 13,
-        "y": 82.2,
-        "availableAt": 62500
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 81.2112,
+        "y": 31.6595,
+        "availableAt": 74700
       },
       {
         "id": 83,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 13.1737,
-        "y": 77.9,
-        "availableAt": 62300
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 61.2296,
+        "y": 31.0709,
+        "availableAt": 73200
       },
       {
         "id": 84,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 15.5,
-        "y": 69.5756,
-        "availableAt": 62000
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 71.7385,
+        "y": 17.6427,
+        "availableAt": 50300
       },
       {
         "id": 85,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 23.4,
-        "y": 69.5,
-        "availableAt": 61400
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 72.2907,
+        "y": 40.9041,
+        "availableAt": 73700
       },
       {
         "id": 86,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 28.6,
-        "y": 71.6756,
-        "availableAt": 61000
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 60.5435,
+        "y": 25.2901,
+        "availableAt": 49600
       },
       {
         "id": 87,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 35.9244,
-        "y": 76.9,
-        "availableAt": 49400
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 78.5668,
+        "y": 26.7528,
+        "availableAt": 74900
       },
       {
         "id": 88,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 39,
-        "y": 81.9,
-        "availableAt": 90001
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 59.5233,
+        "y": 37.5348,
+        "availableAt": 73000
       },
       {
         "id": 89,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 36.8224,
-        "y": 92.2,
-        "availableAt": 90001
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 66.2004,
+        "y": 21.758,
+        "availableAt": 50000
       },
       {
         "id": 90,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 30.9,
-        "y": 97.3224,
-        "availableAt": 90001
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 77.3404,
+        "y": 35.9778,
+        "availableAt": 74200
       },
       {
         "id": 91,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 21.3,
-        "y": 99.6,
-        "availableAt": 90001
-      },
-      {
-        "id": 92,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 14.7,
-        "y": 96.4224,
-        "availableAt": 90001
-      },
-      {
-        "id": 93,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 8.0776,
-        "y": 92.1,
-        "availableAt": 90001
-      },
-      {
-        "id": 94,
-        "kind": "tower",
-        "radius": 10,
-        "points": 60,
-        "x": 10,
-        "y": 83.1,
-        "availableAt": 90001
-      },
-      {
-        "id": 95,
-        "kind": "bin",
-        "radius": 1,
+        "kind": "tree",
+        "radius": 1.7,
         "points": 2,
-        "x": 74.7,
-        "y": 82.7,
-        "availableAt": 53100
-      },
-      {
-        "id": 96,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 73.6282,
-        "y": 87.7,
-        "availableAt": 53500
-      },
-      {
-        "id": 97,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 70.9,
-        "y": 88.3282,
+        "x": 50.3137,
+        "y": 28.2611,
         "availableAt": 53800
       },
       {
-        "id": 98,
-        "kind": "bin",
-        "radius": 1,
+        "id": 92,
+        "kind": "tree",
+        "radius": 1.7,
         "points": 2,
-        "x": 67.6,
-        "y": 91.3,
-        "availableAt": 53900
+        "x": 75.2883,
+        "y": 19.6462,
+        "availableAt": 75700
+      },
+      {
+        "id": 93,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 67.1995,
+        "y": 41.5861,
+        "availableAt": 73400
+      },
+      {
+        "id": 94,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 56.7487,
+        "y": 15.8155,
+        "availableAt": 50700
+      },
+      {
+        "id": 95,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 76.6107,
+        "y": 29.0335,
+        "availableAt": 74600
+      },
+      {
+        "id": 96,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 56.0288,
+        "y": 36.1247,
+        "availableAt": 73300
+      },
+      {
+        "id": 97,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 70.4117,
+        "y": 10.7901,
+        "availableAt": 50400
+      },
+      {
+        "id": 98,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 72.5718,
+        "y": 36.9765,
+        "availableAt": 73800
       },
       {
         "id": 99,
         "kind": "tree",
         "radius": 1.7,
-        "points": 3,
-        "x": 63.5,
-        "y": 92.3263,
-        "availableAt": 54200
+        "points": 2,
+        "x": 56.615,
+        "y": 23.8488,
+        "availableAt": 53500
       },
       {
         "id": 100,
         "kind": "tree",
         "radius": 1.7,
-        "points": 3,
-        "x": 56.8737,
-        "y": 88.1,
-        "availableAt": 54600
+        "points": 2,
+        "x": 80.9247,
+        "y": 20.8892,
+        "availableAt": 75500
       },
       {
         "id": 101,
         "kind": "tree",
         "radius": 1.7,
-        "points": 3,
-        "x": 56.3,
-        "y": 81.9,
-        "availableAt": 51100
+        "points": 2,
+        "x": 63.4394,
+        "y": 36.1247,
+        "availableAt": 73100
       },
       {
         "id": 102,
         "kind": "tree",
         "radius": 1.7,
-        "points": 3,
-        "x": 58.1737,
-        "y": 77.7,
-        "availableAt": 51000
+        "points": 2,
+        "x": 63.3001,
+        "y": 15.9672,
+        "availableAt": 50600
       },
       {
         "id": 103,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 59.6,
-        "y": 70.3756,
-        "availableAt": 58800
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 80.763,
+        "y": 34.9437,
+        "availableAt": 74500
       },
       {
         "id": 104,
         "kind": "bench",
         "radius": 2.6,
-        "points": 5,
-        "x": 67,
-        "y": 69.9,
-        "availableAt": 51600
+        "points": 3,
+        "x": 54.4294,
+        "y": 32.2136,
+        "availableAt": 73400
       },
       {
         "id": 105,
         "kind": "bench",
         "radius": 2.6,
-        "points": 5,
-        "x": 75.9,
-        "y": 69.0756,
-        "availableAt": 52200
+        "points": 3,
+        "x": 77.5534,
+        "y": 12.742,
+        "availableAt": 50900
       },
       {
         "id": 106,
         "kind": "bench",
         "radius": 2.6,
-        "points": 5,
-        "x": 80.9244,
-        "y": 76.3,
-        "availableAt": 52700
+        "points": 3,
+        "x": 72.0181,
+        "y": 47.0255,
+        "availableAt": 73800
       },
       {
         "id": 107,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 83.2,
-        "y": 82.6,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 55.9219,
+        "y": 19.6401,
+        "availableAt": 50900
       },
       {
         "id": 108,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 82.5224,
-        "y": 91.9,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 83.7454,
+        "y": 27.079,
+        "availableAt": 75200
       },
       {
         "id": 109,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 74.6,
-        "y": 97.8224,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 53.1975,
+        "y": 42.0472,
+        "availableAt": 72400
       },
       {
         "id": 110,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 67.4,
-        "y": 100.4,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 67.4634,
+        "y": 15.4002,
+        "availableAt": 50100
       },
       {
         "id": 111,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 59.4,
-        "y": 96.5224,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 78.6502,
+        "y": 38.6505,
+        "availableAt": 74300
       },
       {
         "id": 112,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 53.8776,
-        "y": 91.3,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 49.6811,
+        "y": 26.0466,
+        "availableAt": 53900
       },
       {
         "id": 113,
-        "kind": "tower",
-        "radius": 10,
-        "points": 60,
-        "x": 49.7,
-        "y": 81.5,
-        "availableAt": 90001
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 77.0553,
+        "y": 18.6407,
+        "availableAt": 75800
       },
       {
         "id": 114,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 121.9,
-        "y": 82,
-        "availableAt": 68600
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 66.0363,
+        "y": 42.7416,
+        "availableAt": 73300
       },
       {
         "id": 115,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 120.9282,
-        "y": 87.8,
-        "availableAt": 77300
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 58.8805,
+        "y": 12.7191,
+        "availableAt": 50500
       },
       {
         "id": 116,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 117.7,
-        "y": 89.5282,
-        "availableAt": 77100
-      },
-      {
-        "id": 117,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 112.6,
-        "y": 89.2,
-        "availableAt": 76300
-      },
-      {
-        "id": 118,
-        "kind": "tree",
-        "radius": 1.7,
+        "kind": "bench",
+        "radius": 2.6,
         "points": 3,
-        "x": 106.2,
-        "y": 92.0263,
-        "availableAt": 76100
-      },
-      {
-        "id": 119,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 104.3737,
-        "y": 87.8,
-        "availableAt": 75700
-      },
-      {
-        "id": 120,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 100.2,
-        "y": 82.5,
-        "availableAt": 75300
-      },
-      {
-        "id": 121,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 103.1737,
-        "y": 77.5,
+        "x": 81.2377,
+        "y": 31.0361,
         "availableAt": 74800
       },
       {
+        "id": 117,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 51.5856,
+        "y": 34.4183,
+        "availableAt": 90001
+      },
+      {
+        "id": 118,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 74,
+        "y": 7.8096,
+        "availableAt": 90001
+      },
+      {
+        "id": 119,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 74.5556,
+        "y": 41.1929,
+        "availableAt": 90001
+      },
+      {
+        "id": 120,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 49.9342,
+        "y": 19.7913,
+        "availableAt": 90001
+      },
+      {
+        "id": 121,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 87.7679,
+        "y": 21.8129,
+        "availableAt": 90001
+      },
+      {
         "id": 122,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 105.2,
-        "y": 69.7756,
-        "availableAt": 74400
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 59.6157,
+        "y": 39.8413,
+        "availableAt": 90001
       },
       {
         "id": 123,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 112.6,
-        "y": 67.6,
-        "availableAt": 74000
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 63.8209,
+        "y": 9.0012,
+        "availableAt": 90001
       },
       {
         "id": 124,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 120.6,
-        "y": 70.5756,
-        "availableAt": 69000
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 85.7202,
+        "y": 39.8614,
+        "availableAt": 90001
       },
       {
         "id": 125,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 123.9244,
-        "y": 76.2,
-        "availableAt": 68600
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 51.9152,
+        "y": 30.0551,
+        "availableAt": 90001
       },
       {
         "id": 126,
         "kind": "car",
         "radius": 4.2,
-        "points": 12,
-        "x": 128.2,
-        "y": 81.2,
+        "points": 3,
+        "x": 77.8671,
+        "y": 12.4931,
         "availableAt": 90001
       },
       {
         "id": 127,
         "kind": "car",
         "radius": 4.2,
-        "points": 12,
-        "x": 128.4224,
-        "y": 92,
+        "points": 3,
+        "x": 69.4653,
+        "y": 49.4861,
         "availableAt": 90001
       },
       {
         "id": 128,
         "kind": "car",
         "radius": 4.2,
-        "points": 12,
-        "x": 121.6,
-        "y": 97.8224,
+        "points": 3,
+        "x": 57.5713,
+        "y": 17.4161,
         "availableAt": 90001
       },
       {
         "id": 129,
         "kind": "car",
         "radius": 4.2,
-        "points": 12,
-        "x": 112.2,
-        "y": 99.1,
+        "points": 3,
+        "x": 85.1765,
+        "y": 28.0192,
         "availableAt": 90001
       },
       {
         "id": 130,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 104.4,
-        "y": 98.0224,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 51.7111,
+        "y": 41.6761,
         "availableAt": 90001
       },
       {
         "id": 131,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 98.3776,
-        "y": 89.6,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 70.1727,
+        "y": 11.2439,
         "availableAt": 90001
       },
       {
         "id": 132,
-        "kind": "tower",
-        "radius": 10,
-        "points": 60,
-        "x": 96.7,
-        "y": 83,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 78.9082,
+        "y": 42.8254,
         "availableAt": 90001
       },
       {
         "id": 133,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 166.7,
-        "y": 82.2,
-        "availableAt": 61900
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 48.2348,
+        "y": 22.491,
+        "availableAt": 90001
       },
       {
         "id": 134,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 164.3282,
-        "y": 88,
-        "availableAt": 60000
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 80.4509,
+        "y": 21.6059,
+        "availableAt": 90001
       },
       {
         "id": 135,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 162.4,
-        "y": 88.4282,
-        "availableAt": 59800
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 61.6113,
+        "y": 47.4264,
+        "availableAt": 90001
       },
       {
         "id": 136,
-        "kind": "bin",
-        "radius": 1,
-        "points": 2,
-        "x": 158.2,
-        "y": 89.5,
-        "availableAt": 59700
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 60.3152,
+        "y": 9.2133,
+        "availableAt": 90001
       },
       {
         "id": 137,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 150.8,
-        "y": 93.5263,
-        "availableAt": 66300
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 86.5527,
+        "y": 37.5922,
+        "availableAt": 90001
       },
       {
         "id": 138,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 148.3737,
-        "y": 88.9,
-        "availableAt": 66000
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 49.9902,
+        "y": 34.7433,
+        "availableAt": 90001
       },
       {
         "id": 139,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 147.6,
-        "y": 83,
-        "availableAt": 71400
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 78.93,
+        "y": 8.576,
+        "availableAt": 90001
       },
       {
         "id": 140,
-        "kind": "tree",
-        "radius": 1.7,
-        "points": 3,
-        "x": 148.7737,
-        "y": 77.5,
-        "availableAt": 70000
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 73.0532,
+        "y": 46.3958,
+        "availableAt": 90001
       },
       {
         "id": 141,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 150.8,
-        "y": 70.4756,
-        "availableAt": 70100
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 49.3535,
+        "y": 15.6114,
+        "availableAt": 90001
       },
       {
         "id": 142,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 156.9,
-        "y": 67.9,
-        "availableAt": 58600
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 85.641,
+        "y": 23.7732,
+        "availableAt": 90001
       },
       {
         "id": 143,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 164.5,
-        "y": 71.1756,
-        "availableAt": 61900
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 53.9446,
+        "y": 45.6278,
+        "availableAt": 90001
       },
       {
         "id": 144,
-        "kind": "bench",
-        "radius": 2.6,
-        "points": 5,
-        "x": 169.2244,
-        "y": 75,
-        "availableAt": 63900
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 65.6237,
+        "y": 8.0574,
+        "availableAt": 90001
       },
       {
         "id": 145,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 175.8,
-        "y": 82.8,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 84.8764,
+        "y": 42.8183,
         "availableAt": 90001
       },
       {
         "id": 146,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 171.0224,
-        "y": 89.5,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 47.3009,
+        "y": 25.8146,
         "availableAt": 90001
       },
       {
         "id": 147,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 166.8,
-        "y": 97.7224,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 84.6663,
+        "y": 13.2982,
         "availableAt": 90001
       },
       {
         "id": 148,
-        "kind": "car",
-        "radius": 4.2,
-        "points": 12,
-        "x": 157,
-        "y": 99.9,
-        "availableAt": 90001
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 119,
+        "y": 27.9,
+        "availableAt": 78900
       },
       {
         "id": 149,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 148,
-        "y": 98.2224,
-        "availableAt": 90001
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 104.1263,
+        "y": 35.2549,
+        "availableAt": 76700
       },
       {
         "id": 150,
-        "kind": "house",
-        "radius": 7,
-        "points": 28,
-        "x": 142.1776,
-        "y": 91.8,
-        "availableAt": 90001
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 113.0365,
+        "y": 15.3498,
+        "availableAt": 77800
       },
       {
         "id": 151,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 116.9591,
+        "y": 34.5552,
+        "availableAt": 79500
+      },
+      {
+        "id": 152,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 102.4529,
+        "y": 26.4582,
+        "availableAt": 76500
+      },
+      {
+        "id": 153,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 122.5688,
+        "y": 21.2225,
+        "availableAt": 78700
+      },
+      {
+        "id": 154,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 110.0828,
+        "y": 34.36,
+        "availableAt": 59300
+      },
+      {
+        "id": 155,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 108.7909,
+        "y": 20.1255,
+        "availableAt": 77200
+      },
+      {
+        "id": 156,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 124.7112,
+        "y": 31.7595,
+        "availableAt": 79500
+      },
+      {
+        "id": 157,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 105.1296,
+        "y": 29.3709,
+        "availableAt": 76700
+      },
+      {
+        "id": 158,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 117.2385,
+        "y": 18.3427,
+        "availableAt": 62100
+      },
+      {
+        "id": 159,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 115.1907,
+        "y": 39.3041,
+        "availableAt": 43000
+      },
+      {
+        "id": 160,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 104.9435,
+        "y": 23.8901,
+        "availableAt": 76700
+      },
+      {
+        "id": 161,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 121.0668,
+        "y": 26.6528,
+        "availableAt": 62700
+      },
+      {
+        "id": 162,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 105.5233,
+        "y": 38.6348,
+        "availableAt": 77000
+      },
+      {
+        "id": 163,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 112.1004,
+        "y": 21.458,
+        "availableAt": 77500
+      },
+      {
+        "id": 164,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 120.9404,
+        "y": 36.7778,
+        "availableAt": 79800
+      },
+      {
+        "id": 165,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 96.2137,
+        "y": 29.0611,
+        "availableAt": 76000
+      },
+      {
+        "id": 166,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 120.3883,
+        "y": 18.9462,
+        "availableAt": 78500
+      },
+      {
+        "id": 167,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 113.3995,
+        "y": 41.6861,
+        "availableAt": 52900
+      },
+      {
+        "id": 168,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 102.9487,
+        "y": 16.6155,
+        "availableAt": 60900
+      },
+      {
+        "id": 169,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 122.3107,
+        "y": 28.7335,
+        "availableAt": 62900
+      },
+      {
+        "id": 170,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 103.1288,
+        "y": 33.9247,
+        "availableAt": 76600
+      },
+      {
+        "id": 171,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 114.6117,
+        "y": 13.1901,
+        "availableAt": 78100
+      },
+      {
+        "id": 172,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 118.4718,
+        "y": 36.3765,
+        "availableAt": 79700
+      },
+      {
+        "id": 173,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 99.915,
+        "y": 23.2488,
+        "availableAt": 60300
+      },
+      {
+        "id": 174,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 127.6247,
+        "y": 20.0892,
+        "availableAt": 62400
+      },
+      {
+        "id": 175,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 107.1394,
+        "y": 36.7247,
+        "availableAt": 59100
+      },
+      {
+        "id": 176,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 108.8001,
+        "y": 15.9672,
+        "availableAt": 77500
+      },
+      {
+        "id": 177,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 125.963,
+        "y": 35.4437,
+        "availableAt": 62400
+      },
+      {
+        "id": 178,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 98.5294,
+        "y": 29.7136,
+        "availableAt": 76300
+      },
+      {
+        "id": 179,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 120.0534,
+        "y": 15.142,
+        "availableAt": 78500
+      },
+      {
+        "id": 180,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 116.4181,
+        "y": 44.9255,
+        "availableAt": 53400
+      },
+      {
+        "id": 181,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 100.9219,
+        "y": 19.7401,
+        "availableAt": 76700
+      },
+      {
+        "id": 182,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 129.9454,
+        "y": 24.679,
+        "availableAt": 62500
+      },
+      {
+        "id": 183,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 98.7975,
+        "y": 42.8472,
+        "availableAt": 58900
+      },
+      {
+        "id": 184,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 111.9634,
+        "y": 15.8002,
+        "availableAt": 77800
+      },
+      {
+        "id": 185,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 122.4502,
+        "y": 37.8505,
+        "availableAt": 79900
+      },
+      {
+        "id": 186,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 94.3811,
+        "y": 24.3466,
+        "availableAt": 60500
+      },
+      {
+        "id": 187,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 122.0553,
+        "y": 19.0407,
+        "availableAt": 78700
+      },
+      {
+        "id": 188,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 109.7363,
+        "y": 43.4416,
+        "availableAt": 52000
+      },
+      {
+        "id": 189,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 103.2805,
+        "y": 12.1191,
+        "availableAt": 77500
+      },
+      {
+        "id": 190,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 125.8377,
+        "y": 31.6361,
+        "availableAt": 79600
+      },
+      {
+        "id": 191,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 96.3856,
+        "y": 35.1183,
+        "availableAt": 90001
+      },
+      {
+        "id": 192,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 121,
+        "y": 7.0096,
+        "availableAt": 90001
+      },
+      {
+        "id": 193,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 119.6556,
+        "y": 42.6929,
+        "availableAt": 90001
+      },
+      {
+        "id": 194,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 96.1342,
+        "y": 19.8913,
+        "availableAt": 90001
+      },
+      {
+        "id": 195,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 132.2679,
+        "y": 20.9129,
+        "availableAt": 90001
+      },
+      {
+        "id": 196,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 104.4157,
+        "y": 40.9413,
+        "availableAt": 90001
+      },
+      {
+        "id": 197,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 109.6209,
+        "y": 11.1012,
+        "availableAt": 90001
+      },
+      {
+        "id": 198,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 129.9202,
+        "y": 39.4614,
+        "availableAt": 90001
+      },
+      {
+        "id": 199,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 96.8152,
+        "y": 30.4551,
+        "availableAt": 90001
+      },
+      {
+        "id": 200,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 124.7671,
+        "y": 13.6931,
+        "availableAt": 90001
+      },
+      {
+        "id": 201,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 112.1653,
+        "y": 49.6861,
+        "availableAt": 90001
+      },
+      {
+        "id": 202,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 101.3713,
+        "y": 18.0161,
+        "availableAt": 90001
+      },
+      {
+        "id": 203,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 130.3765,
+        "y": 29.2192,
+        "availableAt": 90001
+      },
+      {
+        "id": 204,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 95.0111,
+        "y": 40.8761,
+        "availableAt": 90001
+      },
+      {
+        "id": 205,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 113.4727,
+        "y": 14.1439,
+        "availableAt": 90001
+      },
+      {
+        "id": 206,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 121.9082,
+        "y": 42.2254,
+        "availableAt": 90001
+      },
+      {
+        "id": 207,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 91.7348,
+        "y": 23.391,
+        "availableAt": 90001
+      },
+      {
+        "id": 208,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 125.6509,
+        "y": 21.4059,
+        "availableAt": 90001
+      },
+      {
+        "id": 209,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 106.6113,
+        "y": 49.8264,
+        "availableAt": 90001
+      },
+      {
+        "id": 210,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 105.2152,
+        "y": 11.0133,
+        "availableAt": 90001
+      },
+      {
+        "id": 211,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 131.7527,
+        "y": 35.9922,
+        "availableAt": 90001
+      },
+      {
+        "id": 212,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 95.3902,
+        "y": 32.3433,
+        "availableAt": 90001
+      },
+      {
+        "id": 213,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 123.93,
+        "y": 8.476,
+        "availableAt": 90001
+      },
+      {
+        "id": 214,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 117.2532,
+        "y": 45.5958,
+        "availableAt": 90001
+      },
+      {
+        "id": 215,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 93.6535,
+        "y": 16.1114,
+        "availableAt": 90001
+      },
+      {
+        "id": 216,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 132.241,
+        "y": 24.9732,
+        "availableAt": 90001
+      },
+      {
+        "id": 217,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 98.9446,
+        "y": 44.1278,
+        "availableAt": 90001
+      },
+      {
+        "id": 218,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 110.1237,
+        "y": 9.4574,
+        "availableAt": 90001
+      },
+      {
+        "id": 219,
         "kind": "tower",
         "radius": 10,
-        "points": 60,
-        "x": 140.7,
-        "y": 84,
+        "points": 30,
+        "x": 128.8764,
+        "y": 42.5183,
+        "availableAt": 90001
+      },
+      {
+        "id": 220,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 93.1009,
+        "y": 26.7146,
+        "availableAt": 90001
+      },
+      {
+        "id": 221,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 127.3663,
+        "y": 12.7982,
+        "availableAt": 90001
+      },
+      {
+        "id": 222,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 163.9,
+        "y": 28.2,
+        "availableAt": 49200
+      },
+      {
+        "id": 223,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 150.2263,
+        "y": 35.0549,
+        "availableAt": 66700
+      },
+      {
+        "id": 224,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 158.8365,
+        "y": 15.5498,
+        "availableAt": 65000
+      },
+      {
+        "id": 225,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 161.4591,
+        "y": 31.7552,
+        "availableAt": 49100
+      },
+      {
+        "id": 226,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 147.7529,
+        "y": 25.1582,
+        "availableAt": 65300
+      },
+      {
+        "id": 227,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 168.0688,
+        "y": 21.2225,
+        "availableAt": 65000
+      },
+      {
+        "id": 228,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 156.5828,
+        "y": 34.56,
+        "availableAt": 51900
+      },
+      {
+        "id": 229,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 153.4909,
+        "y": 17.3255,
+        "availableAt": 64400
+      },
+      {
+        "id": 230,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 168.6112,
+        "y": 31.7595,
+        "availableAt": 64200
+      },
+      {
+        "id": 231,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 150.0296,
+        "y": 30.2709,
+        "availableAt": 66400
+      },
+      {
+        "id": 232,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 160.3385,
+        "y": 17.6427,
+        "availableAt": 65200
+      },
+      {
+        "id": 233,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 159.9907,
+        "y": 41.2041,
+        "availableAt": 67600
+      },
+      {
+        "id": 234,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 152.0435,
+        "y": 24.5901,
+        "availableAt": 64100
+      },
+      {
+        "id": 235,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 166.3668,
+        "y": 25.4528,
+        "availableAt": 64700
+      },
+      {
+        "id": 236,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 149.8233,
+        "y": 39.5348,
+        "availableAt": 67100
+      },
+      {
+        "id": 237,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 155.9004,
+        "y": 19.658,
+        "availableAt": 64600
+      },
+      {
+        "id": 238,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 166.6404,
+        "y": 36.0778,
+        "availableAt": 63900
+      },
+      {
+        "id": 239,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 141.1137,
+        "y": 26.8611,
+        "availableAt": 63300
+      },
+      {
+        "id": 240,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 164.4883,
+        "y": 21.2462,
+        "availableAt": 65100
+      },
+      {
+        "id": 241,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 158.1995,
+        "y": 38.9861,
+        "availableAt": 67100
+      },
+      {
+        "id": 242,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 147.7487,
+        "y": 14.2155,
+        "availableAt": 65000
+      },
+      {
+        "id": 243,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 166.0107,
+        "y": 27.7335,
+        "availableAt": 49200
+      },
+      {
+        "id": 244,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 145.4288,
+        "y": 34.6247,
+        "availableAt": 63900
+      },
+      {
+        "id": 245,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 160.2117,
+        "y": 11.4901,
+        "availableAt": 50400
+      },
+      {
+        "id": 246,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 162.4718,
+        "y": 35.9765,
+        "availableAt": 66400
+      },
+      {
+        "id": 247,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 144.215,
+        "y": 24.3488,
+        "availableAt": 63500
+      },
+      {
+        "id": 248,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 171.4247,
+        "y": 20.0892,
+        "availableAt": 49700
+      },
+      {
+        "id": 249,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 152.4394,
+        "y": 37.1247,
+        "availableAt": 66800
+      },
+      {
+        "id": 250,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 153.6001,
+        "y": 15.3672,
+        "availableAt": 64500
+      },
+      {
+        "id": 251,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 171.563,
+        "y": 36.1437,
+        "availableAt": 64000
+      },
+      {
+        "id": 252,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 144.7294,
+        "y": 29.7136,
+        "availableAt": 66700
+      },
+      {
+        "id": 253,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 166.4534,
+        "y": 13.742,
+        "availableAt": 65700
+      },
+      {
+        "id": 254,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 161.1181,
+        "y": 47.3255,
+        "availableAt": 68400
+      },
+      {
+        "id": 255,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 148.0219,
+        "y": 20.8401,
+        "availableAt": 63900
+      },
+      {
+        "id": 256,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 173.6454,
+        "y": 25.779,
+        "availableAt": 64900
+      },
+      {
+        "id": 257,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 145.3975,
+        "y": 40.0472,
+        "availableAt": 67300
+      },
+      {
+        "id": 258,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 158.5634,
+        "y": 14.1002,
+        "availableAt": 65100
+      },
+      {
+        "id": 259,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 168.4502,
+        "y": 40.3505,
+        "availableAt": 63700
+      },
+      {
+        "id": 260,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 138.5811,
+        "y": 25.9466,
+        "availableAt": 63100
+      },
+      {
+        "id": 261,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 168.4553,
+        "y": 20.1407,
+        "availableAt": 65200
+      },
+      {
+        "id": 262,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 155.1363,
+        "y": 44.2416,
+        "availableAt": 67600
+      },
+      {
+        "id": 263,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 147.7805,
+        "y": 12.1191,
+        "availableAt": 64400
+      },
+      {
+        "id": 264,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 168.6377,
+        "y": 29.6361,
+        "availableAt": 64500
+      },
+      {
+        "id": 265,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 140.3856,
+        "y": 35.0183,
+        "availableAt": 90001
+      },
+      {
+        "id": 266,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 164.1,
+        "y": 7.8096,
+        "availableAt": 90001
+      },
+      {
+        "id": 267,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 161.7556,
+        "y": 41.7929,
+        "availableAt": 90001
+      },
+      {
+        "id": 268,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 142.2342,
+        "y": 20.1913,
+        "availableAt": 90001
+      },
+      {
+        "id": 269,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 175.8,
+        "y": 21.0129,
+        "availableAt": 90001
+      },
+      {
+        "id": 270,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 150.3157,
+        "y": 40.5413,
+        "availableAt": 90001
+      },
+      {
+        "id": 271,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 154.1209,
+        "y": 8.7012,
+        "availableAt": 90001
+      },
+      {
+        "id": 272,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 175.7202,
+        "y": 40.3614,
+        "availableAt": 90001
+      },
+      {
+        "id": 273,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 141.5152,
+        "y": 29.3551,
+        "availableAt": 90001
+      },
+      {
+        "id": 274,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 169.2671,
+        "y": 12.6931,
+        "availableAt": 90001
+      },
+      {
+        "id": 275,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 159.2653,
+        "y": 47.9861,
+        "availableAt": 90001
+      },
+      {
+        "id": 276,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 148.1713,
+        "y": 15.5161,
+        "availableAt": 90001
+      },
+      {
+        "id": 277,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 175.8,
+        "y": 27.9192,
+        "availableAt": 90001
+      },
+      {
+        "id": 278,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 140.9111,
+        "y": 42.2761,
+        "availableAt": 90001
+      },
+      {
+        "id": 279,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 158.0727,
+        "y": 11.3439,
+        "availableAt": 90001
+      },
+      {
+        "id": 280,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 167.6082,
+        "y": 40.9254,
+        "availableAt": 90001
+      },
+      {
+        "id": 281,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 135.8348,
+        "y": 21.991,
+        "availableAt": 90001
+      },
+      {
+        "id": 282,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 170.4509,
+        "y": 20.2059,
+        "availableAt": 90001
+      },
+      {
+        "id": 283,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 150.8113,
+        "y": 47.7264,
+        "availableAt": 90001
+      },
+      {
+        "id": 284,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 148.4152,
+        "y": 9.5133,
+        "availableAt": 90001
+      },
+      {
+        "id": 285,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 173,
+        "y": 34.9922,
+        "availableAt": 90001
+      },
+      {
+        "id": 286,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 139.2902,
+        "y": 34.2433,
+        "availableAt": 90001
+      },
+      {
+        "id": 287,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 167.73,
+        "y": 7,
+        "availableAt": 90001
+      },
+      {
+        "id": 288,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 161.9532,
+        "y": 45.8958,
+        "availableAt": 90001
+      },
+      {
+        "id": 289,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 138.5535,
+        "y": 15.1114,
+        "availableAt": 90001
+      },
+      {
+        "id": 290,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 173,
+        "y": 25.1732,
+        "availableAt": 90001
+      },
+      {
+        "id": 291,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 143.0446,
+        "y": 46.2278,
+        "availableAt": 90001
+      },
+      {
+        "id": 292,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 155.7237,
+        "y": 8.4574,
+        "availableAt": 90001
+      },
+      {
+        "id": 293,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 170,
+        "y": 41.5183,
+        "availableAt": 90001
+      },
+      {
+        "id": 294,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 139.0009,
+        "y": 28.6146,
+        "availableAt": 90001
+      },
+      {
+        "id": 295,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 170,
+        "y": 14.2982,
+        "availableAt": 90001
+      },
+      {
+        "id": 296,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 30,
+        "y": 82.5,
+        "availableAt": 61700
+      },
+      {
+        "id": 297,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 14.8263,
+        "y": 88.2549,
+        "availableAt": 62600
+      },
+      {
+        "id": 298,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 23.4365,
+        "y": 70.1498,
+        "availableAt": 61100
+      },
+      {
+        "id": 299,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 25.7591,
+        "y": 87.2552,
+        "availableAt": 62200
+      },
+      {
+        "id": 300,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 12.6529,
+        "y": 81.9582,
+        "availableAt": 62200
+      },
+      {
+        "id": 301,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 34.2688,
+        "y": 75.0225,
+        "availableAt": 61100
+      },
+      {
+        "id": 302,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 20.8828,
+        "y": 90.26,
+        "availableAt": 62800
+      },
+      {
+        "id": 303,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 19.1909,
+        "y": 72.2255,
+        "availableAt": 61000
+      },
+      {
+        "id": 304,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 33.5112,
+        "y": 87.5595,
+        "availableAt": 64300
+      },
+      {
+        "id": 305,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 15.9296,
+        "y": 85.6709,
+        "availableAt": 62300
+      },
+      {
+        "id": 306,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 28.1385,
+        "y": 72.9427,
+        "availableAt": 61500
+      },
+      {
+        "id": 307,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 26.3907,
+        "y": 96.3041,
+        "availableAt": 62800
+      },
+      {
+        "id": 308,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 16.2435,
+        "y": 78.4901,
+        "availableAt": 61600
+      },
+      {
+        "id": 309,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 32.1668,
+        "y": 81.1528,
+        "availableAt": 61800
+      },
+      {
+        "id": 310,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 13.5233,
+        "y": 93.4348,
+        "availableAt": 63000
+      },
+      {
+        "id": 311,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 22.3004,
+        "y": 76.358,
+        "availableAt": 61400
+      },
+      {
+        "id": 312,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 31.8404,
+        "y": 92.2778,
+        "availableAt": 62400
+      },
+      {
+        "id": 313,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 7.9137,
+        "y": 82.2611,
+        "availableAt": 62500
+      },
+      {
+        "id": 314,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 30.5883,
+        "y": 75.0462,
+        "availableAt": 61400
+      },
+      {
+        "id": 315,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 22.0995,
+        "y": 96.3861,
+        "availableAt": 63100
+      },
+      {
+        "id": 316,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 12.6487,
+        "y": 68.8155,
+        "availableAt": 60700
+      },
+      {
+        "id": 317,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 30.9107,
+        "y": 82.7335,
+        "availableAt": 61800
+      },
+      {
+        "id": 318,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 10.3288,
+        "y": 89.4247,
+        "availableAt": 62800
+      },
+      {
+        "id": 319,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 27.1117,
+        "y": 67.1901,
+        "availableAt": 62400
+      },
+      {
+        "id": 320,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 26.5718,
+        "y": 90.8765,
+        "availableAt": 62500
+      },
+      {
+        "id": 321,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 11.115,
+        "y": 79.0488,
+        "availableAt": 62200
+      },
+      {
+        "id": 322,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 38.3247,
+        "y": 74.9892,
+        "availableAt": 62100
+      },
+      {
+        "id": 323,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 17.8394,
+        "y": 91.1247,
+        "availableAt": 62800
+      },
+      {
+        "id": 324,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 17.7001,
+        "y": 71.7672,
+        "availableAt": 61000
+      },
+      {
+        "id": 325,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 35.263,
+        "y": 90.4437,
+        "availableAt": 61200
+      },
+      {
+        "id": 326,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 9.6294,
+        "y": 87.2136,
+        "availableAt": 62700
+      },
+      {
+        "id": 327,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 30.8534,
+        "y": 67.742,
+        "availableAt": 61500
+      },
+      {
+        "id": 328,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 24.5181,
+        "y": 101.1255,
+        "availableAt": 63200
+      },
+      {
+        "id": 329,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 12.6219,
+        "y": 73.6401,
+        "availableAt": 61100
+      },
+      {
+        "id": 330,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 39.1454,
+        "y": 80.579,
+        "availableAt": 60700
+      },
+      {
+        "id": 331,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 9.2975,
+        "y": 96.4472,
+        "availableAt": 63500
+      },
+      {
+        "id": 332,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 22.8634,
+        "y": 69.8002,
+        "availableAt": 61100
+      },
+      {
+        "id": 333,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 31.9502,
+        "y": 93.1505,
+        "availableAt": 62500
+      },
+      {
+        "id": 334,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 2.6811,
+        "y": 79.7466,
+        "availableAt": 62900
+      },
+      {
+        "id": 335,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 33.0553,
+        "y": 73.4407,
+        "availableAt": 61300
+      },
+      {
+        "id": 336,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 18.7363,
+        "y": 99.2416,
+        "availableAt": 63500
+      },
+      {
+        "id": 337,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 11.2805,
+        "y": 67.4191,
+        "availableAt": 60700
+      },
+      {
+        "id": 338,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 35.8377,
+        "y": 86.2361,
+        "availableAt": 64400
+      },
+      {
+        "id": 339,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 7.6856,
+        "y": 92.1183,
+        "availableAt": 90001
+      },
+      {
+        "id": 340,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 29.2,
+        "y": 63.9096,
+        "availableAt": 90001
+      },
+      {
+        "id": 341,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 29.1556,
+        "y": 95.9929,
+        "availableAt": 90001
+      },
+      {
+        "id": 342,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 6.2342,
+        "y": 73.5913,
+        "availableAt": 90001
+      },
+      {
+        "id": 343,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 41.9679,
+        "y": 75.2129,
+        "availableAt": 90001
+      },
+      {
+        "id": 344,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 16.2157,
+        "y": 94.5413,
+        "availableAt": 90001
+      },
+      {
+        "id": 345,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 18.8209,
+        "y": 63.8012,
+        "availableAt": 90001
+      },
+      {
+        "id": 346,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 39.2202,
+        "y": 94.6614,
+        "availableAt": 90001
+      },
+      {
+        "id": 347,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 6.8152,
+        "y": 83.9551,
+        "availableAt": 90001
+      },
+      {
+        "id": 348,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 35.1671,
+        "y": 67.9931,
+        "availableAt": 90001
+      },
+      {
+        "id": 349,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 23.9653,
+        "y": 104.5861,
+        "availableAt": 90001
+      },
+      {
+        "id": 350,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 12.4713,
+        "y": 73.3161,
+        "availableAt": 90001
+      },
+      {
+        "id": 351,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 40.3765,
+        "y": 81.9192,
+        "availableAt": 90001
+      },
+      {
+        "id": 352,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 4.9111,
+        "y": 95.4761,
+        "availableAt": 90001
+      },
+      {
+        "id": 353,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 23.7727,
+        "y": 66.5439,
+        "availableAt": 90001
+      },
+      {
+        "id": 354,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 32.8082,
+        "y": 97.0254,
+        "availableAt": 90001
+      },
+      {
+        "id": 355,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 4.2,
+        "y": 76.491,
+        "availableAt": 90001
+      },
+      {
+        "id": 356,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 37.0509,
+        "y": 76.3059,
+        "availableAt": 90001
+      },
+      {
+        "id": 357,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 16.0113,
+        "y": 102.3264,
+        "availableAt": 90001
+      },
+      {
+        "id": 358,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 15.1152,
+        "y": 63.8133,
+        "availableAt": 90001
+      },
+      {
+        "id": 359,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 41.7527,
+        "y": 89.6922,
+        "availableAt": 90001
+      },
+      {
+        "id": 360,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 7,
+        "y": 88.3433,
+        "availableAt": 90001
+      },
+      {
+        "id": 361,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 33.73,
+        "y": 62.476,
+        "availableAt": 90001
+      },
+      {
+        "id": 362,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 25.7532,
+        "y": 101.9958,
+        "availableAt": 90001
+      },
+      {
+        "id": 363,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 7,
+        "y": 69.0114,
+        "availableAt": 90001
+      },
+      {
+        "id": 364,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 42.241,
+        "y": 78.1732,
+        "availableAt": 90001
+      },
+      {
+        "id": 365,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 10.2446,
+        "y": 100.0278,
+        "availableAt": 90001
+      },
+      {
+        "id": 366,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 19.6237,
+        "y": 62.2574,
+        "availableAt": 90001
+      },
+      {
+        "id": 367,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 39.6764,
+        "y": 96.6183,
+        "availableAt": 90001
+      },
+      {
+        "id": 368,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 10,
+        "y": 81.4146,
+        "availableAt": 90001
+      },
+      {
+        "id": 369,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 39.0663,
+        "y": 68.8982,
+        "availableAt": 90001
+      },
+      {
+        "id": 370,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 74.8,
+        "y": 82.7,
+        "availableAt": 68200
+      },
+      {
+        "id": 371,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 59.0263,
+        "y": 87.7549,
+        "availableAt": 47300
+      },
+      {
+        "id": 372,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 68.3365,
+        "y": 70.1498,
+        "availableAt": 67000
+      },
+      {
+        "id": 373,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 72.8591,
+        "y": 89.1552,
+        "availableAt": 68900
+      },
+      {
+        "id": 374,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 58.6529,
+        "y": 80.1582,
+        "availableAt": 59300
+      },
+      {
+        "id": 375,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 78.9688,
+        "y": 74.2225,
+        "availableAt": 67900
+      },
+      {
+        "id": 376,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 64.7828,
+        "y": 88.06,
+        "availableAt": 45900
+      },
+      {
+        "id": 377,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 62.7909,
+        "y": 74.7255,
+        "availableAt": 66400
+      },
+      {
+        "id": 378,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 81.1112,
+        "y": 86.4595,
+        "availableAt": 68700
+      },
+      {
+        "id": 379,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 62.3296,
+        "y": 85.9709,
+        "availableAt": 47200
+      },
+      {
+        "id": 380,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 71.5385,
+        "y": 71.9427,
+        "availableAt": 67200
+      },
+      {
+        "id": 381,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 71.3907,
+        "y": 94.9041,
+        "availableAt": 58300
+      },
+      {
+        "id": 382,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 60.2435,
+        "y": 80.2901,
+        "availableAt": 67500
+      },
+      {
+        "id": 383,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 75.8668,
+        "y": 79.0528,
+        "availableAt": 67900
+      },
+      {
+        "id": 384,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 59.6233,
+        "y": 91.7348,
+        "availableAt": 59000
+      },
+      {
+        "id": 385,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 65.6004,
+        "y": 74.858,
+        "availableAt": 66700
+      },
+      {
+        "id": 386,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 77.9404,
+        "y": 91.0778,
+        "availableAt": 69000
+      },
+      {
+        "id": 387,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 52.8137,
+        "y": 83.7611,
+        "availableAt": 59600
+      },
+      {
+        "id": 388,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 74.1883,
+        "y": 76.0462,
+        "availableAt": 67600
+      },
+      {
+        "id": 389,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 66.5995,
+        "y": 93.9861,
+        "availableAt": 58500
+      },
+      {
+        "id": 390,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 58.0487,
+        "y": 71.3155,
+        "availableAt": 66100
+      },
+      {
+        "id": 391,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 78.5107,
+        "y": 85.2335,
+        "availableAt": 68500
+      },
+      {
+        "id": 392,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 58.3288,
+        "y": 90.1247,
+        "availableAt": 59100
+      },
+      {
+        "id": 393,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 69.6117,
+        "y": 67.0901,
+        "availableAt": 67100
+      },
+      {
+        "id": 394,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 72.7718,
+        "y": 92.0765,
+        "availableAt": 46500
+      },
+      {
+        "id": 395,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 55.915,
+        "y": 77.5488,
+        "availableAt": 59700
+      },
+      {
+        "id": 396,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 81.6247,
+        "y": 76.2892,
+        "availableAt": 68200
+      },
+      {
+        "id": 397,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 62.8394,
+        "y": 91.1247,
+        "availableAt": 58800
+      },
+      {
+        "id": 398,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 61.6001,
+        "y": 71.0672,
+        "availableAt": 66400
+      },
+      {
+        "id": 399,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 83.163,
+        "y": 89.1437,
+        "availableAt": 69000
+      },
+      {
+        "id": 400,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 55.4294,
+        "y": 85.1136,
+        "availableAt": 59400
+      },
+      {
+        "id": 401,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 77.1534,
+        "y": 68.142,
+        "availableAt": 67700
+      },
+      {
+        "id": 402,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 70.9181,
+        "y": 101.7255,
+        "availableAt": 58700
+      },
+      {
+        "id": 403,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 56.1219,
+        "y": 76.0401,
+        "availableAt": 59800
+      },
+      {
+        "id": 404,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 82.2454,
+        "y": 81.779,
+        "availableAt": 68500
+      },
+      {
+        "id": 405,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 53.7975,
+        "y": 95.2472,
+        "availableAt": 59700
+      },
+      {
+        "id": 406,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 67.7634,
+        "y": 69.2002,
+        "availableAt": 67000
+      },
+      {
+        "id": 407,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 78.5502,
+        "y": 94.2505,
+        "availableAt": 57600
+      },
+      {
+        "id": 408,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 47.7811,
+        "y": 81.5466,
+        "availableAt": 65400
+      },
+      {
+        "id": 409,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 77.1553,
+        "y": 75.1407,
+        "availableAt": 67800
+      },
+      {
+        "id": 410,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 64.4363,
+        "y": 97.5416,
+        "availableAt": 58900
+      },
+      {
+        "id": 411,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 57.9805,
+        "y": 67.3191,
+        "availableAt": 66300
+      },
+      {
+        "id": 412,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 78.7377,
+        "y": 87.1361,
+        "availableAt": 68700
+      },
+      {
+        "id": 413,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 51.4856,
+        "y": 90.7183,
+        "availableAt": 90001
+      },
+      {
+        "id": 414,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 74.1,
+        "y": 64.2096,
+        "availableAt": 90001
+      },
+      {
+        "id": 415,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 73.1556,
+        "y": 96.1929,
+        "availableAt": 90001
+      },
+      {
+        "id": 416,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 51.6342,
+        "y": 75.7913,
+        "availableAt": 90001
+      },
+      {
+        "id": 417,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 86.0679,
+        "y": 74.8129,
+        "availableAt": 90001
+      },
+      {
+        "id": 418,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 60.2157,
+        "y": 94.7413,
+        "availableAt": 90001
+      },
+      {
+        "id": 419,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 63.0209,
+        "y": 63.7012,
+        "availableAt": 90001
+      },
+      {
+        "id": 420,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 84.5202,
+        "y": 95.5614,
+        "availableAt": 90001
+      },
+      {
+        "id": 421,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 54.0152,
+        "y": 84.9551,
+        "availableAt": 90001
+      },
+      {
+        "id": 422,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 79.4671,
+        "y": 70.1931,
+        "availableAt": 90001
+      },
+      {
+        "id": 423,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 67.7653,
+        "y": 104.4861,
+        "availableAt": 90001
+      },
+      {
+        "id": 424,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 55.7713,
+        "y": 70.7161,
+        "availableAt": 90001
+      },
+      {
+        "id": 425,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 86.2765,
+        "y": 82.0192,
+        "availableAt": 90001
+      },
+      {
+        "id": 426,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 51.7111,
+        "y": 96.7761,
+        "availableAt": 90001
+      },
+      {
+        "id": 427,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 68.2727,
+        "y": 68.3439,
+        "availableAt": 90001
+      },
+      {
+        "id": 428,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 77.8082,
+        "y": 98.8254,
+        "availableAt": 90001
+      },
+      {
+        "id": 429,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 45.7348,
+        "y": 77.191,
+        "availableAt": 90001
+      },
+      {
+        "id": 430,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 80.2509,
+        "y": 75.0059,
+        "availableAt": 90001
+      },
+      {
+        "id": 431,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 59.2113,
+        "y": 103,
+        "availableAt": 90001
+      },
+      {
+        "id": 432,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 58.6152,
+        "y": 63.9133,
+        "availableAt": 90001
+      },
+      {
+        "id": 433,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 87.0527,
+        "y": 91.8922,
+        "availableAt": 90001
+      },
+      {
+        "id": 434,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 48.7902,
+        "y": 89.6433,
+        "availableAt": 90001
+      },
+      {
+        "id": 435,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 76.73,
+        "y": 64.276,
+        "availableAt": 90001
+      },
+      {
+        "id": 436,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 72.1532,
+        "y": 101.2958,
+        "availableAt": 90001
+      },
+      {
+        "id": 437,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 49.1535,
+        "y": 69.9114,
+        "availableAt": 90001
+      },
+      {
+        "id": 438,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 87.141,
+        "y": 79.1732,
+        "availableAt": 90001
+      },
+      {
+        "id": 439,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 54.4446,
+        "y": 101.3278,
+        "availableAt": 90001
+      },
+      {
+        "id": 440,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 66.4237,
+        "y": 63.5574,
+        "availableAt": 90001
+      },
+      {
+        "id": 441,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 83.7764,
+        "y": 97.8183,
+        "availableAt": 90001
+      },
+      {
+        "id": 442,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 47.8009,
+        "y": 82.5146,
+        "availableAt": 90001
+      },
+      {
+        "id": 443,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 82.4663,
+        "y": 69.0982,
+        "availableAt": 90001
+      },
+      {
+        "id": 444,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 120.7,
+        "y": 82.7,
+        "availableAt": 72100
+      },
+      {
+        "id": 445,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 105.3263,
+        "y": 88.3549,
+        "availableAt": 55600
+      },
+      {
+        "id": 446,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 113.3365,
+        "y": 70.0498,
+        "availableAt": 79600
+      },
+      {
+        "id": 447,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 117.1591,
+        "y": 86.6552,
+        "availableAt": 78800
+      },
+      {
+        "id": 448,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 103.2529,
+        "y": 82.2582,
+        "availableAt": 55900
+      },
+      {
+        "id": 449,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 124.8688,
+        "y": 76.8225,
+        "availableAt": 71900
+      },
+      {
+        "id": 450,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 109.2828,
+        "y": 89.76,
+        "availableAt": 79800
+      },
+      {
+        "id": 451,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 107.4909,
+        "y": 72.8255,
+        "availableAt": 79900
+      },
+      {
+        "id": 452,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 125.2112,
+        "y": 85.9595,
+        "availableAt": 78200
+      },
+      {
+        "id": 453,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 104.6296,
+        "y": 86.1709,
+        "availableAt": 55700
+      },
+      {
+        "id": 454,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 116.7385,
+        "y": 74.2427,
+        "availableAt": 71100
+      },
+      {
+        "id": 455,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 115.2907,
+        "y": 95.0041,
+        "availableAt": 79200
+      },
+      {
+        "id": 456,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 107.5435,
+        "y": 79.5901,
+        "availableAt": 80000
+      },
+      {
+        "id": 457,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 123.3668,
+        "y": 80.1528,
+        "availableAt": 71900
+      },
+      {
+        "id": 458,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 105.5233,
+        "y": 94.6348,
+        "availableAt": 55900
+      },
+      {
+        "id": 459,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 110.4004,
+        "y": 75.958,
+        "availableAt": 79600
+      },
+      {
+        "id": 460,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 122.1404,
+        "y": 92.1778,
+        "availableAt": 78700
+      },
+      {
+        "id": 461,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 95.2137,
+        "y": 82.5611,
+        "availableAt": 56300
+      },
+      {
+        "id": 462,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 118.2883,
+        "y": 74.5462,
+        "availableAt": 71300
+      },
+      {
+        "id": 463,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 111.7995,
+        "y": 96.9861,
+        "availableAt": 79600
+      },
+      {
+        "id": 464,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 103.3487,
+        "y": 71.0155,
+        "availableAt": 52800
+      },
+      {
+        "id": 465,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 122.2107,
+        "y": 84.6335,
+        "availableAt": 72400
+      },
+      {
+        "id": 466,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 101.3288,
+        "y": 89.7247,
+        "availableAt": 55700
+      },
+      {
+        "id": 467,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 115.1117,
+        "y": 65.9901,
+        "availableAt": 79800
+      },
+      {
+        "id": 468,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 116.4718,
+        "y": 92.2765,
+        "availableAt": 79100
+      },
+      {
+        "id": 469,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 98.615,
+        "y": 77.4488,
+        "availableAt": 69600
+      },
+      {
+        "id": 470,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 128.5247,
+        "y": 74.4892,
+        "availableAt": 72100
+      },
+      {
+        "id": 471,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 110.1394,
+        "y": 91.0247,
+        "availableAt": 79700
+      },
+      {
+        "id": 472,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 107.9001,
+        "y": 70.2672,
+        "availableAt": 80000
+      },
+      {
+        "id": 473,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 127.763,
+        "y": 89.3437,
+        "availableAt": 78300
+      },
+      {
+        "id": 474,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 100.1294,
+        "y": 85.0136,
+        "availableAt": 55900
+      },
+      {
+        "id": 475,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 121.9534,
+        "y": 67.842,
+        "availableAt": 71600
+      },
+      {
+        "id": 476,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 116.7181,
+        "y": 102.4255,
+        "availableAt": 79600
+      },
+      {
+        "id": 477,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 102.1219,
+        "y": 74.6401,
+        "availableAt": 70100
+      },
+      {
+        "id": 478,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 128.7454,
+        "y": 80.379,
+        "availableAt": 77900
+      },
+      {
+        "id": 479,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 100.2975,
+        "y": 97.8472,
+        "availableAt": 46000
+      },
+      {
+        "id": 480,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 112.8634,
+        "y": 68.8002,
+        "availableAt": 79800
+      },
+      {
+        "id": 481,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 122.1502,
+        "y": 94.8505,
+        "availableAt": 78900
+      },
+      {
+        "id": 482,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 92.2811,
+        "y": 82.2466,
+        "availableAt": 69200
+      },
+      {
+        "id": 483,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 124.1553,
+        "y": 75.2407,
+        "availableAt": 71800
+      },
+      {
+        "id": 484,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 108.5363,
+        "y": 97.1416,
+        "availableAt": 80000
+      },
+      {
+        "id": 485,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 101.8805,
+        "y": 67.9191,
+        "availableAt": 52600
+      },
+      {
+        "id": 486,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 125.2377,
+        "y": 86.8361,
+        "availableAt": 78300
+      },
+      {
+        "id": 487,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 95.6856,
+        "y": 92.0183,
+        "availableAt": 90001
+      },
+      {
+        "id": 488,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 120,
+        "y": 61.6096,
+        "availableAt": 90001
+      },
+      {
+        "id": 489,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 117.7556,
+        "y": 95.8929,
+        "availableAt": 90001
+      },
+      {
+        "id": 490,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 97.5342,
+        "y": 75.4913,
+        "availableAt": 90001
+      },
+      {
+        "id": 491,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 131.8679,
+        "y": 74.8129,
+        "availableAt": 90001
+      },
+      {
+        "id": 492,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 103.5157,
+        "y": 94.1413,
+        "availableAt": 90001
+      },
+      {
+        "id": 493,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 108.9209,
+        "y": 65.1012,
+        "availableAt": 90001
+      },
+      {
+        "id": 494,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 130.7202,
+        "y": 93.2614,
+        "availableAt": 90001
+      },
+      {
+        "id": 495,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 96.1152,
+        "y": 83.0551,
+        "availableAt": 90001
+      },
+      {
+        "id": 496,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 123.8671,
+        "y": 70.0931,
+        "availableAt": 90001
+      },
+      {
+        "id": 497,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 113.1653,
+        "y": 103.2861,
+        "availableAt": 90001
+      },
+      {
+        "id": 498,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 101.3713,
+        "y": 73.0161,
+        "availableAt": 90001
+      },
+      {
+        "id": 499,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 130.1765,
+        "y": 82.6192,
+        "availableAt": 90001
+      },
+      {
+        "id": 500,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 96.7111,
+        "y": 95.3761,
+        "availableAt": 90001
+      },
+      {
+        "id": 501,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 113.5727,
+        "y": 68.4439,
+        "availableAt": 90001
+      },
+      {
+        "id": 502,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 123.0082,
+        "y": 98.4254,
+        "availableAt": 90001
+      },
+      {
+        "id": 503,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 92.1348,
+        "y": 78.191,
+        "availableAt": 90001
+      },
+      {
+        "id": 504,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 125.1509,
+        "y": 74.1059,
+        "availableAt": 90001
+      },
+      {
+        "id": 505,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 105.9113,
+        "y": 102.7264,
+        "availableAt": 90001
+      },
+      {
+        "id": 506,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 103.3152,
+        "y": 65.6133,
+        "availableAt": 90001
+      },
+      {
+        "id": 507,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 131.6527,
+        "y": 91.6922,
+        "availableAt": 90001
+      },
+      {
+        "id": 508,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 93.7902,
+        "y": 88.8433,
+        "availableAt": 90001
+      },
+      {
+        "id": 509,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 123.53,
+        "y": 62.676,
+        "availableAt": 90001
+      },
+      {
+        "id": 510,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 115.8532,
+        "y": 101.3958,
+        "availableAt": 90001
+      },
+      {
+        "id": 511,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 93.4535,
+        "y": 70.2114,
+        "availableAt": 90001
+      },
+      {
+        "id": 512,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 132.241,
+        "y": 80.2732,
+        "availableAt": 90001
+      },
+      {
+        "id": 513,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 97.9446,
+        "y": 99.9278,
+        "availableAt": 90001
+      },
+      {
+        "id": 514,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 112.5237,
+        "y": 62.0574,
+        "availableAt": 90001
+      },
+      {
+        "id": 515,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 129.7764,
+        "y": 97.1183,
+        "availableAt": 90001
+      },
+      {
+        "id": 516,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 94.7009,
+        "y": 83.8146,
+        "availableAt": 90001
+      },
+      {
+        "id": 517,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 127.7663,
+        "y": 66.9982,
+        "availableAt": 90001
+      },
+      {
+        "id": 518,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 163.1,
+        "y": 83.6,
+        "availableAt": 74100
+      },
+      {
+        "id": 519,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 151.5263,
+        "y": 89.8549,
+        "availableAt": 58900
+      },
+      {
+        "id": 520,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 158.2365,
+        "y": 68.7498,
+        "availableAt": 71300
+      },
+      {
+        "id": 521,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 161.4591,
+        "y": 88.5552,
+        "availableAt": 73600
+      },
+      {
+        "id": 522,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 149.1529,
+        "y": 79.7582,
+        "availableAt": 70700
+      },
+      {
+        "id": 523,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 169.5688,
+        "y": 74.8225,
+        "availableAt": 75100
+      },
+      {
+        "id": 524,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 155.5828,
+        "y": 89.86,
+        "availableAt": 72600
+      },
+      {
+        "id": 525,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 154.0909,
+        "y": 75.0255,
+        "availableAt": 60700
+      },
+      {
+        "id": 526,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 170.3112,
+        "y": 85.7595,
+        "availableAt": 74400
+      },
+      {
+        "id": 527,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 151.5296,
+        "y": 86.0709,
+        "availableAt": 71400
+      },
+      {
+        "id": 528,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 162.4385,
+        "y": 72.0427,
+        "availableAt": 70800
+      },
+      {
+        "id": 529,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 162.8907,
+        "y": 94.2041,
+        "availableAt": 73500
+      },
+      {
+        "id": 530,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 152.9435,
+        "y": 79.7901,
+        "availableAt": 71000
+      },
+      {
+        "id": 531,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 167.9668,
+        "y": 81.6528,
+        "availableAt": 74500
+      },
+      {
+        "id": 532,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 149.9233,
+        "y": 94.0348,
+        "availableAt": 58600
+      },
+      {
+        "id": 533,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 156.5004,
+        "y": 76.758,
+        "availableAt": 60600
+      },
+      {
+        "id": 534,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 166.7404,
+        "y": 90.9778,
+        "availableAt": 73900
+      },
+      {
+        "id": 535,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 141.2137,
+        "y": 81.7611,
+        "availableAt": 71100
+      },
+      {
+        "id": 536,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 164.4883,
+        "y": 76.8462,
+        "availableAt": 74800
+      },
+      {
+        "id": 537,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 156.1995,
+        "y": 95.4861,
+        "availableAt": 73000
+      },
+      {
+        "id": 538,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 146.7487,
+        "y": 69.5155,
+        "availableAt": 61200
+      },
+      {
+        "id": 539,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 166.8107,
+        "y": 85.1335,
+        "availableAt": 74200
+      },
+      {
+        "id": 540,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 146.7288,
+        "y": 91.0247,
+        "availableAt": 58500
+      },
+      {
+        "id": 541,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 161.6117,
+        "y": 67.2901,
+        "availableAt": 74700
+      },
+      {
+        "id": 542,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 161.4718,
+        "y": 90.2765,
+        "availableAt": 73500
+      },
+      {
+        "id": 543,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 144.915,
+        "y": 77.0488,
+        "availableAt": 60700
+      },
+      {
+        "id": 544,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 171.1247,
+        "y": 75.3892,
+        "availableAt": 75100
+      },
+      {
+        "id": 545,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 154.0394,
+        "y": 91.4247,
+        "availableAt": 72500
+      },
+      {
+        "id": 546,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 153.7001,
+        "y": 70.7672,
+        "availableAt": 61100
+      },
+      {
+        "id": 547,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 170.863,
+        "y": 88.9437,
+        "availableAt": 74300
+      },
+      {
+        "id": 548,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 145.4294,
+        "y": 85.0136,
+        "availableAt": 71200
+      },
+      {
+        "id": 549,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 166.6534,
+        "y": 67.742,
+        "availableAt": 75100
+      },
+      {
+        "id": 550,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 160.9181,
+        "y": 100.6255,
+        "availableAt": 73500
+      },
+      {
+        "id": 551,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 147.0219,
+        "y": 74.9401,
+        "availableAt": 70500
+      },
+      {
+        "id": 552,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 172.9454,
+        "y": 82.179,
+        "availableAt": 74700
+      },
+      {
+        "id": 553,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 144.1975,
+        "y": 97.6472,
+        "availableAt": 72400
+      },
+      {
+        "id": 554,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 158.1634,
+        "y": 68.2002,
+        "availableAt": 74400
+      },
+      {
+        "id": 555,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 167.2502,
+        "y": 93.4505,
+        "availableAt": 74000
+      },
+      {
+        "id": 556,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 139.8811,
+        "y": 82.2466,
+        "availableAt": 71200
+      },
+      {
+        "id": 557,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 167.0553,
+        "y": 74.2407,
+        "availableAt": 75200
+      },
+      {
+        "id": 558,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 154.8363,
+        "y": 97.2416,
+        "availableAt": 59100
+      },
+      {
+        "id": 559,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 148.6805,
+        "y": 65.7191,
+        "availableAt": 73800
+      },
+      {
+        "id": 560,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 170.3377,
+        "y": 85.9361,
+        "availableAt": 74400
+      },
+      {
+        "id": 561,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 141.8856,
+        "y": 91.8183,
+        "availableAt": 90001
+      },
+      {
+        "id": 562,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 164,
+        "y": 61.9096,
+        "availableAt": 90001
+      },
+      {
+        "id": 563,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 164.1556,
+        "y": 95.4929,
+        "availableAt": 90001
+      },
+      {
+        "id": 564,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 142.6342,
+        "y": 73.3913,
+        "availableAt": 90001
+      },
+      {
+        "id": 565,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 175.8,
+        "y": 75.5129,
+        "availableAt": 90001
+      },
+      {
+        "id": 566,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 151.2157,
+        "y": 96.2413,
+        "availableAt": 90001
+      },
+      {
+        "id": 567,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 155.2209,
+        "y": 64.5012,
+        "availableAt": 90001
+      },
+      {
+        "id": 568,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 174.6202,
+        "y": 95.2614,
+        "availableAt": 90001
+      },
+      {
+        "id": 569,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 141.8152,
+        "y": 84.6551,
+        "availableAt": 90001
+      },
+      {
+        "id": 570,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 170.6671,
+        "y": 67.5931,
+        "availableAt": 90001
+      },
+      {
+        "id": 571,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 158.8653,
+        "y": 104.3861,
+        "availableAt": 90001
+      },
+      {
+        "id": 572,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 146.3713,
+        "y": 71.6161,
+        "availableAt": 90001
+      },
+      {
+        "id": 573,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 174.9765,
+        "y": 84.8192,
+        "availableAt": 90001
+      },
+      {
+        "id": 574,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 140.7111,
+        "y": 96.3761,
+        "availableAt": 90001
+      },
+      {
+        "id": 575,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 159.3727,
+        "y": 66.4439,
+        "availableAt": 90001
+      },
+      {
+        "id": 576,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 167.3082,
+        "y": 96.0254,
+        "availableAt": 90001
+      },
+      {
+        "id": 577,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 137.0348,
+        "y": 76.591,
+        "availableAt": 90001
+      },
+      {
+        "id": 578,
+        "kind": "car",
+        "radius": 4.2,
+        "points": 3,
+        "x": 169.0509,
+        "y": 76.6059,
+        "availableAt": 90001
+      },
+      {
+        "id": 579,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 151.5113,
+        "y": 103,
+        "availableAt": 90001
+      },
+      {
+        "id": 580,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 150.9152,
+        "y": 64.1133,
+        "availableAt": 90001
+      },
+      {
+        "id": 581,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 173,
+        "y": 92.0922,
+        "availableAt": 90001
+      },
+      {
+        "id": 582,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 138.0902,
+        "y": 89.8433,
+        "availableAt": 90001
+      },
+      {
+        "id": 583,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 168.63,
+        "y": 63.076,
+        "availableAt": 90001
+      },
+      {
+        "id": 584,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 161.7532,
+        "y": 99.4958,
+        "availableAt": 90001
+      },
+      {
+        "id": 585,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 137.5535,
+        "y": 69.4114,
+        "availableAt": 90001
+      },
+      {
+        "id": 586,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 173,
+        "y": 79.1732,
+        "availableAt": 90001
+      },
+      {
+        "id": 587,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 142.8446,
+        "y": 99.8278,
+        "availableAt": 90001
+      },
+      {
+        "id": 588,
+        "kind": "house",
+        "radius": 7,
+        "points": 4,
+        "x": 157.3237,
+        "y": 63.7574,
+        "availableAt": 90001
+      },
+      {
+        "id": 589,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 170,
+        "y": 97.4183,
+        "availableAt": 90001
+      },
+      {
+        "id": 590,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 138.4009,
+        "y": 81.0146,
+        "availableAt": 90001
+      },
+      {
+        "id": 591,
+        "kind": "tower",
+        "radius": 10,
+        "points": 30,
+        "x": 170,
+        "y": 67.6982,
         "availableAt": 90001
       }
     ],
     "cells": {
-      "1,1": [0, 8],
-      "1,2": [1, 2, 3, 4, 15, 16],
-      "0,2": [5, 17],
-      "0,1": [6, 7, 18],
-      "1,0": [9],
-      "2,1": [10, 11, 12],
-      "2,2": [13, 14],
-      "5,1": [19, 30, 31],
-      "5,2": [20, 32],
-      "4,2": [21, 22, 23, 33, 34, 35],
-      "3,2": [24, 36],
-      "3,1": [25, 26, 27, 37],
-      "4,0": [28, 29],
-      "7,1": [38],
-      "8,2": [39, 51, 52],
-      "7,2": [40, 41, 42, 53],
-      "6,2": [43, 54, 55],
-      "6,1": [44, 45, 46, 56],
-      "7,0": [47, 48],
-      "8,1": [49, 50],
-      "11,1": [57, 68, 69],
-      "10,2": [58, 59, 60, 61, 72],
-      "9,2": [62, 73, 74],
-      "9,1": [63, 64, 75],
-      "10,0": [65, 66, 67],
-      "11,2": [70, 71],
-      "1,5": [76, 78],
-      "2,5": [77, 87, 88],
-      "1,6": [79, 80, 91],
-      "0,5": [81, 82, 83, 94],
-      "1,4": [84, 85, 86],
-      "2,6": [89, 90],
-      "0,6": [92, 93],
-      "4,5": [95, 96, 97],
-      "4,6": [98, 99, 109, 110],
-      "3,5": [100, 101, 102, 113],
-      "3,4": [103],
-      "4,4": [104],
-      "5,4": [105],
-      "5,5": [106, 107],
-      "5,6": [108],
-      "3,6": [111, 112],
-      "8,5": [114, 115, 125, 126],
-      "7,5": [116, 117],
-      "7,6": [118, 129],
-      "6,5": [119, 120, 121, 131, 132],
-      "7,4": [122, 123],
-      "8,4": [124],
-      "8,6": [127, 128],
-      "6,6": [130],
-      "11,5": [133, 144, 145, 146],
-      "10,5": [134, 135, 136],
-      "10,6": [137, 148],
-      "9,5": [138, 139, 140, 151],
-      "10,4": [141, 142, 143],
-      "11,6": [147],
-      "9,6": [149, 150]
+      "1,1": [
+        0,
+        2,
+        7,
+        10,
+        12,
+        15,
+        18,
+        28
+      ],
+      "0,2": [
+        1,
+        14,
+        22,
+        30,
+        35,
+        43,
+        48,
+        56,
+        64,
+        69
+      ],
+      "1,2": [
+        3,
+        6,
+        9,
+        11,
+        19,
+        24,
+        27,
+        40,
+        45,
+        66
+      ],
+      "0,1": [
+        4,
+        17,
+        25,
+        33,
+        38,
+        46,
+        51,
+        54,
+        59,
+        67,
+        72
+      ],
+      "2,1": [
+        5,
+        13,
+        21,
+        26,
+        34,
+        39,
+        47,
+        55,
+        60,
+        68
+      ],
+      "2,2": [
+        8,
+        16,
+        29,
+        37,
+        42,
+        50,
+        58,
+        63,
+        71
+      ],
+      "0,0": [
+        20,
+        41,
+        62
+      ],
+      "1,0": [
+        23,
+        36,
+        49,
+        57,
+        70
+      ],
+      "2,0": [
+        31,
+        44,
+        52,
+        65,
+        73
+      ],
+      "1,3": [
+        32,
+        53
+      ],
+      "0,3": [
+        61
+      ],
+      "4,1": [
+        74,
+        76,
+        81,
+        84,
+        86,
+        89,
+        102,
+        110
+      ],
+      "4,2": [
+        75,
+        77,
+        80,
+        83,
+        85,
+        93,
+        98,
+        101,
+        114,
+        119
+      ],
+      "3,1": [
+        78,
+        91,
+        94,
+        99,
+        107,
+        112,
+        120,
+        128,
+        133,
+        141,
+        146
+      ],
+      "5,1": [
+        79,
+        87,
+        92,
+        95,
+        100,
+        108,
+        113,
+        121,
+        129,
+        134,
+        142
+      ],
+      "5,2": [
+        82,
+        90,
+        103,
+        111,
+        116,
+        124,
+        132,
+        137,
+        145
+      ],
+      "3,2": [
+        88,
+        96,
+        104,
+        109,
+        117,
+        122,
+        125,
+        130,
+        138
+      ],
+      "4,0": [
+        97,
+        118,
+        123,
+        131,
+        136,
+        144
+      ],
+      "5,0": [
+        105,
+        126,
+        139,
+        147
+      ],
+      "4,3": [
+        106,
+        127,
+        135,
+        140
+      ],
+      "3,0": [
+        115
+      ],
+      "3,3": [
+        143
+      ],
+      "7,1": [
+        148,
+        150,
+        155,
+        157,
+        158,
+        163,
+        176,
+        184
+      ],
+      "6,2": [
+        149,
+        170,
+        183,
+        191,
+        196,
+        199,
+        204,
+        212,
+        217
+      ],
+      "7,2": [
+        151,
+        154,
+        159,
+        162,
+        167,
+        172,
+        175,
+        180,
+        188,
+        193
+      ],
+      "6,1": [
+        152,
+        160,
+        165,
+        168,
+        173,
+        178,
+        181,
+        186,
+        194,
+        202,
+        207,
+        215,
+        220
+      ],
+      "8,1": [
+        153,
+        161,
+        166,
+        169,
+        174,
+        179,
+        182,
+        187,
+        195,
+        203,
+        208,
+        216
+      ],
+      "8,2": [
+        156,
+        164,
+        177,
+        185,
+        190,
+        198,
+        206,
+        211,
+        219
+      ],
+      "7,0": [
+        171,
+        197,
+        205,
+        210,
+        218
+      ],
+      "6,0": [
+        189
+      ],
+      "8,0": [
+        192,
+        200,
+        213,
+        221
+      ],
+      "7,3": [
+        201,
+        209,
+        214
+      ],
+      "10,1": [
+        222,
+        224,
+        229,
+        232,
+        234,
+        237,
+        240,
+        250
+      ],
+      "10,2": [
+        223,
+        225,
+        228,
+        231,
+        233,
+        241,
+        246,
+        249,
+        262,
+        267,
+        270
+      ],
+      "9,1": [
+        226,
+        239,
+        247,
+        252,
+        255,
+        260,
+        268,
+        273,
+        276,
+        281,
+        289,
+        294
+      ],
+      "11,1": [
+        227,
+        235,
+        243,
+        248,
+        256,
+        261,
+        264,
+        269,
+        277,
+        282,
+        290
+      ],
+      "11,2": [
+        230,
+        238,
+        251,
+        259,
+        272,
+        280,
+        285,
+        293
+      ],
+      "9,2": [
+        236,
+        244,
+        257,
+        265,
+        278,
+        286
+      ],
+      "9,0": [
+        242,
+        263,
+        284
+      ],
+      "10,0": [
+        245,
+        258,
+        266,
+        271,
+        279,
+        292
+      ],
+      "11,0": [
+        253,
+        274,
+        287,
+        295
+      ],
+      "10,3": [
+        254,
+        275,
+        283,
+        288
+      ],
+      "9,3": [
+        291
+      ],
+      "2,5": [
+        296,
+        301,
+        304,
+        309,
+        314,
+        317,
+        330,
+        338,
+        343,
+        351,
+        356,
+        359,
+        364
+      ],
+      "0,5": [
+        297,
+        300,
+        313,
+        318,
+        321,
+        326,
+        334,
+        347,
+        355,
+        360,
+        368
+      ],
+      "1,4": [
+        298,
+        303,
+        306,
+        319,
+        324,
+        332,
+        340,
+        345,
+        353,
+        358,
+        366
+      ],
+      "1,5": [
+        299,
+        305,
+        308,
+        311
+      ],
+      "1,6": [
+        302,
+        307,
+        315,
+        320,
+        323,
+        328,
+        336,
+        341,
+        344,
+        349,
+        357,
+        362
+      ],
+      "0,6": [
+        310,
+        331,
+        339,
+        352,
+        365
+      ],
+      "2,6": [
+        312,
+        325,
+        333,
+        346,
+        354,
+        367
+      ],
+      "0,4": [
+        316,
+        329,
+        337,
+        342,
+        350,
+        363
+      ],
+      "2,4": [
+        322,
+        327,
+        335,
+        348,
+        361,
+        369
+      ],
+      "4,5": [
+        370,
+        373,
+        376,
+        379,
+        382,
+        388
+      ],
+      "3,5": [
+        371,
+        374,
+        387,
+        395,
+        400,
+        403,
+        408,
+        416,
+        421,
+        429,
+        434,
+        442
+      ],
+      "4,4": [
+        372,
+        377,
+        380,
+        385,
+        393,
+        398,
+        406,
+        414,
+        419,
+        427,
+        440
+      ],
+      "5,4": [
+        375,
+        401,
+        417,
+        422,
+        435,
+        443
+      ],
+      "5,5": [
+        378,
+        383,
+        391,
+        396,
+        399,
+        404,
+        409,
+        412,
+        425,
+        430,
+        438
+      ],
+      "4,6": [
+        381,
+        389,
+        394,
+        397,
+        402,
+        410,
+        415,
+        418,
+        423,
+        436
+      ],
+      "3,6": [
+        384,
+        392,
+        405,
+        413,
+        426,
+        431,
+        439
+      ],
+      "5,6": [
+        386,
+        407,
+        420,
+        428,
+        433,
+        441
+      ],
+      "3,4": [
+        390,
+        411,
+        424,
+        432,
+        437
+      ],
+      "8,5": [
+        444,
+        449,
+        452,
+        457,
+        465,
+        473,
+        478,
+        483,
+        486,
+        499,
+        512
+      ],
+      "7,5": [
+        445,
+        447,
+        450,
+        456,
+        459
+      ],
+      "7,4": [
+        446,
+        451,
+        454,
+        462,
+        467,
+        472,
+        480,
+        493,
+        501,
+        514
+      ],
+      "6,5": [
+        448,
+        453,
+        461,
+        466,
+        469,
+        474,
+        482,
+        490,
+        495,
+        503,
+        508,
+        516
+      ],
+      "7,6": [
+        455,
+        458,
+        463,
+        468,
+        471,
+        476,
+        484,
+        489,
+        497,
+        505,
+        510
+      ],
+      "8,6": [
+        460,
+        481,
+        494,
+        502,
+        507,
+        515
+      ],
+      "6,4": [
+        464,
+        477,
+        485,
+        498,
+        506,
+        511
+      ],
+      "8,4": [
+        470,
+        475,
+        488,
+        491,
+        496,
+        504,
+        509,
+        517
+      ],
+      "6,6": [
+        479,
+        487,
+        492,
+        500,
+        513
+      ],
+      "10,5": [
+        518,
+        519,
+        521,
+        524,
+        525,
+        527,
+        530,
+        533,
+        536
+      ],
+      "10,4": [
+        520,
+        528,
+        541,
+        546,
+        554,
+        562,
+        567,
+        575,
+        580,
+        588
+      ],
+      "9,5": [
+        522,
+        535,
+        543,
+        548,
+        556,
+        569,
+        577,
+        582,
+        590
+      ],
+      "11,4": [
+        523,
+        549,
+        557,
+        570,
+        583,
+        591
+      ],
+      "11,5": [
+        526,
+        531,
+        539,
+        544,
+        547,
+        552,
+        560,
+        565,
+        573,
+        578,
+        586
+      ],
+      "10,6": [
+        529,
+        537,
+        542,
+        545,
+        550,
+        558,
+        563,
+        566,
+        571,
+        579,
+        584
+      ],
+      "9,6": [
+        532,
+        540,
+        553,
+        561,
+        574,
+        587
+      ],
+      "11,6": [
+        534,
+        555,
+        568,
+        576,
+        581,
+        589
+      ],
+      "9,4": [
+        538,
+        551,
+        559,
+        564,
+        572,
+        585
+      ]
     },
-    "elapsed": 60000
+    "elapsed": 60000,
+    "sinks": [
+      {
+        "id": 151,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 116.9591,
+        "y": 34.5552,
+        "by": "p4",
+        "consumedAt": 59500
+      },
+      {
+        "id": 156,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 124.7112,
+        "y": 31.7595,
+        "by": "p4",
+        "consumedAt": 59500
+      },
+      {
+        "id": 463,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 111.7995,
+        "y": 96.9861,
+        "by": "p6",
+        "consumedAt": 59600
+      },
+      {
+        "id": 476,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 116.7181,
+        "y": 102.4255,
+        "by": "p6",
+        "consumedAt": 59600
+      },
+      {
+        "id": 446,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 113.3365,
+        "y": 70.0498,
+        "by": "p3",
+        "consumedAt": 59600
+      },
+      {
+        "id": 459,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 110.4004,
+        "y": 75.958,
+        "by": "p8",
+        "consumedAt": 59600
+      },
+      {
+        "id": 190,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 125.8377,
+        "y": 31.6361,
+        "by": "p4",
+        "consumedAt": 59600
+      },
+      {
+        "id": 471,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 110.1394,
+        "y": 91.0247,
+        "by": "p5",
+        "consumedAt": 59700
+      },
+      {
+        "id": 172,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 118.4718,
+        "y": 36.3765,
+        "by": "p4",
+        "consumedAt": 59700
+      },
+      {
+        "id": 450,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 109.2828,
+        "y": 89.76,
+        "by": "p5",
+        "consumedAt": 59800
+      },
+      {
+        "id": 467,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 115.1117,
+        "y": 65.9901,
+        "by": "p8",
+        "consumedAt": 59800
+      },
+      {
+        "id": 480,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 112.8634,
+        "y": 68.8002,
+        "by": "p3",
+        "consumedAt": 59800
+      },
+      {
+        "id": 164,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 120.9404,
+        "y": 36.7778,
+        "by": "p4",
+        "consumedAt": 59800
+      },
+      {
+        "id": 451,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 107.4909,
+        "y": 72.8255,
+        "by": "p3",
+        "consumedAt": 59900
+      },
+      {
+        "id": 185,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 122.4502,
+        "y": 37.8505,
+        "by": "p4",
+        "consumedAt": 59900
+      },
+      {
+        "id": 484,
+        "kind": "bench",
+        "radius": 2.6,
+        "points": 3,
+        "x": 108.5363,
+        "y": 97.1416,
+        "by": "p5",
+        "consumedAt": 60000
+      },
+      {
+        "id": 472,
+        "kind": "tree",
+        "radius": 1.7,
+        "points": 2,
+        "x": 107.9001,
+        "y": 70.2672,
+        "by": "p3",
+        "consumedAt": 60000
+      },
+      {
+        "id": 456,
+        "kind": "bin",
+        "radius": 1,
+        "points": 1,
+        "x": 107.5435,
+        "y": 79.5901,
+        "by": "p3",
+        "consumedAt": 60000
+      }
+    ]
   },
   "scores": {
-    "p1": 266,
-    "p2": 166,
-    "p3": 279,
-    "p4": 365,
-    "p5": 269,
-    "p6": 272,
-    "p7": 290,
-    "p8": 229
+    "p1": 165,
+    "p2": 662,
+    "p3": 408,
+    "p4": 709,
+    "p5": 365,
+    "p6": 290,
+    "p7": 50,
+    "p8": 548
   },
   "phoneOnly": false
 }

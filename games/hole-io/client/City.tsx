@@ -1,11 +1,12 @@
 // Player-following software 3D scene, with original low-poly geometry and public state only.
-import { useId } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import type { JSX } from 'react';
 import type { CityView, HoleView } from '../server/types';
 import { playerStyle } from './presentation';
 import { cameraFor, inFrame, liveHole, MODEL_HEIGHT, objectFaces, polygon, project } from './scene';
 import type { Camera, Vec3 } from './scene';
 import styles from './City.module.css';
+import { facingCamera } from './facing';
 
 interface NamedPlayer {
   id: string;
@@ -38,14 +39,20 @@ function Building({
   sink?: number;
 }): JSX.Element {
   return (
-    <g data-kind={kind} data-mesh="3d" className={`${styles.object} ${styles[kind]}`}>
-      {objectFaces(kind, x, y, tilt, sink).map((face, i) => (
-        <polygon
-          key={i}
-          points={polygon(face.points.map((p) => project(p, camera)))}
-          className={styles[face.material]}
-        />
-      ))}
+    <g
+      data-kind={kind}
+      data-mesh="3d"
+      className={[styles.object, styles[kind]].filter(Boolean).join(' ')}
+    >
+      {objectFaces(kind, x, y, tilt, sink)
+        .filter((face) => facingCamera(face, camera))
+        .map((face, i) => (
+          <polygon
+            key={i}
+            points={polygon(face.points.map((p) => project(p, camera)))}
+            className={styles[face.material]}
+          />
+        ))}
     </g>
   );
 }
@@ -81,6 +88,36 @@ function nameLabels(
   });
 }
 
+function Mouth({ h, camera }: { h: HoleView; camera: Camera }): JSX.Element {
+  const p = project({ x: h.x, y: h.y, z: 0 }, camera),
+    r = h.radius * camera.scale;
+  return (
+    <g
+      className={styles.hole}
+      style={playerStyle(h.slot)}
+      data-hole={h.id}
+      data-me={h.id === camera.target || undefined}
+    >
+      <ellipse className={styles.shadow} cx={p.x + 3} cy={p.y + 3} rx={r + 3} ry={r * 0.72 + 3} />
+      {h.shield ? (
+        <ellipse className={styles.shield} cx={p.x} cy={p.y} rx={r + 5} ry={r * 0.72 + 4} />
+      ) : null}
+      <ellipse className={styles.rim} cx={p.x} cy={p.y} rx={r} ry={r * 0.72} />
+      <ellipse
+        className={styles.void}
+        cx={p.x}
+        cy={p.y}
+        rx={Math.max(1, r - 5)}
+        ry={Math.max(1, r * 0.72 - 4)}
+      />
+      <path
+        className={styles.shine}
+        d={`M${p.x - r * 0.67} ${p.y - r * 0.42}Q${p.x} ${p.y - r * 0.89} ${p.x + r * 0.67} ${p.y - r * 0.42}`}
+      />
+    </g>
+  );
+}
+
 export function City({
   city,
   mine,
@@ -97,7 +134,26 @@ export function City({
   elapsed?: number;
 }): JSX.Element {
   const titleId = useId();
-  const camera = cameraFor(city, mine, compact);
+  const frame = useRef<HTMLDivElement>(null);
+  const [viewport, setViewport] = useState<{ width: number; height: number }>();
+  useEffect(() => {
+    const box = frame.current;
+    if (!box) return undefined;
+    const measure = (): void => {
+      const width = Math.round(box.clientWidth),
+        height = Math.round(box.clientHeight);
+      if (width > 0 && height > 0)
+        setViewport((old) =>
+          old?.width === width && old.height === height ? old : { width, height },
+        );
+    };
+    measure();
+    if (typeof ResizeObserver === 'undefined') return undefined;
+    const observer = new ResizeObserver(measure);
+    observer.observe(box);
+    return () => observer.disconnect();
+  }, []);
+  const camera = cameraFor(city, mine, compact, viewport);
   const holes = city.holes.filter((h) => liveHole(h) && inFrame(h.x, h.y, h.radius, 0, camera));
   const objects = [
     ...city.props
@@ -113,8 +169,18 @@ export function City({
       .map((p) => ({ ...p, sinking: true })),
   ].sort((a, b) => a.y + a.x * 0.12 - (b.y + b.x * 0.12) || a.id - b.id);
   const ground = (p: Vec3) => project(p, camera);
+  const drawables = [
+    ...holes.map((h) => ({ depth: h.y + h.x * 0.12, key: `hole-${h.id}`, hole: h, prop: null })),
+    ...objects.map((p) => ({
+      depth: p.y + p.x * 0.12,
+      key: `prop-${p.sinking ? 'sink' : ''}-${p.id}`,
+      hole: null,
+      prop: p,
+    })),
+  ].sort((a, b) => a.depth - b.depth || a.key.localeCompare(b.key));
   return (
     <div
+      ref={frame}
       className={styles.frame}
       data-camera={camera.target ?? 'none'}
       data-compact={compact || undefined}
@@ -122,6 +188,7 @@ export function City({
       <svg
         className={styles.city}
         viewBox={`0 0 ${camera.width} ${camera.height}`}
+        preserveAspectRatio="none"
         role="img"
         aria-labelledby={titleId}
       >
@@ -143,7 +210,7 @@ export function City({
             [0, 1].map((row) => (
               <polygon
                 key={`${col}-${row}`}
-                points={groundRect(col * 45 + 6, row * 55 + 7, 12, 17, camera)}
+                points={groundRect(col * 45 + 17, row * 55 + 8, 11, 13, camera)}
               />
             )),
           )}
@@ -167,49 +234,16 @@ export function City({
             )),
           )}
         </g>
-        {holes.map((h) => {
-          const p = ground({ x: h.x, y: h.y, z: 0 }),
-            r = h.radius * camera.scale;
-          return (
-            <g
-              key={h.id}
-              className={styles.hole}
-              style={playerStyle(h.slot)}
-              data-me={h.id === camera.target || undefined}
-            >
-              <ellipse
-                className={styles.shadow}
-                cx={p.x + 3}
-                cy={p.y + 3}
-                rx={r + 3}
-                ry={r * 0.72 + 3}
-              />
-              {h.shield ? (
-                <ellipse className={styles.shield} cx={p.x} cy={p.y} rx={r + 5} ry={r * 0.72 + 4} />
-              ) : null}
-              <ellipse className={styles.rim} cx={p.x} cy={p.y} rx={r} ry={r * 0.72} />
-              <ellipse
-                className={styles.void}
-                cx={p.x}
-                cy={p.y}
-                rx={Math.max(1, r - 5)}
-                ry={Math.max(1, r * 0.72 - 4)}
-              />
-              <path
-                className={styles.shine}
-                d={`M${p.x - r * 0.67} ${p.y - r * 0.42}Q${p.x} ${p.y - r * 0.89} ${p.x + r * 0.67} ${p.y - r * 0.42}`}
-              />
-            </g>
-          );
-        })}
-        {objects.map((p) => {
+        {drawables.map((item) => {
+          if (item.hole) return <Mouth key={item.key} h={item.hole} camera={camera} />;
+          const p = item.prop!;
           const progress = p.sinking ? Math.min(1, (elapsed - p.consumedAt) / 700) : 0;
           const eater = city.holes.find((h) => h.id === p.by);
           const x = p.x + (eater ? eater.x - p.x : 0) * progress * 0.65;
           const y = p.y + (eater ? eater.y - p.y : 0) * progress * 0.65;
           const location = ground({ x, y, z: 0 });
           return (
-            <g key={`${p.sinking ? 'sink' : 'prop'}-${p.id}`} data-sinking={p.sinking || undefined}>
+            <g key={item.key} data-prop={p.id} data-sinking={p.sinking || undefined}>
               {!p.sinking ? (
                 <ellipse
                   className={styles.shadow}

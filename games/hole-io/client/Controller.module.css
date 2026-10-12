@@ -218,6 +218,18 @@
   grid-template-rows: minmax(0, 1fr) auto;
   gap: var(--pb-space-2);
 }
+.offline {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--pb-space-3);
+  text-align: center;
+  border: calc(var(--pb-space-1) / 2) solid var(--pb-text-muted);
+  border-radius: var(--pb-radius-lg);
+  background: var(--pb-surface);
+}
+.offline strong { font-size: var(--pb-font-h1); }
+.offline p { margin: 0; font-size: var(--pb-font-body); line-height: 1.2; }
 .pad {
   position: relative;
   min-height: 0;

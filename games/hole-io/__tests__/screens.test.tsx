@@ -107,7 +107,7 @@ it('banks eliminated points and follows the live leader without retry controls',
   expect(html).not.toMatch(/Move your hole|Back in|Start small|Try again|respawn/i);
 });
 
-it('leavers watch; temporarily disconnected players retain a disabled local pad', () => {
+it('leavers watch; disconnected survivors keep their local camera without controls', () => {
   const view = game.controllerView(start(2), 'p1');
   const gone = phoneView({
     ...view,
@@ -117,10 +117,14 @@ it('leavers watch; temporarily disconnected players retain a disabled local pad'
   });
   expect(gone).toContain('You left the round');
   expect(gone).not.toContain('Move your hole');
-  const away = phoneView({ ...view, mine: { ...view.mine!, connected: false } });
+  const away = phoneView({
+    ...view,
+    participating: false,
+    mine: { ...view.mine!, connected: false },
+  });
   expect(away).toContain('data-camera-id="p1"');
-  expect(away).toContain('Move your hole');
-  expect(away).toContain('disabled=""');
+  expect(away).not.toContain('Move your hole');
+  expect(away).not.toContain('You were swallowed');
   expect(away).toContain('Disconnected');
 });
 
@@ -236,4 +240,42 @@ it('keeps strict size cues and chooses connected surviving watch targets', () =>
   const fallback = standings(undefined, view.players, { p1: 20, p2: 20, p3: 0 });
   expect(fallback.map((r) => r.rank)).toEqual([1, 1, 3]);
   expect(liveStandings(fallback)).toEqual([]);
+});
+
+it('keeps TV split cameras in seat order as scores change', () => {
+  const s = start(8);
+  const scored = {
+    ...s,
+    world: {
+      ...s.world,
+      holes: s.world.holes.map((h) => ({
+        ...h,
+        score: h.id === 'p8' ? 700 : h.id === 'p4' ? 800 : 0,
+      })),
+    },
+  };
+  const cameraIds = (html: string) =>
+    [...html.matchAll(/data-camera-id="([^"]+)"/g)].map((match) => match[1]);
+  const expected = s.world.holes.map((h) => h.id);
+  expect(cameraIds(tv(s))).toEqual(expected);
+  expect(cameraIds(tv(scored))).toEqual(expected);
+});
+
+it('a real temporary disconnect is not a loss, including an inactive participation flag', () => {
+  const dropped = game.reduce(start(2), {
+    type: 'player',
+    playerId: 'p1',
+    connected: false,
+    now: T0,
+  });
+  const view = game.controllerView(dropped, 'p1');
+  expect(view.mine?.alive).toBe(true);
+  for (const participating of [view.participating, false]) {
+    const html = phoneView({ ...view, participating });
+    expect(html).toContain('data-camera-id="p1"');
+    expect(html).toContain('Disconnected');
+    expect(html).not.toContain('You were swallowed');
+    expect(html).not.toContain('Move your hole');
+    expect(html.match(/role="timer"/g)).toHaveLength(1);
+  }
 });

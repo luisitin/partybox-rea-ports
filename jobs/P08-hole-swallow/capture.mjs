@@ -16,9 +16,9 @@ const executable = candidates.find(existsSync);
 if (!executable) throw new Error('Chrome not found; set CHROME_PATH to an installed browser.');
 const profile = resolve(`.git/r2-p08-chrome-${process.pid}`);
 mkdirSync(profile, { recursive: true });
-const media = resolve('jobs/P08-hole-swallow/media');
+const media = resolve(process.env.PB_P08_CAPTURE_DIR ?? 'jobs/P08-hole-swallow/media');
 const files = JSON.parse(readFileSync(resolve(media, 'index.json'), 'utf8'));
-const allowed = new Set([...files, 'styles.css', 'nunito-latin-wght-normal.woff2']);
+const allowed = new Set([...files, 'styles.css', 'hydrate.js', 'nunito-latin-wght-normal.woff2']);
 const server = createServer((req, res) => {
   const name = req.url?.slice(1);
   if (!allowed.has(name)) {
@@ -27,7 +27,13 @@ const server = createServer((req, res) => {
   }
   res.setHeader(
     'Content-Type',
-    name.endsWith('.css') ? 'text/css' : name.endsWith('.woff2') ? 'font/woff2' : 'text/html',
+    name.endsWith('.css')
+      ? 'text/css'
+      : name.endsWith('.woff2')
+        ? 'font/woff2'
+        : name.endsWith('.js')
+          ? 'text/javascript'
+          : 'text/html',
   );
   res.end(readFileSync(resolve(media, name)));
 });
@@ -141,9 +147,15 @@ try {
       expression: 'document.fonts.ready.then(()=>true)',
       awaitPromise: true,
     });
+    await command('Runtime.evaluate', {
+      expression:
+        'new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve(window.p08Ready))))',
+      awaitPromise: true,
+      returnByValue: true,
+    });
     const measurement = await command('Runtime.evaluate', {
       returnByValue: true,
-      expression: `JSON.stringify({width:innerWidth,height:innerHeight,bodyWidth:document.body.scrollWidth,bodyHeight:document.body.scrollHeight,overflow:Array.from(document.querySelectorAll('#stage *')).filter(e=>e.clientHeight>0&&e.scrollHeight>e.clientHeight+2&&getComputedStyle(e).overflowY!=='hidden'&&getComputedStyle(e).overflowY!=='clip').map(e=>({tag:e.tagName,class:e.className,height:e.clientHeight,scroll:e.scrollHeight})),outside:Array.from(document.querySelectorAll('#stage button,#stage h2,#stage li')).filter(e=>{const r=e.getBoundingClientRect();return r.bottom>innerHeight-44||r.left<0||r.right>innerWidth}).map(e=>({tag:e.tagName,text:e.textContent.slice(0,60)}))})`,
+      expression: `JSON.stringify((()=>{const stage=document.querySelector('#stage').getBoundingClientRect(),visible=e=>e.getBoundingClientRect().width>0&&e.getBoundingClientRect().height>0;return {width:innerWidth,height:innerHeight,bodyWidth:document.body.scrollWidth,bodyHeight:document.body.scrollHeight,ready:window.p08Ready,cityCameras:document.querySelectorAll('[data-camera]').length,svgNodes:document.querySelectorAll('#stage svg *').length,overflow:Array.from(document.querySelectorAll('#stage *')).filter(e=>e.namespaceURI!=='http://www.w3.org/2000/svg'&&e.clientHeight>0&&e.scrollHeight>e.clientHeight+2&&getComputedStyle(e).overflowY!=='hidden'&&getComputedStyle(e).overflowY!=='clip').map(e=>({tag:e.tagName,class:e.className,height:e.clientHeight,scroll:e.scrollHeight})),outside:Array.from(document.querySelectorAll('#stage button,#stage h2,#stage h3,#stage li')).filter(visible).filter(e=>{const r=e.getBoundingClientRect();return r.bottom>stage.bottom+2||r.top<stage.top-2||r.left<stage.left-2||r.right>stage.right+2}).map(e=>({tag:e.tagName,text:e.textContent.slice(0,60)})),tooSmall:${tv ? "Array.from(document.querySelectorAll('#stage h2,#stage h3,#stage li,#stage span,#stage p,#stage b,#stage strong')).filter(visible).filter(e=>e.childElementCount===0&&e.textContent.trim()&&parseFloat(getComputedStyle(e).fontSize)<32).map(e=>({text:e.textContent.slice(0,60),size:getComputedStyle(e).fontSize}))" : '[]'},timers:Array.from(document.querySelectorAll('#stage [role=timer]')).map(e=>({text:e.textContent,size:getComputedStyle(e).fontSize})),uiUndefined:Array.from(document.querySelectorAll('#stage [class]')).filter(e=>e.getAttribute('class').includes('undefined')).length};})())`,
     });
     const check = { file, ...JSON.parse(measurement.result.value) };
     checks.push(check);

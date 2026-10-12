@@ -57,6 +57,38 @@ describe('discrete historical growth tuning', () => {
 });
 
 describe('swallowed players stay out of the shared party round', () => {
+  it('duplicate connected notifications preserve live steering while actual drops stop it', () => {
+    const initial = {
+      ...start(),
+      world: world([hole(), hole('p2', { slot: 1, x: 120 })]),
+    };
+    const steering = move(initial, 'p1', 1, 0, T0);
+    const duplicate = game.reduce(steering, {
+      type: 'player',
+      playerId: 'p1',
+      connected: true,
+      now: T0 + 400,
+    });
+    expect(duplicate.world.holes[0]).toMatchObject({ x: 57.6, dx: 1, dy: 0, lastMoveAt: 0 });
+    expect(duplicate.endsAt).toBe(steering.endsAt);
+    expect(timer(duplicate, T0 + 600).world.holes[0]!.x).toBe(61.4);
+    const sameStep = game.reduce(duplicate, {
+      type: 'player',
+      playerId: 'p1',
+      connected: true,
+      now: T0 + 400,
+    });
+    expect(sameStep).toEqual(duplicate);
+    const dropped = game.reduce(duplicate, {
+      type: 'player',
+      playerId: 'p1',
+      connected: false,
+      now: T0 + 500,
+    });
+    expect(dropped.world.holes[0]).toMatchObject({ x: 59.5, dx: 0, dy: 0 });
+    expect(timer(dropped, T0 + 1000).world.holes[0]!.x).toBe(59.5);
+  });
+
   it('retains banked points and growth, removes steering, and never respawns or consumes again', () => {
     const base = freeze({
       ...start(),
