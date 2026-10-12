@@ -11,6 +11,7 @@ Canonical folder/id/name: `games/2048` / `2048` / **2048**.
 Branch: `job/P09-2048-race`; runner: `r1-local`.
 [PR #12](https://github.com/luisitin/partybox-rea-ports/pull/12).
 A read-only scan found no overlap among126 owner-core game manifests.
+The shared manifest pattern permits the official numeric `2048` id; kit CI passes.
 
 Install once: `corepack enable`, then `pnpm install` (Windows: `pnpm.cmd`).
 Load server and TV/phone entry points through the published SDK.
