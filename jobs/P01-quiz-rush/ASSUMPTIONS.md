@@ -54,8 +54,18 @@
 - Initial static captures showed black labels on wager buttons because the helper shell omitted
   the pinned core `global.css` rule making button/input colour inherit. The helper now matches that
   rule. This was a capture artifact, not a newly identified wager colour defect in the core host.
+- The earlier 82 clean frames used a fake TV stage 900 px tall. Round 2 found that the pinned
+  actual host leaves about 692 px for Stage and 626 px inside it. Earlier standalone fit and
+  safe-margin claims do not prove actual-host fit. The corrected harness is being rebuilt with
+  a 133.2 px header, 152.8 px player strip, 22 px bar and 80 px footer at 1920×1080; repairs,
+  tests and recaptures remain pending. The missing host constraint must not be treated as new
+  space available to the plugin or as a cosmetic-only difference.
+- Round 1 completed the measured 15 → 0 default race-name truncation repair in the old harness.
+  Post-round-1 full checks passed 226/226 in 25 files, 196.07 s; CI 38229318876 passed at `4cf1a53`.
+  Those results remain baseline evidence while round 2 actual-host source repairs are in progress.
 - Old standalone 116-test/7,000-match/screens/mutation/loop evidence is historical. Fresh upgraded
-  verification, evidence review, green CI and a new three-no-gain loop remain final gates before
-  READY/DONE. The additive implementation is complete; pending checks do not imply unfinished modes.
+  actual-host verification, evidence review and a new three-no-gain loop remain final gates before
+  DONE. Initial and post-round-1 CI are green; round 2 source changes require fresh checks. Modes
+  are implemented, but actual-host fit repairs are pending; round 2 is not verified or complete.
   The public kit lacks core gen-registry/verify commands; its discovery, typecheck, format and
   contract checks validate this module.

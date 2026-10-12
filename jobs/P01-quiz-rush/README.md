@@ -2,10 +2,11 @@
 
 This upgrade extends PartyBox's existing Lightning Round under the canonical Kahoot! name.
 It replaces the former standalone Quiz Rush implementation rather than adding a duplicate.
-The initial additive wager/classic baseline passes 224 tests, typecheck and formatting.
-Evidence includes 32,000 bot matches, 20 mutation kills and 80 captures recorded so far.
-[Initial CI is green](https://github.com/luisitin/partybox-rea-ports/actions/runs/38225649131) at `ca58d1b`, and PR #2 is ready. KEEP GOING round 1 is ongoing;
-the combined long-Spanish-text/streak-20 edge is being repaired. Round metrics and final capture count remain pending; no DONE claim is made.
+The first KEEP GOING round passes 226 tests, typecheck and formatting in
+[CI](https://github.com/luisitin/partybox-rea-ports/actions/runs/38229318876) at `4cf1a53`; PR #2 is ready.
+Evidence includes 32,000 bot matches and 20 mutation kills. Round 2 caught a capture-shell error:
+the pinned host leaves a 692px TV stage, versus the old mock's 900px. The corrected 88-frame
+capture passes 87 screens; a tied long-name podium is being repaired. Fresh checks remain pending.
 
 The preserved baseline supports 1–16 players, English/Spanish question libraries, category/topic
 draws, speed points, a 300-point streak cap, custom/preset final wagers and the existing minigame.

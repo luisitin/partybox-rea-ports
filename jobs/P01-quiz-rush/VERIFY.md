@@ -5,17 +5,19 @@
 Current implementation is `games/kahoot`, derived from the pinned Lightning Round source in
 `core-base/SOURCE.json`. The historical standalone checks below do not verify this implementation.
 All local game executions use one thread worker; no repository-wide or whole-suite browser run.
+Post-round-1 code checks are green at `4cf1a53`. Round 2 has uncovered an actual-host frame mismatch;
+source repairs, testing and captures for that frame remain pending. Standalone fit is not host-fit proof.
 
-| Check                                | Exact command                                                                                                                                                                                                                                                             | Current result                                                                                                                                                                             |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Install                              | `corepack enable`; `pnpm.cmd install --frozen-lockfile`                                                                                                                                                                                                                   | PASS; no added dependencies                                                                                                                                                                |
-| Types                                | `pnpm.cmd typecheck`                                                                                                                                                                                                                                                      | PASS on the latest implementation                                                                                                                                                          |
-| Focused screens/minigame/reload      | `$env:PB_WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/kahoot/__tests__/render-upgrade.test.tsx games/kahoot/__tests__/minigame-upgrade.test.ts games/kahoot/__tests__/stage-screens.test.tsx games/kahoot/__tests__/final-reload.test.tsx --maxWorkers=1 --pool=threads` | Latest PASS 33/33; 4 files; 14.58 s; reducer-backed fixtures and legal long-name cases included                                                                                            |
-| Published SDK contract               | `pnpm.cmd vitest run games/kahoot/__tests__/sdk.test.ts --maxWorkers=1 --pool=threads`                                                                                                                                                                                    | PASS 20/20; 25.27 s; exit 0; unmodified assertions                                                                                                                                         |
-| Mutation check                       | `node jobs/P01-quiz-rush/mutate-upgrade.mjs`                                                                                                                                                                                                                              | PASS 20/20 behavioral kills; 72 baseline tests; zero invalid mutations; all 6 tested source hashes restored and rechecked                                                                  |
-| Browser fit                          | `node jobs/P01-quiz-rush/capture.mjs`                                                                                                                                                                                                                                     | Latest PASS 78/78 at 1920×1080 and 390×844; zero overflow, clipping, scrollers or missing CSS; browser PID 112464 closed in finally; temporary profile cleanup deferred after EPERM        |
-| Full game/SDK/properties/32,000 bots | `$env:PB_WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/kahoot --maxWorkers=1 --pool=threads --reporter=default --reporter=json --outputFile=jobs/P01-quiz-rush/upgrade-tests.json`                                                                                        | Baseline PASS 224/224; 25 files; 481.32 s; exit 0; all SDK, 32,000 matches and property checks included                                                                                    |
-| Format/CI/hashes                     | `pnpm.cmd format`; job P01 CI; `node jobs/P01-quiz-rush/hash-media.mjs`                                                                                                                                                                                                   | Baseline format PASS; 194 files / 7,373,326 bytes hashed; [initial CI PASS](https://github.com/luisitin/partybox-rea-ports/actions/runs/38225649131) at ca58d1b; round 1 artifacts pending |
+| Check                                | Exact command                                                                                                                                                                                                                                                             | Current result                                                                                                                                                                           |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Install                              | `corepack enable`; `pnpm.cmd install --frozen-lockfile`                                                                                                                                                                                                                   | PASS; no added dependencies                                                                                                                                                              |
+| Types                                | `pnpm.cmd typecheck`                                                                                                                                                                                                                                                      | Round 1 baseline PASS; pending round 2 repairs require fresh checks                                                                                                                      |
+| Focused screens/minigame/reload      | `$env:PB_WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/kahoot/__tests__/render-upgrade.test.tsx games/kahoot/__tests__/minigame-upgrade.test.ts games/kahoot/__tests__/stage-screens.test.tsx games/kahoot/__tests__/final-reload.test.tsx --maxWorkers=1 --pool=threads` | Earlier PASS 33/33; 4 files; 14.58 s; round 1 focused checks passed 34 tests; round 2 checks pending                                                                                     |
+| Published SDK contract               | `pnpm.cmd vitest run games/kahoot/__tests__/sdk.test.ts --maxWorkers=1 --pool=threads`                                                                                                                                                                                    | PASS 20/20; 25.27 s; exit 0; unmodified assertions                                                                                                                                       |
+| Mutation check                       | `node jobs/P01-quiz-rush/mutate-upgrade.mjs`                                                                                                                                                                                                                              | PASS 20/20 behavioral kills; 72 baseline tests; zero invalid mutations; all 6 tested source hashes restored and rechecked                                                                |
+| Browser fit                          | `node jobs/P01-quiz-rush/capture.mjs`                                                                                                                                                                                                                                     | 82/82 clean in the old 900 px fake TV stage only; actual-host 692 px Stage / 626 px inner fit unverified; browser PID 31420 closed in finally; earlier EPERM profile cleanup deferred    |
+| Full game/SDK/properties/32,000 bots | `$env:PB_WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/kahoot --maxWorkers=1 --pool=threads --reporter=default --reporter=json --outputFile=jobs/P01-quiz-rush/upgrade-tests.json`                                                                                        | Post-round-1 PASS 226/226; 25 files; 196.07 s; round 2 source repairs/testing pending                                                                                                    |
+| Format/CI/hashes                     | `pnpm.cmd format`; job P01 CI; `node jobs/P01-quiz-rush/hash-media.mjs`                                                                                                                                                                                                   | [Post-round-1 CI PASS](https://github.com/luisitin/partybox-rea-ports/actions/runs/38229318876) at 4cf1a53; formatting/hashes must be refreshed after actual-host repairs and recaptures |
 
 The initial full run passed 196/227 tests and exposed an outdated 8-minute duration estimate,
 stale fixtures/SSR clock assumptions, remote-phone lock text pointing at a TV, and SDK minigame
@@ -26,13 +28,22 @@ play budget. Only unrelated pool-availability assertions are omitted. Bounded re
 phase-exit mutants fail behaviorally instead of hanging.
 
 The first upgrade capture failed five inherited wager phone-only reveals. Separate chart and
-standings beats plus compact final rows corrected them; final originals were checked by hand.
+standings beats plus compact final rows corrected them in the standalone capture harness.
 Black wager button text was an incomplete capture-shell reset, confirmed against pinned core
 `packages/client/src/styles/global.css`; the shell now inherits the same token text colour.
 An additional final-reveal case now covers 16 legal 40-character player names and five-digit
-totals in tests and phone-only/remote/spectator captures. The latest four-file focused run passed 33/33
-in 14.58 s, and the latest 78-frame capture is clean. Its owned browser PID 112464 closed in
+totals in tests and phone-only/remote/spectator captures. An earlier four-file focused run passed 33/33
+in 14.58 s, and its 78-frame standalone capture was clean. Its owned browser PID 112464 closed in
 `finally`; temporary profile cleanup remains deferred after Windows returned EPERM.
+
+Round 1 is complete: default sixteen-seat race-name truncations fell from 15 to 0 in the old
+harness (name space 65 → 337 px, body 36 px, delta 32 px), and combined longest EN/ES text with
+streak 20 was repaired. The 82 resulting frames were clean only in that fake 900 px TV stage;
+their zero-overflow and safe-margin results do not prove fit inside the actual PartyBox host.
+Round 2 identified the pinned actual host's smaller Stage: a 133.2 px header, 152.8 px player
+strip, 22 px bar and 80 px footer leave about 692 px, or 626 px inside Stage. Root is
+recreating that chrome and recapturing. Source repairs and testing are pending; no round 2
+fit verification or completion is claimed.
 
 All 20 planted defects were caught: inflated base points; inflated speed bonus; inflated streak
 cap; reduced streak growth; wrong-answer streak retention; double streak increments; wrong final
@@ -57,16 +68,18 @@ phone-only rooms. The longest match was 1,566.388 s, below 26 × 120 = 3,120 s. 
 Properties passed seeds 1, 2, 3 plus 1,000 sampled seeds per mode: 96,436 events and 1,205,348 views.
 `media/property-upgrade.json` records seeds and invariants. The initial upgraded full rerun passed 224/224
 in 25 files (481.32 s, exit 0). `media/verification-upgrade.json` records the result and test hashes.
-Baseline repository formatting passed. Its 194 media files have SHA256 sums and total 7,373,326 bytes,
-below 10 MB. The smallest captured touch target is 45.27×46.19 px; TV timers are 128 px.
-Primary TV body text uses the 36 px or larger tokens; smaller metadata uses caption tokens.
+Baseline repository formatting passed. Its 194 media files had SHA256 sums and total 7,373,326 bytes,
+below 10 MB. In that standalone harness, the smallest captured touch target was 45.27×46.19 px;
+TV timers were 128 px. Primary TV body text used 36 px or larger tokens, with captions for metadata.
+These measurements do not establish fit at the actual host's smaller Stage height.
 Baseline runtime/capture source hashes and all six mutation source hashes matched the verified bytes.
 [Initial CI run 38225649131](https://github.com/luisitin/partybox-rea-ports/actions/runs/38225649131)
-passed at `ca58d1b`; PR #2 is ready. KEEP GOING round 1 is active: the combined long-Spanish-text /
-streak-20 edge is being repaired, with 80 captures recorded so far. Final round metrics, regenerated
-capture count and evidence remain pending; round 1 is not complete and no upgraded DONE claim is made.
+passed at `ca58d1b`. After round 1, full checks passed 226/226 in 25 files, 196.07 s, and
+[CI run 38229318876](https://github.com/luisitin/partybox-rea-ports/actions/runs/38229318876)
+passed at `4cf1a53`. PR #2 is open with that green baseline. Round 2 actual-host repairs,
+verification, regenerated captures and hashes remain pending; no upgraded DONE claim is made.
 
-## Owner-required upgrade baseline (2026-10-12)
+## Owner-required upgrade baseline (historical, 2026-10-12)
 
 The results below this section describe the superseded standalone Quiz Rush at 1c8d264. They do not verify the replacement Lightning Round upgrade in games/kahoot. Provenance is pinned in core-base/SOURCE.json and CHANGE_NOTES.md. No new install/dependency was needed.
 

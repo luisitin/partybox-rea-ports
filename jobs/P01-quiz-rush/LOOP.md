@@ -6,6 +6,8 @@ Started after PR #2 passed CI38225649131 at ca58d1b and left draft. Historical r
 
 1. Five weaknesses in the eight-stranger walkthrough: crowded TV race identities (severe at16), long required reading holds, exact20-question replay overlap, English-only classic content, and receipt-time network differences in speed scoring. Fixed race identification: thirteen–sixteen-player ordinary receipts put the name above verdict/time/streak/points, retaining36px names and32px deltas. Measured gain: default sixteen-seat truncated names15→0; minimum name space65→337px; crowded eight-seat names also fit. Prevented a twenty-streak wrap and verified it together with longest EN/ES content through actual twenty-question reducer matches. All82 captures fit including Stage overscan;34 focused assertions pass. Full name titles remain available; server/scoring/timing and smaller-room layouts are unchanged. Final artifact hashes and post-round CI are recorded in VERIFY.md.
 
+2. In progress. Five weaknesses: host-space assumptions, repeated question text during standings, long reading holds, exact20-question replay overlap, and receipt-time network differences. Corrected the TV capture shell to pinned host geometry (692px Stage /626px inner). The first corrected capture passes87/88; a16-way long-name classic podium still overflows. Race/standings layouts and their actual-screen reading budgets are being repaired; final verification and measured gains remain pending. Round1's82 clean frames used the old900px mock and do not establish real-host fit.
+
 ## Historical standalone engine
 
 Started after PR #2 passed CI run 38176682177 and left draft.
