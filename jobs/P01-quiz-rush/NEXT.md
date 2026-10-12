@@ -2,20 +2,18 @@
 
 ## Resumed locally (2026-10-12, r1-local)
 
-- P01 is unfinished; P22 is DONE. Stay on `job/P01-quiz-rush`; no added dependencies, owner core read-only. Round-4 `1333563` [CI 38241666750](https://github.com/luisitin/partybox-rea-ports/actions/runs/38241666750) is green; last recorded main claim refresh `3addcbb`. Round-5 source/artifacts await final format/hash/push/CI.
-- Round 5 is applied: only 13–16-seat stakes use own four-column/two-line 32 px name/rank/score/placed cards; ≤12 retains SDK. Four normal stakes-name ellipses → zero, name width 416 px, all sixteen scores/marks visible. Spanish 40-character/five-digit/long-leader/all-placed cases pass; before PNG and loop-5 fit JSON are recorded.
-- First new capture 39757 failed 20 clipped last-row items. Corrected div.wagerStage specificity and wrapping 32 px rules; helper now matches pinned global .pb-muted/.pb-caption. Final 50244 PASS 95/95 current, plus one deliberate 85-clipped Finale baseline (96 records). PID 52968 closed in finally; EPERM profile cleanup deferred. The old 90/91 byte identity was round 4 before caption correction.
-- Full 37496 PASS 242/242, 26 files, 484.58 s, exit 0; raw `r1-local-kahoot-loop5-tests-20261012.json`. Runtime JS/server froze throughout, but Tv.module.css and upgrade-evidence.ts changed early during properties. No 93-file freeze claim for this run. Verification JSON records both before/after SHAs; final ten-renderer file ran after fixes and current 77 capture/six restoration hashes match.
-- Typecheck 32345 PASS; focused 43 tests/3 files and final ten-renderer PASS. Independent twelve-sheet/native phone/stakes QA found no remaining concrete visual defect. Final media checkpoint 8,710,478 B before loop-5 JSON; complete final hashes/format and resulting-head CI remain pending. No no-gain rounds or DONE.
+- Final source `1659b6e` is verified: local 242/242 tests, 26 files, 484.58 s; types/SSR PASS; format 83673 PASS; [CI 38244205834](https://github.com/luisitin/partybox-rea-ports/actions/runs/38244205834) green. [PR #2](https://github.com/luisitin/partybox-rea-ports/pull/2) is ready/open for owner review. Owner core migration remains unapplied.
+- All 239 media hashes verify 8,712,209 B. Current 95/95 frames pass plus one labelled Finale baseline (96 records); PID 52968 closed, EPERM profile cleanup deferred. Normal stakes-name ellipses improve four → zero.
+- Two early CSS/helper edits remain disclosed; final SSR ran after fixes and current 93 post-run/77 capture/six restoration hashes match. No all-93 before/after freeze claim. The old 90-PNG identity proof belongs only to round 4.
+- Rounds 6–8 are complete consecutive no-gain reviews with no source/media changes; root confirmed final independent round-8 gain 0. KEEP GOING is complete. LOOP.md remains root-owned. Source CI and first-review documentation CI are green; final documentation-head CI is pending.
 
-Next actions:
+Only release gate remaining:
 
-1. Finish final round-5 formatting and stable source/capture/restoration/media hashes; verify the complete payload below 10,000,000 B. Preserve the two-file early-change disclosure and avoid applying the round-4 93-file freeze to this run.
-2. Push source/artifacts/docs, pull --rebase before P01 claim refresh, and refresh PR #2 from the job README. Require CI at that resulting head; prior round-4 green does not release this source.
-3. After latest CI, conduct a fresh five-weakness walkthrough and record its measured outcome. Continue until three consecutive no-gain rounds pass; none is claimed yet and historical standalone rounds do not count. DONE requires the loop and final-head checks.
+1. Root finalizes documentation formatting/commit, PR body and claim freshness, then verifies CI at the resulting documentation head. Do not assume that future green.
+2. After final-head CI passes, pull --rebase before marking P01 DONE in CLAIMS.md. Leave PR #2 open for owner review; no merge or separate owner-core migration is authorized here. Continue the queue afterward; P22 is already DONE.
 
-Root owns one test worker and one headless browser closed in finally. Final format/hash/push/CI,
-three no-gain rounds and DONE remain pending.
+Implementation, verification and the three-no-gain loop are complete. Final documentation-head
+CI and the resulting DONE claim remain pending.
 
 ## Owner-required upgrade baseline (historical context)
 

@@ -2,13 +2,13 @@
 
 This upgrade extends PartyBox's existing Lightning Round under the canonical Kahoot! name.
 It replaces the former standalone Quiz Rush implementation rather than adding a duplicate.
-Round-4 `1333563` [CI 38241666750](https://github.com/luisitin/partybox-rea-ports/actions/runs/38241666750) is green; round-5 stakes repair is now applied.
-Normal sixteen-seat stakes names improve four ellipses → zero; all scores/marks remain visible.
+Final source `1659b6e` passes 242 tests and [CI 38244205834](https://github.com/luisitin/partybox-rea-ports/actions/runs/38244205834); [PR #2](https://github.com/luisitin/partybox-rea-ports/pull/2) is ready for owner review.
+Types/SSR/final format pass; all 239 media hashes verify 8,712,209 B, below decimal 10 MB.
 Current capture PASS 95/95 plus one labelled Finale before baseline; browser 52968 closed.
-Full PASS 242/242, 26 files, 484.58 s; types/SSR pass. Two early CSS/helper edits are disclosed;
-final SSR ran after fixes, runtime JS/server stayed frozen, and current capture/restoration hashes match.
-Media checkpoint 8,710,478 B before loop-5 JSON; final format/hash/push/head CI remain pending.
-No no-gain rounds or DONE are claimed; three consecutive no-gain rounds remain required.
+Four normal stakes-name ellipses → zero; all numeric fields remain visible. Two early CSS/helper
+edits are disclosed; final SSR ran after fixes, with current post-run/capture/restoration hashes matched.
+Rounds 6–8 complete three consecutive no-gain reviews; KEEP GOING is complete, final documentation-head CI pending.
+Owner core migration remains unapplied; the ready public PR is the completed code handoff.
 
 The upgrade preserves 1–16 players, EN/ES libraries, category/topic draws, speed points,
 a 300-point streak cap, custom/preset final wagers and the existing minigame. Classic adds three

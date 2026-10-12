@@ -2,20 +2,26 @@
 
 ## Current two-mode upgrade (2026-10-12, r1-local)
 
-Round-4 `1333563` [CI 38241666750](https://github.com/luisitin/partybox-rea-ports/actions/runs/38241666750)
-is green. Round 5's stakes repair is applied and locally verified; final format/hash/push/head CI
-remain pending. No three-no-gain completion or DONE is claimed. All executions remain game-only,
-one thread worker and one owned browser closed in finally.
+Final source `1659b6e` is locally verified and
+[CI 38244205834](https://github.com/luisitin/partybox-rea-ports/actions/runs/38244205834) is green.
+PR [#2](https://github.com/luisitin/partybox-rea-ports/pull/2) is ready for owner review. Format
+83673 and all 239 media hashes pass (8,712,209 B); 93 post-run source, 77 capture-source and
+six restored mutation hashes match. Two early CSS/helper edits remain disclosed below; no
+all-93 before/after freeze is claimed for that run. No source changed in reviews 6–8, the first
+three consecutive no-gain rounds (6–8); root confirmed the independent final walkthrough gain 0.
+KEEP GOING is complete. Only final documentation-head CI remains before releasing the claim
+as DONE. Owner core migration remains an unapplied handoff.
+Executions stay game-only, one thread worker and one owned browser closed in finally.
 
-| Check                         | Command / evidence                                                                   | Current result                                                                                                                                                   |
-| ----------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Install                       | `corepack enable`; `pnpm.cmd install --frozen-lockfile`                              | PASS; no added dependencies                                                                                                                                      |
-| Types                         | `pnpm.cmd typecheck`                                                                 | Round-5 PASS session 32345                                                                                                                                       |
-| Focused render/SSR            | Game-only Vitest with `--maxWorkers=1 --pool=threads`                                | PASS 43 tests/3 files; final ten-renderer file PASS after the last CSS/helper corrections                                                                        |
-| Full game/SDK/properties/bots | `pnpm.cmd vitest run games/kahoot --maxWorkers=1 --pool=threads` with JSON reporting | PASS 242/242; 26 files; 484.58 s; session 37496 exit 0; SDK/properties/simulations included                                                                      |
-| Mutations                     | `node jobs/P01-quiz-rush/mutate-upgrade.mjs`                                         | Pacing PASS 20/20, 72-test baseline, restored; current six restoration hashes match tested server source                                                         |
-| Browser fit                   | `node jobs/P01-quiz-rush/capture.mjs`                                                | Session 50244 PASS 95/95 current; one labelled 85-clipped Finale baseline, 96 records total. Browser PID 52968 closed in finally; EPERM profile cleanup deferred |
-| Format/hash/CI                | `pnpm.cmd format`; media hashes; P01 workflow                                        | Final round-5 format, stable source/media hashes, push and resulting-head CI pending; checkpoint 8,710,478 B before loop-5 JSON                                  |
+| Check                         | Command / evidence                                                                   | Current result                                                                                                                                                                                                      |
+| ----------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Install                       | `corepack enable`; `pnpm.cmd install --frozen-lockfile`                              | PASS; no added dependencies                                                                                                                                                                                         |
+| Types                         | `pnpm.cmd typecheck`                                                                 | Round-5 PASS session 32345                                                                                                                                                                                          |
+| Focused render/SSR            | Game-only Vitest with `--maxWorkers=1 --pool=threads`                                | PASS 43 tests/3 files; final ten-renderer file PASS after the last CSS/helper corrections                                                                                                                           |
+| Full game/SDK/properties/bots | `pnpm.cmd vitest run games/kahoot --maxWorkers=1 --pool=threads` with JSON reporting | PASS 242/242; 26 files; 484.58 s; session 37496 exit 0; SDK/properties/simulations included                                                                                                                         |
+| Mutations                     | `node jobs/P01-quiz-rush/mutate-upgrade.mjs`                                         | Pacing PASS 20/20, 72-test baseline, restored; current six restoration hashes match tested server source                                                                                                            |
+| Browser fit                   | `node jobs/P01-quiz-rush/capture.mjs`                                                | Session 50244 PASS 95/95 current; one labelled 85-clipped Finale baseline, 96 records total. Browser PID 52968 closed in finally; EPERM profile cleanup deferred                                                    |
+| Format/hash/CI                | `pnpm.cmd format`; media hashes; P01 workflow                                        | PASS final format 83673; 239 files/8,712,209 B, all 93 post-run/77 capture/six restoration hashes match; [CI 38244205834](https://github.com/luisitin/partybox-rea-ports/actions/runs/38244205834) green at 1659b6e |
 
 ### Round-5 applied source and measured gain
 
@@ -42,11 +48,16 @@ round-4 93-file before/after freeze for this run. `media/verification-upgrade.js
 records those two before/after SHA values. The ten-renderer file ran after the final fixes and
 the current recapture verifies the painted UI; current 77 capture-source/six restoration hashes
 match. Typecheck 32345 PASS. Latest independent twelve-sheet/native phone/stakes QA found no
-remaining concrete visual defect. Fresh final-head CI remains required for the final source.
+remaining concrete visual defect. Final source 1659b6e CI is now green; only the final
+documentation-head CI remains pending.
 
-Checkpoint media is 8,710,478 B before the loop-5 JSON; format/stable final hashes must record
-the complete payload and decimal 10,000,000 B cap. Root will push after those checks. No future
-CI PASS or no-gain result is implied; three consecutive no-gain walkthroughs remain required.
+Final format session 83673 PASS. All 239 media hashes verify 8,712,209 B, below decimal
+10,000,000 B; current 93 post-run source/77 capture/six restoration hashes match. Source
+1659b6e and CI 38244205834 are green. The documentation-only first-review head b8141c3 also
+passed CI 38245368794. Rounds 6–8 found no demonstrated gain and changed no source; root
+confirmed the independent round-8 walkthrough gain 0, completing the three-review loop.
+Final documentation-head CI is still pending; no future green or CLAIMS DONE is assumed.
+PR #2 is ready and open for owner review; no merge or owner-core migration has been applied.
 
 ### Round-4 green baseline
 

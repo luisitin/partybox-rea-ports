@@ -65,9 +65,13 @@ Full 37496 PASS 242/242, 26 files, 484.58 s, exit 0; typecheck 32345 PASS, focus
 final ten-renderer PASS. Runtime JS/server froze; Tv.module.css/helper changed early during
 properties, so no all-93 freeze claim. Verification JSON records both SHAs; final SSR ran after
 fixes and current 77 capture/six restoration hashes match. Independent twelve-sheet/native
-phone/stakes QA found no remaining concrete defect. Checkpoint media 8,710,478 B precedes
-loop-5 JSON; final format/stable hashes/push/head CI remain. Three no-gain rounds remain;
-no completed loop or DONE. Preparation hashes below stay historical.
+phone/stakes QA found no remaining concrete defect. Final format 83673 PASS; all 239 media
+hashes verify 8,712,209 B, with current 93 post-run/77 capture/six restoration hashes matched.
+Source 1659b6e and CI 38244205834 pass; PR #2 is ready/open for owner review. The two early
+CSS/helper edits remain disclosed. Rounds 6–8 complete three consecutive no-gain reviews;
+root confirmed final independent gain 0 with no source/media changes. KEEP GOING is complete.
+Final documentation-head CI remains before the DONE claim. Core migration stays unapplied.
+Preparation hashes below stay historical.
 
 ## Historical preparation snapshot
 

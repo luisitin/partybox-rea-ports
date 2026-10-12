@@ -118,20 +118,23 @@
   32 px rules fixed them; helper now copies exact pinned global muted/caption rules. The old
   90/91 PNG identity proof belongs only to round 4 before this helper correction.
   Final 50244 PASS 95/95 current plus one explicit 85-clipped Finale baseline (96 records).
-  PID 52968 closed in finally; EPERM profile cleanup deferred. Checkpoint 8,710,478 B precedes
-  loop-5 JSON, so final all-media size/hash remains pending.
+  PID 52968 closed in finally; EPERM profile cleanup deferred. Final 239-file media hashes
+  verify 8,712,209 B, below decimal 10 MB.
 - Full 37496 PASS 242/242, 26 files, 484.58 s, exit 0; typecheck 32345 PASS. Runtime JS/server
   stayed frozen; Tv.module.css and upgrade-evidence.ts changed early while properties ran.
   No all-93 freeze claim applies. Verification JSON records both before/after SHAs; final ten
   renderer tests ran after fixes and current 77 capture/six restoration hashes match. Independent
   twelve-sheet/native phone/stakes QA found no concrete remaining visual defect. Final
-  format/stable hashes/push/head CI and three consecutive no-gain rounds remain pending.
+  format 83673, current 93 post-run/77 capture/six restoration hashes and source 1659b6e CI
+  38244205834 pass. The two early edits remain disclosed, not an all-93 before/after freeze.
 - VIP Next/skip is an inherited platform input without a phase stamp (public shared/protocol.ts;
   pinned core Playing.tsx and engine/vip.ts). A delayed old-screen Next can skip the new current
   phase after automatic advance; local duplicate-click guards do not prevent that across devices.
   Repair requires protocol/engine phase matching outside the authorized game/core-read-only scope.
   No complete stale-Next protection is claimed.
-- Old standalone 116-test/7,000-match/screens/mutation/loop evidence is historical. No upgrade
-  no-gain rounds or DONE are claimed; three consecutive no-gain rounds and final checks remain.
+- Old standalone 116-test/7,000-match/screens/mutation/loop evidence is historical. Current
+  rounds 6–8 are consecutive no-gain reviews with no source/media changes; root confirmed
+  final independent round-8 gain 0. KEEP GOING is complete. Final source checks/CI pass;
+  final documentation-head CI remains before the DONE claim. PR #2 is ready for owner review.
   The public kit lacks core gen-registry/verify commands; discovery, typecheck, format and
-  contract checks validate this module. The core migration handoff remains unapplied.
+  contract checks validate this module. Owner core migration remains an unapplied handoff.
