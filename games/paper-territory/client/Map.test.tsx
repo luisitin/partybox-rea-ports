@@ -68,6 +68,27 @@ describe('color-independent map identity', () => {
 
 describe('readable player heads', () => {
   it.each([false, true])(
+    'shows two adjacent runners without a third home digit and restores an empty home (compact=%s)',
+    (compact) => {
+      const props = board();
+      props.runners = props.runners.slice(0, 2);
+      const home = props.runners[1]!.home;
+      props.runners[0]!.cell = home - 2;
+      props.runners[1]!.cell = home - 1;
+      let html = renderToStaticMarkup(<Map {...props} compact={compact} />);
+      expect(html.match(/data-marker="runner"/g)).toHaveLength(2);
+      expect(html).not.toMatch(/data-marker="home"[^>]*>2<\/text>/);
+      // The protected square remains even while its label yields to live heads.
+      expect(html.match(/width="3" height="3"/g)).toHaveLength(2);
+      props.runners[0]!.alive = false;
+      props.runners[1]!.cell = home + 3;
+      html = renderToStaticMarkup(<Map {...props} compact={compact} />);
+      expect(html).toMatch(/data-marker="home"[^>]*>2<\/text>/);
+      expect(html.match(/data-marker="runner"/g)).toHaveLength(1);
+    },
+  );
+
+  it.each([false, true])(
     'keeps both adjacent live identities above every opaque disc (compact=%s)',
     (compact) => {
       const props = board();

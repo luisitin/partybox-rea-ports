@@ -118,15 +118,29 @@ try {
       mobile: !tv,
     });
     await page('Page.navigate', { url: pathToFileURL(join(media, name)).href });
-    await delay(100);
+    for (let attempt = 0; attempt < 100; attempt++) {
+      const { result } = await page('Runtime.evaluate', {
+        expression: `document.readyState === 'complete' && location.href === ${JSON.stringify(pathToFileURL(join(media, name)).href)}`,
+        returnByValue: true,
+      });
+      if (result.value) break;
+      if (attempt === 99) throw new Error(`Page did not load: ${name}`);
+      await delay(50);
+    }
+    await page('Runtime.evaluate', {
+      expression:
+        'document.fonts.ready.then(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))',
+      awaitPromise: true,
+    });
     const { result } = await page('Runtime.evaluate', {
       expression: `(() => {
       const bounds = e => {const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height};};
-      const visible=[...document.querySelectorAll('main button, main input, main h2, main svg, main li')];
+      const visible=[...document.querySelectorAll('main button, main input, main h2, main svg, main li, main section, main header, main ul, main dl, main div, main p')];
       return {width:innerWidth,height:innerHeight,overflowX:document.documentElement.scrollWidth-innerWidth,overflowY:document.documentElement.scrollHeight-innerHeight,
         outside:visible.filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&(r.left < -1||r.top < -1||r.right > innerWidth+1||r.bottom > innerHeight+1);}).map(e=>({tag:e.tagName,text:e.textContent?.slice(0,60),...bounds(e)})),
         touch:[...document.querySelectorAll('button,input')].filter(e=>!e.disabled).map(e=>({text:e.getAttribute('aria-label')||e.textContent,...bounds(e)})),
-        internalScroll:[...document.querySelectorAll('main *')].filter(e=>e.scrollHeight>e.clientHeight+2&&['auto','scroll'].includes(getComputedStyle(e).overflowY)).map(e=>e.className)};
+        internalScroll:[...document.querySelectorAll('main *')].filter(e=>e.scrollHeight>e.clientHeight+2&&['auto','scroll'].includes(getComputedStyle(e).overflowY)).map(e=>e.className),
+        map: (()=>{const map=document.querySelector('main svg[role="img"]');if(!map)return null;const box=bounds(map);const scale=Math.min(box.w/42.5,box.h/30.5);const glyph=map.querySelector('text[data-marker="runner"]');return {...box,scale,headGlyphPx:glyph?parseFloat(getComputedStyle(glyph).fontSize)*scale:null};})()};
     })()`,
       returnByValue: true,
     });
@@ -181,6 +195,7 @@ try {
       ),
     }),
   );
+  if (outside.length) throw new Error(`${outside.length} screen fit failures`);
 } finally {
   if (socket?.readyState === WebSocket.OPEN) {
     try {

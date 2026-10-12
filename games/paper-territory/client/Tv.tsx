@@ -85,7 +85,11 @@ export function Tv({ view }: GameTvProps<PaperTerritoryTvView>): JSX.Element {
                 : view.paused
                   ? L('Paused')
                   : !row.alive
-                    ? L('Returning')
+                    ? runner?.cause === 'connection' && runner.respawnAt === null
+                      ? L('Left')
+                      : view.players.find((player) => player.id === row.id)?.connected === false
+                        ? L('Disconnected')
+                        : L('Returning')
                     : row.exposed
                       ? L('Trail out')
                       : view.phaseId === 'play' && (runner?.lastCapture ?? 0) > 0

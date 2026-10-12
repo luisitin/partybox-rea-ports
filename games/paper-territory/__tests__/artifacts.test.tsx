@@ -174,6 +174,34 @@ it('renders every phase for TV, player, stage, remote and spectator from a real 
     }
   }
   if (build) {
+    for (const mode of ['phone-only', 'phone-only-spectator'] as const) {
+      const fixture: State = {
+        ...done,
+        phoneOnly: true,
+        players: Object.fromEntries(
+          Object.entries(done.players).map(([id, player], index) => [
+            id,
+            { ...player, name: LONG_NAMES[index] ?? '' },
+          ]),
+        ),
+      };
+      const id = mode.includes('spectator') ? 'audience' : players[0]!.id;
+      const body = renderToStaticMarkup(
+        <PhoneOnlyProvider value>
+          <Controller
+            view={{ ...game.controllerView(fixture, id), vip: null }}
+            me={fixture.players[id] ?? { id, name: 'Audience', avatarId: 'fox' }}
+            send={() => undefined}
+          />
+        </PhoneOnlyProvider>,
+      );
+      expect(body).toContain('data-compact="true"');
+      for (const name of LONG_NAMES) expect(body).toContain(name);
+      writeFileSync(
+        resolve(media, `done-long-${mode}.html`),
+        pageHtml(body, `done long ${mode}`, css, false),
+      );
+    }
     for (const mode of ['tv', 'phone-only-spectator'] as const) {
       const tv = mode === 'tv';
       // One legal pair per surface: isolated protected homes and 1057/9×7 land

@@ -21,7 +21,7 @@ An original PartyBox map race inspired by the classic browser territory loop. Tw
 | Remote player who cannot see the TV | Same map as a phone-only player                                        | Same controls                                 |
 | Spectator                           | Public map and standings in every room                                 | None                                          |
 
-The map uses stable player numbers as well as colour, and protected home squares remain visibly distinct. Stage phones do not point at a TV. A local player's reconnect restores the current direction, land and live return timer from server state.
+The map uses stable player numbers as well as colour, and protected home squares remain visibly distinct. Home digits yield while a live head is nearby, so they cannot be mistaken for another runner; empty homes keep their number. Stage phones do not point at a TV. Their final map remains large enough to inspect above all eight standings. A local player's reconnect restores the current direction, land and live return timer from server state.
 
 The ready screens teach movement, closure, trail cuts, and crashes: walls, your own exposed trail and head collisions cost every tile outside your protected home. During play the phone's existing header identifies the leading seat and gap, or reports the number of tied leaders. Its third stat shows the player's current place, with competition ranks shared across ties. The TV names the leader's margin, or the number of tied leaders. These gaps count owned cells and update from the public scores when ownership changes.
 
@@ -53,7 +53,7 @@ Bots read the same public ownership, exposed trails and head positions. Easy bot
 
 ## Edge cases and clock ownership
 
-Pause freezes all physics and return timers. Resume moves `began` and `endsAt` by the exact paused duration while world ticks remain relative. No client decides movement or scoring. A temporary disconnect clears that player's trail and land outside home without adding a gameplay crash; their return runs only after reconnect. A permanent leave/kick never respawns, and stable slot numbers and final results retain their seat. Drops during pause cannot move the map. Host/VIP changes are owned by the SDK. No game phase waits for input from a disconnected player; an all-disconnected room still reaches the timed result.
+Pause freezes all physics and return timers. Resume moves `began` and `endsAt` by the exact paused duration while world ticks remain relative. No client decides movement or scoring. A temporary disconnect clears that player's trail and land outside home without adding a gameplay crash; their return runs only after reconnect. A permanent leave/kick never respawns, even after repeated connection changes, and stable slot numbers and final results retain their seat. The TV distinguishes disconnected seats, timed returns and permanent departures. Drops during pause cannot move the map. Host/VIP changes are owned by the SDK. No game phase waits for input from a disconnected player; an all-disconnected room still reaches the timed result.
 
 The state is JSON, bounded by 1,120 ownership cells and unique exposed trail cells per player. Views have no secret gameplay information; public paths, land and scores are intentionally visible to everyone. The server is deterministic and uses only event time; runtime imports are the real SDK. Art is original inline SVG and CSS using PartyBox tokens, numbered markers, dashed trails and reduced-motion support.
 

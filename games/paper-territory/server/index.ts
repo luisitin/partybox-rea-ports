@@ -121,7 +121,12 @@ const reduce = composeReduce<State, Input>({
     if (event.gone || !event.connected)
       return {
         ...changed,
-        world: removeRunner(changed.world, runner.slot, 'connection', !!event.gone),
+        world: removeRunner(
+          changed.world,
+          runner.slot,
+          'connection',
+          !!event.gone || changed.left.includes(runner.id),
+        ),
       };
     if (!runner.alive && runner.respawnTick === null && !changed.left.includes(runner.id))
       return {

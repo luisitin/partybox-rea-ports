@@ -4,7 +4,9 @@ Install once: `corepack enable`; `pnpm.cmd install`, completed. Windows script p
 
 ## Tests and contracts
 
-Latest completed authoritative full check: `pnpm vitest run games/paper-territory --maxWorkers=1`, [CI 38179181153](https://github.com/luisitin/partybox-rea-ports/actions/runs/38179181153), head `18631b6eafa2079b832f570ff258cbe0535ecaab`: **120/120 tests in 14 files**, 63.79 s; typecheck and format also passed. This includes the real SDK contracts, all 1,003 property traces and all 3,000 simulations. Exact provenance and complete metrics are in tools/final-ci-run.json and tools/final-keep-going-results.json. Subsequent pin/head/roster/TV-fit changes and the shorter-runway bot fallback require the next CI. The property trace harness is unchanged; the old bot/source hashes are historical evidence.
+Latest completed full check: `pnpm vitest run games/paper-territory --maxWorkers=1`, [CI 38182241720](https://github.com/luisitin/partybox-rea-ports/actions/runs/38182241720), head `e87dc662df09c7cdefaab89326877cae7b044a7f`: **133/133 tests in14files**,64.55s; typecheck and format also passed. This includes real SDK contracts,1,003property traces and3,000simulations, including the shorter bot fallback. Later R8–R11 home/phone/result/departure changes need fresh CI. `tools/record-scoped-ci.mjs <run-id>` retains exact metadata, metrics and per-game-file tested/local SHA256 comparisons in latest-scoped-ci.json; historical final-ci files remain labelled with their original head.
+
+Resumed focused commands: `PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/paper-territory/__tests__/artifacts.test.tsx games/paper-territory/client --maxWorkers=1`:57/57passed in3.03s. `pnpm.cmd vitest run games/paper-territory/__tests__/presence.test.ts games/paper-territory/__tests__/contract.test.ts games/paper-territory/client/feedback.test.tsx --maxWorkers=1`:51/51passed in9.43s after permanent departure fix. No other game's tests or browser suite ran.
 
 Historical local checks before KEEP GOING:
 
@@ -58,11 +60,11 @@ This game has no secret information. View assertions check public stage versus l
 
 ## Screens and media
 
-`node jobs/P07-paper-territory/tools/capture.mjs`: all **28 screens** with one isolated cached Chromium, closed in finally. TV 1920×1080; phones 390×844 with 80 px reserved at both ends for the shell. Every phase covers local/phone-only/remote/spectators; play also includes paused/eliminated phones.
+Latest `node jobs/P07-paper-territory/tools/capture.mjs`: **32screens** with one isolated cached Chromium, closed in finally. TV1920×1080; phones390×844 with80pxreserved at both ends for the shell. Every phase covers local/phone-only/remote/spectators; play includes paused/eliminated phones and adjacent heads with maximum-area/long-name rows; final screens stress long-name players/spectators. It waits for the correct complete document, fonts and two painted frames before measurements/capture.
 
 Fit report: zero horizontal/vertical overflow, outside elements or internal scrolling. Smallest active touch: **58.65625 px**. Manually inspected three contact sheets: shared map is focal, eight original monochrome ownership textures, persistent homes, readable numbered direction markers, eight-seat standings. TV body 36 px, timer 96 px from tokens. Reduced-motion disables control transitions.
 
-Media totals 4,160,887 bytes, below 10 MB; all 63 SHA256SUMS.txt entries verified after formatting. Capture accepts PB_CHROME for an existing executable; installs no browser/dependency.
+Resumed captures confirmed zero overflow/outside/internal-scroll failures,58.65625pxminimum active touch,358×256pxfinal stage maps and15.108pxhead glyphs. Manually inspected final long-name screens, adjacent-head stress screens and TV/local/stage contact sheets. Media after format:4,990,382bytes across71files, below10MB; recompute/verify SHA256SUMS.txt after any formatting. Capture accepts PB_CHROME for an existing executable; installs no browser/dependency.
 
 ## CI and iteration
 

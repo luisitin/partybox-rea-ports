@@ -346,6 +346,7 @@ ight is the :root default above) ────────
     /* Play uses only the shell's remaining height. The map yields space to the four thumb targets. */
     ._screen_9f25ac {
       height: 100%;
+      min-width: 0;
       min-height: 0;
       color: var(--pb-text);
       overscroll-behavior: none;
@@ -356,6 +357,7 @@ ight is the :root default above) ────────
       gap: 0;
       overflow: hidden;
       min-height: 0;
+      min-width: 0;
     }
 
     ._content_9f25ac {
@@ -364,6 +366,8 @@ ight is the :root default above) ────────
       gap: var(--pb-space-3);
       min-height: 0;
       height: 100%;
+      min-width: 0;
+      width: 100%;
     }
 
     ._header_9f25ac {
@@ -592,9 +596,11 @@ ight is the :root default above) ────────
 
     ._rows_9f25ac {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       grid-template-rows: repeat(8, minmax(0, 1fr));
       flex: 1;
       min-height: 0;
+      min-width: 0;
       gap: var(--pb-space-1);
       margin: 0;
       padding: 0;
@@ -606,6 +612,7 @@ ight is the :root default above) ────────
       align-items: center;
       gap: var(--pb-space-2);
       min-height: 0;
+      min-width: 0;
       padding: var(--pb-space-1) var(--pb-space-2);
       border-radius: var(--pb-radius);
       font-size: var(--pb-font-body);
@@ -692,7 +699,17 @@ ight is the :root default above) ────────
 
     ._content_9f25ac[data-results] ._arena_9f25ac {
       flex: none;
-      height: calc(var(--pb-touch) * 2);
+      height: calc(var(--pb-touch) * 6);
+    }
+
+    ._content_9f25ac[data-results] {
+      gap: var(--pb-space-2);
+    }
+
+    ._content_9f25ac[data-results] ._heading_9f25ac h2 {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     @media (max-height: 620px) {
@@ -824,6 +841,7 @@ ight is the :root default above) ────────
       display: flex;
       flex-direction: column;
       gap: var(--pb-space-4);
+      min-width: 0;
       min-height: 0;
     }
 
@@ -835,8 +853,10 @@ ight is the :root default above) ────────
 
     ._rows_6b7a07 {
       flex: 1;
+      min-width: 0;
       min-height: 0;
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       grid-template-rows: repeat(8, minmax(0, 1fr));
       gap: var(--pb-space-2);
       margin: 0;
@@ -845,9 +865,11 @@ ight is the :root default above) ────────
     }
 
     ._rows_6b7a07 li {
-      display: flex;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
       gap: var(--pb-space-3);
+      min-width: 0;
       min-height: 0;
       border-bottom: 1px solid var(--pb-surface-2);
     }
@@ -879,6 +901,7 @@ ight is the :root default above) ────────
     }
 
     ._person_6b7a07 b {
+      min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -898,6 +921,7 @@ ight is the :root default above) ────────
     ._area_6b7a07 {
       flex: none;
       text-align: right;
+      white-space: nowrap;
       font-variant-numeric: tabular-nums;
     }
 
@@ -1406,16 +1430,6 @@ ight is the :root default above) ────────
                     stroke="var(--pb-player-2)"
                     class="_home_f40580"
                   ></rect>
-                  <text
-                    x="34.5"
-                    y="22.5"
-                    class="_homeNumber_f40580"
-                    data-marker="home"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                  >
-                    2
-                  </text>
                 </g>
                 <g>
                   <rect
@@ -1426,16 +1440,6 @@ ight is the :root default above) ────────
                     stroke="var(--pb-player-3)"
                     class="_home_f40580"
                   ></rect>
-                  <text
-                    x="34.5"
-                    y="5.5"
-                    class="_homeNumber_f40580"
-                    data-marker="home"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                  >
-                    3
-                  </text>
                 </g>
                 <g>
                   <rect
@@ -1446,16 +1450,6 @@ ight is the :root default above) ────────
                     stroke="var(--pb-player-4)"
                     class="_home_f40580"
                   ></rect>
-                  <text
-                    x="5.5"
-                    y="22.5"
-                    class="_homeNumber_f40580"
-                    data-marker="home"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                  >
-                    4
-                  </text>
                 </g>
                 <g>
                   <rect
@@ -1466,16 +1460,6 @@ ight is the :root default above) ────────
                     stroke="var(--pb-player-5)"
                     class="_home_f40580"
                   ></rect>
-                  <text
-                    x="19.5"
-                    y="5.5"
-                    class="_homeNumber_f40580"
-                    data-marker="home"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                  >
-                    5
-                  </text>
                 </g>
                 <g>
                   <rect
@@ -1486,16 +1470,6 @@ ight is the :root default above) ────────
                     stroke="var(--pb-player-6)"
                     class="_home_f40580"
                   ></rect>
-                  <text
-                    x="19.5"
-                    y="22.5"
-                    class="_homeNumber_f40580"
-                    data-marker="home"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                  >
-                    6
-                  </text>
                 </g>
                 <g>
                   <rect
@@ -1506,16 +1480,6 @@ ight is the :root default above) ────────
                     stroke="var(--pb-player-7)"
                     class="_home_f40580"
                   ></rect>
-                  <text
-                    x="5.5"
-                    y="13.5"
-                    class="_homeNumber_f40580"
-                    data-marker="home"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                  >
-                    7
-                  </text>
                 </g>
                 <g>
                   <rect
@@ -1526,16 +1490,6 @@ ight is the :root default above) ────────
                     stroke="var(--pb-player-8)"
                     class="_home_f40580"
                   ></rect>
-                  <text
-                    x="34.5"
-                    y="13.5"
-                    class="_homeNumber_f40580"
-                    data-marker="home"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                  >
-                    8
-                  </text>
                 </g>
                 <g
                   transform="translate(32.5 22.5)"

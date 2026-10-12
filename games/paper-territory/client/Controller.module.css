@@ -1,6 +1,7 @@
 /* Play uses only the shell's remaining height. The map yields space to the four thumb targets. */
 .screen {
   height: 100%;
+  min-width: 0;
   min-height: 0;
   color: var(--pb-text);
   overscroll-behavior: none;
@@ -11,6 +12,7 @@
   gap: 0;
   overflow: hidden;
   min-height: 0;
+  min-width: 0;
 }
 
 .content {
@@ -19,6 +21,8 @@
   gap: var(--pb-space-3);
   min-height: 0;
   height: 100%;
+  min-width: 0;
+  width: 100%;
 }
 
 .header {
@@ -247,9 +251,11 @@
 
 .rows {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: repeat(8, minmax(0, 1fr));
   flex: 1;
   min-height: 0;
+  min-width: 0;
   gap: var(--pb-space-1);
   margin: 0;
   padding: 0;
@@ -261,6 +267,7 @@
   align-items: center;
   gap: var(--pb-space-2);
   min-height: 0;
+  min-width: 0;
   padding: var(--pb-space-1) var(--pb-space-2);
   border-radius: var(--pb-radius);
   font-size: var(--pb-font-body);
@@ -347,7 +354,17 @@
 
 .content[data-results] .arena {
   flex: none;
-  height: calc(var(--pb-touch) * 2);
+  height: calc(var(--pb-touch) * 6);
+}
+
+.content[data-results] {
+  gap: var(--pb-space-2);
+}
+
+.content[data-results] .heading h2 {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 @media (max-height: 620px) {

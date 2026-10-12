@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
 import type { PaperTerritoryControllerView, PaperTerritoryTvView } from '../server/index';
 import type { State } from '../server/types';
+import { game } from '../server/index';
 import readyFixture from '../fixtures/ready.json';
 import { Controller } from './Controller';
 import { Tv } from './Tv';
@@ -109,6 +110,45 @@ function spectator(view: TvSnapshot, only: boolean): string {
     </ServerClockProvider>,
   );
 }
+
+describe('TV departure feedback', () => {
+  it.each([undefined, 'left', 'kicked'] as const)(
+    'distinguishes a temporary drop from permanent departure (%s)',
+    (gone) => {
+      const initial = game.init({
+        players: Object.values(fixture.players),
+        settings: {},
+        seed: 7,
+        now: NOW,
+      });
+      let state = game.reduce(initial, {
+        type: 'timer',
+        now: initial.phase.deadline!,
+        phaseId: 'ready',
+        startedAt: initial.phase.startedAt,
+      });
+      state = game.reduce(state, {
+        type: 'player',
+        now: state.began + 1000,
+        playerId: 'p1',
+        connected: false,
+        ...(gone ? { gone } : {}),
+      });
+      const html = tv({ ...game.tvView(state), vip: null });
+      expect(html).toContain(gone ? '>Left</span>' : '>Disconnected</span>');
+      expect(html).not.toContain('>Returning</span>');
+      if (!gone) {
+        state = game.reduce(state, {
+          type: 'player',
+          now: state.began + 1100,
+          playerId: 'p1',
+          connected: true,
+        });
+        expect(tv({ ...game.tvView(state), vip: null })).toContain('>Returning</span>');
+      }
+    },
+  );
+});
 
 describe('spectator live map and roster', () => {
   it('identifies all eight map seats with public names, current areas and tied ranks in either room', () => {

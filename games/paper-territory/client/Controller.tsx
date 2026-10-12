@@ -149,7 +149,7 @@ export function Controller({
         {stage && view.owners ? (
           <div className={styles.arena}>
             <Map
-              compact={!over}
+              compact
               width={view.width}
               height={view.height}
               owners={view.owners}

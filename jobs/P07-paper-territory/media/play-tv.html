@@ -346,6 +346,7 @@ ight is the :root default above) ────────
     /* Play uses only the shell's remaining height. The map yields space to the four thumb targets. */
     ._screen_9f25ac {
       height: 100%;
+      min-width: 0;
       min-height: 0;
       color: var(--pb-text);
       overscroll-behavior: none;
@@ -356,6 +357,7 @@ ight is the :root default above) ────────
       gap: 0;
       overflow: hidden;
       min-height: 0;
+      min-width: 0;
     }
 
     ._content_9f25ac {
@@ -364,6 +366,8 @@ ight is the :root default above) ────────
       gap: var(--pb-space-3);
       min-height: 0;
       height: 100%;
+      min-width: 0;
+      width: 100%;
     }
 
     ._header_9f25ac {
@@ -592,9 +596,11 @@ ight is the :root default above) ────────
 
     ._rows_9f25ac {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       grid-template-rows: repeat(8, minmax(0, 1fr));
       flex: 1;
       min-height: 0;
+      min-width: 0;
       gap: var(--pb-space-1);
       margin: 0;
       padding: 0;
@@ -606,6 +612,7 @@ ight is the :root default above) ────────
       align-items: center;
       gap: var(--pb-space-2);
       min-height: 0;
+      min-width: 0;
       padding: var(--pb-space-1) var(--pb-space-2);
       border-radius: var(--pb-radius);
       font-size: var(--pb-font-body);
@@ -692,7 +699,17 @@ ight is the :root default above) ────────
 
     ._content_9f25ac[data-results] ._arena_9f25ac {
       flex: none;
-      height: calc(var(--pb-touch) * 2);
+      height: calc(var(--pb-touch) * 6);
+    }
+
+    ._content_9f25ac[data-results] {
+      gap: var(--pb-space-2);
+    }
+
+    ._content_9f25ac[data-results] ._heading_9f25ac h2 {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     @media (max-height: 620px) {
@@ -824,6 +841,7 @@ ight is the :root default above) ────────
       display: flex;
       flex-direction: column;
       gap: var(--pb-space-4);
+      min-width: 0;
       min-height: 0;
     }
 
@@ -835,8 +853,10 @@ ight is the :root default above) ────────
 
     ._rows_6b7a07 {
       flex: 1;
+      min-width: 0;
       min-height: 0;
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       grid-template-rows: repeat(8, minmax(0, 1fr));
       gap: var(--pb-space-2);
       margin: 0;
@@ -845,9 +865,11 @@ ight is the :root default above) ────────
     }
 
     ._rows_6b7a07 li {
-      display: flex;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
       gap: var(--pb-space-3);
+      min-width: 0;
       min-height: 0;
       border-bottom: 1px solid var(--pb-surface-2);
     }
@@ -879,6 +901,7 @@ ight is the :root default above) ────────
     }
 
     ._person_6b7a07 b {
+      min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -898,6 +921,7 @@ ight is the :root default above) ────────
     ._area_6b7a07 {
       flex: none;
       text-align: right;
+      white-space: nowrap;
       font-variant-numeric: tabular-nums;
     }
 
@@ -1190,7 +1214,7 @@ ight is the :root default above) ────────
         <header class="_header_6b7a07">
           <div class="_heading_6b7a07">
             <p class="_kicker_6b7a07">Paper Territory</p>
-            <h2 class="_title_6b7a07">Dee leads · 6 cells ahead</h2>
+            <h2 class="_title_6b7a07">Dee leads · 2 cells ahead</h2>
           </div>
           <div class="_clock_6b7a07" role="timer"><span>Time left</span><b>1:44</b></div>
         </header>
@@ -1298,22 +1322,22 @@ ight is the :root default above) ────────
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M33 4h3v1h-3zM30 5h6v1h-6zM30 6h6v1h-6zM28 7h7v1h-7zM28 8h7v1h-7zM28 9h7v1h-7zM28 10h7v1h-7zM31 11h4v1h-4zM31 12h2v1h-2z"
+                  d="M33 4h3v1h-3zM33 5h3v1h-3zM31 6h5v1h-5zM31 7h4v1h-4zM31 8h4v1h-4zM31 9h4v1h-4z"
                   fill="var(--pb-player-3)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M7 10h3v1h-3zM5 11h9v1h-9zM4 12h10v1h-10zM4 13h10v1h-10zM4 14h10v1h-10zM5 15h6v1h-6zM5 16h6v1h-6zM5 17h6v1h-6z"
+                  d="M5 10h7v1h-7zM5 11h7v1h-7zM4 12h8v1h-8zM4 13h8v1h-8zM4 14h6v1h-6zM5 15h5v1h-5zM5 16h5v1h-5zM5 17h5v1h-5zM5 18h4v1h-4z"
                   fill="var(--pb-player-7)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M33 12h3v1h-3zM33 13h3v1h-3zM31 14h5v1h-5zM31 15h4v1h-4zM31 16h4v1h-4zM31 17h4v1h-4zM31 18h4v1h-4zM31 19h4v1h-4zM31 20h4v1h-4z"
+                  d="M27 10h8v1h-8zM27 11h8v1h-8zM27 12h9v1h-9zM27 13h9v1h-9zM30 14h6v1h-6zM30 15h5v1h-5zM30 16h5v1h-5zM31 17h4v1h-4z"
                   fill="var(--pb-player-8)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M11 15h2v1h-2zM11 16h2v1h-2zM11 17h2v1h-2zM5 18h11v1h-11zM5 19h11v1h-11zM5 20h11v1h-11zM4 21h12v1h-12zM4 22h12v1h-12zM4 23h3v1h-3z"
+                  d="M10 16h1v1h-1zM10 17h1v1h-1zM9 18h2v1h-2zM5 19h12v1h-12zM5 20h12v1h-12zM4 21h13v1h-13zM4 22h13v1h-13zM4 23h3v1h-3z"
                   fill="var(--pb-player-4)"
                   class="_territory_f40580"
                 ></path>
@@ -1340,25 +1364,25 @@ ight is the :root default above) ────────
                   data-texture="Dots"
                 ></path>
                 <path
-                  d="M33 4h3v1h-3zM30 5h6v1h-6zM30 6h6v1h-6zM28 7h7v1h-7zM28 8h7v1h-7zM28 9h7v1h-7zM28 10h7v1h-7zM31 11h4v1h-4zM31 12h2v1h-2z"
+                  d="M33 4h3v1h-3zM33 5h3v1h-3zM31 6h5v1h-5zM31 7h4v1h-4zM31 8h4v1h-4zM31 9h4v1h-4z"
                   fill="url(#_R_2m_-owner-2)"
                   data-owner="3"
                   data-texture="Rising stripes"
                 ></path>
                 <path
-                  d="M7 10h3v1h-3zM5 11h9v1h-9zM4 12h10v1h-10zM4 13h10v1h-10zM4 14h10v1h-10zM5 15h6v1h-6zM5 16h6v1h-6zM5 17h6v1h-6z"
+                  d="M5 10h7v1h-7zM5 11h7v1h-7zM4 12h8v1h-8zM4 13h8v1h-8zM4 14h6v1h-6zM5 15h5v1h-5zM5 16h5v1h-5zM5 17h5v1h-5zM5 18h4v1h-4z"
                   fill="url(#_R_2m_-owner-6)"
                   data-owner="7"
                   data-texture="Grid"
                 ></path>
                 <path
-                  d="M33 12h3v1h-3zM33 13h3v1h-3zM31 14h5v1h-5zM31 15h4v1h-4zM31 16h4v1h-4zM31 17h4v1h-4zM31 18h4v1h-4zM31 19h4v1h-4zM31 20h4v1h-4z"
+                  d="M27 10h8v1h-8zM27 11h8v1h-8zM27 12h9v1h-9zM27 13h9v1h-9zM30 14h6v1h-6zM30 15h5v1h-5zM30 16h5v1h-5zM31 17h4v1h-4z"
                   fill="url(#_R_2m_-owner-7)"
                   data-owner="8"
                   data-texture="Diamonds"
                 ></path>
                 <path
-                  d="M11 15h2v1h-2zM11 16h2v1h-2zM11 17h2v1h-2zM5 18h11v1h-11zM5 19h11v1h-11zM5 20h11v1h-11zM4 21h12v1h-12zM4 22h12v1h-12zM4 23h3v1h-3z"
+                  d="M10 16h1v1h-1zM10 17h1v1h-1zM9 18h2v1h-2zM5 19h12v1h-12zM5 20h12v1h-12zM4 21h13v1h-13zM4 22h13v1h-13zM4 23h3v1h-3z"
                   fill="url(#_R_2m_-owner-3)"
                   data-owner="4"
                   data-texture="Falling stripes"
@@ -1426,16 +1450,6 @@ ight is the :root default above) ────────
                     stroke="var(--pb-player-3)"
                     class="_home_f40580"
                   ></rect>
-                  <text
-                    x="34.5"
-                    y="5.5"
-                    class="_homeNumber_f40580"
-                    data-marker="home"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                  >
-                    3
-                  </text>
                 </g>
                 <g>
                   <rect
@@ -1539,7 +1553,7 @@ ight is the :root default above) ────────
                 </g>
                 <g>
                   <path
-                    d="M9.5 9.5L9.5 9.5"
+                    d="M9.5 9.5L9.5 10.5L9.5 11.5L8.5 11.5L8.5 11.5"
                     stroke="var(--pb-player-1)"
                     class="_trail_f40580"
                     data-trail="1"
@@ -1547,15 +1561,7 @@ ight is the :root default above) ────────
                 </g>
                 <g>
                   <path
-                    d="M29.5 6.5L29.5 6.5"
-                    stroke="var(--pb-player-3)"
-                    class="_trail_f40580"
-                    data-trail="3"
-                  ></path>
-                </g>
-                <g>
-                  <path
-                    d="M16.5 19.5L17.5 19.5L18.5 19.5L18.5 20.5L18.5 21.5L18.5 22.5L17.5 22.5L16.5 22.5L16.5 22.5"
+                    d="M13.5 18.5L13.5 17.5L13.5 17.5"
                     stroke="var(--pb-player-4)"
                     class="_trail_f40580"
                     data-trail="4"
@@ -1563,28 +1569,13 @@ ight is the :root default above) ────────
                 </g>
                 <g>
                   <path
-                    d="M30.5 17.5L29.5 17.5L28.5 17.5L28.5 16.5L28.5 15.5L28.5 15.5"
+                    d="M29.5 16.5L28.5 16.5L27.5 16.5L27.5 15.5L27.5 14.5L27.5 14.5"
                     stroke="var(--pb-player-8)"
                     class="_trail_f40580"
                     data-trail="8"
                   ></path>
                 </g>
-                <g transform="translate(16.5 19.5)" data-trail-owner="4" data-trail-cell="776">
-                  <polygon
-                    points="0,-0.72 0.72,0 0,0.72 -0.72,0"
-                    class="_trailBadge_f40580"
-                    data-trail-shape="diamond"
-                  ></polygon>
-                  <text
-                    class="_trailNumber_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="trail"
-                  >
-                    4
-                  </text>
-                </g>
-                <g transform="translate(30.5 17.5)" data-trail-owner="8" data-trail-cell="710">
+                <g transform="translate(29.5 16.5)" data-trail-owner="8" data-trail-cell="669">
                   <polygon
                     points="0,-0.72 0.72,0 0,0.72 -0.72,0"
                     class="_trailBadge_f40580"
@@ -1599,7 +1590,7 @@ ight is the :root default above) ────────
                     8
                   </text>
                 </g>
-                <g transform="translate(9.5 9.5)" data-head-layer="background" data-head-owner="1">
+                <g transform="translate(8.5 11.5)" data-head-layer="background" data-head-owner="1">
                   <circle
                     r="0.8"
                     fill="var(--pb-bg)"
@@ -1607,7 +1598,7 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                 </g>
-                <g transform="translate(29.5 6.5)" data-head-layer="background" data-head-owner="3">
+                <g transform="translate(33.5 5.5)" data-head-layer="background" data-head-owner="3">
                   <circle
                     r="0.8"
                     fill="var(--pb-bg)"
@@ -1616,7 +1607,7 @@ ight is the :root default above) ────────
                   ></circle>
                 </g>
                 <g
-                  transform="translate(16.5 22.5)"
+                  transform="translate(13.5 17.5)"
                   data-head-layer="background"
                   data-head-owner="4"
                 >
@@ -1627,7 +1618,7 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                 </g>
-                <g transform="translate(5.5 11.5)" data-head-layer="background" data-head-owner="7">
+                <g transform="translate(8.5 17.5)" data-head-layer="background" data-head-owner="7">
                   <circle
                     r="0.8"
                     fill="var(--pb-bg)"
@@ -1636,7 +1627,7 @@ ight is the :root default above) ────────
                   ></circle>
                 </g>
                 <g
-                  transform="translate(28.5 15.5)"
+                  transform="translate(27.5 14.5)"
                   data-head-layer="background"
                   data-head-owner="8"
                 >
@@ -1647,42 +1638,42 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                 </g>
-                <g transform="translate(9.5 9.5)" data-head-layer="heading" data-head-owner="1">
-                  <polygon
-                    points="-0.32,0.98 0.00,1.52 0.32,0.98"
-                    class="_heading_f40580"
-                    data-heading="2"
-                  ></polygon>
-                </g>
-                <g transform="translate(29.5 6.5)" data-head-layer="heading" data-head-owner="3">
+                <g transform="translate(8.5 11.5)" data-head-layer="heading" data-head-owner="1">
                   <polygon
                     points="-0.98,-0.32 -1.52,0.00 -0.98,0.32"
                     class="_heading_f40580"
                     data-heading="3"
                   ></polygon>
                 </g>
-                <g transform="translate(16.5 22.5)" data-head-layer="heading" data-head-owner="4">
+                <g transform="translate(33.5 5.5)" data-head-layer="heading" data-head-owner="3">
                   <polygon
                     points="-0.98,-0.32 -1.52,0.00 -0.98,0.32"
                     class="_heading_f40580"
                     data-heading="3"
                   ></polygon>
                 </g>
-                <g transform="translate(5.5 11.5)" data-head-layer="heading" data-head-owner="7">
+                <g transform="translate(13.5 17.5)" data-head-layer="heading" data-head-owner="4">
                   <polygon
                     points="0.32,-0.98 0.00,-1.52 -0.32,-0.98"
                     class="_heading_f40580"
                     data-heading="0"
                   ></polygon>
                 </g>
-                <g transform="translate(28.5 15.5)" data-head-layer="heading" data-head-owner="8">
+                <g transform="translate(8.5 17.5)" data-head-layer="heading" data-head-owner="7">
                   <polygon
                     points="0.32,-0.98 0.00,-1.52 -0.32,-0.98"
                     class="_heading_f40580"
                     data-heading="0"
                   ></polygon>
                 </g>
-                <g transform="translate(9.5 9.5)" data-head-layer="label" data-head-owner="1">
+                <g transform="translate(27.5 14.5)" data-head-layer="heading" data-head-owner="8">
+                  <polygon
+                    points="0.32,-0.98 0.00,-1.52 -0.32,-0.98"
+                    class="_heading_f40580"
+                    data-heading="0"
+                  ></polygon>
+                </g>
+                <g transform="translate(8.5 11.5)" data-head-layer="label" data-head-owner="1">
                   <text
                     class="_number_f40580"
                     text-anchor="middle"
@@ -1695,7 +1686,7 @@ ight is the :root default above) ────────
                     1
                   </text>
                 </g>
-                <g transform="translate(29.5 6.5)" data-head-layer="label" data-head-owner="3">
+                <g transform="translate(33.5 5.5)" data-head-layer="label" data-head-owner="3">
                   <text
                     class="_number_f40580"
                     text-anchor="middle"
@@ -1708,7 +1699,7 @@ ight is the :root default above) ────────
                     3
                   </text>
                 </g>
-                <g transform="translate(16.5 22.5)" data-head-layer="label" data-head-owner="4">
+                <g transform="translate(13.5 17.5)" data-head-layer="label" data-head-owner="4">
                   <text
                     class="_number_f40580"
                     text-anchor="middle"
@@ -1721,7 +1712,7 @@ ight is the :root default above) ────────
                     4
                   </text>
                 </g>
-                <g transform="translate(5.5 11.5)" data-head-layer="label" data-head-owner="7">
+                <g transform="translate(8.5 17.5)" data-head-layer="label" data-head-owner="7">
                   <text
                     class="_number_f40580"
                     text-anchor="middle"
@@ -1734,7 +1725,7 @@ ight is the :root default above) ────────
                     7
                   </text>
                 </g>
-                <g transform="translate(28.5 15.5)" data-head-layer="label" data-head-owner="8">
+                <g transform="translate(27.5 14.5)" data-head-layer="label" data-head-owner="8">
                   <text
                     class="_number_f40580"
                     text-anchor="middle"
@@ -1817,8 +1808,8 @@ ight is the :root default above) ────────
                     <rect width="4" height="4" fill="url(#_R_17a_)"></rect></svg
                   ><b class="_number_cafdc5">3</b></span
                 >
-                <div class="_person_6b7a07"><b>Cy</b><span>Trail out</span></div>
-                <div class="_area_6b7a07"><b>4.4%</b><span>49 cells</span></div>
+                <div class="_person_6b7a07"><b>Cy</b><span>+14 cells</span></div>
+                <div class="_area_6b7a07"><b>2.1%</b><span>23 cells</span></div>
               </li>
               <li style="--seat-ink: var(--pb-player-4)">
                 <span class="_seat_6b7a07 _badge_cafdc5"
@@ -1841,7 +1832,7 @@ ight is the :root default above) ────────
                   ><b class="_number_cafdc5">4</b></span
                 >
                 <div class="_person_6b7a07"><b>Dee</b><span>Trail out</span></div>
-                <div class="_area_6b7a07"><b>5.9%</b><span>66 cells</span></div>
+                <div class="_area_6b7a07"><b>5.1%</b><span>57 cells</span></div>
               </li>
               <li style="--seat-ink: var(--pb-player-5)">
                 <span class="_seat_6b7a07 _badge_cafdc5"
@@ -1900,8 +1891,8 @@ ight is the :root default above) ────────
                     <rect width="4" height="4" fill="url(#_R_1fa_)"></rect></svg
                   ><b class="_number_cafdc5">7</b></span
                 >
-                <div class="_person_6b7a07"><b>Gus</b><span>+12 cells</span></div>
-                <div class="_area_6b7a07"><b>5.4%</b><span>60 cells</span></div>
+                <div class="_person_6b7a07"><b>Gus</b><span>+6 cells</span></div>
+                <div class="_area_6b7a07"><b>4.9%</b><span>55 cells</span></div>
               </li>
               <li style="--seat-ink: var(--pb-player-8)">
                 <span class="_seat_6b7a07 _badge_cafdc5"
@@ -1921,7 +1912,7 @@ ight is the :root default above) ────────
                   ><b class="_number_cafdc5">8</b></span
                 >
                 <div class="_person_6b7a07"><b>Hal</b><span>Trail out</span></div>
-                <div class="_area_6b7a07"><b>3.1%</b><span>35 cells</span></div>
+                <div class="_area_6b7a07"><b>4.8%</b><span>54 cells</span></div>
               </li>
             </ul>
           </aside>

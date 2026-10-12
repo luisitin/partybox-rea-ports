@@ -346,6 +346,7 @@ ight is the :root default above) ────────
     /* Play uses only the shell's remaining height. The map yields space to the four thumb targets. */
     ._screen_9f25ac {
       height: 100%;
+      min-width: 0;
       min-height: 0;
       color: var(--pb-text);
       overscroll-behavior: none;
@@ -356,6 +357,7 @@ ight is the :root default above) ────────
       gap: 0;
       overflow: hidden;
       min-height: 0;
+      min-width: 0;
     }
 
     ._content_9f25ac {
@@ -364,6 +366,8 @@ ight is the :root default above) ────────
       gap: var(--pb-space-3);
       min-height: 0;
       height: 100%;
+      min-width: 0;
+      width: 100%;
     }
 
     ._header_9f25ac {
@@ -592,9 +596,11 @@ ight is the :root default above) ────────
 
     ._rows_9f25ac {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       grid-template-rows: repeat(8, minmax(0, 1fr));
       flex: 1;
       min-height: 0;
+      min-width: 0;
       gap: var(--pb-space-1);
       margin: 0;
       padding: 0;
@@ -606,6 +612,7 @@ ight is the :root default above) ────────
       align-items: center;
       gap: var(--pb-space-2);
       min-height: 0;
+      min-width: 0;
       padding: var(--pb-space-1) var(--pb-space-2);
       border-radius: var(--pb-radius);
       font-size: var(--pb-font-body);
@@ -692,7 +699,17 @@ ight is the :root default above) ────────
 
     ._content_9f25ac[data-results] ._arena_9f25ac {
       flex: none;
-      height: calc(var(--pb-touch) * 2);
+      height: calc(var(--pb-touch) * 6);
+    }
+
+    ._content_9f25ac[data-results] {
+      gap: var(--pb-space-2);
+    }
+
+    ._content_9f25ac[data-results] ._heading_9f25ac h2 {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     @media (max-height: 620px) {
@@ -824,6 +841,7 @@ ight is the :root default above) ────────
       display: flex;
       flex-direction: column;
       gap: var(--pb-space-4);
+      min-width: 0;
       min-height: 0;
     }
 
@@ -835,8 +853,10 @@ ight is the :root default above) ────────
 
     ._rows_6b7a07 {
       flex: 1;
+      min-width: 0;
       min-height: 0;
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       grid-template-rows: repeat(8, minmax(0, 1fr));
       gap: var(--pb-space-2);
       margin: 0;
@@ -845,9 +865,11 @@ ight is the :root default above) ────────
     }
 
     ._rows_6b7a07 li {
-      display: flex;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
       gap: var(--pb-space-3);
+      min-width: 0;
       min-height: 0;
       border-bottom: 1px solid var(--pb-surface-2);
     }
@@ -879,6 +901,7 @@ ight is the :root default above) ────────
     }
 
     ._person_6b7a07 b {
+      min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -898,6 +921,7 @@ ight is the :root default above) ────────
     ._area_6b7a07 {
       flex: none;
       text-align: right;
+      white-space: nowrap;
       font-variant-numeric: tabular-nums;
     }
 
@@ -1287,7 +1311,7 @@ ight is the :root default above) ────────
                 </defs>
                 <rect width="40" height="28" class="_ground_f40580"></rect>
                 <path
-                  d="M4 4h3v1h-3zM4 5h3v1h-3zM4 6h3v1h-3z"
+                  d="M4 4h3v1h-3zM4 5h6v1h-6zM4 6h6v1h-6zM5 7h5v1h-5zM5 8h5v1h-5zM6 9h2v1h-2z"
                   fill="var(--pb-player-1)"
                   class="_territory_f40580"
                 ></path>
@@ -1297,37 +1321,37 @@ ight is the :root default above) ────────
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M33 4h3v1h-3zM21 5h15v1h-15zM21 6h15v1h-15zM18 7h18v1h-18zM18 8h13v1h-13zM35 8h1v1h-1zM22 9h2v1h-2zM26 9h5v1h-5zM35 9h1v1h-1zM22 10h2v1h-2zM26 10h5v1h-5zM29 11h2v1h-2z"
+                  d="M33 4h3v1h-3zM33 5h3v1h-3zM33 6h3v1h-3z"
                   fill="var(--pb-player-3)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M7 6h1v1h-1zM5 7h3v1h-3zM5 8h3v1h-3zM5 9h7v1h-7zM5 10h7v1h-7zM5 11h7v1h-7zM4 12h8v1h-8zM4 13h5v1h-5zM4 14h5v1h-5zM5 15h4v1h-4zM5 16h1v1h-1z"
+                  d="M5 10h2v1h-2zM5 11h2v1h-2zM4 12h6v1h-6zM4 13h6v1h-6zM4 14h6v1h-6zM6 15h4v1h-4z"
                   fill="var(--pb-player-7)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M31 8h4v1h-4zM31 9h4v1h-4zM31 10h4v1h-4zM25 11h4v1h-4zM31 11h4v1h-4zM25 12h11v1h-11zM25 13h11v1h-11zM25 14h11v1h-11zM28 15h7v1h-7zM31 16h4v1h-4zM31 17h4v1h-4zM29 20h1v1h-1z"
+                  d="M33 12h3v1h-3zM33 13h3v1h-3zM33 14h3v1h-3z"
                   fill="var(--pb-player-8)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M14 9h1v1h-1zM24 9h1v1h-1zM14 10h1v1h-1zM24 10h1v1h-1zM12 11h3v1h-3zM21 11h4v1h-4zM12 12h6v1h-6zM21 12h4v1h-4zM14 13h4v1h-4zM21 13h3v1h-3zM14 14h4v1h-4zM21 14h3v1h-3zM14 15h10v1h-10zM16 16h9v1h-9zM16 17h12v1h-12zM16 18h13v1h-13zM19 19h10v1h-10zM19 20h10v1h-10zM18 21h13v1h-13zM18 22h13v1h-13zM18 23h3v1h-3z"
+                  d="M18 13h4v1h-4zM18 14h4v1h-4zM18 15h7v1h-7zM15 16h10v1h-10zM15 17h10v1h-10zM16 18h9v1h-9zM16 19h11v1h-11zM16 20h11v1h-11zM16 21h11v1h-11zM13 22h14v1h-14zM18 23h3v1h-3z"
                   fill="var(--pb-player-6)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M9 13h5v1h-5zM9 14h5v1h-5zM9 15h5v1h-5zM6 16h10v1h-10zM5 17h11v1h-11zM5 18h11v1h-11zM5 19h14v1h-14zM5 20h14v1h-14zM4 21h14v1h-14zM4 22h14v1h-14zM4 23h3v1h-3z"
+                  d="M5 15h1v1h-1zM5 16h8v1h-8zM5 17h8v1h-8zM5 18h11v1h-11zM5 19h11v1h-11zM5 20h11v1h-11zM4 21h12v1h-12zM4 22h9v1h-9zM4 23h6v1h-6z"
                   fill="var(--pb-player-4)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M33 21h3v1h-3zM33 22h3v1h-3zM33 23h3v1h-3z"
+                  d="M31 15h4v1h-4zM25 16h3v1h-3zM30 16h5v1h-5zM25 17h10v1h-10zM25 18h10v1h-10zM27 19h8v1h-8zM27 20h8v1h-8zM27 21h9v1h-9zM27 22h9v1h-9zM33 23h3v1h-3z"
                   fill="var(--pb-player-2)"
                   class="_territory_f40580"
                 ></path>
                 <path
-                  d="M4 4h3v1h-3zM4 5h3v1h-3zM4 6h3v1h-3z"
+                  d="M4 4h3v1h-3zM4 5h6v1h-6zM4 6h6v1h-6zM5 7h5v1h-5zM5 8h5v1h-5zM6 9h2v1h-2z"
                   fill="url(#_R_2m_-owner-0)"
                   data-owner="1"
                   data-texture="Horizontal lines"
@@ -1339,37 +1363,37 @@ ight is the :root default above) ────────
                   data-texture="Dots"
                 ></path>
                 <path
-                  d="M33 4h3v1h-3zM21 5h15v1h-15zM21 6h15v1h-15zM18 7h18v1h-18zM18 8h13v1h-13zM35 8h1v1h-1zM22 9h2v1h-2zM26 9h5v1h-5zM35 9h1v1h-1zM22 10h2v1h-2zM26 10h5v1h-5zM29 11h2v1h-2z"
+                  d="M33 4h3v1h-3zM33 5h3v1h-3zM33 6h3v1h-3z"
                   fill="url(#_R_2m_-owner-2)"
                   data-owner="3"
                   data-texture="Rising stripes"
                 ></path>
                 <path
-                  d="M7 6h1v1h-1zM5 7h3v1h-3zM5 8h3v1h-3zM5 9h7v1h-7zM5 10h7v1h-7zM5 11h7v1h-7zM4 12h8v1h-8zM4 13h5v1h-5zM4 14h5v1h-5zM5 15h4v1h-4zM5 16h1v1h-1z"
+                  d="M5 10h2v1h-2zM5 11h2v1h-2zM4 12h6v1h-6zM4 13h6v1h-6zM4 14h6v1h-6zM6 15h4v1h-4z"
                   fill="url(#_R_2m_-owner-6)"
                   data-owner="7"
                   data-texture="Grid"
                 ></path>
                 <path
-                  d="M31 8h4v1h-4zM31 9h4v1h-4zM31 10h4v1h-4zM25 11h4v1h-4zM31 11h4v1h-4zM25 12h11v1h-11zM25 13h11v1h-11zM25 14h11v1h-11zM28 15h7v1h-7zM31 16h4v1h-4zM31 17h4v1h-4zM29 20h1v1h-1z"
+                  d="M33 12h3v1h-3zM33 13h3v1h-3zM33 14h3v1h-3z"
                   fill="url(#_R_2m_-owner-7)"
                   data-owner="8"
                   data-texture="Diamonds"
                 ></path>
                 <path
-                  d="M14 9h1v1h-1zM24 9h1v1h-1zM14 10h1v1h-1zM24 10h1v1h-1zM12 11h3v1h-3zM21 11h4v1h-4zM12 12h6v1h-6zM21 12h4v1h-4zM14 13h4v1h-4zM21 13h3v1h-3zM14 14h4v1h-4zM21 14h3v1h-3zM14 15h10v1h-10zM16 16h9v1h-9zM16 17h12v1h-12zM16 18h13v1h-13zM19 19h10v1h-10zM19 20h10v1h-10zM18 21h13v1h-13zM18 22h13v1h-13zM18 23h3v1h-3z"
+                  d="M18 13h4v1h-4zM18 14h4v1h-4zM18 15h7v1h-7zM15 16h10v1h-10zM15 17h10v1h-10zM16 18h9v1h-9zM16 19h11v1h-11zM16 20h11v1h-11zM16 21h11v1h-11zM13 22h14v1h-14zM18 23h3v1h-3z"
                   fill="url(#_R_2m_-owner-5)"
                   data-owner="6"
                   data-texture="Crosses"
                 ></path>
                 <path
-                  d="M9 13h5v1h-5zM9 14h5v1h-5zM9 15h5v1h-5zM6 16h10v1h-10zM5 17h11v1h-11zM5 18h11v1h-11zM5 19h14v1h-14zM5 20h14v1h-14zM4 21h14v1h-14zM4 22h14v1h-14zM4 23h3v1h-3z"
+                  d="M5 15h1v1h-1zM5 16h8v1h-8zM5 17h8v1h-8zM5 18h11v1h-11zM5 19h11v1h-11zM5 20h11v1h-11zM4 21h12v1h-12zM4 22h9v1h-9zM4 23h6v1h-6z"
                   fill="url(#_R_2m_-owner-3)"
                   data-owner="4"
                   data-texture="Falling stripes"
                 ></path>
                 <path
-                  d="M33 21h3v1h-3zM33 22h3v1h-3zM33 23h3v1h-3z"
+                  d="M31 15h4v1h-4zM25 16h3v1h-3zM30 16h5v1h-5zM25 17h10v1h-10zM25 18h10v1h-10zM27 19h8v1h-8zM27 20h8v1h-8zM27 21h9v1h-9zM27 22h9v1h-9zM33 23h3v1h-3z"
                   fill="url(#_R_2m_-owner-1)"
                   data-owner="2"
                   data-texture="Vertical lines"
@@ -1505,16 +1529,6 @@ ight is the :root default above) ────────
                     stroke="var(--pb-player-7)"
                     class="_home_f40580"
                   ></rect>
-                  <text
-                    x="5.5"
-                    y="13.5"
-                    class="_homeNumber_f40580"
-                    data-marker="home"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                  >
-                    7
-                  </text>
                 </g>
                 <g>
                   <rect
@@ -1538,21 +1552,37 @@ ight is the :root default above) ────────
                 </g>
                 <g>
                   <path
-                    d="M21.5 9.5L21.5 10.5L21.5 11.5L22.5 11.5L23.5 11.5L23.5 11.5"
-                    stroke="var(--pb-player-3)"
+                    d="M10.5 5.5L11.5 5.5L11.5 5.5"
+                    stroke="var(--pb-player-1)"
                     class="_trail_f40580"
-                    data-trail="3"
+                    data-trail="1"
                   ></path>
                 </g>
                 <g>
                   <path
-                    d="M27.5 16.5L27.5 15.5L27.5 14.5L26.5 14.5L26.5 14.5"
+                    d="M34.5 14.5L34.5 13.5L34.5 12.5L34.5 11.5L33.5 11.5L32.5 11.5L31.5 11.5L31.5 11.5"
+                    stroke="var(--pb-player-2)"
+                    class="_trail_f40580"
+                    data-trail="2"
+                  ></path>
+                </g>
+                <g>
+                  <path
+                    d="M21.5 5.5L22.5 5.5L23.5 5.5L23.5 6.5L23.5 7.5L23.5 8.5L22.5 8.5L21.5 8.5L20.5 8.5L20.5 7.5L20.5 7.5"
+                    stroke="var(--pb-player-5)"
+                    class="_trail_f40580"
+                    data-trail="5"
+                  ></path>
+                </g>
+                <g>
+                  <path
+                    d="M25.5 17.5L25.5 17.5"
                     stroke="var(--pb-player-6)"
                     class="_trail_f40580"
                     data-trail="6"
                   ></path>
                 </g>
-                <g transform="translate(21.5 9.5)" data-trail-owner="3" data-trail-cell="381">
+                <g transform="translate(34.5 14.5)" data-trail-owner="2" data-trail-cell="594">
                   <polygon
                     points="0,-0.72 0.72,0 0,0.72 -0.72,0"
                     class="_trailBadge_f40580"
@@ -1564,22 +1594,45 @@ ight is the :root default above) ────────
                     dominant-baseline="central"
                     data-marker="trail"
                   >
-                    3
+                    2
                   </text>
                 </g>
+                <g transform="translate(22.5 5.5)" data-trail-owner="5" data-trail-cell="222">
+                  <polygon
+                    points="0,-0.72 0.72,0 0,0.72 -0.72,0"
+                    class="_trailBadge_f40580"
+                    data-trail-shape="diamond"
+                  ></polygon>
+                  <text
+                    class="_trailNumber_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="trail"
+                  >
+                    5
+                  </text>
+                </g>
+                <g transform="translate(11.5 5.5)" data-head-layer="background" data-head-owner="1">
+                  <circle
+                    r="0.8"
+                    fill="var(--pb-bg)"
+                    stroke="var(--pb-player-1)"
+                    stroke-width="0.18"
+                  ></circle>
+                </g>
                 <g
-                  transform="translate(23.5 11.5)"
+                  transform="translate(31.5 11.5)"
                   data-head-layer="background"
-                  data-head-owner="3"
+                  data-head-owner="2"
                 >
                   <circle
                     r="0.8"
                     fill="var(--pb-bg)"
-                    stroke="var(--pb-player-3)"
+                    stroke="var(--pb-player-2)"
                     stroke-width="0.18"
                   ></circle>
                 </g>
-                <g transform="translate(8.5 22.5)" data-head-layer="background" data-head-owner="4">
+                <g transform="translate(5.5 17.5)" data-head-layer="background" data-head-owner="4">
                   <circle
                     r="0.8"
                     fill="var(--pb-bg)"
@@ -1587,8 +1640,16 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                 </g>
+                <g transform="translate(20.5 7.5)" data-head-layer="background" data-head-owner="5">
+                  <circle
+                    r="0.8"
+                    fill="var(--pb-bg)"
+                    stroke="var(--pb-player-5)"
+                    stroke-width="0.18"
+                  ></circle>
+                </g>
                 <g
-                  transform="translate(26.5 14.5)"
+                  transform="translate(25.5 17.5)"
                   data-head-layer="background"
                   data-head-owner="6"
                 >
@@ -1599,7 +1660,7 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                 </g>
-                <g transform="translate(5.5 15.5)" data-head-layer="background" data-head-owner="7">
+                <g transform="translate(6.5 14.5)" data-head-layer="background" data-head-owner="7">
                   <circle
                     r="0.8"
                     fill="var(--pb-bg)"
@@ -1607,54 +1668,49 @@ ight is the :root default above) ────────
                     stroke-width="0.18"
                   ></circle>
                 </g>
-                <g
-                  transform="translate(31.5 15.5)"
-                  data-head-layer="background"
-                  data-head-owner="8"
-                >
-                  <circle
-                    r="0.8"
-                    fill="var(--pb-bg)"
-                    stroke="var(--pb-player-8)"
-                    stroke-width="0.18"
-                  ></circle>
-                </g>
-                <g transform="translate(23.5 11.5)" data-head-layer="heading" data-head-owner="3">
+                <g transform="translate(11.5 5.5)" data-head-layer="heading" data-head-owner="1">
                   <polygon
                     points="0.98,0.32 1.52,0.00 0.98,-0.32"
                     class="_heading_f40580"
                     data-heading="1"
                   ></polygon>
                 </g>
-                <g transform="translate(8.5 22.5)" data-head-layer="heading" data-head-owner="4">
-                  <polygon
-                    points="0.98,0.32 1.52,0.00 0.98,-0.32"
-                    class="_heading_f40580"
-                    data-heading="1"
-                  ></polygon>
-                </g>
-                <g transform="translate(26.5 14.5)" data-head-layer="heading" data-head-owner="6">
+                <g transform="translate(31.5 11.5)" data-head-layer="heading" data-head-owner="2">
                   <polygon
                     points="-0.98,-0.32 -1.52,0.00 -0.98,0.32"
                     class="_heading_f40580"
                     data-heading="3"
                   ></polygon>
                 </g>
-                <g transform="translate(5.5 15.5)" data-head-layer="heading" data-head-owner="7">
-                  <polygon
-                    points="-0.98,-0.32 -1.52,0.00 -0.98,0.32"
-                    class="_heading_f40580"
-                    data-heading="3"
-                  ></polygon>
-                </g>
-                <g transform="translate(31.5 15.5)" data-head-layer="heading" data-head-owner="8">
+                <g transform="translate(5.5 17.5)" data-head-layer="heading" data-head-owner="4">
                   <polygon
                     points="0.32,-0.98 0.00,-1.52 -0.32,-0.98"
                     class="_heading_f40580"
                     data-heading="0"
                   ></polygon>
                 </g>
-                <g transform="translate(23.5 11.5)" data-head-layer="label" data-head-owner="3">
+                <g transform="translate(20.5 7.5)" data-head-layer="heading" data-head-owner="5">
+                  <polygon
+                    points="0.32,-0.98 0.00,-1.52 -0.32,-0.98"
+                    class="_heading_f40580"
+                    data-heading="0"
+                  ></polygon>
+                </g>
+                <g transform="translate(25.5 17.5)" data-head-layer="heading" data-head-owner="6">
+                  <polygon
+                    points="0.98,0.32 1.52,0.00 0.98,-0.32"
+                    class="_heading_f40580"
+                    data-heading="1"
+                  ></polygon>
+                </g>
+                <g transform="translate(6.5 14.5)" data-head-layer="heading" data-head-owner="7">
+                  <polygon
+                    points="0.32,-0.98 0.00,-1.52 -0.32,-0.98"
+                    class="_heading_f40580"
+                    data-heading="0"
+                  ></polygon>
+                </g>
+                <g transform="translate(11.5 5.5)" data-head-layer="label" data-head-owner="1">
                   <text
                     class="_number_f40580"
                     text-anchor="middle"
@@ -1664,10 +1720,23 @@ ight is the :root default above) ────────
                     stroke-width="0.1"
                     paint-order="stroke"
                   >
-                    3
+                    1
                   </text>
                 </g>
-                <g transform="translate(8.5 22.5)" data-head-layer="label" data-head-owner="4">
+                <g transform="translate(31.5 11.5)" data-head-layer="label" data-head-owner="2">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    2
+                  </text>
+                </g>
+                <g transform="translate(5.5 17.5)" data-head-layer="label" data-head-owner="4">
                   <text
                     class="_number_f40580"
                     text-anchor="middle"
@@ -1680,7 +1749,20 @@ ight is the :root default above) ────────
                     4
                   </text>
                 </g>
-                <g transform="translate(26.5 14.5)" data-head-layer="label" data-head-owner="6">
+                <g transform="translate(20.5 7.5)" data-head-layer="label" data-head-owner="5">
+                  <text
+                    class="_number_f40580"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    data-marker="runner"
+                    stroke="var(--pb-bg)"
+                    stroke-width="0.1"
+                    paint-order="stroke"
+                  >
+                    5
+                  </text>
+                </g>
+                <g transform="translate(25.5 17.5)" data-head-layer="label" data-head-owner="6">
                   <text
                     class="_number_f40580"
                     text-anchor="middle"
@@ -1693,7 +1775,7 @@ ight is the :root default above) ────────
                     6
                   </text>
                 </g>
-                <g transform="translate(5.5 15.5)" data-head-layer="label" data-head-owner="7">
+                <g transform="translate(6.5 14.5)" data-head-layer="label" data-head-owner="7">
                   <text
                     class="_number_f40580"
                     text-anchor="middle"
@@ -1704,19 +1786,6 @@ ight is the :root default above) ────────
                     paint-order="stroke"
                   >
                     7
-                  </text>
-                </g>
-                <g transform="translate(31.5 15.5)" data-head-layer="label" data-head-owner="8">
-                  <text
-                    class="_number_f40580"
-                    text-anchor="middle"
-                    dominant-baseline="central"
-                    data-marker="runner"
-                    stroke="var(--pb-bg)"
-                    stroke-width="0.1"
-                    paint-order="stroke"
-                  >
-                    8
                   </text>
                 </g>
               </svg>
@@ -1744,7 +1813,7 @@ ight is the :root default above) ────────
                   ><b class="_number_cafdc5">6</b></span
                 >
                 <div class="_person_6b7a07"><b>Fay</b><span>Place 1</span></div>
-                <div class="_area_6b7a07"><b>11.4%</b><span>128 cells</span></div>
+                <div class="_area_6b7a07"><b>8.4%</b><span>94 cells</span></div>
               </li>
               <li style="--seat-ink: var(--pb-player-4)">
                 <span class="_seat_6b7a07 _badge_cafdc5"
@@ -1767,9 +1836,9 @@ ight is the :root default above) ────────
                   ><b class="_number_cafdc5">4</b></span
                 >
                 <div class="_person_6b7a07"><b>Dee</b><span>Place 2</span></div>
-                <div class="_area_6b7a07"><b>9.5%</b><span>106 cells</span></div>
+                <div class="_area_6b7a07"><b>6.9%</b><span>77 cells</span></div>
               </li>
-              <li style="--seat-ink: var(--pb-player-3)">
+              <li style="--seat-ink: var(--pb-player-2)">
                 <span class="_seat_6b7a07 _badge_cafdc5"
                   ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
                     <defs>
@@ -1778,21 +1847,18 @@ ight is the :root default above) ────────
                         width="2"
                         height="2"
                         patternUnits="userSpaceOnUse"
-                        data-texture="Rising stripes"
+                        data-texture="Vertical lines"
                       >
-                        <path
-                          d="M-0.5 0.5L0.5 -0.5M0 2L2 0M1.5 2.5L2.5 1.5"
-                          class="_line_73a606"
-                        ></path>
+                        <path d="M1 0V2" class="_line_73a606"></path>
                       </pattern>
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_17a_)"></rect></svg
-                  ><b class="_number_cafdc5">3</b></span
+                  ><b class="_number_cafdc5">2</b></span
                 >
-                <div class="_person_6b7a07"><b>Cy</b><span>Place 3</span></div>
-                <div class="_area_6b7a07"><b>7.3%</b><span>82 cells</span></div>
+                <div class="_person_6b7a07"><b>Ben</b><span>Place 3</span></div>
+                <div class="_area_6b7a07"><b>6.2%</b><span>69 cells</span></div>
               </li>
-              <li style="--seat-ink: var(--pb-player-8)">
+              <li style="--seat-ink: var(--pb-player-1)">
                 <span class="_seat_6b7a07 _badge_cafdc5"
                   ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
                     <defs>
@@ -1801,16 +1867,16 @@ ight is the :root default above) ────────
                         width="2"
                         height="2"
                         patternUnits="userSpaceOnUse"
-                        data-texture="Diamonds"
+                        data-texture="Horizontal lines"
                       >
-                        <path d="M1 0.45L1.55 1L1 1.55L0.45 1Z" class="_line_73a606"></path>
+                        <path d="M0 1H2" class="_line_73a606"></path>
                       </pattern>
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_19a_)"></rect></svg
-                  ><b class="_number_cafdc5">8</b></span
+                  ><b class="_number_cafdc5">1</b></span
                 >
-                <div class="_person_6b7a07"><b>Hal</b><span>Place 4</span></div>
-                <div class="_area_6b7a07"><b>6.2%</b><span>69 cells</span></div>
+                <div class="_person_6b7a07"><b>Ana</b><span>Place 4</span></div>
+                <div class="_area_6b7a07"><b>2.4%</b><span>27 cells</span></div>
               </li>
               <li style="--seat-ink: var(--pb-player-7)">
                 <span class="_seat_6b7a07 _badge_cafdc5"
@@ -1830,9 +1896,9 @@ ight is the :root default above) ────────
                   ><b class="_number_cafdc5">7</b></span
                 >
                 <div class="_person_6b7a07"><b>Gus</b><span>Place 5</span></div>
-                <div class="_area_6b7a07"><b>4.6%</b><span>51 cells</span></div>
+                <div class="_area_6b7a07"><b>2.3%</b><span>26 cells</span></div>
               </li>
-              <li style="--seat-ink: var(--pb-player-1)">
+              <li style="--seat-ink: var(--pb-player-3)">
                 <span class="_seat_6b7a07 _badge_cafdc5"
                   ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
                     <defs>
@@ -1841,18 +1907,21 @@ ight is the :root default above) ────────
                         width="2"
                         height="2"
                         patternUnits="userSpaceOnUse"
-                        data-texture="Horizontal lines"
+                        data-texture="Rising stripes"
                       >
-                        <path d="M0 1H2" class="_line_73a606"></path>
+                        <path
+                          d="M-0.5 0.5L0.5 -0.5M0 2L2 0M1.5 2.5L2.5 1.5"
+                          class="_line_73a606"
+                        ></path>
                       </pattern>
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_1da_)"></rect></svg
-                  ><b class="_number_cafdc5">1</b></span
+                  ><b class="_number_cafdc5">3</b></span
                 >
-                <div class="_person_6b7a07"><b>Ana</b><span>Place 6</span></div>
+                <div class="_person_6b7a07"><b>Cy</b><span>Place 6</span></div>
                 <div class="_area_6b7a07"><b>0.8%</b><span>9 cells</span></div>
               </li>
-              <li style="--seat-ink: var(--pb-player-2)">
+              <li style="--seat-ink: var(--pb-player-5)">
                 <span class="_seat_6b7a07 _badge_cafdc5"
                   ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
                     <defs>
@@ -1861,18 +1930,18 @@ ight is the :root default above) ────────
                         width="2"
                         height="2"
                         patternUnits="userSpaceOnUse"
-                        data-texture="Vertical lines"
+                        data-texture="Dots"
                       >
-                        <path d="M1 0V2" class="_line_73a606"></path>
+                        <circle cx="1" cy="1" r="0.14" class="_dot_73a606"></circle>
                       </pattern>
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_1fa_)"></rect></svg
-                  ><b class="_number_cafdc5">2</b></span
+                  ><b class="_number_cafdc5">5</b></span
                 >
-                <div class="_person_6b7a07"><b>Ben</b><span>Place 6</span></div>
+                <div class="_person_6b7a07"><b>Eli</b><span>Place 6</span></div>
                 <div class="_area_6b7a07"><b>0.8%</b><span>9 cells</span></div>
               </li>
-              <li style="--seat-ink: var(--pb-player-5)">
+              <li style="--seat-ink: var(--pb-player-8)">
                 <span class="_seat_6b7a07 _badge_cafdc5"
                   ><svg class="_texture_cafdc5" viewBox="0 0 4 4" aria-hidden="true">
                     <defs>
@@ -1881,15 +1950,15 @@ ight is the :root default above) ────────
                         width="2"
                         height="2"
                         patternUnits="userSpaceOnUse"
-                        data-texture="Dots"
+                        data-texture="Diamonds"
                       >
-                        <circle cx="1" cy="1" r="0.14" class="_dot_73a606"></circle>
+                        <path d="M1 0.45L1.55 1L1 1.55L0.45 1Z" class="_line_73a606"></path>
                       </pattern>
                     </defs>
                     <rect width="4" height="4" fill="url(#_R_1ha_)"></rect></svg
-                  ><b class="_number_cafdc5">5</b></span
+                  ><b class="_number_cafdc5">8</b></span
                 >
-                <div class="_person_6b7a07"><b>Eli</b><span>Place 6</span></div>
+                <div class="_person_6b7a07"><b>Hal</b><span>Place 6</span></div>
                 <div class="_area_6b7a07"><b>0.8%</b><span>9 cells</span></div>
               </li>
             </ul>

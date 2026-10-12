@@ -135,6 +135,12 @@ export function Map({
       <rect width={width} height={height} className={styles.edge} />
       {runners.map((runner) => {
         const [x, y] = cellCenter(runner.home, width);
+        // A live disc beside its home already supplies the seat number. Avoid
+        // painting a duplicate digit that looks like another nearby player.
+        const covered = heads.some((head) => {
+          const [hx, hy] = cellCenter(head.cell, width);
+          return Math.hypot(x - hx, y - hy) < 2;
+        });
         return (
           <g key={runner.id}>
             <rect
@@ -145,16 +151,18 @@ export function Map({
               stroke={playerInk(runner.slot)}
               className={styles.home}
             />
-            <text
-              x={x}
-              y={y}
-              className={styles.homeNumber}
-              data-marker="home"
-              textAnchor="middle"
-              dominantBaseline="central"
-            >
-              {runner.slot + 1}
-            </text>
+            {!covered ? (
+              <text
+                x={x}
+                y={y}
+                className={styles.homeNumber}
+                data-marker="home"
+                textAnchor="middle"
+                dominantBaseline="central"
+              >
+                {runner.slot + 1}
+              </text>
+            ) : null}
           </g>
         );
       })}

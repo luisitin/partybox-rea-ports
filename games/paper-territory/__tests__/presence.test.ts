@@ -98,6 +98,21 @@ describe('pause, disconnect and return', () => {
     expect(Number.isFinite(game.results(done)?.scores['p1'])).toBe(true);
   });
 
+  it.each(['left', 'kicked'] as const)(
+    'keeps %s permanent through reconnect and a later ordinary disconnect',
+    (gone) => {
+      const start = playing();
+      const departed = kit.player(start, 'p1', false, gone, start.began + 100);
+      const attempted = kit.player(departed, 'p1', true, undefined, start.began + 200);
+      const dropped = kit.player(attempted, 'p1', false, undefined, start.began + 300);
+      expect(dropped.left).toContain('p1');
+      expect(dropped.world.runners[0]!.respawnTick).toBeNull();
+      expect(kit.cv(dropped, 'p1').respawnAt).toBeNull();
+      const restored = kit.player(dropped, 'p1', true, undefined, start.began + 400);
+      expect(kit.timer(restored, start.began + 4000).world.runners[0]!.alive).toBe(false);
+    },
+  );
+
   it('an eliminated runner respawn countdown does not consume paused time', () => {
     const start = playing();
     const dead = kit.player(start, 'p1', false, undefined, start.began + 100);
