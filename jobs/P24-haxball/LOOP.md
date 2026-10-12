@@ -86,3 +86,15 @@ retain their team result. The final 104 mounted controls cover fresh-press recov
 green 141-test source covers these reducer outcomes. Mid-match rebalancing would change the
 documented team policy without human fairness evidence. No actionable defect or measured
 player-visible gain emerged; no game code or verification tolerance changed.
+
+Round 10 — zero player-visible gain (3/3): reviewed own-goal fairness, final-horn credit,
+odd-roster helper results, bot corner/kickoff recovery and draw/final-screen clarity for the
+eight-player room. Root checked scoring/done code, the green rules and seeded simulation
+evidence, and inspected the phone-only draw/final renders. A crossed goal belongs to the
+attacking team; original teammates share their team's score/rank and helpers add no result row.
+Swept-post and horn regressions retain valid credit; all eight bot corner cases recover and
+all 7,000 default games finish, with every strength scoring at every roster count. Winner/draw
+copy is explicit. Larger final labels or removing the frozen pitch would be presentation polish;
+helper/mixed-skill fairness tuning needs human evidence rather than the one 12–12 trace.
+No measured player-visible improvement emerged. Game source, assertions and media are unchanged.
+Three consecutive actual no-gain reviews now complete the KEEP GOING condition.

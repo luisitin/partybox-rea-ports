@@ -20,11 +20,13 @@ Runner r3-local, branch job/P24-haxball. Draft [PR 17](https://github.com/luisit
   browser automation flags/GPU resolve the final capture; game timing and assertions stay fixed.
   Browser/native endpoint closure passes, zero forced processes; the profile is removed.
   Touch milestone a278579 CI failed only two generated JSON formatting checks, now corrected.
-- Exact touch source c8def78 has green CI 38215249699. Rounds 8–9 are actual
-  five-weakness reviews with zero player-visible gain; one consecutive zero-gain round remains.
-  Log/push each review and refresh
-  CLAIMS.md on main after pulling --rebase. Final latest-head CI must be green before PR ready.
-- After that, mark P24 r3-local DONE on main, with pull --rebase before its claim commit.
+- Exact touch source c8def78 has green CI 38215249699. Rounds 8–10 are three consecutive
+  actual five-weakness reviews with zero player-visible gain; KEEP GOING is complete.
+  Final review commits change only these records. Check the latest-head P24 workflow before
+  PR ready; its status is authoritative in GitHub Actions. Superseded review-only CI is cancelled
+  to avoid repeating the full simulation concurrently.
+- Completion sequence: green final latest-head CI, PR 17 ready with job README body,
+  then mark P24 r3-local DONE on main, with pull --rebase before its claim commit.
   Revalidate the lowest eligible queue job; no other r3-local claim is unfinished (P03 DONE).
 - Install is complete. Use pnpm.cmd; root owns only this game's tests and at most one headless
   browser, closed in finally. Source stays frozen during tests/mutations. No original live,
