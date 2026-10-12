@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-12T04:38:22.045Z",
+  "capturedAt": "2026-10-12T06:09:30.492Z",
   "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
   "pages": [],
   "browserVersion": {
@@ -13,7 +13,7 @@
   "interaction": {
     "report": "interaction.json",
     "passed": true,
-    "checks": 67,
+    "checks": 88,
     "captures": 3
   },
   "goalAudio": {
@@ -22,63 +22,64 @@
     "checks": 64,
     "captures": 2
   },
+  "retainedCredit": {
+    "report": "retained-credit.json",
+    "passed": true,
+    "checks": 12,
+    "captures": 2
+  },
   "cleanup": {
     "browser": {
       "verifiedClosed": true,
       "verification": "CDP process membership plus native PID/creation/exit checks",
-      "browserPid": 18844,
+      "browserPid": 51992,
       "observedProcesses": 7,
-      "forcedProcesses": 5,
+      "forcedProcesses": 4,
       "exitedRecords": [
         {
-          "pid": 56792,
-          "type": "renderer",
+          "pid": 83424,
+          "type": "launcher",
           "nativeState": "exited"
         },
         {
-          "pid": 92216,
-          "type": "launcher",
-          "nativeState": "not-found"
-        },
-        {
-          "pid": 18844,
-          "created": "2026-10-12T04:38:22.1457246Z",
+          "pid": 51992,
+          "created": "2026-10-12T06:09:30.6016066Z",
           "type": "browser",
           "nativeState": "exited"
         },
         {
-          "pid": 48980,
-          "created": "2026-10-12T04:38:22.4846121Z",
+          "pid": 112580,
+          "created": "2026-10-12T06:09:31.0560839Z",
           "type": "renderer",
           "nativeState": "exited"
         },
         {
-          "pid": 45864,
-          "created": "2026-10-12T04:38:22.4120736Z",
+          "pid": 62980,
+          "created": "2026-10-12T06:09:30.9586364Z",
           "type": "renderer",
           "nativeState": "exited"
         },
         {
-          "pid": 58036,
-          "created": "2026-10-12T04:38:22.3746803Z",
+          "pid": 5896,
+          "created": "2026-10-12T06:09:30.9331589Z",
           "type": "renderer",
           "nativeState": "exited"
         },
         {
-          "pid": 47356,
-          "created": "2026-10-12T04:38:22.2690454Z",
+          "pid": 55816,
+          "created": "2026-10-12T06:09:30.8686934Z",
           "type": "GPU",
           "nativeState": "exited"
         },
         {
-          "pid": 103736,
-          "created": "2026-10-12T04:38:22.2733091Z",
+          "pid": 100348,
+          "created": "2026-10-12T06:09:30.8716301Z",
           "type": "network.mojom.NetworkService",
           "nativeState": "exited"
         },
         {
-          "pid": 24428,
-          "created": "2026-10-12T04:38:22.2950514Z",
+          "pid": 61560,
+          "created": "2026-10-12T06:09:30.8905695Z",
           "type": "storage.mojom.StorageService",
           "nativeState": "exited"
         }
@@ -90,6 +91,6 @@
       "warning": "Windows retains native-exited Chrome records; no owned active process remains."
     },
     "profileRemoved": false,
-    "warning": "Private Chrome is verified closed; temporary profile partybox-p24-capture-MFX1GA remains locked (EBUSY)."
+    "warning": "Private Chrome is verified closed; temporary profile partybox-p24-capture-9UsDQS remains locked (EBUSY)."
   }
 }

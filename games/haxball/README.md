@@ -57,7 +57,8 @@ in accessible text; halftime explains that goals switch when play restarts; team
 diagonal input is normalized. `phaseAt` must match the current play instance; `seq` increases
 strictly across phases and reconnects. The controller seeds its counter from own `acceptedSeq`.
 Heartbeat packets renew a 650 ms lease; release/cancel sends neutral movement. Lost releases,
-temporary drops and phase changes clear movement and held/armed kick. Kick arms on a false→true
+temporary drops and phase changes clear movement and held/armed kick. Keyboard auto-repeat
+cannot revive a source cleared by a phase/pause/blur; release and press again. Kick arms on a false→true
 edge, fires once near contact after a 250 ms cooldown, and cannot rearm from a held heartbeat.
 
 ## Scoring

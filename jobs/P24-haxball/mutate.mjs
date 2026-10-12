@@ -30,8 +30,8 @@ const mutations = [
     id: 2,
     label: 'Count crossing before the whole ball clears the goal',
     file: world,
-    pattern: /after\.x\s*>\s*W\s*\+\s*BALL_R/,
-    replacement: 'after.x > W',
+    pattern: /before\.x\s*<=\s*W\s*\+\s*BALL_R\s*&&\s*after\.x\s*>\s*W\s*\+\s*BALL_R/,
+    replacement: 'before.x <= W + BALL_R && after.x > W',
   },
   {
     id: 3,

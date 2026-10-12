@@ -178,3 +178,43 @@ Round 5 bot verification:
 --pool=threads` PASS: all 67 rules, 1.04 s, start 00:52:10 local / 05:52:10 UTC. Corner tests
   retain strict kick geometry; the repeated-kickoff case now observes first kicks from both seats
   before halftime without specifying an angle, score or rotation formula. Full scope remains next.
+
+Full rotating physics/tactics source `ad9ba08` PASS with `PB_WRITE_EVIDENCE=1`:
+`pnpm.cmd vitest run games/haxball --maxWorkers=1 --pool=threads`, 141 tests / 7 files,
+540.29 s, start 00:54:43 local / 05:54:43 UTC. All 7,000 default matches terminate, zero failed
+runs, 23,869 goals, 553,070 accepted kicks and 24,251,818 physics steps. All seven roster counts
+have minimum/median/maximum 188,000 ms; every strength scores at every count. CI also PASS on
+this exact source: [38210012575](https://github.com/luisitin/partybox-rea-ports/actions/runs/38210012575).
+Canonical formatting after final SSR export gives identical SHA-256 for all 75 HTML pages
+against their 05:33 capture; no static layout changed through the physics/tactics work.
+
+Round 6 keyboard baseline: `P24_CPU_CAPTURE=1 P24_INTERACTION_ONLY=1 node
+jobs/P24-haxball/capture.mjs` exited 1 with six failures among 88 mounted control checks.
+Across pause/resume, goal/new-play and blur/refocus, trusted repeated ArrowRight/X key-downs
+revived neutral controls and restarted heartbeats without a real release/repress. The other
+82 checks pass, including genuine new presses. The old hook is now regression-proven; both
+baseline report and closed native browser/endpoint evidence are retained in
+`media/keyboard-repeat-before.json` and `media/keyboard-repeat-before-cleanup.json`.
+The fix ignores repeat key-downs after preventing their defaults; the 300 ms heartbeat still
+sustains genuine presses. This is a client-only change: server physics and simulation stay fixed.
+
+Round 6 final focused client/SSR command PASS: 46 tests / 3 files, 40.96 s, start 01:07:04
+local / 06:07:04 UTC. Final mounted command (same interaction-only environment) PASS:
+88/88 controls, 64/64 goal cues and 12/12 retained-credit checks; captured
+2026-10-12T06:09:30.492Z. All three keyboard transitions now remain neutral through trusted
+repeat events and restart only after a real release/repress. Current HTML hashes still match
+all 75 captured static layouts. Native owned PID/creation/exit checks and the exact endpoint
+confirm browser closure. Four lingering owned processes required bounded native shutdown;
+Windows retained exited records and locked the temporary profile (EBUSY), with no owned active
+browser remaining. The retained media report records this cleanup result.
+
+Final mutation rerun: `node jobs/P24-haxball/mutate.mjs` PASS, 20/20 killed, zero survived,
+zero invalid; its baseline has all 67 rules green. Independent PowerShell Get-FileHash checks
+match all four restored source hashes and originalsRestored=true. An earlier attempt stopped
+at mutation 2 because the swept goal helper introduced a second broad anchor. It restored all
+originals, then the pattern was narrowed to the right crossing's before/after condition and
+rerun. The same 20 semantic faults remain; no syntax/import failure counts as a kill.
+
+Final media integrity: `node jobs/P24-haxball/hash-media.mjs` reports 172 files,
+8,965,907 bytes < 10,000,000. Independent PowerShell Get-FileHash -Algorithm SHA256 verifies
+all 172 digests with zero mismatches. Current guard source also passes `pnpm.cmd typecheck`.

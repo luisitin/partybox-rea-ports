@@ -15,6 +15,8 @@ export async function runScenarios(qa) {
     cues: [...window.harness.cues], kind: window.harness.kind,
     phaseAt: window.harness.currentView.phaseAt, acceptedSeq: window.harness.currentView.acceptedSeq,
     controls: document.querySelectorAll('[data-hax-control]').length,
+    heldControls: [...document.querySelectorAll('[data-hax-control][data-held="true"]')]
+      .map(element => element.getAttribute('data-hax-control')),
     performanceNow: performance.now(),
     pointers: structuredClone(window.qaPointers), keys: structuredClone(window.qaKeys), errors: [...window.qaErrors]
   })`);
@@ -433,6 +435,97 @@ export async function runScenarios(qa) {
     await stopped('keyboard release stops heartbeats');
   });
 
+  for (const boundary of [
+    {
+      name: 'pause/resume',
+      enter: 'window.harness.setView("paused")',
+      resume: 'window.harness.setView("play")',
+    },
+    {
+      name: 'goal/new-play',
+      enter: 'window.harness.setView("goal")',
+      resume: 'window.harness.setView("next-play")',
+    },
+    {
+      name: 'blur/refocus',
+      enter: 'window.dispatchEvent(new Event("blur"))',
+      resume: 'window.dispatchEvent(new Event("focus"))',
+    },
+  ]) {
+    await scenario(`held keyboard repeat across ${boundary.name}`, async () => {
+      await reset();
+      await evaluate('document.activeElement?.blur()');
+      await keyboard('ArrowRight', 'ArrowRight', true);
+      await keyboard('x', 'KeyX', true);
+      await lastIs(`${boundary.name}: genuine key-downs hold movement and kick`, {
+        dx: 1,
+        dy: 0,
+        kick: true,
+      });
+      // The CDP keys stay physically held: no key-up is sent at the boundary.
+      await evaluate(boundary.enter);
+      await pause(40);
+      await lastIs(`${boundary.name}: boundary releases movement and armed kick`, {
+        dx: 0,
+        dy: 0,
+        kick: false,
+      });
+      await evaluate(boundary.resume);
+      await pause(40);
+      const resumed = await snapshot();
+      const keyOffset = resumed.keys.length;
+      for (let n = 0; n < 3; n++) {
+        await keyboard('ArrowRight', 'ArrowRight', true, true);
+        await keyboard('x', 'KeyX', true, true);
+      }
+      const repeated = await snapshot();
+      const repeats = repeated.keys.slice(keyOffset);
+      check(
+        `${boundary.name}: held-key repeats are trusted CDP events without a release`,
+        repeats.length === 6 &&
+          repeats.every((event) => event.type === 'keydown' && event.repeat && event.trusted) &&
+          !repeated.keys.some((event) => event.type === 'keyup'),
+        { keys: repeated.keys },
+      );
+      check(
+        `${boundary.name}: repeat cannot revive released controls`,
+        repeated.sent.length === resumed.sent.length &&
+          repeated.heldControls.length === 0 &&
+          equals(vector(repeated.sent.at(-1)), { dx: 0, dy: 0, kick: false }),
+        {
+          packetsBeforeRepeat: resumed.sent.length,
+          packetsAfterRepeat: repeated.sent.length,
+          last: repeated.sent.at(-1) ?? null,
+          heldControls: repeated.heldControls,
+          phaseAt: repeated.phaseAt,
+        },
+      );
+      await stopped(`${boundary.name}: ignored repeat cannot restart heartbeats`);
+
+      await releaseKeys();
+      const released = await snapshot();
+      await keyboard('ArrowRight', 'ArrowRight', true);
+      await keyboard('x', 'KeyX', true);
+      const fresh = await lastIs(`${boundary.name}: release and fresh press work again`, {
+        dx: 1,
+        dy: 0,
+        kick: true,
+      });
+      const freshPackets = fresh.sent.slice(released.sent.length);
+      check(
+        `${boundary.name}: fresh presses use current phase and increasing sequence`,
+        freshPackets.length >= 2 &&
+          freshPackets.every(
+            (packet, i) =>
+              packet.phaseAt === fresh.phaseAt &&
+              packet.seq > fresh.acceptedSeq &&
+              (i === 0 || packet.seq > freshPackets[i - 1].seq),
+          ),
+        { phaseAt: fresh.phaseAt, acceptedSeq: fresh.acceptedSeq, packets: freshPackets },
+      );
+    });
+  }
+
   await scenario('controller unmount cancels held heartbeat', async () => {
     await reset();
     await start(88, 'up');
@@ -523,6 +616,6 @@ export async function runScenarios(qa) {
       note: 'Primary source inspected: WebTouch erases supplied touchEnd IDs; active-point omission releases belong to the optional SyntheticPointerActions branch. Protocol documentation differs from the default WebTouch implementation.',
     },
     lifecycleMethod:
-      'Pause/phase/departure use supplied public views; blur and document-hidden signals are explicitly synthetic handler tests.',
+      'Pause/phase/departure use supplied public views; trusted CDP keyboard repeat stays held across pause/phase/blur until a real key-up and fresh key-down. Blur/refocus and document-hidden signals are explicitly synthetic handler tests.',
   };
 }

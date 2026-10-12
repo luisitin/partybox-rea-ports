@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-12T05:33:37.138Z",
+  "capturedAt": "2026-10-12T06:09:31.062Z",
   "source": "media/interaction-views.json: public controller views only",
   "viewport": {
     "width": 390,
@@ -38,7 +38,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 2,
+          "seq": 1,
           "dx": 1,
           "dy": -1,
           "kick": true
@@ -99,7 +99,7 @@
           "last": {
             "type": "control",
             "phaseAt": 1700000000000,
-            "seq": 3,
+            "seq": 2,
             "dx": 0,
             "dy": 0,
             "kick": true
@@ -120,7 +120,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 3,
+          "seq": 2,
           "dx": 0,
           "dy": 0,
           "kick": true
@@ -139,7 +139,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 4,
+          "seq": 3,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -200,12 +200,12 @@
       "name": "touch release stops heartbeats",
       "passed": true,
       "observed": {
-        "before": 5,
-        "after": 5,
+        "before": 4,
+        "after": 4,
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 4,
+          "seq": 3,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -225,7 +225,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 2,
+          "seq": 1,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -262,7 +262,7 @@
           "last": {
             "type": "control",
             "phaseAt": 1700000000000,
-            "seq": 3,
+            "seq": 2,
             "dx": -1,
             "dy": 0,
             "kick": false
@@ -283,7 +283,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 3,
+          "seq": 2,
           "dx": -1,
           "dy": 0,
           "kick": false
@@ -302,7 +302,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 4,
+          "seq": 3,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -363,12 +363,12 @@
       "name": "touch cancellation stops heartbeats",
       "passed": true,
       "observed": {
-        "before": 5,
-        "after": 5,
+        "before": 4,
+        "after": 4,
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 4,
+          "seq": 3,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -496,7 +496,7 @@
       "passed": true,
       "observed": {
         "configuredMs": 300,
-        "observedDeltasMs": [132, 310, 296, 298],
+        "observedDeltasMs": [193, 299, 293],
         "packets": [
           {
             "type": "control",
@@ -529,14 +529,6 @@
             "dx": 1,
             "dy": 1,
             "kick": true
-          },
-          {
-            "type": "control",
-            "phaseAt": 1700000000000,
-            "seq": 96,
-            "dx": 1,
-            "dy": 1,
-            "kick": true
           }
         ],
         "note": "First interval is anchored to component mount, so steady heartbeat intervals exclude it."
@@ -547,7 +539,7 @@
       "passed": true,
       "observed": {
         "acceptedSeq": 90,
-        "emittedSeq": [91, 92, 93, 94, 95, 96]
+        "emittedSeq": [91, 92, 93, 94, 95]
       }
     },
     {
@@ -555,9 +547,7 @@
       "passed": true,
       "observed": {
         "expected": 1700000000000,
-        "stamps": [
-          1700000000000, 1700000000000, 1700000000000, 1700000000000, 1700000000000, 1700000000000
-        ]
+        "stamps": [1700000000000, 1700000000000, 1700000000000, 1700000000000, 1700000000000]
       }
     },
     {
@@ -936,7 +926,7 @@
       "observed": {
         "repeatedKeydowns": 5,
         "packets": [],
-        "elapsedMs": 150,
+        "elapsedMs": 166,
         "heartbeatAllowance": 1,
         "note": "Scheduled heartbeats may occur during the repeated keydown window."
       }
@@ -953,7 +943,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 2,
+          "seq": 3,
           "dx": 1,
           "dy": -1,
           "kick": true
@@ -1200,17 +1190,539 @@
       "name": "keyboard release stops heartbeats",
       "passed": true,
       "observed": {
-        "before": 14,
-        "after": 14,
+        "before": 13,
+        "after": 13,
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 15,
+          "seq": 14,
           "dx": 0,
           "dy": 0,
           "kick": false
         },
         "waitedMs": 720
+      }
+    },
+    {
+      "name": "pause/resume: genuine key-downs hold movement and kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 1,
+          "dy": 0,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 1,
+          "dy": 0,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "pause/resume: boundary releases movement and armed kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "pause/resume: held-key repeats are trusted CDP events without a release",
+      "passed": true,
+      "observed": {
+        "keys": [
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": true,
+            "trusted": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "pause/resume: repeat cannot revive released controls",
+      "passed": true,
+      "observed": {
+        "packetsBeforeRepeat": 3,
+        "packetsAfterRepeat": 3,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": [],
+        "phaseAt": 1700000000000
+      }
+    },
+    {
+      "name": "pause/resume: ignored repeat cannot restart heartbeats",
+      "passed": true,
+      "observed": {
+        "before": 3,
+        "after": 3,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "pause/resume: release and fresh press work again",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 1,
+          "dy": 0,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 4,
+          "dx": 1,
+          "dy": 0,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "pause/resume: fresh presses use current phase and increasing sequence",
+      "passed": true,
+      "observed": {
+        "phaseAt": 1700000000000,
+        "acceptedSeq": -1,
+        "packets": [
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 3,
+            "dx": 1,
+            "dy": 0,
+            "kick": false
+          },
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 4,
+            "dx": 1,
+            "dy": 0,
+            "kick": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "goal/new-play: genuine key-downs hold movement and kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 1,
+          "dy": 0,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 1,
+          "dy": 0,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "goal/new-play: boundary releases movement and armed kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000001000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "goal/new-play: held-key repeats are trusted CDP events without a release",
+      "passed": true,
+      "observed": {
+        "keys": [
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": true,
+            "trusted": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "goal/new-play: repeat cannot revive released controls",
+      "passed": true,
+      "observed": {
+        "packetsBeforeRepeat": 3,
+        "packetsAfterRepeat": 3,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000001000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": [],
+        "phaseAt": 1700000003000
+      }
+    },
+    {
+      "name": "goal/new-play: ignored repeat cannot restart heartbeats",
+      "passed": true,
+      "observed": {
+        "before": 3,
+        "after": 3,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000001000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "goal/new-play: release and fresh press work again",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 1,
+          "dy": 0,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000003000,
+          "seq": 4,
+          "dx": 1,
+          "dy": 0,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "goal/new-play: fresh presses use current phase and increasing sequence",
+      "passed": true,
+      "observed": {
+        "phaseAt": 1700000003000,
+        "acceptedSeq": 1,
+        "packets": [
+          {
+            "type": "control",
+            "phaseAt": 1700000003000,
+            "seq": 3,
+            "dx": 1,
+            "dy": 0,
+            "kick": false
+          },
+          {
+            "type": "control",
+            "phaseAt": 1700000003000,
+            "seq": 4,
+            "dx": 1,
+            "dy": 0,
+            "kick": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "blur/refocus: genuine key-downs hold movement and kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 1,
+          "dy": 0,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 1,
+          "dx": 1,
+          "dy": 0,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "blur/refocus: boundary releases movement and armed kick",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        }
+      }
+    },
+    {
+      "name": "blur/refocus: held-key repeats are trusted CDP events without a release",
+      "passed": true,
+      "observed": {
+        "keys": [
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": false,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "ArrowRight",
+            "repeat": true,
+            "trusted": true
+          },
+          {
+            "type": "keydown",
+            "key": "x",
+            "repeat": true,
+            "trusted": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "blur/refocus: repeat cannot revive released controls",
+      "passed": true,
+      "observed": {
+        "packetsBeforeRepeat": 3,
+        "packetsAfterRepeat": 3,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "heldControls": [],
+        "phaseAt": 1700000000000
+      }
+    },
+    {
+      "name": "blur/refocus: ignored repeat cannot restart heartbeats",
+      "passed": true,
+      "observed": {
+        "before": 3,
+        "after": 3,
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 2,
+          "dx": 0,
+          "dy": 0,
+          "kick": false
+        },
+        "waitedMs": 720
+      }
+    },
+    {
+      "name": "blur/refocus: release and fresh press work again",
+      "passed": true,
+      "observed": {
+        "expected": {
+          "dx": 1,
+          "dy": 0,
+          "kick": true
+        },
+        "last": {
+          "type": "control",
+          "phaseAt": 1700000000000,
+          "seq": 4,
+          "dx": 1,
+          "dy": 0,
+          "kick": true
+        }
+      }
+    },
+    {
+      "name": "blur/refocus: fresh presses use current phase and increasing sequence",
+      "passed": true,
+      "observed": {
+        "phaseAt": 1700000000000,
+        "acceptedSeq": -1,
+        "packets": [
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 3,
+            "dx": 1,
+            "dy": 0,
+            "kick": false
+          },
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 4,
+            "dx": 1,
+            "dy": 0,
+            "kick": true
+          }
+        ]
       }
     },
     {
@@ -1357,7 +1869,7 @@
       "name": "job media stays below 10 MB",
       "passed": true,
       "observed": {
-        "bytes": 8611330,
+        "bytes": 8886242,
         "limitBytes": 10000000
       }
     }
@@ -3634,7 +4146,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 2,
+          "seq": 1,
           "dx": 1,
           "dy": -1,
           "kick": true
@@ -3668,7 +4180,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 3,
+          "seq": 2,
           "dx": 0,
           "dy": 0,
           "kick": true
@@ -3702,7 +4214,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 4,
+          "seq": 3,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -3750,7 +4262,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 2,
+          "seq": 1,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -3784,7 +4296,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 3,
+          "seq": 2,
           "dx": -1,
           "dy": 0,
           "kick": false
@@ -3815,7 +4327,7 @@
         "last": {
           "type": "control",
           "phaseAt": 1700000000000,
-          "seq": 4,
+          "seq": 3,
           "dx": 0,
           "dy": 0,
           "kick": false
@@ -4839,7 +5351,7 @@
     "featureSource": "https://chromium.googlesource.com/chromium/src/+/refs/heads/main/content/public/common/content_features.cc",
     "note": "Primary source inspected: WebTouch erases supplied touchEnd IDs; active-point omission releases belong to the optional SyntheticPointerActions branch. Protocol documentation differs from the default WebTouch implementation."
   },
-  "lifecycleMethod": "Pause/phase/departure use supplied public views; blur and document-hidden signals are explicitly synthetic handler tests.",
+  "lifecycleMethod": "Pause/phase/departure use supplied public views; trusted CDP keyboard repeat stays held across pause/phase/blur until a real key-up and fresh key-down. Blur/refocus and document-hidden signals are explicitly synthetic handler tests.",
   "withTv": {
     "viewport": {
       "width": 390,

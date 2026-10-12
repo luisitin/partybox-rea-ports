@@ -114,6 +114,9 @@ export function useHeldControls(view: HaxballControllerView, send: (input: Input
           event.key === 'Enter' && focused ? (focused as ControlAction) : keyAction(event.key);
         if (action === null) return;
         event.preventDefault();
+        // A held key must not restart a source released by a phase change or blur.
+        // The heartbeat sustains the original press without keyboard repeats.
+        if (event.repeat) return;
         update(source, action);
       };
     const keydown = keyboard(true);
