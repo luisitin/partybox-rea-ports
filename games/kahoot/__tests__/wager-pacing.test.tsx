@@ -252,4 +252,36 @@ describe('wager reveal uses separate rendered reading floors', () => {
       readMs(Math.max(board.stage + board.strip, ...board.phones)),
     );
   });
+
+  it.each([
+    { lang: 'en' as const, question: 'spo-0227', beforeRaceMs: 58_063, savedMs: 4_329 },
+    { lang: 'es' as const, question: 'gpt-0163', beforeRaceMs: 63_257, savedMs: 6_926 },
+  ])(
+    '$lang removes the measured old-layout surplus while retaining every rendered word',
+    (before) => {
+      language.value = before.lang;
+      const q = longest(before.lang === 'es' ? QUESTIONS_ES : QUESTIONS, true);
+      expect(q.id).toBe(before.question);
+      const state = reveal(q, 8, false);
+      const view = tv(state);
+      const race = paint(state, view.revealAt! + 2_000);
+      const raceMs = view.leaderboardAt! - view.revealAt!;
+      const visibleWords = Math.max(race.stage + race.strip, ...race.phones);
+      // Before values are measured round-2 frames in media/loop-2-reading.json, not a copied
+      // reducer formula. The room now spends exactly the rendered floor plus the same 2s settle.
+      expect(raceMs).toBe(2_000 + readMs(visibleWords));
+      expect(before.beforeRaceMs - raceMs).toBe(before.savedMs);
+      metrics.push({
+        lang: before.lang,
+        count: 8,
+        question: q.id,
+        raceStage: race.stage,
+        strip: race.strip,
+        racePhone: Math.max(...race.phones),
+        beforeRaceMs: before.beforeRaceMs,
+        raceMs,
+        savedMs: before.beforeRaceMs - raceMs,
+      });
+    },
+  );
 });

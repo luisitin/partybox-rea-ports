@@ -135,14 +135,11 @@ export function wagerRevealBeats(state: State): WagerRevealBeats {
     const animation = 1_200 + Math.min(1_500, Math.max(0, players - 1) * 300) + 600 + 600;
     return { raceMs: animation + readMs(Math.max(tv, phone)), standingsMs: 0 };
   }
-  const common = 4 + topic + prompt + 11 + answer + 3;
   const streaks = Object.values(state.streaks).filter((n) => n >= 2).length;
   const correct = Object.keys(state.players).filter(
     (id) => q && state.picks[id]?.index === q.answerIndex,
   ).length;
   const rowWords = names + players * (players <= 8 ? 3 : 2) + streaks;
-  const previousPhone = 4 + questionWords(state) + 4 + 16 + names + players * 3;
-  const previousRace = common + rowWords + correct * 2 + (correct > 0 ? 1 : 0) + 1;
   const scores = Object.values(state.scores);
   const top = Math.max(0, ...scores);
   const leaders =
@@ -182,8 +179,9 @@ export function wagerRevealBeats(state: State): WagerRevealBeats {
   const phoneBoard = 1 + 4 + 1 + subcategory + receipt + 4 + phoneNext;
   const stagedBoard = 4 + 1 + rosterWords(state, 2) + receipt + phoneNext;
   return {
-    // Preserve the existing race hold while also covering the real stage/phone maxima.
-    raceMs: 2_000 + readMs(Math.max(previousRace, previousPhone, tvRace, phoneRace, stagedRace)),
+    // Give the race its full settling beat, then enough time for the largest actual screen.
+    // No phone shows the full choices and a public roster together, so their words never sum.
+    raceMs: 2_000 + readMs(Math.max(tvRace, phoneRace, stagedRace)),
     standingsMs: readMs(Math.max(tvBoard, phoneBoard, stagedBoard)),
   };
 }
