@@ -5,6 +5,7 @@ import { readMs, wordCount, isFinalIndex, isLastIndex, quizModeOf } from './type
 import type { State } from './types';
 import { revealedPodiumEntries } from './standings';
 import { labelOf } from '../content/schema';
+import { PICKER_ES } from '../content/labels-es';
 
 function current(state: State) {
   return questionById(state.questionIds[Math.max(0, state.index)] ?? '', state.contentLang);
@@ -15,6 +16,33 @@ function questionWords(state: State): number {
 }
 function rosterWords(state: State, numbers: number): number {
   return Object.values(state.players).reduce((n, p) => n + wordCount(p.name) + numbers, 0);
+}
+function uiWords(en: string, es = en): number {
+  return Math.max(wordCount(en), wordCount(es));
+}
+function labelWords(label: string): number {
+  return uiWords(label, PICKER_ES[label] ?? label);
+}
+function wagerReceiptWords(state: State, answerIndex: number | undefined): number {
+  return Math.max(
+    0,
+    ...Object.keys(state.players).map((id) => {
+      const correct = state.picks[id]?.index === answerIndex && answerIndex !== undefined;
+      const streak = correct && (state.streaks[id] ?? 0) >= 2 ? ' 🔥20' : '';
+      if (correct)
+        return uiWords(
+          `Correct!${streak} +1300 this round 99999 total`,
+          `¡Correcto!${streak} +1300 en esta ronda 99999 en total`,
+        );
+      // The prior streak lives on the mounted phone, not in the scored state. A wrong/missing
+      // answer can therefore show the longer broken-streak receipt even after the server reset.
+      const verdict = state.picks[id] ? ['Wrong', 'Incorrecto'] : ['Too slow', 'Muy tarde'];
+      return uiWords(
+        `${verdict[0]} · Streak of 20 over +0 this round 99999 total`,
+        `${verdict[1]} · Se cortó tu racha de 20 +0 en esta ronda 99999 en total`,
+      );
+    }),
+  );
 }
 export function classicIntroMs(state: State): number {
   const pack = classicPackLabel(state.settings.classicPack ?? 'general');
@@ -109,17 +137,54 @@ export function wagerRevealBeats(state: State): WagerRevealBeats {
   }
   const common = 4 + topic + prompt + 11 + answer + 3;
   const streaks = Object.values(state.streaks).filter((n) => n >= 2).length;
-  const correct = Object.keys(state.picks).filter(
-    (id) => state.picks[id]?.index === q?.answerIndex,
+  const correct = Object.keys(state.players).filter(
+    (id) => q && state.picks[id]?.index === q.answerIndex,
   ).length;
   const rowWords = names + players * (players <= 8 ? 3 : 2) + streaks;
-  const phone = 4 + questionWords(state) + 4 + 16 + names + players * 3;
-  const race = common + rowWords + correct * 2 + (correct > 0 ? 1 : 0) + 1;
-  const next = Math.max(0, ...Object.values(state.players).map((p) => wordCount(p.name))) + 5;
-  const board = common + rowWords + next;
+  const previousPhone = 4 + questionWords(state) + 4 + 16 + names + players * 3;
+  const previousRace = common + rowWords + correct * 2 + (correct > 0 ? 1 : 0) + 1;
+  const scores = Object.values(state.scores);
+  const top = Math.max(0, ...scores);
+  const leaders =
+    top > 0 && scores.some((score) => score !== top)
+      ? Object.keys(state.players).filter((id) => state.scores[id] === top).length
+      : 0;
+  const rowLeaders = players <= 12 ? leaders : 0;
+  const correctTimes = Object.keys(state.players)
+    .filter((id) => q && state.picks[id]?.index === q.answerIndex)
+    .map((id) => state.picks[id]!.elapsedMs);
+  const fastest = Math.min(...correctTimes);
+  const bolts = correctTimes.filter((elapsed) => elapsed === fastest).length;
+  // The TV entry hides the generic host strip during reveal: the stage already carries every
+  // player's result. The named strip still contributes to questionReadingMs in the input phase.
+  const receipt = wagerReceiptWords(state, q?.answerIndex);
+  const subcategory = q ? labelWords(labelOf(q.subcategory)) : 0;
+  const renderedTopic = q ? labelWords(categoryLabel(q.category)) + subcategory + 3 : 0;
+  const languageMark = state.contentLang !== 'es' ? 2 : 0;
+  const chart = wordCount('A 16 B 16 C 16 D 16 No answer 16');
+  const tvRace =
+    4 + renderedTopic + prompt + chart + answer + 2 + rowWords + correct * 2 + bolts + rowLeaders;
+  // Beside-TV phones show the complete choices and their own receipt, never a public roster.
+  // Before the verdict their longest lock receipt has thirteen words. Shape letters and the
+  // correct/wrong tile's glyphs/tags are visible too (five words for an incorrect selection).
+  const phoneRace =
+    4 + 1 + subcategory + questionWords(state) + languageMark + 4 + 5 + Math.max(receipt, 13);
+  // A staged phone's chart has the prompt/correct answer and personal receipt, not all options.
+  const stagedRace = 4 + prompt + languageMark + 4 + answer + chart + receipt;
+  const longestName = Math.max(0, ...Object.values(state.players).map((p) => wordCount(p.name)));
+  const tvNext = Math.max(wordCount("Next on the VIP's phone"), longestName + 3);
+  const phoneNext = state.index === state.questionIds.length - 2 ? 4 : 2;
+  // The second beat removes the already-read prompt/chart/answer everywhere. TV rows show
+  // rank/name/total/delta/streak at every roster size; staged phones show rank/name/total.
+  // A beside-TV phone shows only its receipt, topic and Next.
+  const boardRowWords = names + players * 3 + streaks;
+  const tvBoard = 1 + tvNext + boardRowWords + rowLeaders;
+  const phoneBoard = 1 + 4 + 1 + subcategory + receipt + 4 + phoneNext;
+  const stagedBoard = 4 + 1 + rosterWords(state, 2) + receipt + phoneNext;
   return {
-    raceMs: 2_000 + readMs(Math.max(race, phone)),
-    standingsMs: readMs(Math.max(board, phone)),
+    // Preserve the existing race hold while also covering the real stage/phone maxima.
+    raceMs: 2_000 + readMs(Math.max(previousRace, previousPhone, tvRace, phoneRace, stagedRace)),
+    standingsMs: readMs(Math.max(tvBoard, phoneBoard, stagedBoard)),
   };
 }
 export interface ClassicRevealBeats {

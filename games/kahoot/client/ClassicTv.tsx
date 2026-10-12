@@ -1,6 +1,6 @@
 // Classic mode uses public stage data; the wager presentation remains independently routed.
 import type { JSX } from 'react';
-import { Stage, Timer, useServerNow, useSound, useT } from '@partybox/game-sdk/ui';
+import { Stage, useServerNow, useT } from '@partybox/game-sdk/ui';
 import type { GameTvProps } from '@partybox/game-sdk/ui';
 import type { LightningTvView } from '../server/views';
 import {
@@ -17,7 +17,6 @@ import { useStandingsCue } from './useRevealCue';
 
 export function ClassicTv({ view, skip }: GameTvProps<LightningTvView>): JSX.Element {
   const L = useT(STRINGS);
-  const sound = useSound();
   const now = useServerNow(100, view.paused, view.clockHeldAt);
   useStandingsCue(view);
   const nextUp = useStandingsUp(
@@ -49,14 +48,6 @@ export function ClassicTv({ view, skip }: GameTvProps<LightningTvView>): JSX.Ele
                 <p>{round}</p>
                 <p>{L('{n} of {m} answered', { n: view.answeredCount, m: view.totalCount })}</p>
               </div>
-              <Timer
-                deadline={view.deadline}
-                phaseKey={`classic:${view.phaseId}:${view.round?.number}`}
-                phaseAt={view.phaseAt}
-                paused={view.paused}
-                clockHeldAt={view.clockHeldAt}
-                onTick={() => sound('countdown')}
-              />
             </header>
             <h2 className={styles.tvPrompt}>{view.question.text}</h2>
             <QuestionOptions question={view.question} />

@@ -21,9 +21,9 @@
   animation: global(pb-pop) var(--pb-motion-slow) var(--pb-ease) both;
 }
 
-/* The question page measures the room it gets: a sixteen-player roster (four chip rows) leaves the
-   stage ~480 px and "0 / 16 locked in" went under the host bar. Below 560 px the prompt drops to
-   h2 and the cards shrink; twelve players (three rows) keep the full size. */
+/* The pinned host reserves its timer/player strip and toolbar even when a phase has no clock.
+   At 1080p that leaves about 692 px for Stage, or 626 px after its safe padding. Named chips
+   collapse to faces past two rows; use available height rather than an assumed roster count. */
 .page {
   flex: 1;
   min-height: 0;
@@ -43,7 +43,7 @@
   gap: var(--pb-space-5);
 }
 
-@container (max-height: 560px) {
+@container (max-height: 700px) {
   .page .prompt {
     font-size: var(--pb-font-h2);
   }
@@ -83,11 +83,55 @@
     min-height: 60px;
     gap: var(--pb-space-2);
     padding: var(--pb-space-1) var(--pb-space-3);
-    font-size: var(--pb-font-caption);
+    font-size: calc(var(--pb-font-body) * 8 / 9);
   }
   .page .deltaFinal {
     font-size: var(--pb-font-body);
   }
+  /* Once final totals land, the room reads the complete receipts rather than the question
+     again. This frees the third numeric line without hiding any bet, delta or final score. */
+  .page .fit:has(.rowsFinal .total) > .asked {
+    display: none;
+  }
+  /* The race keeps every fact while fitting the host: the known question occupies full width,
+     the distribution gets its own line, and the correct answer uses the h2 card above receipts.
+     Tight rows still keep names at body size and verdicts/deltas at the TV's 32 px minimum. */
+  .page .revealRace {
+    gap: var(--pb-space-1);
+  }
+  .page .revealRace .header {
+    line-height: 1.2;
+  }
+  .page .revealRace .revealSummary {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--pb-space-1);
+  }
+  .page .revealRace .asked {
+    font-size: calc(var(--pb-font-body) * 8 / 9);
+    line-height: 1;
+    text-wrap: pretty;
+  }
+  .page .revealRace .row {
+    padding-block: 0;
+  }
+  .page .revealRace .rows1 {
+    gap: var(--pb-space-2);
+  }
+  .page .revealRace .rows1 .row {
+    min-height: var(--pb-space-8);
+    font-size: var(--pb-font-body);
+  }
+}
+
+.standingsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pb-space-5);
+}
+
+.revealBoard {
+  justify-content: safe center;
 }
 
 .grid {
@@ -455,6 +499,76 @@
   text-align: right;
 }
 
+/* With the generic strip withheld during reveals, standings carry their own rank and total. */
+.settled .rank {
+  margin-inline-end: var(--pb-space-1);
+  min-width: 0;
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  color: var(--pb-accent-2);
+  white-space: nowrap;
+}
+
+.settled .score {
+  flex: 0 0 auto;
+  min-width: 0;
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+}
+
+.settled.rows4 > .row > .score {
+  grid-column: 3;
+  grid-row: 2;
+  justify-self: end;
+}
+
+/* Three columns need the same name line once totals replace the race clock. Rank and total
+   stay with each keyed row while its FLIP carries it into the standings. */
+.settled.rows3 > .row {
+  display: grid;
+  grid-template-columns: 48px auto auto minmax(0, 1fr) auto;
+  column-gap: var(--pb-space-1);
+  row-gap: 0;
+  line-height: 1;
+}
+
+.settled.rows3 > .row > :first-child {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.settled.rows3 > .row > .name {
+  grid-column: 2 / -1;
+  grid-row: 1;
+}
+
+.settled.rows3 > .row > .rank {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.settled.rows3 > .row > .score {
+  grid-column: 3;
+  grid-row: 2;
+  justify-self: end;
+}
+
+.settled.rows3 > .row > .streak {
+  grid-column: 4;
+  grid-row: 2;
+  justify-self: end;
+  white-space: nowrap;
+}
+
+.settled.rows3 > .row > .delta {
+  grid-column: 5;
+  grid-row: 2;
+  justify-self: end;
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+}
+
+.settled.rows3 > .row > .crown {
+  display: none;
+}
+
 .streak {
   display: inline-block;
   color: var(--pb-accent-2);
@@ -513,15 +627,16 @@
   text-align: right;
 }
 
-/* Three and four columns cannot spare h2 deltas next to "✓ bet 3150 · 2340 pts"; four cannot spare
-   the total either (the results board follows). */
+/* Three and four columns use body deltas; four put final totals on their own reading line. */
 .rows3 .deltaFinal,
 .rows4 .deltaFinal {
   font-size: var(--pb-font-body);
 }
 
 .rows4 .total {
-  display: none;
+  display: block;
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  line-height: 1;
 }
 
 /* Totals land on every row at once (the per-row stagger is for verdicts and deltas only). */

@@ -35,8 +35,8 @@
   Same-choice retry is delivery recovery. Answers at/after the original deadline are too late; wrong
   and missing answers give zero and break streaks except that a wager final can lose its stake.
 - Tied totals share competition ranks. Classic podium tiers preserve ties and skip unoccupied ranks.
-  Public final standings/rival totals are withheld during the last reveal and unveiled podium tiers;
-  a player's own total remains visible. Complete standings return at done.
+  The last chart withholds public final standings. During podium, only already-unveiled tiers expose
+  rivals' totals; a player's own total remains visible. Complete standings return at done.
 - The sixty classic questions are authored using stable general facts, not copied publisher content.
   Paired game-research evidence is in RESEARCH/SOURCES; pack-fact references and ambiguity decisions
   are in [CONTENT_SOURCES.md](CONTENT_SOURCES.md). Existing library sources/licences remain attached.
@@ -54,18 +54,28 @@
 - Initial static captures showed black labels on wager buttons because the helper shell omitted
   the pinned core `global.css` rule making button/input colour inherit. The helper now matches that
   rule. This was a capture artifact, not a newly identified wager colour defect in the core host.
-- The earlier 82 clean frames used a fake TV stage 900 px tall. Round 2 found that the pinned
-  actual host leaves about 692 px for Stage and 626 px inside it. Earlier standalone fit and
-  safe-margin claims do not prove actual-host fit. The corrected harness is being rebuilt with
-  a 133.2 px header, 152.8 px player strip, 22 px bar and 80 px footer at 1920×1080; repairs,
-  tests and recaptures remain pending. The missing host constraint must not be treated as new
-  space available to the plugin or as a cosmetic-only difference.
-- Round 1 completed the measured 15 → 0 default race-name truncation repair in the old harness.
-  Post-round-1 full checks passed 226/226 in 25 files, 196.07 s; CI 38229318876 passed at `4cf1a53`.
-  Those results remain baseline evidence while round 2 actual-host source repairs are in progress.
+- The earlier 82 clean frames used a fake 900 px TV stage. Their fit/safe-margin claims do not
+  establish pinned-host fit. Current captures reserve the 133.2 px header, 152.8 px player strip,
+  22 px bar and 80 px footer at 1920×1080, leaving a 692 px Stage/626 px inner area. Hiding shell
+  names/scores during intro, reveal and podium preserves the player strip's reserved height.
+- The actual phone question shell has a 60 px VIP header, 27.6 px counter strut and 4 px bar at
+  390×844. It has no permanent host footer or duplicate main-area timer. Capture typography now
+  uses pinned global h2 sizing/weight and Nunito Variable, rather than a silent Segoe fallback.
+  The existing local font asset and OFL 1.1 licence are included solely for faithful capture;
+  no dependency was added and the owner's core source was not changed.
+- Reveal stages own their rosters and ranked standings. Ordinary wager separates chart/race from
+  all-seat ranked totals; visible-TV phones show a compact receipt at the standings beat. Staged
+  phones receive the public chart/board. Final wager choreography retains bets/verdicts/deltas and
+  now shows every seat's total, including sixteen-player boards. Classic switches to a board for
+  3+ tied entries at any rank; pairs retain podium plinths with readable wrapping wide names.
+- Round 1 repaired the measured 15 → 0 default race-name truncations in the old harness.
+  Post-round-1 checks passed 226/226 in 25 files, 196.07 s; CI 38229318876 passed at `4cf1a53`.
+  These remain baseline evidence while round 2 verification is being completed.
+- The current 91 Nunito/pinned-chrome captures pass fit metrics and hand review; evidence totals
+  8,957,011 B and browser PID 96636 is closed. A rank separator added after hand review still
+  requires focused recapture. Full game test run 21307 is active; its result is not yet green.
 - Old standalone 116-test/7,000-match/screens/mutation/loop evidence is historical. Fresh upgraded
-  actual-host verification, evidence review and a new three-no-gain loop remain final gates before
-  DONE. Initial and post-round-1 CI are green; round 2 source changes require fresh checks. Modes
-  are implemented, but actual-host fit repairs are pending; round 2 is not verified or complete.
-  The public kit lacks core gen-registry/verify commands; its discovery, typecheck, format and
-  contract checks validate this module.
+  verification, CI and the remaining KEEP GOING gates are required before DONE. Initial and
+  post-round-1 CI are green; no fresh round-2 CI pass or completed loop is claimed. The public
+  kit lacks core gen-registry/verify commands; its discovery, typecheck, format and contract
+  checks validate this module. The core migration handoff remains unapplied.

@@ -86,8 +86,8 @@ function WagerTv({ view, skip }: GameTvProps<LightningTvView>): JSX.Element {
     if (view.round?.final && view.question && view.correctIndex !== undefined) {
       return (
         <Stage>
-          {/* Same size container as the question page: a four-row roster leaves too little for
-              four rows of two-line bet cards, so below 560 px the reveal compacts. */}
+          {/* The host reserves its player strip in every phase. This container adapts the final
+              cards to the remaining stage height, including the host's safe bottom margin. */}
           <div className={styles.page}>
             <div className={styles.fit}>
               <FinalReveal
@@ -106,40 +106,49 @@ function WagerTv({ view, skip }: GameTvProps<LightningTvView>): JSX.Element {
     }
     return (
       <Stage>
-        <RoundHeader
-          round={view.round}
-          question={view.question}
-          // I-589: the owner's Next button, with the standings
-          aside={
-            standingsUp && view.next && skip ? (
-              <TvNext
-                next={view.next}
-                skip={skip}
-                vipName={view.players.find((p) => p.id === view.vip)?.name}
-              />
-            ) : null
-          }
-        />
-        <div className={styles.revealSummary}>
-          <p className={styles.asked}>{view.question?.text ?? '…'}</p>
-          {view.question && view.correctIndex !== undefined && view.answerDistribution ? (
-            <AnswerChart
-              question={view.question}
-              correctIndex={view.correctIndex}
-              distribution={view.answerDistribution}
+        <div className={styles.page}>
+          <div className={`${styles.fit} ${standingsUp ? styles.revealBoard : styles.revealRace}`}>
+            {standingsUp ? (
+              <div className={styles.standingsHeader}>
+                <BigText level="h2">{L('Scoreboard')}</BigText>
+                {view.next && skip ? (
+                  <TvNext
+                    next={view.next}
+                    skip={skip}
+                    vipName={view.players.find((p) => p.id === view.vip)?.name}
+                  />
+                ) : null}
+              </div>
+            ) : (
+              <RoundHeader round={view.round} question={view.question} />
+            )}
+            {!standingsUp ? (
+              <div className={styles.revealSummary}>
+                <p className={styles.asked}>{view.question?.text ?? '…'}</p>
+                {view.question && view.correctIndex !== undefined && view.answerDistribution ? (
+                  <AnswerChart
+                    question={view.question}
+                    correctIndex={view.correctIndex}
+                    distribution={view.answerDistribution}
+                  />
+                ) : null}
+              </div>
+            ) : null}
+            {!standingsUp && view.question && view.correctIndex !== undefined ? (
+              <AnswerCard question={view.question} correctIndex={view.correctIndex} />
+            ) : null}
+            {/* One mounted list keeps its identity and FLIP refs as the question gives way to
+                standings; only the preceding reading stage changes at leaderboardAt. */}
+            <RevealRows
+              key="receipts"
+              rows={view.rows ?? []}
+              startedAt={view.revealAt}
+              paused={view.paused}
+              clockHeldAt={view.clockHeldAt}
+              leaderboardAt={view.leaderboardAt}
             />
-          ) : null}
+          </div>
         </div>
-        {view.question && view.correctIndex !== undefined ? (
-          <AnswerCard question={view.question} correctIndex={view.correctIndex} />
-        ) : null}
-        <RevealRows
-          rows={view.rows ?? []}
-          startedAt={view.revealAt}
-          paused={view.paused}
-          clockHeldAt={view.clockHeldAt}
-          leaderboardAt={view.leaderboardAt}
-        />
       </Stage>
     );
   }

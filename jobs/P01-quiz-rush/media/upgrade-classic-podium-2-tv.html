@@ -5,15 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Kahoot! upgrade · upgrade-classic-podium-2-tv</title>
     <style>
-      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
-   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
-   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
-   <html> by main.tsx and on the shell element). */
       :root {
         --pb-bg: #0f1020;
-        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
-     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
-     far more, so text drawn on the stage keeps its contrast. */
         --pb-art-wash: 16%;
         --pb-tile-wash: 0%;
         --pb-surface: #1c1e3a;
@@ -27,14 +20,10 @@
         --pb-info: #4cc9f0;
         --pb-focus: #ffd166;
         --pb-on-accent: #1a0b12;
-        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
         --pb-accent-2-fill: #ffd166;
         --pb-on-accent-2-fill: #1a0b12;
-        /* optional edge for surfaces; only High Contrast sets it */
         --pb-border: transparent;
-        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
         --pb-scrim: rgb(15 16 32 / 62%);
-
         --pb-player-1: #ff5d8f;
         --pb-player-2: #ffd166;
         --pb-player-3: #06d6a0;
@@ -43,17 +32,12 @@
         --pb-player-6: #ff9f43;
         --pb-player-7: #48dbfb;
         --pb-player-8: #f368e0;
-
-        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
-     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
         --pb-team-sun: var(--pb-accent);
         --pb-team-moon: var(--pb-info);
-
         --pb-font-family:
           'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
           Roboto, 'Helvetica Neue', Arial, sans-serif;
         --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
-
         --pb-space-1: 4px;
         --pb-space-2: 8px;
         --pb-space-3: 12px;
@@ -62,20 +46,15 @@
         --pb-space-6: 32px;
         --pb-space-7: 48px;
         --pb-space-8: 64px;
-
         --pb-radius: 12px;
         --pb-radius-lg: 24px;
         --pb-touch: 44px;
-
         --pb-motion-fast: 150ms;
         --pb-motion-base: 300ms;
         --pb-motion-slow: 600ms;
         --pb-motion-pulse: 1000ms;
         --pb-motion-confetti: 3000ms;
         --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-
-        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
-     setting scales the words (16 px root = the same sizes as before). */
         --pb-font-display: 3rem;
         --pb-font-h1: 1.75rem;
         --pb-font-h2: 1.375rem;
@@ -84,11 +63,6 @@
         --pb-font-button: 1.25rem;
         --pb-chip-size: 40px;
       }
-
-      /* ── Themes (src/theme.ts sets data-theme on <html>; 
-ight is the :root default above) ────────
-   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
-   colours stay bright in every theme — they are avatar discs, not text. */
       [data-theme='daylight'] {
         color-scheme: light;
         --pb-bg: #f6f5ff;
@@ -109,7 +83,6 @@ ight is the :root default above) ────────
         --pb-on-accent-2-fill: #1a0b12;
         --pb-scrim: rgb(23 22 51 / 45%);
       }
-
       [data-theme='arcade'] {
         --pb-bg: #050014;
         --pb-surface: #14002e;
@@ -127,7 +100,6 @@ ight is the :root default above) ────────
         --pb-on-accent-2-fill: #050014;
         --pb-scrim: rgb(5 0 20 / 62%);
       }
-
       [data-theme='cabin'] {
         --pb-bg: #1d1410;
         --pb-surface: #2c211b;
@@ -145,7 +117,6 @@ ight is the :root default above) ────────
         --pb-on-accent-2-fill: #1d1410;
         --pb-scrim: rgb(29 20 16 / 62%);
       }
-
       [data-theme='contrast'] {
         --pb-bg: #000000;
         --pb-surface: #111111;
@@ -170,14 +141,12 @@ ight is the :root default above) ────────
         --pb-font-h2: 48px;
         --pb-font-body: 36px;
         --pb-font-caption: 28px;
-        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-tv-text-min: 28px;
         --pb-font-button: 36px;
         --pb-chip-size: 72px;
-        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
         --pb-overscan-x: 96px;
         --pb-overscan-y: 54px;
       }
-
       @media (prefers-reduced-motion: reduce) {
         :root {
           --pb-motion-fast: 0ms;
@@ -187,8 +156,6 @@ ight is the :root default above) ────────
           --pb-motion-confetti: 0ms;
         }
       }
-
-      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
       :root[data-motion='off'] {
         --pb-motion-fast: 0ms;
         --pb-motion-base: 0ms;
@@ -196,9 +163,6 @@ ight is the :root default above) ────────
         --pb-motion-pulse: 0ms;
         --pb-motion-confetti: 0ms;
       }
-
-      /* games/kahoot/client/Classic.module.css */
-      /* Classic quiz: original shape marks, token contrast and compact public information at 1–16 seats. */
       ._stage_986a22 {
         flex: 1;
         min-height: 0;
@@ -419,6 +383,69 @@ ight is the :root default above) ────────
         ) {
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
+      [data-surface='tv']
+        ._standings_986a22:is(
+          [data-count='13'],
+          [data-count='14'],
+          [data-count='15'],
+          [data-count='16']
+        )
+        li {
+        padding: var(--pb-space-1);
+        gap: var(--pb-space-1);
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+        line-height: 1;
+      }
+      [data-surface='tv']
+        ._standings_986a22:is(
+          [data-count='13'],
+          [data-count='14'],
+          [data-count='15'],
+          [data-count='16']
+        )
+        ._name_986a22 {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+      [data-surface='tv']
+        ._standings_986a22:is(
+          [data-count='13'],
+          [data-count='14'],
+          [data-count='15'],
+          [data-count='16']
+        )
+        ._rank_986a22 {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      [data-surface='tv']
+        ._standings_986a22:is(
+          [data-count='13'],
+          [data-count='14'],
+          [data-count='15'],
+          [data-count='16']
+        )
+        ._score_986a22 {
+        grid-column: 2;
+        grid-row: 2;
+        justify-self: end;
+      }
+      [data-surface='tv']
+        ._standings_986a22:is(
+          [data-count='13'],
+          [data-count='14'],
+          [data-count='15'],
+          [data-count='16']
+        )
+        ._gain_986a22 {
+        grid-column: 3;
+        grid-row: 2;
+        font-size: inherit;
+      }
       ._podium_986a22 {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -450,6 +477,13 @@ ight is the :root default above) ────────
       }
       ._podiumPlace_986a22:not([data-revealed]) ._podiumPeople_986a22 {
         visibility: hidden;
+      }
+      [data-surface='tv']
+        ._podiumPlace_986a22:has(._podiumPeople_986a22 > div:nth-child(2))
+        ._podiumPeople_986a22
+        > div {
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+        line-height: 1.1;
       }
       ._plinth_986a22 {
         display: grid;
@@ -689,28 +723,29 @@ ight is the :root default above) ────────
         animation: none;
         transition: none;
       }
-
-      /* packages/game-sdk/src/tv/Stage.module.css */
       ._stage_262f13 {
         display: flex;
         flex-direction: column;
         gap: var(--pb-space-5);
         min-height: 100%;
-        /* The top is the overscan band unless the host already fills it (T-0179: under the playing
-     header, which sits inside the band, the shell sets --pb-stage-top). */
         padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
           var(--pb-overscan-y, 54px);
       }
-
       ._center_262f13 {
-        /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
-     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
         justify-content: safe center;
         align-items: safe center;
         text-align: center;
       }
-
-      * {
+      @font-face {
+        font-family: 'Nunito Variable';
+        font-style: normal;
+        font-weight: 200 1000;
+        font-display: swap;
+        src: url('./nunito-latin-wght-normal.woff2') format('woff2');
+      }
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
       }
       html,
@@ -733,10 +768,15 @@ ight is the :root default above) ────────
       p {
         margin: 0;
       }
-      h2 {
+      h1 {
         font-size: var(--pb-font-h1);
+        line-height: 1.15;
+        font-weight: 800;
+      }
+      h2 {
+        font-size: var(--pb-font-h2);
         line-height: 1.2;
-        font-weight: 900;
+        font-weight: 700;
       }
       button,
       input,
@@ -745,14 +785,29 @@ ight is the :root default above) ────────
         font: inherit;
         color: inherit;
       }
+      button {
+        cursor: pointer;
+        border: 0;
+        background: none;
+        padding: 0;
+        touch-action: manipulation;
+      }
       .evidence-shell {
         display: grid;
         width: 100%;
         height: 100%;
-        grid-template-rows: 84px minmax(0, 1fr) 48px;
+        grid-template-rows: 60px calc(var(--pb-font-caption) * 1.4 + var(--pb-space-2)) minmax(
+            0,
+            1fr
+          );
       }
       [data-surface='tv'] .evidence-shell {
-        grid-template-rows: 100px minmax(0, 1fr) 80px;
+        grid-template-rows:
+          calc(var(--pb-overscan-y) + var(--pb-font-h2) * 1.4 + var(--pb-space-3))
+          calc(var(--pb-font-display) * 1.1 + var(--pb-space-3)) calc(6px + var(--pb-space-4))
+          minmax(0, 1fr) calc(
+            var(--pb-touch) + var(--pb-space-4) + var(--pb-space-2) + var(--pb-space-3)
+          );
       }
       .evidence-header,
       .evidence-footer {
@@ -763,9 +818,60 @@ ight is the :root default above) ────────
         background: var(--pb-surface);
         gap: var(--pb-space-3);
       }
+      [data-surface='tv'] .evidence-header {
+        padding: var(--pb-overscan-y) var(--pb-overscan-x) var(--pb-space-3);
+        font-size: var(--pb-font-h2);
+      }
+      .evidence-strip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--pb-space-5);
+        padding: 0 var(--pb-overscan-x) var(--pb-space-3);
+        min-height: 0;
+      }
+      .evidence-chips {
+        flex: 1;
+        min-width: 0;
+      }
+      .evidence-timer {
+        flex: 0 0 auto;
+        min-width: calc(var(--pb-font-display) * 2.2);
+        display: flex;
+        justify-content: flex-end;
+      }
+      .evidence-chips-hidden {
+        visibility: hidden;
+      }
+      .evidence-bar {
+        height: 6px;
+        margin: 0 var(--pb-overscan-x) var(--pb-space-4);
+        background: var(--pb-accent-2);
+        border-radius: 999px;
+      }
+      [hidden] {
+        display: none !important;
+      }
       .evidence-footer {
         font-size: var(--pb-font-caption);
         color: var(--pb-text-muted);
+      }
+      [data-surface='phone'] .evidence-footer {
+        display: none;
+      }
+      .evidence-phone-countdown {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-1) var(--pb-space-4);
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+      .evidence-phone-track {
+        height: 6px;
+        flex: 1;
+        border-radius: 999px;
+        background: var(--pb-accent-2);
       }
       .evidence-main {
         display: flex;
@@ -773,7 +879,7 @@ ight is the :root default above) ────────
         min-height: 0;
         min-width: 0;
         overflow: hidden;
-        --pb-stage-top: var(--pb-space-5);
+        --pb-stage-top: var(--pb-space-3);
       }
       .evidence-code {
         font-weight: 900;
@@ -803,6 +909,11 @@ ight is the :root default above) ────────
       <header class="evidence-header">
         <b>PartyBox</b><span class="evidence-code">KAHOOT</span>
       </header>
+      <div class="evidence-strip">
+        <div class="evidence-chips evidence-chips-hidden"></div>
+        <div class="evidence-timer"></div>
+      </div>
+      <div class="evidence-bar"></div>
       <main class="evidence-main" aria-label="Game stage">
         <div class="_stage_262f13 _stage_986a22">
           <div class="_tvPage_986a22" data-phase="podium">

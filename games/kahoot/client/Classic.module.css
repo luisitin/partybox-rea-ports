@@ -209,6 +209,47 @@
   .standings:is([data-count='13'], [data-count='14'], [data-count='15'], [data-count='16']) {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+/* A tied sixteen-player podium shares the host's 626 px inner stage with both headings.
+   Give names the whole card width above rank/score rather than three cramped word lines.
+   Only TV dense cards clamp pathological wide names; phones retain their full wrapping. */
+:global([data-surface='tv'])
+  .standings:is([data-count='13'], [data-count='14'], [data-count='15'], [data-count='16'])
+  li {
+  padding: var(--pb-space-1);
+  gap: var(--pb-space-1);
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  line-height: 1;
+}
+:global([data-surface='tv'])
+  .standings:is([data-count='13'], [data-count='14'], [data-count='15'], [data-count='16'])
+  .name {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+:global([data-surface='tv'])
+  .standings:is([data-count='13'], [data-count='14'], [data-count='15'], [data-count='16'])
+  .rank {
+  grid-column: 1;
+  grid-row: 2;
+}
+:global([data-surface='tv'])
+  .standings:is([data-count='13'], [data-count='14'], [data-count='15'], [data-count='16'])
+  .score {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+}
+:global([data-surface='tv'])
+  .standings:is([data-count='13'], [data-count='14'], [data-count='15'], [data-count='16'])
+  .gain {
+  grid-column: 3;
+  grid-row: 2;
+  font-size: inherit;
+}
 .podium {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -240,6 +281,14 @@
 }
 .podiumPlace:not([data-revealed]) .podiumPeople {
   visibility: hidden;
+}
+/* Paired long names share one plinth; keep their full text within the host's inner height. */
+:global([data-surface='tv'])
+  .podiumPlace:has(.podiumPeople > div:nth-child(2))
+  .podiumPeople
+  > div {
+  font-size: calc(var(--pb-font-body) * 8 / 9);
+  line-height: 1.1;
 }
 .plinth {
   display: grid;

@@ -23,18 +23,20 @@ Classic bots use a separate learned-answer-text map; no question library is down
 
 ## Phases
 
-| Phase      | TV                                                                                                                                                                        | Phone                                                                                                                      | Exit                                                                                                     |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `intro`    | Title and selected pack/topics                                                                                                                                            | First-question notice                                                                                                      | Reading budget; wager also has a 2 s minimum                                                             |
-| `question` | Prompt, four choices, clock and connected lock count                                                                                                                      | Mode's answer pad; one accepted choice locks                                                                               | All connected participants answered after the reading hold, answer deadline, or VIP skip                 |
-| `reveal`   | Classic: answer-count chart, explanation, then standings except on last question. Wager: chart and fastest-correct race, then standings; final shows bets/verdicts/totals | Correct/wrong/too slow, delta and total; classic separates speed and streak points and shows rank before the last question | Reading budgets, or VIP Next/skip; classic last → podium; wager last regular → wager; wager final → done |
-| `wager`    | Final topic/difficulty, placed count and standings; no wager amounts                                                                                                      | Preset shares or custom percent/points; personal bet receipt                                                               | All connected bets after the reading hold, max(15 s, reading budget), or VIP skip                        |
-| `podium`   | Classic only: occupied ranks descending 3 → 2 → 1                                                                                                                         | Public tiers on staged phones; otherwise reveal notice and personal rank once unveiled                                     | Each tier's reading budget or VIP skip; empty tiers skipped, then done                                   |
-| `done`     | Complete final standings and shell results                                                                                                                                | Personal rank/score; staged phones also show standings                                                                     | Terminal; `results()` is non-null                                                                        |
+| Phase      | TV                                                                                                                                                                        | Phone                                                                                                      | Exit                                                                                                     |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `intro`    | Title and selected pack/topics                                                                                                                                            | First-question notice                                                                                      | Reading budget; wager also has a 2 s minimum                                                             |
+| `question` | Prompt, four choices, clock and connected lock count                                                                                                                      | Mode's answer pad; one accepted choice locks                                                               | All connected participants answered after the reading hold, answer deadline, or VIP skip                 |
+| `reveal`   | Classic: answer-count chart, explanation, then standings except on last question. Wager: chart and fastest-correct race, then standings; final shows bets/verdicts/totals | Verdict/delta/total; wager beside TV switches to a compact receipt at standings; classic speed/streak/rank | Reading budgets, or VIP Next/skip; classic last → podium; wager last regular → wager; wager final → done |
+| `wager`    | Final topic/difficulty, placed count and standings; no wager amounts                                                                                                      | Preset shares or custom percent/points; personal bet receipt                                               | All connected bets after the reading hold, max(15 s, reading budget), or VIP skip                        |
+| `podium`   | Classic only: occupied ranks descending 3 → 2 → 1                                                                                                                         | Public tiers on staged phones; otherwise reveal notice and personal rank once unveiled                     | Each tier's reading budget or VIP skip; empty tiers skipped, then done                                   |
+| `done`     | Complete final standings and shell results                                                                                                                                | Personal rank/score; staged phones also show standings                                                     | Terminal; `results()` is non-null                                                                        |
 
-Classic's last reveal omits public final rows/standings and roster scores. Podium payloads contain
-only already unveiled top-three tiers; full standings return at `done`. Equal scores share competition
-ranks, including podium ties. Phones retain their own total; they do not receive unrevealed rivals' totals.
+Reveals own rosters/ranked boards; shell names/scores hide in intro/reveal/podium at fixed height.
+Wager chart/race → all-seat ranked totals; final bet/verdict rows include every total. TV-side phones
+show a compact receipt at standings. Classic's last chart withholds public final rows/roster scores.
+Podiums expose unveiled tiers; 3+ ties at a rank use a board, pairs use wrapping plinths. Equal scores
+share competition ranks; phones retain own totals and complete standings return at done.
 
 ## Phone-only and remote play
 
@@ -96,8 +98,7 @@ the shared reveal beat. Token-based shapes, marks and words accompany colour; re
 plus comma-joined `subcategories` (empty = all topics; out-of-category topics discarded).
 Classic always uses English questions (`questionLang: en`), independently of host `contentLang`.
 Wager retains EN/ES content selection. The inherited 100 s minigame sets wager, four regular questions
-and a 5 s requested answer minimum; reading budgets still apply. Manifest estimate: 26 minutes;
-the adjustable estimate grows with question and player counts. Small classic matches are faster.
+and a 5 s requested minimum; reading floors apply. Estimate: 26 minutes, growing with question/player counts; small classic matches are faster.
 
 ## Content
 

@@ -223,14 +223,16 @@ describe.each(['classic', 'wager'] as const)('%s shared question stages', (mode)
     (offsetMs) => {
       const state = timer(start(mode, 8, false, true));
       const pausedAt = state.phase.startedAt + 2_500;
-      // The inherited wager UI delegates these two countdowns to host chrome.
-      // The public kit has no host; its SDK Timer receives the unmodified real view clocks.
+      // Both TV modes use the host's SDK clock; wager phones also delegate their clock to
+      // host chrome. Classic phones and public phone stages render their own SDK Timer.
       const render = (current: State, now: number): string[][] => [
-        timerText(paintTv(current, now, offsetMs, mode === 'wager')),
+        timerText(paintTv(current, now, offsetMs, true)),
         timerText(paintPhone(current, 'seat-1', false, now, offsetMs, mode === 'wager')),
         timerText(paintPhone(current, 'audience', true, now, offsetMs)),
       ];
       const before = render(state, pausedAt);
+      expect(before[0]).toHaveLength(1);
+      expect(timerText(paintTv(state, pausedAt, offsetMs))).toHaveLength(0);
       for (const text of before) {
         expect(text.length).toBeGreaterThan(0);
         expect(text.join(' ')).toMatch(/\d/);
@@ -286,6 +288,8 @@ describe('inherited final-wager registration', () => {
       if (!reveal || tv(reveal).leaderboardAt === undefined)
         throw new Error('Ordinary stage needs its authored scoreboard beat');
       const boardAt = tv(reveal).leaderboardAt!;
+      const question = tv(reveal).question;
+      if (!question) throw new Error('Ordinary reveal question missing');
       for (const id of ['seat-1', 'audience']) {
         const before = paintPhone(reveal, id, true, boardAt - 1);
         expect(before).toContain('aria-label="Answer distribution"');
@@ -296,6 +300,7 @@ describe('inherited final-wager registration', () => {
         expect(after).toContain('aria-label="Standings"');
         expect(after).not.toContain('aria-label="Answer distribution"');
         expect(after).not.toContain('role="radio"');
+        expect(after).not.toContain(escape(question.text));
         for (const player of seats(count)) expect(textOf(after)).toContain(player.name);
         if (id === 'seat-1') {
           expect(before).toContain('Too slow');
@@ -304,9 +309,51 @@ describe('inherited final-wager registration', () => {
           expect(after).toContain('0 total');
         }
       }
-      const besideTv = paintPhone({ ...reveal, phoneOnly: false }, 'seat-1', false, boardAt);
-      expect(besideTv).toContain('role="radiogroup"');
-      expect(buttons(besideTv)).toHaveLength(4);
+      const besideState = { ...reveal, phoneOnly: false };
+      const besideBefore = paintPhone(besideState, 'seat-1', false, boardAt - 1);
+      expect(besideBefore).toContain('role="radiogroup"');
+      expect(besideBefore).toContain(escape(question.text));
+      expect(buttons(besideBefore)).toHaveLength(4);
+      expect(buttons(besideBefore).every((button) => button.includes('disabled'))).toBe(true);
+      const besideAfter = paintPhone(besideState, 'seat-1', false, boardAt);
+      expect(besideAfter).toContain('Scoreboard');
+      expect(besideAfter).toContain('Too slow');
+      expect(besideAfter).toContain('0 total');
+      expect(besideAfter).not.toContain(escape(question.text));
+      expect(besideAfter).not.toContain('role="radiogroup"');
+      expect(buttons(besideAfter)).toHaveLength(0);
+      const tvBefore = paintTv(besideState, boardAt - 1);
+      expect(tvBefore).toContain(escape(question.text));
+      expect(tvBefore).toContain('aria-label="Answer distribution"');
+      const tvAfter = paintTv(besideState, boardAt);
+      expect(tvAfter).toContain('Scoreboard');
+      expect(tvAfter).not.toContain(escape(question.text));
+      expect(tvAfter).not.toContain('aria-label="Answer distribution"');
+      expect(tvAfter.match(/data-player=/g)).toHaveLength(count);
+      for (const player of seats(count)) expect(textOf(tvAfter)).toContain(player.name);
+      // A late reload uses the held reveal clock on either side of the exact board boundary.
+      for (const [heldAt, boarded] of [
+        [boardAt - 1, false],
+        [boardAt, true],
+      ] as const) {
+        const paused = vip(besideState, 'pause', heldAt);
+        expect(tv(paused).clockHeldAt).toBe(heldAt);
+        const lateTv = paintTv(paused, boardAt + 60_000);
+        const latePhone = paintPhone(paused, 'seat-1', false, boardAt + 60_000);
+        if (boarded) {
+          expect(lateTv).toContain('Scoreboard');
+          expect(latePhone).toContain('Scoreboard');
+          expect(lateTv).not.toContain(escape(question.text));
+          expect(latePhone).not.toContain(escape(question.text));
+          expect(buttons(latePhone)).toHaveLength(0);
+        } else {
+          expect(lateTv).toContain(escape(question.text));
+          expect(latePhone).toContain(escape(question.text));
+          expect(lateTv).toContain('aria-label="Answer distribution"');
+          expect(buttons(latePhone)).toHaveLength(4);
+          expect(buttons(latePhone).every((button) => button.includes('disabled'))).toBe(true);
+        }
+      }
     },
   );
 

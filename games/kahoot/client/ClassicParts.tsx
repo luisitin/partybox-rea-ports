@@ -104,9 +104,15 @@ export function PublicStandings({
   return (
     <ol className={styles.standings} data-count={rows.length} aria-label={L('Standings')}>
       {rows.map((row) => (
-        <li key={row.playerId} data-me={row.playerId === me || undefined}>
+        <li
+          key={row.playerId}
+          data-me={row.playerId === me || undefined}
+          aria-label={`${row.name} · ${L('Place {rank}', { rank: row.rank })} · ${L('{n} points', { n: row.score })}${gains && 'delta' in row && typeof row.delta === 'number' && row.delta > 0 ? ` · ${L('+{n} points', { n: row.delta })}` : ''}`}
+        >
           <b className={styles.rank}>#{row.rank}</b>
-          <b className={styles.name}>{row.name}</b>
+          <b className={styles.name} title={row.name}>
+            {row.name}
+          </b>
           <span className={styles.score}>{row.score}</span>
           {gains && 'delta' in row && typeof row.delta === 'number' && row.delta > 0 ? (
             <span className={styles.gain}>+{row.delta}</span>
@@ -122,7 +128,7 @@ export function Podium({ view }: { view: LightningTvView }): JSX.Element | null 
   const podium = view.podium;
   if (!podium) return null;
   const crowded = [1, 2, 3].some(
-    (rank) => podium.entries.filter((entry) => entry.rank === rank).length > 3,
+    (rank) => podium.entries.filter((entry) => entry.rank === rank).length > 2,
   );
   if (crowded) return <PublicStandings rows={podium.entries} />;
   return (

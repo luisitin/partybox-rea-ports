@@ -5,15 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Kahoot! upgrade · upgrade-classic-reveal-standings-phone-only</title>
     <style>
-      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
-   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
-   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
-   <html> by main.tsx and on the shell element). */
       :root {
         --pb-bg: #0f1020;
-        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
-     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
-     far more, so text drawn on the stage keeps its contrast. */
         --pb-art-wash: 16%;
         --pb-tile-wash: 0%;
         --pb-surface: #1c1e3a;
@@ -27,14 +20,10 @@
         --pb-info: #4cc9f0;
         --pb-focus: #ffd166;
         --pb-on-accent: #1a0b12;
-        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
         --pb-accent-2-fill: #ffd166;
         --pb-on-accent-2-fill: #1a0b12;
-        /* optional edge for surfaces; only High Contrast sets it */
         --pb-border: transparent;
-        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
         --pb-scrim: rgb(15 16 32 / 62%);
-
         --pb-player-1: #ff5d8f;
         --pb-player-2: #ffd166;
         --pb-player-3: #06d6a0;
@@ -43,17 +32,12 @@
         --pb-player-6: #ff9f43;
         --pb-player-7: #48dbfb;
         --pb-player-8: #f368e0;
-
-        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
-     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
         --pb-team-sun: var(--pb-accent);
         --pb-team-moon: var(--pb-info);
-
         --pb-font-family:
           'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
           Roboto, 'Helvetica Neue', Arial, sans-serif;
         --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
-
         --pb-space-1: 4px;
         --pb-space-2: 8px;
         --pb-space-3: 12px;
@@ -62,20 +46,15 @@
         --pb-space-6: 32px;
         --pb-space-7: 48px;
         --pb-space-8: 64px;
-
         --pb-radius: 12px;
         --pb-radius-lg: 24px;
         --pb-touch: 44px;
-
         --pb-motion-fast: 150ms;
         --pb-motion-base: 300ms;
         --pb-motion-slow: 600ms;
         --pb-motion-pulse: 1000ms;
         --pb-motion-confetti: 3000ms;
         --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-
-        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
-     setting scales the words (16 px root = the same sizes as before). */
         --pb-font-display: 3rem;
         --pb-font-h1: 1.75rem;
         --pb-font-h2: 1.375rem;
@@ -84,11 +63,6 @@
         --pb-font-button: 1.25rem;
         --pb-chip-size: 40px;
       }
-
-      /* ── Themes (src/theme.ts sets data-theme on <html>; 
-ight is the :root default above) ────────
-   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
-   colours stay bright in every theme — they are avatar discs, not text. */
       [data-theme='daylight'] {
         color-scheme: light;
         --pb-bg: #f6f5ff;
@@ -109,7 +83,6 @@ ight is the :root default above) ────────
         --pb-on-accent-2-fill: #1a0b12;
         --pb-scrim: rgb(23 22 51 / 45%);
       }
-
       [data-theme='arcade'] {
         --pb-bg: #050014;
         --pb-surface: #14002e;
@@ -127,7 +100,6 @@ ight is the :root default above) ────────
         --pb-on-accent-2-fill: #050014;
         --pb-scrim: rgb(5 0 20 / 62%);
       }
-
       [data-theme='cabin'] {
         --pb-bg: #1d1410;
         --pb-surface: #2c211b;
@@ -145,7 +117,6 @@ ight is the :root default above) ────────
         --pb-on-accent-2-fill: #1d1410;
         --pb-scrim: rgb(29 20 16 / 62%);
       }
-
       [data-theme='contrast'] {
         --pb-bg: #000000;
         --pb-surface: #111111;
@@ -170,14 +141,12 @@ ight is the :root default above) ────────
         --pb-font-h2: 48px;
         --pb-font-body: 36px;
         --pb-font-caption: 28px;
-        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-tv-text-min: 28px;
         --pb-font-button: 36px;
         --pb-chip-size: 72px;
-        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
         --pb-overscan-x: 96px;
         --pb-overscan-y: 54px;
       }
-
       @media (prefers-reduced-motion: reduce) {
         :root {
           --pb-motion-fast: 0ms;
@@ -187,8 +156,6 @@ ight is the :root default above) ────────
           --pb-motion-confetti: 0ms;
         }
       }
-
-      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
       :root[data-motion='off'] {
         --pb-motion-fast: 0ms;
         --pb-motion-base: 0ms;
@@ -196,9 +163,6 @@ ight is the :root default above) ────────
         --pb-motion-pulse: 0ms;
         --pb-motion-confetti: 0ms;
       }
-
-      /* games/kahoot/client/Classic.module.css */
-      /* Classic quiz: original shape marks, token contrast and compact public information at 1–16 seats. */
       ._stage_986a22 {
         flex: 1;
         min-height: 0;
@@ -419,6 +383,69 @@ ight is the :root default above) ────────
         ) {
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
+      [data-surface='tv']
+        ._standings_986a22:is(
+          [data-count='13'],
+          [data-count='14'],
+          [data-count='15'],
+          [data-count='16']
+        )
+        li {
+        padding: var(--pb-space-1);
+        gap: var(--pb-space-1);
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+        line-height: 1;
+      }
+      [data-surface='tv']
+        ._standings_986a22:is(
+          [data-count='13'],
+          [data-count='14'],
+          [data-count='15'],
+          [data-count='16']
+        )
+        ._name_986a22 {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+      [data-surface='tv']
+        ._standings_986a22:is(
+          [data-count='13'],
+          [data-count='14'],
+          [data-count='15'],
+          [data-count='16']
+        )
+        ._rank_986a22 {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      [data-surface='tv']
+        ._standings_986a22:is(
+          [data-count='13'],
+          [data-count='14'],
+          [data-count='15'],
+          [data-count='16']
+        )
+        ._score_986a22 {
+        grid-column: 2;
+        grid-row: 2;
+        justify-self: end;
+      }
+      [data-surface='tv']
+        ._standings_986a22:is(
+          [data-count='13'],
+          [data-count='14'],
+          [data-count='15'],
+          [data-count='16']
+        )
+        ._gain_986a22 {
+        grid-column: 3;
+        grid-row: 2;
+        font-size: inherit;
+      }
       ._podium_986a22 {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -450,6 +477,13 @@ ight is the :root default above) ────────
       }
       ._podiumPlace_986a22:not([data-revealed]) ._podiumPeople_986a22 {
         visibility: hidden;
+      }
+      [data-surface='tv']
+        ._podiumPlace_986a22:has(._podiumPeople_986a22 > div:nth-child(2))
+        ._podiumPeople_986a22
+        > div {
+        font-size: calc(var(--pb-font-body) * 8 / 9);
+        line-height: 1.1;
       }
       ._plinth_986a22 {
         display: grid;
@@ -689,26 +723,16 @@ ight is the :root default above) ────────
         animation: none;
         transition: none;
       }
-
-      /* packages/game-sdk/src/controller/Screen.module.css */
-      /* Every screen rises on mount (the phone was the only surface that hard-cut). Fill `backwards`,
-   not `both`: a retained transform would make this frame the containing block for any future
-   position: fixed game element. Taps are never blocked (opacity does not gate pointer events). */
       ._screen_72dfcc {
-        position: relative; /* the predecessor's snapshot overlays this frame (review-loop #18) */
+        position: relative;
         display: flex;
         flex-direction: column;
         flex: 1;
         min-height: 0;
         overscroll-behavior: none;
         animation: pb-rise var(--pb-motion-base) var(--pb-ease) backwards;
-        animation-delay: var(
-          --pb-screen-delay,
-          0ms
-        ); /* I-039 A: the shell can hold the rise a beat */
+        animation-delay: var(--pb-screen-delay, 0ms);
       }
-
-      /* A leaving screen's snapshot, parked in the parent: on top, inert, fading over the base token. */
       ._ghost_72dfcc {
         position: absolute;
         inset: 0;
@@ -718,18 +742,14 @@ ight is the :root default above) ────────
         pointer-events: none;
         animation: pb-fade-out var(--pb-motion-base) var(--pb-ease) both;
       }
-
-      /* Cloned nodes would replay their entrance keyframes; freeze them where they were. */
       ._ghost_72dfcc * {
         animation: none !important;
         transition: none !important;
       }
-
       ._title_72dfcc {
         padding: var(--pb-space-4) var(--pb-space-4) 0;
         text-wrap: balance;
       }
-
       ._body_72dfcc {
         flex: 1;
         min-height: 0;
@@ -740,7 +760,6 @@ ight is the :root default above) ────────
         flex-direction: column;
         gap: var(--pb-space-4);
       }
-
       ._footer_72dfcc {
         position: sticky;
         bottom: 0;
@@ -748,8 +767,6 @@ ight is the :root default above) ────────
           calc(var(--pb-space-3) + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
         background: linear-gradient(to top, var(--pb-bg) 70%, transparent);
       }
-
-      /* A sideways phone in Safari (≈ 330 px tall): tighter body padding, the height goes to the game. */
       @media (orientation: landscape) and (max-height: 420px) {
         ._body_72dfcc {
           padding: var(--pb-space-2) var(--pb-space-4);
@@ -759,18 +776,11 @@ ight is the :root default above) ────────
             calc(4px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
         }
       }
-
-      /* A long body (six-row results, a wager list on an SE) folds under the footer and the last line is
-   cut mid-glyph (review-loop, six-player results on an iPhone). Browsers with scroll-driven animations fade the body's bottom 28 px
-   while there is more below and lift the fade at the end; a body that does not scroll has no
-   timeline, so no fade. Only meaningful overflow (the same threshold as the cue) folds: a few
-   pixels of card-arrival overshoot must not fade a whole row. Others keep the plain fold. */
       @property --pb-fold {
         syntax: '<length>';
         inherits: false;
         initial-value: 0px;
       }
-
       @supports (animation-timeline: scroll()) {
         ._body_72dfcc {
           mask-image: linear-gradient(to bottom, #000 calc(100% - var(--pb-fold)), transparent);
@@ -779,11 +789,6 @@ ight is the :root default above) ────────
           animation: _pb-fold_72dfcc linear both;
           animation-timeline: scroll(self);
         }
-        /* fill1: a title drawn down to its bottom edge (the results' award chips) sat flush on the body's
-     clip line, so a row scrolled half out read as hidden under the chips — at 200 % text most of a
-     name. Scrolled away from the top, the body keeps the clear strip it has at rest (its own top
-     padding) and then fades in over twice the caption size, so nothing touches the title at any
-     text size. Paint only: every box stays where it was, and at the top there is no mask at all. */
         ._body_72dfcc._fadeTop_72dfcc {
           mask-image: linear-gradient(
             to bottom,
@@ -802,7 +807,6 @@ ight is the :root default above) ────────
           animation-timeline: scroll(self), scroll(self);
         }
       }
-
       @property --pb-fold-top {
         syntax: '<length>';
         inherits: false;
@@ -813,7 +817,6 @@ ight is the :root default above) ────────
         inherits: false;
         initial-value: 0px;
       }
-
       @keyframes _pb-fold-top_72dfcc {
         0% {
           --pb-fold-clear: 0px;
@@ -825,22 +828,15 @@ ight is the :root default above) ────────
           --pb-fold-top: calc(var(--pb-font-caption) * 2);
         }
       }
-
       @keyframes _pb-fold_72dfcc {
         0%,
         92% {
-          --pb-fold: 72px; /* I-066 A: one cut row deep */
+          --pb-fold: 72px;
         }
         100% {
           --pb-fold: 0px;
         }
       }
-
-      /* ── I-788 A (design review A, refines I-066 B / I-187): "more below" is a slim row of its own at the
-   top of the footer — a grab bar and the words — never a pill floating over the body's last line or
-   the button's own words. The row is laid out whenever the body overflows (the body gives up its
-   height), and only fades out at the end, so nothing shifts under a finger. With no footer the same
-   row sits in the bottom safe area. The whole row is the button: 28 px drawn, 40 px to the thumb. */
       ._cue_72dfcc {
         position: relative;
         display: flex;
@@ -870,7 +866,6 @@ ight is the :root default above) ────────
         opacity: 0.6;
         flex: none;
       }
-      /* The thumb target reaches up to the footer's top edge (44 px), never down over the button. */
       ._cue_72dfcc::after {
         content: '';
         position: absolute;
@@ -893,14 +888,11 @@ ight is the :root default above) ────────
       :root[data-motion='off'] ._cue_72dfcc[data-on='false'] {
         transition: none;
       }
-
-      /* No footer: the row alone, in the bottom safe area. */
       ._cueOnly_72dfcc {
         flex-shrink: 0;
         padding: var(--pb-space-3) var(--pb-space-4)
           calc(4px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
       }
-
       @media (orientation: landscape) and (max-height: 420px) {
         ._cue_72dfcc {
           min-height: 22px;
@@ -914,8 +906,6 @@ ight is the :root default above) ────────
             calc(2px + var(--pb-safe-bottom, env(safe-area-inset-bottom)));
         }
       }
-
-      /* packages/game-sdk/src/controller/PrimaryButton.module.css */
       ._button_380395 {
         width: 100%;
         min-height: 56px;
@@ -928,77 +918,58 @@ ight is the :root default above) ────────
           transform var(--pb-motion-fast) var(--pb-ease),
           opacity var(--pb-motion-fast) var(--pb-ease);
       }
-
       ._button_380395:active:not([aria-disabled='true']) {
         transform: scale(0.97);
-        /* brightens accent, danger, success and the neutral surface-2 fill in every theme (R-049) */
         filter: brightness(1.12);
       }
-
-      /* Disabled reads as "not yet", not as a dimmer version of the action (label contrast 6.9:1): an
-   empty dashed outline, never a filled neutral button (T-0392: that read like an enabled one). */
       ._button_380395[aria-disabled='true'] {
         background: transparent;
         color: var(--pb-text-muted);
         border: 2px dashed var(--pb-text-muted);
         cursor: default;
       }
-
       ._wrap_380395 {
         display: flex;
         flex-direction: column;
         gap: var(--pb-space-1);
         width: 100%;
       }
-
       ._reason_380395 {
         text-align: center;
         font-size: var(--pb-font-caption);
         color: var(--pb-text-muted);
       }
-
-      /* A tap on a disabled button: three sideways jolts (global keyframe; 0 ms under reduced motion). */
       ._shake_380395 {
         animation: pb-shake var(--pb-motion-base) var(--pb-ease);
       }
-
       ._accent_380395 {
         background: var(--pb-accent);
         color: var(--pb-on-accent);
       }
-
       ._neutral_380395 {
         background: var(--pb-surface-2);
         color: var(--pb-text);
         box-shadow: inset 0 0 0 1px var(--pb-border);
       }
-
       ._danger_380395 {
         background: var(--pb-danger);
         color: var(--pb-on-accent);
       }
-
       ._success_380395 {
         background: var(--pb-accent-3);
         color: var(--pb-on-accent);
       }
-
       ._done_380395,
       ._done_380395[aria-disabled='true'] {
         background: var(--pb-accent-3);
         color: var(--pb-on-accent);
-        border-color: transparent; /* dashed is for the waiting state only */
+        border-color: transparent;
       }
-
-      /* The last 5 s for an unanswered phone (`data-urgent` on the controller shell): a danger outline
-   and one nudge when the attribute lands — no JS timer. A button disabled by an empty answer gets
-   nothing (there is nothing to press yet); the header cue and haptic still cover that player. */
       [data-urgent] ._button_380395._accent_380395:not([aria-disabled='true']) {
         outline: 3px solid var(--pb-danger);
         outline-offset: 2px;
         animation: _pb-nudge_380395 var(--pb-motion-slow) var(--pb-ease) 1;
       }
-
       @keyframes _pb-nudge_380395 {
         0%,
         100% {
@@ -1008,18 +979,11 @@ ight is the :root default above) ────────
           transform: scale(1.03);
         }
       }
-
-      /* The ✓ pops once each time a done button mounts (R-063); 0 ms under reduced motion. */
-      /* The gap is a margin: a trailing space inside an inline-block collapses, so every done button
-   read "✓Submitted" / "✓You're ready". */
       ._check_380395 {
         display: inline-block;
         margin-right: 0.35em;
         animation: pb-pop var(--pb-motion-fast) var(--pb-ease) both;
       }
-
-      /* T-0225: sent, not yet taken. Neutral and quiet: no ✓, not the success green (that reads as
-   delivered and the phone goes down while the send may still be lost). */
       ._busy_380395,
       ._busy_380395[aria-disabled='true'] {
         background: var(--pb-surface-2);
@@ -1027,8 +991,16 @@ ight is the :root default above) ────────
         border-color: transparent;
         box-shadow: inset 0 0 0 1px var(--pb-border);
       }
-
-      * {
+      @font-face {
+        font-family: 'Nunito Variable';
+        font-style: normal;
+        font-weight: 200 1000;
+        font-display: swap;
+        src: url('./nunito-latin-wght-normal.woff2') format('woff2');
+      }
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
       }
       html,
@@ -1051,10 +1023,15 @@ ight is the :root default above) ────────
       p {
         margin: 0;
       }
-      h2 {
+      h1 {
         font-size: var(--pb-font-h1);
+        line-height: 1.15;
+        font-weight: 800;
+      }
+      h2 {
+        font-size: var(--pb-font-h2);
         line-height: 1.2;
-        font-weight: 900;
+        font-weight: 700;
       }
       button,
       input,
@@ -1063,14 +1040,29 @@ ight is the :root default above) ────────
         font: inherit;
         color: inherit;
       }
+      button {
+        cursor: pointer;
+        border: 0;
+        background: none;
+        padding: 0;
+        touch-action: manipulation;
+      }
       .evidence-shell {
         display: grid;
         width: 100%;
         height: 100%;
-        grid-template-rows: 84px minmax(0, 1fr) 48px;
+        grid-template-rows: 60px calc(var(--pb-font-caption) * 1.4 + var(--pb-space-2)) minmax(
+            0,
+            1fr
+          );
       }
       [data-surface='tv'] .evidence-shell {
-        grid-template-rows: 100px minmax(0, 1fr) 80px;
+        grid-template-rows:
+          calc(var(--pb-overscan-y) + var(--pb-font-h2) * 1.4 + var(--pb-space-3))
+          calc(var(--pb-font-display) * 1.1 + var(--pb-space-3)) calc(6px + var(--pb-space-4))
+          minmax(0, 1fr) calc(
+            var(--pb-touch) + var(--pb-space-4) + var(--pb-space-2) + var(--pb-space-3)
+          );
       }
       .evidence-header,
       .evidence-footer {
@@ -1081,9 +1073,60 @@ ight is the :root default above) ────────
         background: var(--pb-surface);
         gap: var(--pb-space-3);
       }
+      [data-surface='tv'] .evidence-header {
+        padding: var(--pb-overscan-y) var(--pb-overscan-x) var(--pb-space-3);
+        font-size: var(--pb-font-h2);
+      }
+      .evidence-strip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--pb-space-5);
+        padding: 0 var(--pb-overscan-x) var(--pb-space-3);
+        min-height: 0;
+      }
+      .evidence-chips {
+        flex: 1;
+        min-width: 0;
+      }
+      .evidence-timer {
+        flex: 0 0 auto;
+        min-width: calc(var(--pb-font-display) * 2.2);
+        display: flex;
+        justify-content: flex-end;
+      }
+      .evidence-chips-hidden {
+        visibility: hidden;
+      }
+      .evidence-bar {
+        height: 6px;
+        margin: 0 var(--pb-overscan-x) var(--pb-space-4);
+        background: var(--pb-accent-2);
+        border-radius: 999px;
+      }
+      [hidden] {
+        display: none !important;
+      }
       .evidence-footer {
         font-size: var(--pb-font-caption);
         color: var(--pb-text-muted);
+      }
+      [data-surface='phone'] .evidence-footer {
+        display: none;
+      }
+      .evidence-phone-countdown {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-1) var(--pb-space-4);
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+      .evidence-phone-track {
+        height: 6px;
+        flex: 1;
+        border-radius: 999px;
+        background: var(--pb-accent-2);
       }
       .evidence-main {
         display: flex;
@@ -1091,7 +1134,7 @@ ight is the :root default above) ────────
         min-height: 0;
         min-width: 0;
         overflow: hidden;
-        --pb-stage-top: var(--pb-space-5);
+        --pb-stage-top: var(--pb-space-3);
       }
       .evidence-code {
         font-weight: 900;
@@ -1121,6 +1164,7 @@ ight is the :root default above) ────────
       <header class="evidence-header">
         <b>PartyBox</b><span class="evidence-code">KAHOOT</span>
       </header>
+      <div class="evidence-phone-countdown"><span class="evidence-phone-track"></span></div>
       <main class="evidence-main" aria-label="Game stage">
         <section class="_screen_72dfcc _phoneScreen_986a22">
           <h2 class="_title_72dfcc">Question 1 of 5</h2>
@@ -1133,68 +1177,84 @@ ight is the :root default above) ────────
             </div>
             <h2 class="_headline_986a22">Scoreboard</h2>
             <ol class="_standings_986a22" data-count="16" aria-label="Standings">
-              <li data-me="true">
-                <b class="_rank_986a22">#1</b><b class="_name_986a22">Guest 01 Aster</b
+              <li data-me="true" aria-label="Guest 01 Aster · Place 1 · 996 points">
+                <b class="_rank_986a22">#1</b
+                ><b class="_name_986a22" title="Guest 01 Aster">Guest 01 Aster</b
                 ><span class="_score_986a22">996</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#2</b><b class="_name_986a22">Guest 02 Aster</b
+              <li aria-label="Guest 02 Aster · Place 2 · 990 points">
+                <b class="_rank_986a22">#2</b
+                ><b class="_name_986a22" title="Guest 02 Aster">Guest 02 Aster</b
                 ><span class="_score_986a22">990</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#3</b><b class="_name_986a22">Guest 03 Aster</b
+              <li aria-label="Guest 03 Aster · Place 3 · 984 points">
+                <b class="_rank_986a22">#3</b
+                ><b class="_name_986a22" title="Guest 03 Aster">Guest 03 Aster</b
                 ><span class="_score_986a22">984</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#3</b><b class="_name_986a22">Guest 04 Aster</b
+              <li aria-label="Guest 04 Aster · Place 3 · 984 points">
+                <b class="_rank_986a22">#3</b
+                ><b class="_name_986a22" title="Guest 04 Aster">Guest 04 Aster</b
                 ><span class="_score_986a22">984</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#5</b><b class="_name_986a22">Guest 10 Aster</b
+              <li aria-label="Guest 10 Aster · Place 5 · 0 points">
+                <b class="_rank_986a22">#5</b
+                ><b class="_name_986a22" title="Guest 10 Aster">Guest 10 Aster</b
                 ><span class="_score_986a22">0</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#5</b><b class="_name_986a22">Guest 11 Aster</b
+              <li aria-label="Guest 11 Aster · Place 5 · 0 points">
+                <b class="_rank_986a22">#5</b
+                ><b class="_name_986a22" title="Guest 11 Aster">Guest 11 Aster</b
                 ><span class="_score_986a22">0</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#5</b><b class="_name_986a22">Guest 12 Aster</b
+              <li aria-label="Guest 12 Aster · Place 5 · 0 points">
+                <b class="_rank_986a22">#5</b
+                ><b class="_name_986a22" title="Guest 12 Aster">Guest 12 Aster</b
                 ><span class="_score_986a22">0</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#5</b><b class="_name_986a22">Guest 13 Aster</b
+              <li aria-label="Guest 13 Aster · Place 5 · 0 points">
+                <b class="_rank_986a22">#5</b
+                ><b class="_name_986a22" title="Guest 13 Aster">Guest 13 Aster</b
                 ><span class="_score_986a22">0</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#5</b><b class="_name_986a22">Guest 14 Aster</b
+              <li aria-label="Guest 14 Aster · Place 5 · 0 points">
+                <b class="_rank_986a22">#5</b
+                ><b class="_name_986a22" title="Guest 14 Aster">Guest 14 Aster</b
                 ><span class="_score_986a22">0</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#5</b><b class="_name_986a22">Guest 15 Aster</b
+              <li aria-label="Guest 15 Aster · Place 5 · 0 points">
+                <b class="_rank_986a22">#5</b
+                ><b class="_name_986a22" title="Guest 15 Aster">Guest 15 Aster</b
                 ><span class="_score_986a22">0</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#5</b><b class="_name_986a22">Guest 16 Aster</b
+              <li aria-label="Guest 16 Aster · Place 5 · 0 points">
+                <b class="_rank_986a22">#5</b
+                ><b class="_name_986a22" title="Guest 16 Aster">Guest 16 Aster</b
                 ><span class="_score_986a22">0</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#5</b><b class="_name_986a22">Guest 05 Aster</b
+              <li aria-label="Guest 05 Aster · Place 5 · 0 points">
+                <b class="_rank_986a22">#5</b
+                ><b class="_name_986a22" title="Guest 05 Aster">Guest 05 Aster</b
                 ><span class="_score_986a22">0</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#5</b><b class="_name_986a22">Guest 06 Aster</b
+              <li aria-label="Guest 06 Aster · Place 5 · 0 points">
+                <b class="_rank_986a22">#5</b
+                ><b class="_name_986a22" title="Guest 06 Aster">Guest 06 Aster</b
                 ><span class="_score_986a22">0</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#5</b><b class="_name_986a22">Guest 07 Aster</b
+              <li aria-label="Guest 07 Aster · Place 5 · 0 points">
+                <b class="_rank_986a22">#5</b
+                ><b class="_name_986a22" title="Guest 07 Aster">Guest 07 Aster</b
                 ><span class="_score_986a22">0</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#5</b><b class="_name_986a22">Guest 08 Aster</b
+              <li aria-label="Guest 08 Aster · Place 5 · 0 points">
+                <b class="_rank_986a22">#5</b
+                ><b class="_name_986a22" title="Guest 08 Aster">Guest 08 Aster</b
                 ><span class="_score_986a22">0</span>
               </li>
-              <li>
-                <b class="_rank_986a22">#5</b><b class="_name_986a22">Guest 09 Aster</b
+              <li aria-label="Guest 09 Aster · Place 5 · 0 points">
+                <b class="_rank_986a22">#5</b
+                ><b class="_name_986a22" title="Guest 09 Aster">Guest 09 Aster</b
                 ><span class="_score_986a22">0</span>
               </li>
             </ol>

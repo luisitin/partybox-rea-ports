@@ -5,6 +5,7 @@ import type { JSX } from 'react';
 import {
   ChoiceGrid,
   PhoneOnlyProvider,
+  Screen,
   WaitingScreen,
   buzz,
   useMediaQuery,
@@ -18,7 +19,7 @@ import type { Input } from '../server/types';
 import { Outcome, Stake, Worth, wagerLabel } from './ControllerBits';
 import { CustomStake } from './CustomStake';
 import { useCustomWager } from './useCustomWager';
-import { PhoneNext } from './NextStep';
+import { PhoneNext, useStandingsUp } from './NextStep';
 import { useRevealBeat } from './reveal-clock';
 import { useVerdictCue } from './useRevealCue';
 import styles from './Controller.module.css';
@@ -97,6 +98,13 @@ function WagerController({
     view.paused,
     view.clockHeldAt,
   );
+  const standingsUp = useStandingsUp(
+    phaseId === 'reveal' && !isFinal ? view.deadline : null,
+    view.revealAt,
+    view.paused,
+    view.clockHeldAt,
+    view.leaderboardAt,
+  );
   // Quiz Rush's personal cue waits for Lightning's verdict beat, alongside the existing buzz.
   useVerdictCue(view);
   // I-565 A: one short buzz the moment the room is waiting on me alone, once per question (buzz()
@@ -132,6 +140,34 @@ function WagerController({
         hint={L('First question coming up…')}
         mood="wait"
       />
+    );
+  }
+  // The TV now carries the standings: keep the phone's receipt without repeating the question.
+  // This swaps only the screen; WagerController retains the streak and reveal-cue state.
+  if (phaseId === 'reveal' && !isFinal && standingsUp) {
+    return (
+      <Screen
+        key={`standings:${view.round?.number ?? 0}`}
+        title={L('Scoreboard')}
+        footer={
+          view.next && skip ? (
+            <PhoneNext
+              next={view.next}
+              skip={skip}
+              phaseKey={view.deadline}
+              revealAt={view.revealAt}
+              paused={view.paused}
+              clockHeldAt={view.clockHeldAt}
+              leaderboardAt={view.leaderboardAt}
+              nextAt={view.nextAt}
+            />
+          ) : undefined
+        }
+      >
+        <p className={styles.footnote}>{roundKicker(view, L)}</p>
+        <Outcome view={view} streakBefore={streakBefore} />
+        <p className={styles.footnote}>{L('Look at the TV')}</p>
+      </Screen>
     );
   }
   if ((phaseId === 'question' || phaseId === 'reveal') && view.question) {

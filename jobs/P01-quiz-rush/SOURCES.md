@@ -39,4 +39,5 @@ Original interactive play was unavailable; source screenshots do not constitute 
 - Shapes and chart/podium styling: original HTML/CSS/SVG using PartyBox design tokens and primitives.
 - Sounds: existing PartyBox SDK cues/music plan; no original game's audio is included.
 - Captured HTML/PNG: only this port's generated screens; their hashes belong in `SHA256SUMS.txt`.
-- External art/fonts/music packages: none added. Port code and original content follow the repository MIT licence.
+- No new runtime art/font/music dependency is added. Port code and original content follow the repository MIT licence.
+- Capture-only font: the pinned PartyBox host uses Fontsource Nunito Variable5.3.0. Its existing `nunito-latin-wght-normal.woff2` (39,128 bytes) is included beside the standalone HTML under the SIL Open Font License1.1; the full licence is `media/NUNITO-LICENSE.txt`. This is the host's open font, independent of Kahoot! materials. Capture loads those same local bytes and records the SHA256; no network request is needed.

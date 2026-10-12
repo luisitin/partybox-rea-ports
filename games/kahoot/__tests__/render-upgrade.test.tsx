@@ -2,11 +2,19 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { PhoneOnlyProvider, ServerClockProvider, Timer } from '@partybox/game-sdk/ui';
+import {
+  PhoneOnlyProvider,
+  PlayerChip,
+  PlayerChips,
+  ServerClockProvider,
+  Timer,
+} from '@partybox/game-sdk/ui';
+import chipStyles from '../../../packages/game-sdk/src/tv/PlayerChips.module.css';
 import type { PlayerInfo } from '@partybox/game-sdk';
 import { afterEach, expect, it, vi } from 'vitest';
 import { Controller } from '../client/Controller';
 import { Tv } from '../client/Tv';
+import { tv as tvModule } from '../client/tv-entry';
 import { game } from '../server/index';
 import { QUESTIONS, QUESTIONS_ES, questionById } from '../server/content';
 import { CLASSIC_PACKS } from '../server/classic';
@@ -151,22 +159,8 @@ function paint(
     const publicView = tv(state);
     // Existing wager components deliberately delegate clocks to the shell. Keep that real
     // contract visible rather than silently giving those screenshots no running clock.
-    const shellClock =
-      state.settings.quizMode !== 'classic' &&
-      (state.phase.id === 'question' || state.phase.id === 'wager') &&
-      surface !== 'spectator';
     const html = renderToStaticMarkup(
       <ServerClockProvider offsetMs={0}>
-        {shellClock ? (
-          <Timer
-            deadline={publicView.deadline}
-            phaseKey={publicView.phaseId}
-            phaseAt={publicView.phaseAt}
-            paused={publicView.paused}
-            clockHeldAt={publicView.clockHeldAt}
-            size={surface === 'tv' ? 'lg' : 'md'}
-          />
-        ) : null}
         {surface === 'tv' ? (
           <Tv view={{ ...publicView, vip: null }} skip={() => undefined} />
         ) : (
@@ -194,6 +188,79 @@ function paint(
       at,
       stateHash: stateDigest(state),
       html,
+      chrome:
+        surface === 'tv'
+          ? renderToStaticMarkup(
+              <ServerClockProvider offsetMs={0}>
+                <div className="evidence-strip">
+                  <div
+                    className={`evidence-chips ${tvModule.stripHidden?.includes(publicView.phaseId) ? 'evidence-chips-hidden' : ''}`}
+                  >
+                    {!tvModule.stripHidden?.includes(publicView.phaseId) ? (
+                      <>
+                        <div data-chips-named>
+                          <PlayerChips
+                            players={publicView.players}
+                            showScores={
+                              state.settings.quizMode !== 'classic' || state.phase.id === 'done'
+                            }
+                            size="sm"
+                          />
+                        </div>
+                        <div data-chips-faces hidden>
+                          <ul
+                            className={`${chipStyles.list} ${chipStyles.row}`}
+                            aria-label="players"
+                          >
+                            {publicView.players.map((player) => (
+                              <li key={player.id} className={chipStyles.item}>
+                                <PlayerChip
+                                  name=""
+                                  avatarId={player.avatarId}
+                                  connected={player.connected}
+                                  status={player.status}
+                                  compact
+                                  size="sm"
+                                  score={
+                                    state.settings.quizMode !== 'classic' ||
+                                    state.phase.id === 'done'
+                                      ? player.score
+                                      : undefined
+                                  }
+                                />
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+                  <div className="evidence-timer">
+                    {publicView.timerMode === 'normal' && publicView.deadline !== null ? (
+                      <Timer
+                        deadline={publicView.deadline}
+                        phaseKey={publicView.phaseId}
+                        phaseAt={publicView.phaseAt}
+                        paused={publicView.paused}
+                        clockHeldAt={publicView.clockHeldAt}
+                        size="lg"
+                      />
+                    ) : null}
+                  </div>
+                </div>
+                <div className="evidence-bar" />
+              </ServerClockProvider>,
+            )
+          : renderToStaticMarkup(
+              <div className="evidence-phone-countdown">
+                <span className="evidence-phone-track" />
+                {controller.paused ? (
+                  <span>⏸ Paused</span>
+                ) : controller.timerMode !== 'quiet' && controller.deadline !== null ? (
+                  <span>{Math.max(0, Math.ceil((controller.deadline - at) / 1000))}s</span>
+                ) : null}
+              </div>,
+            ),
     };
     expect(standalone(frame)).not.toMatch(/:global\(|\bglobal\(/);
     frames.push(frame);
@@ -355,6 +422,9 @@ it('renders shipped longest classic and bilingual wager text with sixteen long n
       (tv(reveal).revealAt ?? reveal.phase.startedAt) + 1000,
       ['tv', 'phone-only', 'spectator'],
     );
+    if (mode === 'wager') {
+      paint(`${mode}-${lang}-longest-standings`, reveal, atEnd(reveal), ['phone-tv']);
+    }
   }
   language.value = 'es';
   const classic = timer(start('classic'));
@@ -391,13 +461,13 @@ it('renders legal forty-character final names with five-digit bets and totals fr
     expect(row.score).toBeLessThan(100000);
   }
   const name = 'wager-final-wide-names-five-digits';
-  paint(name, final, atEnd(final), ['phone-only', 'spectator', 'remote']);
+  paint(name, final, atEnd(final), ['tv', 'phone-only', 'spectator', 'remote']);
   for (const frame of frames.filter((frame) => frame.name.startsWith(`upgrade-${name}-`))) {
     expect(frame.html.match(/<li\b/g)).toHaveLength(16);
     expect(frame.html).not.toContain('role="radio"');
     for (const player of players) {
       expect(frame.html).toContain(`title="${player.name}"`);
-      expect(frame.html).toContain(`aria-label="${player.name} · `);
+      if (frame.surface !== 'tv') expect(frame.html).toContain(`aria-label="${player.name} · `);
     }
   }
   fixtures['wager-final-wide-names-five-digits'] = final;
@@ -475,6 +545,36 @@ it('fits the longest translated race together with twenty-answer streaks from re
   }
 });
 
+it('fits the tall receipt layouts used by one and four-player TV rooms', () => {
+  for (const count of [1, 4]) {
+    const states = played('wager', true, start('wager', count));
+    const race = first(states, 'reveal');
+    const final = first(states, 'reveal', true);
+    paint(`wager-small-${count}-race`, race, (tv(race).revealAt ?? race.phase.startedAt) + 1000, [
+      'tv',
+    ]);
+    paint(`wager-small-${count}-final`, final, atEnd(final), ['tv']);
+  }
+});
+
+it('fits paired and tripled first-place ties with legal forty-character wide names', () => {
+  for (const count of [2, 3]) {
+    const initial = start('classic', count);
+    const players = Object.fromEntries(
+      Object.values(initial.players).map((player, index) => [
+        player.id,
+        { ...player, name: `${String(index + 1).padStart(2, '0')}${'W'.repeat(38)}` },
+      ]),
+    );
+    const state = played('classic', true, { ...initial, players }).find(
+      (s) => s.phase.id === 'podium',
+    );
+    if (!state) throw new Error('Tied podium missing');
+    expect(tv(state).podium?.entries).toHaveLength(count);
+    paint(`classic-podium-wide-tie-${count}`, state, atEnd(state), ['tv']);
+  }
+});
+
 function captureFrames(): UpgradeFrame[] {
   return frames.filter((frame) => {
     const name = frame.name.slice('upgrade-'.length, -(frame.surface.length + 1));
@@ -482,6 +582,8 @@ function captureFrames(): UpgradeFrame[] {
       frame.surface === 'tv' || frame.surface === 'phone-tv' || frame.surface === 'phone-only';
     const stage = frame.surface === 'tv' || frame.surface === 'phone-only';
     if (name === 'wager-final-wide-names-five-digits') return true;
+    if (/^classic-podium-wide-tie-/.test(name)) return true;
+    if (/^wager-small-/.test(name) || /^wager-(?:en|es)-longest-standings$/.test(name)) return true;
     if (/^wager-race-(?:eight|sixteen)$/.test(name)) return frame.surface === 'tv';
     if (/^(?:classic|wager)-(?:intro|question|reveal-chart|done)$/.test(name))
       return (
@@ -516,7 +618,7 @@ it('writes current HTML and manifest only when the root requests fresh evidence'
   );
   const captures = captureFrames();
   expect(captures.length).toBeGreaterThanOrEqual(65);
-  expect(captures.length).toBeLessThanOrEqual(82);
+  expect(captures.length).toBeLessThanOrEqual(91);
   expect(timer(fixtures['classic-podium-1']!)).toEqual(fixtures['classic-done']);
   expect(timer(fixtures['wager-final-reveal']!)).toEqual(fixtures['wager-done']);
   if (process.env.PB_WRITE_EVIDENCE === '1') writeUpgradeEvidence(captures, fixtures);

@@ -276,6 +276,7 @@ export function RevealRows({
   const top = Math.max(0, ...rows.map((r) => r.score));
   // I-268 B: the roster's rule — no leader when nobody has scored or everyone is tied
   const leads = top > 0 && rows.some((r) => r.score !== top);
+  const rankOf = (score: number): number => 1 + rows.filter((row) => row.score > score).length;
   return (
     <ol
       ref={list}
@@ -311,8 +312,13 @@ export function RevealRows({
                 🔥{row.streak}
               </span>
             ) : null}
-            <span className={`${styles.verdict} ${verdictClass}`} aria-label={verdict.label}>
-              {verdict.glyph}
+            <span
+              className={`${styles.verdict} ${standings ? styles.rank : verdictClass}`}
+              aria-label={
+                standings ? L('Place {rank}', { rank: rankOf(row.score) }) : verdict.label
+              }
+            >
+              {standings ? `#${rankOf(row.score)}·` : verdict.glyph}
             </span>
             {/* I-589 A: how fast — the fastest gets the bolt */}
             {row.elapsedMs !== undefined && !standings ? (
@@ -322,7 +328,7 @@ export function RevealRows({
               </span>
             ) : null}
             <span className={`${styles.delta} ${deltaClass}`}>{deltaText(row.delta)}</span>
-            {wide ? <span className={styles.score}>{row.score}</span> : null}
+            {wide || standings ? <span className={styles.score}>{row.score}</span> : null}
           </li>
         );
       })}

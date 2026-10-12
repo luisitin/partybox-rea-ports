@@ -18,6 +18,8 @@ import button from '../../../packages/game-sdk/src/controller/PrimaryButton.modu
 import waiting from '../../../packages/game-sdk/src/controller/WaitingScreen.module.css';
 import avatar from '../../../packages/game-sdk/src/ui/Avatar.module.css';
 import lead from '../../../packages/game-sdk/src/ui/LeadMark.module.css';
+import chips from '../../../packages/game-sdk/src/tv/PlayerChips.module.css';
+import chip from '../../../packages/game-sdk/src/ui/PlayerChip.module.css';
 import type { State } from '../server/types';
 
 export type Surface = 'tv' | 'phone-tv' | 'phone-only' | 'remote' | 'spectator';
@@ -29,6 +31,7 @@ export interface UpgradeFrame {
   at: number;
   stateHash: string;
   html: string;
+  chrome?: string;
 }
 
 const ROOT = resolve(import.meta.dirname, '../../..');
@@ -50,6 +53,8 @@ const MODULES: [string, Record<string, string>][] = [
   ['packages/game-sdk/src/controller/WaitingScreen.module.css', waiting],
   ['packages/game-sdk/src/ui/Avatar.module.css', avatar],
   ['packages/game-sdk/src/ui/LeadMark.module.css', lead],
+  ['packages/game-sdk/src/tv/PlayerChips.module.css', chips],
+  ['packages/game-sdk/src/ui/PlayerChip.module.css', chip],
 ];
 
 export const digest = (data: string | Buffer): string =>
@@ -83,14 +88,24 @@ function scoped(path: string, mapping: Record<string, string>): string {
 }
 
 const SHELL = `
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}
+@font-face{font-family:'Nunito Variable';font-style:normal;font-weight:200 1000;font-display:swap;src:url('./nunito-latin-wght-normal.woff2') format('woff2')}
+*,*::before,*::after{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}
 body{background:var(--pb-bg);color:var(--pb-text);font-family:var(--pb-font-family);font-size:var(--pb-font-body);line-height:1.4}
-h1,h2,h3,p{margin:0}h2{font-size:var(--pb-font-h1);line-height:1.2;font-weight:900}button,input,select,textarea{font:inherit;color:inherit}
-.evidence-shell{display:grid;width:100%;height:100%;grid-template-rows:84px minmax(0,1fr) 48px}
-[data-surface=tv] .evidence-shell{grid-template-rows:100px minmax(0,1fr) 80px}
+h1,h2,h3,p{margin:0}h1{font-size:var(--pb-font-h1);line-height:1.15;font-weight:800}h2{font-size:var(--pb-font-h2);line-height:1.2;font-weight:700}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer;border:0;background:none;padding:0;touch-action:manipulation}
+.evidence-shell{display:grid;width:100%;height:100%;grid-template-rows:60px calc(var(--pb-font-caption) * 1.4 + var(--pb-space-2)) minmax(0,1fr)}
+[data-surface=tv] .evidence-shell{grid-template-rows:calc(var(--pb-overscan-y) + var(--pb-font-h2) * 1.4 + var(--pb-space-3)) calc(var(--pb-font-display) * 1.1 + var(--pb-space-3)) calc(6px + var(--pb-space-4)) minmax(0,1fr) calc(var(--pb-touch) + var(--pb-space-4) + var(--pb-space-2) + var(--pb-space-3))}
 .evidence-header,.evidence-footer{display:flex;align-items:center;justify-content:space-between;padding:var(--pb-space-4);background:var(--pb-surface);gap:var(--pb-space-3)}
+[data-surface=tv] .evidence-header{padding:var(--pb-overscan-y) var(--pb-overscan-x) var(--pb-space-3);font-size:var(--pb-font-h2)}
+.evidence-strip{display:flex;align-items:center;justify-content:space-between;gap:var(--pb-space-5);padding:0 var(--pb-overscan-x) var(--pb-space-3);min-height:0}
+.evidence-chips{flex:1;min-width:0}.evidence-timer{flex:0 0 auto;min-width:calc(var(--pb-font-display) * 2.2);display:flex;justify-content:flex-end}
+.evidence-chips-hidden{visibility:hidden}
+.evidence-bar{height:6px;margin:0 var(--pb-overscan-x) var(--pb-space-4);background:var(--pb-accent-2);border-radius:999px}
+[hidden]{display:none!important}
 .evidence-footer{font-size:var(--pb-font-caption);color:var(--pb-text-muted)}
-.evidence-main{display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden;--pb-stage-top:var(--pb-space-5)}
+[data-surface=phone] .evidence-footer{display:none}
+.evidence-phone-countdown{display:flex;align-items:center;gap:var(--pb-space-2);padding:var(--pb-space-1) var(--pb-space-4);font-size:var(--pb-font-caption);color:var(--pb-text-muted)}
+.evidence-phone-track{height:6px;flex:1;border-radius:999px;background:var(--pb-accent-2)}
+.evidence-main{display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden;--pb-stage-top:var(--pb-space-3)}
 .evidence-code{font-weight:900;color:var(--pb-accent-2)}
 .pb-visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 :root[data-motion=off] *,:root[data-motion=off] *::before,:root[data-motion=off] *::after{animation:none!important;transition:none!important}
@@ -99,7 +114,9 @@ h1,h2,h3,p{margin:0}h2{font-size:var(--pb-font-h1);line-height:1.2;font-weight:9
 export function standalone(frame: UpgradeFrame): string {
   // Only modules with used classes are embedded; no remote CSS/font requests are possible.
   const used = new Set(
-    [...frame.html.matchAll(/class="([^"]+)"/g)].flatMap((m) => m[1]!.split(/\s+/)),
+    [...`${frame.html}${frame.chrome ?? ''}`.matchAll(/class="([^"]+)"/g)].flatMap((m) =>
+      m[1]!.split(/\s+/),
+    ),
   );
   const css = MODULES.filter(([path, map]) =>
     [...readFileSync(resolve(ROOT, path), 'utf8').matchAll(/\.([a-zA-Z_][a-zA-Z0-9_-]*)/g)].some(
@@ -110,7 +127,11 @@ export function standalone(frame: UpgradeFrame): string {
     .join('\n');
   const tokens = readFileSync(resolve(ROOT, 'design/tokens.css'), 'utf8');
   const surface = frame.surface === 'tv' ? 'tv' : 'phone';
-  return `<!doctype html><html lang="en" data-surface="${surface}" data-motion="off"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kahoot! upgrade · ${frame.name}</title><style>${tokens}\n${css}\n${SHELL}</style></head><body><div class="evidence-shell"><header class="evidence-header"><b>PartyBox</b><span class="evidence-code">KAHOOT</span></header><main class="evidence-main" aria-label="Game stage">${frame.html}</main><footer class="evidence-footer"><span>Kahoot! · ${frame.surface}</span><span>${frame.width} × ${frame.height}</span></footer></div></body></html>`;
+  // Generated evidence needs the emitted rules, not repeated source comments/indentation.
+  const styles = `${tokens}\n${css}\n${SHELL}`
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/\s+/g, ' ');
+  return `<!doctype html><html lang="en" data-surface="${surface}" data-motion="off"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kahoot! upgrade · ${frame.name}</title><style>${styles}</style></head><body><div class="evidence-shell"><header class="evidence-header"><b>PartyBox</b><span class="evidence-code">KAHOOT</span></header>${frame.chrome ?? ''}<main class="evidence-main" aria-label="Game stage">${frame.html}</main><footer class="evidence-footer"><span>Kahoot! · ${frame.surface}</span><span>${frame.width} × ${frame.height}</span></footer></div></body></html>`;
 }
 
 function sourceFiles(dir: string): string[] {
@@ -143,7 +164,7 @@ export function writeUpgradeEvidence(
   writeFileSync(
     resolve(MEDIA, 'capture-manifest.json'),
     JSON.stringify(
-      frames.map(({ html: _html, ...frame }) => frame),
+      frames.map(({ html: _html, chrome: _chrome, ...frame }) => frame),
       null,
       2,
     ) + '\n',
@@ -165,6 +186,13 @@ export function writeUpgradeEvidence(
       {
         implementation: 'kahoot-lightning-round-upgrade',
         frames: frames.length,
+        host: {
+          coreCommit: '6ce46e613d3705624a56647592979613c4d6e468',
+          tvStageHeight: 692,
+          tvInnerHeight: 626,
+          font: 'Nunito Variable 5.3.0',
+          fontSha256: digest(readFileSync(resolve(MEDIA, 'nunito-latin-wght-normal.woff2'))),
+        },
         sources: Object.fromEntries(
           [...new Set(files)]
             .sort()

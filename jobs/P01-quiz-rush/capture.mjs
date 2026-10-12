@@ -26,6 +26,7 @@ const browserPath = [
 ].find(existsSync);
 if (!browserPath) throw new Error('Neither the standard Chrome nor Edge executable exists.');
 const cases = JSON.parse(readFileSync(resolve(media, 'capture-manifest.json'), 'utf8'));
+const fontBytes = readFileSync(resolve(media, 'nunito-latin-wght-normal.woff2'));
 mkdirSync(temp, { recursive: true });
 
 function pause(ms) {
@@ -203,6 +204,9 @@ function measure() {
       element: named(el),
       fontSize: parseFloat(getComputedStyle(el).fontSize),
     })),
+    nunitoLoaded: [...document.fonts].some(
+      (font) => font.family === 'Nunito Variable' && font.status === 'loaded',
+    ),
   };
 }
 
@@ -298,9 +302,17 @@ try {
       await pause(100);
     }
     if (!ready) throw new Error(`Page content not ready: ${frame.name}`);
+    // Page.setDocumentContent has no file base URL. Load the committed local font bytes directly;
+    // opening the standalone HTML from disk uses the same adjacent OFL font, without a network.
     await dev.call('Runtime.evaluate', {
-      expression: 'document.fonts.ready.then(()=>true)',
+      expression: `(()=>{const bytes=Uint8Array.from(atob('${fontBytes.toString('base64')}'),char=>char.charCodeAt(0));const face=new FontFace('Nunito Variable',bytes,{weight:'200 1000',style:'normal'});document.fonts.add(face);return face.load().then(()=>document.fonts.ready).then(()=>true)})()`,
       awaitPromise: true,
+    });
+    // The real host's layout effect auto-collapses the named strip past two rows before paint.
+    // Static SSR has no layout effects, so apply that same measured decision to its two renders.
+    await dev.call('Runtime.evaluate', {
+      expression: `(()=>{const named=document.querySelector('[data-chips-named]');const faces=document.querySelector('[data-chips-faces]');const list=named?.querySelector('ul');if(list&&new Set([...list.children].map(el=>el.offsetTop)).size>2){named.hidden=true;faces.hidden=false;}return true})()`,
+      returnByValue: true,
     });
     const result = await dev.call('Runtime.evaluate', {
       expression: `(${measure.toString()})()`,
@@ -428,6 +440,7 @@ const failed = metrics.filter(
     m.verticalOverflow > 1 ||
     m.clipped.length ||
     m.unstyled.length ||
+    !m.nunitoLoaded ||
     m.scrollers.some((s) => s.overflow > 1),
 );
 console.log(

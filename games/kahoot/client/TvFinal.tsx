@@ -144,7 +144,9 @@ export function FinalReveal({
             >
               <Avatar avatarId={row.avatarId} size={48} dim={!row.connected} />
               <span className={styles.stack}>
-                <span className={styles.name}>{row.name}</span>
+                <span className={styles.name} title={row.name}>
+                  {row.name}
+                </span>
                 <span className={styles.bet}>
                   {judged ? (
                     <span className={`${styles.pop} ${verdictClass}`} aria-label={verdict.label}>
