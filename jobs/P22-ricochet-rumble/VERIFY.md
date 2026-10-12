@@ -188,3 +188,21 @@ Post-R13 `pnpm.cmd format` and `git diff --check` passed before push b6d1b99. A 
 Tests were added before source: `pnpm.cmd vitest run games/tank-trouble/__tests__/bot-pulse.test.ts --maxWorkers=1 --pool=threads --reporter=verbose` intentionally failed 15 expectations (693 ms). The legacy 1120 ms owner death and the held-command 1980 ms death assertions passed before the new bot-command expectations failed; the output showed the original turn=-1/fire=true mismatch. Some failures reflect the newly introduced pulse shape, not additional gameplay defects.
 After source: `pnpm.cmd vitest run games/tank-trouble/__tests__/bot-pulse.test.ts games/tank-trouble/__tests__/bot-shot.test.ts games/tank-trouble/__tests__/physics.test.ts games/tank-trouble/__tests__/game.test.ts games/tank-trouble/__tests__/lifecycle-order.test.ts games/tank-trouble/__tests__/sdk.test.ts --maxWorkers=1 --pool=threads --reporter=dot` passed 105 tests, exit 0, 9.10 s. `pnpm.cmd typecheck` and `node jobs/P22-ricochet-rumble/mutate.mjs --check` passed (20 unique sites, no bugs planted).
 Cases preserve useful Shell/Burst/Beam/Seeker volleys, cover six readiness deferrals and exact-next-sample eligibility, retain human reload queueing, and judge both self-hit failures plus an actual successful dodge. The input pulse has no privilege or new dependency. Pause/drop/death neutralize its latch. Post-R13 head b6d1b99 passed CI 38207456916 (3m53s job). Full simulation/property/mutation/render evidence follows on the new source.
+
+## Final source verification
+
+On R14 source 2a31ade, `$env:PB_WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/tank-trouble --maxWorkers=1 --pool=threads --reporter=dot` passed all 164 tests in 12 files, exit 0, 521.44 s. This includes 1003 property seeds, generated phase fixtures and 7000 terminating matches: 1000 at each supported count 2..8, cycling all three bot strengths. Every match is below the 720000 ms budget. These measurements supersede the initial table for the finished source:
+
+| Seats | Median round (ms) | Median match (ms) | Longest match (ms) |
+| ----- | ----------------- | ----------------- | ------------------ |
+| 2     | 19646             | 149694            | 201693             |
+| 3     | 19879             | 149193            | 196159             |
+| 4     | 20312             | 151940            | 193357             |
+| 5     | 20400             | 152071.5          | 201455             |
+| 6     | 20578             | 153403            | 199989             |
+| 7     | 20811             | 153954            | 191721             |
+| 8     | 20844             | 155268            | 202453             |
+
+`node jobs/P22-ricochet-rumble/mutate.mjs` passed its 54-test baseline and killed 19 of 20 planted bugs with assertion failures, with zero invalid mutations. M19 survives because an inner stale-event guard makes that outer guard redundant. An independent PowerShell Get-FileHash comparison against media/mutation-results.json found zero mismatches across all six restored source files; `git diff --exit-code -- games/tank-trouble/server` passed. After reloading the fresh generated fixtures, `PB_WRITE_EVIDENCE=1 pnpm.cmd vitest run games/tank-trouble/__tests__/screens.test.tsx --maxWorkers=1 --pool=threads --reporter=dot` passed all 42 SSR checks, exit 0, 2.05 s.
+
+The rebuilt offline Controller harness is 398968 bytes, SHA256 prefix 32bc2529336a. First final capture: 64 fits, eight feedback cases and motion passed, but mouse drag/release failed (28/30 input cases). That report and exact harness are preserved as media/input-results-final-first-attempt.json and media/input-harness-32bc2529336a.html. Browser PID8360 closed in finally. A diagnostic rerun with `PB_INPUT_POINTER_AUDIT=1 PB_MEASURE_MOTION=1 PB_MOTION_LABEL=final-pointer-audit PB_FEEDBACK_CHECKS=fixed PB_INPUT_CHECKS=1 PB_INPUT_SCREENSHOT=1 node jobs/P22-ricochet-rumble/capture.mjs` passed 30/30 cases, but reported no native mouse capture under touchscreen emulation. PID61656 closed in finally. This quick rerun alone does not resolve the earlier failure; device-mode separation and a held/outside-pad capture check remain pending.

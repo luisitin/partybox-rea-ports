@@ -9,6 +9,7 @@ export async function runInputChecks(dev, frameId, mediaDir) {
   const cases = [];
   const neutral = { type: 'control', drive: 0, turn: 0, fire: false };
   let geometry;
+  let pointerAudit;
   const evaluate = async (expression) => {
     const result = await dev.call(
       'Runtime.evaluate',
@@ -25,7 +26,9 @@ export async function runInputChecks(dev, frameId, mediaDir) {
   const same = (a, b) =>
     !!a && a.type === b.type && a.drive === b.drive && a.turn === b.turn && a.fire === b.fire;
   const read = () =>
-    evaluate('({commands: window.__sentControls.slice(), observed: window.__lastControl})');
+    evaluate(
+      '({commands: window.__sentControls.slice(), observed: window.__lastControl, pointerAudit: window.__pointerAudit?.snapshot()})',
+    );
   const clear = () => evaluate('window.__clearSentControls(); true');
   const check = async (name, expected, method) => {
     const state = await read();
@@ -186,6 +189,66 @@ export async function runInputChecks(dev, frameId, mediaDir) {
     }
 
     await reset();
+    if (process.env.PB_INPUT_POINTER_AUDIT === '1') {
+      await evaluate(`(() => {
+        const events = [];
+        const started = performance.now();
+        const original = Object.getOwnPropertyDescriptor(window, '__lastControl');
+        let last = window.__lastControl;
+        const describe = target => target === window ? 'window' : target === document ? 'document' :
+          target instanceof Element ? target.tagName + (target.getAttribute('aria-label') ? ':' + target.getAttribute('aria-label') : '') +
+            (target.hasAttribute('data-steering-pad') ? ':steering-pad' : '') : String(target);
+        const snapshot = () => ({
+          focused: document.hasFocus(), visibility: document.visibilityState,
+          heading: document.querySelector('h2')?.textContent,
+          enabledButtons: document.querySelectorAll('[data-steering-pad] button:not(:disabled)').length,
+          heldButtons: [...document.querySelectorAll('[data-steering-pad] [data-held="true"]')].map(describe),
+        });
+        const record = item => {
+          events.push({atMs: performance.now() - started, ...snapshot(), ...item});
+          if (events.length > 500) events.shift();
+        };
+        const types = ['pointerdown', 'pointermove', 'pointerup', 'pointercancel',
+          'gotpointercapture', 'lostpointercapture', 'mousedown', 'mousemove', 'mouseup',
+          'touchstart', 'touchmove', 'touchend', 'touchcancel', 'blur', 'focus', 'pagehide', 'visibilitychange'];
+        const native = event => {
+          const pad = document.querySelector('[data-steering-pad]');
+          let captured = false;
+          if (typeof event.pointerId === 'number' && pad) {
+            try { captured = pad.hasPointerCapture(event.pointerId); } catch {}
+          }
+          record({kind: 'native', type: event.type, trusted: event.isTrusted,
+            target: describe(event.target), pointerId: event.pointerId, pointerType: event.pointerType,
+            button: event.button, buttons: event.buttons, x: event.clientX, y: event.clientY,
+            capturesPointer: captured, touches: event.touches?.length,
+            firesTouchEvents: event.sourceCapabilities?.firesTouchEvents});
+        };
+        for (const type of types) window.addEventListener(type, native, true);
+        Object.defineProperty(window, '__lastControl', {
+          configurable: true, enumerable: original?.enumerable ?? true,
+          get: () => last,
+          set: value => {
+            last = value;
+            const neutral = value && value.drive === 0 && value.turn === 0 && !value.fire;
+            record({kind: value ? 'command' : 'observation-clear', command: value,
+              ...(neutral ? {stack: new Error('Neutral command provenance').stack.split(String.fromCharCode(10)).slice(0, 8)} : {})});
+          },
+        });
+        window.__pointerAudit = {
+          snapshot: () => ({state: snapshot(), events: events.slice()}),
+          stop: () => {
+            for (const type of types) window.removeEventListener(type, native, true);
+            if (original) Object.defineProperty(window, '__lastControl', {...original, value: last});
+            else Object.defineProperty(window, '__lastControl', {configurable: true, writable: true, value: last});
+            const result = {state: snapshot(), events: events.slice()};
+            delete window.__pointerAudit;
+            return result;
+          },
+        };
+        record({kind: 'audit-start', touchEmulationUnchanged: true});
+        return true;
+      })()`);
+    }
     const mouse = (type, location, button, buttons) =>
       dev.call(
         'Input.dispatchMouseEvent',
@@ -226,6 +289,8 @@ export async function runInputChecks(dev, frameId, mediaDir) {
       'Mouse hover cannot restart released steering',
       'CDP mouseMoved without mousePressed',
     );
+    if (process.env.PB_INPUT_POINTER_AUDIT === '1')
+      pointerAudit = await evaluate('window.__pointerAudit?.stop()');
 
     for (const [label, expected] of [
       ['Drive forward', { ...neutral, drive: 1 }],
@@ -278,6 +343,8 @@ export async function runInputChecks(dev, frameId, mediaDir) {
       error: error.message,
     });
   } finally {
+    if (process.env.PB_INPUT_POINTER_AUDIT === '1' && !pointerAudit)
+      pointerAudit = await evaluate('window.__pointerAudit?.stop()').catch(() => undefined);
     await touch('touchCancel').catch(() => undefined);
     await evaluate('window.__setActive?.(false); true').catch(() => undefined);
     await dev
@@ -289,6 +356,7 @@ export async function runInputChecks(dev, frameId, mediaDir) {
     harnessSha256: createHash('sha256').update(html).digest('hex'),
     viewport: { width: 390, height: 844 },
     geometry,
+    ...(pointerAudit ? { pointerAudit } : {}),
     pass: cases.length > 0 && cases.every((test) => test.pass),
     cases,
   };

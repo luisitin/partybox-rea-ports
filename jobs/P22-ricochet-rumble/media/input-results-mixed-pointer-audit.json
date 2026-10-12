@@ -1,0 +1,1700 @@
+{
+  "artifact": "input-harness.html",
+  "harnessSha256": "32bc2529336aea7e2ab4f3550b826f970aed4b127bfd4375c54962178a3b15fa",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "geometry": {
+    "topRight": {
+      "x": 213.859375,
+      "y": 528.8203125,
+      "width": 74.34375,
+      "height": 104.671875
+    },
+    "bottomLeft": {
+      "x": 49.171875,
+      "y": 754.1640625,
+      "width": 74.34375,
+      "height": 104.671875
+    },
+    "fire": {
+      "x": 318.5078125,
+      "y": 641.4921875,
+      "width": 118.953125,
+      "height": 330.015625
+    },
+    "center": {
+      "x": 133.515625,
+      "y": 641.4921875
+    },
+    "buttons": [
+      {
+        "label": "Drive forward",
+        "disabled": false
+      },
+      {
+        "label": "Turn left",
+        "disabled": false
+      },
+      {
+        "label": "Turn right",
+        "disabled": false
+      },
+      {
+        "label": "Drive backward",
+        "disabled": false
+      },
+      {
+        "label": "Hold to fire",
+        "disabled": false
+      }
+    ]
+  },
+  "pointerAudit": {
+    "state": {
+      "focused": true,
+      "visibility": "visible",
+      "heading": "You are tank 1",
+      "enabledButtons": 5,
+      "heldButtons": []
+    },
+    "events": [
+      {
+        "atMs": 0.20000001788139343,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": [],
+        "kind": "audit-start",
+        "touchEmulationUnchanged": true
+      },
+      {
+        "atMs": 4.800000011920929,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": [],
+        "kind": "native",
+        "type": "pointermove",
+        "trusted": true,
+        "target": "DIV:Tank controls:steering-pad",
+        "pointerId": 1,
+        "pointerType": "mouse",
+        "button": -1,
+        "buttons": 0,
+        "x": 213.859375,
+        "y": 528.8203125,
+        "capturesPointer": false
+      },
+      {
+        "atMs": 5.0999999940395355,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": [],
+        "kind": "native",
+        "type": "mousemove",
+        "trusted": true,
+        "target": "DIV:Tank controls:steering-pad",
+        "button": 0,
+        "buttons": 0,
+        "x": 213,
+        "y": 528,
+        "capturesPointer": false,
+        "firesTouchEvents": false
+      },
+      {
+        "atMs": 13.300000011920929,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": [],
+        "kind": "native",
+        "type": "pointerdown",
+        "trusted": true,
+        "target": "DIV:Tank controls:steering-pad",
+        "pointerId": 1,
+        "pointerType": "mouse",
+        "button": 0,
+        "buttons": 1,
+        "x": 213.859375,
+        "y": 528.8203125,
+        "capturesPointer": false
+      },
+      {
+        "atMs": 13.900000005960464,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": [],
+        "kind": "command",
+        "command": {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": false
+        }
+      },
+      {
+        "atMs": 45.20000001788139,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"],
+        "kind": "observation-clear",
+        "command": null
+      },
+      {
+        "atMs": 55.900000005960464,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"],
+        "kind": "native",
+        "type": "pointermove",
+        "trusted": true,
+        "target": "DIV:Tank controls:steering-pad",
+        "pointerId": 1,
+        "pointerType": "mouse",
+        "button": -1,
+        "buttons": 1,
+        "x": 49.171875,
+        "y": 754.1640625,
+        "capturesPointer": false
+      },
+      {
+        "atMs": 56.099999994039536,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"],
+        "kind": "command",
+        "command": {
+          "type": "control",
+          "drive": -1,
+          "turn": -1,
+          "fire": false
+        }
+      },
+      {
+        "atMs": 97.2000000178814,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"],
+        "kind": "command",
+        "command": {
+          "type": "control",
+          "drive": -1,
+          "turn": -1,
+          "fire": false
+        }
+      },
+      {
+        "atMs": 99.40000000596046,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"],
+        "kind": "observation-clear",
+        "command": null
+      },
+      {
+        "atMs": 102.40000000596046,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"],
+        "kind": "native",
+        "type": "pointerup",
+        "trusted": true,
+        "target": "DIV:Tank controls:steering-pad",
+        "pointerId": 1,
+        "pointerType": "mouse",
+        "button": 0,
+        "buttons": 0,
+        "x": 49.171875,
+        "y": 754.1640625,
+        "capturesPointer": false
+      },
+      {
+        "atMs": 102.7000000178814,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"],
+        "kind": "command",
+        "command": {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        },
+        "stack": [
+          "Error: Neutral command provenance",
+          "    at set (<anonymous>:42:37)",
+          "    at Object.cf [as send] (about:blank:80:87413)",
+          "    at about:blank:80:52280",
+          "    at about:blank:80:52642",
+          "    at onPointerUp (about:blank:80:56462)",
+          "    at Vf (about:blank:25:138822)",
+          "    at about:blank:25:143553"
+        ]
+      },
+      {
+        "atMs": 142.30000001192093,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": [],
+        "kind": "observation-clear",
+        "command": null
+      },
+      {
+        "atMs": 148.30000001192093,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": [],
+        "kind": "native",
+        "type": "pointermove",
+        "trusted": true,
+        "target": "DIV:Tank controls:steering-pad",
+        "pointerId": 1,
+        "pointerType": "mouse",
+        "button": -1,
+        "buttons": 0,
+        "x": 213.859375,
+        "y": 528.8203125,
+        "capturesPointer": false
+      },
+      {
+        "atMs": 148.59999999403954,
+        "focused": true,
+        "visibility": "visible",
+        "heading": "You are tank 1",
+        "enabledButtons": 5,
+        "heldButtons": [],
+        "kind": "native",
+        "type": "mousemove",
+        "trusted": true,
+        "target": "DIV:Tank controls:steering-pad",
+        "button": 0,
+        "buttons": 0,
+        "x": 213,
+        "y": 528,
+        "capturesPointer": false,
+        "firesTouchEvents": false
+      }
+    ]
+  },
+  "pass": true,
+  "cases": [
+    {
+      "name": "Five enabled keyboard buttons retained",
+      "method": "Rendered production Controller DOM",
+      "expected": ["Drive forward", "Drive backward", "Turn left", "Turn right", "Hold to fire"],
+      "observed": [
+        {
+          "label": "Drive forward",
+          "disabled": false
+        },
+        {
+          "label": "Turn left",
+          "disabled": false
+        },
+        {
+          "label": "Turn right",
+          "disabled": false
+        },
+        {
+          "label": "Drive backward",
+          "disabled": false
+        },
+        {
+          "label": "Hold to fire",
+          "disabled": false
+        }
+      ],
+      "commands": [],
+      "pass": true
+    },
+    {
+      "name": "Two touches: forward-right plus Fire",
+      "method": "CDP touchStart, two contacts",
+      "expected": {
+        "type": "control",
+        "drive": 1,
+        "turn": 1,
+        "fire": true
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": false
+        },
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": true
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 1,
+        "turn": 1,
+        "fire": true
+      },
+      "pass": true
+    },
+    {
+      "name": "Center steering goes neutral while Fire stays held",
+      "method": "CDP touchMove into steering dead zone",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": true
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": true
+      },
+      "pass": true
+    },
+    {
+      "name": "Drag steering to reverse-left while Fire stays held",
+      "method": "CDP touchMove, same two contact ids",
+      "expected": {
+        "type": "control",
+        "drive": -1,
+        "turn": -1,
+        "fire": true
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": -1,
+          "turn": -1,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": -1,
+          "turn": -1,
+          "fire": true
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": -1,
+        "turn": -1,
+        "fire": true
+      },
+      "pass": true
+    },
+    {
+      "name": "Touch release returns neutral",
+      "method": "CDP touchEnd",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": -1,
+          "turn": -1,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Touch cancellation returns neutral",
+      "method": "CDP touchCancel",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Window blur clears both held contacts",
+      "method": "Controller cleanup after browser/API event",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Window blur: stale contacts cannot restart controls",
+      "method": "CDP touchMove without a new touchStart",
+      "expected": "No command may restart drive, turn or fire.",
+      "commands": [],
+      "observed": null,
+      "pass": true
+    },
+    {
+      "name": "Pagehide clears both held contacts",
+      "method": "Controller cleanup after browser/API event",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Pagehide: stale contacts cannot restart controls",
+      "method": "CDP touchMove without a new touchStart",
+      "expected": "No command may restart drive, turn or fire.",
+      "commands": [],
+      "observed": null,
+      "pass": true
+    },
+    {
+      "name": "Phase change clears both held contacts",
+      "method": "Controller cleanup after browser/API event",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Phase change: stale contacts cannot restart controls",
+      "method": "CDP touchMove without a new touchStart",
+      "expected": "No command may restart drive, turn or fire.",
+      "commands": [],
+      "observed": null,
+      "pass": true
+    },
+    {
+      "name": "Inactive hand clears both held contacts",
+      "method": "Controller cleanup after browser/API event",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Inactive hand: stale contacts cannot restart controls",
+      "method": "CDP touchMove without a new touchStart",
+      "expected": "No command may restart drive, turn or fire.",
+      "commands": [],
+      "observed": null,
+      "pass": true
+    },
+    {
+      "name": "Disconnected hand clears both held contacts",
+      "method": "Controller cleanup after browser/API event",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Disconnected hand: stale contacts cannot restart controls",
+      "method": "CDP touchMove without a new touchStart",
+      "expected": "No command may restart drive, turn or fire.",
+      "commands": [],
+      "observed": null,
+      "pass": true
+    },
+    {
+      "name": "Mouse press steers forward-right",
+      "method": "CDP mousePressed",
+      "expected": {
+        "type": "control",
+        "drive": 1,
+        "turn": 1,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 1,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 1,
+        "turn": 1,
+        "fire": false
+      },
+      "pointerAudit": {
+        "state": {
+          "focused": true,
+          "visibility": "visible",
+          "heading": "You are tank 1",
+          "enabledButtons": 5,
+          "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"]
+        },
+        "events": [
+          {
+            "atMs": 0.20000001788139343,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "audit-start",
+            "touchEmulationUnchanged": true
+          },
+          {
+            "atMs": 4.800000011920929,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "pointermove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": -1,
+            "buttons": 0,
+            "x": 213.859375,
+            "y": 528.8203125,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 5.0999999940395355,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "mousemove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "button": 0,
+            "buttons": 0,
+            "x": 213,
+            "y": 528,
+            "capturesPointer": false,
+            "firesTouchEvents": false
+          },
+          {
+            "atMs": 13.300000011920929,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "pointerdown",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": 0,
+            "buttons": 1,
+            "x": 213.859375,
+            "y": 528.8203125,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 13.900000005960464,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "command",
+            "command": {
+              "type": "control",
+              "drive": 1,
+              "turn": 1,
+              "fire": false
+            }
+          }
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "Captured mouse drag steers reverse-left",
+      "method": "CDP mouseMoved, left button held",
+      "expected": {
+        "type": "control",
+        "drive": -1,
+        "turn": -1,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": -1,
+          "turn": -1,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": -1,
+        "turn": -1,
+        "fire": false
+      },
+      "pointerAudit": {
+        "state": {
+          "focused": true,
+          "visibility": "visible",
+          "heading": "You are tank 1",
+          "enabledButtons": 5,
+          "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"]
+        },
+        "events": [
+          {
+            "atMs": 0.20000001788139343,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "audit-start",
+            "touchEmulationUnchanged": true
+          },
+          {
+            "atMs": 4.800000011920929,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "pointermove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": -1,
+            "buttons": 0,
+            "x": 213.859375,
+            "y": 528.8203125,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 5.0999999940395355,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "mousemove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "button": 0,
+            "buttons": 0,
+            "x": 213,
+            "y": 528,
+            "capturesPointer": false,
+            "firesTouchEvents": false
+          },
+          {
+            "atMs": 13.300000011920929,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "pointerdown",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": 0,
+            "buttons": 1,
+            "x": 213.859375,
+            "y": 528.8203125,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 13.900000005960464,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "command",
+            "command": {
+              "type": "control",
+              "drive": 1,
+              "turn": 1,
+              "fire": false
+            }
+          },
+          {
+            "atMs": 45.20000001788139,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"],
+            "kind": "observation-clear",
+            "command": null
+          },
+          {
+            "atMs": 55.900000005960464,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"],
+            "kind": "native",
+            "type": "pointermove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": -1,
+            "buttons": 1,
+            "x": 49.171875,
+            "y": 754.1640625,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 56.099999994039536,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"],
+            "kind": "command",
+            "command": {
+              "type": "control",
+              "drive": -1,
+              "turn": -1,
+              "fire": false
+            }
+          }
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "Mouse release returns neutral",
+      "method": "CDP mouseReleased",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pointerAudit": {
+        "state": {
+          "focused": true,
+          "visibility": "visible",
+          "heading": "You are tank 1",
+          "enabledButtons": 5,
+          "heldButtons": []
+        },
+        "events": [
+          {
+            "atMs": 0.20000001788139343,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "audit-start",
+            "touchEmulationUnchanged": true
+          },
+          {
+            "atMs": 4.800000011920929,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "pointermove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": -1,
+            "buttons": 0,
+            "x": 213.859375,
+            "y": 528.8203125,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 5.0999999940395355,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "mousemove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "button": 0,
+            "buttons": 0,
+            "x": 213,
+            "y": 528,
+            "capturesPointer": false,
+            "firesTouchEvents": false
+          },
+          {
+            "atMs": 13.300000011920929,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "pointerdown",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": 0,
+            "buttons": 1,
+            "x": 213.859375,
+            "y": 528.8203125,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 13.900000005960464,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "command",
+            "command": {
+              "type": "control",
+              "drive": 1,
+              "turn": 1,
+              "fire": false
+            }
+          },
+          {
+            "atMs": 45.20000001788139,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"],
+            "kind": "observation-clear",
+            "command": null
+          },
+          {
+            "atMs": 55.900000005960464,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"],
+            "kind": "native",
+            "type": "pointermove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": -1,
+            "buttons": 1,
+            "x": 49.171875,
+            "y": 754.1640625,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 56.099999994039536,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"],
+            "kind": "command",
+            "command": {
+              "type": "control",
+              "drive": -1,
+              "turn": -1,
+              "fire": false
+            }
+          },
+          {
+            "atMs": 97.2000000178814,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"],
+            "kind": "command",
+            "command": {
+              "type": "control",
+              "drive": -1,
+              "turn": -1,
+              "fire": false
+            }
+          },
+          {
+            "atMs": 99.40000000596046,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"],
+            "kind": "observation-clear",
+            "command": null
+          },
+          {
+            "atMs": 102.40000000596046,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"],
+            "kind": "native",
+            "type": "pointerup",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": 0,
+            "buttons": 0,
+            "x": 49.171875,
+            "y": 754.1640625,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 102.7000000178814,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"],
+            "kind": "command",
+            "command": {
+              "type": "control",
+              "drive": 0,
+              "turn": 0,
+              "fire": false
+            },
+            "stack": [
+              "Error: Neutral command provenance",
+              "    at set (<anonymous>:42:37)",
+              "    at Object.cf [as send] (about:blank:80:87413)",
+              "    at about:blank:80:52280",
+              "    at about:blank:80:52642",
+              "    at onPointerUp (about:blank:80:56462)",
+              "    at Vf (about:blank:25:138822)",
+              "    at about:blank:25:143553"
+            ]
+          }
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "Mouse hover cannot restart released steering",
+      "method": "CDP mouseMoved without mousePressed",
+      "expected": "No command may restart drive, turn or fire.",
+      "commands": [],
+      "observed": null,
+      "pointerAudit": {
+        "state": {
+          "focused": true,
+          "visibility": "visible",
+          "heading": "You are tank 1",
+          "enabledButtons": 5,
+          "heldButtons": []
+        },
+        "events": [
+          {
+            "atMs": 0.20000001788139343,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "audit-start",
+            "touchEmulationUnchanged": true
+          },
+          {
+            "atMs": 4.800000011920929,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "pointermove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": -1,
+            "buttons": 0,
+            "x": 213.859375,
+            "y": 528.8203125,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 5.0999999940395355,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "mousemove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "button": 0,
+            "buttons": 0,
+            "x": 213,
+            "y": 528,
+            "capturesPointer": false,
+            "firesTouchEvents": false
+          },
+          {
+            "atMs": 13.300000011920929,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "pointerdown",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": 0,
+            "buttons": 1,
+            "x": 213.859375,
+            "y": 528.8203125,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 13.900000005960464,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "command",
+            "command": {
+              "type": "control",
+              "drive": 1,
+              "turn": 1,
+              "fire": false
+            }
+          },
+          {
+            "atMs": 45.20000001788139,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"],
+            "kind": "observation-clear",
+            "command": null
+          },
+          {
+            "atMs": 55.900000005960464,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"],
+            "kind": "native",
+            "type": "pointermove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": -1,
+            "buttons": 1,
+            "x": 49.171875,
+            "y": 754.1640625,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 56.099999994039536,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Drive forward", "BUTTON:Turn right"],
+            "kind": "command",
+            "command": {
+              "type": "control",
+              "drive": -1,
+              "turn": -1,
+              "fire": false
+            }
+          },
+          {
+            "atMs": 97.2000000178814,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"],
+            "kind": "command",
+            "command": {
+              "type": "control",
+              "drive": -1,
+              "turn": -1,
+              "fire": false
+            }
+          },
+          {
+            "atMs": 99.40000000596046,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"],
+            "kind": "observation-clear",
+            "command": null
+          },
+          {
+            "atMs": 102.40000000596046,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"],
+            "kind": "native",
+            "type": "pointerup",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": 0,
+            "buttons": 0,
+            "x": 49.171875,
+            "y": 754.1640625,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 102.7000000178814,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": ["BUTTON:Turn left", "BUTTON:Drive backward"],
+            "kind": "command",
+            "command": {
+              "type": "control",
+              "drive": 0,
+              "turn": 0,
+              "fire": false
+            },
+            "stack": [
+              "Error: Neutral command provenance",
+              "    at set (<anonymous>:42:37)",
+              "    at Object.cf [as send] (about:blank:80:87413)",
+              "    at about:blank:80:52280",
+              "    at about:blank:80:52642",
+              "    at onPointerUp (about:blank:80:56462)",
+              "    at Vf (about:blank:25:138822)",
+              "    at about:blank:25:143553"
+            ]
+          },
+          {
+            "atMs": 142.30000001192093,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "observation-clear",
+            "command": null
+          },
+          {
+            "atMs": 148.30000001192093,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "pointermove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "button": -1,
+            "buttons": 0,
+            "x": 213.859375,
+            "y": 528.8203125,
+            "capturesPointer": false
+          },
+          {
+            "atMs": 148.59999999403954,
+            "focused": true,
+            "visibility": "visible",
+            "heading": "You are tank 1",
+            "enabledButtons": 5,
+            "heldButtons": [],
+            "kind": "native",
+            "type": "mousemove",
+            "trusted": true,
+            "target": "DIV:Tank controls:steering-pad",
+            "button": 0,
+            "buttons": 0,
+            "x": 213,
+            "y": 528,
+            "capturesPointer": false,
+            "firesTouchEvents": false
+          }
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button: Drive forward",
+      "method": "CDP Enter keyDown on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 1,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 0,
+          "fire": false
+        },
+        {
+          "type": "control",
+          "drive": 1,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 1,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button releases: Drive forward",
+      "method": "CDP Enter keyUp on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button: Drive backward",
+      "method": "CDP Enter keyDown on focused button",
+      "expected": {
+        "type": "control",
+        "drive": -1,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": -1,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": -1,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button releases: Drive backward",
+      "method": "CDP Enter keyUp on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button: Turn left",
+      "method": "CDP Enter keyDown on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": -1,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": -1,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": -1,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button releases: Turn left",
+      "method": "CDP Enter keyUp on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button: Turn right",
+      "method": "CDP Enter keyDown on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 1,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 1,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 1,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button releases: Turn right",
+      "method": "CDP Enter keyUp on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button: Hold to fire",
+      "method": "CDP Enter keyDown on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": true
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        },
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": true
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": true
+      },
+      "pass": true
+    },
+    {
+      "name": "Keyboard button releases: Hold to fire",
+      "method": "CDP Enter keyUp on focused button",
+      "expected": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "commands": [
+        {
+          "type": "control",
+          "drive": 0,
+          "turn": 0,
+          "fire": false
+        }
+      ],
+      "observed": {
+        "type": "control",
+        "drive": 0,
+        "turn": 0,
+        "fire": false
+      },
+      "pass": true
+    }
+  ]
+}
