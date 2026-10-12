@@ -56,7 +56,7 @@
 :global([data-surface='tv']) [data-phase='intro'] .roster {
   grid-template-columns: minmax(0, 1fr);
 }
-:global([data-surface='tv']) [data-phase='intro'] .members {
+:global([data-surface='tv']) [data-phase='intro'] .roster .members {
   grid-template-columns: minmax(0, 1fr);
   column-gap: var(--pb-space-3);
 }
@@ -65,7 +65,7 @@
 }
 .questionStage {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-rows: auto minmax(min-content, 1fr) auto auto;
   gap: var(--pb-space-2);
   flex: 1;
   min-height: 0;
@@ -75,7 +75,7 @@
   min-width: 0;
   overflow-wrap: anywhere;
   text-align: center;
-  font-size: var(--pb-font-h2);
+  font-size: var(--pb-font-body);
   line-height: 1.15;
   text-wrap: balance;
 }
@@ -102,8 +102,8 @@
 .countdownCircle {
   display: grid;
   place-items: center;
-  width: calc(var(--pb-font-display) * 1.25);
-  height: calc(var(--pb-font-display) * 1.25);
+  width: var(--pb-font-display);
+  height: var(--pb-font-display);
   border-radius: 50%;
   background: var(--pb-accent-2-fill);
   color: var(--pb-on-accent-2-fill);
@@ -111,6 +111,10 @@
   font-weight: 1000;
   line-height: 1;
   font-variant-numeric: tabular-nums;
+}
+.countdownCircle[data-long] {
+  width: calc(var(--pb-font-display) * 1.5);
+  height: calc(var(--pb-font-display) * 1.5);
 }
 .countdownCircle[data-paused] {
   background: var(--pb-surface-2);
@@ -130,10 +134,12 @@
 }
 .questionAnswers li {
   min-height: calc(var(--pb-space-8) * 1.5);
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-1);
 }
 .questionAnswers svg {
-  width: var(--pb-font-h2);
-  height: var(--pb-font-h2);
+  width: var(--pb-font-body);
+  height: var(--pb-font-body);
 }
 .questionFooter {
   display: flex;

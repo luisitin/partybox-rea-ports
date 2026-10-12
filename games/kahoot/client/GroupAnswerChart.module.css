@@ -1,7 +1,9 @@
 /* The native graph is centered; the full-width answer alternatives remain the reading anchor. */
 .chart {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-rows:
+    auto minmax(calc(var(--pb-font-body) * 1.2 + var(--pb-space-2) * 2), 1fr)
+    auto auto;
   gap: var(--pb-space-3);
   flex: 1;
   min-height: 0;
@@ -12,7 +14,7 @@
   justify-self: center;
   max-width: 100%;
   margin: 0;
-  padding: var(--pb-space-2) var(--pb-space-4);
+  padding: var(--pb-space-1) var(--pb-space-4);
   border-radius: calc(var(--pb-radius) / 2);
   background: var(--pb-surface);
   color: var(--pb-text);
@@ -93,6 +95,8 @@
 }
 .choices li {
   min-height: 0;
+  padding: var(--pb-space-2);
+  gap: var(--pb-space-2);
 }
 .choices li[data-correct='false'] {
   background: var(--pb-surface-2);
@@ -119,6 +123,7 @@
 /* Phones retain the shared shapes and the original four alternatives on the SDK type scale. */
 :global([data-surface='phone']) .chart {
   gap: var(--pb-space-2);
+  grid-template-rows: auto minmax(calc(var(--pb-font-body) + var(--pb-space-1) * 2), 1fr) auto auto;
 }
 :global([data-surface='phone']) .prompt {
   padding: var(--pb-space-1) var(--pb-space-2);

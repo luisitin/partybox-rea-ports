@@ -176,11 +176,23 @@ function paint(
                   className={`evidence-chips ${tvModule.stripHidden?.includes(publicView.phaseId) ? 'evidence-chips-hidden' : ''}`}
                 >
                   {!tvModule.stripHidden?.includes(publicView.phaseId) ? (
-                    <PlayerChips
-                      players={publicView.players}
-                      showScores={source.phase.id === 'done'}
-                      size="sm"
-                    />
+                    <>
+                      <div data-chips-named="true">
+                        <PlayerChips
+                          players={publicView.players}
+                          showScores={source.phase.id === 'done'}
+                          size="sm"
+                        />
+                      </div>
+                      <div data-chips-faces="true" hidden>
+                        <PlayerChips
+                          players={publicView.players}
+                          showScores={source.phase.id === 'done'}
+                          size="sm"
+                          facesOnly
+                        />
+                      </div>
+                    </>
                   ) : null}
                 </div>
                 <div className="evidence-timer">

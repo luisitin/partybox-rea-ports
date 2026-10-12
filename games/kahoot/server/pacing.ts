@@ -74,9 +74,6 @@ export function groupTalkMs(state: State): number {
       questionWords(state) +
       4 +
       1 +
-      (vote
-        ? ui('Room talk', 'Conversación de la sala')
-        : ui('Team talk', 'Conversación de equipo')) +
       (vote ? ui('0 of 8 votes', '0 de 8 votos') : ui('0 of 8 answers', '0 de 8 respuestas')) +
       (vote
         ? ui(

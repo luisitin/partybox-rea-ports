@@ -14,6 +14,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { resolve } from 'node:path';
+import { format, resolveConfig } from 'prettier';
 
 const job = import.meta.dirname;
 const media = resolve(job, 'media');
@@ -396,9 +397,42 @@ function measure() {
       failures,
     };
   }
+  // Viewport bounds alone do not detect one sibling painting over another.
+  const overlapFailures = [];
+  for (const root of main.querySelectorAll('[data-group-question],[data-group-answer-chart]')) {
+    const rows = [...root.children].filter(visible);
+    for (let index = 1; index < rows.length; index++) {
+      if (
+        rows[index - 1].getBoundingClientRect().bottom >
+        rows[index].getBoundingClientRect().top + 1
+      )
+        overlapFailures.push(`${named(rows[index - 1])} overlaps ${named(rows[index])}`);
+    }
+    for (const container of root.querySelectorAll(
+      '[class*="_questionMiddle_"],[class*="_bars_"]',
+    )) {
+      const limit = container.getBoundingClientRect();
+      const children = container.matches('ol')
+        ? [...container.querySelectorAll('[class*="_base_"]')]
+        : [...container.children];
+      for (const child of children.filter(visible)) {
+        const r = child.getBoundingClientRect();
+        if (r.top < limit.top - 1 || r.bottom > limit.bottom + 1)
+          overlapFailures.push(`${named(child)} exceeds its reserved ${named(container)} row`);
+      }
+    }
+  }
+  for (const clock of main.querySelectorAll('[class*="_countdownCircle_"]')) {
+    if (
+      visible(clock) &&
+      (clock.scrollWidth > clock.clientWidth + 1 || clock.scrollHeight > clock.clientHeight + 1)
+    )
+      overlapFailures.push(`${named(clock)} digits overflow the clock circle`);
+  }
   return {
     receiptGeometry: receiptPlacement(),
     teamDiscovery: teamDiscovery(),
+    overlapFailures,
     horizontalOverflow: document.documentElement.scrollWidth - innerWidth,
     verticalOverflow: document.documentElement.scrollHeight - innerHeight,
     main: {
@@ -596,7 +630,15 @@ try {
         /<details\b[^>]*data-team-discovery="true"[^>]*>/,
         (tag) => tag.replace(/>$/, ' open="">'),
       );
-      writeFileSync(resolve(media, `${alternate}.html`), openHTML, 'utf8');
+      const alternatePath = resolve(media, `${alternate}.html`);
+      writeFileSync(
+        alternatePath,
+        await format(openHTML, {
+          ...(await resolveConfig(alternatePath)),
+          filepath: alternatePath,
+        }),
+        'utf8',
+      );
       await dev.call('Runtime.evaluate', {
         expression: `document.querySelector('[data-team-discovery="true"] summary').focus()`,
       });
@@ -810,6 +852,7 @@ const failed = metrics.filter(
       m.verticalOverflow > 1 ||
       m.clipped.length ||
       m.choiceOverflow.length ||
+      m.overlapFailures.length ||
       m.unstyled.length ||
       !m.nunitoLoaded ||
       m.receiptGeometry?.failures.length ||
@@ -831,6 +874,7 @@ console.log(
         unstyled: m.unstyled,
         scrollers: m.scrollers,
         choiceOverflow: m.choiceOverflow,
+        overlapFailures: m.overlapFailures,
         receiptGeometry: m.receiptGeometry,
         teamDiscovery: m.teamDiscovery,
       })),

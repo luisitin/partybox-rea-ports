@@ -55,14 +55,13 @@ function QuestionStage({ view, now }: { view: LightningTvView; now: number }): J
           <span
             className={styles.countdownCircle}
             data-paused={view.paused || undefined}
+            data-long={(seconds !== null && seconds >= 100) || undefined}
             role="timer"
             aria-label={view.paused ? L('Paused') : L('{n} seconds left', { n: seconds ?? 0 })}
           >
             {seconds ?? '—'}
           </span>
-          <b>
-            {L(view.paused ? 'Paused' : talk ? (vote ? 'Room talk' : 'Team talk') : 'Time left')}
-          </b>
+          {view.paused ? <b>{L('Paused')}</b> : null}
         </div>
         <p className={styles.questionInstruction}>{L(instruction)}</p>
         <div

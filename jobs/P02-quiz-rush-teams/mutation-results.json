@@ -1,22 +1,26 @@
 {
   "command": "node jobs/P02-quiz-rush-teams/mutate.mjs",
-  "testCommand": "pnpm vitest run games/kahoot/__tests__/group-server.test.ts games/kahoot/__tests__/group-accuracy.test.ts games/kahoot/__tests__/classic-server.test.ts games/kahoot/__tests__/scoring.test.ts games/kahoot/__tests__/answer-window.test.ts games/kahoot/__tests__/vip.test.ts --pool=threads --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile=jobs/P02-quiz-rush-teams/.mutation-work-NzYna1/vitest.json",
+  "testCommand": "pnpm vitest run games/kahoot/__tests__/group-server.test.ts games/kahoot/__tests__/group-accuracy.test.ts games/kahoot/__tests__/custom-bot-public-facts.test.ts games/kahoot/__tests__/group-pacing.test.ts games/kahoot/__tests__/group-final-room-privacy.test.tsx games/kahoot/__tests__/group-reveal-cut-stability.test.ts games/kahoot/__tests__/classic-server.test.ts games/kahoot/__tests__/scoring.test.ts games/kahoot/__tests__/answer-window.test.ts games/kahoot/__tests__/vip.test.ts --pool=threads --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile=jobs/P02-quiz-rush-teams/.mutation-work-OQh9nf/vitest.json",
   "timeoutMs": 120000,
   "sourceHashes": {
-    "games/kahoot/server/types.ts": "81470f9f72475e263c7d05000762b4ce81209e2693ffd21f646ee08eaa36b10f",
+    "games/kahoot/server/types.ts": "5916f651dd14281311892a3fc0185bb240b3e02f1a7f0f5de3119e95cc56aa81",
     "games/kahoot/server/scoring.ts": "980f5f449ae204a5c850ae17aeb22d023aa0b106fef639262c243f2c06ac5e10",
     "games/kahoot/server/teams.ts": "6a3813de1de00345bb35651782498ba1ce70c8680b49d46b5cd01a8424cc739a",
     "games/kahoot/server/phases/talk.ts": "41e12300575417a8f1cfc8612a2432fdefa384adb5137e79d60406fa2f4fd1c2",
     "games/kahoot/server/index.ts": "2229dec5e51f95b8c400a604ffd7406bc8ca332b516b17da7012d30e48fd3a61",
     "games/kahoot/server/phases/question.ts": "2e568660f95ba746cc58cbfbdedfa8bf0b5f0da67e9a3dfe59da34c23f4ab4f1",
-    "games/kahoot/server/views.ts": "e8ea0228236c198f6ab0982dffcc4e2f8ff043f9232aeac49a4781b7e11293be"
+    "games/kahoot/server/views.ts": "1baa475f9454040b5ff160d738b5541456e62be6051b42b9602658efc0f78fa5",
+    "games/kahoot/server/classic.ts": "bd72a584c737ca57c63a4b4ede8b90799eda7c2ddf4e201cdc291471956b06a9",
+    "games/kahoot/server/pacing.ts": "182cdbf202437565d9572410fbc1af57da432cdb8753697feea248cf13062ffe"
   },
   "baseline": {
     "exitCode": 0,
     "signal": null,
     "timedout": false,
-    "durationMs": 7903,
-    "tests": 93,
+    "durationMs": 19734,
+    "tests": 141,
+    "executedTests": 141,
+    "suites": 10,
     "failed": [],
     "invalidReason": "",
     "logFile": "mutation-logs/baseline.log"
@@ -25,12 +29,16 @@
     "exitCode": 0,
     "signal": null,
     "timedout": false,
-    "durationMs": 4049,
-    "tests": 93,
+    "durationMs": 14050,
+    "tests": 141,
+    "executedTests": 141,
+    "suites": 10,
     "failed": [],
     "invalidReason": "",
     "logFile": "mutation-logs/post-baseline.log"
   },
+  "requiredOriginalKills": 19,
+  "requiredUpgradeMutants": ["M21", "M22", "M23", "M24"],
   "results": [
     {
       "id": "M01",
@@ -41,8 +49,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 10059,
-      "tests": 93,
+      "durationMs": 16174,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "question answer window a tap 0 ms past the deadline reveals without crediting it",
@@ -117,8 +127,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 5439,
-      "tests": 93,
+      "durationMs": 19780,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "question answer window a tap 0 ms past the deadline reveals without crediting it",
@@ -181,8 +193,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 4782,
-      "tests": 93,
+      "durationMs": 17527,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "classic scoring, finale privacy and occupied podium tiers uses ordinary final-question points and chart, then only unveils third, second, first",
@@ -221,8 +235,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 4765,
-      "tests": 93,
+      "durationMs": 16454,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "team averaging without departure exploits averages correct, wrong and missing eligible members instead of summing team size",
@@ -249,8 +265,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 4877,
-      "tests": 93,
+      "durationMs": 14177,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "team averaging without departure exploits excludes an unanswered offline or permanently departed teammate from the denominator",
@@ -271,8 +289,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 4957,
-      "tests": 93,
+      "durationMs": 15684,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "team averaging without departure exploits retains a locked answer from a leaver and cannot inflate a wrong answer away by disconnecting",
@@ -293,9 +313,29 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 5712,
-      "tests": 93,
+      "durationMs": 13864,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
+        {
+          "name": "hidden final room score has no numeric outcome side channel withholds a nonzero shared final gain from every controller while preserving correctness",
+          "messages": [
+            "AssertionError: expected 0 to be greater than 0\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:101:18\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "hidden final room score has no numeric outcome side channel shows a truthful final room verdict and placeholder without hidden name, gain, rank or total",
+          "messages": [
+            "AssertionError: expected '<section class=\"_screen_72dfcc _phone…' to contain 'The room got it right!'\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:123:20\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "hidden final room score has no numeric outcome side channel retains public gain and speed/streak fields on nonfinal room reveals",
+          "messages": [
+            "AssertionError: expected 0 to be greater than 0\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:142:34\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
         {
           "name": "shared plurality, speed and bounded room streak does not turn collective speed and streaks into personal awards for an abstaining guest",
           "messages": [
@@ -339,8 +379,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 5902,
-      "tests": 93,
+      "durationMs": 16895,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "shared plurality, speed and bounded room streak uses the mean time of every vote and credits the same room gain to everyone",
@@ -373,8 +415,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 5644,
-      "tests": 93,
+      "durationMs": 10585,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "shared plurality, speed and bounded room streak uses the mean time of every vote and credits the same room gain to everyone",
@@ -401,8 +445,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 5733,
-      "tests": 93,
+      "durationMs": 10181,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "shared plurality, speed and bounded room streak does not turn collective speed and streaks into personal awards for an abstaining guest",
@@ -429,13 +475,81 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 6014,
-      "tests": 93,
+      "durationMs": 11662,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
+        {
+          "name": "custom bots reuse independent public facts teams distinguishes three strengths over 1,000 seeds on a renamed public prompt",
+          "messages": [
+            "AssertionError: expected 'talk' to be 'question' // Object.is equality\n    at open (C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:28:26)\n    at seededChoices (C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:60:17)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:91:20\n    at Array.map (<anonymous>)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:90:29\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts tv-vote distinguishes three strengths over 1,000 seeds on a renamed public prompt",
+          "messages": [
+            "AssertionError: expected 'talk' to be 'question' // Object.is equality\n    at open (C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:28:26)\n    at seededChoices (C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:60:17)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:91:20\n    at Array.map (<anonymous>)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:90:29\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts teams calibrates the actual five-question custom pack without mocking its lookup",
+          "messages": [
+            "AssertionError: expected 'talk' to be 'question' // Object.is equality\n    at open (C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:28:26)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:121:20\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts tv-vote calibrates the actual five-question custom pack without mocking its lookup",
+          "messages": [
+            "AssertionError: expected 'talk' to be 'question' // Object.is equality\n    at open (C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:28:26)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:121:20\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)"
+          ]
+        },
         {
           "name": "freezes the team correctness gauge at scoring and never sends it before the reveal",
           "messages": [
             "AssertionError: expected undefined to be 50 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-accuracy.test.ts:34:87\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "hidden final room score has no numeric outcome side channel withholds a nonzero shared final gain from every controller while preserving correctness",
+          "messages": [
+            "Error: Fixture must reach the next live question\n    at question (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:44:44)\n    at answered (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:48:11)\n    at finalFixture (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:68:51)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:97:31\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        },
+        {
+          "name": "hidden final room score has no numeric outcome side channel shows a truthful final room verdict and placeholder without hidden name, gain, rank or total",
+          "messages": [
+            "Error: Fixture must reach the next live question\n    at question (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:44:44)\n    at answered (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:48:11)\n    at finalFixture (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:68:51)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:120:23\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        },
+        {
+          "name": "hidden final room score has no numeric outcome side channel retains public gain and speed/streak fields on nonfinal room reveals",
+          "messages": [
+            "Error: Fixture must reach the next live question\n    at question (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:44:44)\n    at answered (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:48:11)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:137:19\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)"
+          ]
+        },
+        {
+          "name": "hidden final room score has no numeric outcome side channel retains final Teams personal feedback while keeping shared team receipts and totals hidden",
+          "messages": [
+            "Error: Fixture must reach the next live question\n    at question (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:44:44)\n    at answered (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:48:11)\n    at finalFixture (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:68:51)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:155:31\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        },
+        {
+          "name": "group reveal freezes shared answer, explanation and standings cuts keeps every cut fixed after the longest missing receipt leaves and reconnects permanently",
+          "messages": [
+            "Error: Fixture needs a live stamped question\n    at reveal (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-reveal-cut-stability.test.ts:36:44)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-reveal-cut-stability.test.ts:93:19\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "group reveal freezes shared answer, explanation and standings cuts keeps the same cuts while a temporary disconnection returns to its participating seat",
+          "messages": [
+            "Error: Fixture needs a live stamped question\n    at reveal (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-reveal-cut-stability.test.ts:36:44)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-reveal-cut-stability.test.ts:116:19\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "group reveal freezes shared answer, explanation and standings cuts shifts all cuts uniformly on SDK resume even if a player leaves while paused",
+          "messages": [
+            "Error: Fixture needs a live stamped question\n    at reveal (C:/dev/rea-runs/r2/games/kahoot/__tests__/group-reveal-cut-stability.test.ts:36:44)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-reveal-cut-stability.test.ts:130:19\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
           ]
         },
         {
@@ -565,8 +679,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 6361,
-      "tests": 93,
+      "durationMs": 13080,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "discussion, stamped answers and presence talk reveals the question without accepting picks, stamped answers or bots",
@@ -587,8 +703,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 6138,
-      "tests": 93,
+      "durationMs": 22131,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "stamped answers and minimum reading holds ignores unstamped, wrong-id, wrong-opening, unknown, early and duplicate answers",
@@ -615,8 +733,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 14483,
-      "tests": 93,
+      "durationMs": 66111,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "stamped answers and minimum reading holds ignores unstamped, wrong-id, wrong-opening, unknown, early and duplicate answers",
@@ -643,8 +763,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 6833,
-      "tests": 93,
+      "durationMs": 66457,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "stamped answers and minimum reading holds ignores unstamped, wrong-id, wrong-opening, unknown, early and duplicate answers",
@@ -671,8 +793,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 9340,
-      "tests": 93,
+      "durationMs": 24616,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "question answer window a disconnected seat cannot answer; reconnect restores the same open window",
@@ -693,8 +817,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 4875,
-      "tests": 93,
+      "durationMs": 12191,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "question answer window pause extends the deadline without changing speed or accepting a deadline tap",
@@ -711,7 +837,7 @@
         {
           "name": "discussion, stamped answers and presence answer pause is excluded from speed and unanswered reconnect restores the original window",
           "messages": [
-            "AssertionError: expected 158142 to be 162142 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-server.test.ts:328:33\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+            "AssertionError: expected 165502 to be 169502 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-server.test.ts:328:33\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
           ]
         },
         {
@@ -739,9 +865,41 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 5016,
-      "tests": 93,
+      "durationMs": 12408,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
+        {
+          "name": "hidden final room score has no numeric outcome side channel withholds a nonzero shared final gain from every controller while preserving correctness",
+          "messages": [
+            "AssertionError: expected [ { id: 'room', …(5) } ] to deeply equal []\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:104:36\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "hidden final room score has no numeric outcome side channel shows a truthful final room verdict and placeholder without hidden name, gain, rank or total",
+          "messages": [
+            "AssertionError: expected '<section class=\"_screen_72dfcc _phone…' to contain 'Room score after the podium'\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:125:20\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "hidden final room score has no numeric outcome side channel retains final Teams personal feedback while keeping shared team receipts and totals hidden",
+          "messages": [
+            "AssertionError: expected [ { id: 'team-2', …(6) }, …(3) ] to deeply equal []\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:165:30\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "group reveal budgets match actual screens teams gives the VIP a real final window before automatic podium",
+          "messages": [
+            "AssertionError: expected [ { id: 'team-1', …(6) }, …(3) ] to deeply equal []\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-pacing.test.ts:178:52\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "group reveal budgets match actual screens tv-vote gives the VIP a real final window before automatic podium",
+          "messages": [
+            "AssertionError: expected [ { id: 'room', …(5) } ] to deeply equal []\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-pacing.test.ts:178:52\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
         {
           "name": "group projection, podium privacy and results withholds future team scores and podium tiers from both envelopes and personal totals",
           "messages": [
@@ -761,9 +919,17 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 4436,
-      "tests": 93,
+      "durationMs": 21944,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
+        {
+          "name": "group reveal budgets match actual screens teams gives the VIP a real final window before automatic podium",
+          "messages": [
+            "AssertionError: expected false to be true // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-pacing.test.ts:186:84\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
         {
           "name": "group projection, podium privacy and results withholds future team scores and podium tiers from both envelopes and personal totals",
           "messages": [
@@ -783,8 +949,10 @@
       "exitCode": 1,
       "signal": null,
       "timedout": false,
-      "durationMs": 5629,
-      "tests": 93,
+      "durationMs": 13486,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
       "failed": [
         {
           "name": "discussion, stamped answers and presence teams VIP end discards an unfinished accepted answer and retains every starter",
@@ -807,21 +975,211 @@
       ],
       "invalidReason": "",
       "logFile": "mutation-logs/M20.log"
+    },
+    {
+      "id": "M21",
+      "description": "Custom IDs lose exact public-prompt bot facts",
+      "file": "games/kahoot/server/classic.ts",
+      "expected": "custom-bot-public-facts learned facts, public-key independence and three calibrated strengths",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 17419,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
+      "failed": [
+        {
+          "name": "custom bots reuse independent public facts classic distinguishes three strengths over 1,000 seeds on a renamed public prompt",
+          "messages": [
+            "AssertionError: expected 264 to be greater than or equal to 430\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:96:25\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts teams distinguishes three strengths over 1,000 seeds on a renamed public prompt",
+          "messages": [
+            "AssertionError: expected 264 to be greater than or equal to 430\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:96:25\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts tv-vote distinguishes three strengths over 1,000 seeds on a renamed public prompt",
+          "messages": [
+            "AssertionError: expected 264 to be greater than or equal to 430\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:96:25\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts classic calibrates the actual five-question custom pack without mocking its lookup",
+          "messages": [
+            "AssertionError: expected [ undefined, undefined, …(3) ] to deeply equal [ 'Paris', 'Tokyo', 'Four', …(2) ]\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:118:21\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts teams calibrates the actual five-question custom pack without mocking its lookup",
+          "messages": [
+            "AssertionError: expected [ undefined, undefined, …(3) ] to deeply equal [ 'Paris', 'Tokyo', 'Four', …(2) ]\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:118:21\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts tv-vote calibrates the actual five-question custom pack without mocking its lookup",
+          "messages": [
+            "AssertionError: expected [ undefined, undefined, …(3) ] to deeply equal [ 'Paris', 'Tokyo', 'Four', …(2) ]\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:118:21\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts never reads the owner answer key or explanation, even for an exact known prompt",
+          "messages": [
+            "AssertionError: expected 264 to be greater than or equal to 730\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:232:59\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts knows the written violin count through visible text without owner-key access",
+          "messages": [
+            "AssertionError: expected -1 to be +0 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:257:87\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts knows the digit violin count through visible text without owner-key access",
+          "messages": [
+            "AssertionError: expected -1 to be 3 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:257:87\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts knows the written tennis count through visible text without owner-key access",
+          "messages": [
+            "AssertionError: expected -1 to be 2 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:257:87\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts knows the digit tennis count through visible text without owner-key access",
+          "messages": [
+            "AssertionError: expected -1 to be 2 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:257:87\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "custom bots reuse independent public facts keeps Four/4 public count facts equivalent and preserves canonical exact-ID matching",
+          "messages": [
+            "AssertionError: expected undefined to be 'Four' // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/custom-bot-public-facts.test.ts:285:62\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M21.log"
+    },
+    {
+      "id": "M22",
+      "description": "Final group reveal removes the usable VIP podium window",
+      "file": "games/kahoot/server/pacing.ts",
+      "expected": "group-pacing final-window duration, live pre-deadline skip and hidden-score assertions",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 12398,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
+      "failed": [
+        {
+          "name": "group reveal budgets match actual screens teams final pages exclude the hidden team receipt, gauge and final rank",
+          "messages": [
+            "AssertionError: expected { chartMs: 35935, standingsMs: +0 } to deeply equal { chartMs: 35935, standingsMs: 4980 }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-pacing.test.ts:111:41\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "group reveal budgets match actual screens tv-vote final pages exclude the hidden team receipt, gauge and final rank",
+          "messages": [
+            "AssertionError: expected { chartMs: 45892, standingsMs: +0 } to deeply equal { chartMs: 45892, standingsMs: 4980 }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-pacing.test.ts:111:41\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "group reveal budgets match actual screens teams gives the VIP a real final window before automatic podium",
+          "messages": [
+            "AssertionError: expected +0 to be 4980 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-pacing.test.ts:174:53\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "group reveal budgets match actual screens tv-vote gives the VIP a real final window before automatic podium",
+          "messages": [
+            "AssertionError: expected +0 to be 4980 // Object.is equality\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-pacing.test.ts:174:53\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M22.log"
+    },
+    {
+      "id": "M23",
+      "description": "Final room outcomes expose a reconstructible shared gain",
+      "file": "games/kahoot/server/views.ts",
+      "expected": "group-final-room-privacy zero final delta, absent base/bonus and nonreconstructible shared total",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 11058,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
+      "failed": [
+        {
+          "name": "hidden final room score has no numeric outcome side channel withholds a nonzero shared final gain from every controller while preserving correctness",
+          "messages": [
+            "AssertionError: expected { correct: true, delta: 1281, …(3) } to match object { correct: true, answered: true, …(1) }\n(2 matching properties omitted from actual)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1283:10)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)\n    at Proxy.methodWrapper (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-final-room-privacy.test.tsx:109:27\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M23.log"
+    },
+    {
+      "id": "M24",
+      "description": "Presence updates recompute frozen reveal cuts",
+      "file": "games/kahoot/server/pacing.ts",
+      "expected": "group-reveal-cut-stability permanent leave/reconnect and paused uniform cut assertions",
+      "status": "killed",
+      "exitCode": 1,
+      "signal": null,
+      "timedout": false,
+      "durationMs": 17367,
+      "tests": 141,
+      "executedTests": 141,
+      "suites": 10,
+      "failed": [
+        {
+          "name": "group reveal freezes shared answer, explanation and standings cuts keeps every cut fixed after the longest missing receipt leaves and reconnects permanently",
+          "messages": [
+            "AssertionError: expected { revealAt: 2000000077623, …(4) } to deeply equal { revealAt: 2000000076757, …(4) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-reveal-cut-stability.test.ts:99:28\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "group reveal freezes shared answer, explanation and standings cuts shifts all cuts uniformly on SDK resume even if a player leaves while paused",
+          "messages": [
+            "AssertionError: expected { revealAt: 2000000077623, …(4) } to deeply equal { revealAt: 2000000076757, …(4) }\n    at C:/dev/rea-runs/r2/games/kahoot/__tests__/group-reveal-cut-stability.test.ts:139:28\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r2/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "invalidReason": "",
+      "logFile": "mutation-logs/M24.log"
     }
   ],
   "restorationVerified": true,
   "error": "",
   "restoredHashes": {
-    "games/kahoot/server/types.ts": "81470f9f72475e263c7d05000762b4ce81209e2693ffd21f646ee08eaa36b10f",
+    "games/kahoot/server/types.ts": "5916f651dd14281311892a3fc0185bb240b3e02f1a7f0f5de3119e95cc56aa81",
     "games/kahoot/server/scoring.ts": "980f5f449ae204a5c850ae17aeb22d023aa0b106fef639262c243f2c06ac5e10",
     "games/kahoot/server/teams.ts": "6a3813de1de00345bb35651782498ba1ce70c8680b49d46b5cd01a8424cc739a",
     "games/kahoot/server/phases/talk.ts": "41e12300575417a8f1cfc8612a2432fdefa384adb5137e79d60406fa2f4fd1c2",
     "games/kahoot/server/index.ts": "2229dec5e51f95b8c400a604ffd7406bc8ca332b516b17da7012d30e48fd3a61",
     "games/kahoot/server/phases/question.ts": "2e568660f95ba746cc58cbfbdedfa8bf0b5f0da67e9a3dfe59da34c23f4ab4f1",
-    "games/kahoot/server/views.ts": "e8ea0228236c198f6ab0982dffcc4e2f8ff043f9232aeac49a4781b7e11293be"
+    "games/kahoot/server/views.ts": "1baa475f9454040b5ff160d738b5541456e62be6051b42b9602658efc0f78fa5",
+    "games/kahoot/server/classic.ts": "bd72a584c737ca57c63a4b4ede8b90799eda7c2ddf4e201cdc291471956b06a9",
+    "games/kahoot/server/pacing.ts": "182cdbf202437565d9572410fbc1af57da432cdb8753697feea248cf13062ffe"
   },
-  "mutations": 20,
-  "killed": 20,
+  "mutations": 24,
+  "killed": 24,
+  "originalKilled": 20,
+  "upgradesDetected": true,
   "invalidMutations": 0,
   "complete": true
 }

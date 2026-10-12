@@ -52,8 +52,14 @@ export async function writeGroupEvidence(
   }
   if (!stable) throw new Error('Generated evidence CSS formatting did not converge');
   writeFileSync(cssPath, css, 'utf8');
-  for (const frame of frames)
-    writeFileSync(resolve(GROUP_MEDIA, `${frame.name}.html`), standalone(frame), 'utf8');
+  for (const frame of frames) {
+    const htmlPath = resolve(GROUP_MEDIA, `${frame.name}.html`);
+    writeFileSync(
+      htmlPath,
+      await format(standalone(frame), { ...options, filepath: htmlPath }),
+      'utf8',
+    );
+  }
   for (const [name, state] of Object.entries(fixtures)) {
     writeFileSync(
       resolve(ROOT, `games/kahoot/fixtures/${name}.json`),
