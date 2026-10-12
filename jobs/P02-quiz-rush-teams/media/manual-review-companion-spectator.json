@@ -1,0 +1,213 @@
+{
+  "round": 11,
+  "reviewer": "queue_audit",
+  "createdAtUtc": "2026-10-12T17:11:11.011241+00:00",
+  "scope": "Read-only recorded evidence and raster review; no runtime source read while parent mutation campaign is active",
+  "operations": {
+    "browser": false,
+    "tests": false,
+    "git": false,
+    "runtimeEdits": false,
+    "repositoryEdits": false,
+    "writes": "Owned temporary JSON/Markdown artifacts only"
+  },
+  "reconciliation": {
+    "counts": {
+      "phone-tv": 37,
+      "opened": 5,
+      "spectator": 30
+    },
+    "rasterUnchanged": 72,
+    "changed": [],
+    "standaloneSpectatorFilesIdentical": 30,
+    "methodNote": "All72 nativeRGB rasters matched. Previous standalone hashes were retained only by the 30 old spectator PNG files; the 42 old phone-TV/opened frames were recovered from exact native-resolution saved contact-sheet cells. No claim of prior standalone file-byte equality for those 42."
+  },
+  "latestIndividualReinspections": [
+    "C:\\dev\\rea-runs\\r2\\jobs\\P02-quiz-rush-teams\\media\\groups-two-teams-presence-talk-phone-tv.png",
+    "C:\\dev\\rea-runs\\r2\\jobs\\P02-quiz-rush-teams\\media\\groups-tv-vote-last-reveal-ready-phone-tv.png",
+    "C:\\Users\\LUISI_~1\\AppData\\Local\\Temp\\pb-p02-review-PjsQu8\\groups-tv-vote-paused-spectator.png",
+    "C:\\Users\\LUISI_~1\\AppData\\Local\\Temp\\pb-p02-review-PjsQu8\\groups-tv-vote-last-explanation-spectator.png"
+  ],
+  "metrics": {
+    "screens": 229,
+    "monitoredScrollContainers": 179,
+    "recordedFailureTotals": {
+      "overlapFailures": 0,
+      "choiceOverflow": 0,
+      "clipped": 0,
+      "unstyled": 0,
+      "horizontalOverflow": 0,
+      "verticalOverflow": 0,
+      "scrollOverflow": 0
+    }
+  },
+  "captureLifecycle": {
+    "capturedAtUtc": "2026-10-12T17:08:30.385Z",
+    "browserPid": 53372,
+    "closureVerified": true,
+    "nativeVerifierTimeoutMs": 45000,
+    "baseScreens": 219,
+    "screensCaptured": 229,
+    "nativeDisclosurePairs": 10,
+    "nativeDisclosureMethod": "pointer press/release opens; focused Enter down/up closes",
+    "allNativeDisclosuresRestored": true,
+    "htmlRolePngReviewDirectory": "C:\\Users\\LUISI_~1\\AppData\\Local\\Temp\\pb-p02-review-PjsQu8"
+  },
+  "formattedHtmlReproducibilityRecheck": {
+    "requestedByParent": true,
+    "captureAtUtc": "2026-10-12T17:08:30.385Z",
+    "browserPid": 53372,
+    "closureVerified": true,
+    "imagesCompared": 72,
+    "newPixelDifferences": 0
+  },
+  "staticPropertyReport": {
+    "modes": ["teams", "tv-vote"],
+    "seedsPerMode": 1003,
+    "counts": "2..8",
+    "events": 116376,
+    "views": 1078010,
+    "botChecks": 1420584,
+    "maxStateBytes": 2542,
+    "phases": ["done", "intro", "podium", "question", "reveal", "talk"],
+    "eventKinds": [
+      "input",
+      "player:gone",
+      "player:presence",
+      "speech",
+      "speechStart",
+      "timer",
+      "vip:pause",
+      "vip:resume",
+      "vip:skip"
+    ],
+    "checks": [
+      "deep-frozen state and bot inputs",
+      "double reducer deterministic replay",
+      "finite bounded JSON round trips",
+      "question/talk answer and decision secrecy",
+      "unknown/prototype spectators",
+      "future team/envelope/personal podium totals omitted",
+      "schema-valid easy/normal/sharp bots",
+      "lifecycle trace reaches done"
+    ]
+  },
+  "staticPropertyReportScopeNote": "This is the committed aggregate report as read; its figures do not establish provenance against the final mutated/restored source or an explicit VIP reassignment sequence.",
+  "mentalScenarios": [
+    {
+      "scenario": "Eight strangers with mixed local/remote/spectator surfaces and presence changes",
+      "observation": "Fixed identities and own-teammate discovery stay readable. The two-team fixture has seat 6 in left despite connected=true, and seat 8 temporarily connected=false; roster distinguishes Left from Away. Spectator presentation contains Watching wording and no answer controls.",
+      "fixtureFacts": {
+        "team1Members": ["seat-1", "seat-6", "seat-8", "seat-2"],
+        "permanentLeft": ["seat-6"],
+        "temporarilyAway": ["seat-8"]
+      },
+      "limit": "A screenshot is not a live connection/accepted-input trace; retained-counter and denominator behavior belongs to separate recorded regressions."
+    },
+    {
+      "scenario": "VIP disappears during a live or paused game",
+      "observation": "All captured nonpaused game phases have deadlines, so ordinary advancement has an automatic path. Ready VIP buttons are large and readable.",
+      "limit": "No explicit ownership reassignment sequence is contained in this static inventory; pause recovery depends on SDK/runtime VIP handling."
+    },
+    {
+      "scenario": "Reveal is paused, then a teammate permanently leaves/reconnects",
+      "observation": "The reveal fixture stores fixed answer/explanation/chart/standings durations. The mental flow should hold visible cuts at the pause instant, then shift every cut together when resumed; the same receipt/spectator roles remain appropriate.",
+      "fixtureFacts": {
+        "answersMs": 25760,
+        "explanationMs": 20132,
+        "chartMs": 45892,
+        "standingsMs": 5413,
+        "phaseDurationMs": 51305
+      },
+      "limit": "Paused reveal was not separately pictured in this inventory; the dedicated regression is the behavioral proof."
+    },
+    {
+      "scenario": "Correct shared final Room answer with opposite personal votes and a nonzero prior bank",
+      "observation": "Final Room images do not print final gain, total or rank; personal vote is labeled separately from shared correctness and the footer says score after the podium. Partial podium pictures reveal no future team/name/score.",
+      "privateFixtureFacts": {
+        "priorBank": 4561,
+        "finalGain": 1290,
+        "finalTotal": 5851,
+        "meanAcceptedVoteMs": 650
+      },
+      "limit": "The fixture is private state. Silent public view-field redaction is not observable from its PNG."
+    }
+  ],
+  "residualWeaknesses": [
+    {
+      "rank": 1,
+      "classification": "evidence limitation",
+      "title": "VIP reassignment is outside the recorded phone fixture proof",
+      "evidence": [
+        "group-teams-standings-vip",
+        "group-tv-vote-last-reveal-ready",
+        "property-groups.json eventKinds"
+      ],
+      "detail": "Next/Show podium targets fit and every nonpaused phase has a finite deadline. The static fixtures and aggregate event list do not record losing the VIP and assigning its permissions to another phone, particularly while paused. No ownership-transfer failure is demonstrated.",
+      "action": "Use the separately owned SDK/runtime and regression evidence for this boundary; no game patch is justified by these PNGs."
+    },
+    {
+      "rank": 2,
+      "classification": "evidence limitation",
+      "title": "Paused reveal cuts cannot be reconstructed from the static paused pictures",
+      "evidence": [
+        "groups-tv-vote-paused-spectator.png",
+        "group-tv-vote-paused",
+        "group-tv-vote-last-reveal-ready groupRevealBeats",
+        "property-groups.json vip:pause/vip:resume"
+      ],
+      "detail": "The captured paused fixture is question, not reveal. Frozen answer/explanation/standings durations are present in the reveal fixture, but static aggregate traces do not independently show a leave-while-paused reveal and its uniformly shifted cuts. This is a limit of this review, not evidence that the separate cut-stability regression fails.",
+      "action": "Retain the dedicated cut-stability and final-source mutation results as the timing proof; no new UI change identified."
+    },
+    {
+      "rank": 3,
+      "classification": "evidence limitation",
+      "title": "Safe final Room pictures do not by themselves prove raw numeric view privacy",
+      "evidence": [
+        "groups-tv-vote-last-reveal-ready-phone-tv.png",
+        "groups-tv-vote-last-explanation-spectator.png",
+        "group-tv-vote-last-reveal-ready"
+      ],
+      "detail": "Final pictures correctly show the shared verdict, own vote and an em-dash score placeholder; spectators see only the answer/explanation. The authoritative private fixture has total 5851 and gain 1290 (prior bank 4561), but it is not a serialized public controller view. Raw delta/base/bonus omission must therefore be established by the separate final-room-privacy regression and semantic mutation, not inferred from hidden UI.",
+      "action": "Keep raw-view regression/mutation evidence separate from raster proof; no visual leak found."
+    },
+    {
+      "rank": 4,
+      "classification": "cosmetic",
+      "title": "A single shared room displays an uninformative rank and empty podium tiers",
+      "evidence": ["groups-tv-vote-standings-phone-tv.png", "groups-tv-vote-podium-1-phone-tv.png"],
+      "detail": "The room is always in place 1; second/third plinths remain empty. They are understandable reuse of the standard quiz presentation and do not misstate another competitor, score or hidden winner.",
+      "action": "Optional simplification only; no material gain or required patch."
+    },
+    {
+      "rank": 5,
+      "classification": "cosmetic",
+      "title": "Discovering teammates on staged phones requires one context switch",
+      "evidence": [
+        "groups-two-teams-presence-talk-phone-only-teammates.png",
+        "groups-custom-unbroken-teams-talk-phone-only-teammates.png"
+      ],
+      "detail": "Opening the roster replaces the question/options; Back to question returns to them. The clock, full names and Left/Away distinctions remain clear, and the native open/close capture reports restoration. This is a small navigation cost of fitting every legal question and full names in390x844.",
+      "action": "Optional polish only; keeping the full legal content and no-scroll fit takes priority."
+    }
+  ],
+  "result": {
+    "newMaterialDefects": 0,
+    "newRequiredRuntimePatches": 0,
+    "visualRegressionDetected": false,
+    "cosmeticItems": 2,
+    "evidenceLimitations": 3,
+    "convergenceClaim": false,
+    "summary": "No new material player-visible defect in this scoped review. Final behavioral/campaign status remains separately owned by root."
+  },
+  "inputHashes": {
+    "C:\\dev\\rea-runs\\r2\\jobs\\P02-quiz-rush-teams\\media\\layout-metrics.json": "47f66a4b4bd87e3607d5bdf1e484618741a270f39f9f5d732a5443d08d0b9dc5",
+    "C:\\dev\\rea-runs\\r2\\jobs\\P02-quiz-rush-teams\\media\\capture-lifecycle.json": "31653553ac49710e95ac1a76aa10649d93c7cf85dba4a45f8067b7c5a1ca9ad9",
+    "C:\\dev\\rea-runs\\r2\\jobs\\P02-quiz-rush-teams\\media\\phase-fixtures.json": "5ce53a4c1a42c91f47036e4b89f7853de3cb306cdfe66780af284bc6374afceb",
+    "C:\\dev\\rea-runs\\r2\\jobs\\P02-quiz-rush-teams\\media\\property-groups.json": "3203054d78a853d85defc38b2a0beddb0fbab3a2704491fe5ef08ebcd6558a29"
+  },
+  "reconciliationArtifact": {
+    "path": "C:\\Users\\LUISI_~1\\AppData\\Local\\Temp\\pb-p02-round11-review-1ok1nl3s\\reconciliation.json",
+    "sha256": "80a0ee7c21bdae59afda05ea0f78ba2186b805bb797e8679587c06528cc677aa"
+  }
+}

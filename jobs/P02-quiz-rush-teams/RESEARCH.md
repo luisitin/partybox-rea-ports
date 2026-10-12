@@ -48,8 +48,15 @@ additive paths within the existing module.
 
 No original team match was played: no live room PIN/captain account was
 provided. Published official screenshots, the firsthand teacher report and
-empirical work reconstruct the flow. No original source, questions or assets
-are copied; new artwork remains existing original SVG/CSS marks.
+empirical work reconstruct the flow. No original source, questions or assets are copied into runtime; new artwork remains existing original SVG/CSS marks. Attributed published screenshots are retained separately for the required documentation comparison.
+
+## Static fidelity evidence and adaptations
+
+The inspected official host answer-results image is a complete 2876×1576 screenshot: prompt above centered vertical shape/count/check bars, four labeled alternatives below and two correct choices. It is not proof of a team playthrough or current motion/audio/timing. Current P02 uses this chart geometry with its single-correct authored schema, then a separate complete explanation and standings on shared cuts frozen at scoring. The extra explanation is an explicit PartyBox reading adaptation.
+
+The comparison retains four complete original inputs and five matching port captures across four semantic moments. Historical illustrated/two-answer content differs from this authored text/four-choice content; palette, shell, phone/VIP controls and fixed presence/reconnect membership are explicit adaptations. Current agent-reviewed exact-40 captures and bounded maximum authored text support static readability; no owner/live-eight-person or native full-flow claim follows. SOURCES.md and the fidelity REFERENCES/PLAYBACK/GAPS files record primary attribution and limits.
+
+Accepted leaver votes remain in live progress; final Room vote outcomes withhold raw score delta/base/bonus while ordinary shared verdict/own vote remains. Final VIP reading adapts to button text or the longest identity/hint, and conservative SDK full-name question reading is an authoring/accessibility tradeoff even when the strip ellipsizes names or uses faces. Classic/Wager behavior remains canonical.
 
 ## Historical standalone implementation
 

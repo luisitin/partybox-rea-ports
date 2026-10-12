@@ -2,6 +2,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { format, resolveConfig } from 'prettier';
 import { PhoneOnlyProvider, ServerClockProvider, PlayerChips, Timer } from '@partybox/game-sdk/ui';
 import type { PlayerInfo } from '@partybox/game-sdk';
 import { testKit } from '@partybox/game-sdk/testing';
@@ -314,7 +315,7 @@ function customEdgePack(variant: EdgeVariant): ClassicPack {
   });
 }
 
-function paintCustomEdges(variant: EdgeVariant): void {
+async function paintCustomEdges(variant: EdgeVariant): Promise<void> {
   const pack = customEdgePack(variant);
   expect(pack.questions).toHaveLength(5);
   for (const question of pack.questions) {
@@ -329,7 +330,11 @@ function paintCustomEdges(variant: EdgeVariant): void {
       (variant === 'unbroken' ? 'W'.repeat(38) : ' ' + 'a '.repeat(18) + 'a'),
   }));
   expect(players.every((player) => player.name.length === 40)).toBe(true);
-  const json = JSON.stringify(pack, null, 2) + '\n';
+  const packPath = resolve(GROUP_MEDIA, 'custom-edge-' + variant + '.json');
+  const json = await format(JSON.stringify(pack), {
+    ...(await resolveConfig(packPath)),
+    filepath: packPath,
+  });
   const provenance: EdgeContent = {
     variant,
     file: 'custom-edge-' + variant + '.json',
@@ -567,7 +572,7 @@ it('renders every canonical group phase and role, plus paused/locked/long-name f
   expect(
     frames.filter((frame) => frame.name.startsWith('groups-two-teams-presence-talk-')),
   ).toHaveLength(3);
-  for (const variant of ['words', 'unbroken'] as const) paintCustomEdges(variant);
+  for (const variant of ['words', 'unbroken'] as const) await paintCustomEdges(variant);
   expect(frames.filter((frame) => frame.name.startsWith('groups-custom-'))).toHaveLength(60);
   const tied = firstRound(start('tv-vote', 2), true);
   expect(tv(tied.talk).group?.decision).toBeUndefined();

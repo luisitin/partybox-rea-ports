@@ -1,0 +1,366 @@
+{
+  "capture": {
+    "baseFrames": 219,
+    "openedRosters": 10,
+    "capturedFrames": 229,
+    "pngFiles": 143,
+    "htmlFiles": 86,
+    "mediaBytesAtCaptureCompletion": 8340593,
+    "mediaBytesDuringDocDraft": 8491192,
+    "browserPid": 37732,
+    "browserClosed": true
+  },
+  "method": "Agent static visual review at original 1920×1080 resolution, not owner review. All 50 previous TV PNGs were inspected individually; hash comparison found 30 changed and 20 identical images, and every changed image was viewed individually again. No browser, tests or git were run by this reviewer. After the final formatted-HTML capture, forty-seven TV hashes matched; the three changed maximum-unbroken Talk/question PNGs were viewed individually again and remain legible. Final metadata checkpoint 77304 completed at 2026-10-12T17:16:05.850Z: forty-eight TV hashes matched the preceding review; both changed Room Talk/question PNGs were inspected at original resolution, and their current hashes are recorded with earlier hashes retained.",
+  "automatedResult": "Exit 0; zero viewport, card, sibling, HUD, bar, clock, font-loading, scroll, receipt or disclosure failures. Ten pointer-open/Enter-close pairs passed and were restored.",
+  "coverage": {
+    "reviewed": 50,
+    "reViewedChanged": 30,
+    "previouslyReviewedUnchanged": 20
+  },
+  "observations": "The four worst-case discussion/question HUDs are now separate from all answers, native bar bases clear the labels, and 141 fits the larger clock. Normal, locked and paused screens remain legible. Complete explanations, 40-character name rosters, shared-score receipts, actual tied-room cues and partial podium privacy are intelligible. Maximum-unbroken Room chart fill contracts to the count bases while retaining numeric counts/correctness; no exact pixel or motion identity is claimed.",
+  "fiveWeaknessesReviewed": [
+    {
+      "id": "hidden-hud",
+      "status": "corrected",
+      "frames": [
+        "groups-custom-unbroken-teams-talk-tv.png",
+        "groups-custom-unbroken-teams-question-tv.png",
+        "groups-custom-unbroken-tv-vote-talk-tv.png",
+        "groups-custom-unbroken-tv-vote-question-tv.png"
+      ]
+    },
+    {
+      "id": "chart-overlap",
+      "status": "corrected",
+      "frames": ["groups-custom-unbroken-tv-vote-reveal-tv.png"]
+    },
+    {
+      "id": "clock-digits",
+      "status": "corrected",
+      "frames": [
+        "groups-custom-words-teams-question-tv.png",
+        "groups-custom-words-tv-vote-question-tv.png"
+      ]
+    },
+    {
+      "id": "question-reading",
+      "status": "documented-conservative-accessibility-tradeoff",
+      "detail": "Full names are conservatively budgeted even when the public SDK strip ellipsizes names or switches to auto faces. Long authored-word limits can produce 141-second floors; no native timing identity is claimed."
+    },
+    {
+      "id": "room-podium",
+      "status": "presentation-review-candidate",
+      "detail": "One cooperative room has rank 1 with empty 2nd/3rd plinths; intro/flow docs explicitly state no rival or fake threshold. This is a copy/meaning review candidate, not a scoring/privacy defect."
+    }
+  ],
+  "conclusion": "No additional actionable static layout defect found in the corrected set. This does not establish owner approval, native motion/audio fidelity, final current-head mutation/CI success or three-round convergence.",
+  "reviewedFrames": [
+    {
+      "name": "groups-custom-unbroken-teams-explanation-tv.png",
+      "sha256": "5cdd13e5d820696f27f7460826463f548cf76be498dfb2aa7b6a0da429458b05",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-custom-unbroken-teams-intro-tv.png",
+      "sha256": "2b72f3b43db0905c6f55ae6071fd65e65072c4cb1a91399def87d770c13fb2ca",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-custom-unbroken-teams-question-tv.png",
+      "sha256": "dacaf1d3bdbc7505c5bd3f07c51859eee8336dfc9fd397bb6807f82c084cefd0",
+      "reviewBasis": "re-viewed final formatted-HTML capture PNG",
+      "priorReviewedSha256": "dacaf1d3bdbc7505c5bd3f07c51859eee8336dfc9fd397bb6807f82c084cefd0"
+    },
+    {
+      "name": "groups-custom-unbroken-teams-reveal-tv.png",
+      "sha256": "b889d054d7913fce8391dbf8b1addc9aef6b722ad768317cdc0b76df1fe03320",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-custom-unbroken-teams-talk-tv.png",
+      "sha256": "f2b4e3229ced404684b5f089e7123db3e569bb3e7415a262c5331303cc331251",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-custom-unbroken-tv-vote-explanation-tv.png",
+      "sha256": "6b1f0dcdb2a6add834ea0c1d9fb959c87656821c177b36ee1a4e55c0f4d0c1ba",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-custom-unbroken-tv-vote-intro-tv.png",
+      "sha256": "9d4da2492aeb832a3594e8c7cca29360d54a2838e5a721dc63c6a7260c0768d6",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-custom-unbroken-tv-vote-question-tv.png",
+      "sha256": "0e17f8eb18567a034757b3894b7aa6ae69d8367741f9faa54fae138eb54e485d",
+      "reviewBasis": "re-viewed final metadata capture PNG at original 1920×1080",
+      "priorReviewedSha256": "0e17f8eb18567a034757b3894b7aa6ae69d8367741f9faa54fae138eb54e485d",
+      "reviewHistory": [
+        {
+          "sha256": "468626830e4a65e2b2ad03c0fdc6b71b0e7eb72d8b3e4a19d19467848ac25229",
+          "reviewBasis": "re-viewed final formatted-HTML capture PNG",
+          "captureBrowserPid": 53372
+        }
+      ]
+    },
+    {
+      "name": "groups-custom-unbroken-tv-vote-reveal-tv.png",
+      "sha256": "dcdb3af6f969f3dc73ecda56b75886eae3fea772a07a1476db6015839ee7575a",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-custom-unbroken-tv-vote-talk-tv.png",
+      "sha256": "ae2d5b160cd702fad019ae7b9c70201d8a80c9ee6de8a10285a3886456cd574f",
+      "reviewBasis": "re-viewed final metadata capture PNG at original 1920×1080",
+      "priorReviewedSha256": "ae2d5b160cd702fad019ae7b9c70201d8a80c9ee6de8a10285a3886456cd574f",
+      "reviewHistory": [
+        {
+          "sha256": "e32ba941e2be839ada646d9bac39816fd57944e0dd485594e0a9efa6283606b4",
+          "reviewBasis": "re-viewed final formatted-HTML capture PNG",
+          "captureBrowserPid": 53372
+        }
+      ]
+    },
+    {
+      "name": "groups-custom-words-teams-explanation-tv.png",
+      "sha256": "6cffa70d799e87e8d2a686dda46021fdc60468816475a745b640c2ae8572ac5a",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-custom-words-teams-intro-tv.png",
+      "sha256": "5da5ab106aa792f746207593c7cd250b2bd03f3e90a069fcf14b3c0b79605096",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-custom-words-teams-question-tv.png",
+      "sha256": "eb1d20ba1589982678e75b46ec149ae6f1a634618deacb723bb6738ec57b765c",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-custom-words-teams-reveal-tv.png",
+      "sha256": "1144c1dcac4087331a1dc5eaca6c6eb0308ce9af61187319ad39631d5175256c",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-custom-words-teams-talk-tv.png",
+      "sha256": "85d1ec1661843047ec9784db9cd31b0724eb310fec6134a9cc9d741362c629d4",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-custom-words-tv-vote-explanation-tv.png",
+      "sha256": "888a117a6553c6e7a5910db7dcf7a2658451a4ffd6c4c498960960c638b3f0e1",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-custom-words-tv-vote-intro-tv.png",
+      "sha256": "7f6e0b135878d58382cfa84632972843d08ad65b7c9d048269d5799d4e6afa7f",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-custom-words-tv-vote-question-tv.png",
+      "sha256": "a19bf1bda5c64e2d92fdb1870a6b5c37c0a927a8c1b5de6f217ba78393a58b30",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-custom-words-tv-vote-reveal-tv.png",
+      "sha256": "3ff95bf524db7159f39f60892ecac0970435a63ae08e1c17201c3b20bd26b37a",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-custom-words-tv-vote-talk-tv.png",
+      "sha256": "272e2197170594684d6f97f1b98f5412924ee940227b756c396d0970908a415c",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-teams-done-tv.png",
+      "sha256": "a6d7133bae21c433b8bab124ca94988062bba7b4dc2e725ab50eb9ea74c2d4da",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-teams-explanation-tv.png",
+      "sha256": "589f9ed2bdd9f1d809bbae04f9a445d00e2e0f126d250129912061d6c293b441",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-teams-intro-tv.png",
+      "sha256": "76efaf1ec36dbb857a57bfe49ae34839e1218bd036472849e0756ab4fe2a70b3",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-teams-last-explanation-tv.png",
+      "sha256": "a91c2e7a77ae3f5958386e66c5b3457b3aa5fa3915c785524cf53677de7a806b",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-teams-last-reveal-tv.png",
+      "sha256": "f83c10b7cd6a6a1187d5b68fe9a2c0f04a7863fedbfab8053087635df338db61",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-teams-locked-tv.png",
+      "sha256": "84965ed2d6f9ae0da2ff90b7bddb3b38d697d5450e793a55b5e35c1b7c07e5fa",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-teams-paused-tv.png",
+      "sha256": "1389aa33b41c9d0a066faeab95a8242351d89931241763ed1f30415de459d0b0",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-teams-podium-1-tv.png",
+      "sha256": "d13abc6bcf4f48b2866d8b14e45f2499bf913dbb716de92dc5589b44fd800f01",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-teams-podium-2-tv.png",
+      "sha256": "f9bb16e33786224d2ee527a220e7da527f8c9d502f311e33ec03e94afbcdab3c",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-teams-podium-3-tv.png",
+      "sha256": "abddebe51e6b7b5cd2bfa89c18b46abd652b0a2f84f000ac68ab8012ed328802",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-teams-question-tv.png",
+      "sha256": "4cbbcb941f77f47a60bccccd7fcdeeb7ab55229a18c320191cc59b6093d8ad37",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-teams-reveal-tv.png",
+      "sha256": "1866d799ac331e9f2866697e971e0dc28d1ca1206f4a956f9a169b14acd0f445",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-teams-revealed-result-tv.png",
+      "sha256": "1866d799ac331e9f2866697e971e0dc28d1ca1206f4a956f9a169b14acd0f445",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-teams-standings-tv.png",
+      "sha256": "a0556580ee018d6fc34f73ecabc0d1515d474a9464e91a596168220daf19d3d0",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-teams-talk-tv.png",
+      "sha256": "b5afd3f128764c4a2afff9c5751be5858966bbf7502eeded3e2c2f6d9c3ec1e3",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-tv-vote-done-tv.png",
+      "sha256": "746254d96aaaa64dc1e4ff66fe587a2aad5d3349d7ad17e2a938e78d99eafe14",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-tv-vote-explanation-tv.png",
+      "sha256": "c0d0f9a557275bd28ec29426b7909a4d24689f559f9bbc6f56f95da6c5cde2d8",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-tv-vote-intro-tv.png",
+      "sha256": "92818753f60d30a67be7ae771a5ef32507471edb3eae707f6781467cfff2a2b5",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-tv-vote-last-explanation-tv.png",
+      "sha256": "9d04ab9f89cd41b0eeb456f5a9649ad25cb5e18af9b0e21f210f53c9494eb079",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-tv-vote-last-reveal-tv.png",
+      "sha256": "24f3c5e8911c346b890f1c70025a63aecd82a414fda3fe9437a3aada637c5c26",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-tv-vote-locked-tv.png",
+      "sha256": "f88dfcc3ed88051691d94988b046d16fe5077dd55761b93934bbda251917dfde",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-tv-vote-paused-tv.png",
+      "sha256": "b57795c1450211cd073191722f0337e6464f95d8abf2c862f4743e671b6079ea",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-tv-vote-podium-1-tv.png",
+      "sha256": "6acb7b5b690f096e540d32221406c0caad628f458885f3578f70107f358e10da",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-tv-vote-question-tv.png",
+      "sha256": "e419436c39c43593e2d5f84c16050424bc567269a81b554ef88425d85446f5d8",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-tv-vote-reveal-tv.png",
+      "sha256": "05a797f927e16384c623db4d99747b983dec8edb612509d1abb2a4946ff25b15",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-tv-vote-revealed-result-tv.png",
+      "sha256": "05a797f927e16384c623db4d99747b983dec8edb612509d1abb2a4946ff25b15",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-tv-vote-standings-tv.png",
+      "sha256": "12a314bb25b826d083d479e525c449038105549d7cba5f9068b72fdb24db1400",
+      "reviewBasis": "hash-identical prior full-size review"
+    },
+    {
+      "name": "groups-tv-vote-talk-tv.png",
+      "sha256": "dfefd8e002a8af56a528f87034cbb7a29e6bbaf9cf2071c8e7f989bc3b0cbbc3",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-tv-vote-tied-reveal-tv.png",
+      "sha256": "7049479371f006e330de2fd5782aebf0176ff89c55d2a4c095347341852857f3",
+      "reviewBasis": "re-viewed corrected PNG"
+    },
+    {
+      "name": "groups-two-teams-talk-tv.png",
+      "sha256": "35fb7fac57312c61e2cd0dc67a7e5d96ed03ca2c67c78a7a7b56e165ae844d53",
+      "reviewBasis": "re-viewed corrected PNG"
+    }
+  ],
+  "reproducibilityCapture": {
+    "capturedFrames": 229,
+    "browserPid": 53372,
+    "browserClosed": true,
+    "mediaBytesAtCompletion": 8544996,
+    "automatedResult": "Exit 0; all checks green",
+    "unchangedTvHashes": 47,
+    "changedTvReViewed": 3,
+    "changedNames": [
+      "groups-custom-unbroken-teams-question-tv.png",
+      "groups-custom-unbroken-tv-vote-question-tv.png",
+      "groups-custom-unbroken-tv-vote-talk-tv.png"
+    ]
+  },
+  "finalMetadataCapture": {
+    "capturedAtUtc": "2026-10-12T17:16:05.850Z",
+    "browserPid": 77304,
+    "browserClosed": true,
+    "baseFrames": 219,
+    "capturedFrames": 229,
+    "nativeDisclosurePairs": 10,
+    "allNativeDisclosuresRestored": true,
+    "automatedResult": "Exit 0; 229 frames and zero failures, reported by root",
+    "unchangedTvHashes": 48,
+    "changedTvReViewed": 2,
+    "changedFrames": [
+      {
+        "name": "groups-custom-unbroken-tv-vote-question-tv.png",
+        "priorReviewedSha256": "468626830e4a65e2b2ad03c0fdc6b71b0e7eb72d8b3e4a19d19467848ac25229",
+        "sha256": "0e17f8eb18567a034757b3894b7aa6ae69d8367741f9faa54fae138eb54e485d"
+      },
+      {
+        "name": "groups-custom-unbroken-tv-vote-talk-tv.png",
+        "priorReviewedSha256": "e32ba941e2be839ada646d9bac39816fd57944e0dd485594e0a9efa6283606b4",
+        "sha256": "ae2d5b160cd702fad019ae7b9c70201d8a80c9ee6de8a10285a3886456cd574f"
+      }
+    ],
+    "visualFinding": "Both current maximum-unbroken Room Talk/question frames were inspected at original resolution. Prompt/options, 20/17 second clock, central instruction, accepted-vote count and footer remain separate and fully readable. No new actionable static layout issue.",
+    "reviewDirectory": "C:\\Users\\LUISI_~1\\AppData\\Local\\Temp\\pb-p02-review-bDdZhP"
+  }
+}

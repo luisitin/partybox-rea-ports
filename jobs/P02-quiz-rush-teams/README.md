@@ -6,7 +6,7 @@ Groups support 2–8 players, TV and phone-only rooms, spectators, bots and reco
 
 Sports and music add twenty authored questions each. Strict UTF-8 custom packs compile before bundling (5–20 questions with reserved IDs). Exact public prompts can reuse independent standard answer-text facts; narrow count word/digit equivalence is allowed. Unknown/edited/conflicting prompts and ambiguous choices remain seeded guesses; custom keys never teach bots.
 
-Quality-loop changes add native-like shared phone receipts, actual EN/ES reading budgets, a live final VIP window, the public quiet TV countdown cue, a translated room-tie explanation and own-team discovery with factual Away/Left presence labels. Staged teammate disclosure swaps roster/question panes; it accepts no game answer during discussion.
+Quality-loop changes add native-style shared phone receipts, a vertical shape/count/correctness chart, the full authored explanation in a separate shared beat, and standings. Reveal cuts freeze at scoring; final Room vote outcomes withhold raw shared-score fields. Actual EN/ES reading budgets, an adaptive final VIP window, quiet TV countdown cues, tied-room explanation and factual own-team Away/Left discovery preserve PartyBox phone/presence plumbing. Native teammate disclosure swaps roster/question panes and sends no game answer; accepted departing picks remain in live progress.
 
 Wager and individual Classic retain their canonical behavior. This stacked public PR performs no owner-core deployment; [UPGRADE.md](UPGRADE.md) documents the existing wager-team overlap and migration scope. No runtime network/file reads, new dependency or second picker card.
 
@@ -23,6 +23,6 @@ Compile custom text using `pnpm exec tsx jobs/P02-quiz-rush-teams/validate-pack.
 - `pnpm vitest run games/kahoot --maxWorkers=1 --pool=threads`
 - `pnpm exec tsx jobs/P02-quiz-rush-teams/validate-pack.ts my-pack.txt`
 
-Initial integrated CI passed 345 tests and required simulation/property campaigns. Rounds 1–6 have focused checks; latest roster/presence/pacing checks passed 71/71 in 10.24 s and typecheck passed. Final current-head CI, the expanded mutation campaign, fresh maximum-legal-text/native-disclosure browser evidence and three zero-gain rounds remain pending; the PR stays draft.
+Current runtime CI passed 502 tests, required simulations and properties. Final SSR/capture passed 229 surfaces with all geometry/native-disclosure checks, closed PID77304 and media below 10 MB; all unique frames have agent review. Semantic mutations killed 24/24 with zero invalid, green 141-check baselines and restored hashes. One zero-gain review is recorded; final-head CI and two remaining reviews keep PR18 draft.
 
-Specification: [games/kahoot/README.md](../../games/kahoot/README.md). RESEARCH.md/SOURCES.md distinguish original mechanics and allowed PartyBox adaptations; ASSUMPTIONS.md records access limits. VERIFY.md contains executed results; NEXT.md is the handoff; LOOP.md records measured rounds. Saved reports/images/hashes remain labeled baseline until final refresh.
+Specification: [games/kahoot/README.md](../../games/kahoot/README.md). RESEARCH.md/SOURCES.md distinguish original mechanics and allowed PartyBox adaptations; ASSUMPTIONS.md records access limits. VERIFY.md contains executed results; NEXT.md is the handoff; LOOP.md records measured rounds. Current CI reports and captured inputs are bound by evidence-source.json; historical checks remain labeled in LOOP.md.

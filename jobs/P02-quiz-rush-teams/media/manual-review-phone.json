@@ -1,0 +1,124 @@
+{
+  "round": 10,
+  "scope": "P02 phone-only and remote PNG evidence after Round 9 HUD/chart corrections",
+  "reviewMethod": {
+    "latest": "SHA256 comparison of every current PNG against the prior individually accounted manual review set",
+    "prior": "All 112 full frames reviewed in 28 native-size four-frame sheets; six hardest frames also reviewed individually; independent second review of five hard frames",
+    "changedCasesReinspected": 0,
+    "rationale": "No assigned current PNG differs from its previously reviewed counterpart."
+  },
+  "counts": {
+    "phoneOnlyBase": 51,
+    "phoneOnlyOpened": 5,
+    "remoteBase": 51,
+    "remoteOpened": 5,
+    "total": 112,
+    "changedPhoneOnly": 0,
+    "changedRemote": 0,
+    "identicalLatestPairs": 56
+  },
+  "provenance": {
+    "latestRoleDirectory": "C:/Users/LUISI_~1/AppData/Local/Temp/pb-p02-review-XwlfaQ",
+    "priorRoleDirectory": "C:/Users/LUISI_~1/AppData/Local/Temp/pb-p02-review-ua9gCY",
+    "priorReviewInventory": "C:/Users/LUISI_~1/AppData/Local/Temp/pb-p02-content-review-final229-7ab432/inventory.json",
+    "hashComparison": "hash-comparison.json",
+    "latestCaptureAtUtc": "2026-10-12T16:55:31.528Z",
+    "browserPid": 37732,
+    "closureVerified": true
+  },
+  "latestGeometry": {
+    "measurements": 229,
+    "horizontalOverflow": 0,
+    "verticalOverflow": 0,
+    "clipped": 0,
+    "overflowingScrollerScreens": 0,
+    "trackedScrollerContainers": 179,
+    "choiceOverflow": 0,
+    "unstyled": 0
+  },
+  "observedFindings": [
+    "No confirmed clipping, lost legal text, misleading room-personal correctness, incorrect tie cue, TV-only phone instructions, broken Left/Away label, or hidden final-result disclosure in the assigned frames.",
+    "The 110-character prompts, 42-character choices, 120-character explanations and 40-character player names remain visible.",
+    "Group chart, explanation and standings are separate readable panes.",
+    "Team receipts distinguish personal points from shared averaged gain; Room receipts distinguish the private vote from the shared chosen answer.",
+    "Opened own-team rosters preserve the clock and provide a visible return to question."
+  ],
+  "eightStrangerReview": {
+    "confirmedMaterialDefects": 0,
+    "remainingWeaknesses": [
+      {
+        "rank": 1,
+        "classification": "evidence limitation",
+        "weakness": "Static captures do not establish coordinated live eight-person comprehension, network recovery, delivered audio or animation timing.",
+        "sourceChangeRecommended": false,
+        "action": null
+      },
+      {
+        "rank": 2,
+        "classification": "cosmetic / content-quality tradeoff",
+        "weakness": "Pathological many-word legal custom content leads to large visible reading windows (141-second question; 75–78-second talk in the reviewed wordy fixtures). The required reading floor is functioning; shorter, meaningful authored content would improve party pace.",
+        "sourceChangeRecommended": false,
+        "action": "Prefer concise authored custom questions; do not shorten the required reading floor."
+      },
+      {
+        "rank": 3,
+        "classification": "cosmetic",
+        "weakness": "Crossed-out 42-character unbroken wrong choices remain visually dense, despite fitting fully. This is confined to pathological content in these frames.",
+        "sourceChangeRecommended": false,
+        "action": null
+      },
+      {
+        "rank": 4,
+        "classification": "cosmetic",
+        "weakness": "The compact result receipt sits far below the chart, so newcomers must shift attention to notice personal and shared gains. Labels remain readable and distinct.",
+        "sourceChangeRecommended": false,
+        "action": null
+      },
+      {
+        "rank": 5,
+        "classification": "cosmetic",
+        "weakness": "The shared Room podium retains empty second/third-place tiers. It adds a little competitive framing to a cooperative score, without presenting incorrect winners or leaking hidden identities.",
+        "sourceChangeRecommended": false,
+        "action": null
+      }
+    ],
+    "conclusion": "No actionable runtime defect or necessary source change is supported by this review. This is not a claim of live eight-person or original-audio convergence."
+  },
+  "limitations": [
+    "The assigned PNG review scope uses English at 390×844; it does not establish fit under OS text zoom or additional device viewports.",
+    "No tests, browser, git or runtime mutation performed by this reviewer.",
+    "The 179 measured scroller containers all report zero overflow; container presence is not a scroll failure."
+  ],
+  "finalFormattingReproducibility": {
+    "capture": {
+      "capturedAtUtc": "2026-10-12T17:08:30.385Z",
+      "browserPid": 53372,
+      "closureVerified": true,
+      "nativeVerifierTimeoutMs": 45000,
+      "baseScreens": 219,
+      "screensCaptured": 229,
+      "nativeDisclosurePairs": 10,
+      "nativeDisclosureMethod": "pointer press/release opens; focused Enter down/up closes",
+      "allNativeDisclosuresRestored": true,
+      "htmlRolePngReviewDirectory": "C:\\Users\\LUISI_~1\\AppData\\Local\\Temp\\pb-p02-review-PjsQu8"
+    },
+    "comparison": "format-reproducibility-hash-comparison.json",
+    "phoneCount": 56,
+    "remoteCount": 56,
+    "changedPhone": 0,
+    "changedRemote": 0,
+    "identicalPairs": 56,
+    "changedCasesReinspected": 0,
+    "reason": "Every final PNG is SHA256-identical to its already reviewed Round 10 counterpart.",
+    "geometry": {
+      "measurements": 229,
+      "horizontalOverflow": 0,
+      "verticalOverflow": 0,
+      "clipped": 0,
+      "overflowingScrollerScreens": 0,
+      "trackedScrollerContainers": 179,
+      "choiceOverflow": 0,
+      "unstyled": 0
+    }
+  }
+}

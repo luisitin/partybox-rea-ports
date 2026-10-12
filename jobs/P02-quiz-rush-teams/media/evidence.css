@@ -50,6 +50,20 @@
   font-size: var(--pb-font-display);
   color: var(--pb-accent-2);
 }
+._tvPage_986a22[data-phase='intro']:has([data-group-intro-rules]) ._intro_986a22 h2 {
+  font-size: var(--pb-font-h1);
+  line-height: 1.1;
+  margin-bottom: var(--pb-space-2);
+}
+._phoneQuestion_986a22[data-group][data-stage] ._phonePrompt_986a22 {
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+._phoneQuestion_986a22[data-group][data-stage] ._shape_986a22 {
+  width: var(--pb-font-display);
+  height: var(--pb-font-display);
+  flex: none;
+}
 ._intro_986a22 p {
   font-size: var(--pb-font-body);
 }
@@ -90,6 +104,13 @@
 ._choice0_986a22 {
   background: var(--pb-accent);
   color: var(--pb-on-accent);
+}
+._optionResult_986a22 {
+  flex: none;
+  margin-inline-start: auto;
+  font-size: var(--pb-font-body);
+  line-height: 1;
+  font-weight: 1000;
 }
 ._choice1_986a22 {
   background: var(--pb-accent-2-fill);
@@ -3735,9 +3756,20 @@ button {
 [data-surface='tv'] ._members_3a8fe9 > span::after {
   content: none;
 }
+/* Full-width member pairs keep every legal nickname readable in the host's intro. */
+[data-surface='tv'] [data-phase='intro'] ._roster_3a8fe9 {
+  grid-template-columns: minmax(0, 1fr);
+}
+[data-surface='tv'] [data-phase='intro'] ._roster_3a8fe9 ._members_3a8fe9 {
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: var(--pb-space-3);
+}
+[data-surface='tv'] [data-phase='intro'] ._roster_3a8fe9 li {
+  padding-block: 0;
+}
 ._questionStage_3a8fe9 {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-rows: auto minmax(min-content, 1fr) auto auto;
   gap: var(--pb-space-2);
   flex: 1;
   min-height: 0;
@@ -3747,7 +3779,7 @@ button {
   min-width: 0;
   overflow-wrap: anywhere;
   text-align: center;
-  font-size: var(--pb-font-h2);
+  font-size: var(--pb-font-body);
   line-height: 1.15;
   text-wrap: balance;
 }
@@ -3774,8 +3806,8 @@ button {
 ._countdownCircle_3a8fe9 {
   display: grid;
   place-items: center;
-  width: calc(var(--pb-font-display) * 1.25);
-  height: calc(var(--pb-font-display) * 1.25);
+  width: var(--pb-font-display);
+  height: var(--pb-font-display);
   border-radius: 50%;
   background: var(--pb-accent-2-fill);
   color: var(--pb-on-accent-2-fill);
@@ -3783,6 +3815,10 @@ button {
   font-weight: 1000;
   line-height: 1;
   font-variant-numeric: tabular-nums;
+}
+._countdownCircle_3a8fe9[data-long] {
+  width: calc(var(--pb-font-display) * 1.5);
+  height: calc(var(--pb-font-display) * 1.5);
 }
 ._countdownCircle_3a8fe9[data-paused] {
   background: var(--pb-surface-2);
@@ -3802,10 +3838,12 @@ button {
 }
 ._questionAnswers_3a8fe9 li {
   min-height: calc(var(--pb-space-8) * 1.5);
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-1);
 }
 ._questionAnswers_3a8fe9 svg {
-  width: var(--pb-font-h2);
-  height: var(--pb-font-h2);
+  width: var(--pb-font-body);
+  height: var(--pb-font-body);
 }
 ._questionFooter_3a8fe9 {
   display: flex;
@@ -4177,4 +4215,301 @@ button {
   background: var(--pb-surface-2);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+/* games/kahoot/client/GroupAnswerChart.module.css */
+/* The native graph is centered; the full-width answer alternatives remain the reading anchor. */
+._chart_447d97 {
+  display: grid;
+  grid-template-rows:
+    auto minmax(calc(var(--pb-font-body) * 1.2 + var(--pb-space-2) * 2), 1fr)
+    auto auto;
+  gap: var(--pb-space-3);
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+}
+._prompt_447d97 {
+  justify-self: center;
+  max-width: 100%;
+  margin: 0;
+  padding: var(--pb-space-1) var(--pb-space-4);
+  border-radius: calc(var(--pb-radius) / 2);
+  background: var(--pb-surface);
+  color: var(--pb-text);
+  font-size: var(--pb-font-body);
+  line-height: 1.15;
+  text-align: center;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+._bars_447d97 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-self: center;
+  justify-self: center;
+  column-gap: var(--pb-space-7);
+  width: 60%;
+  max-width: calc(var(--pb-space-8) * 13);
+  height: 100%;
+  max-height: calc(var(--pb-space-8) * 4);
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+._column_447d97 {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 0;
+  min-width: 0;
+}
+._track_447d97 {
+  position: relative;
+  min-height: 0;
+}
+._fill_447d97 {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: calc(100% * var(--pb-group-chart-share));
+  border-radius: calc(var(--pb-radius) / 2) calc(var(--pb-radius) / 2) 0 0;
+}
+._base_447d97 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+  border-radius: 0 0 calc(var(--pb-radius) / 2) calc(var(--pb-radius) / 2);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+._base_447d97::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--pb-bg);
+  opacity: 0.18;
+  content: '';
+  pointer-events: none;
+}
+._base_447d97 > * {
+  position: relative;
+}
+._shape_447d97 {
+  flex: none;
+  width: var(--pb-font-body);
+  height: var(--pb-font-body);
+}
+._check_447d97 {
+  font-size: var(--pb-font-body);
+  line-height: 1;
+  font-weight: 1000;
+}
+._choices_447d97 {
+  min-width: 0;
+}
+._choices_447d97 li {
+  min-height: 0;
+  padding: var(--pb-space-2);
+  gap: var(--pb-space-2);
+}
+._choices_447d97 li[data-correct='false'] {
+  background: var(--pb-surface-2);
+  color: var(--pb-text-muted);
+}
+._choices_447d97 li[data-correct='false'] > span:first-of-type {
+  text-decoration: line-through;
+}
+._footer_447d97 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--pb-space-2) var(--pb-space-4);
+  min-width: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+._footer_447d97 > p {
+  flex-basis: 100%;
+  min-width: 0;
+  margin: 0;
+  font-size: inherit;
+}
+/* Phones retain the shared shapes and the original four alternatives on the SDK type scale. */
+[data-surface='phone'] ._chart_447d97 {
+  gap: var(--pb-space-2);
+  grid-template-rows: auto minmax(calc(var(--pb-font-body) + var(--pb-space-1) * 2), 1fr) auto auto;
+}
+[data-surface='phone'] ._prompt_447d97 {
+  padding: var(--pb-space-1) var(--pb-space-2);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+[data-surface='phone'] ._bars_447d97 {
+  width: 100%;
+  max-width: none;
+  max-height: calc(var(--pb-space-8) * 2);
+  column-gap: var(--pb-space-2);
+}
+[data-surface='phone'] ._base_447d97 {
+  gap: var(--pb-space-1);
+  padding: var(--pb-space-1);
+  font-size: var(--pb-font-caption);
+}
+[data-surface='phone'] ._shape_447d97,
+[data-surface='phone'] ._check_447d97 {
+  width: var(--pb-font-body);
+  height: var(--pb-font-body);
+  font-size: var(--pb-font-body);
+}
+[data-surface='phone'] ._choices_447d97 ol {
+  gap: var(--pb-space-2);
+}
+[data-surface='phone'] ._choices_447d97 li {
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+  font-size: var(--pb-font-caption);
+}
+[data-surface='phone'] ._choices_447d97 svg {
+  width: var(--pb-font-h2);
+  height: var(--pb-font-h2);
+}
+[data-surface='phone'] ._footer_447d97 {
+  font-size: var(--pb-font-caption);
+}
+
+/* The phone Screen already supplies the round title; the TV keeps its native footer ordinal. */
+[data-surface='phone'] ._ordinal_447d97 {
+  display: none;
+}
+
+/* games/kahoot/client/GroupRevealStage.module.css */
+/* Full authored text wraps on both stages; no clipping, line clamp or omitted content. */
+._explanation_392906 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--pb-space-2);
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+._prompt_392906,
+._heading_392906,
+._copy_392906 {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+._prompt_392906,
+._heading_392906 {
+  font-size: var(--pb-font-h2);
+  line-height: 1.1;
+  text-align: center;
+  text-wrap: balance;
+}
+._prompt_392906 {
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+._correctChoice_392906 {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--pb-space-2);
+  min-width: 0;
+  margin: 0;
+  padding: var(--pb-space-2);
+  border-radius: calc(var(--pb-radius) / 2);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+._correctChoice_392906 > b {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+._shape_392906 {
+  flex: none;
+  width: var(--pb-font-body);
+  height: var(--pb-font-body);
+}
+._check_392906 {
+  flex: none;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+  font-weight: 1000;
+}
+._copy_392906 {
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+._decision_392906 {
+  min-width: 0;
+}
+._decision_392906 > p {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+._receipt_392906 {
+  display: grid;
+  gap: var(--pb-space-1);
+  min-width: 0;
+  padding-top: var(--pb-space-2);
+  border-top: calc(var(--pb-space-1) / 4) solid var(--pb-border);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+._primaryRow_392906,
+._teamRow_392906 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-1) var(--pb-space-2);
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+._primaryRow_392906 > b {
+  font-size: var(--pb-font-body);
+}
+._myVote_392906,
+._voteMark_392906 {
+  display: inline-flex;
+  align-items: center;
+}
+._myVote_392906 {
+  gap: var(--pb-space-1);
+}
+._voteMark_392906 {
+  padding: var(--pb-space-1);
+  border-radius: calc(var(--pb-radius) / 2);
+}
+._cue_392906 {
+  margin: 0;
+  text-align: center;
+}
+/* The SDK phone scale keeps all 110/42/120-character content legible and wrapped. */
+[data-surface='phone'] ._prompt_392906 {
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+[data-surface='phone'] ._heading_392906 {
+  font-size: var(--pb-font-h2);
+  line-height: 1.2;
+}
+[data-surface='phone'] ._correctChoice_392906,
+[data-surface='phone'] ._copy_392906 {
+  font-size: var(--pb-font-body);
+}
+[data-surface='phone'] ._receipt_392906 {
+  font-size: var(--pb-font-caption);
 }
