@@ -444,16 +444,17 @@ ight is the :root default above) ────────
       ._paper_2a652a {
         width: 100%;
         min-height: 0;
-        aspect-ratio: 5 / 3;
-        align-self: center;
-        max-height: 100%;
+        display: grid;
+        place-items: center;
       }
 
       ._paper_2a652a canvas {
         display: block;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
+        width: auto;
+        height: auto;
+        max-width: calc(100% - var(--pb-space-1) - var(--pb-space-1));
+        max-height: calc(100% - var(--pb-space-1) - var(--pb-space-1));
+        box-sizing: content-box;
         border: var(--pb-space-1) solid var(--pb-surface-2);
         background: var(--pb-bg);
         border-radius: var(--pb-radius);
@@ -864,9 +865,9 @@ ight is the :root default above) ────────
           </svg>
           <p>Pick a picture you can draw. Keep it secret!</p>
           <div class="_choices_49b69d" role="group" aria-label="Secret word choices">
-            <button type="button"><span aria-hidden="true">1</span>balloon</button
-            ><button type="button"><span aria-hidden="true">2</span>cat</button
-            ><button type="button"><span aria-hidden="true">3</span>sun</button>
+            <button type="button"><span aria-hidden="true">1</span>tree</button
+            ><button type="button"><span aria-hidden="true">2</span>sun</button
+            ><button type="button"><span aria-hidden="true">3</span>star</button>
           </div>
         </div>
       </section>

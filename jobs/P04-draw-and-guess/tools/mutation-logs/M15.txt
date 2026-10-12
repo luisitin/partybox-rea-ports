@@ -1,13 +1,13 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 25ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 1 failed) 26ms
      × caps drawings, rejects invalid payloads at the schema boundary, and stays within wire budgets 5ms
 
  Test Files  1 failed (1)
-      Tests  1 failed | 20 passed (21)
-   Start at  16:18:51
-   Duration  637ms (transform 290ms, setup 0ms, import 448ms, tests 25ms, environment 0ms)
+      Tests  1 failed | 23 passed (24)
+   Start at  17:35:38
+   Duration  685ms (transform 313ms, setup 0ms, import 483ms, tests 26ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
@@ -21,13 +21,13 @@ AssertionError: expected [ { points: [ …(2) ], …(2) }, …(240) ] to have a 
 - 240
 + 241
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:69:23
-     67|       s = kit.input(s, s.drawer, { type: 'stroke', stroke }, s.began +…
-     68|     }
-     69|     expect(s.strokes).toHaveLength(MAX_STROKES);
+ ❯ games/draw-and-guess/__tests__/game.test.ts:110:23
+    108|       s = kit.input(s, s.drawer, { type: 'stroke', stroke }, s.began +…
+    109|     }
+    110|     expect(s.strokes).toHaveLength(MAX_STROKES);
        |                       ^
-     70|     expect(jsonBytes(s)).toBeLessThanOrEqual(STATE_SIZE_LIMIT_BYTES);
-     71|     expect(jsonBytes(game.tvView(s))).toBeLessThanOrEqual(64 * 1024);
+    111|     expect(jsonBytes(s)).toBeLessThanOrEqual(STATE_SIZE_LIMIT_BYTES);
+    112|     expect(jsonBytes(game.tvView(s))).toBeLessThanOrEqual(64 * 1024);
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
 

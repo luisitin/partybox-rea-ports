@@ -1,14 +1,14 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 2 failed) 54ms
-     × timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer 6ms
-     × every player draws once per lap and the final reveal continues into stable complete results 27ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 2 failed) 43ms
+     × timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer 5ms
+     × every player draws once per lap and the final reveal continues into stable complete results 16ms
 
  Test Files  1 failed (1)
-      Tests  2 failed | 19 passed (21)
-   Start at  16:18:53
-   Duration  693ms (transform 294ms, setup 0ms, import 456ms, tests 54ms, environment 0ms)
+      Tests  2 failed | 22 passed (24)
+   Start at  17:35:42
+   Duration  688ms (transform 310ms, setup 0ms, import 476ms, tests 43ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
@@ -19,13 +19,13 @@ AssertionError: expected 'draw' to be 'reveal' // Object.is equality
 Expected: "reveal"
 Received: "draw"
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:123:24
-    121|     const secret = s.word;
-    122|     s = kit.finish(s, 40);
-    123|     expect(s.phase.id).toBe('reveal');
+ ❯ games/draw-and-guess/__tests__/game.test.ts:164:24
+    162|     const secret = s.word;
+    163|     s = kit.finish(s, 40);
+    164|     expect(s.phase.id).toBe('reveal');
        |                        ^
-    124|     expect(game.tvView(s).answer).toBe(secret);
-    125|   });
+    165|     expect(game.tvView(s).answer).toBe(secret);
+    166|   });
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
 
@@ -35,13 +35,13 @@ AssertionError: expected 'draw' to be 'done' // Object.is equality
 Expected: "done"
 Received: "draw"
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:137:26
-    135|         else s = kit.timer(s);
-    136|       }
-    137|       expect(s.phase.id).toBe('done');
+ ❯ games/draw-and-guess/__tests__/game.test.ts:178:26
+    176|         else s = kit.timer(s);
+    177|       }
+    178|       expect(s.phase.id).toBe('done');
        |                          ^
-    138|       expect(artists).toHaveLength(8 * laps);
-    139|       for (const id of Object.keys(s.players))
+    179|       expect(artists).toHaveLength(8 * laps);
+    180|       for (const id of Object.keys(s.players))
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
 

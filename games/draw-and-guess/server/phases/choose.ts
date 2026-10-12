@@ -5,21 +5,38 @@ import { vocabulary } from '../content';
 import { BOT_ART } from '../pictures';
 import { CHOOSE_MS } from '../types';
 import type { State, Input, Transition } from '../types';
+
+function wordHand(state: State, bot: boolean): [string[], State['rng']] {
+  const eligible = (words: readonly string[]): string[] =>
+    words.filter((word) => !bot || Object.hasOwn(BOT_ART, word));
+  if (state.settings.difficulty === 'mixed') {
+    let rng = state.rng;
+    const hand: string[] = [];
+    // Every artist gets the same range of choices, independent of a lucky difficulty deal.
+    for (const tier of ['easy', 'medium', 'hard']) {
+      const pool = eligible(vocabulary(tier));
+      const unused = pool.filter((word) => !state.used.includes(word));
+      const [deck, nextRng] = shuffle(rng, unused.length ? unused : pool);
+      rng = nextRng;
+      hand.push(...deck.slice(0, 1));
+    }
+    return shuffle(rng, hand);
+  }
+  const pool = eligible(vocabulary(state.settings.difficulty));
+  const unused = pool.filter((word) => !state.used.includes(word));
+  const [deck, rng] = shuffle(state.rng, unused.length >= 3 ? unused : pool);
+  return [deck.slice(0, 3), rng];
+}
+
 export function enterChoose(state: State, now: number, turn: number): State {
   const drawer = state.order[turn] ?? '';
-  const words = vocabulary(state.settings.difficulty);
-  const bot = state.players[drawer]?.bot;
-  const suitable = words.filter(
-    (word) => (!bot || Object.hasOwn(BOT_ART, word)) && !state.used.includes(word),
-  );
-  const fallback = words.filter((word) => !bot || Object.hasOwn(BOT_ART, word));
-  const [deck, rng] = shuffle(state.rng, suitable.length >= 3 ? suitable : fallback);
+  const [choices, rng] = wordHand(state, Boolean(state.players[drawer]?.bot));
   return enterPhase(
     {
       ...state,
       turn,
       drawer,
-      choices: deck.slice(0, 3),
+      choices,
       rng,
       word: '',
       strokes: [],

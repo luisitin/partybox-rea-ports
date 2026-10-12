@@ -1,13 +1,13 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 27ms
-     × only the connected drawer may paint, clear or undo, and undo preserves earlier strokes 6ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 1 failed) 38ms
+     × only the connected drawer may paint, clear or undo, and undo preserves earlier strokes 8ms
 
  Test Files  1 failed (1)
-      Tests  1 failed | 20 passed (21)
-   Start at  16:18:48
-   Duration  638ms (transform 275ms, setup 0ms, import 428ms, tests 27ms, environment 0ms)
+      Tests  1 failed | 23 passed (24)
+   Start at  17:35:36
+   Duration  722ms (transform 334ms, setup 0ms, import 507ms, tests 38ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
@@ -37,13 +37,13 @@ AssertionError: expected [ { points: [ [ 400, 200 ] ], …(2) } ] to deeply equa
       "width": 9,
     },
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:47:80
-     45|     const second = { ...stroke, color: 3, points: [[400, 200]] } as ty…
-     46|     const two = kit.input(painted, s.drawer, { type: 'stroke', stroke:…
-     47|     expect(kit.input(two, s.drawer, { type: 'undo' }, s.began + 1600).…
+ ❯ games/draw-and-guess/__tests__/game.test.ts:88:80
+     86|     const second = { ...stroke, color: 3, points: [[400, 200]] } as ty…
+     87|     const two = kit.input(painted, s.drawer, { type: 'stroke', stroke:…
+     88|     expect(kit.input(two, s.drawer, { type: 'undo' }, s.began + 1600).…
        |                                                                                ^
-     48|     expect(kit.input(two, s.drawer, { type: 'clear' }, s.began + 1700)…
-     49|     for (const id of [guesser(s), 'spectator', '__proto__', 'construct…
+     89|     expect(kit.input(two, s.drawer, { type: 'clear' }, s.began + 1700)…
+     90|     for (const id of [guesser(s), 'spectator', '__proto__', 'construct…
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
 

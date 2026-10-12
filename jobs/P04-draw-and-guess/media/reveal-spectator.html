@@ -444,16 +444,17 @@ ight is the :root default above) ────────
       ._paper_2a652a {
         width: 100%;
         min-height: 0;
-        aspect-ratio: 5 / 3;
-        align-self: center;
-        max-height: 100%;
+        display: grid;
+        place-items: center;
       }
 
       ._paper_2a652a canvas {
         display: block;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
+        width: auto;
+        height: auto;
+        max-width: calc(100% - var(--pb-space-1) - var(--pb-space-1));
+        max-height: calc(100% - var(--pb-space-1) - var(--pb-space-1));
+        box-sizing: content-box;
         border: var(--pb-space-1) solid var(--pb-surface-2);
         background: var(--pb-bg);
         border-radius: var(--pb-radius);
@@ -836,13 +837,13 @@ ight is the :root default above) ────────
         <header class="_header_49b69d">
           <div class="_heading_49b69d">
             <p class="_kicker_49b69d">The word was</p>
-            <h2 class="_title_49b69d" data-mask="false">balloon</h2>
+            <h2 class="_title_49b69d" data-mask="false">tree</h2>
           </div>
         </header>
         <div class="_picture_49b69d">
           <svg class="_picture_c36590" viewBox="0 0 1000 600" role="img" aria-label="Live drawing">
             <polyline
-              points="630,220 624,260 605,296 576,325 540,344 500,350 460,344 424,325 395,296 376,260 370,220 376,180 395,144 424,115 460,96 500,90 540,96 576,115 605,144 624,180 630,220"
+              points="470,520 470,340 530,340 530,520"
               fill="none"
               stroke="var(--pb-text)"
               stroke-width="9"
@@ -850,7 +851,7 @@ ight is the :root default above) ────────
               stroke-linejoin="round"
             ></polyline>
             <polyline
-              points="470,350 500,380 530,350"
+              points="250,350 500,50 750,350 250,350"
               fill="none"
               stroke="var(--pb-text)"
               stroke-width="9"
@@ -858,7 +859,7 @@ ight is the :root default above) ────────
               stroke-linejoin="round"
             ></polyline>
             <polyline
-              points="500,380 480,440 530,490 500,550"
+              points="200,520 800,520"
               fill="none"
               stroke="var(--pb-text)"
               stroke-width="9"

@@ -444,16 +444,17 @@ ight is the :root default above) ────────
       ._paper_2a652a {
         width: 100%;
         min-height: 0;
-        aspect-ratio: 5 / 3;
-        align-self: center;
-        max-height: 100%;
+        display: grid;
+        place-items: center;
       }
 
       ._paper_2a652a canvas {
         display: block;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
+        width: auto;
+        height: auto;
+        max-width: calc(100% - var(--pb-space-1) - var(--pb-space-1));
+        max-height: calc(100% - var(--pb-space-1) - var(--pb-space-1));
+        box-sizing: content-box;
         border: var(--pb-space-1) solid var(--pb-surface-2);
         background: var(--pb-bg);
         border-radius: var(--pb-radius);
@@ -836,7 +837,7 @@ ight is the :root default above) ────────
         <header class="_header_49b69d">
           <div class="_heading_49b69d">
             <p class="_kicker_49b69d">Turn 1 of 8</p>
-            <h2 class="_title_49b69d" data-mask="false">balloon</h2>
+            <h2 class="_title_49b69d" data-mask="false">tree</h2>
             <p class="_artistProgress_49b69d" role="status">0/7 guessed it</p>
           </div>
           <p class="_clock_49b69d" role="timer" aria-label="Time left">30s</p>

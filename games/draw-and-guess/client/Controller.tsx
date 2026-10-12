@@ -99,6 +99,7 @@ export function Controller({
       data-phase={phase}
       data-drawing={view.isDrawer && phase === 'draw'}
       data-stage={stage}
+      data-compact={visibleHeight !== undefined && visibleHeight <= 600}
     >
       <header className={styles.header}>
         <div className={styles.heading}>

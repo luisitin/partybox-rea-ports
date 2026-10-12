@@ -2,20 +2,24 @@
 
 Branch: job/P04-draw-and-guess. Runner: r2-local.
 
-PR #1 is ready after green CI. R1 fixes long drawing gestures, complete Undo,
-delayed edit acknowledgements, artist progress and immediate solver points.
-27 HTML/PNG screens fit; eight actual browser interaction checks pass;
-20/20 mutations remain caught. R2 public geometry recognition passes86tests
-and green CI. R3 skips an empty reveal after a choosing artist departs.
-R4-R9 protect Clear, identify final winners, announce the next artist,
-cue public solves/final ticks, meet all-theme ink contrast, and show full names.
-32 HTML/PNG screens fit, all8long names visible; 13live checks pass. R10 restricts
-bot guesses to the public selected deck; all7,000matches terminate and easy
-bots solve faster. R11 preserves dense corners with14passing ink checks.
-R12-R14 source fixes are complete: proportional canvas,54unique bot pictures,
-retained refused drafts and bounded request/gesture IDs. Full scoped suite:
-177passing tests, all7,000matches terminate. Finish R15 balanced mixed choices
-and R16 insertion/deletion feedback, then repeat scoped checks and browser
-evidence and review until three consecutive rounds find no player-visible gain.
-No-gain count is zero after the latest substantive fix.
-Original interactive play was unavailable (CUA exposes no browser); see research.
+PR #1 remains open. R15 mixed hands now include one original word per
+difficulty in shuffled order. R16 private near-miss feedback accepts one
+insertion, deletion or substitution after normalization. The full scoped
+suite passes 207 tests; all 7,000 seeded matches terminate. Windows emitted
+fork cleanup warnings after passing assertions; the command exited 0.
+
+R17 source fixes address compact artist canvas containment, release-only
+pointer endpoints and Safari visual-viewport compact rules. Validate these
+with the updated playcheck harness, then refresh 33 PNGs and media hashes.
+Run typecheck, format and scoped game tests after the client changes.
+The browser harness now bounds close RPCs and cleans its unique Windows
+profile to handle launcher PID handoff. Never launch another browser until
+the current harness has completed cleanup.
+
+Reconcile VERIFY.md/LOOP.md with final measured evidence, check PR CI and
+continue KEEP GOING until three consecutive reviews find no player-visible
+gain. No-gain count remains zero. Audit follow-ups: high-rate coalesced
+pointer packets may bypass the 80 ms gate; disconnected roster copy and
+alternate English answer spellings merit review.
+
+Original interactive play was unavailable through CUA; see RESEARCH.md.

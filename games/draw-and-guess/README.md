@@ -4,11 +4,11 @@ An original PartyBox drawing race inspired by the choose, draw and recognize flo
 
 ## Overview
 
-The seeded turn order gives each seat one artist turn per lap. The artist chooses one of three words in eight seconds; no choice selects the first word. The drawing clock then begins, with 60 seconds by default. Guessers see blank letters and the drawing. Hints uncover one letter after one third and another after two thirds of the turn. Correct guesses score immediately; the turn ends when every connected guesser solves or time expires. The completed picture, word and gains share a reveal before the next artist. Highest total wins.
+The seeded turn order gives each seat one artist turn per lap. The artist chooses one of three words in eight seconds; no choice selects the first word. Mixed difficulty offers one word from each level in shuffled order. The drawing clock then begins, with 60 seconds by default. Guessers see blank letters and the drawing. Hints uncover one letter after one third and another after two thirds of the turn. Correct guesses score immediately; the turn ends when every connected guesser solves or time expires. The completed picture, word and gains share a reveal before the next artist. Highest total wins.
 
 ## Players
 
-2-8 players, including bots. Bots have easy, normal and sharp strengths. Artist bots choose words with original pictograms and produce actual strokes; guesser bots search seeded vocabulary using public letters and their guess history. They never read the private word to generate a guess. Spectators watch without choice, drawing or guess controls. Normal and sharp bots also compare public geometry with the 36 original pictograms, tolerating translation, uniform resizing, jitter, path order and packet boundaries. Other drawings use letter-constrained vocabulary guesses.
+2-8 players, including bots. Bots have easy, normal and sharp strengths. Artist bots choose words with original pictograms and produce actual strokes; guesser bots search seeded vocabulary using public letters and their guess history. They never read the private word to generate a guess. Spectators watch without choice, drawing or guess controls. Normal and sharp bots also compare public geometry with the 54 original pictograms, tolerating translation, uniform resizing, jitter, path order and packet boundaries. Other drawings use letter-constrained vocabulary guesses.
 
 ## Phases
 
@@ -48,7 +48,7 @@ Phone play fits 390 × 844. The drawing stage stays visible above the form; arti
   whitespace, punctuation and leading articles use SDK normalization. An exact normalized word/phrase solves.
   Optional integer `request` (1-1,000,000,000) correlates a private text-free receipt.
 
-Six colours and three brush sizes keep the tool row simple. At most 240 paths are stored; a current gesture can keep drawing throughout the turn. A 3,500-point budget simplifies long paths while preserving their endpoints. Accepted ink and edits carry a per-turn revision for ordered phone acknowledgements. Guesses are accepted at most once every 750 ms per seat, and only the most recent 24 are retained. Raw guesses never appear on the shared stage; a one-letter mismatch gets private “Close!” feedback. A solved seat cannot score or submit more guesses that turn. Throttled guesses return to an untouched input for retry; late receipts cannot overwrite newer typing. Canvas proportions and finger registration match the shared drawing at ordinary and compact phone heights.
+Six colours and three brush sizes keep the tool row simple. At most 240 paths are stored; a current gesture can keep drawing throughout the turn. A 3,500-point budget simplifies long paths while preserving their endpoints. Accepted ink and edits carry a per-turn revision for ordered phone acknowledgements. Guesses are accepted at most once every 750 ms per seat, and only the most recent 24 are retained. Raw guesses never appear on the shared stage; one missing, extra or replaced letter gets private “Close!” feedback. A solved seat cannot score or submit more guesses that turn. Throttled guesses return to an untouched input for retry; late receipts cannot overwrite newer typing. Canvas proportions and finger registration match the shared drawing at ordinary and compact phone heights.
 
 ## Scoring
 

@@ -1,11 +1,19 @@
 {
   "checks": [
+    "normal artist 5:3 bitmap",
+    "compact artist 5:3 bitmap",
+    "normal pointer border projection",
+    "compact pointer border projection",
     "pointer chunk merge",
     "one Undo per gesture",
     "accidental Clear preserves ink",
     "second Clear confirms deletion",
     "delayed Clear/Undo acknowledgements",
     "real canvas paint",
+    "accepted guess clears draft",
+    "refused guess retained",
+    "same-text retry receipt",
+    "new draft survives old refusal",
     "phone-only guess fit",
     "keyboard-height guess fit",
     "immediate point receipt",
@@ -14,8 +22,8 @@
     "five final-second ticks",
     "paused sound silence"
   ],
-  "firstGestureChunks": 55,
-  "finalRevision": 143,
+  "firstGestureChunks": 20,
+  "finalRevision": 75,
   "normal": {
     "height": 844,
     "overflow": []
@@ -27,5 +35,40 @@
   "solved": {
     "height": 500,
     "overflow": []
+  },
+  "normalArtist": {
+    "left": 16,
+    "top": 190.1874977558046,
+    "width": 358,
+    "height": 214.79687948839077,
+    "first": [
+      50,
+      30
+    ],
+    "last": [
+      950,
+      570
+    ],
+    "projectionErrorPx": 0
+  },
+  "compactArtist": {
+    "left": 145.98437594325742,
+    "top": 94.18749850292454,
+    "width": 98.01562311348519,
+    "height": 58.79687799415093,
+    "first": [
+      50,
+      30
+    ],
+    "last": [
+      950,
+      570
+    ],
+    "projectionErrorPx": 0
+  },
+  "refusedDrafts": {
+    "firstRefusal": "retry this guess",
+    "repeatedRefusal": "retry this guess",
+    "newerDraft": "my newer draft"
   }
 }

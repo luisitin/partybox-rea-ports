@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
+import { closeBrowserProfile } from './close-browser.mjs';
 const require = createRequire(import.meta.url);
 const vr = createRequire(require.resolve('vitest/package.json'));
 const { createServer } = await import(pathToFileURL(vr.resolve('vite')).href);
@@ -34,6 +35,7 @@ const processHandle = spawn(
   [
     '--headless=new',
     '--disable-gpu',
+    '--disable-extensions',
     '--no-first-run',
     '--no-default-browser-check',
     '--remote-debugging-port=0',
@@ -186,6 +188,8 @@ try {
       mobile: true,
     });
     await settle();
+    await evaluate('new Promise(done => setTimeout(done, 300))');
+    await settle();
     const box = await evaluate(`(() => {
       const c=document.querySelector('canvas'), r=c.getBoundingClientRect(), s=getComputedStyle(c);
       const width=parseFloat(s.width), height=parseFloat(s.height);
@@ -200,6 +204,18 @@ try {
     );
     const start = { x: box.left + box.width * 0.05, y: box.top + box.height * 0.05 };
     const end = { x: box.left + box.width * 0.95, y: box.top + box.height * 0.95 };
+    const hit = await evaluate(`(() => {
+      const e=document.elementFromPoint(${start.x},${start.y});
+      window.pointerProbe=[];
+      for(const type of ['pointerdown','pointerup','pointercancel','lostpointercapture'])
+        document.querySelector('canvas').addEventListener(type,e=>pointerProbe.push({type,primary:e.isPrimary,button:e.button,x:e.clientX,y:e.clientY}));
+      return {tag:e?.tagName, label:e?.getAttribute('aria-label'),
+        viewport:{width:innerWidth,height:innerHeight}, state:p04.info()};
+    })()`);
+    check(
+      hit.tag === 'CANVAS',
+      `${height}px artist pointer must hit canvas: ${JSON.stringify({ box, hit })}`,
+    );
     await rpc(socket, 'Input.dispatchMouseEvent', {
       type: 'mousePressed',
       ...start,
@@ -235,7 +251,7 @@ try {
         : Infinity;
     check(
       projectionErrorPx <= 1.25,
-      `${height}px pointer endpoints must map inside the border (got ${JSON.stringify([first, last])})`,
+      `${height}px pointer endpoints must map inside the border (got ${JSON.stringify({ box, hit, first, last, state: await evaluate('p04.info()'), events: await evaluate('pointerProbe') })})`,
     );
     await button('Clear');
     await button('Tap again to clear');
@@ -415,17 +431,22 @@ try {
 } finally {
   if (browserSocket?.readyState === WebSocket.OPEN) {
     try {
-      await rpc(browserSocket, 'Browser.close');
+      await Promise.race([
+        rpc(browserSocket, 'Browser.close'),
+        new Promise((done) => setTimeout(done, 3000)),
+      ]);
     } catch {
       /* Closing can race the reply. */
     }
   }
   socket?.close();
   browserSocket?.close();
+  closeBrowserProfile(profile);
   if (processHandle.exitCode === null) {
     spawnSync('taskkill.exe', ['/PID', String(processHandle.pid), '/T', '/F'], {
       windowsHide: true,
       stdio: 'ignore',
+      timeout: 6000,
     });
   }
   await server.close();

@@ -1,14 +1,14 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 2 failed) 34ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 2 failed) 34ms
      × awards 300 base plus 700 times remaining time, only once; the artist also earns points 5ms
      × adds points to earlier turns instead of replacing either player total 1ms
 
  Test Files  1 failed (1)
-      Tests  2 failed | 19 passed (21)
-   Start at  16:18:32
-   Duration  726ms (transform 336ms, setup 0ms, import 512ms, tests 34ms, environment 0ms)
+      Tests  2 failed | 22 passed (24)
+   Start at  17:53:57
+   Duration  767ms (transform 343ms, setup 0ms, import 537ms, tests 34ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
@@ -22,13 +22,13 @@ AssertionError: expected 560 to be 860 // Object.is equality
 - 860
 + 560
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:156:29
-    154|     const now = s.began + 6000;
-    155|     const next = kit.input(s, id, { type: 'guess', text: s.word }, now…
-    156|     expect(next.scores[id]).toBe(300 + Math.floor((700 * 24_000) / 30_…
+ ❯ games/draw-and-guess/__tests__/game.test.ts:197:29
+    195|     const now = s.began + 6000;
+    196|     const next = kit.input(s, id, { type: 'guess', text: s.word }, now…
+    197|     expect(next.scores[id]).toBe(300 + Math.floor((700 * 24_000) / 30_…
        |                             ^
-    157|     expect(next.gains[id]).toBe(next.scores[id]);
-    158|     expect(next.scores[s.drawer]).toBeGreaterThan(0);
+    198|     expect(next.gains[id]).toBe(next.scores[id]);
+    199|     expect(next.scores[s.drawer]).toBeGreaterThan(0);
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
 
@@ -41,13 +41,13 @@ AssertionError: expected 1760 to be 2060 // Object.is equality
 - 2060
 + 1760
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:203:29
-    201|     const prior = { ...s, scores: { ...s.scores, [id]: 1200, [s.drawer…
-    202|     const next = kit.input(prior, id, { type: 'guess', text: s.word },…
-    203|     expect(next.scores[id]).toBe(1200 + 860);
+ ❯ games/draw-and-guess/__tests__/game.test.ts:244:29
+    242|     const prior = { ...s, scores: { ...s.scores, [id]: 1200, [s.drawer…
+    243|     const next = kit.input(prior, id, { type: 'guess', text: s.word },…
+    244|     expect(next.scores[id]).toBe(1200 + 860);
        |                             ^
-    204|     expect(next.scores[s.drawer]).toBe(2300 + 250);
-    205|   });
+    245|     expect(next.scores[s.drawer]).toBe(2300 + 250);
+    246|   });
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
 

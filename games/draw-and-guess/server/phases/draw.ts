@@ -9,6 +9,25 @@ import type { State, Input, Transition } from '../types';
 export function normalize(text: string): string {
   return normalizeAnswer(text, 'en').norm;
 }
+function oneEditApart(guess: string, answer: string): boolean {
+  const a = [...guess];
+  const b = [...answer];
+  if (Math.abs(a.length - b.length) > 1) return false;
+  let i = 0;
+  let j = 0;
+  let edits = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) {
+      i++;
+      j++;
+    } else {
+      if (++edits > 1) return false;
+      if (a.length >= b.length) i++;
+      if (b.length >= a.length) j++;
+    }
+  }
+  return edits + (a.length - i) + (b.length - j) === 1;
+}
 export function maskedWord(state: State): string {
   const revealed = new Set(state.hintOrder.slice(0, state.hintCount));
   return [...state.word]
@@ -108,10 +127,10 @@ export function reduceDraw(state: State, event: GameEvent<Input>, next: Transiti
     guesses,
     lastGuessAt: { ...state.lastGuessAt, [playerId]: now },
   };
-  if (normalizeAnswer(text, 'en').compact !== normalizeAnswer(state.word, 'en').compact) {
-    const close =
-      text.length === state.word.length &&
-      [...text].filter((c, i) => c !== state.word[i]).length === 1;
+  const compact = normalizeAnswer(text, 'en').compact;
+  const answer = normalizeAnswer(state.word, 'en').compact;
+  if (compact !== answer) {
+    const close = oneEditApart(compact, answer);
     return {
       ...fresh,
       feedback: { ...state.feedback, [playerId]: close ? 'Close!' : 'Try another word' },

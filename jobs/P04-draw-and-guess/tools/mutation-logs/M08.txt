@@ -1,14 +1,14 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 2 failed) 27ms
-     × choices and the answer stay off every public surface until reveal, even after a correct guess 4ms
-     × views are identical when unrevealed secrets alone change, and bots cannot peek at them 3ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 2 failed) 39ms
+     × choices and the answer stay off every public surface until reveal, even after a correct guess 5ms
+     × views are identical when unrevealed secrets alone change, and bots cannot peek at them 4ms
 
  Test Files  1 failed (1)
-      Tests  2 failed | 19 passed (21)
-   Start at  16:18:41
-   Duration  719ms (transform 309ms, setup 0ms, import 472ms, tests 27ms, environment 0ms)
+      Tests  2 failed | 22 passed (24)
+   Start at  17:54:09
+   Duration  768ms (transform 376ms, setup 0ms, import 553ms, tests 39ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
@@ -19,13 +19,13 @@ AssertionError: expected '{"gameId":"draw-and-guess","phaseId":…' not to conta
 Expected: "zzzsafesecret"
 Received: "{"gameId":"draw-and-guess","phaseId":"choose","phaseAt":1000000,"deadline":1008000,"paused":false,"players":[{"id":"p1","name":"Ana","avatarId":"fox","connected":true,"status":"waiting","score":0},{"id":"p2","name":"Ben","avatarId":"owl","connected":true,"status":"waiting","score":0},{"id":"p3","name":"Cy","avatarId":"frog","connected":true,"status":"waiting","score":0},{"id":"p4","name":"Dee","avatarId":"cat","connected":true,"status":"active","score":0}],"timerMode":"quiet","turn":1,"turns":4,"drawer":"p4","drawerName":"Dee","mask":"","answer":"zzzsafesecret","strokes":[],"inkRevision":0,"scores":{"p1":0,"p2":0,"p3":0,"p4":0},"gains":{},"solvedIds":[],"solvedCount":0,"guesserCount":3,"endsAt":1008000,"hintCount":0}"
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:244:83
-    242|       ]) {
-    243|         const text = JSON.stringify(view);
-    244|         for (const secret of [altered.word, ...altered.choices]) expec…
+ ❯ games/draw-and-guess/__tests__/game.test.ts:285:83
+    283|       ]) {
+    284|         const text = JSON.stringify(view);
+    285|         for (const secret of [altered.word, ...altered.choices]) expec…
        |                                                                                   ^
-    245|       }
-    246|       for (const id of ['spectator', '__proto__', 'constructor', '']) {
+    286|       }
+    287|       for (const id of ['spectator', '__proto__', 'constructor', '']) {
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
 
@@ -45,13 +45,13 @@ AssertionError: expected { gameId: 'draw-and-guess', …(21) } to deeply equal {
     "endsAt": 1031000,
     "gains": {},
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:264:32
-    262|       choices: s.choices.map((word) => 'z'.repeat(word.length)),
-    263|     };
-    264|     expect(game.tvView(other)).toEqual(game.tvView(s));
+ ❯ games/draw-and-guess/__tests__/game.test.ts:305:32
+    303|       choices: s.choices.map((word) => 'z'.repeat(word.length)),
+    304|     };
+    305|     expect(game.tvView(other)).toEqual(game.tvView(s));
        |                                ^
-    265|     for (const id of [guesser(s), 'spectator', '__proto__']) {
-    266|       expect(game.controllerView(other, id)).toEqual(game.controllerVi…
+    306|     for (const id of [guesser(s), 'spectator', '__proto__']) {
+    307|       expect(game.controllerView(other, id)).toEqual(game.controllerVi…
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
 

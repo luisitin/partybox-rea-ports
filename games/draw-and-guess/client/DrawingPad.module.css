@@ -10,14 +10,16 @@
   min-height: 0;
   display: grid;
   place-items: center;
+  container-type: size;
 }
 
 .paper canvas {
   display: block;
-  width: auto;
+  width: min(
+    calc(100% - var(--pb-space-1) - var(--pb-space-1)),
+    calc((100cqh - var(--pb-space-1) - var(--pb-space-1)) * 5 / 3)
+  );
   height: auto;
-  max-width: calc(100% - var(--pb-space-1) - var(--pb-space-1));
-  max-height: calc(100% - var(--pb-space-1) - var(--pb-space-1));
   box-sizing: content-box;
   border: var(--pb-space-1) solid var(--pb-surface-2);
   background: var(--pb-bg);

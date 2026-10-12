@@ -55,13 +55,7 @@ const bugs = [
     "if (input.type !== 'guess' || Object.hasOwn(state.solved, playerId)) return state;",
     "if (input.type !== 'guess') return state;",
   ],
-  [
-    'M07',
-    'Every wrong guess scores',
-    'phases/draw.ts',
-    "if (normalizeAnswer(text, 'en').compact !== normalizeAnswer(state.word, 'en').compact)",
-    'if (false)',
-  ],
+  ['M07', 'Every wrong guess scores', 'phases/draw.ts', 'if (compact !== answer)', 'if (false)'],
   [
     'M08',
     'TV and public board leak the answer',
@@ -137,8 +131,8 @@ const bugs = [
     'M19',
     'Rotation skips every second artist',
     'index.ts',
-    'nextTurn(state, now, state.turn + 1)',
-    'nextTurn(state, now, state.turn + 2)',
+    '      return nextTurn(state, now, state.turn + 1);',
+    '      return nextTurn(state, now, state.turn + 2);',
   ],
   [
     'M20',

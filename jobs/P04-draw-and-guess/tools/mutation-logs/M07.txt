@@ -1,13 +1,13 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 26ms
-     × uses the shared matcher for uppercase and punctuation; a wrong guess neither scores nor solves 4ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 1 failed) 27ms
+     × uses the shared matcher for uppercase and punctuation; a wrong guess neither scores nor solves 5ms
 
  Test Files  1 failed (1)
-      Tests  1 failed | 20 passed (21)
-   Start at  16:18:40
-   Duration  676ms (transform 305ms, setup 0ms, import 462ms, tests 26ms, environment 0ms)
+      Tests  1 failed | 23 passed (24)
+   Start at  17:54:07
+   Duration  732ms (transform 351ms, setup 0ms, import 533ms, tests 27ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
@@ -27,13 +27,13 @@ AssertionError: expected { p1: +0, p2: 976, p3: +0, p4: 250 } to deeply equal { 
 +   "p4": 250,
   }
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:174:26
-    172|       s.began + 1000,
-    173|     );
-    174|     expect(wrong.scores).toEqual(s.scores);
+ ❯ games/draw-and-guess/__tests__/game.test.ts:215:26
+    213|       s.began + 1000,
+    214|     );
+    215|     expect(wrong.scores).toEqual(s.scores);
        |                          ^
-    175|     expect(wrong.solved).toEqual({});
-    176|     const exact = kit.input(
+    216|     expect(wrong.solved).toEqual({});
+    217|     const exact = kit.input(
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
 

@@ -1,13 +1,13 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 32ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 1 failed) 31ms
      × only the connected drawer may paint, clear or undo, and undo preserves earlier strokes 6ms
 
  Test Files  1 failed (1)
-      Tests  1 failed | 20 passed (21)
-   Start at  16:18:49
-   Duration  753ms (transform 335ms, setup 0ms, import 513ms, tests 32ms, environment 0ms)
+      Tests  1 failed | 23 passed (24)
+   Start at  17:35:37
+   Duration  755ms (transform 352ms, setup 0ms, import 541ms, tests 31ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
@@ -46,13 +46,13 @@ AssertionError: expected [ { points: [ …(2) ], …(2) }, …(1) ] to deeply eq
 +   },
 + ]
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:48:81
-     46|     const two = kit.input(painted, s.drawer, { type: 'stroke', stroke:…
-     47|     expect(kit.input(two, s.drawer, { type: 'undo' }, s.began + 1600).…
-     48|     expect(kit.input(two, s.drawer, { type: 'clear' }, s.began + 1700)…
+ ❯ games/draw-and-guess/__tests__/game.test.ts:89:81
+     87|     const two = kit.input(painted, s.drawer, { type: 'stroke', stroke:…
+     88|     expect(kit.input(two, s.drawer, { type: 'undo' }, s.began + 1600).…
+     89|     expect(kit.input(two, s.drawer, { type: 'clear' }, s.began + 1700)…
        |                                                                                 ^
-     49|     for (const id of [guesser(s), 'spectator', '__proto__', 'construct…
-     50|       for (const input of [
+     90|     for (const id of [guesser(s), 'spectator', '__proto__', 'construct…
+     91|       for (const input of [
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
 

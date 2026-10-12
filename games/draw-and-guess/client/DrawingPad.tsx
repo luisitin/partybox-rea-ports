@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { JSX, PointerEvent } from 'react';
 import { useT, useThemeColor } from '@partybox/game-sdk/ui';
 import type { Input, Point, Stroke } from '../server/types';
-import { canvasContentRect, drawingPoint } from './drawingGeometry';
+import { canvasContentRect, drawingPoint, finishDrawingPoints } from './drawingGeometry';
 import { gestureCount, nextGesture, previewInk } from './ink';
 import type { InkOperation, PendingInk } from './ink';
 import { COLORS, WIDTHS } from './palette';
@@ -133,7 +133,21 @@ export function DrawingPad({
     drag.dirty = false;
   };
   const finish = (event: PointerEvent<HTMLCanvasElement>): void => {
-    if (active.current.id !== event.pointerId) return;
+    const drag = active.current;
+    if (drag.id !== event.pointerId) return;
+    if (!disabled) {
+      const points = finishDrawingPoints(
+        drag.points,
+        event.type,
+        event.clientX,
+        event.clientY,
+        paperBounds(),
+      );
+      if (points !== drag.points) {
+        drag.points = points;
+        drag.dirty = true;
+      }
+    }
     flush(event.timeStamp);
     active.current.id = -1;
     active.current.points = [];

@@ -1,13 +1,13 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 30ms
-     × awards 300 base plus 700 times remaining time, only once; the artist also earns points 7ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 1 failed) 28ms
+     × awards 300 base plus 700 times remaining time, only once; the artist also earns points 6ms
 
  Test Files  1 failed (1)
-      Tests  1 failed | 20 passed (21)
-   Start at  16:18:39
-   Duration  749ms (transform 328ms, setup 0ms, import 499ms, tests 30ms, environment 0ms)
+      Tests  1 failed | 23 passed (24)
+   Start at  17:54:06
+   Duration  732ms (transform 328ms, setup 0ms, import 498ms, tests 28ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
@@ -27,13 +27,13 @@ AssertionError: expected { p1: +0, p2: 1696, p3: +0, p4: 500 } to deeply equal {
 +   "p4": 500,
   }
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:161:26
-    159|     expect(Object.keys(next.solved)).toContain(id);
-    160|     const again = kit.input(next, id, { type: 'guess', text: s.word },…
-    161|     expect(again.scores).toEqual(next.scores);
+ ❯ games/draw-and-guess/__tests__/game.test.ts:202:26
+    200|     expect(Object.keys(next.solved)).toContain(id);
+    201|     const again = kit.input(next, id, { type: 'guess', text: s.word },…
+    202|     expect(again.scores).toEqual(next.scores);
        |                          ^
-    162|     expect(again.solved).toEqual(next.solved);
-    163|   });
+    203|     expect(again.solved).toEqual(next.solved);
+    204|   });
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
 

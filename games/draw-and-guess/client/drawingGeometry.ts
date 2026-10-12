@@ -42,3 +42,18 @@ export function drawingPoint(x: number, y: number, rect: DrawingRect): Point {
     Math.max(0, Math.min(600, ((y - rect.top) / rect.height) * 600)),
   ];
 }
+
+/** A release can carry the final motion; cancellation coordinates do not describe new ink. */
+export function finishDrawingPoints(
+  points: Point[],
+  eventType: string,
+  x: number,
+  y: number,
+  rect: DrawingRect,
+): Point[] {
+  if (eventType !== 'pointerup' || !(rect.width > 0 && rect.height > 0)) return points;
+  const point = drawingPoint(x, y, rect);
+  const last = points.at(-1);
+  if (last?.[0] === point[0] && last[1] === point[1]) return points;
+  return [...points, point];
+}

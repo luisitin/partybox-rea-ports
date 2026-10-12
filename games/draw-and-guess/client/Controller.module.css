@@ -234,3 +234,18 @@
     display: none;
   }
 }
+
+/* Safari's keyboard can reduce the visual viewport without changing media queries. */
+.screen[data-compact='true'] {
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+}
+
+.screen[data-compact='true'][data-stage='true'][data-phase='draw'] .picture {
+  max-height: calc(var(--pb-space-8) * 2);
+}
+
+.screen[data-compact='true'][data-phase='draw'] .status p:not(.correct),
+.screen[data-compact='true'] .breath {
+  display: none;
+}

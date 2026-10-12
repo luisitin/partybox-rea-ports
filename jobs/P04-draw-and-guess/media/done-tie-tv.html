@@ -444,16 +444,17 @@ ight is the :root default above) ────────
       ._paper_2a652a {
         width: 100%;
         min-height: 0;
-        aspect-ratio: 5 / 3;
-        align-self: center;
-        max-height: 100%;
+        display: grid;
+        place-items: center;
       }
 
       ._paper_2a652a canvas {
         display: block;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
+        width: auto;
+        height: auto;
+        max-width: calc(100% - var(--pb-space-1) - var(--pb-space-1));
+        max-height: calc(100% - var(--pb-space-1) - var(--pb-space-1));
+        box-sizing: content-box;
         border: var(--pb-space-1) solid var(--pb-surface-2);
         background: var(--pb-bg);
         border-radius: var(--pb-radius);
@@ -848,7 +849,31 @@ ight is the :root default above) ────────
               aria-label="Live drawing"
             >
               <polyline
-                points="500,70 590,230 790,230 630,340 680,520 500,420 320,520 370,340 210,230 410,230 500,70"
+                points="650,80 480,50 330,140 250,300 330,460 480,550 650,520"
+                fill="none"
+                stroke="var(--pb-text)"
+                stroke-width="9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></polyline>
+              <polyline
+                points="650,80 530,150 470,300 530,450 650,520"
+                fill="none"
+                stroke="var(--pb-text)"
+                stroke-width="9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></polyline>
+              <polyline
+                points="375,300 374,308 370,315 365,320 358,324 350,325 342,324 335,320 330,315 326,308 325,300 326,292 330,285 335,280 342,276 350,275 358,276 365,280 370,285 374,292 375,300"
+                fill="none"
+                stroke="var(--pb-text)"
+                stroke-width="9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></polyline>
+              <polyline
+                points="425,440 424,445 422,449 419,452 415,454 410,455 405,454 401,452 398,449 396,445 395,440 396,435 398,431 401,428 405,426 410,425 415,426 419,428 422,431 424,435 425,440"
                 fill="none"
                 stroke="var(--pb-text)"
                 stroke-width="9"

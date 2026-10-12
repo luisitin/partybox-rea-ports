@@ -1,13 +1,13 @@
 
  RUN  v4.1.11 C:/dev/rea-runs/r2
 
- ❯ games/draw-and-guess/__tests__/game.test.ts (21 tests | 1 failed) 25ms
+ ❯ games/draw-and-guess/__tests__/game.test.ts (24 tests | 1 failed) 26ms
      × timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer 4ms
 
  Test Files  1 failed (1)
-      Tests  1 failed | 20 passed (21)
-   Start at  16:18:52
-   Duration  649ms (transform 295ms, setup 0ms, import 454ms, tests 25ms, environment 0ms)
+      Tests  1 failed | 23 passed (24)
+   Start at  17:35:40
+   Duration  761ms (transform 345ms, setup 0ms, import 534ms, tests 26ms, environment 0ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
@@ -21,13 +21,13 @@ AssertionError: expected 1 to be +0 // Object.is equality
 - 0
 + 1
 
- ❯ games/draw-and-guess/__tests__/game.test.ts:115:25
-    113|     };
-    114|     advanceTo(8000);
-    115|     expect(s.hintCount).toBe(0);
+ ❯ games/draw-and-guess/__tests__/game.test.ts:156:25
+    154|     };
+    155|     advanceTo(8000);
+    156|     expect(s.hintCount).toBe(0);
        |                         ^
-    116|     advanceTo(10_000);
-    117|     expect(s.hintCount).toBe(1);
+    157|     advanceTo(10_000);
+    158|     expect(s.hintCount).toBe(1);
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
 

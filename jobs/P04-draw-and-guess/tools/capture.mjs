@@ -4,6 +4,7 @@ import { mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { closeBrowserProfile } from './close-browser.mjs';
 const browser = process.env.P04_BROWSER ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const profile = mkdtempSync(join(tmpdir(), 'p04-r2-'));
 const dir = resolve('jobs/P04-draw-and-guess/media');
@@ -12,6 +13,7 @@ const processHandle = spawn(
   [
     '--headless=new',
     '--disable-gpu',
+    '--disable-extensions',
     '--no-first-run',
     '--no-default-browser-check',
     '--remote-debugging-port=0',
@@ -137,17 +139,22 @@ try {
 } finally {
   if (browserSocket?.readyState === WebSocket.OPEN) {
     try {
-      await rpc(browserSocket, 'Browser.close');
+      await Promise.race([
+        rpc(browserSocket, 'Browser.close'),
+        new Promise((done) => setTimeout(done, 3000)),
+      ]);
     } catch {
       /* Closing can race the reply. */
     }
   }
   socket?.close();
   browserSocket?.close();
+  closeBrowserProfile(profile);
   if (processHandle.exitCode === null) {
     spawnSync('taskkill.exe', ['/PID', String(processHandle.pid), '/T', '/F'], {
       windowsHide: true,
       stdio: 'ignore',
+      timeout: 6000,
     });
   }
 }
