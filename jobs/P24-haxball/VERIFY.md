@@ -259,3 +259,7 @@ Round 7 canonical media: `node jobs/P24-haxball/hash-media.mjs` reports 175 file
 verification PASS: PowerShell `Get-FileHash -Algorithm SHA256` recomputes every one of the
 175 media digests with zero mismatches; all 75 canonical HTML hashes match the retained static
 capture. `pnpm.cmd typecheck` and `pnpm.cmd format` both exit 0 after final report formatting.
+
+Exact touch-source CI `c8def78` PASS: [38215249699](https://github.com/luisitin/partybox-rea-ports/actions/runs/38215249699).
+It runs install, typecheck, format and all scoped game tests. Subsequent review-only commits
+do not alter the validated game source; the final latest-head workflow must also pass.

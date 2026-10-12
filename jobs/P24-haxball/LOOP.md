@@ -66,3 +66,13 @@ blur and hidden transitions become zero, with all 104 mounted controls, 64 goal 
 12 retained-credit checks passing. All 46 focused client/SSR tests pass. Existing real centre
 drags, two-thumb releases and repeat-key regressions remain green. Two intermediate heartbeat
 timing failures and the foreground automation rerun are retained honestly in VERIFY.md.
+
+Round 8 — zero player-visible gain (1/3), after exact touch-source CI 38215249699 passed:
+reviewed eight strangers finding their jersey, understanding radial kicks/rearming, identifying
+the attacking goal, reading long teammate names and watching without a seat. Root inspected
+the retained with-TV active phone and phone-only spectator PNGs, the public pitch/credit code
+and the final two-thumb view. Jersey identity, directional copy, kick status, full accessible
+names and button-free spectator stage already cover those tasks. Existing measurements remain
+104/64/12 mounted checks and 75 fitting static layouts. Larger compact labels or different name
+truncation are presentation polish; no measured player-visible failure warrants another change.
+This is a source/render review, not a human eight-stranger playtest. No game code changed.
