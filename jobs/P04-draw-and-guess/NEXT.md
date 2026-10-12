@@ -19,9 +19,14 @@ fresh20/20R23mutation campaign. Rendering markup/CSS and33SSR captures are
 unchanged;68media files total2,157,072bytes and are rehashed after final reports.
 
 CI38205795568 is green for final R34 source a476457 (331tests/32files,26.69s).
-Latest9227289 documentation CI38205957432 is green. R35/R36 find no further
-bounded player-visible gain; no-gain streak2/3. One independent round remains.
-Rank/log five residuals, push/refresh. Refresh PR body from this job README and ready only on
-latest green CI, then mark P04 DONE before taking the next lowest eligible job.
+Latest31281b9 documentation CI38206170950 is green. R35/R36/R37 find no further
+bounded player-visible gain; no-gain streak3/3. KEEP GOING is complete.
+
+The public deliverable has no remaining game implementation or local checks.
+After this final documentation push, refresh the claim and PR body from README,
+wait for current-head CI, then ready PR1 and mark P04 DONE on main. Publication
+status lives in GitHub and CLAIMS.md. Continue with the lowest eligible job.
+For later core integration, follow UPGRADE.md and run installed telephone/live
+host checks; this public runner has not performed a private deployment.
 
 Original interactive play was unavailable through CUA; see RESEARCH.md.
