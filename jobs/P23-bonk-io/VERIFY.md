@@ -25,6 +25,8 @@ Current minimum published alive y at 2-8 seats: 182.9619, 160.5004, 94.9622, 119
 
 Root used only own-game tests with one worker; no whole-suite/browser run. Local R8 client command `pnpm.cmd vitest run games/bonk-io/client --maxWorkers=1` passed 68/68 in four files, 2.99 s; `pnpm.cmd typecheck` passed. New combined full CI supplies current all-size coverage. The job workflow is Ubuntu, read-only, 30-minute timeout, actions/* only and paths-scoped. Original play/audio/timing and live WebSocket/remount behavior are unavailable and explicitly unclaimed in ASSUMPTIONS.md.
 
+Three consecutive independent post-fix KEEP GOING rounds (R9 client, R10 server lifecycle/strategy, R11 party/spec) found no further material player gain. Each checkpoint was pushed and its claim refreshed after pull --rebase. LOOP.md retains all five candidates per round. Final documentation-head CI is the remaining publication gate; it does not substitute for the matching-game-source evidence above.
+
 ## Earlier checks and milestone history
 
 The following records preserve commands, failures, observations and pending statements as they stood at each milestone. Current status and hashes are above; older results do not establish changed-source behavior.
