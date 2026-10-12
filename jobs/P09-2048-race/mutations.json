@@ -1,5 +1,40 @@
 {
-  "command": "pnpm.cmd vitest run games/merge-sprint/__tests__/board.test.ts games/merge-sprint/__tests__/game.test.ts --maxWorkers=1",
+  "startedAt": "2026-10-12T14:19:23.653Z",
+  "finishedAt": null,
+  "command": "pnpm.cmd vitest run games/2048/__tests__/board.test.ts games/2048/__tests__/game.test.ts --maxWorkers=1 --pool=threads --reporter=json --outputFile=C:\\Users\\LUISI_~1\\AppData\\Local\\Temp\\r1-local-2048-mutations-43LABG\\vitest.json",
+  "restoredCommand": "pnpm.cmd vitest run games/2048 --maxWorkers=1 --pool=threads --reporter=json --outputFile=C:\\Users\\LUISI_~1\\AppData\\Local\\Temp\\r1-local-2048-mutations-43LABG\\vitest.json",
+  "sourceHashes": {
+    "games/2048/server/board.ts": "5386d4d95af48afa71f5b5995f52714d541c99dcec8a4dda63bc18addb142ffb",
+    "games/2048/server/phases/play.ts": "4bb3ae123d2153570ba6ff82ad8e96562771ff0f03e8bd06002544589179d76f",
+    "games/2048/server/scoring.ts": "fb2c8d564637a61881d5cd88bc265971eb3dc03c6ae3c9dd9bc77ed3049ad0c0",
+    "games/2048/server/phases/reveal.ts": "71a9c4ccbdd18d5ebe4d19a7f6723c6c8c368bd00b9b2e5a3d2d879ca4e03551",
+    "games/2048/server/index.ts": "3808ae21d3e75d186369192bff4110fef5997b459805274202b7040c88f92f5e"
+  },
+  "testSources": {
+    "games/2048/__tests__/board.test.ts": "85c912479b44f5ec798f1d4a78ac5b59f05f51584d7cb48dba7c86b75523aff7",
+    "games/2048/__tests__/game.test.ts": "bef7cbceebf9e644ef9c3056b984e511075fa31ccf8d381c7355af14746e9ee7"
+  },
+  "baseline": {
+    "exitCode": 0,
+    "passedTests": 40,
+    "passedSuites": 5,
+    "files": 2,
+    "failedTests": 0,
+    "failedAssertions": [],
+    "error": null,
+    "elapsedMs": 1194,
+    "finishedAt": "2026-10-12T14:19:24.849Z",
+    "sources": null,
+    "sourcesStable": true
+  },
+  "restoredBaseline": null,
+  "expectedMutants": 20,
+  "completedMutants": 20,
+  "caughtMutants": 20,
+  "incomplete": true,
+  "restored": true,
+  "passed": false,
+  "elapsedMs": 35352,
   "results": [
     {
       "name": "merge unequal tiles",
@@ -7,11 +42,145 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× adds exactly the merged tile values and one spawn for an accepted move 7ms",
-        "× does not spawn, score, count, or spend a draw on a direction that changes nothing 32ms",
-        "× the first 2048 ends every board and wins even against a higher merge score 2ms",
-        "× holds inputs and timers during pause and preserves the remaining race time on resume 1ms"
+        "2048 merge rules slides [2,2,2,2] left to [4,4,0,0], adding 8 points",
+        "2048 merge rules slides [2,2,4,0] left to [4,4,0,0], adding 4 points",
+        "2048 merge rules slides [4,4,8,8] left to [8,16,0,0], adding 24 points",
+        "2048 merge rules slides [2,0,2,2] left to [4,2,0,0], adding 4 points",
+        "2048 merge rules slides [4,2,2,4] left to [4,4,4,0], adding 4 points",
+        "2048 merge rules merges once per tile from the edge being approached in all four directions",
+        "2048 merge rules reports no change and no gain for a slide already packed without equal neighbours",
+        "2048 race rules adds exactly the merged tile values and one spawn for an accepted move",
+        "2048 race rules does not spawn, score, count, or spend a draw on a direction that changes nothing",
+        "2048 race rules the first 2048 ends every board and wins even against a higher merge score",
+        "2048 race rules holds inputs and timers during pause and preserves the remaining race time on resume",
+        "2048 race rules ends early once the final live board blocks after a spawn",
+        "2048 race rules closes when every connected racer blocks even if a disconnected board can still move",
+        "2048 race rules a blocked racer rejoining an empty resumed room finishes without waiting for offline rivals",
+        "2048 race rules a blocked reconnect while paused stays held and closes only when the VIP resumes",
+        "2048 race rules marks the 1200th accepted move blocked while other racers continue",
+        "public views and bots the easy bot selects a legal move and never reads future luck",
+        "public views and bots the normal bot selects a legal move and never reads future luck",
+        "public views and bots the sharp bot selects a legal move and never reads future luck"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 merge rules slides [2,2,2,2] left to [4,4,0,0], adding 8 points",
+          "messages": [
+            "AssertionError: expected [ 2, 2, 2, 2 ] to deeply equal [ 4, 4, +0, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [2,2,4,0] left to [4,4,0,0], adding 4 points",
+          "messages": [
+            "AssertionError: expected [ 2, 4, +0, +0 ] to deeply equal [ 4, 4, +0, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [4,4,8,8] left to [8,16,0,0], adding 24 points",
+          "messages": [
+            "AssertionError: expected [ 4, 8, 8, +0 ] to deeply equal [ 8, 16, +0, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [2,0,2,2] left to [4,2,0,0], adding 4 points",
+          "messages": [
+            "AssertionError: expected [ 2, 2, 2, +0 ] to deeply equal [ 4, 2, +0, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [4,2,2,4] left to [4,4,4,0], adding 4 points",
+          "messages": [
+            "AssertionError: expected [ 8, 4, +0, +0 ] to deeply equal [ 4, 4, 4, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules merges once per tile from the edge being approached in all four directions",
+          "messages": [
+            "AssertionError: expected { …(3) } to deeply equal { …(3) }\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:30:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 merge rules reports no change and no gain for a slide already packed without equal neighbours",
+          "messages": [
+            "AssertionError: expected { …(3) } to deeply equal { …(3) }\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:54:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules adds exactly the merged tile values and one spawn for an accepted move",
+          "messages": [
+            "AssertionError: expected 44 to be 52 // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:50:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules does not spawn, score, count, or spend a draw on a direction that changes nothing",
+          "messages": [
+            "AssertionError: expected { phase: { id: 'play', …(2) }, …(7) } to be { phase: { id: 'play', …(2) }, …(7) } // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:63:18\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules the first 2048 ends every board and wins even against a higher merge score",
+          "messages": [
+            "AssertionError: expected 'play' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:124:27\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules holds inputs and timers during pause and preserves the remaining race time on resume",
+          "messages": [
+            "AssertionError: expected +0 to be 1 // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:170:69\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules ends early once the final live board blocks after a spawn",
+          "messages": [
+            "AssertionError: expected 'racing' to be 'blocked' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:212:38\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules closes when every connected racer blocks even if a disconnected board can still move",
+          "messages": [
+            "AssertionError: expected 'racing' to be 'blocked' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:223:38\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules a blocked racer rejoining an empty resumed room finishes without waiting for offline rivals",
+          "messages": [
+            "AssertionError: expected 'racing' to be 'blocked' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:283:37\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules a blocked reconnect while paused stays held and closes only when the VIP resumes",
+          "messages": [
+            "AssertionError: expected 'play' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:324:29\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules marks the 1200th accepted move blocked while other racers continue",
+          "messages": [
+            "AssertionError: expected 1199 to be 1200 // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:339:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "public views and bots the easy bot selects a legal move and never reads future luck",
+          "messages": [
+            "AssertionError: expected { type: 'move', dir: 'left', move: +0 } to be null\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:426:9\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "public views and bots the normal bot selects a legal move and never reads future luck",
+          "messages": [
+            "AssertionError: expected { Object (type, dir, ...) } to be null\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:426:9\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "public views and bots the sharp bot selects a legal move and never reads future luck",
+          "messages": [
+            "AssertionError: expected { Object (type, dir, ...) } to be null\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:426:9\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        }
+      ],
+      "passedTests": 21,
+      "failedTestCount": 19,
+      "elapsedMs": 1112,
       "error": null
     },
     {
@@ -20,11 +189,89 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× adds exactly the merged tile values and one spawn for an accepted move 5ms",
-        "× ends early once the final live board blocks after a spawn 1ms",
-        "× closes when every connected racer blocks even if a disconnected board can still move 1ms",
-        "× slides [2,2,2,2] left to [4,4,0,0], adding 8 points 5ms"
+        "2048 merge rules slides [2,2,2,2] left to [4,4,0,0], adding 8 points",
+        "2048 merge rules slides [2,2,4,0] left to [4,4,0,0], adding 4 points",
+        "2048 merge rules slides [4,4,8,8] left to [8,16,0,0], adding 24 points",
+        "2048 merge rules slides [2,0,2,2] left to [4,2,0,0], adding 4 points",
+        "2048 merge rules slides [4,2,2,4] left to [4,4,4,0], adding 4 points",
+        "2048 merge rules merges once per tile from the edge being approached in all four directions",
+        "2048 race rules adds exactly the merged tile values and one spawn for an accepted move",
+        "2048 race rules ends early once the final live board blocks after a spawn",
+        "2048 race rules closes when every connected racer blocks even if a disconnected board can still move",
+        "2048 race rules a blocked racer rejoining an empty resumed room finishes without waiting for offline rivals",
+        "2048 race rules a blocked reconnect while paused stays held and closes only when the VIP resumes"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 merge rules slides [2,2,2,2] left to [4,4,0,0], adding 8 points",
+          "messages": [
+            "AssertionError: expected [ 8, 8, +0, +0 ] to deeply equal [ 4, 4, +0, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [2,2,4,0] left to [4,4,0,0], adding 4 points",
+          "messages": [
+            "AssertionError: expected [ 8, 4, +0, +0 ] to deeply equal [ 4, 4, +0, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [4,4,8,8] left to [8,16,0,0], adding 24 points",
+          "messages": [
+            "AssertionError: expected [ 16, 32, +0, +0 ] to deeply equal [ 8, 16, +0, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [2,0,2,2] left to [4,2,0,0], adding 4 points",
+          "messages": [
+            "AssertionError: expected [ 8, 2, +0, +0 ] to deeply equal [ 4, 2, +0, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [4,2,2,4] left to [4,4,4,0], adding 4 points",
+          "messages": [
+            "AssertionError: expected [ 4, 8, 4, +0 ] to deeply equal [ 4, 4, 4, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules merges once per tile from the edge being approached in all four directions",
+          "messages": [
+            "AssertionError: expected { …(3) } to deeply equal { …(3) }\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:30:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules adds exactly the merged tile values and one spawn for an accepted move",
+          "messages": [
+            "AssertionError: expected [ 8, 16 ] to deeply equal [ 4, 8 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:52:47\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules ends early once the final live board blocks after a spawn",
+          "messages": [
+            "AssertionError: expected 'racing' to be 'blocked' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:212:38\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules closes when every connected racer blocks even if a disconnected board can still move",
+          "messages": [
+            "AssertionError: expected 'racing' to be 'blocked' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:223:38\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules a blocked racer rejoining an empty resumed room finishes without waiting for offline rivals",
+          "messages": [
+            "AssertionError: expected 'racing' to be 'blocked' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:283:37\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules a blocked reconnect while paused stays held and closes only when the VIP resumes",
+          "messages": [
+            "AssertionError: expected 'play' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:324:29\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 29,
+      "failedTestCount": 11,
+      "elapsedMs": 1177,
       "error": null
     },
     {
@@ -33,11 +280,68 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× adds exactly the merged tile values and one spawn for an accepted move 5ms",
-        "× the first 2048 ends every board and wins even against a higher merge score 1ms",
-        "× slides [2,2,2,2] left to [4,4,0,0], adding 8 points 5ms",
-        "× slides [2,2,4,0] left to [4,4,0,0], adding 4 points 1ms"
+        "2048 merge rules slides [2,2,2,2] left to [4,4,0,0], adding 8 points",
+        "2048 merge rules slides [2,2,4,0] left to [4,4,0,0], adding 4 points",
+        "2048 merge rules slides [4,4,8,8] left to [8,16,0,0], adding 24 points",
+        "2048 merge rules slides [2,0,2,2] left to [4,2,0,0], adding 4 points",
+        "2048 merge rules slides [4,2,2,4] left to [4,4,4,0], adding 4 points",
+        "2048 merge rules merges once per tile from the edge being approached in all four directions",
+        "2048 race rules adds exactly the merged tile values and one spawn for an accepted move",
+        "2048 race rules the first 2048 ends every board and wins even against a higher merge score"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 merge rules slides [2,2,2,2] left to [4,4,0,0], adding 8 points",
+          "messages": [
+            "AssertionError: expected 4 to be 8 // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:22:27\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [2,2,4,0] left to [4,4,0,0], adding 4 points",
+          "messages": [
+            "AssertionError: expected 2 to be 4 // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:22:27\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [4,4,8,8] left to [8,16,0,0], adding 24 points",
+          "messages": [
+            "AssertionError: expected 12 to be 24 // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:22:27\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [2,0,2,2] left to [4,2,0,0], adding 4 points",
+          "messages": [
+            "AssertionError: expected 2 to be 4 // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:22:27\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [4,2,2,4] left to [4,4,4,0], adding 4 points",
+          "messages": [
+            "AssertionError: expected 2 to be 4 // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:22:27\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules merges once per tile from the edge being approached in all four directions",
+          "messages": [
+            "AssertionError: expected { …(3) } to deeply equal { …(3) }\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:30:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules adds exactly the merged tile values and one spawn for an accepted move",
+          "messages": [
+            "AssertionError: expected 46 to be 52 // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:50:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules the first 2048 ends every board and wins even against a higher merge score",
+          "messages": [
+            "AssertionError: expected 1024 to be 2048 // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:127:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 32,
+      "failedTestCount": 8,
+      "elapsedMs": 1243,
       "error": null
     },
     {
@@ -46,11 +350,61 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× adds exactly the merged tile values and one spawn for an accepted move 6ms",
-        "× slides [2,2,2,2] left to [4,4,0,0], adding 8 points 6ms",
-        "× slides [2,2,4,0] left to [4,4,0,0], adding 4 points 1ms",
-        "× slides [4,4,8,8] left to [8,16,0,0], adding 24 points 1ms"
+        "2048 merge rules slides [2,2,2,2] left to [4,4,0,0], adding 8 points",
+        "2048 merge rules slides [2,2,4,0] left to [4,4,0,0], adding 4 points",
+        "2048 merge rules slides [4,4,8,8] left to [8,16,0,0], adding 24 points",
+        "2048 merge rules slides [2,0,2,2] left to [4,2,0,0], adding 4 points",
+        "2048 merge rules slides [4,2,2,4] left to [4,4,4,0], adding 4 points",
+        "2048 merge rules merges once per tile from the edge being approached in all four directions",
+        "2048 race rules adds exactly the merged tile values and one spawn for an accepted move"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 merge rules slides [2,2,2,2] left to [4,4,0,0], adding 8 points",
+          "messages": [
+            "AssertionError: expected [ 4, 4, 4, 2 ] to deeply equal [ 4, 4, +0, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [2,2,4,0] left to [4,4,0,0], adding 4 points",
+          "messages": [
+            "AssertionError: expected [ 4, 2, 4, +0 ] to deeply equal [ 4, 4, +0, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [4,4,8,8] left to [8,16,0,0], adding 24 points",
+          "messages": [
+            "AssertionError: expected [ 8, 4, 16, 8 ] to deeply equal [ 8, 16, +0, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [2,0,2,2] left to [4,2,0,0], adding 4 points",
+          "messages": [
+            "AssertionError: expected [ 4, 4, 2, +0 ] to deeply equal [ 4, 2, +0, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules slides [4,2,2,4] left to [4,4,4,0], adding 4 points",
+          "messages": [
+            "AssertionError: expected [ 4, 4, 2, 4 ] to deeply equal [ 4, 4, 4, +0 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:21:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "2048 merge rules merges once per tile from the edge being approached in all four directions",
+          "messages": [
+            "AssertionError: expected { …(3) } to deeply equal { …(3) }\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:30:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules adds exactly the merged tile values and one spawn for an accepted move",
+          "messages": [
+            "AssertionError: expected [ 4, 2 ] to deeply equal [ 4, 8 ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:52:47\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 33,
+      "failedTestCount": 7,
+      "elapsedMs": 1500,
       "error": null
     },
     {
@@ -59,9 +413,19 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× merges once per tile from the edge being approached in all four directions 5ms",
-        "FAIL  games/merge-sprint/__tests__/board.test.ts > 2048 merge rules > merges once per tile from the edge being approached in all four directions"
+        "2048 merge rules merges once per tile from the edge being approached in all four directions"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 merge rules merges once per tile from the edge being approached in all four directions",
+          "messages": [
+            "AssertionError: expected { …(3) } to deeply equal { …(3) }\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:35:36\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 39,
+      "failedTestCount": 1,
+      "elapsedMs": 1445,
       "error": null
     },
     {
@@ -70,9 +434,19 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× recognises blocked full boards, and finds vertical as well as horizontal merges 4ms",
-        "FAIL  games/merge-sprint/__tests__/board.test.ts > 2048 merge rules > recognises blocked full boards, and finds vertical as well as horizontal merges"
+        "2048 merge rules recognises blocked full boards, and finds vertical as well as horizontal merges"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 merge rules recognises blocked full boards, and finds vertical as well as horizontal merges",
+          "messages": [
+            "AssertionError: expected false to be true // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:66:31\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 39,
+      "failedTestCount": 1,
+      "elapsedMs": 1310,
       "error": null
     },
     {
@@ -81,11 +455,26 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× recognises blocked full boards, and finds vertical as well as horizontal merges 3ms",
-        "× keeps a blocked player on stage while a rival races 4ms",
-        "FAIL  games/merge-sprint/__tests__/board.test.ts > 2048 merge rules > recognises blocked full boards, and finds vertical as well as horizontal merges",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > keeps a blocked player on stage while a rival races"
+        "2048 merge rules recognises blocked full boards, and finds vertical as well as horizontal merges",
+        "2048 race rules keeps a blocked player on stage while a rival races"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 merge rules recognises blocked full boards, and finds vertical as well as horizontal merges",
+          "messages": [
+            "AssertionError: expected false to be true // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:61:51\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules keeps a blocked player on stage while a rival races",
+          "messages": [
+            "AssertionError: expected 'reveal' to be 'play' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:201:76\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 38,
+      "failedTestCount": 2,
+      "elapsedMs": 1437,
       "error": null
     },
     {
@@ -94,9 +483,19 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× selects an empty cell by the shared normalized draw and never overwrites occupied cells 5ms",
-        "FAIL  games/merge-sprint/__tests__/board.test.ts > 2048 merge rules > selects an empty cell by the shared normalized draw and never overwrites occupied cells"
+        "2048 merge rules selects an empty cell by the shared normalized draw and never overwrites occupied cells"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 merge rules selects an empty cell by the shared normalized draw and never overwrites occupied cells",
+          "messages": [
+            "AssertionError: expected [ 8, +0, 8, 8, 8, 8, 8, 4, 8, 8, …(6) ] to deeply equal [ 8, 4, 8, 8, 8, 8, 8, +0, 8, 8, …(6) ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:85:56\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 39,
+      "failedTestCount": 1,
+      "elapsedMs": 9007,
       "error": null
     },
     {
@@ -105,11 +504,26 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× selects an empty cell by the shared normalized draw and never overwrites occupied cells 5ms",
-        "× adds exactly the merged tile values and one spawn for an accepted move 6ms",
-        "FAIL  games/merge-sprint/__tests__/board.test.ts > 2048 merge rules > selects an empty cell by the shared normalized draw and never overwrites occupied cells",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > adds exactly the merged tile values and one spawn for an accepted move"
+        "2048 merge rules selects an empty cell by the shared normalized draw and never overwrites occupied cells",
+        "2048 race rules adds exactly the merged tile values and one spawn for an accepted move"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 merge rules selects an empty cell by the shared normalized draw and never overwrites occupied cells",
+          "messages": [
+            "AssertionError: expected [ 8, 4, 8, 8, 8, 8, 8, +0, 8, 8, …(6) ] to deeply equal [ 8, 2, 8, 8, 8, 8, 8, +0, 8, 8, …(6) ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/board.test.ts:89:50\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules adds exactly the merged tile values and one spawn for an accepted move",
+          "messages": [
+            "AssertionError: expected [ 4, 8, 4, +0, +0, +0, +0, +0, …(8) ] to deeply equal [ 4, 8, 2, +0, +0, +0, +0, +0, …(8) ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:53:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 38,
+      "failedTestCount": 2,
+      "elapsedMs": 1171,
       "error": null
     },
     {
@@ -118,9 +532,19 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× does not spawn, score, count, or spend a draw on a direction that changes nothing 27ms",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > does not spawn, score, count, or spend a draw on a direction that changes nothing"
+        "2048 race rules does not spawn, score, count, or spend a draw on a direction that changes nothing"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 race rules does not spawn, score, count, or spend a draw on a direction that changes nothing",
+          "messages": [
+            "AssertionError: expected { phase: { id: 'play', …(2) }, …(7) } to be { phase: { id: 'play', …(2) }, …(7) } // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:63:18\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 39,
+      "failedTestCount": 1,
+      "elapsedMs": 1308,
       "error": null
     },
     {
@@ -129,9 +553,19 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× rejects duplicates, future counters, unknown ids and moves faster than 150ms 26ms",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > rejects duplicates, future counters, unknown ids and moves faster than 150ms"
+        "2048 race rules rejects duplicates, future counters, unknown ids and moves faster than 150ms"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 race rules rejects duplicates, future counters, unknown ids and moves faster than 150ms",
+          "messages": [
+            "AssertionError: expected { phase: { id: 'play', …(2) }, …(7) } to be { phase: { id: 'play', …(2) }, …(7) } // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:73:86\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 39,
+      "failedTestCount": 1,
+      "elapsedMs": 1209,
       "error": null
     },
     {
@@ -140,9 +574,26 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× rejects duplicates, future counters, unknown ids and moves faster than 150ms 25ms",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > rejects duplicates, future counters, unknown ids and moves faster than 150ms"
+        "2048 race rules rejects duplicates, future counters, unknown ids and moves faster than 150ms",
+        "2048 race rules preserves the unspent move cooldown across a pause at the exact boundary"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 race rules rejects duplicates, future counters, unknown ids and moves faster than 150ms",
+          "messages": [
+            "AssertionError: expected { phase: { id: 'play', …(2) }, …(7) } to be { phase: { id: 'play', …(2) }, …(7) } // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:78:50\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules preserves the unspent move cooldown across a pause at the exact boundary",
+          "messages": [
+            "AssertionError: expected { phase: { id: 'play', …(2) }, …(7) } to be { phase: { id: 'play', …(2) }, …(7) } // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:178:53\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 38,
+      "failedTestCount": 2,
+      "elapsedMs": 1233,
       "error": null
     },
     {
@@ -151,9 +602,19 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× ends at the clock, rejects late moves, and lets identical highest scores share first 4ms",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > ends at the clock, rejects late moves, and lets identical highest scores share first"
+        "2048 race rules ends at the clock, rejects late moves, and lets identical highest scores share first"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 race rules ends at the clock, rejects late moves, and lets identical highest scores share first",
+          "messages": [
+            "AssertionError: expected 'play' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:140:27\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 39,
+      "failedTestCount": 1,
+      "elapsedMs": 1257,
       "error": null
     },
     {
@@ -162,9 +623,19 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× the first 2048 ends every board and wins even against a higher merge score 5ms",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > the first 2048 ends every board and wins even against a higher merge score"
+        "2048 race rules the first 2048 ends every board and wins even against a higher merge score"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 race rules the first 2048 ends every board and wins even against a higher merge score",
+          "messages": [
+            "AssertionError: expected 'play' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:124:27\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 39,
+      "failedTestCount": 1,
+      "elapsedMs": 1454,
       "error": null
     },
     {
@@ -173,11 +644,26 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× ends early once the final live board blocks after a spawn 4ms",
-        "× closes when every connected racer blocks even if a disconnected board can still move 1ms",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > ends early once the final live board blocks after a spawn",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > closes when every connected racer blocks even if a disconnected board can still move"
+        "2048 race rules ends early once the final live board blocks after a spawn",
+        "2048 race rules closes when every connected racer blocks even if a disconnected board can still move"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 race rules ends early once the final live board blocks after a spawn",
+          "messages": [
+            "AssertionError: expected 'play' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:213:29\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules closes when every connected racer blocks even if a disconnected board can still move",
+          "messages": [
+            "AssertionError: expected 'play' to be 'reveal' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:225:29\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 38,
+      "failedTestCount": 2,
+      "elapsedMs": 1358,
       "error": null
     },
     {
@@ -186,11 +672,26 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× adds exactly the merged tile values and one spawn for an accepted move 6ms",
-        "× marks the 1200th accepted move blocked while other racers continue 1ms",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > adds exactly the merged tile values and one spawn for an accepted move",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > marks the 1200th accepted move blocked while other racers continue"
+        "2048 race rules adds exactly the merged tile values and one spawn for an accepted move",
+        "2048 race rules marks the 1200th accepted move blocked while other racers continue"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 race rules adds exactly the merged tile values and one spawn for an accepted move",
+          "messages": [
+            "AssertionError: expected [ 4, 8, +0, +0, +0, +0, +0, +0, …(8) ] to deeply equal [ 4, 8, 2, +0, +0, +0, +0, +0, …(8) ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:53:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules marks the 1200th accepted move blocked while other racers continue",
+          "messages": [
+            "AssertionError: expected 1199 to be 1200 // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:339:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 38,
+      "failedTestCount": 2,
+      "elapsedMs": 1249,
       "error": null
     },
     {
@@ -199,9 +700,19 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× adds exactly the merged tile values and one spawn for an accepted move 35ms",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > adds exactly the merged tile values and one spawn for an accepted move"
+        "2048 race rules adds exactly the merged tile values and one spawn for an accepted move"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 race rules adds exactly the merged tile values and one spawn for an accepted move",
+          "messages": [
+            "AssertionError: expected 12 to be 52 // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:50:35\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 39,
+      "failedTestCount": 1,
+      "elapsedMs": 1227,
       "error": null
     },
     {
@@ -210,9 +721,19 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× the first 2048 ends every board and wins even against a higher merge score 5ms",
-        "FAIL  games/merge-sprint/__tests__/game.test.ts > Merge Sprint race rules > the first 2048 ends every board and wins even against a higher merge score"
+        "2048 race rules the first 2048 ends every board and wins even against a higher merge score"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 race rules the first 2048 ends every board and wins even against a higher merge score",
+          "messages": [
+            "AssertionError: expected [ 'p2' ] to deeply equal [ 'p1' ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:131:43\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 39,
+      "failedTestCount": 1,
+      "elapsedMs": 1352,
       "error": null
     },
     {
@@ -221,11 +742,47 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× the first 2048 ends every board and wins even against a higher merge score 611ms",
-        "× ends at the clock, rejects late moves, and lets identical highest scores share first 7ms",
-        "× preserves a board through refresh and finishes without waiting for disconnected players 1ms",
-        "× closes when every connected racer blocks even if a disconnected board can still move 1ms"
+        "2048 race rules the first 2048 ends every board and wins even against a higher merge score",
+        "2048 race rules ends at the clock, rejects late moves, and lets identical highest scores share first",
+        "2048 race rules preserves a board through refresh and finishes without waiting for disconnected players",
+        "2048 race rules closes when every connected racer blocks even if a disconnected board can still move",
+        "2048 race rules a blocked racer rejoining an empty resumed room finishes without waiting for offline rivals"
       ],
+      "failedAssertions": [
+        {
+          "name": "2048 race rules the first 2048 ends every board and wins even against a higher merge score",
+          "messages": [
+            "AssertionError: expected 'reveal' to be 'done' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:130:27\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules ends at the clock, rejects late moves, and lets identical highest scores share first",
+          "messages": [
+            "AssertionError: expected undefined to deeply equal [ 'p1', 'p2' ]\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:147:50\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules preserves a board through refresh and finishes without waiting for disconnected players",
+          "messages": [
+            "AssertionError: expected 'reveal' to be 'done' // Object.is equality\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:189:27\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules closes when every connected racer blocks even if a disconnected board can still move",
+          "messages": [
+            "TypeError: Cannot read properties of null (reading 'scores')\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:228:55\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        },
+        {
+          "name": "2048 race rules a blocked racer rejoining an empty resumed room finishes without waiting for offline rivals",
+          "messages": [
+            "TypeError: Cannot read properties of null (reading 'scores')\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:301:55\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 35,
+      "failedTestCount": 5,
+      "elapsedMs": 1365,
       "error": null
     },
     {
@@ -234,11 +791,40 @@
       "caught": true,
       "exitCode": 1,
       "failedTests": [
-        "× changing future spawn luck and RNG leaves every public view identical in play 113ms",
-        "× changing future spawn luck and RNG leaves every public view identical in reveal 118ms",
-        "× changing future spawn luck and RNG leaves every public view identical in done 114ms",
-        "× publishes completed boards while keeping all future spawns and RNG private 1ms"
+        "public views and bots changing future spawn luck and RNG leaves every public view identical in play",
+        "public views and bots changing future spawn luck and RNG leaves every public view identical in reveal",
+        "public views and bots changing future spawn luck and RNG leaves every public view identical in done",
+        "public views and bots publishes completed boards while keeping all future spawns and RNG private"
       ],
+      "failedAssertions": [
+        {
+          "name": "public views and bots changing future spawn luck and RNG leaves every public view identical in play",
+          "messages": [
+            "AssertionError: expected { gameId: '2048', …(11) } to deeply equal { gameId: '2048', …(11) }\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:371:42\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "public views and bots changing future spawn luck and RNG leaves every public view identical in reveal",
+          "messages": [
+            "AssertionError: expected { gameId: '2048', …(11) } to deeply equal { gameId: '2048', …(11) }\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:371:42\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "public views and bots changing future spawn luck and RNG leaves every public view identical in done",
+          "messages": [
+            "AssertionError: expected { gameId: '2048', …(11) } to deeply equal { gameId: '2048', …(11) }\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:371:42\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)"
+          ]
+        },
+        {
+          "name": "public views and bots publishes completed boards while keeping all future spawns and RNG private",
+          "messages": [
+            "AssertionError: expected '{\"gameId\":\"2048\",\"phaseId\":\"play\",\"ph…' not to contain '\"spawns\"'\n    at C:/dev/rea-runs/r1/games/2048/__tests__/game.test.ts:383:40\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///C:/dev/rea-runs/r1/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+          ]
+        }
+      ],
+      "passedTests": 36,
+      "failedTestCount": 4,
+      "elapsedMs": 1700,
       "error": null
     }
   ]

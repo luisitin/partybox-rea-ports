@@ -38,7 +38,8 @@ copy without counting tile cells that are no longer on screen.
 | `done`   | Final result and all eight standings                                                                    |
 
 The SDK `usePhoneOnly` hook selects stage context. Remote and phone-only play
-never need TV instructions. A blocked racer keeps their score and sees the race.
+never need TV instructions. A blocked racer keeps their own board under the
+original-timed Game over overlay and retains their score in the race.
 
 ## Inputs
 
@@ -47,6 +48,10 @@ never need TV instructions. A blocked racer keeps their score and sees the race.
 disconnected, stale, paused, late and too-fast inputs are ignored. Changed moves
 are separated by at least 150 ms; no-ops spend no move, draw or score.
 The server computes every merge; the phone sends only direction and version.
+Phone input accepts arrows/WASD, arrow buttons and dominant-axis swipes longer
+than 10 px. The main phone board stays 280 px square in both room modes.
+SCORE and BEST retain the original top-right slots; BEST is a device-local
+personal merge-score record, independent of authoritative race scoring.
 
 ## Scoring
 
@@ -92,9 +97,13 @@ Reduced motion disables decorative transforms. No runtime network calls.
 Research: [original creator's engine](https://github.com/gabrielecirulli/2048/blob/478b6ec346e3787f589e4af751378d06ded4cbbc/js/game_manager.js)
 and [independent engine](https://github.com/nneonneo/2048-ai/blob/41e298f4571a9505e421e3a19af7a1cb372a368c/2048.cpp)
 agree on initial tiles, four directions, once-per-move merges, spawning and scoring.
-The original was played through its engine in an ephemeral VM; browser surfaces
-were unavailable. Original authored travel/merge feedback is 100/200 ms, score
-feedback 600 ms; PartyBox uses its own motion tokens and sound cues.
+The pinned classic release was played in a fresh headless profile with ordinary
+arrow inputs. Matched board/score screenshots, ranked visual gaps and the comparison
+are in [fidelity/](fidelity/GAPS.md). The hosted URL now redirects to a redesigned
+2026 site; the studied classic revision remains the explicit reference.
+Original travel/merge feedback is 100/200 ms, score feedback 600 ms. Authored CSS
+derives those timings and original square geometry from PartyBox tokens.
 Measured probes, source-specific timings, living-room decisions and limitations:
 [RESEARCH.md](../../jobs/P09-2048-race/RESEARCH.md) and
-[SOURCES.md](../../jobs/P09-2048-race/SOURCES.md). Nothing from upstream is copied.
+[SOURCES.md](../../jobs/P09-2048-race/SOURCES.md). No upstream implementation or
+runtime assets are copied; original screenshots are review evidence only.

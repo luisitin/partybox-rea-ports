@@ -55,3 +55,14 @@ limitations. Current canonical naming and verification status above take precede
   process cleanup in finally; stale CIM records with HasExited=true are ignored.
 
 - Numeric ID2048 needs the narrowly expanded leading-character validator documented in docs/DECISIONS.md; safe ID length/characters remain bounded. Public SDK phone type lacks pinned host ownSpectatorScreen, so the local phone entry extends its type while preserving the runtime opt-in. Owner core remains read-only.
+
+# Fidelity reference,2026-10-12
+
+The creator's hosted URL redirects to play2048.co, which presents a new tutorial
+and redesigned2026 UI. Use the classic original revision478b6ec already studied
+for this job as the explicit reference. A temporary checkout outside the public
+repo supplies reference code/assets only for screenshots. Twelve ordinary arrow
+inputs in a fresh browser profile produced11 accepted moves/24points. No source,
+font or artwork from that checkout ships in the port. Original PNGs are fidelity
+review evidence required by fresh RULES. Arial is an upstream-declared system
+font fallback; the original Clear Sans font file is not imported.

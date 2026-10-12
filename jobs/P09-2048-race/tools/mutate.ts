@@ -146,6 +146,7 @@ const sourceHashes = Object.fromEntries(
 const reportDir = mkdtempSync(resolve(tmpdir(), 'r1-local-2048-mutations-'));
 const reportFile = resolve(reportDir, 'vitest.json');
 const command = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
+const deferBaseline = process.env['MERGE_MUTATION_DEFER_BASELINE'] === '1';
 const args = [
   'vitest',
   'run',
@@ -400,9 +401,11 @@ if (process.env['MERGE_MUTATION_BASELINE_ONLY'] === '1') {
         checkpoint();
       }
     }
-    restoredBaseline = runTests(restoredArgs);
-    if (!passedRun(restoredBaseline))
-      throw new Error('Restored source must pass after mutation testing');
+    if (!deferBaseline) {
+      restoredBaseline = runTests(restoredArgs);
+      if (!passedRun(restoredBaseline))
+        throw new Error('Restored source must pass after mutation testing');
+    }
   } finally {
     for (const [file, source] of originals) writeFileSync(resolve(prefix, file), source, 'utf8');
     const restored = [...originals].every(
@@ -414,5 +417,6 @@ if (process.env['MERGE_MUTATION_BASELINE_ONLY'] === '1') {
   }
   const caught = results.filter((result) => result.caught).length;
   console.log(`${caught}/${mutants.length} mutants caught`);
+  if (deferBaseline) console.log('Full restored baseline deferred until client/tests release');
   if (caught < 19) process.exitCode = 1;
 }

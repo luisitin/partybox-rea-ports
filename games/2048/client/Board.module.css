@@ -1,20 +1,33 @@
 .board {
-  display: grid;
-  grid-template-rows: repeat(4, minmax(0, 1fr));
-  gap: var(--pb-space-2);
+  /* 280px mobile board: 10px inset/gaps and 6px/3px corners. Smaller
+     public maps scale this geometry instead of stretching the puzzle. */
+  --board-gap: calc(var(--pb-space-2) * 1.25);
+  --board-travel: calc(var(--pb-motion-fast) * 2 / 3);
+  --board-appear: calc(var(--pb-motion-fast) * 4 / 3);
+  --board-well: color-mix(in srgb, var(--pb-surface) 65%, var(--pb-bg));
+  position: relative;
+  box-sizing: border-box;
   width: 100%;
   aspect-ratio: 1;
-  padding: var(--pb-space-2);
-  border-radius: var(--pb-radius-lg);
+  border-radius: calc(var(--pb-radius) / 2);
   background: var(--pb-surface-2);
   color: var(--pb-text);
   container-type: inline-size;
+  font-family: var(--merge-font-family, Arial, Helvetica, sans-serif);
+}
+
+.cells {
+  position: absolute;
+  inset: var(--board-gap);
+  display: grid;
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: var(--board-gap);
 }
 
 .row {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--pb-space-2);
+  gap: var(--board-gap);
   min-height: 0;
 }
 
@@ -22,105 +35,191 @@
   display: grid;
   place-items: center;
   min-width: 0;
-  border-radius: var(--pb-radius);
-  background: var(--pb-surface);
-  font-size: min(var(--pb-font-h1), 13cqw);
-  font-weight: 900;
+  border-radius: calc(var(--pb-radius) / 4);
+  background: var(--board-well);
+  font-size: 12.5cqw;
+  font-weight: 700;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
 .tile[data-value='2'] {
-  background: var(--pb-surface);
+  background: color-mix(in srgb, var(--pb-surface) 92%, var(--pb-text));
 }
 
 .tile[data-value='4'] {
-  color: var(--pb-info);
+  background: color-mix(in srgb, var(--pb-surface) 84%, var(--pb-text));
 }
 
-.tile[data-value='8'],
+.tile[data-value='8'] {
+  background: var(--pb-accent-3);
+  color: var(--pb-on-accent);
+}
+
 .tile[data-value='16'] {
-  color: var(--pb-accent-3);
+  background: var(--pb-info);
+  color: var(--pb-on-accent);
 }
 
-.tile[data-value='32'],
+.tile[data-value='32'] {
+  background: var(--pb-accent);
+  color: var(--pb-on-accent);
+}
+
 .tile[data-value='64'] {
-  color: var(--pb-accent);
+  background: var(--pb-danger);
+  color: var(--pb-on-accent);
 }
 
 .tile[data-value='128'],
 .tile[data-value='256'],
 .tile[data-value='512'],
+.tile[data-value='1024'],
+.tile[data-value='2048'] {
+  --tile-glow: 24%;
+  background: color-mix(in srgb, var(--pb-accent-2-fill) 80%, var(--pb-surface));
+  color: var(--pb-on-accent-2-fill);
+  box-shadow: 0 0 calc(var(--pb-space-6) * 15 / 16) calc(var(--pb-space-2) * 1.25)
+    color-mix(in srgb, var(--pb-accent-2-fill) var(--tile-glow), transparent);
+}
+
+.tile[data-value='256'] {
+  --tile-glow: 32%;
+  background: color-mix(in srgb, var(--pb-accent-2-fill) 85%, var(--pb-surface));
+}
+
+.tile[data-value='512'] {
+  --tile-glow: 40%;
+  background: color-mix(in srgb, var(--pb-accent-2-fill) 90%, var(--pb-surface));
+}
+
 .tile[data-value='1024'] {
-  color: var(--pb-accent-2);
+  --tile-glow: 48%;
+  background: color-mix(in srgb, var(--pb-accent-2-fill) 95%, var(--pb-surface));
 }
 
 .tile[data-value='2048'] {
+  --tile-glow: 56%;
   background: var(--pb-accent-2-fill);
-  color: var(--pb-on-accent-2-fill);
 }
 
 .tile[data-digits='3'] {
-  font-size: min(var(--pb-font-h1), 10cqw);
+  font-size: 8.928571429cqw;
 }
 
 .tile[data-digits='4'] {
-  font-size: min(var(--pb-font-h2), 8cqw);
+  font-size: 5.357142857cqw;
 }
 
-.tile[data-pop='true'] {
-  animation: global(pb-pop) var(--pb-motion-fast) var(--pb-ease);
-}
-
-/* Small stage boards are a map; the card repeats their largest tile at display size. */
-.board[data-mini='true'] {
-  gap: var(--pb-space-1);
-  padding: var(--pb-space-1);
-  border-radius: var(--pb-radius);
-}
-
-.board[data-mini='true'] .row {
-  gap: var(--pb-space-1);
-}
-
-.board[data-mini='true'] .tile {
-  border-radius: calc(var(--pb-radius) / 2);
-  font-size: min(var(--pb-font-body), 13cqw);
-}
-
-.board[data-mini='true'] .tile[data-digits='4'] {
-  font-size: min(calc(var(--pb-font-body) * 0.75), 8cqw);
-}
-
-.board[data-mini='true'] .tile[data-digits='3'] {
-  font-size: min(var(--pb-font-body), 10cqw);
-}
-
-/* Wide TV map cells hold four-digit numbers at the sofa-readable 32px minimum.
-   The playing board on a phone stays square. */
+.board[data-mini='true'],
 .board[data-tv-map='true'] {
-  aspect-ratio: auto;
-  height: calc(var(--pb-font-body) * 32 / 9 + var(--pb-space-1) * 5);
-  gap: var(--pb-space-1);
-  padding: var(--pb-space-1);
-  border-radius: var(--pb-radius);
+  --board-gap: 3.571428571cqw;
+  border-radius: 2.142857143%;
 }
 
-.board[data-tv-map='true'] .row {
-  gap: var(--pb-space-1);
-}
-
+.board[data-mini='true'] .tile,
 .board[data-tv-map='true'] .tile {
-  border-radius: calc(var(--pb-radius) / 2);
-  font-size: calc(var(--pb-font-body) * 8 / 9);
+  border-radius: 5.217391304%;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .tile[data-pop='true'] {
-    animation: none;
+/* The phone is the essential original puzzle. Square TV maps are supplementary
+   party plumbing; the card repeats score and best tile at sofa-readable size. */
+.board[data-tv-map='true'] {
+  width: calc(var(--pb-font-body) * 32 / 9 + var(--pb-space-1) * 5);
+  max-width: 100%;
+  justify-self: center;
+}
+
+.board[data-moving='true'] .cells .tile {
+  background: var(--board-well);
+  color: transparent;
+  box-shadow: none;
+}
+
+.motion {
+  position: absolute;
+  inset: var(--board-gap);
+  pointer-events: none;
+}
+
+.movingTile {
+  position: absolute;
+  left: calc(var(--tile-col) * (100% + var(--board-gap)) / 4);
+  top: calc(var(--tile-row) * (100% + var(--board-gap)) / 4);
+  width: calc((100% - var(--board-gap) * 3) / 4);
+  height: calc((100% - var(--board-gap) * 3) / 4);
+  z-index: 2;
+}
+
+.movingTile[data-motion='travel'] {
+  animation: travel var(--board-travel) ease-in-out both;
+}
+
+.movingTile[data-merged='true'] {
+  animation:
+    travel var(--board-travel) ease-in-out both,
+    consumed var(--board-travel) steps(1, end) both;
+}
+
+.movingTile[data-motion='spawn'] {
+  animation: appear var(--board-appear) ease var(--board-travel) both;
+}
+
+.movingTile[data-motion='merge'] {
+  z-index: 3;
+  animation: merge var(--board-appear) ease var(--board-travel) both;
+}
+
+@keyframes travel {
+  from {
+    transform: translate(
+      calc(var(--from-x) * (100% + var(--board-gap))),
+      calc(var(--from-y) * (100% + var(--board-gap)))
+    );
+  }
+  to {
+    transform: translate(0, 0);
   }
 }
 
-:global(:root[data-motion='off']) .tile[data-pop='true'] {
-  animation: none;
+@keyframes consumed {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes merge {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion {
+    display: none;
+  }
+}
+
+:global(:root[data-motion='off']) .motion {
+  display: none;
 }

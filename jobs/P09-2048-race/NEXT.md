@@ -1,5 +1,15 @@
 # P09 resume
 
+2026-10-12 fidelity update: origin/main added the mandatory original/ours gate.
+Matched original classic478b6ec screenshots now exist under games/2048/fidelity;
+hosted URL redirects to play2048.co's2026 tutorial, so pinnedclassic is explicit.
+Phone HUD/280px board/score-rise/blocked overlay are repaired; Board agent is
+finishing100ms travel/200ms spawn-merge/squaremini maps. Full current UI tests,
+all new captures, fidelity gaps, hashes, final CI and3no-gain rounds remain.
+Fresh final-server simulation:21,000/21,000, max220,911ms <480,000. Fresh20/20
+server behavioral mutants are caught/restored; full UI baseline is deliberately
+held until animation/UI edits finish. Do not mark DONE with old gate figures.
+
 Latest KEEP GOING update: meaningful pacing/focus/phone-identity improvements are
 in progress. The green local figures below are the pre-pacing baseline; rerun
 simulations, all20mutations, own tests, captures, sums, type/format and new-head CI

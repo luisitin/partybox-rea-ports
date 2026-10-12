@@ -79,6 +79,7 @@ export function RaceStage({
                 <Board
                   board={racer.board}
                   miniature
+                  moves={racer.moves}
                   label={L('{name}’s board', { name: names[racer.id] ?? racer.id })}
                 />
               </div>

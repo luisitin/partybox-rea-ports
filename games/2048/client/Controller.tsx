@@ -24,6 +24,26 @@ export function Controller({
   const now = useServerNow(250, view.paused, view.clockHeldAt);
   const gesture = useRef<{ id: number; x: number; y: number; key: string } | null>(null);
   const mine = view.mine;
+  const [personalBest, setPersonalBest] = useState(mine?.score ?? 0);
+  useEffect(() => {
+    // Original BEST is a score record, not the largest tile. Storage is optional:
+    // a restricted browser still keeps the current race score visible.
+    const storageKey = `partybox:2048:best:${view.me.id}`;
+    let saved = 0;
+    try {
+      saved = Number(localStorage.getItem(storageKey)) || 0;
+    } catch {
+      /* private/restricted storage does not affect the authoritative game */
+    }
+    const best = Math.max(saved, mine?.score ?? 0);
+    setPersonalBest(best);
+    try {
+      localStorage.setItem(storageKey, String(best));
+    } catch {
+      /* record persistence is optional */
+    }
+  }, [view.me.id, mine?.score]);
+  const animationInput = useRef<{ key: string; moves: number; dir: Input['dir'] } | null>(null);
   const playing = view.phaseId === 'play';
   const connected = view.players.find((p) => p.id === view.me.id)?.connected !== false;
   const canMove =
@@ -82,6 +102,7 @@ export function Controller({
     if (!pending) return;
     feedbackRef.current = pending;
     setFeedback(pending);
+    animationInput.current = { key: feedbackView.key, moves: current.moves, dir };
     send({ type: 'move', dir, move: current.moves });
   };
   const start = (event: PointerEvent<HTMLDivElement>): void => {
@@ -95,8 +116,8 @@ export function Controller({
     if (!began || began.id !== event.pointerId || began.key !== gestureKey) return;
     const dx = event.clientX - began.x;
     const dy = event.clientY - began.y;
-    // Proportional to the board, so a deliberate swipe works on both small and large phones.
-    if (Math.max(Math.abs(dx), Math.abs(dy)) < event.currentTarget.clientWidth / 12) return;
+    // Match the original's deliberate >10px dominant-axis swipe threshold.
+    if (Math.max(Math.abs(dx), Math.abs(dy)) <= 10) return;
     move(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : dy > 0 ? 'down' : 'up');
   };
   const keyboard = (event: KeyboardEvent<HTMLDivElement>): void => {
@@ -105,6 +126,14 @@ export function Controller({
       ArrowUp: 'up',
       ArrowDown: 'down',
       ArrowRight: 'right',
+      a: 'left',
+      A: 'left',
+      w: 'up',
+      W: 'up',
+      s: 'down',
+      S: 'down',
+      d: 'right',
+      D: 'right',
     };
     const dir = keys[event.key];
     if (!dir || !canMove || event.repeat) return;
@@ -112,41 +141,42 @@ export function Controller({
     move(dir);
   };
 
-  if (!playing || !mine || view.me.role === 'spectator' || mine.status === 'blocked') {
+  if (!playing || !mine || view.me.role === 'spectator') {
     return <RaceStage view={view} phoneOnly={phoneOnly} />;
   }
 
   return (
     <div className={styles.screen} data-phone-only={phoneOnly || undefined} onKeyDown={keyboard}>
       <header className={styles.header}>
-        <div>
-          <h2>{L('2048')}</h2>
-          <p>{L('Race to {target}', { target: view.target })}</p>
-        </div>
-        <div className={styles.clock} role="timer" data-urgent={left !== null && left <= 5000}>
-          <span>{view.paused ? L('Paused') : L('Time left')}</span>
-          <strong>{left === null ? '—' : clockText(left)}</strong>
-        </div>
+        <h2>{L('2048')}</h2>
+        <dl className={styles.stats}>
+          <div>
+            <dt>{L('Score')}</dt>
+            <dd>
+              {mine.score}
+              <span className={styles.gain} role="status" key={`${feedback.key}:${feedback.moves}`}>
+                {feedback.gain > 0 ? `+${feedback.gain}` : null}
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt>{L('Best')}</dt>
+            <dd>{Math.max(personalBest, mine.score)}</dd>
+          </div>
+        </dl>
       </header>
-      <dl className={styles.stats}>
-        <div>
-          <dt>{L('Score')}</dt>
-          <dd>
-            {mine.score}
-            <span className={styles.gain} role="status" key={`${feedback.key}:${feedback.moves}`}>
-              {feedback.gain > 0 ? L('+{gain} points', { gain: feedback.gain }) : '\u00a0'}
-            </span>
-          </dd>
+      <div className={styles.intro}>
+        <p>{L('Join the numbers and get to the {target} tile!', { target: view.target })}</p>
+        <div className={styles.raceInfo}>
+          <span className={styles.clock} role="timer" data-urgent={left !== null && left <= 5000}>
+            {view.paused ? L('Paused') : L('Time left')}{' '}
+            <strong>{left === null ? '—' : clockText(left)}</strong>
+          </span>
+          <span>
+            {L('Best tile')} {mine.best} · {L('Place')} #{mine.rank}
+          </span>
         </div>
-        <div>
-          <dt>{L('Best tile')}</dt>
-          <dd>{mine.best}</dd>
-        </div>
-        <div>
-          <dt>{L('Place')}</dt>
-          <dd>#{mine.rank}</dd>
-        </div>
-      </dl>
+      </div>
       <div className={styles.boardSpace}>
         <div
           className={styles.swipe}
@@ -159,42 +189,62 @@ export function Controller({
           onPointerCancel={() => (gesture.current = null)}
           onLostPointerCapture={() => (gesture.current = null)}
         >
-          <Board board={mine.board} label={L('Your board')} moves={mine.moves} />
+          <Board
+            board={mine.board}
+            label={L('Your board')}
+            moves={mine.moves}
+            direction={
+              animationInput.current?.key === feedbackView.key &&
+              animationInput.current.moves + 1 === mine.moves
+                ? animationInput.current.dir
+                : undefined
+            }
+          />
+          {mine.status === 'blocked' ? (
+            <div className={styles.overlay} role="status">
+              <strong>{L('Game over!')}</strong>
+              <span>{L('No moves left')}</span>
+            </div>
+          ) : null}
         </div>
       </div>
       <p className={styles.hint}>
-        {phoneOnly && leader
-          ? L('{name} leads · best tile {tile}', {
-              name: `${names[leader.id] ?? leader.id}${leader.bot ? ` (${L('Bot')})` : leaderAway ? ` (${L('Away')})` : ''}`,
-              tile: leader.best,
-            })
-          : L('Swipe the board or tap a direction.')}
+        {mine.status === 'blocked'
+          ? L('Your {score} points stay in the race.', { score: mine.score })
+          : phoneOnly && leader
+            ? L('{name} leads · best tile {tile}', {
+                name: `${names[leader.id] ?? leader.id}${leader.bot ? ` (${L('Bot')})` : leaderAway ? ` (${L('Away')})` : ''}`,
+                tile: leader.best,
+              })
+            : L('Swipe the board or tap a direction.')}
       </p>
       {phoneOnly ? <StandingsStrip view={view} /> : null}
-      <div className={styles.controls} role="group" aria-label={L('Move tiles')}>
-        {DIRECTIONS.map((dir) => (
-          <button
-            key={dir}
-            type="button"
-            className={styles.direction}
-            // Retain native keyboard focus while an accepted move settles. The
-            // guarded move handler rejects busy/paused clicks and key presses.
-            aria-disabled={!ready}
-            onClick={() => move(dir)}
-            aria-label={
-              dir === 'left'
-                ? L('Move left')
-                : dir === 'up'
-                  ? L('Move up')
-                  : dir === 'down'
-                    ? L('Move down')
-                    : L('Move right')
-            }
-          >
-            <span aria-hidden="true">{ARROWS[dir]}</span>
-          </button>
-        ))}
-      </div>
+      {mine.status !== 'blocked' ? (
+        <div className={styles.controls} role="group" aria-label={L('Move tiles')}>
+          {DIRECTIONS.map((dir) => (
+            <button
+              key={dir}
+              type="button"
+              className={styles.direction}
+              // Retain native keyboard focus while an accepted move settles. The
+              // guarded move handler rejects busy/paused clicks and key presses.
+              aria-disabled={!ready}
+              onClick={() => move(dir)}
+              aria-label={
+                dir === 'left'
+                  ? L('Move left')
+                  : dir === 'up'
+                    ? L('Move up')
+                    : dir === 'down'
+                      ? L('Move down')
+                      : L('Move right')
+              }
+            >
+              <span aria-hidden="true">{ARROWS[dir]}</span>
+            </button>
+          ))}
+        </div>
+      ) : null}
       <p className={styles.rule}>
         {feedback.failed
           ? L('Move not confirmed. Try again.')

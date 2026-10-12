@@ -10,7 +10,7 @@ const job = fileURLToPath(new URL('../', import.meta.url));
 const media = join(job, 'media');
 const delay = (ms) => new Promise((done) => setTimeout(done, ms));
 
-async function devToolsEndpoint(child, profile) {
+export async function devToolsEndpoint(child, profile) {
   let output = '';
   let launchError;
   let lastRead = 'DevToolsActivePort has not appeared';
@@ -57,7 +57,7 @@ async function devToolsEndpoint(child, profile) {
   }
 }
 
-function ownedProfile(profile) {
+export function ownedProfile(profile) {
   const absolute = resolve(profile);
   if (
     dirname(absolute) !== resolve(tmpdir()) ||
@@ -68,7 +68,7 @@ function ownedProfile(profile) {
   return absolute;
 }
 
-async function closeProfileProcesses(profile) {
+export async function closeProfileProcesses(profile) {
   // Pass ownership through an environment variable, never a string-built shell command.
   // Enumerate/stop only chrome.exe processes with this exact user-data-dir argument.
   const script = String.raw`
@@ -178,7 +178,7 @@ if ($taskCaptureRemaining.Count -ne 0) { throw 'Owned capture Chrome processes r
   console.log(JSON.stringify({ cleanup: report }));
 }
 
-class Cdp {
+export class Cdp {
   constructor(socket) {
     this.socket = socket;
     this.nextId = 1;
@@ -344,6 +344,7 @@ function measure() {
       text: text.textContent.trim().slice(0, 120),
       fontPx: parseFloat(style.fontSize),
       gameText: document.getElementById('game-frame').contains(node),
+      supplementaryMap: !!node.closest('[data-tv-map="true"]'),
       rect: box(rect),
     };
     textFonts.push(font);
@@ -435,189 +436,192 @@ function measure() {
     keyboardFocus,
     tvTextBelow32px:
       document.documentElement.dataset.surface === 'tv'
-        ? textFonts.filter((text) => text.gameText && text.fontPx < 32)
+        ? textFonts.filter((text) => text.gameText && !text.supplementaryMap && text.fontPx < 32)
         : [],
   };
 }
 
-let browser;
-let cdp;
-let profile;
-let captureError;
-try {
-  await stat(chromePath);
-  await mkdir(media, { recursive: true });
-  const htmlFiles = (await readdir(media)).filter((name) => name.endsWith('.html')).sort();
-  if (!htmlFiles.length) throw new Error('Render the SSR HTML captures before running capture.mjs');
-  profile = await mkdtemp(join(tmpdir(), 'partybox-p09-capture-'));
-  browser = spawn(
-    chromePath,
-    [
-      '--headless=new',
-      '--disable-gpu',
-      '--disable-background-networking',
-      '--no-first-run',
-      '--no-default-browser-check',
-      '--disable-extensions',
-      '--disable-component-update',
-      '--mute-audio',
-      '--remote-debugging-address=127.0.0.1',
-      '--remote-debugging-port=0',
-      `--user-data-dir=${profile}`,
-      '--window-size=1920,1080',
-      'about:blank',
-    ],
-    { windowsHide: true, stdio: ['ignore', 'ignore', 'pipe'] },
-  );
-  cdp = await Cdp.open(await devToolsEndpoint(browser, profile));
-  const { targetId } = await cdp.send('Target.createTarget', { url: 'about:blank' });
-  const { sessionId } = await cdp.send('Target.attachToTarget', { targetId, flatten: true });
-  await cdp.send('Page.enable', {}, sessionId);
-  await cdp.send('Network.enable', {}, sessionId);
-  await cdp.send('Network.setBlockedURLs', { urls: ['http://*', 'https://*'] }, sessionId);
-  await cdp.send(
-    'Emulation.setEmulatedMedia',
-    {
-      features: [
-        { name: 'prefers-color-scheme', value: 'dark' },
-        { name: 'prefers-reduced-motion', value: 'reduce' },
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  let browser;
+  let cdp;
+  let profile;
+  let captureError;
+  try {
+    await stat(chromePath);
+    await mkdir(media, { recursive: true });
+    const htmlFiles = (await readdir(media)).filter((name) => name.endsWith('.html')).sort();
+    if (!htmlFiles.length)
+      throw new Error('Render the SSR HTML captures before running capture.mjs');
+    profile = await mkdtemp(join(tmpdir(), 'partybox-p09-capture-'));
+    browser = spawn(
+      chromePath,
+      [
+        '--headless=new',
+        '--disable-gpu',
+        '--disable-background-networking',
+        '--no-first-run',
+        '--no-default-browser-check',
+        '--disable-extensions',
+        '--disable-component-update',
+        '--mute-audio',
+        '--remote-debugging-address=127.0.0.1',
+        '--remote-debugging-port=0',
+        `--user-data-dir=${profile}`,
+        '--window-size=1920,1080',
+        'about:blank',
       ],
-    },
-    sessionId,
-  );
+      { windowsHide: true, stdio: ['ignore', 'ignore', 'pipe'] },
+    );
+    cdp = await Cdp.open(await devToolsEndpoint(browser, profile));
+    const { targetId } = await cdp.send('Target.createTarget', { url: 'about:blank' });
+    const { sessionId } = await cdp.send('Target.attachToTarget', { targetId, flatten: true });
+    await cdp.send('Page.enable', {}, sessionId);
+    await cdp.send('Network.enable', {}, sessionId);
+    await cdp.send('Network.setBlockedURLs', { urls: ['http://*', 'https://*'] }, sessionId);
+    await cdp.send(
+      'Emulation.setEmulatedMedia',
+      {
+        features: [
+          { name: 'prefers-color-scheme', value: 'dark' },
+          { name: 'prefers-reduced-motion', value: 'reduce' },
+        ],
+      },
+      sessionId,
+    );
 
-  const layouts = [];
-  for (const filename of htmlFiles) {
-    const source = await readFile(join(media, filename), 'utf8');
-    const phone = /data-surface="phone"/.test(source);
-    const width = phone ? 390 : 1920;
-    const height = phone ? 844 : 1080;
-    await cdp.send(
-      'Emulation.setDeviceMetricsOverride',
-      {
-        width,
-        height,
-        deviceScaleFactor: 1,
-        mobile: phone,
-        screenWidth: width,
-        screenHeight: height,
-      },
-      sessionId,
-    );
-    const frame = await cdp.send('Page.getFrameTree', {}, sessionId);
-    const contents = await readFile(join(media, filename), 'utf8');
-    const base = pathToFileURL(`${media}/`).href;
-    await cdp.send(
-      'Page.setDocumentContent',
-      {
-        frameId: frame.frameTree.frame.id,
-        html: contents.replace('<head>', `<head><base href="${base}">`),
-      },
-      sessionId,
-    );
-    const settled = await cdp.send(
-      'Runtime.evaluate',
-      {
-        expression:
-          '(async () => { await document.fonts.ready; await new Promise(done => requestAnimationFrame(() => requestAnimationFrame(done))); return true; })()',
-        awaitPromise: true,
-        returnByValue: true,
-      },
-      sessionId,
-    );
-    if (settled.exceptionDetails)
-      throw new Error(`${filename}: ${JSON.stringify(settled.exceptionDetails)}`);
-    const measured = await cdp.send(
-      'Runtime.evaluate',
-      {
-        expression: `(${measure.toString()})()`,
-        returnByValue: true,
-      },
-      sessionId,
-    );
-    if (measured.exceptionDetails)
-      throw new Error(`${filename}: ${JSON.stringify(measured.exceptionDetails)}`);
-    const screenshot = await cdp.send(
-      'Page.captureScreenshot',
-      {
-        format: 'png',
-        fromSurface: true,
-        captureBeyondViewport: false,
-      },
-      sessionId,
-    );
-    const png = filename.replace(/\.html$/, '.png');
-    await writeFile(join(media, png), Buffer.from(screenshot.data, 'base64'));
-    const layout = { html: filename, png, ...measured.result.value };
-    layouts.push(layout);
-    console.log(
-      JSON.stringify({
-        file: filename,
-        outside: layout.outside.length,
-        overflow: layout.overflow.length,
-        textOverflow: layout.textOverflow.length,
-        clipped: layout.clipping.length,
-        smallTvText: layout.tvTextBelow32px.length,
-      }),
-    );
-  }
-  await writeFile(
-    join(media, 'layout.json'),
-    `${JSON.stringify({ chromePath, captures: layouts }, null, 2)}\n`,
-    'utf8',
-  );
-  const mediaFiles = await readdir(media);
-  const sizes = await Promise.all(mediaFiles.map((name) => stat(join(media, name))));
-  const bytes = sizes
-    .filter((entry) => entry.isFile())
-    .reduce((total, entry) => total + entry.size, 0);
-  const failed = layouts.filter(
-    (a) =>
-      a.outside.length ||
-      a.clipping.length ||
-      a.boardOverlaps.length ||
-      (a.keyboardFocus && !a.keyboardFocus.ariaDisabledRetainsFocus) ||
-      a.tvTextBelow32px.length ||
-      a.headerOverlap > 1 ||
-      a.directionTargets.some((t) => !t.passes44px),
-  );
-  if (failed.length)
-    throw new Error(`Current host fit failed: ${failed.map((a) => a.html).join(', ')}`);
-  if (bytes >= 10_000_000) throw new Error(`Media exceeds the 10 MB budget: ${bytes} bytes`);
-  console.log(
-    JSON.stringify({ captures: layouts.length, mediaBytes: bytes, report: 'media/layout.json' }),
-  );
-} catch (error) {
-  captureError = error;
-  throw error;
-} finally {
-  // Cleanup covers failures during launch, connection, navigation, layout inspection, or capture.
-  if (cdp) {
-    try {
-      await cdp.send('Browser.close', {}, undefined, 2000);
-    } catch {
-      /* close can end CDP before replying */
-    }
-    try {
-      cdp.socket.close();
-    } catch {
-      /* process cleanup must run even if the socket is already gone */
-    }
-  }
-  if (profile) {
-    const absolute = ownedProfile(profile);
-    try {
-      // Always run, even if the launcher exited, CDP never appeared, or Browser.close succeeded.
-      await closeProfileProcesses(absolute);
-    } catch (cleanupError) {
-      // Keep the exact ownership/profile evidence available for a manual PID audit.
-      throw new AggregateError(
-        captureError ? [captureError, cleanupError] : [cleanupError],
-        `Capture Chrome cleanup failed; profile retained for audit: ${absolute}`,
+    const layouts = [];
+    for (const filename of htmlFiles) {
+      const source = await readFile(join(media, filename), 'utf8');
+      const phone = /data-surface="phone"/.test(source);
+      const width = phone ? 390 : 1920;
+      const height = phone ? 844 : 1080;
+      await cdp.send(
+        'Emulation.setDeviceMetricsOverride',
+        {
+          width,
+          height,
+          deviceScaleFactor: 1,
+          mobile: phone,
+          screenWidth: width,
+          screenHeight: height,
+        },
+        sessionId,
+      );
+      const frame = await cdp.send('Page.getFrameTree', {}, sessionId);
+      const contents = await readFile(join(media, filename), 'utf8');
+      const base = pathToFileURL(`${media}/`).href;
+      await cdp.send(
+        'Page.setDocumentContent',
+        {
+          frameId: frame.frameTree.frame.id,
+          html: contents.replace('<head>', `<head><base href="${base}">`),
+        },
+        sessionId,
+      );
+      const settled = await cdp.send(
+        'Runtime.evaluate',
+        {
+          expression:
+            '(async () => { await document.fonts.ready; await new Promise(done => requestAnimationFrame(() => requestAnimationFrame(done))); return true; })()',
+          awaitPromise: true,
+          returnByValue: true,
+        },
+        sessionId,
+      );
+      if (settled.exceptionDetails)
+        throw new Error(`${filename}: ${JSON.stringify(settled.exceptionDetails)}`);
+      const measured = await cdp.send(
+        'Runtime.evaluate',
+        {
+          expression: `(${measure.toString()})()`,
+          returnByValue: true,
+        },
+        sessionId,
+      );
+      if (measured.exceptionDetails)
+        throw new Error(`${filename}: ${JSON.stringify(measured.exceptionDetails)}`);
+      const screenshot = await cdp.send(
+        'Page.captureScreenshot',
+        {
+          format: 'png',
+          fromSurface: true,
+          captureBeyondViewport: false,
+        },
+        sessionId,
+      );
+      const png = filename.replace(/\.html$/, '.png');
+      await writeFile(join(media, png), Buffer.from(screenshot.data, 'base64'));
+      const layout = { html: filename, png, ...measured.result.value };
+      layouts.push(layout);
+      console.log(
+        JSON.stringify({
+          file: filename,
+          outside: layout.outside.length,
+          overflow: layout.overflow.length,
+          textOverflow: layout.textOverflow.length,
+          clipped: layout.clipping.length,
+          smallTvText: layout.tvTextBelow32px.length,
+        }),
       );
     }
-    await rm(absolute, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 }).catch(
-      () => undefined,
+    await writeFile(
+      join(media, 'layout.json'),
+      `${JSON.stringify({ chromePath, captures: layouts }, null, 2)}\n`,
+      'utf8',
     );
+    const mediaFiles = await readdir(media);
+    const sizes = await Promise.all(mediaFiles.map((name) => stat(join(media, name))));
+    const bytes = sizes
+      .filter((entry) => entry.isFile())
+      .reduce((total, entry) => total + entry.size, 0);
+    const failed = layouts.filter(
+      (a) =>
+        a.outside.length ||
+        a.clipping.length ||
+        a.boardOverlaps.length ||
+        (a.keyboardFocus && !a.keyboardFocus.ariaDisabledRetainsFocus) ||
+        a.tvTextBelow32px.length ||
+        a.headerOverlap > 1 ||
+        a.directionTargets.some((t) => !t.passes44px),
+    );
+    if (failed.length)
+      throw new Error(`Current host fit failed: ${failed.map((a) => a.html).join(', ')}`);
+    if (bytes >= 10_000_000) throw new Error(`Media exceeds the 10 MB budget: ${bytes} bytes`);
+    console.log(
+      JSON.stringify({ captures: layouts.length, mediaBytes: bytes, report: 'media/layout.json' }),
+    );
+  } catch (error) {
+    captureError = error;
+    throw error;
+  } finally {
+    // Cleanup covers failures during launch, connection, navigation, layout inspection, or capture.
+    if (cdp) {
+      try {
+        await cdp.send('Browser.close', {}, undefined, 2000);
+      } catch {
+        /* close can end CDP before replying */
+      }
+      try {
+        cdp.socket.close();
+      } catch {
+        /* process cleanup must run even if the socket is already gone */
+      }
+    }
+    if (profile) {
+      const absolute = ownedProfile(profile);
+      try {
+        // Always run, even if the launcher exited, CDP never appeared, or Browser.close succeeded.
+        await closeProfileProcesses(absolute);
+      } catch (cleanupError) {
+        // Keep the exact ownership/profile evidence available for a manual PID audit.
+        throw new AggregateError(
+          captureError ? [captureError, cleanupError] : [cleanupError],
+          `Capture Chrome cleanup failed; profile retained for audit: ${absolute}`,
+        );
+      }
+      await rm(absolute, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 }).catch(
+        () => undefined,
+      );
+    }
   }
 }

@@ -79,7 +79,8 @@ describe('2048 phone surfaces', () => {
     expect(html).toContain('No moves left');
     expect(html).toContain('Your 0 points stay in the race.');
     expect(html).not.toContain('<button');
-    expect(html.match(/role="grid"/g)).toHaveLength(8);
+    expect(html.match(/role="grid"/g)).toHaveLength(1);
+    expect(html).toContain('Game over!');
   });
 
   it('gives phone-only racers a live race leader and no TV directions', () => {

@@ -101,6 +101,7 @@ export function Tv({ view }: GameTvProps<TvMergeView>): JSX.Element {
                   board={racer.board}
                   label={L('{name}’s board', { name: names[racer.id] ?? racer.id })}
                   tvMap
+                  moves={racer.moves}
                 />
               ) : null}
             </article>

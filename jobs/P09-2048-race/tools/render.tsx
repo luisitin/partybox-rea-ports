@@ -108,7 +108,9 @@ function phone(state: State, id: string, phoneOnly = true): ReactNode {
 }
 
 await mkdir(media, { recursive: true });
-for (const phase of process.argv.includes('--hash-only') ? [] : game.phases) {
+for (const phase of process.argv.includes('--hash-only') || process.argv.includes('--fidelity')
+  ? []
+  : game.phases) {
   const state = JSON.parse(await readFile(resolve(fixtures, `${phase}.json`), 'utf8')) as State;
   const first = Object.values(state.players)[0];
   if (!first) throw new Error(`Fixture ${phase} has no players`);
@@ -136,7 +138,35 @@ for (const phase of process.argv.includes('--hash-only') ? [] : game.phases) {
   }
 }
 
-if (!process.argv.includes('--hash-only')) {
+if (process.argv.includes('--fidelity')) {
+  const reference = JSON.parse(
+    await readFile(resolve(repository, 'games/2048/fidelity/original-states.json'), 'utf8'),
+  ) as { states: { moment: string; board: number[]; score: number; moves: number }[] };
+  for (const moment of reference.states) {
+    const state = game.init({
+      players: ['p1', 'p2'].map((id) => ({
+        id,
+        name: id === 'p1' ? 'You' : 'Peer',
+        avatarId: 'fox',
+        connected: true,
+      })),
+      settings: {},
+      seed: 913,
+      now: 0,
+    });
+    for (const id of ['p1', 'p2']) {
+      state.racers[id] = {
+        ...state.racers[id]!,
+        board: moment.board,
+        score: moment.score,
+        moves: moment.moves,
+      };
+    }
+    await capture(`${moment.moment}-fidelity`, 'phone', state, phone(state, 'p1', false));
+  }
+}
+
+if (!process.argv.includes('--hash-only') && !process.argv.includes('--fidelity')) {
   const play = JSON.parse(await readFile(resolve(fixtures, 'play.json'), 'utf8')) as State;
   const long: State = {
     ...play,

@@ -46,6 +46,8 @@ captured.done = game.reduce(state, {
   phaseId: 'reveal',
   startedAt: state.phase.startedAt,
 });
+if (captured.done.phase.id !== 'done' || game.results(captured.done) === null)
+  throw new Error('Fixture game did not reach complete results');
 mkdirSync('games/2048/fixtures', { recursive: true });
 for (const [name, snapshot] of Object.entries(captured))
   writeFileSync(`games/2048/fixtures/${name}.json`, `${JSON.stringify(snapshot, null, 2)}\n`);
@@ -54,12 +56,16 @@ console.log(
     Object.fromEntries(
       Object.entries(captured).map(([phase, s]) => [
         phase,
-        game.tvView(s).racers.map((r) => ({
-          name: names[Number(r.id.slice(1)) - 1],
-          best: r.best,
-          score: r.score,
-          moves: r.moves,
-        })),
+        {
+          startedAt: s.phase.startedAt,
+          holdMs: s.phase.deadline === null ? null : s.phase.deadline - s.phase.startedAt,
+          racers: game.tvView(s).racers.map((r) => ({
+            name: names[Number(r.id.slice(1)) - 1],
+            best: r.best,
+            score: r.score,
+            moves: r.moves,
+          })),
+        },
       ]),
     ),
     null,
