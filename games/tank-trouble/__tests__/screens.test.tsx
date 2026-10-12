@@ -45,6 +45,7 @@ const longNames = (state: State): State => ({
 const play = fixtures.find((fixture) => fixture.name === 'play')?.state;
 const done = fixtures.find((fixture) => fixture.name === 'done')?.state;
 const score = fixtures.find((fixture) => fixture.name === 'score')?.state;
+let skipPending: State | undefined;
 if (play) {
   const fresh = game.init({
     players: Object.values(play.players),
@@ -74,6 +75,56 @@ if (play) {
     connected: true,
   });
   fixtures.push({ name: 'ready-gone', state: departed });
+  // Born at 720 ms, this shell has advanced nineteen 20 ms samples by 1080 ms.
+  // Its next sample reaches the rival before the ordinary 1200 ms timer.
+  skipPending = {
+    ...longNames(fresh),
+    phase: { ...fresh.phase, deadline: play.began + 1200 },
+    checked: 1080,
+    world: {
+      ...fresh.world,
+      maze: {
+        cols: 10,
+        rows: 6,
+        cell: 16,
+        walls: [
+          { x1: 0, y1: 0, x2: 160, y2: 0 },
+          { x1: 160, y1: 0, x2: 160, y2: 96 },
+          { x1: 0, y1: 96, x2: 160, y2: 96 },
+          { x1: 0, y1: 0, x2: 0, y2: 96 },
+        ],
+      },
+      tanks: fresh.world.tanks.map((tank) => ({
+        ...tank,
+        ...(tank.id === 'p1' ? { x: 24, y: 24, angle: 0, ammo: 4, reloadAt: 1140 } : {}),
+        ...(tank.id === 'p2' ? { x: 48, y: 24, angle: Math.PI } : {}),
+        alive: tank.id === 'p1' || tank.id === 'p2',
+        died: tank.id === 'p1' || tank.id === 'p2' ? null : 700,
+      })),
+      bullets: [
+        {
+          id: 1,
+          owner: 'p1',
+          x: 44.14,
+          y: 24,
+          vx: 43,
+          vy: 0,
+          born: 720,
+          bounces: 0,
+          kind: 'shell',
+        },
+      ],
+      pickups: [],
+      stepped: 54,
+      nextBullet: 2,
+    },
+  };
+  const skippedWinner = game.reduce(skipPending, {
+    type: 'vip',
+    now: play.began + 1100,
+    action: 'skip',
+  });
+  fixtures.push({ name: 'score-skip-winner', state: skippedWinner });
   fixtures.push({
     name: 'play-paused',
     state: game.reduce(play, {
@@ -231,6 +282,42 @@ it('compact round receipts show the winner, own gain and current rank within an 
       }
       expect(html).not.toContain('<ol');
     }
+  }
+});
+
+it('a skip settling an imminent rival hit shows its awarded survivor and budgets the full receipt', () => {
+  const state = fixtures.find((fixture) => fixture.name === 'score-skip-winner')?.state;
+  expect(state).toBeDefined();
+  if (!state) return;
+  expect(state.phase.id).toBe('score');
+  expect(state.reason).toBe('skip');
+  expect(state.winnerIds).toEqual(['p1']);
+  expect(state.lastPoints.p1).toBe(1);
+  expect(state.scores.p1).toBe(1);
+  expect(skipPending?.world.tanks.filter((tank) => tank.alive)).toHaveLength(2);
+  expect(state.world.tanks.find((tank) => tank.id === 'p2')?.alive).toBe(false);
+  if (skipPending) {
+    const ordinary = game.reduce(skipPending, {
+      type: 'timer',
+      now: skipPending.began + 1200,
+      phaseId: 'play',
+      startedAt: skipPending.phase.startedAt,
+    });
+    expect(ordinary.reason).toBe('last-standing');
+    expect(ordinary.lastPoints).toEqual(state.lastPoints);
+  }
+  const duration = state.phase.deadline! - state.phase.startedAt;
+  for (const surface of ['tv', 'phone-tv', 'phone-only', 'spectator'] as const) {
+    const html = render(state, surface);
+    expect(html).toContain(`${names[0]} wins`);
+    expect(html).toContain('1 total wins');
+    expect(html).not.toContain('No round points');
+    if (surface === 'phone-tv' || surface === 'phone-only') {
+      expect(html).toContain('Your rank #1');
+      expect(html).toContain('+1 this round');
+    }
+    const visible = html.replace(/<[^>]+>/g, ' ').replace(/&[^;]+;/g, ' ');
+    expect(duration, visible).toBeGreaterThanOrEqual(readingMs(wordCount(visible), { ui: true }));
   }
 });
 

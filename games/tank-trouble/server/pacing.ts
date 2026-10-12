@@ -22,7 +22,7 @@ export function readyDuration(state: State): number {
 export function scoreDuration(state: State): number {
   const winnerId = state.winnerIds[0];
   const winner = winnerId === undefined ? undefined : state.players[winnerId];
-  const won = state.reason === 'last-standing' && winner;
+  const won = winner && (state.lastPoints[winner.id] ?? 0) > 0;
   const outcome = won
     ? `${winner.name} wins +1 ${state.scores[winner.id] ?? 0} total wins`
     : `${state.reason === 'time' ? 'Time up' : state.reason === 'skip' ? 'Round skipped' : 'No survivors'} No round points`;

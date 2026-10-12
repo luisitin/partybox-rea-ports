@@ -16,7 +16,7 @@ export function RoundResult({
 }): JSX.Element {
   const L = useT(STRINGS);
   const winner = view.players.find((player) => player.id === view.winnerIds[0]);
-  const won = view.reason === 'last-standing' && winner;
+  const won = winner && (view.lastPoints[winner.id] ?? 0) > 0;
   const mine = me ? (view.scores[me] ?? 0) : 0;
   const rank = 1 + Object.values(view.scores).filter((score) => score > mine).length;
   return (
