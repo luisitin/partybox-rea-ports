@@ -42,6 +42,12 @@ function invariant(state: State, seed: number, step: number): void {
       fail('protected home was stolen');
   }
   for (const runner of world.runners) {
+    if (
+      ['ready', 'play'].includes(state.phase.id) &&
+      state.left.includes(runner.id) &&
+      (runner.alive || runner.respawnTick !== null)
+    )
+      fail('permanent departure acquired a live head or return timer');
     if (runner.cell < 0 || runner.cell >= world.owners.length) fail('head outside board');
     if (runner.trail.some((at) => at < 0 || at >= world.owners.length)) fail('trail outside board');
     if (new Set(runner.trail).size !== runner.trail.length) fail('duplicate vulnerable trail cell');
@@ -63,7 +69,7 @@ function invariant(state: State, seed: number, step: number): void {
 
 function exercise(seed: number): void {
   const rng = createRng(seed);
-  const kit = testKit(game, { t0: 1_000_000, players: testPlayers(rng.pick([2, 4, 8])) });
+  const kit = testKit(game, { t0: 1_000_000, players: testPlayers(rng.int(2, 8)) });
   let state = kit.start({ seed, settings: { rounds: rng.pick([1, 2]) } });
   let replay = structuredClone(state);
   let now = state.phase.startedAt;
@@ -83,7 +89,15 @@ function exercise(seed: number): void {
             : { type: 'input', now, playerId: id, input: sample };
         break;
       case 2:
-        event = { type: 'player', now, playerId: id, connected: rng.chance(0.6) };
+        event = rng.chance(0.2)
+          ? {
+              type: 'player',
+              now,
+              playerId: id,
+              connected: false,
+              gone: rng.pick(['left', 'kicked']),
+            }
+          : { type: 'player', now, playerId: id, connected: rng.chance(0.6) };
         break;
       case 3:
         event = { type: 'vip', now, action: rng.pick(['pause', 'resume', 'skip']) };

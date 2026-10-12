@@ -31,10 +31,10 @@ if (!clean.includes('Run pnpm vitest run games/paper-territory --maxWorkers=1'))
 if (!/property\.test\.ts.*4 tests/.test(clean)) throw new Error('Property checks missing');
 const metrics = {};
 for (const line of clean.split(/\r?\n/)) {
-  const match = line.match(/P07 SIM n=(2|4|8): (\{.*\})/);
+  const match = line.match(/P07 SIM n=([2-8]): (\{.*\})/);
   if (match) metrics[match[1]] = JSON.parse(match[2]);
 }
-for (const count of ['2', '4', '8']) {
+for (const count of ['2', '3', '4', '5', '6', '7', '8']) {
   const batch = metrics[count];
   if (batch?.games !== 1000 || batch?.decisionBeatMs !== 600 || batch?.maximumGameMs > 360000)
     throw new Error(`Incomplete or over-budget ${count}-player simulation batch`);
@@ -64,7 +64,7 @@ const result = {
   propertyTraces: 1003,
   regressionSeeds: [1, 2, 3],
   generatedSeeds: 1000,
-  botMatches: 3000,
+  botMatches: 7000,
   metrics,
   sources,
   allGameFilesMatchTestedHead: sources.every((source) => source.matchesTestedHead),
@@ -72,5 +72,5 @@ const result = {
 writeFileSync(resolve(folder, 'latest-scoped-ci.log'), raw, 'utf8');
 writeFileSync(resolve(folder, 'latest-scoped-ci.json'), JSON.stringify(result, null, 2) + '\n');
 console.log(
-  `${result.tests}/${result.tests} passed; 3000 matches; 1003 traces; game files match CI: ${result.allGameFilesMatchTestedHead}`,
+  `${result.tests}/${result.tests} passed; 7000 matches; 1003 traces; game files match CI: ${result.allGameFilesMatchTestedHead}`,
 );

@@ -92,7 +92,7 @@ function simulate(
 }
 
 describe('1000 seeded bot games at each party size', () => {
-  it.each([2, 4, 8])(
+  it.each([2, 3, 4, 5, 6, 7, 8])(
     '%i bots terminate within the manifest estimate × 2',
     (n) => {
       const lengths: number[] = [];
