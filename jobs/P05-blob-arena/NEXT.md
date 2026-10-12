@@ -1,54 +1,47 @@
-# P05 r1-local upgrade — current handoff
+# P05 r1-local upgrade ? current handoff
 
-r1-local took the stale P05 claim on main in616d8a4 at2026-10-12T15:35UTC,
-after completing all prior own claims (P09PR12ready/DONE). Branch remains
-job/P05-blob-arena, inherited head1f6ac64; draftPR9 stays open.
+r1-local claimed the stale P05 job in616d8a4 after completing all older own claims.
+Branch job/P05-blob-arena, draftPR9; owner checkout remains read-only.
+Fresh ownerHEAD0a97701d7 scan found one existing Agar.io among126 manifests,
+so this upgrades that existing game and preserves newer owner input lifecycle fixes.
 
-Fresh owner scan found existing Agar.io among126 manifests atownerHEAD0a97701d7.
-This is an upgrade of that existing game. Owner server/content/fixtures already
-match the publicR2 source; three newer client input/lifecycle/layout files must
-be preserved. Owner checkout is read-only and no files there were changed.
+Milestones c4983d5/a189d8e/936fb63/123cc8e are pushed. Last claim refresh e74d211
+at2026-10-12T17:14:53Z. Local b7b0881 merged origin/main without rebasing or force.
+The newer SDK matches the actual CI checkout, not merely the PR API head.
+Refresh CLAIMS after every push; pull --rebase in the claims worktree first.
 
-Server source is frozen. Horn and reading-floor repairs pass21focused cases.
-Real reducer phase fixtures regenerated after final score timing. Serial mutation
-run exited0: focusedbaseline91/91,20/20semantic mutants caught in134913ms.
-Independent finalbyte/hash check confirmsRESTORED; no bugs are currently planted.
-The bounded camera planner passes74focused client cases and typecheck, but the
-native comparison exposed a destination-origin defect after keyed SVG reorder.
-Client agent is actively repairing precommit body/camera sampling and120ms native
-travel/growth. Fullbaseline remains held until root releases final source.
-Original live research finished in one Chrome: CloudFront403, no playable canvas.
-It closed in finally with zero owned PIDs; the browser slot is now free.
+Final gameplay/client/harness source is FROZEN. Horn retirement now banks75mass
+exactly at/after the deadline;21focused boundary/reading cases pass. Summaries use
+complete-roster reading holds; max legal match443382ms remains below600000ms.
+Final client81/81focused checks pass in1.77s, one threads worker; typecheck passes.
+Original personal follow camera, full inside names, floating controls, continuous
+edge grid,120ms logical motion and separate painted-outline growth are repaired.
 
-Proven new server defect: a permanent departure at/after the horn retires75mass
-before banking, producing0points instead of75. Pre-horn departure must still
-forfeit current mass; paused wall time must not bank early; scoring stays once.
-R2 snapshot predator ownership/reconnect-neutral behavior otherwise passed audit.
-The horn repair is now frozen:13 named boundary regressions passed in432ms,
-covering leave/kick before/at/after the horn, pause, reconnect and once-only banking.
+Postmerge final native fidelity passes all five settled scenes and five50/100/150/
+300/600ms motion samples. Max camera error0.000650px, outline radius0.280px,
+alphabetic baseline0.000000098px. Source/harness/SDK guards match; browser closed
+in finally with zero owned PIDs. Current2026 original remains403/opaqueWASM;
+reference is untouched pinned May1,2015 parser/renderer with authored packets.
+Original bytes/fonts/skins never ship as runtime code. GAPS ranks remaining limits.
 
-New fidelity gate is binding fromorigin/main RULES/JOBS. Existing whole-world
-phone camera, external identity tags, diamond food and fixed rectangular controls
-differ from the original. Miniclip guide/store screenshots were read and reviewed;
-original camera source is currently opaque WASM, with historical reverse-client
-formula replaced by stronger pinned raw May1,2015 original archive (.25/965).
-Root fidelity tools replay authored binary packets through its untouched parser/
-renderer, with no network/assets. No new original live-play or audio claim.
-All three settled targets match. Both negative temporal reports are retained in
-r1-fidelity-before-motion.json and r1-fidelity-before-integration.json. A pure
-planner test pass is insufficient: actual public browser body/camera matrices
-must match original50/100/150ms samples. No per-frame game JS is introduced.
+Fresh merged-SDK mutation run RESTORED:91/91baseline,20/20semantic assertion kills,
+31538ms;426pre/post entries match, no bugs planted. The earlier successful CI run
+38279669664 tested MERGE f6293b2 (PRhead936fb63 +main5b49a52),201/201tests,
+7000complete matches at every count2?8,90000ms median round,381045ms max match,
+3404max events. Verified CI import audited414committed blobs; six later client/UI
+changes are explicit. Do not duplicate7000locally while behavior/SDK/driver match.
 
-Capture tooling uses actual mounted components/state reduction, all63SSRscenarios,
-actualownerframing and finally-owned singleChrome. Root's original browser closed
-with zero owned PIDs. Verification now owns the sole browser slot for a diagnostic
-pilot of native inputs/motion/short-phone/paused-banner fit. It may report source
-drift while the client is repaired; final captures must repeat after source freeze.
+Completed: verification's full scoped baseline session48905 uses
+PB_MUTATION_BASELINE_ONLY=1,PB_SIM_RUNS=1 plus that independently audited7000proof.
+It passed213/213 in216360ms with stable runtime/test/fixture/SDK bytes. The later phone heading CSS change will be closed by strict final-head CI proof.
+All72 mounted captures passed fit/native input/motion with zero owned browser PIDs. Verification is canonicalizing generated HTML/CSS then repeating exact-byte proof after regenerating
+63SSR inputs. No other browser/test worker/source edit may start until coordination.
 
-Historical154tests/7000simulations/20kills/63captures below do not prove finalR2
-or upcoming repairs. Fresh final checks/source hashes/true original-versus-ours
-fidelity evidence/CI/three post-green no-gain rounds remain required. Never delete
-the legacy.git browser profile whose earlier automatic review rejected deletion.
+Remaining: final canonical capture and fidelity source refresh, manual review of every final
+PNG, media/fidelity SHA and git-byte audit, complete format, final-headgreenCI,
+exact jobREADME PRbody, then three post-green five-candidate zero-gain rounds.
+No convergence/DONE is claimed. Preserve negative probes and the rejected legacy
+.git browser profile; never delete that target by another route.
 
 ## Historical r4-local recovery (superseded where stated above)
 

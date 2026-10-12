@@ -29,6 +29,15 @@ const focusedFiles = [
 ];
 const baselineOnly = process.env.PB_MUTATION_BASELINE_ONLY === '1';
 const deferBaseline = process.env.PB_MUTATION_DEFER_BASELINE === '1';
+const simulationOnly = process.env.PB_SIMULATION_ONLY === '1';
+const simulationFiles = ['games/agar-io/__tests__/sim.test.ts'];
+const simulationDriverFiles = [
+  'jobs/P05-blob-arena/sim.ts',
+  'jobs/P05-blob-arena/provenance.mjs',
+  'jobs/P05-blob-arena/provenance.d.mts',
+  ...simulationFiles,
+];
+if (baselineOnly && simulationOnly) throw new Error('Choose baseline-only or simulation-only');
 const fullRuns = Number(process.env.PB_SIM_RUNS ?? 1000);
 if (!Number.isInteger(fullRuns) || fullRuns < 1) throw new Error('Invalid PB_SIM_RUNS');
 
@@ -227,11 +236,16 @@ function argsFor(testFiles, full = false) {
 function commandFor(args) {
   return 'pnpm.cmd ' + args.map((arg) => (/\s/.test(arg) ? '"' + arg + '"' : arg)).join(' ');
 }
-async function runTests(testFiles = focusedFiles, full = false) {
+async function runTests(testFiles = focusedFiles, full = false, simOnly = false) {
   const runStartedAt = new Date().toISOString();
   const runBegan = performance.now();
-  const sources = snapshot(testFiles, full);
-  const args = argsFor(testFiles, full);
+  const collectsSimulation = full || simOnly;
+  const takeSnapshot = () =>
+    simOnly
+      ? { ...simulationSources(), ...hashes(simulationDriverFiles) }
+      : { ...snapshot(testFiles, full), ...(full ? hashes(simulationDriverFiles) : {}) };
+  const sources = takeSnapshot();
+  const args = argsFor(testFiles, collectsSimulation);
   rmSync(resultFile, { force: true });
   const reports = [];
   let stdout = '';
@@ -251,7 +265,7 @@ async function runTests(testFiles = focusedFiles, full = false) {
         ...process.env,
         FORCE_COLOR: '0',
         NO_COLOR: '1',
-        ...(full ? { PB_RECORD_VERIFY: '1', PB_SIM_RUNS: String(fullRuns) } : {}),
+        ...(collectsSimulation ? { PB_RECORD_VERIFY: '1', PB_SIM_RUNS: String(fullRuns) } : {}),
       },
     },
   );
@@ -283,7 +297,7 @@ async function runTests(testFiles = focusedFiles, full = false) {
         Number.isFinite(report.medianRoundMs)
       ) {
         reports.push(report);
-        if (full && fullRuns === 1000) {
+        if (collectsSimulation && fullRuns === 1000) {
           writeJson(simFile, {
             status: 'running',
             incomplete: true,
@@ -293,6 +307,7 @@ async function runTests(testFiles = focusedFiles, full = false) {
             games: reports.reduce((sum, group) => sum + group.games, 0),
             reports,
             sources: { ...sourceHashes, ...dependencyHashes },
+            driverSources: hashes(simulationDriverFiles),
           });
           console.log(
             JSON.stringify({
@@ -327,7 +342,7 @@ async function runTests(testFiles = focusedFiles, full = false) {
   });
   const timer = setTimeout(
     () => stopOwnedChild('Own-game subprocess timed out'),
-    full ? 30 * 60_000 : 180_000,
+    collectsSimulation ? 30 * 60_000 : 180_000,
   );
   let exitCode;
   try {
@@ -370,7 +385,7 @@ async function runTests(testFiles = focusedFiles, full = false) {
   const semanticFailures = failedTests.filter((test) =>
     test.failures.some((message) => message.includes('AssertionError:')),
   );
-  const after = snapshot(testFiles, full);
+  const after = takeSnapshot();
   const changes = sourceChanges(sources, after);
   return {
     exitCode,
@@ -401,7 +416,8 @@ async function runTests(testFiles = focusedFiles, full = false) {
     sourceAfter: after,
     sourcesStable: changes.length === 0,
     sourceChanges: changes,
-    simulationRunsPerCount: full ? fullRuns : null,
+    simulationOnly: simOnly,
+    simulationRunsPerCount: collectsSimulation ? fullRuns : null,
     simulationReports: reports,
     simulationTests: (json?.testResults ?? []).flatMap((suite) =>
       (suite.assertionResults ?? [])
@@ -448,7 +464,8 @@ function freshSimulationMatches() {
       !prior.incomplete &&
       prior.games === 7000 &&
       completeReports(prior.reports) &&
-      sameSources(prior.sources, simulationSources())
+      sameSources(prior.sources, simulationSources()) &&
+      sameSources(prior.driverSources, hashes(simulationDriverFiles))
     );
   } catch {
     return false;
@@ -463,6 +480,7 @@ function recordSimulation(run) {
     run.simulationTests.every((test) => test.status === 'passed') &&
     run.sourcesStable &&
     !run.error &&
+    (!run.simulationOnly || run.success) &&
     sameSources({ ...sourceHashes, ...dependencyHashes }, simulationSources());
   writeJson(simFile, {
     runId: 'r1-local',
@@ -474,6 +492,14 @@ function recordSimulation(run) {
     elapsedMs: run.simulationTests.reduce((sum, test) => sum + (test.durationMs ?? 0), 0),
     sourceScope: 'All server/content/manifest bytes plus local SDK/shared/dependency configuration',
     sources: { ...sourceHashes, ...dependencyHashes },
+    driverSources: Object.fromEntries(
+      simulationDriverFiles.map((path) => [path, run.sourceBefore[path]]),
+    ),
+    driverSourcesAfter: Object.fromEntries(
+      simulationDriverFiles.map((path) => [path, run.sourceAfter[path]]),
+    ),
+    verificationMode: run.simulationOnly ? 'simulation-test-only' : 'full-own-game-baseline',
+    simulationTestRun: run.simulationOnly ? run : null,
     runsPerCount: 1000,
     seedRange: [1, 1000],
     counts: [2, 3, 4, 5, 6, 7, 8],
@@ -566,7 +592,36 @@ function cleanup() {
 }
 
 try {
-  if (baselineOnly) {
+  if (simulationOnly) {
+    if (fullRuns !== 1000)
+      throw new Error('Fresh simulation-only proof requires1,000 runs per count');
+    writeJson(simFile, {
+      runId: 'r1-local',
+      status: 'running',
+      incomplete: true,
+      startedAt,
+      expectedGames: 7000,
+      games: 0,
+      reports: [],
+      sources: { ...sourceHashes, ...dependencyHashes },
+      driverSources: hashes(simulationDriverFiles),
+      verificationMode: 'simulation-test-only',
+    });
+    const run = await runTests(simulationFiles, false, true);
+    const passed = recordSimulation(run);
+    console.log(
+      JSON.stringify({
+        stage: 'simulation-only',
+        passed,
+        passedTests: run.passedTests,
+        failedTests: run.failedTestCount,
+        elapsedMs: run.elapsedMs,
+        sourcesStable: run.sourcesStable,
+        failedAssertions: run.failedTests,
+      }),
+    );
+    if (!passed) process.exitCode = 1;
+  } else if (baselineOnly) {
     const previous = JSON.parse(readFileSync(finalFile, 'utf8'));
     if (
       previous.completedMutants !== 20 ||
@@ -736,14 +791,17 @@ try {
 } finally {
   try {
     // Baseline-only never plants source and therefore never owns source writes.
-    if (!baselineOnly) restoreSources();
+    if (!baselineOnly && !simulationOnly) restoreSources();
   } catch (failure) {
     error = [error, failure.message].filter(Boolean).join('; ');
     process.exitCode = 1;
     console.error(failure.message);
   }
   try {
-    if (!baselineOnly)
+    if (simulationOnly && error) {
+      const previous = JSON.parse(readFileSync(simFile, 'utf8'));
+      writeJson(simFile, { ...previous, status: 'failed', incomplete: true, error });
+    } else if (!baselineOnly && !simulationOnly)
       checkpoint(deferBaseline ? 'baseline-deferred' : 'failed', !deferBaseline && !!finishedAt);
     else if (error) {
       const previous = JSON.parse(readFileSync(finalFile, 'utf8'));
@@ -764,7 +822,7 @@ try {
     }
   }
 }
-if (!baselineOnly) {
+if (!baselineOnly && !simulationOnly) {
   const killed = outcomes.filter((item) => item.killed).length;
   console.log(
     killed + '/' + mutations.length + ' semantic mutants caught; original bytes restored',

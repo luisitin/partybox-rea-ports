@@ -82,7 +82,7 @@ function installEnvironment() {
       const fillText = context.fillText;
       context.fillText = function (text, ...values) {
         const result = Reflect.apply(fillText, this, [text, ...values]);
-        cachedNames.set(image, { text: String(text), font: this.font });
+        cachedNames.set(image, { text: String(text), font: this.font, baselineY: values[1] });
         return result;
       };
       return context;
@@ -154,6 +154,7 @@ function installEnvironment() {
       renderedBodies.push({
         name: cachedName.text,
         nameFont: cachedName.font,
+        nameBaselineY: y + cachedName.baselineY,
         ...filledBody,
         labelCenter: { x: x + image.width / 2, y: y + image.height / 2 },
       });
@@ -309,6 +310,7 @@ function replayScene(scene) {
           return {
             name: body.name,
             nameFont: body.nameFont,
+            nameBaselineY: body.nameBaselineY / units,
             x: (left + right) / 2 / units,
             y: (top + bottom) / 2 / units,
             radius: (right - left + bottom - top) / 4 / units,
@@ -381,6 +383,7 @@ export function referenceMetadata(originalBytes, quadBytes) {
       'forwarded original filled polygon bounds associated with cached-name fillText/drawImage; no private model reads',
     ownedBodyRadius: 'mean of observed horizontal/vertical path half-extents, excluding stroke',
     nameFontSource: 'actual cached-name canvas font at forwarded fillText',
+    nameBaselineSource: 'forwarded cached-name fillText baseline plus actual drawImage placement',
     countSource: 'fixture binary packets; original private model remains unexposed',
     settleFrames: 240,
     fixedReferenceRandomSeed: 17,

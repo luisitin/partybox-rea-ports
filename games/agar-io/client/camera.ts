@@ -24,6 +24,7 @@ export interface CameraPose {
   radius: number;
   outlineRadius?: number;
   fontSize?: number;
+  baseline?: number;
 }
 
 export function ownedCameraPoses(cells: readonly Cell[], owner: string | undefined): CameraPose[] {
@@ -221,7 +222,7 @@ export interface PoseSurface {
   ): { cancel(): void };
   animateNameFont(
     id: number,
-    frames: { offset: number; fontSize: string; easing?: string }[],
+    frames: { offset: number; fontSize: string; transform: string; easing?: string }[],
     options: KeyframeAnimationOptions,
   ): { cancel(): void };
 }
@@ -248,11 +249,12 @@ export function outlineMotionFrames(
 export function nameMotionFrames(
   from: CameraPose,
   to: CameraPose,
-): { offset: number; fontSize: string; easing: string }[] {
+): { offset: number; fontSize: string; transform: string; easing: string }[] {
   const frames = [
     {
       offset: 0,
       fontSize: `${from.fontSize ?? cellNameSize(from.radius)}px`,
+      transform: `translate(0px, ${from.baseline ?? cellNameBaseline(from.radius, from.y)}px)`,
       easing: 'steps(1, end)',
     },
   ];
@@ -260,9 +262,11 @@ export function nameMotionFrames(
     const elapsed = Math.min(120, (frame * 1000) / 60);
     const t = Math.min(1, Math.floor(elapsed) / 120);
     const logical = from.radius + (to.radius - from.radius) * t * t * (3 - 2 * t);
+    const y = from.y + (to.y - from.y) * t * t * (3 - 2 * t);
     frames.push({
       offset: elapsed / 120,
       fontSize: `${cellNameSize(logical)}px`,
+      transform: `translate(0px, ${cellNameBaseline(logical, y)}px)`,
       easing: 'steps(1, end)',
     });
   }
@@ -315,6 +319,11 @@ export class PoseMotionSession {
           );
         if (
           Math.abs(origin.radius - target.radius) > 0.0001 ||
+          Math.abs(origin.y - target.y) > 0.0001 ||
+          Math.abs(
+            (origin.baseline ?? cellNameBaseline(origin.radius, origin.y)) -
+              cellNameBaseline(target.radius, target.y),
+          ) > 0.0001 ||
           Math.abs((origin.fontSize ?? cellNameSize(origin.radius)) - cellNameSize(target.radius)) >
             0.0001
         )
@@ -342,4 +351,12 @@ export function foodPoints(x: number, y: number, zoom: number): string {
 
 export function cellNameSize(cellRadius: number): number {
   return (Math.max(Math.floor(cellRadius * CAMERA_UNITS * 0.3), 24) - 2) / CAMERA_UNITS;
+}
+
+// Original cached text uses an alphabetic baseline inside an integer-sized
+// texture, drawn at an integer original-world y. Preserve that geometry in SVG.
+export function cellNameBaseline(cellRadius: number, y: number): number {
+  const originalFont = Math.max(Math.floor(cellRadius * CAMERA_UNITS * 0.3), 24) - 2;
+  const originalY = y * CAMERA_UNITS;
+  return (Math.trunc(originalY) - originalY + Math.ceil(originalFont / 2) - 9) / CAMERA_UNITS;
 }

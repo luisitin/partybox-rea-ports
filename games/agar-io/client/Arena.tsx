@@ -11,6 +11,7 @@ import {
   cameraFromTransform,
   cameraTransform,
   cellNameSize,
+  cellNameBaseline,
   foodPoints,
   ownedCameraPoses,
   playerCamera,
@@ -101,6 +102,8 @@ export function Arena({
       const currentRadius = Number.parseFloat(getComputedStyle(logical).getPropertyValue('r'));
       const outlineRadius = Number.parseFloat(getComputedStyle(body).getPropertyValue('r'));
       const fontSize = label ? Number.parseFloat(getComputedStyle(label).fontSize) : undefined;
+      const labelTransform = label ? getComputedStyle(label).transform : 'none';
+      const baseline = labelTransform === 'none' ? 0 : new DOMMatrixReadOnly(labelTransform).f;
       if (
         ![matrix.e, matrix.f, currentRadius, outlineRadius].every(Number.isFinite) ||
         currentRadius <= 0
@@ -114,6 +117,7 @@ export function Arena({
           radius: currentRadius,
           outlineRadius,
           fontSize,
+          baseline,
         },
       ];
     });
@@ -363,6 +367,9 @@ export function Arena({
                     data-cell-label-id={cell.id}
                     data-name-inside="true"
                     fontSize={cellNameSize(cellRadius)}
+                    style={{
+                      transform: `translate(0px, ${cellNameBaseline(cellRadius, cell.y)}px)`,
+                    }}
                     x="0"
                     y="0"
                   >

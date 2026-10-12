@@ -13,6 +13,7 @@ import {
   cameraMotionFrames,
   cameraTransform,
   cellNameSize,
+  cellNameBaseline,
   foodPoints,
   ownedCameraPoses,
   outlineMotionFrames,
@@ -318,7 +319,7 @@ describe('classic received camera filtering', () => {
         };
       };
     const outlines: { offset: number; r: string }[][] = [];
-    const fonts: { offset: number; fontSize: string; easing?: string }[][] = [];
+    const fonts: { offset: number; fontSize: string; transform: string; easing?: string }[][] = [];
     const surface: PoseSurface = {
       animatePose: record('pose'),
       animateRadius: record('radius'),
@@ -350,7 +351,9 @@ describe('classic received camera filtering', () => {
     expect(received[1]!.from.radius).toBe(starts[0]!.radius);
     expect(received.every((value) => value.options.duration === 120)).toBe(true);
     const half = starts.map((pose) =>
-      pose.id === 1 ? { ...pose, x: 82, radius: 3.5, outlineRadius: 2.8, fontSize: 1.21 } : pose,
+      pose.id === 1
+        ? { ...pose, x: 82, radius: 3.5, outlineRadius: 2.8, fontSize: 1.21, baseline: 0.085 }
+        : pose,
     );
     const next = ownedCameraPoses([cell({ x: 86, mass: 192 })], 'p1');
     session.update(surface, 'same', half, next, false);
@@ -359,6 +362,7 @@ describe('classic received camera filtering', () => {
     expect(received[3]!.from.radius).toBe(3.5);
     expect(outlines[1]![0]!.r).toBe('2.8px');
     expect(fonts[1]![0]!.fontSize).toBe('1.21px');
+    expect(fonts[1]![0]!.transform).toBe('translate(0px, 0.085px)');
     session.update(surface, 'same', next, next, false);
     expect(received).toHaveLength(4);
     session.update(surface, 'same', next, next, true);
@@ -398,9 +402,26 @@ describe('classic received camera filtering', () => {
     expect(Number.parseFloat(frames[3]!.fontSize) * CAMERA_UNITS).toBeCloseTo(22);
     expect(Number.parseFloat(frames[6]!.fontSize) * CAMERA_UNITS).toBeCloseTo(26);
     expect(Number.parseFloat(frames.at(-1)!.fontSize) * CAMERA_UNITS).toBeCloseTo(27);
+    const baseline = (index: number): number =>
+      Number(frames[index]!.transform.match(/, ([^p]+)px\)/)![1]);
+    expect(baseline(3)).toBeCloseTo(0.105);
+    expect(baseline(6)).toBeCloseTo(0.215);
+    expect(baseline(8)).toBeCloseTo(0.27);
     expect(frames.every((frame) => frame.easing === 'steps(1, end)')).toBe(true);
     expect(frames.at(-1)!.offset).toBe(1);
     expect(nameMotionFrames({ ...from, fontSize: 1.43 }, to)[0]!.fontSize).toBe('1.43px');
+  });
+
+  it('uses the original alphabetic cached-text baseline at known static coordinates', () => {
+    expect(cellNameBaseline(0.55 * Math.sqrt(24), 50)).toBeCloseTo(0.105);
+    expect(cellNameBaseline(0.55 * Math.sqrt(192), 48)).toBeCloseTo(0.565);
+    expect(cellNameBaseline(0.55 * Math.sqrt(96), 48)).toBeCloseTo(0.235);
+    expect(cellNameBaseline(0.55 * Math.sqrt(24), 5)).toBeCloseTo(0.06);
+    const from = ownedCameraPoses([cell({ y: 50 })], 'p1')[0]!;
+    const to = ownedCameraPoses([cell({ y: 48, mass: 96 })], 'p1')[0]!;
+    const frames = nameMotionFrames({ ...from, baseline: 0.03 }, to);
+    expect(frames[0]!.transform).toBe('translate(0px, 0.03px)');
+    expect(Number(frames.at(-1)!.transform.match(/, ([^p]+)px\)/)![1])).toBeCloseTo(0.235);
   });
 });
 
