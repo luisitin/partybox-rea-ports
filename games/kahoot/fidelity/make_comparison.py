@@ -1,6 +1,6 @@
-"""Render the three attributed semantic comparisons without cropping either source.
+"""Render the four attributed semantic comparisons without cropping either source.
 
-Run only after root has refreshed the four captures under fidelity/ours/.
+Run only after root has refreshed the five captures under fidelity/ours/.
 Requires the already available Pillow package; launches no browser or game process.
 """
 
@@ -63,6 +63,20 @@ COMPARISONS = [
             "Compare the percentage/gain panel and identity bar; the original pair is not one viewport."
         ),
         "image_height": 960,
+    },
+    {
+        "moment": "4. Answer Results - host screen",
+        "original": "original/official-answer-results.png",
+        "ours": "groups-teams-revealed-result-tv.png",
+        "original_label": "Official hosting guide - complete host result image inspected October 2026",
+        "ours_label": "P02 authored quiz - answer results before explanation, TV",
+        "note": (
+            "Whole images. Compare the top prompt, centered vertical shape/count/check bars and "
+            "four bottom alternatives. The original has two correct alternatives; our authored "
+            "schema has one. The following explanation beat is a PartyBox reading adaptation, "
+            "not an observed native sequence. No native motion or audio identity is claimed."
+        ),
+        "image_height": 600,
     },
 ]
 
@@ -165,7 +179,7 @@ def main() -> None:
     body_font = ImageFont.truetype(str(normal_path), 25)
     small_font = ImageFont.truetype(str(normal_path), 23)
     # Allocate the complete page, then remove only unused page whitespace at the end.
-    canvas = Image.new("RGB", (WIDTH, 3800), BACKGROUND)
+    canvas = Image.new("RGB", (WIDTH, 5200), BACKGROUND)
     draw = ImageDraw.Draw(canvas)
     y = text_block(
         draw,

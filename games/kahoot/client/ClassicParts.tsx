@@ -22,9 +22,12 @@ export function Shape({ index, className }: { index: number; className?: string 
 export function QuestionOptions({
   question,
   letters = false,
+  correctIndex,
 }: {
   question: QuestionView;
   letters?: boolean;
+  /** Closed public results only; question callers keep the original alternatives. */
+  correctIndex?: number;
 }): JSX.Element {
   const L = useT(STRINGS);
   return (
@@ -33,7 +36,8 @@ export function QuestionOptions({
         <li
           key={index}
           className={`${styles.option} ${choiceClass(index)}`}
-          aria-label={`${letters ? 'ABCD'[index] : L(SHAPES[index] ?? '')}: ${text}`}
+          data-correct={correctIndex === undefined ? undefined : index === correctIndex}
+          aria-label={`${letters ? 'ABCD'[index] : L(SHAPES[index] ?? '')}: ${text}${index === correctIndex ? ` · ${L('correct answer')}` : ''}`}
         >
           {letters ? (
             <b className={styles.shape}>{'ABCD'[index]}</b>
@@ -41,6 +45,11 @@ export function QuestionOptions({
             <Shape index={index} className={styles.shape} />
           )}
           <span>{text}</span>
+          {correctIndex !== undefined ? (
+            <span className={styles.optionResult} aria-hidden="true">
+              {index === correctIndex ? '✓' : '✕'}
+            </span>
+          ) : null}
         </li>
       ))}
     </ol>

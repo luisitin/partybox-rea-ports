@@ -2,13 +2,16 @@
 import { describe, expect, it } from 'vitest';
 import { testKit } from '@partybox/game-sdk/testing';
 import { game } from '../server/index';
-import { classicRevealBeats } from '../server/pacing';
+import { classicRevealBeats, groupRevealTiming } from '../server/pacing';
+import { questionById } from '../server/content';
 import { readMs, wordCount } from '../server/types';
 import type { GroupMode, State } from '../server/types';
 import { controllerView, tvView } from '../server/views';
 
 const kit = testKit(game, { t0: 100_000 });
-const finalWindowMs = readMs(Math.max(wordCount('Show podium'), wordCount('Mostrar el podio')));
+const finalWindowMs = readMs(
+  Math.max(wordCount('Show podium'), wordCount('Mostrar el podio'), 4 + 3),
+);
 
 function receiptState(mode: GroupMode): State {
   const players = Array.from({ length: 8 }, (_, i) => ({
@@ -63,25 +66,36 @@ describe('group reveal budgets match actual screens', () => {
     },
   );
   it.each([
-    ['teams', 58, 65],
-    ['tv-vote', 56, 51],
+    ['teams', 65],
+    ['tv-vote', 51],
   ] as const)(
-    '%s budgets the longest actual EN/ES chart and board, including the VIP cue',
-    (mode, chartWords, boardWords) => {
-      // Four-word names and sports-09: independently counted rendered text/shape marks.
-      // Spanish averaging/total/heading copy is included; room phones have no team meter.
-      expect(classicRevealBeats(receiptState(mode))).toEqual({
-        chartMs: readMs(chartWords),
+    '%s gives both full-text pages their own reading floor, then the board/VIP cue',
+    (mode, boardWords) => {
+      const state = receiptState(mode);
+      const q = questionById('sports-09')!;
+      const timing = groupRevealTiming(state);
+      // Independent visible lower bounds: four alternatives, four shape/count bases,
+      // ordinal on the chart; prompt/correct alternative/Why/explanation on its next page.
+      const question =
+        wordCount(q.question) + q.choices.reduce((n, text) => n + wordCount(text), 0);
+      expect(timing.answersMs).toBeGreaterThanOrEqual(readMs(question + 12));
+      expect(timing.explanationMs).toBeGreaterThanOrEqual(
+        readMs(
+          wordCount(q.question) +
+            wordCount(q.choices[q.answerIndex] ?? '') +
+            wordCount('explanation' in q ? q.explanation : '') +
+            8,
+        ),
+      );
+      expect(classicRevealBeats(state)).toEqual({
+        chartMs: timing.answersMs + timing.explanationMs,
         standingsMs: readMs(boardWords),
       });
     },
   );
-  it.each([
-    ['teams', 40],
-    ['tv-vote', 50],
-  ] as const)(
-    '%s final chart excludes the hidden team receipt, gauge and final rank',
-    (mode, words) => {
+  it.each(['teams', 'tv-vote'] as const)(
+    '%s final pages exclude the hidden team receipt, gauge and final rank',
+    (mode) => {
       const final: State = {
         ...receiptState(mode),
         index: 4,
@@ -91,8 +105,11 @@ describe('group reveal budgets match actual screens', () => {
         ),
         ...(mode === 'tv-vote' ? { roomDecision: 3 } : {}),
       };
+      const timing = groupRevealTiming(final);
+      expect(timing.answersMs).toBeGreaterThan(0);
+      expect(timing.explanationMs).toBeGreaterThan(0);
       expect(classicRevealBeats(final)).toEqual({
-        chartMs: readMs(words),
+        chartMs: timing.answersMs + timing.explanationMs,
         standingsMs: finalWindowMs,
       });
       const hidden = {
@@ -120,10 +137,13 @@ describe('group reveal budgets match actual screens', () => {
     expect(classicRevealBeats(long).standingsMs).toBe(readMs(101));
     expect(classicRevealBeats(long).standingsMs).toBeGreaterThan(classicRevealBeats(s).standingsMs);
   });
-  it('budgets the actual no-vote/absent-voter wording and missing-count chart', () => {
+  it('budgets the actual no-vote/absent-voter wording on both separate pages', () => {
     const { roomDecision: _decision, ...prior } = receiptState('tv-vote');
     const empty: State = { ...prior, picks: {}, teamGains: { room: 0 } };
-    expect(classicRevealBeats(empty).chartMs).toBe(readMs(58));
+    const timing = groupRevealTiming(empty);
+    const cue = wordCount('La sala no respondió — nadie votó');
+    expect(timing.answersMs).toBeGreaterThanOrEqual(readMs(cue + 12));
+    expect(timing.explanationMs).toBeGreaterThanOrEqual(readMs(cue + 8));
   });
   it.each(['teams', 'tv-vote'] as const)(
     '%s gives the VIP a real final window before automatic podium',

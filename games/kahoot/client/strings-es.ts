@@ -3,6 +3,10 @@
 // their choices are content, in the game's deck language (ADR-054: English or Spanish).
 
 export const SCREENS_ES: Readonly<Record<string, string>> = {
+  'Everyone answers; team points are the average, and nobody is eliminated.':
+    'Todos responden; los puntos del equipo son el promedio y nadie queda eliminado.',
+  'Everyone votes for one shared answer and score; nobody is eliminated.':
+    'Todos votan por una respuesta y puntuación compartidas; nadie queda eliminado.',
   // Classic content stays authored in English; its controls and stage use the device language.
   'Question {n} of {m}': 'Pregunta {n} de {m}',
   Paused: 'En pausa',
@@ -237,4 +241,6 @@ export const SCREENS_ES: Readonly<Record<string, string>> = {
   '{n} room points': '{n} puntos de la sala',
   'Team score after the podium': 'Puntuación del equipo después del podio',
   'Room score after the podium': 'Puntuación de la sala después del podio',
+  'Why this answer?': '¿Por qué esta respuesta?',
+  'Your vote:': 'Tu voto:',
 };

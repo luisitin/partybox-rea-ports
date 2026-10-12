@@ -52,6 +52,22 @@
   font-size: var(--pb-font-display);
   color: var(--pb-accent-2);
 }
+/* Group intros retain the complete 40-character roster at the TV body size. */
+.tvPage[data-phase='intro']:has([data-group-intro-rules]) .intro h2 {
+  font-size: var(--pb-font-h1);
+  line-height: 1.1;
+  margin-bottom: var(--pb-space-2);
+}
+/* Staged group phones reserve room for the public live counter and full legal choices. */
+.phoneQuestion[data-group][data-stage] .phonePrompt {
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.phoneQuestion[data-group][data-stage] .shape {
+  width: var(--pb-font-display);
+  height: var(--pb-font-display);
+  flex: none;
+}
 .intro p {
   font-size: var(--pb-font-body);
 }
@@ -92,6 +108,13 @@
 .choice0 {
   background: var(--pb-accent);
   color: var(--pb-on-accent);
+}
+.optionResult {
+  flex: none;
+  margin-inline-start: auto;
+  font-size: var(--pb-font-body);
+  line-height: 1;
+  font-weight: 1000;
 }
 .choice1 {
   background: var(--pb-accent-2-fill);

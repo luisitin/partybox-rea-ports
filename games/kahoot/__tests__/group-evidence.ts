@@ -10,6 +10,8 @@ import {
 import { resolve } from 'node:path';
 import { format, resolveConfig } from 'prettier';
 import groupStyles from '../client/Group.module.css';
+import groupChartStyles from '../client/GroupAnswerChart.module.css';
+import groupRevealStyles from '../client/GroupRevealStage.module.css';
 import { digest, evidenceCSS, scoped, standalone } from './upgrade-evidence';
 import type { UpgradeFrame } from './upgrade-evidence';
 import type { State } from '../server/types';
@@ -31,7 +33,14 @@ export async function writeGroupEvidence(
   // Stabilize the generated file rather than publishing a file its own check rejects.
   const cssPath = resolve(GROUP_MEDIA, 'evidence.css');
   const options = { ...(await resolveConfig(cssPath)), filepath: cssPath };
-  let css = evidenceCSS() + '\n' + scoped('games/kahoot/client/Group.module.css', groupStyles);
+  let css =
+    evidenceCSS() +
+    '\n' +
+    scoped('games/kahoot/client/Group.module.css', groupStyles) +
+    '\n' +
+    scoped('games/kahoot/client/GroupAnswerChart.module.css', groupChartStyles) +
+    '\n' +
+    scoped('games/kahoot/client/GroupRevealStage.module.css', groupRevealStyles);
   let stable = false;
   for (let pass = 0; pass < 5; pass++) {
     const next = await format(css, options);

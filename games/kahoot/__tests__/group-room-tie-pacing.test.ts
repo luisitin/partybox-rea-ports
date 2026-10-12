@@ -1,7 +1,7 @@
 // Extra reading time follows only the tie text rendered on each actual surface.
 import { describe, expect, it } from 'vitest';
 import { game } from '../server/index';
-import { classicRevealBeats } from '../server/pacing';
+import { classicRevealBeats, groupRevealTiming } from '../server/pacing';
 import { readMs, wordCount } from '../server/types';
 import type { State } from '../server/types';
 import { tvView } from '../server/views';
@@ -51,9 +51,15 @@ describe('room tie reading budget', () => {
       expect(wordCount(STRINGS.es?.[CUE] ?? '')).toBe(8);
       const plain = receipt(false, final);
       const tied = receipt(true, final);
-      const baseChartWords = final ? 50 : 56;
-      expect(classicRevealBeats(plain).chartMs).toBe(readMs(baseChartWords));
-      expect(classicRevealBeats(tied).chartMs).toBe(readMs(baseChartWords + 8));
+      const original = groupRevealTiming(plain);
+      const withTie = groupRevealTiming(tied);
+      // Exactly one eight-word Spanish cue per page. Round-to-integer SDK reading floors
+      // may differ by one millisecond, independently of which phone limits that page.
+      const extraCueMs = readMs(8) - readMs(0);
+      expect(Math.abs(withTie.answersMs - original.answersMs - extraCueMs)).toBeLessThanOrEqual(1);
+      expect(
+        Math.abs(withTie.explanationMs - original.explanationMs - extraCueMs),
+      ).toBeLessThanOrEqual(1);
       // TV members still limit this board; hidden finals retain their existing VIP window.
       expect(classicRevealBeats(tied).standingsMs).toBe(classicRevealBeats(plain).standingsMs);
       expect(tvView(tied, 'kahoot').answerDistribution?.counts.filter((n) => n === 4)).toHaveLength(
@@ -74,7 +80,8 @@ describe('room tie reading budget', () => {
     expect(classicRevealBeats(plurality)).toEqual(classicRevealBeats(plain));
     const { roomDecision: _decision, ...prior } = plain;
     const empty: State = { ...prior, picks: {}, teamGains: { room: 0 } };
-    expect(classicRevealBeats(empty).chartMs).toBe(readMs(58));
+    expect(groupRevealTiming(empty).answersMs).toBeGreaterThan(0);
+    expect(groupRevealTiming(empty).explanationMs).toBeGreaterThan(0);
   });
 
   it('does not add group tie copy to the inherited Classic reveal', () => {

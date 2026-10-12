@@ -19,6 +19,8 @@ const job = import.meta.dirname;
 const media = resolve(job, 'media');
 const temp = mkdtempSync(resolve(tmpdir(), 'pb-p02-canonical-capture-'));
 const profile = resolve(temp, 'capture-profile');
+// Optional roles retain standalone HTML under the budget; their PNGs remain in an owned QA temp.
+const review = mkdtempSync(resolve(tmpdir(), 'pb-p02-review-'));
 let port;
 const browserPath = [
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
@@ -732,18 +734,34 @@ writeFileSync(
       allNativeDisclosuresRestored: metrics
         .filter((row) => row.closedAgain)
         .every((row) => !row.closedAgain.open && row.closedAgain.failures.length === 0),
+      htmlRolePngReviewDirectory: review,
     },
     null,
     2,
   ) + '\n',
   'utf8',
 );
-const files = readdirSync(media).sort();
-const bytes = files.reduce((sum, file) => sum + statSync(resolve(media, file)).size, 0);
-if (bytes >= 10 * 1024 * 1024) throw new Error(`Evidence budget exceeded: ${bytes} bytes.`);
+// RULES requires HTML or PNG. Preserve every full PNG and regenerate redundant HTML on demand.
+for (const row of metrics) {
+  const htmlPath = resolve(media, `${row.name}.html`);
+  const pngPath = resolve(media, `${row.name}.png`);
+  if (!htmlPath.startsWith(`${media}\\`) && !htmlPath.startsWith(`${media}/`))
+    throw new Error('Refusing HTML cleanup outside this job media directory.');
+  const frame = cases.find((candidate) => candidate.name === (row.sourceFrame ?? row.name));
+  const htmlOnly = frame?.surface === 'remote' || frame?.surface === 'spectator';
+  if (existsSync(htmlPath) && existsSync(pngPath)) {
+    if (htmlOnly) {
+      writeFileSync(resolve(review, `${row.name}.png`), readFileSync(pngPath));
+      rmSync(pngPath);
+    } else rmSync(htmlPath);
+  }
+}
+const retainedFiles = readdirSync(media).sort();
+const bytes = retainedFiles.reduce((sum, file) => sum + statSync(resolve(media, file)).size, 0);
+if (bytes >= 10_000_000) throw new Error(`Evidence budget exceeded: ${bytes} bytes.`);
 writeFileSync(
   resolve(job, 'SHA256SUMS.txt'),
-  files
+  retainedFiles
     .map(
       (file) =>
         `${createHash('sha256')

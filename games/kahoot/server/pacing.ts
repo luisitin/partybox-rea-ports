@@ -161,15 +161,45 @@ function wagerReceiptWords(state: State, answerIndex: number | undefined): numbe
 }
 export function classicIntroMs(state: State): number {
   const pack = classicPackLabel(state.settings.classicPack ?? 'general');
+  const group = groupModeOf(state);
+  if (group) {
+    const wordsIn = (spanish: boolean): number => {
+      const ui = (en: string, es: string): number => wordCount(spanish ? es : en);
+      const title = group === 'teams' ? ui('Teams', 'Equipos') : ui('Room vote', 'Voto de la sala');
+      const rules =
+        group === 'teams'
+          ? ui(
+              'Everyone answers; team points are the average, and nobody is eliminated.',
+              'Todos responden; los puntos del equipo son el promedio y nadie queda eliminado.',
+            )
+          : ui(
+              'Everyone votes for one shared answer and score; nobody is eliminated.',
+              'Todos votan por una respuesta y puntuación compartidas; nadie queda eliminado.',
+            );
+      // TV and spectator intro show all public teams; an own-team phone is shorter.
+      const roster = groupRosterWords(state, 0);
+      const paused = state.phase.paused ? ui('Paused', 'En pausa') : 0;
+      return Math.max(
+        wordCount(`Kahoot! ${pack}`) +
+          ui('faster is worth more', 'más rápido, más puntos') +
+          title +
+          rules +
+          roster +
+          paused,
+        wordCount('Kahoot!') +
+          title +
+          rules +
+          roster +
+          ui('First question coming up…', 'Ya viene la primera pregunta…') +
+          paused,
+      );
+    };
+    return readMs(Math.max(wordsIn(false), wordsIn(true)));
+  }
   return readMs(
     Math.max(
       wordCount(`Kahoot! ${pack} faster is worth more`),
       wordCount('Kahoot! First question coming up'),
-      groupModeOf(state)
-        ? wordCount(
-            `Kahoot! ${pack} faster is worth more ${groupModeOf(state) === 'teams' ? 'Teams' : 'Room vote'}`,
-          ) + groupRosterWords(state, 0)
-        : 0,
     ),
   );
 }
@@ -190,6 +220,8 @@ export function questionReadingMs(state: State): number {
       ? wordCount(`${categoryLabel(q.category)} ${labelOf(q.subcategory)} ${q.difficulty}`)
       : 0;
   const tv = questionWords(state) + 4 + 4 + 4 + 1 + rosterWords(state, 1) + topic;
+  // Group stage phones also show the public live response count, including after lock-in.
+  const progress = groupModeOf(state) ? uiWords('8 of 8 answered', '8 de 8 respondieron') : 0;
   // Phone-only question and four options plus its prompt/selection receipt.
   const phone =
     questionWords(state) +
@@ -197,7 +229,8 @@ export function questionReadingMs(state: State): number {
     4 +
     1 +
     4 +
-    (state.contentLang === 'es' && quizModeOf(state) === 'classic' ? 3 : 0);
+    (state.contentLang === 'es' && quizModeOf(state) === 'classic' ? 3 : 0) +
+    progress;
   // Wager's final phone also names its stake; classic's shapes do not need that line.
   const wagerFooter = isFinalIndex(state, state.index) ? 4 : 0;
   return readMs(Math.max(tv, phone + wagerFooter));
@@ -311,7 +344,11 @@ export interface ClassicRevealBeats {
 }
 
 /** Group results use their actual TV/staged/near-TV surfaces, including both UI languages. */
-function groupRevealBeats(state: State): ClassicRevealBeats {
+export function groupRevealTiming(state: State): ClassicRevealBeats & {
+  answersMs: number;
+  explanationMs: number;
+} {
+  if (state.phase.id === 'reveal' && state.groupRevealBeats) return state.groupRevealBeats;
   const vote = groupModeOf(state) === 'tv-vote';
   const last = isLastIndex(state, state.index);
   const q = current(state);
@@ -319,7 +356,6 @@ function groupRevealBeats(state: State): ClassicRevealBeats {
   const ids = Object.keys(state.players).filter((id) => isParticipating(state, id));
   const longestName = Math.max(0, ...Object.values(state.players).map((p) => wordCount(p.name)));
   const explanation = q && 'explanation' in q ? wordCount(q.explanation) : 0;
-  const missed = Object.keys(state.players).length - Object.keys(state.picks).length;
   // Mirror the public reveal distribution; the cue never names a voter's choice.
   const voteCounts = [0, 0, 0, 0];
   if (vote) {
@@ -349,27 +385,15 @@ function groupRevealBeats(state: State): ClassicRevealBeats {
       : state.roomDecision === undefined
         ? words('No room answer — nobody voted', 'La sala no respondió — nadie votó')
         : words('Room answer:', 'Respuesta de la sala:') +
-          1 +
-          wordCount(q?.choices[state.roomDecision] ?? '') +
+          2 +
           words(
             state.roomDecision === q?.answerIndex ? '✓ Correct' : 'Wrong',
             state.roomDecision === q?.answerIndex ? '✓ Correcta' : 'Incorrecto',
           ) +
           tie;
-    // Four shape marks plus four counts; choices appear once in ClassicChart.
-    const chart =
-      ordinal +
-      questionWords(state) +
-      8 +
-      words('✓ Correct', '✓ Correcta') +
-      explanation +
-      decision +
-      (missed > 0
-        ? words(
-            vote ? '8 did not vote' : '8 did not answer',
-            vote ? '8 no votaron' : '8 no respondieron',
-          )
-        : 0);
+    // Native results show the prompt, four alternatives, four shape/count bases and mode.
+    const mode = words(vote ? 'Room vote' : 'Teams', vote ? 'Voto de la sala' : 'Equipos');
+    const chart = ordinal + questionWords(state) + 17 + mode + decision;
     const receipt = (id: string, besideTv: boolean): number => {
       const team = teams.find((candidate) => candidate.members.includes(id));
       const pick = state.picks[id];
@@ -387,7 +411,7 @@ function groupRevealBeats(state: State): ClassicRevealBeats {
             ? words('Wrong', 'Incorrecto')
             : words('Too slow', 'Muy tarde');
       let total =
-        1 +
+        (besideTv ? 1 : 0) +
         verdict +
         (vote
           ? pick
@@ -401,18 +425,21 @@ function groupRevealBeats(state: State): ClassicRevealBeats {
       if (!last && team) {
         total += wordCount(team.name) + words('+1300 points', '+1300 puntos');
         if (!vote)
-          total +=
-            words('Correct 100%', 'Correcto 100%') +
-            words(
-              'Team points average players who stayed or answered',
-              'Los puntos del equipo promedian a quienes siguieron o respondieron',
-            );
+          total += besideTv
+            ? words('Correct 100%', 'Correcto 100%')
+            : words('100% correct', '100% de aciertos');
         if (besideTv)
-          total += words(
-            vote ? 'Room results' : 'Team results',
-            vote ? 'Resultados de la sala' : 'Resultados del equipo',
-          );
-        else total += words('99999 total', '99999 en total');
+          total +=
+            words(
+              vote ? 'Room results' : 'Team results',
+              vote ? 'Resultados de la sala' : 'Resultados del equipo',
+            ) +
+            (!vote
+              ? words(
+                  'Team points average players who stayed or answered',
+                  'Los puntos del equipo promedian a quienes siguieron o respondieron',
+                )
+              : 0);
       }
       if (besideTv) {
         const identity =
@@ -443,6 +470,18 @@ function groupRevealBeats(state: State): ClassicRevealBeats {
     const ownStage = Math.max(0, ...ids.map((id) => receipt(id, false)));
     const ownBeside = Math.max(0, ...ids.map((id) => receipt(id, true)));
     const chartWords = Math.max(chart + ownStage, ordinal + ownBeside);
+    // The authored explanation is a separate shared beat, never crowded below all alternatives.
+    const explanationWords = Math.max(
+      ordinal +
+        wordCount(q?.question ?? '') +
+        words('Why this answer?', '¿Por qué esta respuesta?') +
+        2 +
+        wordCount(q?.choices[q.answerIndex] ?? '') +
+        explanation +
+        decision +
+        ownStage,
+      ordinal + ownBeside,
+    );
     const rows = (members: boolean) =>
       teams.reduce(
         (n, team) =>
@@ -469,21 +508,29 @@ function groupRevealBeats(state: State): ClassicRevealBeats {
       ordinal + heading + rows(false) + ownStage + next,
       ordinal + ownBeside + next,
     );
-    return { chartWords, boardWords };
+    return { chartWords, explanationWords, boardWords };
   };
   const en = copies('en');
   const es = copies('es');
+  const answersMs = readMs(Math.max(en.chartWords, es.chartWords));
+  const explanationMs =
+    explanation > 0 ? readMs(Math.max(en.explanationWords, es.explanationWords)) : 0;
   return {
-    chartMs: readMs(Math.max(en.chartWords, es.chartWords)),
+    answersMs,
+    explanationMs,
+    chartMs: answersMs + explanationMs,
     // Final groups keep a short button-reading window; no standings are revealed there.
     standingsMs: last
-      ? readMs(uiWords('Show podium', 'Mostrar el podio'))
+      ? readMs(Math.max(uiWords('Show podium', 'Mostrar el podio'), longestName + 3))
       : readMs(Math.max(en.boardWords, es.boardWords)),
   };
 }
 
 export function classicRevealBeats(state: State): ClassicRevealBeats {
-  if (groupModeOf(state)) return groupRevealBeats(state);
+  if (groupModeOf(state)) {
+    const { chartMs, standingsMs } = groupRevealTiming(state);
+    return { chartMs, standingsMs };
+  }
   const q = current(state);
   const explanation = q && 'explanation' in q ? wordCount(q.explanation) : 0;
   const missed = Object.keys(state.players).length - Object.keys(state.picks).length;

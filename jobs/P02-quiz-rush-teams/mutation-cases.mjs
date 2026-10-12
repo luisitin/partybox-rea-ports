@@ -184,4 +184,42 @@ export const mutants = [
     expected:
       'canonical group-server/classic-server/scoring/answer-window/VIP behavioral assertions',
   },
+  {
+    id: 'M21',
+    description: 'Custom IDs lose exact public-prompt bot facts',
+    file: 'classic.ts',
+    anchor: "return id.startsWith('custom-') ? CLASSIC_PROMPT_FACTS.get(prompt) : undefined;",
+    replacement:
+      "return id.startsWith('disabled-custom-') ? CLASSIC_PROMPT_FACTS.get(prompt) : undefined;",
+    expected:
+      'custom-bot-public-facts learned facts, public-key independence and three calibrated strengths',
+  },
+  {
+    id: 'M22',
+    description: 'Final group reveal removes the usable VIP podium window',
+    file: 'pacing.ts',
+    anchor: "? readMs(Math.max(uiWords('Show podium', 'Mostrar el podio'), longestName + 3))",
+    replacement: '? 0',
+    expected:
+      'group-pacing final-window duration, live pre-deadline skip and hidden-score assertions',
+  },
+  {
+    id: 'M23',
+    description: 'Final room outcomes expose a reconstructible shared gain',
+    file: 'views.ts',
+    anchor: 'const hiddenRoomGain = room && hidden;',
+    replacement: 'const hiddenRoomGain = false;',
+    expected:
+      'group-final-room-privacy zero final delta, absent base/bonus and nonreconstructible shared total',
+  },
+  {
+    id: 'M24',
+    description: 'Presence updates recompute frozen reveal cuts',
+    file: 'pacing.ts',
+    anchor:
+      "if (state.phase.id === 'reveal' && state.groupRevealBeats) return state.groupRevealBeats;",
+    replacement: '',
+    expected:
+      'group-reveal-cut-stability permanent leave/reconnect and paused uniform cut assertions',
+  },
 ];

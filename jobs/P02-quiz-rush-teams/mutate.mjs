@@ -21,6 +21,10 @@ const prefix = 'games/kahoot/server/';
 const tests = [
   'group-server.test.ts',
   'group-accuracy.test.ts',
+  'custom-bot-public-facts.test.ts',
+  'group-pacing.test.ts',
+  'group-final-room-privacy.test.tsx',
+  'group-reveal-cut-stability.test.ts',
   'classic-server.test.ts',
   'scoring.test.ts',
   'answer-window.test.ts',
@@ -94,7 +98,7 @@ const onTerminate = () => interrupt('SIGTERM');
 process.on('SIGINT', onInterrupt);
 process.on('SIGTERM', onTerminate);
 
-async function runRules(label) {
+async function runRules(label, baseline = null) {
   if (unsafeChildren)
     throw new Error('Cannot start another child after an unverified tree shutdown');
   if (existsSync(reportPath)) unlinkSync(reportPath);
@@ -162,6 +166,9 @@ async function runRules(label) {
   if (existsSync(reportPath)) unlinkSync(reportPath);
   const suites = report?.testResults ?? [];
   const assertions = suites.flatMap((suite) => suite.assertionResults ?? []);
+  const executedTests = assertions.filter(
+    (test) => test.status === 'passed' || test.status === 'failed',
+  ).length;
   const failed = assertions
     .filter((test) => test.status === 'failed')
     .map((test) => ({
@@ -183,7 +190,13 @@ async function runRules(label) {
     output.killError ||
     (output.timedout ? 'Child exceeded 120 seconds' : '') ||
     (!report ? 'No readable Vitest JSON report' : '') ||
-    (!assertions.length ? 'No executed test assertions' : '') ||
+    (!executedTests ? 'No executed test assertions' : '') ||
+    (baseline &&
+    (assertions.length !== baseline.tests ||
+      executedTests !== baseline.executedTests ||
+      suites.length !== baseline.suites)
+      ? 'Focused assertion/suite counts differ from the green baseline'
+      : '') ||
     (toolFailure ? 'Compiler/module/unhandled tool failure in stderr' : '') ||
     (failedLoads.length ? 'Test suite load/transform failed' : '') ||
     (timedOutTests ? 'Test timed out' : '') ||
@@ -198,6 +211,8 @@ async function runRules(label) {
     timedout: output.timedout,
     durationMs: Date.now() - started,
     tests: assertions.length,
+    executedTests,
+    suites: suites.length,
     failed,
     invalidReason,
     logFile,
@@ -237,6 +252,8 @@ const evidence = {
   ),
   baseline: null,
   postBaseline: null,
+  requiredOriginalKills: 19,
+  requiredUpgradeMutants: ['M21', 'M22', 'M23', 'M24'],
   results: [],
   restorationVerified: false,
   error: '',
@@ -267,7 +284,7 @@ try {
         mutationSource(original.toString('utf8'), mutant.anchor, mutant.replacement, mutant.id),
         'utf8',
       );
-      outcome = await runRules(mutant.id);
+      outcome = await runRules(mutant.id, evidence.baseline);
     } finally {
       writeFileSync(path, original);
       if (hash(readFileSync(path)) !== hash(original))
@@ -304,7 +321,7 @@ try {
   try {
     if (abortReason || unsafeChildren)
       throw new Error(abortReason || 'Child tree shutdown unverified');
-    evidence.postBaseline = await runRules('post-baseline');
+    evidence.postBaseline = await runRules('post-baseline', evidence.baseline);
     if (evidence.postBaseline.invalidReason || evidence.postBaseline.exitCode !== 0)
       throw new Error('Restored post-baseline is not green');
   } catch (error) {
@@ -313,6 +330,12 @@ try {
   }
   evidence.mutations = mutants.length;
   evidence.killed = evidence.results.filter((result) => result.status === 'killed').length;
+  evidence.originalKilled = evidence.results.filter(
+    (result) => result.status === 'killed' && !evidence.requiredUpgradeMutants.includes(result.id),
+  ).length;
+  evidence.upgradesDetected = evidence.requiredUpgradeMutants.every((id) =>
+    evidence.results.some((result) => result.id === id && result.status === 'killed'),
+  );
   evidence.invalidMutations = evidence.results.filter(
     (result) => result.status === 'invalid',
   ).length;
@@ -334,6 +357,11 @@ try {
   console.log(
     `${evidence.killed}/${mutants.length} meaningful mutations detected; source restored=${evidence.restorationVerified}`,
   );
-  if (!evidence.complete || evidence.invalidMutations > 0 || evidence.killed < 19)
+  if (
+    !evidence.complete ||
+    evidence.invalidMutations > 0 ||
+    evidence.originalKilled < evidence.requiredOriginalKills ||
+    !evidence.upgradesDetected
+  )
     process.exitCode = 1;
 }

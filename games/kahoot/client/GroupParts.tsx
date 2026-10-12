@@ -165,7 +165,13 @@ function hasRoomVoteTie(
   );
 }
 
-export function GroupDecision({ view }: { view: LightningTvView }): JSX.Element | null {
+export function GroupDecision({
+  view,
+  compact = false,
+}: {
+  view: LightningTvView;
+  compact?: boolean;
+}): JSX.Element | null {
   const L = useT(STRINGS);
   const group = view.group;
   if (!group || group.mode !== 'tv-vote' || view.phaseId !== 'reveal') return null;
@@ -180,7 +186,11 @@ export function GroupDecision({ view }: { view: LightningTvView }): JSX.Element 
           <span className={`${styles.decisionMark} ${choiceClass(decision)}`}>
             <Shape index={decision} className={styles.mark} />
           </span>
-          <b>{view.question?.choices[decision] ?? L(SHAPES[decision] ?? '')}</b>
+          <b>
+            {compact
+              ? L(SHAPES[decision] ?? '')
+              : (view.question?.choices[decision] ?? L(SHAPES[decision] ?? ''))}
+          </b>
           <span>{decision === view.correctIndex ? L('✓ Correct') : L('Wrong')}</span>
           {hasRoomVoteTie(view) ? (
             <span data-room-tie="true">{L('Tie — random choice among tied answers')}</span>

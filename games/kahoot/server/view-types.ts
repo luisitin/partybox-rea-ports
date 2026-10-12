@@ -91,6 +91,8 @@ export interface LightningTvView extends TvView {
   correctIndex?: number;
   explanation?: string;
   revealAt?: number;
+  /** Group-only shared transition from native answer results to authored explanation. */
+  explanationAt?: number;
   leaderboardAt?: number;
   /** The reading-safe Next beat, including the final classic chart before the podium. */
   nextAt?: number;
@@ -125,6 +127,8 @@ export interface LightningControllerView extends ControllerView {
   standings?: StandingRow[];
   next?: RevealNext;
   revealAt?: number;
+  /** Present only during a group reveal with an authored explanation. */
+  explanationAt?: number;
   leaderboardAt?: number;
   /** The reading-safe Next beat; independent from whether a scoreboard is shown. */
   nextAt?: number;

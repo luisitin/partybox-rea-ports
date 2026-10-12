@@ -19,7 +19,7 @@ import {
 } from './types';
 import type { State } from './types';
 import { revealMs } from './phases/reveal';
-import { classicRevealBeats, podiumMs, wagerRevealBeats } from './pacing';
+import { classicRevealBeats, groupRevealTiming, podiumMs, wagerRevealBeats } from './pacing';
 import { occupiedPodiumRanks, revealedPodiumEntries, standingsOf } from './standings';
 import { groupStandings, teamOf } from './teams';
 import type {
@@ -203,6 +203,8 @@ export function tvView(state: State, gameId: string): LightningTvView {
   const classic = quizModeOf(state) === 'classic';
   const hidden = hidesFinalScores(state);
   const group = groupOf(state);
+  const connected = connectedParticipants(state);
+  const acceptedGroupPicks = group && phase === 'question' ? Object.keys(state.picks) : undefined;
   const view: LightningTvView = {
     ...envelope(state, gameId, {
       statusOf: statusOf(state),
@@ -217,11 +219,14 @@ export function tvView(state: State, gameId: string): LightningTvView {
       phase === 'talk' || phase === 'question' || phase === 'reveal' ? questionOf(state) : null,
     answeredCount:
       phase === 'question'
-        ? connectedParticipants(state).filter((id) => Object.hasOwn(state.picks, id)).length
+        ? (acceptedGroupPicks?.length ??
+          connected.filter((id) => Object.hasOwn(state.picks, id)).length)
         : phase === 'wager'
-          ? connectedParticipants(state).filter((id) => Object.hasOwn(state.wagers, id)).length
+          ? connected.filter((id) => Object.hasOwn(state.wagers, id)).length
           : 0,
-    totalCount: connectedParticipants(state).length,
+    totalCount: acceptedGroupPicks
+      ? new Set([...connected, ...acceptedGroupPicks]).size
+      : connected.length,
     // Group stages place the original-style circular clock beside the question.
     // Phones retain their normal envelope and their own local countdown.
     timerMode:
@@ -240,6 +245,8 @@ export function tvView(state: State, gameId: string): LightningTvView {
     };
   if (phase === 'reveal') {
     view.revealAt = revealAtOf(state);
+    if (group && groupRevealTiming(state).explanationMs > 0)
+      view.explanationAt = view.revealAt + groupRevealTiming(state).answersMs;
     const q = questionById(state.questionIds[state.index] ?? '', state.contentLang);
     if (q) {
       view.correctIndex = q.answerIndex;
@@ -322,12 +329,18 @@ export function controllerView(
     };
   if (phase === 'reveal') {
     view.revealAt = revealAtOf(state);
+    if (group && groupRevealTiming(state).explanationMs > 0)
+      view.explanationAt = view.revealAt + groupRevealTiming(state).answersMs;
     const q = questionById(state.questionIds[state.index] ?? '', state.contentLang);
     if (q) {
       view.correctIndex = q.answerIndex;
       const room = group?.mode === 'tv-vote';
       const correct = room ? state.roomDecision === q.answerIndex : myPick?.index === q.answerIndex;
-      view.outcome = { correct, delta: me ? (state.lastDelta[playerId] ?? 0) : 0 };
+      const hiddenRoomGain = room && hidden;
+      view.outcome = {
+        correct,
+        delta: me && !hiddenRoomGain ? (state.lastDelta[playerId] ?? 0) : 0,
+      };
       if (classic) {
         const base =
           correct && (myPick || room)
@@ -340,8 +353,7 @@ export function controllerView(
         view.outcome = {
           ...view.outcome,
           answered: room ? state.roomDecision !== undefined : myPick !== undefined,
-          base,
-          bonus: correct ? view.outcome.delta - base : 0,
+          ...(hiddenRoomGain ? {} : { base, bonus: correct ? view.outcome.delta - base : 0 }),
         };
         view.answerDistribution = distributionOf(state);
         if ('explanation' in q) view.explanation = q.explanation;

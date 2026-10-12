@@ -97,6 +97,13 @@ export interface State extends GameStateBase {
   /** Fixed answer end: an early all-answered hold must not change speed arithmetic. */
   answerClosesAt?: number;
   questionReadableUntil?: number;
+  /** Group result reading windows frozen at scoring; presence changes cannot move shared cuts. */
+  groupRevealBeats?: {
+    answersMs: number;
+    explanationMs: number;
+    chartMs: number;
+    standingsMs: number;
+  };
   wagerClosesAt?: number;
   wagerReadableUntil?: number;
   /** Occupied competition rank currently being unveiled, descending 3 → 2 → 1. */

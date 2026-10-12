@@ -90,3 +90,9 @@ The inspected clips do not show the standard response-count chart, so they
 cannot establish whether ClassicChart's horizontal rows match the original.
 Any graph comparison must cite another actually inspected original state;
 the board's green correct card must not be treated as the classic reveal chart.
+
+## Additional inspected static answer-results reference
+
+On October 12, the [official hosting-tips article](https://support.kahoot.com/hc/en-us/articles/360039900153-Tips-for-hosting-a-live-game) supplied an accessible [answer-results attachment](https://support.kahoot.com/hc/article_attachments/38926500115219). The complete [2876×1576 PNG](original/official-answer-results.png) was inspected: the prompt remains above vertical count bars, with four labeled choices below. Shapes and correctness marks accompany the bars. No explanation paragraph is visible. This supplies static chart geometry, not team-specific playback or transition timing.
+
+The [older support-post screenshot](https://support.kahoot.com/hc/user_images/01HQRDBH4Z8C9Y5K32H5XTCZVA.png) returned HTTP 403 and was not inspected. This research opened no browser or live session. The accessible asset's SHA256 and attribution are in REFERENCES.md.

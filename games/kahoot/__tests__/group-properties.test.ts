@@ -46,6 +46,7 @@ const NEVER = new Set([
   'roomDecision',
   'answerClosesAt',
   'questionReadableUntil',
+  'groupRevealBeats',
   'wagerClosesAt',
   'wagerReadableUntil',
 ]);
@@ -54,6 +55,7 @@ const BEFORE_REVEAL = new Set([
   'pickIndex',
   'answerDistribution',
   'explanation',
+  'explanationAt',
   'decision',
 ]);
 const SKILLS: readonly BotSkill[] = ['easy', 'normal', 'sharp'];

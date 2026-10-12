@@ -196,7 +196,10 @@ function paint(
                   ) : null}
                 </div>
               </div>
-              <div className="evidence-bar" />
+              <div
+                className="evidence-bar"
+                style={publicView.timerMode === 'hidden' ? { visibility: 'hidden' } : undefined}
+              />
             </ServerClockProvider>,
           )
         : '<div class="evidence-phone-countdown"><span class="evidence-phone-track"></span></div>';
@@ -215,8 +218,12 @@ function paint(
           expect(controller.stage).not.toHaveProperty('correctIndex');
           expect(controller.stage).not.toHaveProperty('explanation');
         }
-      } else {
+      } else if (publicView.explanationAt !== undefined && at >= publicView.explanationAt) {
         expect(html, name + ' custom explanation').toContain(expected.explanation);
+        expect(html).toContain('data-group-explanation="true"');
+      } else {
+        expect(html, name + ' separate custom explanation').not.toContain(expected.explanation);
+        expect(html).toContain('data-group-answer-chart="vertical"');
       }
     }
     if (options.roomTie) {
@@ -369,12 +376,27 @@ function paintCustomEdges(variant: EdgeVariant): void {
       expect(round.reveal.phase.deadline! - round.reveal.phase.startedAt).toBe(
         beats.chartMs + beats.standingsMs,
       );
+      paint('custom-' + variant + '-' + mode + '-intro', initial, undefined, {
+        surfaces: EDGE_SURFACES,
+        customContent: provenance,
+      });
       for (const phase of ['talk', 'question', 'reveal'] as const) {
-        paint('custom-' + variant + '-' + mode + '-' + phase, round[phase], undefined, {
+        const at =
+          phase === 'reveal' ? round.reveal.phase.startedAt + REVEAL_BEAT_MS + 100 : undefined;
+        paint('custom-' + variant + '-' + mode + '-' + phase, round[phase], at, {
           surfaces: EDGE_SURFACES,
           customContent: provenance,
         });
       }
+      paint(
+        'custom-' + variant + '-' + mode + '-explanation',
+        round.reveal,
+        tv(round.reveal).explanationAt! + 100,
+        {
+          surfaces: EDGE_SURFACES,
+          customContent: provenance,
+        },
+      );
     }
   } finally {
     lookup.mockRestore();
@@ -436,7 +458,7 @@ function writeCustomEdgePacks(): void {
         seats: 8,
         nameLength: 40,
         teams: 'Two teams of four; room-vote mode has one room of eight',
-        phases: ['talk', 'question', 'reveal'],
+        phases: ['intro', 'talk', 'question', 'reveal', 'explanation'],
         surfaces: EDGE_SURFACES,
         packs: edgePacks.map(({ content: provenance }) => ({
           ...provenance,
@@ -466,8 +488,11 @@ it('renders every canonical group phase and role, plus paused/locked/long-name f
       const state = states.find((s) => s.phase.id === phase);
       if (!state) throw new Error(`Missing ${mode} ${phase}`);
       paint(`${mode}-${phase}`, state);
-      if (phase === 'reveal')
+      if (phase === 'reveal') {
+        paint(`${mode}-revealed-result`, state, state.phase.startedAt + REVEAL_BEAT_MS + 100);
+        paint(`${mode}-explanation`, state, tv(state).explanationAt! + 100);
         paint(`${mode}-standings`, state, (tv(state).leaderboardAt ?? state.phase.startedAt) + 100);
+      }
     }
     for (const podium of states.filter((s) => s.phase.id === 'podium'))
       paint(`${mode}-podium-${podium.podiumRank}`, podium);
@@ -512,6 +537,7 @@ it('renders every canonical group phase and role, plus paused/locked/long-name f
     const final = states.filter((s) => s.phase.id === 'reveal').at(-1)!;
     expect((tv(final).nextAt ?? final.phase.startedAt) + 100).toBeLessThan(final.phase.deadline!);
     paint(`${mode}-last-reveal`, final);
+    paint(`${mode}-last-explanation`, final, tv(final).explanationAt! + 100);
     const readyAt = phone(final, 'seat-1').nextAt;
     if (readyAt === undefined) throw new Error('Final reveal needs its authored podium-ready beat');
     expect(phone(final, 'seat-1').group?.teams).toHaveLength(0);
@@ -530,7 +556,7 @@ it('renders every canonical group phase and role, plus paused/locked/long-name f
     frames.filter((frame) => frame.name.startsWith('groups-two-teams-presence-talk-')),
   ).toHaveLength(3);
   for (const variant of ['words', 'unbroken'] as const) paintCustomEdges(variant);
-  expect(frames.filter((frame) => frame.name.startsWith('groups-custom-'))).toHaveLength(36);
+  expect(frames.filter((frame) => frame.name.startsWith('groups-custom-'))).toHaveLength(60);
   const tied = firstRound(start('tv-vote', 2), true);
   expect(tv(tied.talk).group?.decision).toBeUndefined();
   expect(tv(tied.question).group?.decision).toBeUndefined();

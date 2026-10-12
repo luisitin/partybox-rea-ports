@@ -52,6 +52,17 @@
 :global([data-surface='tv']) .members > span::after {
   content: none;
 }
+/* Full-width member pairs keep every legal nickname readable in the host's intro. */
+:global([data-surface='tv']) [data-phase='intro'] .roster {
+  grid-template-columns: minmax(0, 1fr);
+}
+:global([data-surface='tv']) [data-phase='intro'] .members {
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: var(--pb-space-3);
+}
+:global([data-surface='tv']) [data-phase='intro'] .roster li {
+  padding-block: 0;
+}
 .questionStage {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto auto;

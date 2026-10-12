@@ -38,6 +38,10 @@ import {
   groupTitle,
 } from './GroupParts';
 import { GroupTalk } from './GroupTalk';
+import { GroupIntroRules } from './GroupIntroRules';
+import { GroupAnswerChart } from './GroupAnswerChart';
+import { GroupExplanation } from './GroupExplanation';
+import { GroupStageVerdict } from './GroupStageVerdict';
 import groups from './Group.module.css';
 
 interface Pending {
@@ -83,6 +87,8 @@ export function ClassicController({
     view.deadline === null ? null : Math.max(0, Math.ceil((view.deadline - now) / 1000));
   const leaderboard =
     view.phaseId === 'reveal' && stage?.leaderboardAt !== undefined && now >= stage.leaderboardAt;
+  const explanation =
+    view.phaseId === 'reveal' && stage?.explanationAt !== undefined && now >= stage.explanationAt;
   const verdictAt = view.revealAt ?? view.phaseAt;
   const shown = view.phaseId === 'reveal' && now >= verdictAt + REVEAL_BEAT_MS;
   const cue = useRef({ key: '', done: false });
@@ -165,7 +171,11 @@ export function ClassicController({
         className={`${styles.phoneScreen} ${groups.phone}`}
         ghost={false}
       >
-        <div className={styles.phoneQuestion} data-stage={showStage || undefined}>
+        <div
+          className={styles.phoneQuestion}
+          data-stage={showStage || undefined}
+          data-group={group?.mode}
+        >
           <header className={styles.phoneHeader}>
             <h2>{round}</h2>
             {showStage && seconds !== null ? (
@@ -223,6 +233,14 @@ export function ClassicController({
             <QuestionOptions question={question} />
           ) : null}
           <div className={styles.answerStatus}>
+            {group && showStage && stage?.phaseId === 'question' ? (
+              <p className={styles.status} role="status" data-group-progress="true">
+                {L(vote ? '{n} of {m} voted' : '{n} of {m} answered', {
+                  n: stage.answeredCount,
+                  m: stage.totalCount,
+                })}
+              </p>
+            ) : null}
             <p className={styles.status} role="status">
               {status}
             </p>
@@ -245,6 +263,38 @@ export function ClassicController({
         nextAt={view.nextAt}
       />
     ) : undefined;
+  if (view.phaseId === 'reveal' && group && showStage && stage)
+    return (
+      <Screen
+        key={`reveal:${view.round?.number}`}
+        className={`${styles.phoneScreen} ${groups.phone}`}
+        title={round}
+        footer={
+          <div className={groups.revealFooter}>
+            {view.participating ? (
+              shown && view.outcome ? (
+                <GroupStageVerdict view={view} />
+              ) : (
+                <p className={styles.status}>{L('Your result is coming…')}</p>
+              )
+            ) : null}
+            {revealNext}
+          </div>
+        }
+      >
+        {view.paused ? <p className={styles.status}>{L('Paused')}</p> : null}
+        {leaderboard ? (
+          <>
+            <h2 className={styles.headline}>{L(vote ? 'Room score' : 'Team scoreboard')}</h2>
+            <PublicStandings rows={stage.standings ?? []} me={group.myTeamId} gains />
+          </>
+        ) : explanation ? (
+          <GroupExplanation view={stage} />
+        ) : (
+          <GroupAnswerChart view={stage} />
+        )}
+      </Screen>
+    );
   if (view.phaseId === 'reveal')
     return (
       <Screen
@@ -357,6 +407,7 @@ export function ClassicController({
           {group ? (
             <>
               <h3>{L(groupTitle(group))}</h3>
+              <GroupIntroRules group={group} />
               <GroupRoster group={group} players={view.players} mine={view.participating} />
             </>
           ) : null}
