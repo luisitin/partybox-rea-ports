@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" data-surface="controller" data-motion="off">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Hole.io · done · phone-tv</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      body > header,
+      body > footer {
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--pb-space-3) var(--pb-space-4);
+        font-size: var(--pb-font-body);
+        background: var(--pb-surface);
+      }
+      body > header {
+        height: 60px;
+      }
+      body > footer {
+        height: 44px;
+      }
+      main {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+      }
+      button {
+        font: inherit;
+      }
+      h1 {
+        font-size: inherit;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>PartyBox · Hole.io</h1>
+      <span>Player 1</span>
+    </header>
+    <main id="stage">
+      <div class="Controller_summary" style="--pb-hole-color: var(--pb-player-1)" data-phase="done">
+        <header class="Controller_summaryHeading">
+          <h2>Player 4 wins!</h2>
+          <p>Place 3 · 307 points</p>
+        </header>
+        <ol class="Controller_rows" aria-label="Player scores">
+          <li style="--pb-hole-color: var(--pb-player-4)">
+            <span class="Controller_smallIdentity" aria-label="Hole 4">4</span
+            ><span class="Controller_rowName"
+              ><b title="Player 4">Player 4</b><small>Place 1</small></span
+            ><strong>411</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-8)">
+            <span class="Controller_smallIdentity" aria-label="Hole 8">8</span
+            ><span class="Controller_rowName"
+              ><b title="Player 8">Player 8</b><small>Place 2</small></span
+            ><strong>328</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-1)" data-me="true">
+            <span class="Controller_smallIdentity" aria-label="Hole 1">1</span
+            ><span class="Controller_rowName"
+              ><b title="Player 1">Player 1</b><small>Place 3</small></span
+            ><strong>307</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-5)">
+            <span class="Controller_smallIdentity" aria-label="Hole 5">5</span
+            ><span class="Controller_rowName"
+              ><b title="Player 5">Player 5</b><small>Place 3</small></span
+            ><strong>307</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-3)">
+            <span class="Controller_smallIdentity" aria-label="Hole 3">3</span
+            ><span class="Controller_rowName"
+              ><b title="Player 3">Player 3</b><small>Place 5</small></span
+            ><strong>303</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-6)">
+            <span class="Controller_smallIdentity" aria-label="Hole 6">6</span
+            ><span class="Controller_rowName"
+              ><b title="Player 6">Player 6</b><small>Place 5</small></span
+            ><strong>303</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-7)">
+            <span class="Controller_smallIdentity" aria-label="Hole 7">7</span
+            ><span class="Controller_rowName"
+              ><b title="Player 7">Player 7</b><small>Place 7</small></span
+            ><strong>301</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-2)">
+            <span class="Controller_smallIdentity" aria-label="Hole 2">2</span
+            ><span class="Controller_rowName"
+              ><b title="Player 2">Player 2</b><small>Place 8</small></span
+            ><strong>227</strong>
+          </li>
+        </ol>
+        <p class="Controller_finishNote">Small bites built a big score.</p>
+      </div>
+    </main>
+    <footer><span>Final standings</span><span>Connected</span></footer>
+  </body>
+</html>

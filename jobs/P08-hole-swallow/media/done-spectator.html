@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en" data-surface="controller" data-motion="off">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Hole.io · done · spectator</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      body > header,
+      body > footer {
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--pb-space-3) var(--pb-space-4);
+        font-size: var(--pb-font-body);
+        background: var(--pb-surface);
+      }
+      body > header {
+        height: 60px;
+      }
+      body > footer {
+        height: 44px;
+      }
+      main {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+      }
+      button {
+        font: inherit;
+      }
+      h1 {
+        font-size: inherit;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>PartyBox · Hole.io</h1>
+      <span>Spectator</span>
+    </header>
+    <main id="stage">
+      <div class="Controller_summary" style="--pb-hole-color: var(--pb-player-1)" data-phase="done">
+        <header class="Controller_summaryHeading">
+          <h2>Player 4 wins!</h2>
+          <p>Most points wins</p>
+        </header>
+        <div class="Controller_map">
+          <svg
+            class="City_city"
+            data-compact="true"
+            viewBox="0 0 180 110"
+            role="img"
+            aria-labelledby="_R_2_"
+          >
+            <title id="_R_2_">City with numbered player holes</title>
+            <rect class="City_ground" width="180" height="110"></rect>
+            <g class="City_blocks">
+              <rect x="3" y="3" width="39" height="49" rx="3"></rect>
+              <rect x="3" y="58" width="39" height="49" rx="3"></rect>
+              <rect x="48" y="3" width="39" height="49" rx="3"></rect>
+              <rect x="48" y="58" width="39" height="49" rx="3"></rect>
+              <rect x="93" y="3" width="39" height="49" rx="3"></rect>
+              <rect x="93" y="58" width="39" height="49" rx="3"></rect>
+              <rect x="138" y="3" width="39" height="49" rx="3"></rect>
+              <rect x="138" y="58" width="39" height="49" rx="3"></rect>
+            </g>
+            <g class="City_parks">
+              <rect x="9" y="10" width="12" height="13" rx="3"></rect>
+              <rect x="148" y="66" width="14" height="13" rx="3"></rect>
+              <rect x="59" y="67" width="12" height="13" rx="3"></rect>
+            </g>
+            <g class="City_roadLines">
+              <path d="M45 3V107"></path>
+              <path d="M90 3V107"></path>
+              <path d="M135 3V107"></path>
+              <path d="M3 55H177"></path>
+            </g>
+            <g class="City_crossings">
+              <path d="M42 49V51M42 59V61"></path>
+              <path d="M44 49V51M44 59V61"></path>
+              <path d="M46 49V51M46 59V61"></path>
+              <path d="M48 49V51M48 59V61"></path>
+              <path d="M87 49V51M87 59V61"></path>
+              <path d="M89 49V51M89 59V61"></path>
+              <path d="M91 49V51M91 59V61"></path>
+              <path d="M93 49V51M93 59V61"></path>
+              <path d="M132 49V51M132 59V61"></path>
+              <path d="M134 49V51M134 59V61"></path>
+              <path d="M136 49V51M136 59V61"></path>
+              <path d="M138 49V51M138 59V61"></path>
+            </g>
+            <g class="City_props">
+              <g transform="translate(71.1 34.7282)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(66 34)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(62.9 36.3263)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(57.9737 33.9)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(119.2 26.4)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(120.2282 32.1)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(115.3 33.6282)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(111.8 36.1)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(106.1 37.5263)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(101.8737 32.1)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(103 27.3)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(102.7737 22.6)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(104.6 15.2756)" data-kind="bench">
+                <g class="City_bench">
+                  <path d="M-1.7-.65V1.4M1.7-.65V1.4"></path>
+                  <rect x="-2.3" y="-1" width="4.6" height=".8" rx=".2"></rect>
+                  <rect x="-2.3" y=".25" width="4.6" height=".7" rx=".2"></rect>
+                </g>
+              </g>
+              <g transform="translate(111.8 14.1)" data-kind="bench">
+                <g class="City_bench">
+                  <path d="M-1.7-.65V1.4M1.7-.65V1.4"></path>
+                  <rect x="-2.3" y="-1" width="4.6" height=".8" rx=".2"></rect>
+                  <rect x="-2.3" y=".25" width="4.6" height=".7" rx=".2"></rect>
+                </g>
+              </g>
+              <g transform="translate(118.1 14.4756)" data-kind="bench">
+                <g class="City_bench">
+                  <path d="M-1.7-.65V1.4M1.7-.65V1.4"></path>
+                  <rect x="-2.3" y="-1" width="4.6" height=".8" rx=".2"></rect>
+                  <rect x="-2.3" y=".25" width="4.6" height=".7" rx=".2"></rect>
+                </g>
+              </g>
+              <g transform="translate(123.7244 20.2)" data-kind="bench">
+                <g class="City_bench">
+                  <path d="M-1.7-.65V1.4M1.7-.65V1.4"></path>
+                  <rect x="-2.3" y="-1" width="4.6" height=".8" rx=".2"></rect>
+                  <rect x="-2.3" y=".25" width="4.6" height=".7" rx=".2"></rect>
+                </g>
+              </g>
+              <g transform="translate(165.9 27.9)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(163.6282 30.1)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(160 35.5282)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(156.8 35.7)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(150.7 36.4263)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(147.0737 31.8)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(146.7 28.8)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(146.8737 21.3)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(150.9 14.6756)" data-kind="bench">
+                <g class="City_bench">
+                  <path d="M-1.7-.65V1.4M1.7-.65V1.4"></path>
+                  <rect x="-2.3" y="-1" width="4.6" height=".8" rx=".2"></rect>
+                  <rect x="-2.3" y=".25" width="4.6" height=".7" rx=".2"></rect>
+                </g>
+              </g>
+              <g transform="translate(157.3 12.1)" data-kind="bench">
+                <g class="City_bench">
+                  <path d="M-1.7-.65V1.4M1.7-.65V1.4"></path>
+                  <rect x="-2.3" y="-1" width="4.6" height=".8" rx=".2"></rect>
+                  <rect x="-2.3" y=".25" width="4.6" height=".7" rx=".2"></rect>
+                </g>
+              </g>
+              <g transform="translate(164.9 14.8756)" data-kind="bench">
+                <g class="City_bench">
+                  <path d="M-1.7-.65V1.4M1.7-.65V1.4"></path>
+                  <rect x="-2.3" y="-1" width="4.6" height=".8" rx=".2"></rect>
+                  <rect x="-2.3" y=".25" width="4.6" height=".7" rx=".2"></rect>
+                </g>
+              </g>
+              <g transform="translate(170.7244 21.7)" data-kind="bench">
+                <g class="City_bench">
+                  <path d="M-1.7-.65V1.4M1.7-.65V1.4"></path>
+                  <rect x="-2.3" y="-1" width="4.6" height=".8" rx=".2"></rect>
+                  <rect x="-2.3" y=".25" width="4.6" height=".7" rx=".2"></rect>
+                </g>
+              </g>
+              <g transform="translate(30.9282 87.4)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(166.7 82.2)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(164.3282 88)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(162.4 88.4282)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(158.2 89.5)" data-kind="bin">
+                <g class="City_bin">
+                  <rect x="-0.65" y="-0.8" width="1.3" height="1.6" rx="0.2"></rect>
+                  <path d="M-.85-.7H.85M-.25-1H.25"></path>
+                  <path d="M-.2-.4V.5M.2-.4V.5"></path>
+                </g>
+              </g>
+              <g transform="translate(150.8 93.5263)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(148.3737 88.9)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(148.7737 77.5)" data-kind="tree">
+                <g class="City_tree">
+                  <path d="M0 .2V1.5"></path>
+                  <circle r="1.45"></circle>
+                  <circle cx="-.45" cy="-.35" r=".6" class="City_treeLight"></circle>
+                </g>
+              </g>
+              <g transform="translate(156.9 67.9)" data-kind="bench">
+                <g class="City_bench">
+                  <path d="M-1.7-.65V1.4M1.7-.65V1.4"></path>
+                  <rect x="-2.3" y="-1" width="4.6" height=".8" rx=".2"></rect>
+                  <rect x="-2.3" y=".25" width="4.6" height=".7" rx=".2"></rect>
+                </g>
+              </g>
+              <g transform="translate(164.5 71.1756)" data-kind="bench">
+                <g class="City_bench">
+                  <path d="M-1.7-.65V1.4M1.7-.65V1.4"></path>
+                  <rect x="-2.3" y="-1" width="4.6" height=".8" rx=".2"></rect>
+                  <rect x="-2.3" y=".25" width="4.6" height=".7" rx=".2"></rect>
+                </g>
+              </g>
+              <g transform="translate(169.2244 75)" data-kind="bench">
+                <g class="City_bench">
+                  <path d="M-1.7-.65V1.4M1.7-.65V1.4"></path>
+                  <rect x="-2.3" y="-1" width="4.6" height=".8" rx=".2"></rect>
+                  <rect x="-2.3" y=".25" width="4.6" height=".7" rx=".2"></rect>
+                </g>
+              </g>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(13.9128 81.2563)"
+              style="
+                --pb-hole-color: var(--pb-player-1);
+                transform: translate(13.9128px, 81.2563px);
+              "
+            >
+              <title>Hole 1, 307 points</title>
+              <circle class="City_rim" r="13.912849280761138"></circle>
+              <circle class="City_void" r="13.262849280761138"></circle>
+              <path
+                class="City_shine"
+                d="M-9.04335203249474 -6.260782176342512Q0 -14.608491744799196 9.04335203249474 -6.260782176342512"
+              ></path>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(13.8249 76.8499)"
+              style="
+                --pb-hole-color: var(--pb-player-2);
+                transform: translate(13.8249px, 76.8499px);
+              "
+            >
+              <title>Hole 2, 227 points</title>
+              <circle class="City_rim" r="12.439911503991619"></circle>
+              <circle class="City_void" r="11.789911503991618"></circle>
+              <path
+                class="City_shine"
+                d="M-8.085942477594552 -5.597960176796229Q0 -13.0619070791912 8.085942477594552 -5.597960176796229"
+              ></path>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(13.8441 81.2455)"
+              style="
+                --pb-hole-color: var(--pb-player-3);
+                transform: translate(13.8441px, 81.2455px);
+              "
+            >
+              <title>Hole 3, 303 points</title>
+              <circle class="City_rim" r="13.844137111317528"></circle>
+              <circle class="City_void" r="13.194137111317527"></circle>
+              <path
+                class="City_shine"
+                d="M-8.998689122356394 -6.229861700092887Q0 -14.536343966883404 8.998689122356394 -6.229861700092887"
+              ></path>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(17.1404 79.0963)"
+              style="
+                --pb-hole-color: var(--pb-player-4);
+                transform: translate(17.1404px, 79.0963px);
+              "
+            >
+              <title>Hole 4, 411 points</title>
+              <circle class="City_rim" r="14"></circle>
+              <circle class="City_void" r="13.35"></circle>
+              <path class="City_shine" d="M-9.1 -6.3Q0 -14.700000000000001 9.1 -6.3"></path>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(13.9128 81.2015)"
+              style="
+                --pb-hole-color: var(--pb-player-5);
+                transform: translate(13.9128px, 81.2015px);
+              "
+            >
+              <title>Hole 5, 307 points</title>
+              <circle class="City_rim" r="13.912849280761138"></circle>
+              <circle class="City_void" r="13.262849280761138"></circle>
+              <path
+                class="City_shine"
+                d="M-9.04335203249474 -6.260782176342512Q0 -14.608491744799196 9.04335203249474 -6.260782176342512"
+              ></path>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(13.8441 81.2567)"
+              style="
+                --pb-hole-color: var(--pb-player-6);
+                transform: translate(13.8441px, 81.2567px);
+              "
+            >
+              <title>Hole 6, 303 points</title>
+              <circle class="City_rim" r="13.844137111317528"></circle>
+              <circle class="City_void" r="13.194137111317527"></circle>
+              <path
+                class="City_shine"
+                d="M-8.998689122356394 -6.229861700092887Q0 -14.536343966883404 8.998689122356394 -6.229861700092887"
+              ></path>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(13.8096 81.2589)"
+              style="
+                --pb-hole-color: var(--pb-player-7);
+                transform: translate(13.8096px, 81.2589px);
+              "
+            >
+              <title>Hole 7, 301 points</title>
+              <circle class="City_rim" r="13.809610943738484"></circle>
+              <circle class="City_void" r="13.159610943738484"></circle>
+              <path
+                class="City_shine"
+                d="M-8.976247113430015 -6.214324924682318Q0 -14.500091490925408 8.976247113430015 -6.214324924682318"
+              ></path>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(13.8499 76.6582)"
+              style="
+                --pb-hole-color: var(--pb-player-8);
+                transform: translate(13.8499px, 76.6582px);
+              "
+            >
+              <title>Hole 8, 328 points</title>
+              <circle class="City_rim" r="12.558602513484248"></circle>
+              <circle class="City_void" r="11.908602513484247"></circle>
+              <path
+                class="City_shine"
+                d="M-8.163091633764761 -5.651371131067911Q0 -13.186532639158461 8.163091633764761 -5.651371131067911"
+              ></path>
+            </g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g
+              class="City_hole"
+              transform="translate(13.845382001257038 71.32966348349957)"
+              style="
+                --pb-hole-color: var(--pb-player-1);
+                transform: translate(13.845382001257038px, 71.32966348349957px);
+              "
+            >
+              <path class="City_callout" d="M0.06741799874296284 9.926636516500423L0 0"></path>
+              <circle class="City_labelRing" r="3.3"></circle>
+              <text
+                class="City_number"
+                font-size="6.4"
+                text-anchor="middle"
+                dominant-baseline="central"
+              >
+                1
+              </text>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(21.092407126495065 69.73685877664792)"
+              style="
+                --pb-hole-color: var(--pb-player-2);
+                transform: translate(21.092407126495065px, 69.73685877664792px);
+              "
+            >
+              <path class="City_callout" d="M-7.267507126495065 7.113041223352084L0 0"></path>
+              <circle class="City_labelRing" r="3.3"></circle>
+              <text
+                class="City_number"
+                font-size="6.4"
+                text-anchor="middle"
+                dominant-baseline="central"
+              >
+                2
+              </text>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(23.751637961020663 80.00672534753133)"
+              style="
+                --pb-hole-color: var(--pb-player-3);
+                transform: translate(23.751637961020663px, 80.00672534753133px);
+              "
+            >
+              <path class="City_callout" d="M-9.907537961020664 1.2387746524686776L0 0"></path>
+              <circle class="City_labelRing" r="3.3"></circle>
+              <text
+                class="City_number"
+                font-size="6.4"
+                text-anchor="middle"
+                dominant-baseline="central"
+              >
+                3
+              </text>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(24.30392985084481 87.40614246433415)"
+              style="
+                --pb-hole-color: var(--pb-player-4);
+                transform: translate(24.30392985084481px, 87.40614246433415px);
+              "
+            >
+              <path class="City_callout" d="M-7.16352985084481 -8.309842464334153L0 0"></path>
+              <circle class="City_labelRing" r="3.3"></circle>
+              <text
+                class="City_number"
+                font-size="6.4"
+                text-anchor="middle"
+                dominant-baseline="central"
+              >
+                4
+              </text>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(13.9128 91.2015)"
+              style="
+                --pb-hole-color: var(--pb-player-5);
+                transform: translate(13.9128px, 91.2015px);
+              "
+            >
+              <path class="City_callout" d="M0 -10L0 0"></path>
+              <circle class="City_labelRing" r="3.3"></circle>
+              <text
+                class="City_number"
+                font-size="6.4"
+                text-anchor="middle"
+                dominant-baseline="central"
+              >
+                5
+              </text>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(6.773032188134525 88.32776781186547)"
+              style="
+                --pb-hole-color: var(--pb-player-6);
+                transform: translate(6.773032188134525px, 88.32776781186547px);
+              "
+            >
+              <path class="City_callout" d="M7.071067811865475 -7.0710678118654755L0 0"></path>
+              <circle class="City_labelRing" r="3.3"></circle>
+              <text
+                class="City_number"
+                font-size="6.4"
+                text-anchor="middle"
+                dominant-baseline="central"
+              >
+                6
+              </text>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(4 81.2589)"
+              style="--pb-hole-color: var(--pb-player-7); transform: translate(4px, 81.2589px)"
+            >
+              <path class="City_callout" d="M9.8096 0L0 0"></path>
+              <circle class="City_labelRing" r="3.3"></circle>
+              <text
+                class="City_number"
+                font-size="6.4"
+                text-anchor="middle"
+                dominant-baseline="central"
+              >
+                7
+              </text>
+            </g>
+            <g
+              class="City_hole"
+              transform="translate(6.649810872247895 69.55574211612155)"
+              style="
+                --pb-hole-color: var(--pb-player-8);
+                transform: translate(6.649810872247895px, 69.55574211612155px);
+              "
+            >
+              <path class="City_callout" d="M7.200089127752105 7.102457883878444L0 0"></path>
+              <circle class="City_labelRing" r="3.3"></circle>
+              <text
+                class="City_number"
+                font-size="6.4"
+                text-anchor="middle"
+                dominant-baseline="central"
+              >
+                8
+              </text>
+            </g>
+          </svg>
+        </div>
+        <ol class="Controller_rows" aria-label="Player scores">
+          <li style="--pb-hole-color: var(--pb-player-4)">
+            <span class="Controller_smallIdentity" aria-label="Hole 4">4</span
+            ><span class="Controller_rowName"
+              ><b title="Player 4">Player 4</b><small>Place 1</small></span
+            ><strong>411</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-8)">
+            <span class="Controller_smallIdentity" aria-label="Hole 8">8</span
+            ><span class="Controller_rowName"
+              ><b title="Player 8">Player 8</b><small>Place 2</small></span
+            ><strong>328</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-1)">
+            <span class="Controller_smallIdentity" aria-label="Hole 1">1</span
+            ><span class="Controller_rowName"
+              ><b title="Player 1">Player 1</b><small>Place 3</small></span
+            ><strong>307</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-5)">
+            <span class="Controller_smallIdentity" aria-label="Hole 5">5</span
+            ><span class="Controller_rowName"
+              ><b title="Player 5">Player 5</b><small>Place 3</small></span
+            ><strong>307</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-3)">
+            <span class="Controller_smallIdentity" aria-label="Hole 3">3</span
+            ><span class="Controller_rowName"
+              ><b title="Player 3">Player 3</b><small>Place 5</small></span
+            ><strong>303</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-6)">
+            <span class="Controller_smallIdentity" aria-label="Hole 6">6</span
+            ><span class="Controller_rowName"
+              ><b title="Player 6">Player 6</b><small>Place 5</small></span
+            ><strong>303</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-7)">
+            <span class="Controller_smallIdentity" aria-label="Hole 7">7</span
+            ><span class="Controller_rowName"
+              ><b title="Player 7">Player 7</b><small>Place 7</small></span
+            ><strong>301</strong>
+          </li>
+          <li style="--pb-hole-color: var(--pb-player-2)">
+            <span class="Controller_smallIdentity" aria-label="Hole 2">2</span
+            ><span class="Controller_rowName"
+              ><b title="Player 2">Player 2</b><small>Place 8</small></span
+            ><strong>227</strong>
+          </li>
+        </ol>
+        <p class="Controller_finishNote">Small bites built a big score.</p>
+      </div>
+    </main>
+    <footer><span>Final standings</span><span>Connected</span></footer>
+  </body>
+</html>

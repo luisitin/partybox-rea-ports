@@ -1,0 +1,153 @@
+.frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+.city {
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-family: var(--pb-font-family);
+}
+.water {
+  fill: color-mix(in srgb, var(--pb-info) 60%, var(--pb-bg));
+}
+.ground {
+  fill: color-mix(in srgb, var(--pb-surface-2) 80%, var(--pb-text-muted));
+}
+.blocks {
+  fill: color-mix(in srgb, var(--pb-surface) 75%, var(--pb-text-muted));
+  stroke: var(--pb-border);
+  stroke-width: 1.2;
+}
+.parks {
+  fill: color-mix(in srgb, var(--pb-accent-3) 50%, var(--pb-surface));
+}
+.roadLines {
+  fill: none;
+  stroke: var(--pb-text-muted);
+  stroke-width: 2;
+  stroke-dasharray: 14 12;
+}
+.crossings {
+  fill: var(--pb-text-muted);
+}
+.shadow {
+  fill: var(--pb-bg);
+  opacity: 0.24;
+}
+.object {
+  --model-body: var(--pb-info);
+  --model-roof: var(--pb-surface-2);
+  stroke: color-mix(in srgb, var(--pb-bg) 38%, transparent);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+.house {
+  --model-body: var(--pb-accent-2-fill);
+}
+.tower {
+  --model-body: var(--pb-text-muted);
+}
+.bin {
+  --model-body: var(--pb-info);
+}
+.car {
+  --model-body: var(--pb-accent);
+}
+.body {
+  fill: var(--model-body);
+}
+.side {
+  fill: color-mix(in srgb, var(--model-body) 68%, var(--pb-bg));
+}
+.roof {
+  fill: var(--model-roof);
+}
+.glass {
+  fill: color-mix(in srgb, var(--pb-info) 62%, var(--pb-text));
+  stroke: var(--pb-border);
+  stroke-width: 0.7;
+}
+.dark {
+  fill: var(--pb-bg);
+}
+.light {
+  fill: var(--pb-text-muted);
+}
+.wood {
+  fill: var(--pb-accent-2-fill);
+}
+.leaf {
+  fill: var(--pb-accent-3);
+}
+.leafLight {
+  fill: color-mix(in srgb, var(--pb-accent-3) 70%, var(--pb-text));
+}
+.rim {
+  fill: var(--pb-hole-color);
+  stroke: color-mix(in srgb, var(--pb-hole-color) 75%, var(--pb-text));
+  stroke-width: 2;
+}
+.void {
+  fill: var(--pb-bg);
+}
+.shine {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: 2;
+  opacity: 0.35;
+}
+.shield {
+  fill: none;
+  stroke: var(--pb-text);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+}
+.nativeLabel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  max-width: 58%;
+  pointer-events: none;
+  color: var(--pb-text);
+  font-size: var(--pb-font-body);
+  font-weight: 900;
+  line-height: 1.35;
+  text-align: center;
+  text-shadow: 0 2px 3px var(--pb-bg);
+}
+.name {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.nativeLabel[data-me='true'] {
+  z-index: 2;
+}
+.gain {
+  position: absolute;
+  bottom: calc(100% + var(--pb-space-2));
+  font-size: inherit;
+  white-space: nowrap;
+}
+.frame[data-compact='true'] .nativeLabel {
+  font-size: var(--pb-font-body);
+}
+@media (prefers-reduced-motion: reduce) {
+  .frame * {
+    transition: none;
+    animation: none;
+  }
+}
+:global(:root[data-motion='off']) .frame * {
+  transition: none;
+  animation: none;
+}
