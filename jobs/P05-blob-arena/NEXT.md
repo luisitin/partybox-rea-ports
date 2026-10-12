@@ -9,13 +9,14 @@ This is an upgrade of that existing game. Owner server/content/fixtures already
 match the publicR2 source; three newer client input/lifecycle/layout files must
 be preserved. Owner checkout is read-only and no files there were changed.
 
-Server/client source is frozen for serial semantic mutations. The server horn
-and reading-floor repairs pass21focused cases; the client passes69focused cases.
-Real reducer phase fixtures regenerated after final score timing. Typecheckpassed
-at this snapshot. Serial mutation run exited0: focusedbaseline91/91,20/20semantic
-mutants caught in134913ms. Independent finalbyte/hash check confirmsRESTORED;
-gameimports, staging and capture are released. Fullbaseline is still deferred.
-Do not start the long full baseline until root releases the final clientcamera.
+Server source is frozen. Horn and reading-floor repairs pass21focused cases.
+Real reducer phase fixtures regenerated after final score timing. Serial mutation
+run exited0: focusedbaseline91/91,20/20semantic mutants caught in134913ms.
+Independent finalbyte/hash check confirmsRESTORED; no bugs are currently planted.
+The bounded camera planner passes74focused client cases and typecheck, but the
+native comparison exposed a destination-origin defect after keyed SVG reorder.
+Client agent is actively repairing precommit body/camera sampling and120ms native
+travel/growth. Fullbaseline remains held until root releases final source.
 Original live research finished in one Chrome: CloudFront403, no playable canvas.
 It closed in finally with zero owned PIDs; the browser slot is now free.
 
@@ -33,13 +34,16 @@ original camera source is currently opaque WASM, with historical reverse-client
 formula replaced by stronger pinned raw May1,2015 original archive (.25/965).
 Root fidelity tools replay authored binary packets through its untouched parser/
 renderer, with no network/assets. No new original live-play or audio claim.
-Settledtargets nowmatch; camera temporal behavior is undergoing a measured audit.
-Potentialonce-per-snapshot CSS keyframes can reproduceframe-recursive follow
-withoutper-framegameJS; no new code is allowed during thePLANTED window.
+All three settled targets match. Both negative temporal reports are retained in
+r1-fidelity-before-motion.json and r1-fidelity-before-integration.json. A pure
+planner test pass is insufficient: actual public browser body/camera matrices
+must match original50/100/150ms samples. No per-frame game JS is introduced.
 
-Capture tooling is being rebuilt around actual mounted components/state reduction,
-all63SSRscenarios, actualownerframing and finally-owned singleChrome. Browser
-slot is reserved for rootoriginalfidelityfirst, thenverificationnative/screens.
+Capture tooling uses actual mounted components/state reduction, all63SSRscenarios,
+actualownerframing and finally-owned singleChrome. Root's original browser closed
+with zero owned PIDs. Verification now owns the sole browser slot for a diagnostic
+pilot of native inputs/motion/short-phone/paused-banner fit. It may report source
+drift while the client is repaired; final captures must repeat after source freeze.
 
 Historical154tests/7000simulations/20kills/63captures below do not prove finalR2
 or upcoming repairs. Fresh final checks/source hashes/true original-versus-ours

@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 const directory = fileURLToPath(new URL('.', import.meta.url)),
   root = resolve(directory, '../..');
 const previewFile = join(directory, 'preview.mjs'),
-  captureFile = join(directory, 'capture.mjs');
+  captureFile = join(directory, 'capture-r1.mjs');
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const exited = (child) => child.exitCode !== null || child.signalCode !== null;
 let helper, ready, capture, error;
@@ -61,7 +61,7 @@ try {
     // Error text may be useful; never forward the ready JSON or its owner token.
     helper.stderr.on('data', (chunk) => process.stderr.write(chunk));
   });
-  console.log(`Owned P05 preview ready: pid=${helper.pid}, shell=80/80.`);
+  console.log(`Owned P05 preview ready: pid=${helper.pid}, ordinary phone shell=83.6/0.`);
   capture = spawn(process.execPath, [captureFile], {
     cwd: root,
     windowsHide: true,

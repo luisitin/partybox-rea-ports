@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Blob Arena controller preview</title>
+    <title>Agar.io mounted reducer preview</title>
     <style>
       * {
         box-sizing: border-box;
@@ -19,11 +19,12 @@
         background: var(--pb-bg);
         color: var(--pb-text);
         font-family: var(--pb-font-family);
+        line-height: 1.4;
       }
       #preview-header {
         display: flex;
         align-items: center;
-        height: calc(var(--pb-space-8) + var(--pb-space-4));
+        height: 83.6px;
         padding: 0 var(--pb-space-5);
         border-bottom: calc(var(--pb-space-1) / 4) solid var(--pb-surface-2);
         font-size: var(--pb-font-body);
@@ -32,15 +33,35 @@
       #root {
         display: flex;
         flex-direction: column;
-        height: calc(100dvh - var(--pb-space-8) - var(--pb-space-4));
+        flex: 1;
         min-height: 0;
         width: 100%;
+      }
+      main {
+        height: calc(100dvh - 83.6px);
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+      .capture-banner {
+        position: relative;
+        padding: var(--pb-space-2) var(--pb-space-4);
+        background: var(--pb-surface-2);
+        color: var(--pb-text-muted);
+        text-align: center;
+        font-size: var(--pb-font-caption);
+      }
+      #root[data-host-paused='true'] {
+        opacity: 0.5;
       }
     </style>
   </head>
   <body>
     <header id="preview-header">PB · PREVIEW</header>
-    <main id="root" data-ready="false"></main>
+    <main>
+      <div id="p05-owner-banner" class="capture-banner" hidden></div>
+      <div id="root" data-ready="false"></div>
+    </main>
     <script type="module" src="./interactive.tsx"></script>
   </body>
 </html>

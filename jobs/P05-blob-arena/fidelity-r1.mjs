@@ -200,7 +200,7 @@ try {
     );
     await navigate(`http://127.0.0.1:${port}/jobs/P05-blob-arena/fidelity.html?scene=${scene.id}`);
     const ours = await evaluate(
-      `(()=>{const svg=document.querySelector('[data-camera="personal"]');const r=svg?.getBoundingClientRect();return {center:svg?.dataset.cameraCenter,zoom:Number(svg?.dataset.cameraZoom),viewBox:svg?.getAttribute('viewBox'),width:r?.width,height:r?.height,names:[...svg.querySelectorAll('[data-name-inside]')].map(n=>n.textContent),font: getComputedStyle(svg).fontFamily};})()`,
+      `(()=>{const svg=document.querySelector('[data-camera="personal"]');const r=svg?.getBoundingClientRect();const name=svg.querySelector('[data-name-inside]');return {center:svg?.dataset.cameraCenter,zoom:Number(svg?.dataset.cameraZoom),viewBox:svg?.getAttribute('viewBox'),width:r?.width,height:r?.height,names:[...svg.querySelectorAll('[data-name-inside]')].map(n=>n.textContent),font:name?getComputedStyle(name).fontFamily:null};})()`,
     );
     const oursPng = await send('Page.captureScreenshot', {
       format: 'png',
@@ -225,9 +225,45 @@ try {
     });
     console.log(JSON.stringify({ stage: 'fidelity', scene: scene.id, cameraMatches }));
   }
+  // One received movement/growth update, sampled through both actual renderers.
+  const motionScene = scenes[0];
+  const nextCells = motionScene.cells.map((cell) =>
+    cell.owner === 'p1' ? { ...cell, x: cell.x + 4, mass: cell.mass * 4 } : cell,
+  );
+  await navigate(`http://localhost:${port}/__r1_original?scene=${motionScene.id}`);
+  await evaluate(`window.__referenceMove(${JSON.stringify(nextCells)})`);
+  const referenceMotion = [];
+  for (let frame = 0; frame < 3; frame++)
+    referenceMotion.push(await evaluate('window.__referenceFrames(3)'));
+  await navigate(
+    `http://127.0.0.1:${port}/jobs/P05-blob-arena/fidelity.html?scene=${motionScene.id}`,
+  );
+  await evaluate(
+    `window.__oursMove(${JSON.stringify(nextCells)});document.getAnimations().forEach(a=>a.pause());true`,
+  );
+  report.motion = [];
+  for (const [index, reference] of referenceMotion.entries()) {
+    const ms = (index + 1) * 50;
+    const ours = await evaluate(
+      `(()=>{document.getAnimations().forEach(a=>{a.pause();a.currentTime=${ms};});const svg=document.querySelector('[data-camera="personal"]');const world=svg.querySelector('[data-world-layer]');const m=new DOMMatrix(getComputedStyle(world).transform);const box=svg.getBoundingClientRect();return{x:(box.width/2-m.e)/m.a,y:(box.height/2-m.f)/m.d,zoom:m.a,animations:document.getAnimations().length,matrix:{a:m.a,e:m.e,f:m.f}};})()`,
+    );
+    const centerErrorPx = Math.hypot(ours.x - reference.x, ours.y - reference.y) * reference.zoom;
+    const zoomError = Math.abs(ours.zoom - reference.zoom);
+    report.motion.push({
+      ms,
+      reference,
+      ours,
+      centerErrorPx,
+      zoomError,
+      matched: centerErrorPx < 1 && zoomError < 0.01,
+    });
+    console.log(JSON.stringify({ stage: 'camera-motion', ms, centerErrorPx, zoomError }));
+  }
+  report.motionPassed = report.motion.every((sample) => sample.matched);
   report.afterSources = source();
   report.sourcesStable = sameSources(before, report.afterSources);
-  report.passed = report.pairs.every((pair) => pair.cameraMatches) && report.sourcesStable;
+  report.passed =
+    report.pairs.every((pair) => pair.cameraMatches) && report.motionPassed && report.sourcesStable;
   if (!report.passed) throw new Error('Fidelity camera or source guard failed');
 } catch (error) {
   report.error = error.stack;

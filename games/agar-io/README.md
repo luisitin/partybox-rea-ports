@@ -20,6 +20,14 @@ Fully swallowed players return after three seconds with 24 mass at a seeded safe
 
 Bots use public arena information and the same inputs as humans. Easy bots graze nearby snacks with some variation. Normal bots choose nearby food and flee larger threats. Sharp bots look farther ahead for threats, chase edible rivals, and split only when the projected half can eat its target. All strengths steer away from walls when an escape route would otherwise pin them there.
 
+## Party format
+
+If every piece is swallowed, steering stops and the player watches the live arena and leaderboard for three seconds, then automatically returns with 24 mass and a two-second shield in the same round and world. A return scheduled after the shared horn never starts: the player watches until the round ends. There is no early finish or independent retry button.
+
+A live leader can lose mass or transfer it to a rival before the horn; food replenishes, smaller cells move faster, and splitting exposes edible halves. A returning player can therefore recover and affect the lead. Earlier banked points cannot be taken back, and a sufficiently large late deficit may put first place out of reach; that player still contests the remaining places and influences the live arena. Each remaining round restarts everyone's mass while retaining totals.
+
+One 90-second clock ends the round for everyone. Eliminating a player never ends it. Pause holds the shared clock, and VIP skip banks the settled mass for all seats together. The sum of mass at the three horns wins. The final screen names the winner or tied winners on the TV and phones and shows every total and place; ties share rank and win, with no hidden tie-break.
+
 ## Phases
 
 The shell handles the match-start introduction. The game begins directly in `play`; each later round resets the arena and mass without resetting banked points.

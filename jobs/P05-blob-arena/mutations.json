@@ -850,9 +850,7 @@
       "file": "scoring.ts",
       "from": "Math.floor(totalMass(world, id))",
       "to": "Math.floor(Math.max(0, ...world.cells.filter(c => c.owner === id).map(c => c.mass)))",
-      "tests": [
-        "games/agar-io/__tests__/mechanics.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/mechanics.test.ts"],
       "killed": true,
       "plantedSha256": "91b45609c3853f4705c7f079234fcc6ba539b0bff840209ddce275f2cf9665c0",
       "restoredSha256": "ac986ef8504bcb02990f6d7ebdbf9610aff52145722569d5ad64c7d5b4777bbe",
@@ -886,9 +884,7 @@
       "file": "phases/score.ts",
       "from": "n + (lastPoints[id] ?? 0)",
       "to": "(lastPoints[id] ?? 0)",
-      "tests": [
-        "games/agar-io/__tests__/game.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/game.test.ts"],
       "killed": true,
       "plantedSha256": "2dcb5d6711794c5d9be64fe8daa255f65425559c32285e37b936ef917d85c291",
       "restoredSha256": "cdfa93e677eed307c8b9e7fd7c5af6ce83eed0f1e9b380189d73f754ade0d820",
@@ -994,9 +990,7 @@
       "file": "index.ts",
       "from": "state.round >= 3",
       "to": "state.round >= 2",
-      "tests": [
-        "games/agar-io/__tests__/game.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/game.test.ts"],
       "killed": true,
       "plantedSha256": "2d673086f5e4e67b38638226c59aa7eaca78fceed0a50ae002379bf6dfe1fb82",
       "restoredSha256": "c874858e2bbc51fb596bffc991107ab0ec2a8b51725141c6662436a994ab97db",
@@ -1036,9 +1030,7 @@
       "file": "phases/play.ts",
       "from": "return now >= s.endsAt",
       "to": "return now >= s.endsAt + 1000",
-      "tests": [
-        "games/agar-io/__tests__/game.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/game.test.ts"],
       "killed": true,
       "plantedSha256": "85fabd1a476f7c8d1c286d9f1b90aa2a1f38100297af03d9c94622d0fa39adf8",
       "restoredSha256": "296b9736fc6ee977fb587e4f926538bc53ec197580a463008e8c0edf74b67be0",
@@ -1174,9 +1166,7 @@
       "file": "phases/play.ts",
       "from": "Math.min(ROUND_MS, Math.max(0, now - state.began))",
       "to": "Math.min(ROUND_MS - 100, Math.max(0, now - state.began))",
-      "tests": [
-        "games/agar-io/__tests__/game.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/game.test.ts"],
       "killed": true,
       "plantedSha256": "b04ac3de0d01185b900abdc6f94a9ccb18da62e59d5830c44872fe1c95c9063e",
       "restoredSha256": "296b9736fc6ee977fb587e4f926538bc53ec197580a463008e8c0edf74b67be0",
@@ -1252,9 +1242,7 @@
       "file": "types.ts",
       "from": "export const EAT_RATIO = 1.25;",
       "to": "export const EAT_RATIO = 1.15;",
-      "tests": [
-        "games/agar-io/__tests__/mechanics.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/mechanics.test.ts"],
       "killed": true,
       "plantedSha256": "628a11c0ea8bc17b375ccb70def46575ada49bfa0a4ef039afdcc9024d78d54d",
       "restoredSha256": "c2fe1d239653548d87f42237e0ab7acb7af3e32f111eb7c12aec5bf7adf82d3d",
@@ -1288,9 +1276,7 @@
       "file": "collisions.ts",
       "from": "if (gap >= radius(predator.mass) - radius(victim.mass) * 0.35) continue;",
       "to": "if (gap >= radius(predator.mass) + radius(victim.mass)) continue;",
-      "tests": [
-        "games/agar-io/__tests__/mechanics.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/mechanics.test.ts"],
       "killed": true,
       "plantedSha256": "b6622f6e77749f3115f1631be3a367b70729a57a0b112ae071b90fb8b5cb7006",
       "restoredSha256": "1a7c234072e6172dcafedfa970f610243e54f3a2523f2f4f4494af6b6754a611",
@@ -1330,9 +1316,7 @@
       "file": "collisions.ts",
       "from": "if (time < victim.shieldUntil) continue;",
       "to": "if (false) continue;",
-      "tests": [
-        "games/agar-io/__tests__/mechanics.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/mechanics.test.ts"],
       "killed": true,
       "plantedSha256": "60b248dffc62f020ad075b547679f9c9828910a875564284479a9ccd53d40d8e",
       "restoredSha256": "1a7c234072e6172dcafedfa970f610243e54f3a2523f2f4f4494af6b6754a611",
@@ -1427,9 +1411,7 @@
       "file": "types.ts",
       "from": "export const SPLIT_COOLDOWN_MS = 1000;",
       "to": "export const SPLIT_COOLDOWN_MS = 0;",
-      "tests": [
-        "games/agar-io/__tests__/game.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/game.test.ts"],
       "killed": true,
       "plantedSha256": "d49949a75f5084680917d45d64816cc821befcf35a8eb9d27b1b29ce9885b9b3",
       "restoredSha256": "c2fe1d239653548d87f42237e0ab7acb7af3e32f111eb7c12aec5bf7adf82d3d",
@@ -1555,9 +1537,7 @@
       "file": "types.ts",
       "from": "export const MERGE_MS = 8000;",
       "to": "export const MERGE_MS = 1000;",
-      "tests": [
-        "games/agar-io/__tests__/mechanics.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/mechanics.test.ts"],
       "killed": true,
       "plantedSha256": "eca5d8cfe1a304db551445db9385c6def876900814b671bbb2cebb0c3543145c",
       "restoredSha256": "c2fe1d239653548d87f42237e0ab7acb7af3e32f111eb7c12aec5bf7adf82d3d",
@@ -1591,9 +1571,7 @@
       "file": "world.ts",
       "from": "respawns[id] = time + RESPAWN_MS;",
       "to": "respawns[id] = time + RESPAWN_MS / 2;",
-      "tests": [
-        "games/agar-io/__tests__/mechanics.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/mechanics.test.ts"],
       "killed": true,
       "plantedSha256": "616a16ae690738d5ad40454eaf3140a9c8c50eef6914afae8a0ae87073652719",
       "restoredSha256": "4268a097121b093637a59aa11425937ddd9cbe90a7445f100ff60ca6fd7b0863",
@@ -1627,9 +1605,7 @@
       "file": "spawn.ts",
       "from": "shieldUntil: world.time + shield,",
       "to": "shieldUntil: world.time,",
-      "tests": [
-        "games/agar-io/__tests__/mechanics.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/mechanics.test.ts"],
       "killed": true,
       "plantedSha256": "4eb365f947e7dc23035d11f0e1b01aaeefe7dcec9f503ec1b5d235bf591fbaa2",
       "restoredSha256": "bda508a0862e03452d0dab660e711f4b0739727da059c8f275f21660624bf17e",
@@ -1730,9 +1706,7 @@
       "file": "world.ts",
       "from": "return fresh;",
       "to": "return p;",
-      "tests": [
-        "games/agar-io/__tests__/mechanics.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/mechanics.test.ts"],
       "killed": true,
       "plantedSha256": "0bc559c3c64d1e2d1ba8e1b5c02f7bcf15a5f776d189b50a87588ffb5d3fcc9e",
       "restoredSha256": "4268a097121b093637a59aa11425937ddd9cbe90a7445f100ff60ca6fd7b0863",
@@ -1766,9 +1740,7 @@
       "file": "index.ts",
       "from": "endsAt: state.endsAt + ms",
       "to": "endsAt: state.endsAt",
-      "tests": [
-        "games/agar-io/__tests__/game.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/game.test.ts"],
       "killed": true,
       "plantedSha256": "719adc38a7e21d453ddb0540c046fdfba33cdc4e3979150b3ab907aeeee26035",
       "restoredSha256": "c874858e2bbc51fb596bffc991107ab0ec2a8b51725141c6662436a994ab97db",
@@ -1820,9 +1792,7 @@
       "file": "index.ts",
       "from": "timerMode: 'quiet',",
       "to": "timerMode: 'quiet',\n    ...{ rng: state.rng },",
-      "tests": [
-        "games/agar-io/__tests__/game.test.ts"
-      ],
+      "tests": ["games/agar-io/__tests__/game.test.ts"],
       "killed": true,
       "plantedSha256": "9684d76e7b52ee31ad3f218764333261433252736c4206cfe2c795ddd639e945",
       "restoredSha256": "c874858e2bbc51fb596bffc991107ab0ec2a8b51725141c6662436a994ab97db",

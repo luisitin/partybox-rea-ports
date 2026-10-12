@@ -397,6 +397,8 @@ async function runTests(testFiles = focusedFiles, full = false) {
     elapsedMs: Math.round(performance.now() - runBegan),
     command: windows ? commandFor(args) : ['pnpm', ...args].join(' '),
     sources,
+    sourceBefore: sources,
+    sourceAfter: after,
     sourcesStable: changes.length === 0,
     sourceChanges: changes,
     simulationRunsPerCount: full ? fullRuns : null,
@@ -507,6 +509,11 @@ function restored() {
     sameSources(dependencyHashes, dependencySources())
   );
 }
+function runtimeHashPart(sourceMap) {
+  return Object.fromEntries(
+    Object.entries(sourceMap ?? {}).filter(([path]) => path.startsWith('games/agar-io/')),
+  );
+}
 function checkpoint(stage, complete = false) {
   const sourceRestored = restored();
   const killed = outcomes.filter((item) => item.killed).length;
@@ -529,8 +536,19 @@ function checkpoint(stage, complete = false) {
     expectedMutants: mutations.length,
     completedMutants: outcomes.length,
     sourceFiles: Object.keys(originalGameSources).length,
+    sourceFilesMeaning: 'Original mutation-time runtime count, not final baseline runtime count',
+    mutationRuntimeFileCount: Object.keys(originalGameSources).length,
+    recordedMutationRuntimeHashes: originalGameSources,
+    finalBaselineRuntimeHashes: restoredBaseline
+      ? runtimeHashPart(restoredBaseline.sourceBefore)
+      : null,
+    finalBaselineRuntimeHashesAfter: restoredBaseline
+      ? runtimeHashPart(restoredBaseline.sourceAfter)
+      : null,
     sourceScope:
-      'All game runtime/client/tests/fixtures plus local SDK/shared/dependency configuration; fidelity and docs excluded',
+      'Server/content/manifest and focused rule-test mutation evidence plus SDK/shared/dependency configuration',
+    baselineSourceScope:
+      'Final full-game baseline sourceBefore/sourceAfter includes runtime/client/tests/fixtures and SDK dependencies; docs/fidelity excluded',
     shippedGameFiles: Object.keys(gameSources()).length,
     sourceRestored,
     restored: sourceRestored,
@@ -579,6 +597,18 @@ try {
       ...previous,
       restoredCommand: run.command,
       restoredBaseline: run,
+      sourceFilesMeaning: 'Original mutation-time runtime count, not final baseline runtime count',
+      mutationRuntimeFileCount: previous.mutationRuntimeFileCount ?? previous.sourceFiles,
+      // Older completed mutation runs did not persist their full runtime hash map.
+      // Preserve that absence; current client bytes cannot reconstruct historical bytes.
+      recordedMutationRuntimeHashes: previous.recordedMutationRuntimeHashes ?? null,
+      finalBaselineRuntimeHashes: runtimeHashPart(run.sourceBefore),
+      finalBaselineRuntimeHashesAfter: runtimeHashPart(run.sourceAfter),
+      finalBaselineRuntimeFileCount: Object.keys(runtimeHashPart(run.sourceBefore)).length,
+      sourceScope:
+        'Server/content/manifest and focused rule-test mutation evidence plus SDK/shared/dependency configuration',
+      baselineSourceScope:
+        'Final full-game baseline sourceBefore/sourceAfter includes runtime/client/tests/fixtures and SDK dependencies; docs/fidelity excluded',
       baselineAttempts: [
         ...(previous.baselineAttempts ??
           (previous.restoredBaseline ? [previous.restoredBaseline] : [])),
@@ -705,7 +735,8 @@ try {
   console.error(error);
 } finally {
   try {
-    restoreSources();
+    // Baseline-only never plants source and therefore never owns source writes.
+    if (!baselineOnly) restoreSources();
   } catch (failure) {
     error = [error, failure.message].filter(Boolean).join('; ');
     process.exitCode = 1;

@@ -23,18 +23,6 @@ const server = await createServer({
   plugins: [
     {
       name: 'p05-owned-preview',
-      transformIndexHtml(html) {
-        return html
-          .replace(/<title>[^<]*<\/title>/, '<title>Agar.io mounted controller preview</title>')
-          .replace(
-            '</head>',
-            '<style>#preview-header{height:80px}#root{height:calc(100dvh - 160px)}#preview-footer{height:80px;display:flex;align-items:center;padding:0 var(--pb-space-4);font-size:var(--pb-font-caption);color:var(--pb-text-muted)}</style></head>',
-          )
-          .replace(
-            '</body>',
-            '<footer id="preview-footer">Agar.io · local mounted preview</footer></body>',
-          );
-      },
       configureServer(vite) {
         vite.middlewares.use((req, res, next) => {
           if (req.url !== '/__p05_preview' && req.url !== '/__p05_preview/close') return next();
@@ -52,7 +40,7 @@ const server = await createServer({
                 root,
                 pid: process.pid,
                 token,
-                phoneShell: { top: 80, bottom: 80 },
+                phoneShell: { top: 83.6, bottom: 0, vipTop: 87.6, ownerPin: '0a977' },
               }),
             );
           } else if (req.url === '/__p05_preview/close' && req.method === 'POST') {
