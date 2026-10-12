@@ -3470,6 +3470,11 @@ ight is the :root default above) ────────
         color: var(--pb-text-muted);
       }
 
+      .pb_StandingsStrip_cd4f575c_status {
+        flex: none;
+        color: var(--pb-text-muted);
+      }
+
       .pb_StandingsStrip_cd4f575c_name {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -3639,11 +3644,11 @@ ight is the :root default above) ────────
         -webkit-tap-highlight-color: transparent;
       }
 
-      .pb_Controller_d61e2ba9_direction:active:not(:disabled) {
+      .pb_Controller_d61e2ba9_direction:active:not([aria-disabled='true']) {
         transform: scale(0.94);
       }
 
-      .pb_Controller_d61e2ba9_direction:disabled {
+      .pb_Controller_d61e2ba9_direction[aria-disabled='true'] {
         background: var(--pb-surface-2);
         color: var(--pb-text-muted);
       }
@@ -3861,6 +3866,35 @@ ight is the :root default above) ────────
         font-size: calc(var(--pb-font-body) * 8 / 9);
         line-height: 1.4;
       }
+
+      /* Ranked results emphasize the outcome instead of repeating every board cell. */
+      .pb_Tv_6d37bbeb_racers[data-final='true'] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: minmax(0, 1fr);
+        gap: var(--pb-space-3);
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-final='true'] .pb_Tv_6d37bbeb_racer {
+        padding: var(--pb-space-3) var(--pb-space-4);
+        align-content: center;
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-final='true'] .pb_Tv_6d37bbeb_best strong,
+      .pb_Tv_6d37bbeb_racers[data-final='true'] .pb_Tv_6d37bbeb_score strong {
+        font-size: var(--pb-font-h2);
+        line-height: 1.1;
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-final='true'][data-count='2'],
+      .pb_Tv_6d37bbeb_racers[data-final='true'][data-count='3'],
+      .pb_Tv_6d37bbeb_racers[data-final='true'][data-count='4'] {
+        flex: none;
+        grid-auto-rows: minmax(calc(var(--pb-space-8) * 3), auto);
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-final='true'][data-count='2'] {
+        grid-auto-rows: minmax(calc(var(--pb-space-8) * 4), auto);
+      }
     </style>
     <style>
       @font-face {
@@ -4016,155 +4050,34 @@ ight is the :root default above) ────────
               <span aria-hidden="true">✓</span><b>Final standings</b>
             </div>
           </header>
-          <div class="pb_Tv_6d37bbeb_racers" data-count="8">
+          <div
+            class="pb_Tv_6d37bbeb_racers"
+            data-count="8"
+            data-final="true"
+            role="list"
+            aria-label="Final standings"
+          >
             <article
               class="pb_Tv_6d37bbeb_racer"
+              role="listitem"
               style="--racer-color: var(--pb-player-3)"
               data-winner="true"
             >
               <header class="pb_Tv_6d37bbeb_racerHeader">
                 <b class="pb_Tv_6d37bbeb_rank">#1</b>
                 <h2 title="Mei">Mei</h2>
-                <span aria-label="Winner">Bot ★</span>
+                <span aria-label="Bot · Winner">Bot ★</span>
               </header>
               <div class="pb_Tv_6d37bbeb_summary">
                 <div class="pb_Tv_6d37bbeb_best"><span>Best</span><strong>512</strong></div>
                 <div class="pb_Tv_6d37bbeb_score"><span>Score</span><strong>5348</strong></div>
               </div>
-              <div
-                class="pb_Board_558e3b53_board"
-                role="grid"
-                aria-label="Mei’s board"
-                aria-readonly="true"
-                data-tv-map="true"
-              >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 1, column 2: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 1, column 3: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 1, column 4: 32"
-                    >32</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 2, column 3: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="64"
-                    data-digits="2"
-                    aria-label="Row 2, column 4: 64"
-                    >64</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 3, column 2: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 3, column 3: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 3, column 4: 128"
-                    >128</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 2: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="512"
-                    data-digits="3"
-                    aria-label="Row 4, column 4: 512"
-                    >512</span
-                  >
-                </div>
-              </div>
             </article>
-            <article class="pb_Tv_6d37bbeb_racer" style="--racer-color: var(--pb-player-2)">
+            <article
+              class="pb_Tv_6d37bbeb_racer"
+              role="listitem"
+              style="--racer-color: var(--pb-player-2)"
+            >
               <header class="pb_Tv_6d37bbeb_racerHeader">
                 <b class="pb_Tv_6d37bbeb_rank">#2</b>
                 <h2 title="Diego">Diego</h2>
@@ -4174,137 +4087,12 @@ ight is the :root default above) ────────
                 <div class="pb_Tv_6d37bbeb_best"><span>Best</span><strong>512</strong></div>
                 <div class="pb_Tv_6d37bbeb_score"><span>Score</span><strong>5304</strong></div>
               </div>
-              <div
-                class="pb_Board_558e3b53_board"
-                role="grid"
-                aria-label="Diego’s board"
-                aria-readonly="true"
-                data-tv-map="true"
-              >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 1, column 1: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 1, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 1, column 3: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 1, column 4: 4"
-                    >4</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="64"
-                    data-digits="2"
-                    aria-label="Row 2, column 1: 64"
-                    >64</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 2, column 2: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 2, column 3: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 4: empty"
-                  ></span>
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 3, column 1: 128"
-                    >128</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 3, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 4: empty"
-                  ></span>
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="512"
-                    data-digits="3"
-                    aria-label="Row 4, column 1: 512"
-                    >512</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 4, column 2: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 4: empty"
-                  ></span>
-                </div>
-              </div>
             </article>
-            <article class="pb_Tv_6d37bbeb_racer" style="--racer-color: var(--pb-player-5)">
+            <article
+              class="pb_Tv_6d37bbeb_racer"
+              role="listitem"
+              style="--racer-color: var(--pb-player-5)"
+            >
               <header class="pb_Tv_6d37bbeb_racerHeader">
                 <b class="pb_Tv_6d37bbeb_rank">#3</b>
                 <h2 title="Priya">Priya</h2>
@@ -4314,140 +4102,12 @@ ight is the :root default above) ────────
                 <div class="pb_Tv_6d37bbeb_best"><span>Best</span><strong>512</strong></div>
                 <div class="pb_Tv_6d37bbeb_score"><span>Score</span><strong>5300</strong></div>
               </div>
-              <div
-                class="pb_Board_558e3b53_board"
-                role="grid"
-                aria-label="Priya’s board"
-                aria-readonly="true"
-                data-tv-map="true"
-              >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 2: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 1, column 3: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 1, column 4: 4"
-                    >4</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 2, column 3: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 2, column 4: 16"
-                    >16</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 3, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 3, column 3: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="64"
-                    data-digits="2"
-                    aria-label="Row 3, column 4: 64"
-                    >64</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 4, column 1: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 4, column 2: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 4, column 3: 128"
-                    >128</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="512"
-                    data-digits="3"
-                    aria-label="Row 4, column 4: 512"
-                    >512</span
-                  >
-                </div>
-              </div>
             </article>
-            <article class="pb_Tv_6d37bbeb_racer" style="--racer-color: var(--pb-player-6)">
+            <article
+              class="pb_Tv_6d37bbeb_racer"
+              role="listitem"
+              style="--racer-color: var(--pb-player-6)"
+            >
               <header class="pb_Tv_6d37bbeb_racerHeader">
                 <b class="pb_Tv_6d37bbeb_rank">#4</b>
                 <h2 title="Leo">Leo</h2>
@@ -4457,139 +4117,12 @@ ight is the :root default above) ────────
                 <div class="pb_Tv_6d37bbeb_best"><span>Best</span><strong>512</strong></div>
                 <div class="pb_Tv_6d37bbeb_score"><span>Score</span><strong>5284</strong></div>
               </div>
-              <div
-                class="pb_Board_558e3b53_board"
-                role="grid"
-                aria-label="Leo’s board"
-                aria-readonly="true"
-                data-tv-map="true"
-              >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 1, column 1: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 1, column 2: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 1, column 3: 128"
-                    >128</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="512"
-                    data-digits="3"
-                    aria-label="Row 1, column 4: 512"
-                    >512</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 2, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="64"
-                    data-digits="2"
-                    aria-label="Row 2, column 3: 64"
-                    >64</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 2, column 4: 32"
-                    >32</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 3, column 2: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 3, column 3: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 3, column 4: 8"
-                    >8</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 4, column 2: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 4, column 3: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 4: empty"
-                  ></span>
-                </div>
-              </div>
             </article>
-            <article class="pb_Tv_6d37bbeb_racer" style="--racer-color: var(--pb-player-8)">
+            <article
+              class="pb_Tv_6d37bbeb_racer"
+              role="listitem"
+              style="--racer-color: var(--pb-player-8)"
+            >
               <header class="pb_Tv_6d37bbeb_racerHeader">
                 <b class="pb_Tv_6d37bbeb_rank">#5</b>
                 <h2 title="Jules">Jules</h2>
@@ -4599,140 +4132,12 @@ ight is the :root default above) ────────
                 <div class="pb_Tv_6d37bbeb_best"><span>Best</span><strong>512</strong></div>
                 <div class="pb_Tv_6d37bbeb_score"><span>Score</span><strong>5276</strong></div>
               </div>
-              <div
-                class="pb_Board_558e3b53_board"
-                role="grid"
-                aria-label="Jules’s board"
-                aria-readonly="true"
-                data-tv-map="true"
-              >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 1, column 2: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 1, column 3: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="64"
-                    data-digits="2"
-                    aria-label="Row 1, column 4: 64"
-                    >64</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 2, column 3: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="512"
-                    data-digits="3"
-                    aria-label="Row 2, column 4: 512"
-                    >512</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 3, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 3, column 3: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 3, column 4: 128"
-                    >128</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 4, column 1: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 4, column 2: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 4, column 3: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 4, column 4: 32"
-                    >32</span
-                  >
-                </div>
-              </div>
             </article>
-            <article class="pb_Tv_6d37bbeb_racer" style="--racer-color: var(--pb-player-1)">
+            <article
+              class="pb_Tv_6d37bbeb_racer"
+              role="listitem"
+              style="--racer-color: var(--pb-player-1)"
+            >
               <header class="pb_Tv_6d37bbeb_racerHeader">
                 <b class="pb_Tv_6d37bbeb_rank">#6</b>
                 <h2 title="Ava">Ava</h2>
@@ -4742,140 +4147,12 @@ ight is the :root default above) ────────
                 <div class="pb_Tv_6d37bbeb_best"><span>Best</span><strong>256</strong></div>
                 <div class="pb_Tv_6d37bbeb_score"><span>Score</span><strong>2744</strong></div>
               </div>
-              <div
-                class="pb_Board_558e3b53_board"
-                role="grid"
-                aria-label="Ava’s board"
-                aria-readonly="true"
-                data-tv-map="true"
-              >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 1, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 1, column 2: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 1, column 3: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 1, column 4: 16"
-                    >16</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 2, column 1: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 2, column 3: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 2, column 4: 8"
-                    >8</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 3, column 2: 128"
-                    >128</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="256"
-                    data-digits="3"
-                    aria-label="Row 3, column 3: 256"
-                    >256</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 3, column 4: 4"
-                    >4</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 4, column 1: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 4, column 2: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 4, column 3: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 4, column 4: 2"
-                    >2</span
-                  >
-                </div>
-              </div>
             </article>
-            <article class="pb_Tv_6d37bbeb_racer" style="--racer-color: var(--pb-player-4)">
+            <article
+              class="pb_Tv_6d37bbeb_racer"
+              role="listitem"
+              style="--racer-color: var(--pb-player-4)"
+            >
               <header class="pb_Tv_6d37bbeb_racerHeader">
                 <b class="pb_Tv_6d37bbeb_rank">#7</b>
                 <h2 title="Sam">Sam</h2>
@@ -4885,140 +4162,12 @@ ight is the :root default above) ────────
                 <div class="pb_Tv_6d37bbeb_best"><span>Best</span><strong>128</strong></div>
                 <div class="pb_Tv_6d37bbeb_score"><span>Score</span><strong>2072</strong></div>
               </div>
-              <div
-                class="pb_Board_558e3b53_board"
-                role="grid"
-                aria-label="Sam’s board"
-                aria-readonly="true"
-                data-tv-map="true"
-              >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 1, column 1: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 1, column 2: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 1, column 3: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 1, column 4: 2"
-                    >2</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="64"
-                    data-digits="2"
-                    aria-label="Row 2, column 1: 64"
-                    >64</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 2, column 3: 128"
-                    >128</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 2, column 4: 32"
-                    >32</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 3, column 2: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 3, column 3: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 3, column 4: 2"
-                    >2</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 4, column 1: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 4, column 2: 128"
-                    >128</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 4, column 3: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 4, column 4: 4"
-                    >4</span
-                  >
-                </div>
-              </div>
             </article>
-            <article class="pb_Tv_6d37bbeb_racer" style="--racer-color: var(--pb-player-7)">
+            <article
+              class="pb_Tv_6d37bbeb_racer"
+              role="listitem"
+              style="--racer-color: var(--pb-player-7)"
+            >
               <header class="pb_Tv_6d37bbeb_racerHeader">
                 <b class="pb_Tv_6d37bbeb_rank">#8</b>
                 <h2 title="Nora">Nora</h2>
@@ -5027,138 +4176,6 @@ ight is the :root default above) ────────
               <div class="pb_Tv_6d37bbeb_summary">
                 <div class="pb_Tv_6d37bbeb_best"><span>Best</span><strong>32</strong></div>
                 <div class="pb_Tv_6d37bbeb_score"><span>Score</span><strong>436</strong></div>
-              </div>
-              <div
-                class="pb_Board_558e3b53_board"
-                role="grid"
-                aria-label="Nora’s board"
-                aria-readonly="true"
-                data-tv-map="true"
-              >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 1, column 1: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 1, column 2: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 1, column 3: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 1, column 4: 2"
-                    >2</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 2, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 2, column 3: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 2, column 4: 8"
-                    >8</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 3, column 2: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 3, column 3: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 3, column 4: 16"
-                    >16</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 4, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 4, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 4, column 3: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 4, column 4: 2"
-                    >2</span
-                  >
-                </div>
               </div>
             </article>
           </div>

@@ -50,13 +50,21 @@ export function Tv({ view }: GameTvProps<TvMergeView>): JSX.Element {
           </div>
         )}
       </header>
-      <div className={styles.racers} data-count={rows.length}>
+      <div
+        className={styles.racers}
+        data-count={rows.length}
+        data-final={!playing || undefined}
+        role={playing ? undefined : 'list'}
+        aria-label={playing ? undefined : L('Final standings')}
+      >
         {rows.map((racer) => {
           const slot = view.racers.findIndex((r) => r.id === racer.id);
+          const identity = racer.bot ? L('Bot') : away.has(racer.id) ? L('Away') : '';
           return (
             <article
               className={styles.racer}
               key={racer.id}
+              role={playing ? undefined : 'listitem'}
               style={playerColor(slot)}
               data-winner={view.winners.includes(racer.id) || undefined}
             >
@@ -64,21 +72,17 @@ export function Tv({ view }: GameTvProps<TvMergeView>): JSX.Element {
                 <b className={styles.rank}>#{racer.rank}</b>
                 <h2 title={names[racer.id] ?? racer.id}>{names[racer.id] ?? racer.id}</h2>
                 {view.winners.includes(racer.id) ? (
-                  <span aria-label={L('Winner')}>{racer.bot ? `${L('Bot')} ★` : '★'}</span>
+                  <span aria-label={identity ? `${identity} · ${L('Winner')}` : L('Winner')}>
+                    {identity ? `${identity} ★` : '★'}
+                  </span>
                 ) : racer.status === 'blocked' ? (
                   <span className={styles.status}>
-                    {racer.bot ? `${L('Bot')} · ` : ''}
+                    {identity && (racer.bot || !playing) ? `${identity} · ` : ''}
                     {L('No moves')}
                   </span>
                 ) : (
                   <span className={styles.status}>
-                    {racer.bot
-                      ? L('Bot')
-                      : away.has(racer.id) && playing
-                        ? L('Away')
-                        : playing
-                          ? L('Racing')
-                          : L('Locked')}
+                    {identity || (playing ? L('Racing') : L('Locked'))}
                   </span>
                 )}
               </header>
@@ -92,11 +96,13 @@ export function Tv({ view }: GameTvProps<TvMergeView>): JSX.Element {
                   <strong>{racer.score}</strong>
                 </div>
               </div>
-              <Board
-                board={racer.board}
-                label={L('{name}’s board', { name: names[racer.id] ?? racer.id })}
-                tvMap
-              />
+              {playing ? (
+                <Board
+                  board={racer.board}
+                  label={L('{name}’s board', { name: names[racer.id] ?? racer.id })}
+                  tvMap
+                />
+              ) : null}
             </article>
           );
         })}

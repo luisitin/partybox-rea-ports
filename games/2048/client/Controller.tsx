@@ -31,6 +31,7 @@ export function Controller({
   const left = view.deadline === null ? null : Math.max(0, view.deadline - now);
   const leader = ranked(view.racers)[0];
   const names = Object.fromEntries(view.players.map((p) => [p.id, p.name]));
+  const leaderAway = view.players.find((p) => p.id === leader?.id)?.connected === false;
   const feedbackView = {
     key: `${view.phaseId}:${view.phaseAt}:${view.me.id}`,
     moves: mine?.moves ?? 0,
@@ -164,7 +165,7 @@ export function Controller({
       <p className={styles.hint}>
         {phoneOnly && leader
           ? L('{name} leads · best tile {tile}', {
-              name: names[leader.id] ?? leader.id,
+              name: `${names[leader.id] ?? leader.id}${leader.bot ? ` (${L('Bot')})` : leaderAway ? ` (${L('Away')})` : ''}`,
               tile: leader.best,
             })
           : L('Swipe the board or tap a direction.')}
@@ -176,7 +177,9 @@ export function Controller({
             key={dir}
             type="button"
             className={styles.direction}
-            disabled={!ready}
+            // Retain native keyboard focus while an accepted move settles. The
+            // guarded move handler rejects busy/paused clicks and key presses.
+            aria-disabled={!ready}
             onClick={() => move(dir)}
             aria-label={
               dir === 'left'

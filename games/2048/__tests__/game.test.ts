@@ -170,6 +170,15 @@ describe('2048 race rules', () => {
     expect(move(resumed, 'p1', 'left', T0 + 6500).racers.p1?.moves).toBe(1);
   });
 
+  it('preserves the unspent move cooldown across a pause at the exact boundary', () => {
+    const state = move(withBoard(kit.start(), 'p1', row(2, 2, 4)), 'p1', 'left', T0 + 900);
+    const paused = kit.vip(state, 'pause', T0 + 1000);
+    const resumed = kit.vip(paused, 'resume', T0 + 6000);
+    expect(resumed.racers.p1?.lastAt).toBe(T0 + 5900);
+    expect(move(resumed, 'p1', 'right', T0 + 6049)).toBe(resumed);
+    expect(move(resumed, 'p1', 'right', T0 + 6050).racers.p1?.moves).toBe(2);
+  });
+
   it('preserves a board through refresh and finishes without waiting for disconnected players', () => {
     const state = move(withBoard(kit.start(), 'p1', row(2, 2)), 'p1', 'left');
     const dropped = kit.player(state, 'p1', false);
@@ -262,6 +271,62 @@ describe('2048 race rules', () => {
     expect(returned.phase.id).toBe('play');
     expect(returned.racers.p1).toEqual(state.racers.p1);
     expect(move(returned, 'p1', 'right', T0 + 2000).racers.p1?.moves).toBe(2);
+  });
+
+  it('a blocked racer rejoining an empty resumed room finishes without waiting for offline rivals', () => {
+    const state = move(
+      withBoard(kit.start(), 'p1', [2, 2, 8, 16, 8, 16, 4, 8, 4, 8, 2, 4, 8, 16, 4, 8]),
+      'p1',
+      'left',
+      T0 + 500,
+    );
+    expect(state.racers.p1?.status).toBe('blocked');
+    const paused = kit.vip(state, 'pause', T0 + 1000);
+    const dropped = kit.player(
+      kit.player(paused, 'p1', false, undefined, T0 + 2000),
+      'p2',
+      false,
+      undefined,
+      T0 + 2500,
+    );
+    const resumed = kit.vip(dropped, 'resume', T0 + 6000);
+    expect(resumed.phase.id).toBe('play');
+    expect(kit.player(resumed, 'spectator-x', true, undefined, T0 + 6200)).toBe(resumed);
+    const reveal = kit.player(resumed, 'p1', true, undefined, T0 + 6500);
+    expect(reveal.phase.id).toBe('reveal');
+    expect(reveal.reason).toBe('blocked');
+    expect(reveal.phase.startedAt).toBe(T0 + 6500);
+    expect(reveal.racers).toEqual(resumed.racers);
+    expect(reveal.players.p2?.connected).toBe(false);
+    expect(Object.keys(game.results(kit.timer(reveal))!.scores).sort()).toEqual(['p1', 'p2']);
+  });
+
+  it('a blocked reconnect while paused stays held and closes only when the VIP resumes', () => {
+    const state = move(
+      withBoard(kit.start(), 'p1', [2, 2, 8, 16, 8, 16, 4, 8, 4, 8, 2, 4, 8, 16, 4, 8]),
+      'p1',
+      'left',
+      T0 + 500,
+    );
+    const paused = kit.vip(state, 'pause', T0 + 1000);
+    const dropped = kit.player(
+      kit.player(paused, 'p1', false, undefined, T0 + 2000),
+      'p2',
+      false,
+      undefined,
+      T0 + 2500,
+    );
+    const returned = kit.player(dropped, 'p1', true, undefined, T0 + 3000);
+    expect(returned.phase).toEqual(paused.phase);
+    expect(returned.racers).toEqual(state.racers);
+    expect(kit.timer(returned)).toBe(returned);
+    const reveal = kit.vip(returned, 'resume', T0 + 6000);
+    expect(reveal.phase.id).toBe('reveal');
+    expect(reveal.phase.paused).toBeUndefined();
+    expect(reveal.phase.startedAt).toBe(T0 + 6000);
+    expect(reveal.reason).toBe('blocked');
+    expect(reveal.racers.p1?.board).toEqual(state.racers.p1?.board);
+    expect(reveal.racers.p1?.score).toBe(state.racers.p1?.score);
   });
 
   it('marks the 1200th accepted move blocked while other racers continue', () => {

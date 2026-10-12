@@ -54,6 +54,8 @@ describe('2048 phone surfaces', () => {
     for (const dir of ['left', 'up', 'down', 'right']) {
       expect(html).toContain(`aria-label="Move ${dir}"`);
     }
+    expect(html.match(/aria-disabled="false"/g)).toHaveLength(4);
+    expect(html).not.toContain('disabled=""');
     expect(html).toContain('aria-label="Your board"');
     expect(html).toContain('Swipe the board or tap a direction.');
     expect(html).toContain('Best tile');
@@ -66,7 +68,8 @@ describe('2048 phone surfaces', () => {
     const html = phone(s);
     expect(html).toContain('Paused');
     expect(html).toContain('0:42');
-    expect(html.match(/disabled=""/g)).toHaveLength(4);
+    expect(html.match(/aria-disabled="true"/g)).toHaveLength(4);
+    expect(html).not.toContain('disabled=""');
   });
 
   it('shows blocked racers the live stage and retains score without accepting moves', () => {
@@ -88,6 +91,18 @@ describe('2048 phone surfaces', () => {
     expect(html.match(/<button/g)).toHaveLength(4);
   });
 
+  it('keeps Bot and Away identity on the active phone-only standings', () => {
+    const s = state();
+    s.players['racer-7']!.bot = true;
+    s.players['racer-6']!.connected = false;
+    const html = phone(s, 'racer-0', true);
+    expect(html).toContain('Racer 8 (Bot) leads');
+    const standings = html.split('aria-label="Race standings"')[1]!.split('</ol>')[0]!;
+    expect(standings).toContain('Bot');
+    expect(standings).toContain('Away');
+    expect(html.match(/<button/g)).toHaveLength(4);
+  });
+
   it.each([false, true])(
     'spectators see all eight boards without controls (phoneOnly=%s)',
     (mode) => {
@@ -95,6 +110,7 @@ describe('2048 phone surfaces', () => {
       expect(html.match(/role="grid"/g)).toHaveLength(8);
       expect(html).not.toContain('<button');
       for (const player of PLAYERS) expect(html).toContain(player.name);
+      expect(html).toContain('First to 2048 wins. At the buzzer, highest score wins.');
     },
   );
 
@@ -205,12 +221,12 @@ describe('2048 TV', () => {
     expect(cards[3]).not.toMatch(/Bot|Away/);
   });
 
-  it.each(['play', 'reveal', 'done'])('shows every player board and best tile in %s', (phase) => {
+  it.each(['play', 'reveal', 'done'])('shows every player and best tile in %s', (phase) => {
     const s = state();
     s.phase = { id: phase, startedAt: 0, deadline: phase === 'done' ? null : 180000 };
     const html = renderToStaticMarkup(<Tv view={{ ...game.tvView(s), vip: null }} />);
-    expect(html.match(/role="grid"/g)).toHaveLength(8);
-    expect(html.match(/data-tv-map="true"/g)).toHaveLength(8);
+    expect(html.match(/role="grid"/g) ?? []).toHaveLength(phase === 'play' ? 8 : 0);
+    expect(html.match(/data-tv-map="true"/g) ?? []).toHaveLength(phase === 'play' ? 8 : 0);
     for (const player of PLAYERS) expect(html).toContain(player.name);
     expect(html.match(/Best<\/span>/g)).toHaveLength(8);
     expect(html).not.toContain('<button');

@@ -1,7 +1,7 @@
 // Each mutant starts from the same source snapshot and is restored even if Vitest throws.
 // The focused command exercises only this game's rules tests, sequentially, with one worker.
 import { createHash } from 'node:crypto';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -129,6 +129,7 @@ const results: {
   caught: boolean;
   exitCode: number | null;
   failedTests: string[];
+  failedAssertions: { name: string; messages: string[] }[];
   passedTests: number;
   failedTestCount: number;
   elapsedMs: number;
@@ -175,11 +176,26 @@ interface TestReport {
   numFailedTestSuites: number;
   numPassedTests: number;
   numFailedTests: number;
-  testResults: { assertionResults: { fullName: string; status: string }[] }[];
+  testResults: {
+    assertionResults: { fullName: string; status: string; failureMessages: string[] }[];
+  }[];
+}
+function baselineSources(): Record<string, string> {
+  const collect = (dir: string): string[] =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
+      entry.isDirectory() ? collect(`${dir}/${entry.name}`) : [`${dir}/${entry.name}`],
+    );
+  return Object.fromEntries(
+    collect('games/2048')
+      .filter((path) => path.startsWith('games/2048/client/') || /\.test\.tsx?$/.test(path))
+      .sort()
+      .map((path) => [path, createHash('sha256').update(readFileSync(path)).digest('hex')]),
+  );
 }
 
 function runTests(testArgs = args) {
   const started = performance.now();
+  const sources = testArgs === restoredArgs ? baselineSources() : null;
   rmSync(reportFile, { force: true });
   const run = spawnSync(command, testArgs, {
     encoding: 'utf8',
@@ -193,7 +209,51 @@ function runTests(testArgs = args) {
   } catch {
     /* Failed loading is not a caught rule bug. */
   }
-  return { ...run, report, elapsedMs: Math.round(performance.now() - started) };
+  return {
+    ...run,
+    report,
+    elapsedMs: Math.round(performance.now() - started),
+    finishedAt: new Date().toISOString(),
+    sources,
+    sourcesStable: !sources || JSON.stringify(sources) === JSON.stringify(baselineSources()),
+  };
+}
+type TestRun = ReturnType<typeof runTests>;
+function passedRun(run: TestRun | null): boolean {
+  return (
+    run?.status === 0 &&
+    !!run.report &&
+    run.report.numFailedTests === 0 &&
+    run.report.numPassedTests > 0 &&
+    run.sourcesStable
+  );
+}
+function evidence(run: TestRun) {
+  return {
+    exitCode: run.status,
+    passedTests: run.report?.numPassedTests,
+    passedSuites: run.report?.numPassedTestSuites,
+    files: run.report?.testResults.length,
+    failedTests: run.report?.numFailedTests,
+    failedAssertions: (run.report?.testResults ?? []).flatMap((suite) =>
+      suite.assertionResults
+        .filter((test) => test.status === 'failed')
+        .map((test) => ({
+          name: test.fullName,
+          messages: test.failureMessages,
+        })),
+    ),
+    error: run.error?.message ?? null,
+    elapsedMs: run.elapsedMs,
+    finishedAt: run.finishedAt,
+    sources: run.sources,
+    sourcesStable: run.sourcesStable,
+  };
+}
+function cleanupReport(): void {
+  if (!resolve(reportDir).startsWith(resolve(tmpdir(), 'r1-local-2048-mutations-')))
+    throw new Error('Unexpected mutation report directory');
+  rmSync(reportDir, { recursive: true, force: true });
 }
 let baseline: ReturnType<typeof runTests> | null = null;
 let restoredBaseline: ReturnType<typeof runTests> | null = null;
@@ -208,28 +268,8 @@ function checkpoint(incomplete = true, restored = false): void {
         restoredCommand: [command, ...restoredArgs].join(' '),
         sourceHashes,
         testSources,
-        baseline: baseline
-          ? {
-              exitCode: baseline.status,
-              passedTests: baseline.report?.numPassedTests,
-              passedSuites: baseline.report?.numPassedTestSuites,
-              files: baseline.report?.testResults.length,
-              failedTests: baseline.report?.numFailedTests,
-              error: baseline.error?.message ?? null,
-              elapsedMs: baseline.elapsedMs,
-            }
-          : null,
-        restoredBaseline: restoredBaseline
-          ? {
-              exitCode: restoredBaseline.status,
-              passedTests: restoredBaseline.report?.numPassedTests,
-              passedSuites: restoredBaseline.report?.numPassedTestSuites,
-              files: restoredBaseline.report?.testResults.length,
-              failedTests: restoredBaseline.report?.numFailedTests,
-              error: restoredBaseline.error?.message ?? null,
-              elapsedMs: restoredBaseline.elapsedMs,
-            }
-          : null,
+        baseline: baseline ? evidence(baseline) : null,
+        restoredBaseline: restoredBaseline ? evidence(restoredBaseline) : null,
         expectedMutants: mutants.length,
         completedMutants: results.length,
         caughtMutants: results.filter((result) => result.caught).length,
@@ -245,69 +285,134 @@ function checkpoint(incomplete = true, restored = false): void {
     'utf8',
   );
 }
-checkpoint();
-try {
-  baseline = runTests();
-  if (baseline.status !== 0 || !baseline.report || baseline.report.numFailedTests !== 0) {
-    console.error(baseline.stdout, baseline.stderr);
-    throw new Error('Baseline must pass before mutation testing');
-  }
-  for (const mutant of mutants) {
-    const original = originals.get(mutant.file)!;
-    if (
-      typeof mutant.before === 'string'
-        ? !original.includes(mutant.before)
-        : !mutant.before.test(original)
-    )
-      throw new Error(`Missing mutation target: ${mutant.name}`);
-    try {
-      writeFileSync(
-        resolve(prefix, mutant.file),
-        original.replace(mutant.before, mutant.after),
-        'utf8',
-      );
-      const run = runTests();
-      // Syntax/type/import errors do not count as detected rule violations.
-      const failedTests = (run.report?.testResults ?? []).flatMap((suite) =>
-        suite.assertionResults
-          .filter((test) => test.status === 'failed')
-          .map((test) => test.fullName),
-      );
-      const caught = run.status !== 0 && failedTests.length > 0;
-      const result = {
-        name: mutant.name,
-        file: mutant.file,
-        caught,
-        exitCode: run.status,
-        failedTests,
-        passedTests: run.report?.numPassedTests ?? 0,
-        failedTestCount: run.report?.numFailedTests ?? 0,
-        elapsedMs: run.elapsedMs,
-        error: run.error?.message ?? null,
-      };
-      results.push(result);
-      console.log(JSON.stringify(result));
-    } finally {
-      writeFileSync(resolve(prefix, mutant.file), original, 'utf8');
-      checkpoint();
-    }
-  }
-  restoredBaseline = runTests(restoredArgs);
+if (process.env['MERGE_MUTATION_BASELINE_ONLY'] === '1') {
+  // A test-only repair may refresh the restored baseline without replanting the
+  // already-proven mutations. Require identical affected source and rules tests.
+  const output = resolve('jobs/P09-2048-race/mutations.json');
+  const previous = JSON.parse(readFileSync(output, 'utf8')) as {
+    sourceHashes: Record<string, string>;
+    testSources: Record<string, string>;
+    completedMutants: number;
+    caughtMutants: number;
+    results: { caught: boolean }[];
+    restoredBaseline: object | null;
+    baselineAttempts?: object[];
+  };
   if (
-    restoredBaseline.status !== 0 ||
-    !restoredBaseline.report ||
-    restoredBaseline.report.numFailedTests !== 0
-  )
-    throw new Error('Restored source must pass after mutation testing');
-} finally {
-  for (const [file, source] of originals) writeFileSync(resolve(prefix, file), source, 'utf8');
-  const restored = [...originals].every(
-    ([file, source]) => readFileSync(resolve(prefix, file), 'utf8') === source,
-  );
-  checkpoint(results.length !== mutants.length || restoredBaseline?.status !== 0, restored);
-  rmSync(reportDir, { recursive: true, force: true });
-  if (!restored) throw new Error('Mutation source restoration failed');
+    previous.completedMutants !== mutants.length ||
+    previous.results.length !== mutants.length ||
+    previous.results.filter((result) => result.caught).length < 19 ||
+    JSON.stringify(previous.sourceHashes) !== JSON.stringify(sourceHashes) ||
+    JSON.stringify(previous.testSources) !== JSON.stringify(testSources)
+  ) {
+    cleanupReport();
+    throw new Error('Mutation source/rules-test evidence changed; rerun all mutations');
+  }
+  try {
+    const run = runTests(restoredArgs);
+    const restored = [...originals].every(
+      ([file, source]) => readFileSync(resolve(prefix, file), 'utf8') === source,
+    );
+    const baselineEvidence = evidence(run);
+    const passed = passedRun(run) && restored;
+    writeFileSync(
+      output,
+      `${JSON.stringify(
+        {
+          ...previous,
+          restoredCommand: [command, ...restoredArgs].join(' '),
+          restoredBaseline: baselineEvidence,
+          baselineAttempts: [
+            ...(previous.baselineAttempts ??
+              (previous.restoredBaseline ? [previous.restoredBaseline] : [])),
+            baselineEvidence,
+          ],
+          finishedAt: passed ? run.finishedAt : null,
+          baselineOnlyStartedAt: startedAt,
+          incomplete: !passed,
+          restored,
+          passed,
+        },
+        null,
+        2,
+      )}\n`,
+      'utf8',
+    );
+    console.log(JSON.stringify(baselineEvidence));
+    if (!passed) process.exitCode = 1;
+  } finally {
+    cleanupReport();
+  }
+} else {
+  checkpoint();
+  try {
+    baseline = runTests();
+    if (!passedRun(baseline)) {
+      console.error(baseline.stdout, baseline.stderr);
+      throw new Error('Baseline must pass before mutation testing');
+    }
+    for (const mutant of mutants) {
+      const original = originals.get(mutant.file)!;
+      if (
+        typeof mutant.before === 'string'
+          ? !original.includes(mutant.before)
+          : !mutant.before.test(original)
+      )
+        throw new Error(`Missing mutation target: ${mutant.name}`);
+      try {
+        writeFileSync(
+          resolve(prefix, mutant.file),
+          original.replace(mutant.before, mutant.after),
+          'utf8',
+        );
+        const run = runTests();
+        // Syntax/type/import errors do not count as detected rule violations.
+        const failedTests = (run.report?.testResults ?? []).flatMap((suite) =>
+          suite.assertionResults
+            .filter((test) => test.status === 'failed')
+            .map((test) => test.fullName),
+        );
+        const caught = run.status !== 0 && failedTests.length > 0;
+        const result = {
+          name: mutant.name,
+          file: mutant.file,
+          caught,
+          exitCode: run.status,
+          failedTests,
+          failedAssertions: evidence(run).failedAssertions,
+          passedTests: run.report?.numPassedTests ?? 0,
+          failedTestCount: run.report?.numFailedTests ?? 0,
+          elapsedMs: run.elapsedMs,
+          error: run.error?.message ?? null,
+        };
+        results.push(result);
+        console.log(
+          JSON.stringify({
+            name: result.name,
+            caught: result.caught,
+            failedTestCount: result.failedTestCount,
+            elapsedMs: result.elapsedMs,
+            error: result.error,
+          }),
+        );
+      } finally {
+        writeFileSync(resolve(prefix, mutant.file), original, 'utf8');
+        checkpoint();
+      }
+    }
+    restoredBaseline = runTests(restoredArgs);
+    if (!passedRun(restoredBaseline))
+      throw new Error('Restored source must pass after mutation testing');
+  } finally {
+    for (const [file, source] of originals) writeFileSync(resolve(prefix, file), source, 'utf8');
+    const restored = [...originals].every(
+      ([file, source]) => readFileSync(resolve(prefix, file), 'utf8') === source,
+    );
+    checkpoint(results.length !== mutants.length || !passedRun(restoredBaseline), restored);
+    cleanupReport();
+    if (!restored) throw new Error('Mutation source restoration failed');
+  }
+  const caught = results.filter((result) => result.caught).length;
+  console.log(`${caught}/${mutants.length} mutants caught`);
+  if (caught < 19) process.exitCode = 1;
 }
-const caught = results.filter((result) => result.caught).length;
-console.log(`${caught}/${mutants.length} mutants caught`);
-if (caught < 19) process.exitCode = 1;

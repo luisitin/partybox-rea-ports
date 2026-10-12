@@ -362,6 +362,27 @@ function measure() {
   }
 
   const gameFrame = document.getElementById('game-frame');
+  const firstDirection = gameFrame.querySelector('button[aria-label^="Move "]');
+  let keyboardFocus = null;
+  if (firstDirection) {
+    // Reproduce Chromium's native focus behavior on our own static control,
+    // then prove the actual aria-disabled strategy retains focus while busy.
+    const disabled = firstDirection.disabled;
+    const aria = firstDirection.getAttribute('aria-disabled');
+    firstDirection.disabled = false;
+    firstDirection.focus();
+    firstDirection.disabled = true;
+    const nativeDisableLostFocus = document.activeElement !== firstDirection;
+    firstDirection.disabled = false;
+    firstDirection.focus();
+    firstDirection.setAttribute('aria-disabled', 'true');
+    const ariaDisabledRetainsFocus = document.activeElement === firstDirection;
+    firstDirection.disabled = disabled;
+    if (aria === null) firstDirection.removeAttribute('aria-disabled');
+    else firstDirection.setAttribute('aria-disabled', aria);
+    firstDirection.blur();
+    keyboardFocus = { nativeDisableLostFocus, ariaDisabledRetainsFocus };
+  }
   const boardOverlaps = [...gameFrame.querySelectorAll('article')].flatMap((article) => {
     const board = article.querySelector('[role="grid"]');
     const caption = article.querySelector('p');
@@ -411,6 +432,7 @@ function measure() {
     textFonts,
     directionTargets,
     boardOverlaps,
+    keyboardFocus,
     tvTextBelow32px:
       document.documentElement.dataset.surface === 'tv'
         ? textFonts.filter((text) => text.gameText && text.fontPx < 32)
@@ -554,6 +576,7 @@ try {
       a.outside.length ||
       a.clipping.length ||
       a.boardOverlaps.length ||
+      (a.keyboardFocus && !a.keyboardFocus.ariaDisabledRetainsFocus) ||
       a.tvTextBelow32px.length ||
       a.headerOverlap > 1 ||
       a.directionTargets.some((t) => !t.passes44px),

@@ -151,11 +151,11 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.direction:active:not(:disabled) {
+.direction:active:not([aria-disabled='true']) {
   transform: scale(0.94);
 }
 
-.direction:disabled {
+.direction[aria-disabled='true'] {
   background: var(--pb-surface-2);
   color: var(--pb-text-muted);
 }

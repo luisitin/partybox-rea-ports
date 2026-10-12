@@ -35,7 +35,11 @@ export function RaceStage({
           : L('Final standings');
 
   return (
-    <div className={styles.stage} data-play={playing || undefined}>
+    <div
+      className={styles.stage}
+      data-play={playing || undefined}
+      data-phone-only={phoneOnly || undefined}
+    >
       <header className={styles.header}>
         <h2>{headline}</h2>
         <p>
@@ -115,9 +119,9 @@ export function RaceStage({
       )}
       <p className={styles.footer}>
         {playing
-          ? phoneOnly
-            ? L('Same tiles for every racer. First to the target wins.')
-            : L('Watching the race. First to the target wins.')
+          ? L('First to {target} wins. At the buzzer, highest score wins.', {
+              target: view.target,
+            })
           : view.reason === 'target'
             ? L('First to {target} wins. Reaching the target beats merge score.', {
                 target: view.target,

@@ -3,7 +3,7 @@ import { winners } from './scoring';
 import { REVEAL_MS, TARGET } from './types';
 import type { State } from './types';
 
-/** The frozen TV boards and phone result list are separate screens: hold for the larger one. */
+/** TV summaries and phone standings are separate result screens: hold for the larger one. */
 export function revealReadingMs(state: State): number {
   const winnerIds = winners(state);
   const winning = new Set(winnerIds);
@@ -32,17 +32,25 @@ export function revealReadingMs(state: State): number {
   let personal = 0;
   for (const [id, racer] of Object.entries(state.racers)) {
     const name = wordCount(state.players[id]?.name ?? id);
-    // Rank/name/status, best-tile and score labels/numbers, plus every occupied board cell.
+    const identity = state.players[id]?.bot
+      ? 'Bot'
+      : state.players[id]?.connected === false
+        ? 'Away'
+        : '';
+    const status = winning.has(id)
+      ? `${identity} ★`
+      : racer.status === 'blocked'
+        ? `${identity}${identity ? ' · ' : ''}No moves`
+        : identity || 'Locked';
+    // Final TV cards have no board maps: count their rank, name, status and summaries.
     tv +=
       1 +
       name +
-      wordCount(winning.has(id) ? '★' : racer.status === 'blocked' ? 'No moves' : 'Locked') +
-      wordCount(`Best tile ${Math.max(...racer.board)} Score ${racer.score}`) +
-      racer.board.filter((value) => value !== 0).length;
+      wordCount(status) +
+      wordCount(`Best ${Math.max(...racer.board)} Score ${racer.score}`);
     phone += 1 + name + wordCount(`Best tile ${Math.max(...racer.board)} ${racer.score}`);
     // Phone final rows keep bot identity after the generic host strip is hidden.
     if (state.players[id]?.bot) phone++;
-    if (state.players[id]?.bot && (winning.has(id) || racer.status === 'blocked')) tv++;
     if (winning.has(id)) phone++;
     personal = Math.max(
       personal,

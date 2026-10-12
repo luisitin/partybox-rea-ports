@@ -1,4 +1,4 @@
-// Freeze the race until the full TV boards or phone standings have had their reading time.
+// Freeze the race until the TV summaries or phone standings have had their reading time.
 import { enterPhase, isTimerFor } from '@partybox/game-sdk';
 import type { GameEvent, Transition } from '@partybox/game-sdk';
 import { revealReadingMs } from '../reveal-reading';

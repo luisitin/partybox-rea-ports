@@ -3470,6 +3470,11 @@ ight is the :root default above) ────────
         color: var(--pb-text-muted);
       }
 
+      .pb_StandingsStrip_cd4f575c_status {
+        flex: none;
+        color: var(--pb-text-muted);
+      }
+
       .pb_StandingsStrip_cd4f575c_name {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -3639,11 +3644,11 @@ ight is the :root default above) ────────
         -webkit-tap-highlight-color: transparent;
       }
 
-      .pb_Controller_d61e2ba9_direction:active:not(:disabled) {
+      .pb_Controller_d61e2ba9_direction:active:not([aria-disabled='true']) {
         transform: scale(0.94);
       }
 
-      .pb_Controller_d61e2ba9_direction:disabled {
+      .pb_Controller_d61e2ba9_direction[aria-disabled='true'] {
         background: var(--pb-surface-2);
         color: var(--pb-text-muted);
       }
@@ -3860,6 +3865,35 @@ ight is the :root default above) ────────
       .pb_Tv_6d37bbeb_score strong {
         font-size: calc(var(--pb-font-body) * 8 / 9);
         line-height: 1.4;
+      }
+
+      /* Ranked results emphasize the outcome instead of repeating every board cell. */
+      .pb_Tv_6d37bbeb_racers[data-final='true'] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: minmax(0, 1fr);
+        gap: var(--pb-space-3);
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-final='true'] .pb_Tv_6d37bbeb_racer {
+        padding: var(--pb-space-3) var(--pb-space-4);
+        align-content: center;
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-final='true'] .pb_Tv_6d37bbeb_best strong,
+      .pb_Tv_6d37bbeb_racers[data-final='true'] .pb_Tv_6d37bbeb_score strong {
+        font-size: var(--pb-font-h2);
+        line-height: 1.1;
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-final='true'][data-count='2'],
+      .pb_Tv_6d37bbeb_racers[data-final='true'][data-count='3'],
+      .pb_Tv_6d37bbeb_racers[data-final='true'][data-count='4'] {
+        flex: none;
+        grid-auto-rows: minmax(calc(var(--pb-space-8) * 3), auto);
+      }
+
+      .pb_Tv_6d37bbeb_racers[data-final='true'][data-count='2'] {
+        grid-auto-rows: minmax(calc(var(--pb-space-8) * 4), auto);
       }
     </style>
     <style>
