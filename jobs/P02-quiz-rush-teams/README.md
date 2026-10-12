@@ -1,5 +1,10 @@
 # P02 Kahoot! team mode
 
+BLOCKED: P01 was reopened and replaced the old engine with its canonical
+Lightning Round base. Its updated classic engine/pack schema is still under
+construction. Read BLOCKED.md; PR18 remains draft and requires integration
+against the completed replacement before these checks can release it.
+
 Runner r2-local; branch job/P02-quiz-rush-teams. This extends the public P01
 engine in games/kahoot, renamed per the owner's official name table.
 P01 PR2 is the unmerged prerequisite; the P02 PR is stacked on that branch.

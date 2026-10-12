@@ -1,5 +1,11 @@
 # P02 continuation
 
+BLOCKED on reopened P01; read BLOCKED.md first. Latest public P01 head3586a79
+retires the engine below and is still implementing the required classic mode
+and pack schema. PR18 is CONFLICTING and cannot run synchronized CI. Resume
+only against the published updated canonical P01 implementation; preserve the
+reusable group payload, validator, authored facts, adapters and evidence here.
+
 Runner r2-local; branch job/P02-quiz-rush-teams. P04 is DONE/readyPR1.
 P02's old blocker is lifted by public P01 PR2/branch1c8d264, merged here.
 The P02 PR will stack on job/P01-quiz-rush until that prerequisite merges.

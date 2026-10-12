@@ -1,5 +1,10 @@
 # P02 assumptions
 
+- The earlier P01 DONE assumption is superseded: public3586a79 reopens P01
+  and replaces its standalone engine with the canonical Lightning Round base.
+  Its updated classic mode and pack schema are still being implemented. P02's
+  explicit dependency is blocked until that replacement is public; see BLOCKED.md.
+
 - The old blocker was the absence of any public P01 implementation. P01 is
   now DONE with PR2 and public branch1c8d264. It is still unmerged; P02 reuses
   that branch and will stack its PR on it instead of building another engine.
