@@ -3,10 +3,12 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
 import { Controller } from '../client/Controller';
+import { Arena } from '../client/Arena';
+import arenaStyles from '../client/Arena.module.css';
 import { Tv } from '../client/Tv';
 import { clockText } from '../client/timing';
 import { game } from '../server/index';
-import type { State } from '../server/types';
+import type { State, World } from '../server/types';
 import play from '../fixtures/play.json';
 import score from '../fixtures/score.json';
 import scoreLast from '../fixtures/score-last.json';
@@ -63,6 +65,32 @@ function tv(state: State): string {
 }
 
 const buttons = (html: string): string[] => html.match(/<button\b[^>]*>/g) ?? [];
+
+it('fractional rich food has the diamond cue while ordinary sparks and spent boost retain circles', () => {
+  const world: World = {
+    elapsed: 0,
+    snakes: [],
+    food: [
+      { x: 10, y: 20, value: 0.3 },
+      { x: 30, y: 20, value: 1 },
+      { x: 50, y: 20, value: 1.5 },
+      { x: 70, y: 20, value: 1.957 },
+    ],
+  };
+  const html = renderToStaticMarkup(<Arena world={world} names={new Map()} />);
+  const sparks = (html.match(/<circle\b[^>]*>/g) ?? []).filter((tag) =>
+    tag.includes(`class="${arenaStyles.food}"`),
+  );
+  const rich = (html.match(/<path\b[^>]*>/g) ?? []).filter((tag) =>
+    tag.includes(`class="${arenaStyles.corpseFood}"`),
+  );
+  expect(sparks).toHaveLength(2);
+  expect(sparks[0]).toContain('cx="10"');
+  expect(sparks[1]).toContain('cx="30"');
+  expect(rich).toHaveLength(2);
+  expect(rich[0]).toContain('d="M50 ');
+  expect(rich[1]).toContain('d="M70 ');
+});
 
 describe.each(Object.entries(fixtures))('every surface: %s', (_phase, state) => {
   it('the TV renders the arena and every starting player', () => {
@@ -167,7 +195,7 @@ describe('play feedback and guards', () => {
       world: {
         ...state.world,
         snakes: state.world.snakes.map((snake) =>
-          snake.id === 'p1' ? { ...snake, mass: 8 } : snake,
+          snake.id === 'p1' ? { ...snake, mass: 8, boost: true, safeUntil: 0 } : snake,
         ),
       },
     };
@@ -175,6 +203,11 @@ describe('play feedback and guards', () => {
     expect(buttons(html)[0]).not.toContain('disabled');
     expect(buttons(html)[1]).toContain('disabled');
     expect(html).toContain('Needs size above 8');
+    const source = { ...minimum.world, snakes: [minimum.world.snakes[0]!] };
+    const arena = renderToStaticMarkup(<Arena world={source} names={new Map()} />);
+    expect(arena).not.toContain(`class="${arenaStyles.boost}"`);
+    for (const html of [tv(minimum), phone(minimum, 'p1', 'phone-only')])
+      expect(html).not.toContain('Boosting');
   });
 
   it('a paused spectator retains the stage and a visible pause explanation without controls', () => {

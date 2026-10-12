@@ -2,6 +2,7 @@
 import type { JSX } from 'react';
 import { useT } from '@partybox/game-sdk/ui';
 import type { World } from '../server/types';
+import { MIN_MASS } from '../server/types';
 import { STRINGS } from './strings';
 import { playerStyle } from './timing';
 import styles from './Arena.module.css';
@@ -24,7 +25,7 @@ export function Arena({ world, names, me }: ArenaProps): JSX.Element {
       <rect className={styles.floor} x="0" y="0" width="160" height="100" rx="2" />
       <path className={styles.grid} d="M40 0V100M80 0V100M120 0V100M0 25H160M0 50H160M0 75H160" />
       {world.food.map((food, index) =>
-        food.value >= 2 ? (
+        food.value > 1 ? (
           <path
             key={index}
             className={styles.corpseFood}
@@ -60,7 +61,9 @@ export function Arena({ world, names, me }: ArenaProps): JSX.Element {
             <g
               transform={`translate(${head[0]} ${head[1]}) rotate(${(snake.angle * 180) / Math.PI})`}
             >
-              {snake.boost ? <path className={styles.boost} d="M-3-1.3L-5 0-3 1.3" /> : null}
+              {snake.boost && snake.mass > MIN_MASS ? (
+                <path className={styles.boost} d="M-3-1.3L-5 0-3 1.3" />
+              ) : null}
               <circle className={styles.head} r="1.8" />
               <circle className={styles.eye} cx="0.8" cy="-0.7" r="0.35" />
               <circle className={styles.eye} cx="0.8" cy="0.7" r="0.35" />

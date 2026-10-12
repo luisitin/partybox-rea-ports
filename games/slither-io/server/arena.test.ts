@@ -115,4 +115,48 @@ describe('arena fairness under crowded geometry', () => {
     }
     expect(judged(source)).toEqual(world);
   });
+
+  it('a return finds clear arena space when two long bodies cover the whole spawn ring', () => {
+    const blockers = [0, Math.PI].map((start, i): Snake => ({
+      ...straight(`ring-${i}`, [80, 50], i ? -Math.PI / 2 : Math.PI / 2, MAX_MASS),
+      body: Array.from({ length: MAX_MASS }, (_, j): Point => {
+        const angle = start - (j * Math.PI) / (MAX_MASS - 1);
+        return [80 + 50 * Math.cos(angle), 50 + 28 * Math.sin(angle)];
+      }),
+    }));
+    const clearanceFromSource = (point: Point): number => {
+      let distance = Infinity;
+      for (const blocker of blockers) {
+        for (let i = 1; i < blocker.body.length; i++) {
+          distance = Math.min(
+            distance,
+            pointSegment2(point, blocker.body[i - 1]!, blocker.body[i]!),
+          );
+        }
+      }
+      return distance;
+    };
+    // Verify that this setup blocks every original candidate, rather than one chosen angle.
+    for (let attempt = 0; attempt < 16; attempt++) {
+      const candidate = spawn('returning', 0, 3, STEP_MS, attempt);
+      expect(clearanceFromSource(candidate.body[0]!)).toBeLessThan((2 * RADIUS) ** 2);
+    }
+    const returning: Snake = {
+      ...spawn('returning', 0, 3, 0),
+      body: [],
+      mass: MIN_MASS,
+      respawnAt: STEP_MS,
+    };
+    const source = arena([returning, ...blockers]);
+    const world = judged(source);
+    const fresh = world.snakes.find((s) => s.id === 'returning')!;
+    expect(fresh.respawnAt).toBeNull();
+    expect(fresh.mass).toBe(START_MASS);
+    expect(fresh.body).toHaveLength(START_MASS);
+    // Rivals may crash during movement; compare against their occupied source geometry.
+    for (const point of fresh.body) {
+      expect(clearanceFromSource(point)).toBeGreaterThan((2 * RADIUS) ** 2);
+    }
+    expect(judged(source)).toEqual(world);
+  });
 });

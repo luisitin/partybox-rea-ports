@@ -1,5 +1,6 @@
 // Preserve snake numbers while ranking the score rows; colours never change with rank.
 import type { World } from '../server/types';
+import { MIN_MASS } from '../server/types';
 
 interface Source {
   players: readonly { id: string; name: string; connected: boolean }[];
@@ -39,7 +40,7 @@ export function standingsRows(view: Source, ranked: boolean): StandingRow[] {
         active?.respawnAt === null || active?.respawnAt === undefined
           ? 0
           : Math.max(1, Math.ceil((active.respawnAt - (view.world?.elapsed ?? 0)) / 1000)),
-      boost: active?.boost ?? false,
+      boost: Boolean(active?.boost && active.mass > MIN_MASS),
       protected: (active?.safeUntil ?? 0) > (view.world?.elapsed ?? 0),
     };
   });
