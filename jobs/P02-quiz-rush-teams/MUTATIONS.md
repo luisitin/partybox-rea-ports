@@ -1,17 +1,14 @@
 # P02 canonical mutation campaign
 
 Current canonical `games/kahoot`: 20/20 semantic rule mutations killed, zero
-invalid mutants, an 89-check green pre-baseline and an 89-check green restored
-post-baseline. SHA-256 hashes match every launch-time source file exactly.
+invalid mutants, a green 93-check pre-baseline and a green 93-check restored
+post-baseline. Both children exited 0 with no timeout. SHA-256 hashes match
+every launch-time source file exactly. This fresh campaign includes the current
+HUD, frozen team-accuracy and discussion-budget integration.
 
-The first campaign command exited 1 because its restored post-baseline process
-exceeded the 30-second limit and the five-second Windows taskkill probe also
-timed out. All 89 post-baseline assertions had passed, but that attempt was
-invalid process evidence. Root reran the same five focused suites with a
-120-second process limit: exit 0, 89 passed, no failed assertions. The recovery
-check confirmed unchanged source hashes and attached that genuine retry.
-`mutation-results.json` preserves both post-baseline attempts and the original
-error; the initial timeout is not presented as a clean completed run.
+An earlier 89-check campaign had a restored-baseline process cleanup timeout
+and a genuine passing retry. That historical attempt remains in git history;
+the fresh 93-check campaign supersedes it and required no retry.
 
 Run after source edits settle and the focused behavioral baseline is green:
 
@@ -19,8 +16,9 @@ Run after source edits settle and the focused behavioral baseline is green:
 node jobs/P02-quiz-rush-teams/mutate.mjs
 ```
 
-Each sequential child runs `group-server.test.ts`, `classic-server.test.ts`,
-`scoring.test.ts`, `answer-window.test.ts` and `vip.test.ts` through
+Each sequential child runs `group-server.test.ts`, `group-accuracy.test.ts`,
+`classic-server.test.ts`, `scoring.test.ts`, `answer-window.test.ts` and
+`vip.test.ts` through
 `pnpm vitest run`, with `--pool=threads --maxWorkers=1 --no-file-parallelism`.
 The exact child command and temporary JSON-report path are recorded in
 `mutation-results.json` and each log. The full property and simulation
@@ -58,16 +56,14 @@ Do not edit game source during the campaign.
 The script uses a 30-second child limit and stops on an invalid mutant.
 Load/transform errors, missing reports, process failures and timeouts never
 count as kills. Threshold: at least 19/20 killed, no invalid mutants, green
-pre/post baselines and exact restoration. A clean restored-baseline retry may
-complete process evidence without rerunning valid mutant results; the failed
-attempt must remain recorded. Current recovery used
-`node jobs/P02-quiz-rush-teams/verify-mutation-restoration.mjs` after the actual
-passing test command produced `post-baseline-retry.json`. The recovery script
-checks the report and source hashes; it does not execute tests itself.
+pre/post baselines and exact restoration. The current campaign has both green
+93-check baselines without a timeout or recovery command. Frozen team accuracy,
+presence changes and reveal-only accuracy privacy are included in the focused
+behavioral coverage.
 
 `mutation-logs/*.log` retain bounded stdout/stderr for all campaign children.
 `mutation-results.json` retains behavioral failure names/messages, durations,
-exit codes, source hashes, statuses and both restored-baseline attempts.
+exit codes, source hashes, statuses and the green pre/post baselines.
 Historical standalone mutation results are recorded in HISTORICAL_VERIFY.md
 and git; their different test names and mutant mapping do not release this
 canonical integration.

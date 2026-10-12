@@ -3489,18 +3489,19 @@ button {
   grid-template-rows: 60px calc(var(--pb-font-caption) * 1.4 + var(--pb-space-2)) minmax(0, 1fr);
 }
 [data-surface='tv'] .evidence-shell {
-  grid-template-rows: calc(var(--pb-overscan-y) + var(--pb-font-h2) * 1.4 + var(--pb-space-3)) calc(
+  grid-template-rows:
+    calc(var(--pb-overscan-y) + var(--pb-font-h2) * 1.4 + var(--pb-space-3)) calc(
       var(--pb-font-display) * 1.1 + var(--pb-space-3)
-    ) calc(6px + var(--pb-space-4)) minmax(0, 1fr) calc(
+    )
+    calc(6px + var(--pb-space-4)) minmax(0, 1fr) calc(
       var(--pb-touch) + var(--pb-space-4) + var(--pb-space-2) + var(--pb-space-3)
     );
 }
 [data-layout='results'] .evidence-shell {
-  grid-template-rows: calc(
-      var(--pb-overscan-y) + var(--pb-font-h2) * 1.4 + var(--pb-space-3)
-    ) minmax(0, 1fr) calc(
-      var(--pb-touch) + var(--pb-space-4) + var(--pb-space-2) + var(--pb-space-3)
-    );
+  grid-template-rows:
+    calc(var(--pb-overscan-y) + var(--pb-font-h2) * 1.4 + var(--pb-space-3))
+    minmax(0, 1fr)
+    calc(var(--pb-touch) + var(--pb-space-4) + var(--pb-space-2) + var(--pb-space-3));
 }
 [data-layout='results'] .evidence-main {
   --pb-stage-top: var(--pb-overscan-y);

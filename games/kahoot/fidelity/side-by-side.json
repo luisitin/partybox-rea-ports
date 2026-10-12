@@ -1,0 +1,82 @@
+{
+  "generator": "make_comparison.py",
+  "font": "C:\\Windows\\Fonts\\segoeui.ttf",
+  "bold_font": "C:\\Windows\\Fonts\\segoeuib.ttf",
+  "policy": "Complete source images; no image cropping; proportional LANCZOS scaling.",
+  "comparisons": [
+    {
+      "moment": "1. Team Talk - host screen",
+      "note": "Whole source images. The original has two populated alternatives and question media; our authored question has four alternatives. Compare the prompt, clock, answer count and options placement; this is not a current live original capture.",
+      "images": [
+        {
+          "file": "original/official-2019-team-talk.png",
+          "sha256": "6093b7b75745ce45424eef32d20ebf0dd3985b9af5d5b6e0f7d9a2eef08a218d",
+          "native_pixels": [463, 276],
+          "display_pixels": [1000, 596],
+          "display_origin": [80, 398],
+          "crop": null,
+          "scale_percent": 215.983
+        },
+        {
+          "file": "ours/groups-teams-talk-tv.png",
+          "sha256": "7d68c39a59b637ddf68ff92bcde46022183b36004190987ac4bf347f63cf00a8",
+          "native_pixels": [1920, 1080],
+          "display_pixels": [1000, 562],
+          "display_origin": [1160, 415],
+          "crop": null,
+          "scale_percent": 52.083
+        }
+      ]
+    },
+    {
+      "moment": "2. Team Scoreboard - host screen",
+      "note": "Whole published composite retained: host scoreboard, joined phone and illustrated guests. Its host region is the semantic comparison; the complete composite is not a single TV viewport. Names, question content and PartyBox plumbing differ.",
+      "images": [
+        {
+          "file": "original/official-2021-team-scoreboard-composite.jpg",
+          "sha256": "ff5354d1e065c353d6881c051621db2fe00506f7d6771bf0d32598c10ffe1bc2",
+          "native_pixels": [1024, 576],
+          "display_pixels": [1000, 562],
+          "display_origin": [80, 1393],
+          "crop": null,
+          "scale_percent": 97.656
+        },
+        {
+          "file": "ours/groups-teams-standings-tv.png",
+          "sha256": "ebb4dd14834b98e0e2f683f1699d8c077e183ed3c13fc03a345988ed3e385321",
+          "native_pixels": [1920, 1080],
+          "display_pixels": [1000, 562],
+          "display_origin": [1160, 1393],
+          "crop": null,
+          "scale_percent": 52.083
+        }
+      ]
+    },
+    {
+      "moment": "3. Team Result - phone beside the TV",
+      "note": "Whole original correct/incorrect phone pair versus one complete port phone. Both originals share the same team gain. Compare the personal verdict and team percentage/gain panel; the original pair is not one phone viewport.",
+      "images": [
+        {
+          "file": "original/official-team-phone-receipts.png",
+          "sha256": "10ee6e6fa2842c6ca888fe035d0d7ca0687a5880e9aee68f25dc8d9ee7c8529d",
+          "native_pixels": [986, 904],
+          "display_pixels": [1000, 917],
+          "display_origin": [80, 2373],
+          "crop": null,
+          "scale_percent": 101.42
+        },
+        {
+          "file": "ours/groups-teams-standings-phone-tv.png",
+          "sha256": "e53ec4f39847bac25912f37afec670bfdfa8ac290c8f836bb9d21dd70909d84a",
+          "native_pixels": [390, 844],
+          "display_pixels": [444, 960],
+          "display_origin": [1438, 2352],
+          "crop": null,
+          "scale_percent": 113.744
+        }
+      ]
+    }
+  ],
+  "output_pixels": [2240, 3500],
+  "output_sha256": "d63031ef7e67acbd6c07e331cb48bb2e52594ca3819190ecadc250836e649f71"
+}

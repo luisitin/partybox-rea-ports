@@ -163,7 +163,7 @@ function paint(name: string, source: State, at = source.phase.startedAt + 100): 
     frames.push(frame);
   }
 }
-it('renders every canonical group phase and role, plus paused/locked/long-name flows', () => {
+it('renders every canonical group phase and role, plus paused/locked/long-name flows', async () => {
   frames.length = 0;
   for (const mode of ['teams', 'tv-vote'] as const) {
     const states = played(start(mode, 4));
@@ -198,5 +198,5 @@ it('renders every canonical group phase and role, plus paused/locked/long-name f
     played(start('teams', 2)).find((s) => s.phase.id === 'talk')!,
   );
   expect(frames.length).toBeGreaterThanOrEqual(90);
-  if (process.env.P02_WRITE_EVIDENCE === '1') writeGroupEvidence(frames, fixtures);
+  if (process.env.P02_WRITE_EVIDENCE === '1') await writeGroupEvidence(frames, fixtures);
 });

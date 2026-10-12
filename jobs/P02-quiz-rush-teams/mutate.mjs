@@ -20,6 +20,7 @@ const prefix = 'games/kahoot/server/';
 // Full 1,000-seed property traces run separately; rule mutations need the focused behavioral checks.
 const tests = [
   'group-server.test.ts',
+  'group-accuracy.test.ts',
   'classic-server.test.ts',
   'scoring.test.ts',
   'answer-window.test.ts',

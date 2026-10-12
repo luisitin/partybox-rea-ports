@@ -22,3 +22,12 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm format
       - run: pnpm vitest run games/kahoot --maxWorkers=1
+        env:
+          P02_WRITE_EVIDENCE: '1'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: P02-runtime-evidence
+          path: |
+            jobs/P02-quiz-rush-teams/media/sim-*.json
+            jobs/P02-quiz-rush-teams/media/property-groups.json
+          if-no-files-found: error
