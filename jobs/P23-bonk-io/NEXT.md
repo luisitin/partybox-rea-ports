@@ -1,0 +1,9 @@
+# P23 completed game and convergence
+
+Owner r4-local; branch job/P23-bonk-io; PR #16 https://github.com/luisitin/partybox-rea-ports/pull/16. P07 is DONE with green ready PR #4. All P23 implementation, research, verification and KEEP GOING work is complete.
+
+Game source is frozen at R8 head 02a9dfe. Matching-source CI 38206111467 passed 143 tests in 10 files, 7,000 matches (1,000 at every 2-8 seats), 1,003 traces in 199.80 s. Every game-file hash matches after restoration. All twenty semantic mutations were caught by assertions; clean before/after baselines 134/134 and exact byte hashes restored. A zero-test startup timeout in case 6 was retried alone by the guarded infrastructure mode; first attempt retained. No own mutation/Vitest/browser process remains.
+
+All 46 captures fit; 100 media files (5,037,728 bytes) match their SHA hashes, with active controls at least 88 px. Five finite rounds, stable public identities, phone-only/spectators, pose easing, safe lifecycle holds, live Out standings, seeded target ties and editable-field keyups are covered. No original live play, measured original timing/audio or live socket integration is claimed.
+
+R9 client, R10 server and R11 party/spec audits each found zero justified player-visible gain; streak 3, convergence complete. R10 checkpoint b90923c and claim refresh 5f0e6b5 are published. Push this R11 documentation checkpoint, refresh CLAIMS after pull --rebase and refresh PR body from this job README. The final publication gate is successful scoped CI on the latest PR head; after it passes, mark PR ready and CLAIMS P23 DONE, then take the next eligible job. No further source work remains unless that check finds a real issue. Only own-game tests, one worker, full batches in scoped CI and at most one finally-closed headless browser.

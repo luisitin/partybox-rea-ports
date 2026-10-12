@@ -1,0 +1,133 @@
+# Verification
+
+## Current combined source (R8)
+
+Full [CI 38206111467](https://github.com/luisitin/partybox-rea-ports/actions/runs/38206111467), head `02a9dfe00b1dc1bc78ec520c3babb9830950358a`: **143/143 tests in 10 files**, **199.80 s**. Install, `pnpm typecheck`, `pnpm format` and `PB_RECORD_VERIFY=1 pnpm vitest run games/bonk-io --maxWorkers=1` all passed. The record was collected after local mutation restoration: **every game file matches the tested head**, with LF-normalized SHA-256 hashes in `tools/latest-scoped-ci.json`.
+
+- **7,000 matches / 35,000 rounds:** 1,000 seeds at each player count 2-8, with easy/normal/sharp counts 334/333/333. All finite complete rankings; maximum match 176,920 ms, below the manifest budget of 480,000 ms. Actual bot scheduled spacing is 160/240 ms on 80 ms snapshots, targeting 200 ms buckets.
+- **1,003 property traces / 128,384 events:** seeds 1,2,3 plus 1,000 reproducibly generated seeds. Pure frozen-state replay, finite/bounded motion and scores, pause, reconnect, departure, stale/invalid/outsider input pass.
+- **20 real SDK contracts:** purity, deterministic replay, lifecycle/presence/phone-only combinations, fast/random/idle/skipper scheduling and bounded phase exits pass without changing the SDK's 5,000-event budget.
+- **20/20 semantic mutations caught by failed assertions**, zero compiler-only catches. Clean current baselines before/after pass **134/134**; all original bytes and restoration hashes match. `node jobs/P23-bonk-io/tools/mutate.mjs` first caught 19/20; case 6 timed out at process startup (`ETIMEDOUT`, zero tests/output). `node jobs/P23-bonk-io/tools/mutate.mjs --retry-infrastructure` retried only that unresolved case with a longer startup allowance and caught it. The tool pins restored source hashes and refuses semantic misses as infrastructure retries. `r8-mutation-first-pass.json` and the final case's `firstAttempt` retain the original result. No leftover own test process remains.
+- **46 static browser captures / 100 media files / 5,037,728 bytes:** TV 1920x1080; phones 390x844 with 80 px top/bottom shell reservations, all phases/roles plus stress and lifecycle states. Zero outside/overflow/internal-scroll findings; active controls at least 88 px and captured ball digits at least 16.775 px. Root and independent audits reviewed fit by hand; all exact media hashes match. One isolated cached Chromium per capture, closed in finally; no browser installed or left running. R7/R8 changed strategy/input handling without changing visual layout, so existing captures remain applicable.
+- **Browser motion probe:** body and number layers interpolate together at the exact 40 ms midpoint of an 80 ms received-pose transition. Pause, app motion-off and OS reduced motion use zero duration. This is browser CSS verification, not original live play or a device FPS claim.
+
+| Players | Matches | Median round ms | Maximum match ms | Last standing / draw / timeout | Shared match wins |
+| ------- | ------- | --------------- | ---------------- | ------------------------------ | ----------------- |
+| 2       | 1,000   | 26,120          | 176,200          | 4,957 / 43 / 0                 | 16                |
+| 3       | 1,000   | 25,880          | 173,880          | 4,966 / 34 / 0                 | 367               |
+| 4       | 1,000   | 26,440          | 176,120          | 4,967 / 33 / 0                 | 357               |
+| 5       | 1,000   | 26,640          | 175,880          | 4,969 / 31 / 0                 | 338               |
+| 6       | 1,000   | 26,760          | 176,440          | 4,966 / 34 / 0                 | 340               |
+| 7       | 1,000   | 26,920          | 176,600          | 4,968 / 32 / 0                 | 321               |
+| 8       | 1,000   | 27,000          | 176,920          | 4,950 / 50 / 0                 | 353               |
+
+Current minimum published alive y at 2-8 seats: 182.9619, 160.5004, 94.9622, 119.4815, 113.2725, 80.5817, 38.3014. No clipped or fully off-top pose occurred in this changed-bot batch. The R5 six-seat partial clip at y17.6074 is historical verified evidence from that strategy revision; the fully off-top captures are authored legal stress states. Physics bounds and the identity-marker regression remain unchanged. Per-seat wins are observations, not an equal-win-rate guarantee or controlled causal test.
+
+Root used only own-game tests with one worker; no whole-suite/browser run. Local R8 client command `pnpm.cmd vitest run games/bonk-io/client --maxWorkers=1` passed 68/68 in four files, 2.99 s; `pnpm.cmd typecheck` passed. New combined full CI supplies current all-size coverage. The job workflow is Ubuntu, read-only, 30-minute timeout, actions/* only and paths-scoped. Original play/audio/timing and live WebSocket/remount behavior are unavailable and explicitly unclaimed in ASSUMPTIONS.md.
+
+Three consecutive independent post-fix KEEP GOING rounds (R9 client, R10 server lifecycle/strategy, R11 party/spec) found no further material player gain. Each checkpoint was pushed and its claim refreshed after pull --rebase. LOOP.md retains all five candidates per round. Final documentation-head CI is the remaining publication gate; it does not substitute for the matching-game-source evidence above.
+
+## Earlier checks and milestone history
+
+The following records preserve commands, failures, observations and pending statements as they stood at each milestone. Current status and hashes are above; older results do not establish changed-source behavior.
+
+Install once completed during P07: `corepack.cmd enable`; `pnpm.cmd install`. Windows script policy requires cmd shims. P23 adds no dependency.
+
+Root ran only `games/bonk-io` tests with one worker. No whole-suite tests/browser run. Expanded all-size simulations run in scoped CI after local pilots to preserve desktop CPU. Baseline through R5 full batches are green. R5 current-source mutations pass; further gameplay changes require fresh evidence before readiness or convergence.
+
+## Checks and contracts
+
+- `PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/bonk-io/__tests__/artifacts.test.tsx --maxWorkers=1`: passed and generated four real phase fixtures from a seeded eight-bot match. The first build incorrectly saved the first-round score fixture; the real SDK rejected it. It now saves the fifth-round verdict, whose timer produces the exact done fixture.
+- `PB_SIM_GAMES=3 PB_RECORD_VERIFY=1 pnpm.cmd vitest run games/bonk-io --maxWorkers=1`: **99/99 tests in 10 files**, 51.75 s. Includes 1,003 property traces and 21 full seeded pilot matches, three per player count. Historical local-pilot.log and simulation-results retain this partial-batch provenance; they do not count as the required full batch.
+- `pnpm.cmd vitest run games/bonk-io/__tests__/contract.test.ts --maxWorkers=1 --reporter=verbose`: **20/20 real SDK contracts**, 1.80 s, including purity, deterministic replay, fuzz/stale events, all presence/phone-only combinations and fast/random/idle/skipper schedulers.
+- Latest focused build: `PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/bonk-io/server games/bonk-io/client games/bonk-io/__tests__/game.test.ts games/bonk-io/__tests__/contract.test.ts games/bonk-io/__tests__/artifacts.test.tsx --maxWorkers=1`: **97/97 in 8 files**, 4.24 s. Includes neutral-release timestamps, optimized symmetric contacts, truthful skipped-draw copy, modified-key rejection, all hold-release lifecycle paths and regenerated artifacts.
+- `pnpm.cmd typecheck` and `pnpm.cmd format`: passed after shortening an over-limit manifest instruction and correcting two test-only type annotations. No policy or dependency changes.
+- R1: `PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/bonk-io/client games/bonk-io/__tests__/artifacts.test.tsx --maxWorkers=1`: **46/46 in 5 files**, 2.21 s; `pnpm.cmd typecheck` passed. Five new regressions cover the final-round countdown, differing round/match winners, draw/shared verdict context and immediate Jump feedback/release.
+- R1 full [CI 38200031558](https://github.com/luisitin/partybox-rea-ports/actions/runs/38200031558), head `ef6012e041319257014a393214e350d415149dfb`: **110/110 in 10 files**, 107.28 s, all 7,000 matches and 1,003 traces passed. `tools/r1-scoped-ci.json` retains exact evidence; subsequent R2 sources differ as its hashes correctly report.
+- R2 focused artifact/server/client/game/contract command above: **111/111 in 8 files**, 11.39 s; `pnpm.cmd typecheck` passed. Six new server regressions cover nongrid release barriers, bounded neutral releases, long paused drops and permanent departure; three SSR regressions distinguish final/earlier-round elimination and retired seats. Mutation definitions 16/17 follow the changed call signatures; fresh mutation/full-CI results remain pending.
+- R2 full [CI 38200726369](https://github.com/luisitin/partybox-rea-ports/actions/runs/38200726369), head `5ef7f1bb90127051f965cd34f411a8c1b8a2f0f5`: **119/119 in 10 files**, 148.37 s, all 7,000 matches and 1,003 traces passed. `tools/r2-scoped-ci.json` retains historical source-hashed evidence.
+- R3 rejected 40 ms snapshot candidate: own-game one-match-per-size/property pilot **123/127 passed**, 46.94 s. Three real SDK schedulers exceeded the unchanged 5,000-event budget; one SSR assertion incorrectly counted an accessibility label as visible text. Exact 200 ms bot marks still exceeded the eight-seat event budget and risked missing asynchronous host samples. Final code uses 80 ms snapshots and decision buckets; no SDK contract, deadline cap or event limit was changed.
+- R3 final local command: `PB_SIM_GAMES=1 PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/bonk-io/server games/bonk-io/client games/bonk-io/__tests__/game.test.ts games/bonk-io/__tests__/contract.test.ts games/bonk-io/__tests__/artifacts.test.tsx games/bonk-io/__tests__/simulation.test.ts --maxWorkers=1`: **128/128 in 9 files**, 17.26 s. Includes all 20 real SDK contracts and seven full pilot matches at 2–8 seats. `pnpm.cmd typecheck` passed. Full R3 properties/simulations will run in scoped CI.
+
+## Simulations and properties
+
+The pilot played **21 matches / 105 rounds**: 104 last-standing wins, one draw, no timeout. Per-count median round ms: 2=23,440; 3=26,440; 4=26,600; 5=26,000; 6=27,200; 7=27,120; 8=27,440. Maximum whole match 175,400 ms, below the manifest estimate × 2 (480,000 ms). Every result retained all seats with finite points/ranks. These are pilot observations, not the required 1,000-per-count result.
+
+Property source runs seeds 1,2,3 plus 1,000 reproducibly generated seeds; each trace varies 2–8 seats and 128 events. It checks frozen input/state purity, paired replay, finite bounded physics, 0–5 scores, exact pause shifts, temporary drops, permanent departure churn, invalid input, outsiders and stale timers. The local full property check passed inside the 99-test pilot. CI writes and prints the exact trace count/event total.
+
+Full baseline [CI 38199152567](https://github.com/luisitin/partybox-rea-ports/actions/runs/38199152567), head `5ecd63010ce0b37a390e17760e0e97f132df1056`: **105/105 tests in 10 files**, 190.79 s. **7,000 full matches / 35,000 rounds** passed, with 1,000 seeds per count and easy/normal/sharp counts 334/333/333. **1,003 property traces / 128,384 events** passed. `tools/initial-scoped-ci.json` retains exact results and source hashes; its false current-head flag correctly identifies the subsequent client changes, not a test failure.
+
+| Players | Matches | Median round ms | Maximum match ms | Last standing / draw / timeout | Shared match wins |
+| ------- | ------- | --------------- | ---------------- | ------------------------------ | ----------------- |
+| 2       | 1,000   | 26,240          | 178,000          | 4,951 / 49 / 0                 | 15                |
+| 3       | 1,000   | 25,840          | 174,400          | 4,974 / 26 / 0                 | 359               |
+| 4       | 1,000   | 26,400          | 176,200          | 4,976 / 24 / 0                 | 355               |
+| 5       | 1,000   | 26,600          | 176,200          | 4,963 / 37 / 0                 | 291               |
+| 6       | 1,000   | 26,760          | 177,200          | 4,966 / 34 / 0                 | 320               |
+| 7       | 1,000   | 26,920          | 177,200          | 4,953 / 47 / 0                 | 343               |
+| 8       | 1,000   | 27,040          | 177,400          | 4,959 / 41 / 0                 | 349               |
+
+All maximum whole matches are below 480,000 ms. Every match produces finite retained-seat points/ranks. Timed platform pressure finishes ordinary rounds before the hard cap; ties at match level remain intentional after five rounds.
+
+## Screens
+
+R3 full [CI 38202130126](https://github.com/luisitin/partybox-rea-ports/actions/runs/38202130126), head `4ad90adc18a7653d386f59c8cafb340ed6c49cdc`: **129/129 in 10 files**, 188.75 s, 7,000 matches and 1,003 traces passed. All reports show 80 ms snapshots, 200 ms decision targets and actual 160/240 ms spacing. Median rounds ms: 2=26,120; 3=25,880; 4=26,520; 5=26,560; 6=26,760; 7=26,920; 8=27,040. Maximum match 176,840 ms, below 480,000. `tools/r3-scoped-ci.json` retains historical evidence; subsequent UI/instrumentation changes correctly differ in its hashes.
+
+R4 focused artifact/server/client/game/contract command above: **124/124 in 8 files**, 10.00 s; typecheck passed. Three new SVG regressions cover above-arena alive/partial/crowded identity, no dead revival and final number-layer order. Two authored stress captures added: **44/44 fit**, controls at least **88 px**, root manually reviewed both markers. Natural launch frequency remains unclaimed pending the minimum published alive-y metric. Current-source mutations/final CI remain pending.
+
+`node jobs/P23-bonk-io/tools/capture.mjs`: **42 PNG screens**, TV 1920×1080 and phones 390×844 with 80 px shell reservations at both ends. Every phase includes local/stage/remote/spectators; stress variants cover out, pause, permanent departure, adjacent heavy balls, long names, a real host-skipped draw with eight survivors and a true idle round at 20 seconds with shrinking platforms. R2 adds three true fifth-round out screens collected from the same seeded match, rather than changing a first-round fixture's number. One isolated cached Chromium, closed in finally; no browser installed, no server remains.
+
+R2 fresh fit report: **zero overflow, outside elements or internal scrolling**; smallest active control **88 px**, smallest captured ball digit **16.775 px**. Initial independent review covered all 39 captures through 28 unique groups and three contact sheets. Root manually reviewed the larger long-name final standings, final TV context and three added fifth-round out screens; a second independent review checked the recaptured groups and identified the final-out correction. Ranked phone text increased 14 to 18 px and rows 28 to 40 px. SHA256SUMS covers every final media byte; media remains below 10 MB.
+
+R3 recaptured **42/42 fits**, controls at least **88 px**; live/ready roster text also now 18 px/40 px rows. Root reviewed the phone-only spectator and shrinking-platform controls with their new round context. `motion-report.json` comes from the same single finally-closed browser: the CSS transition is exactly **0.08 s**, both layers move from x=499.565 through the 40 ms midpoint x=519.565 to x=539.565, with identical y=372. Pause, app motion-off and OS reduced motion each report **0 s**. This verifies browser interpolation, not original live gameplay or a device frame-rate measurement. 92 media files are about 4.57 MB; all final bytes are hashed after formatting.
+
+## Mutation check
+
+`node jobs/P23-bonk-io/tools/mutate.mjs`: **20/20 caught by failed assertions**, no compiler-only catches. Clean baselines before/after passed **90/90**. Each replacement was unique, compile-valid and applied serially; every original byte was restored in finally and hashes matched. mutation-results.json retains exact source replacements, failing test names/messages and restoration hashes. No secret gameplay data exists; the visibility/identity cases target stage omission and spectator impersonation rather than inventing hidden information.
+
+1. Movement acceleration is disabled - caught.
+2. Gravity is disabled so a jump never lands - caught.
+3. A grounded normal jump has no impulse - caught.
+4. Heavy gains a higher jump instead of trading mobility away - caught.
+5. Heavy loses its bump resistance and impulse transfer advantage - caught.
+6. Shrinking starts ten seconds late - caught.
+7. The bottom fall plane kills balls inside the arena and spares fallen balls - caught.
+8. A neutral release fails to record its time allowing an older hold to override it - caught.
+9. The physics control helper accepts a control older than its latest accepted input - caught.
+10. The sole surviving ball is denied its round win - caught.
+11. Survivors at the exact hard cap lose their declared shared point - caught.
+12. Entering the same score verdict twice double credits the win - caught.
+13. Round five starts an illegal sixth round instead of ending the match - caught.
+14. A timer for another phase instance advances the live physics beat - caught.
+15. Permanent leave and kick stop being recorded for later rounds - caught.
+16. Temporary disconnect keeps movement and Heavy held - caught.
+17. Pause retains held movement and Heavy after the room resumes - caught.
+18. Resume moves the end clock but leaves the physics start unshifted - caught.
+19. Phone only players lose their public arena stage during play - caught.
+20. Spectators inherit the first player identity and role instead of watching - caught.
+
+## CI and convergence
+
+R4 full [CI 38203038238](https://github.com/luisitin/partybox-rea-ports/actions/runs/38203038238), head `58af779eaffec4a0fc5772243f7de7bed3774750`: **132/132 in 10 files**, 191.53 s, all 7,000 matches and 1,003 traces passed. Minimum published alive y at 2–8 seats: 182.9619, 161.0472, 87.5134, 111.1881, **17.6074**, 95.6862, 63.473. The six-seat value clips an ordinary radius-28 pose at the upper edge; no fully off-top bot pose was observed. `tools/r4-scoped-ci.json` retains exact results; R5 adds the seed/round/time/seat of the minimum for replay.
+
+R5 local `PB_BUILD_ARTIFACTS=1 pnpm.cmd vitest run games/bonk-io/client games/bonk-io/__tests__/artifacts.test.tsx --maxWorkers=1`: **65/65 in 5 files**, 5.42 s. After adding the browser-online release path, `pnpm.cmd vitest run games/bonk-io/client --maxWorkers=1`: **64/64 in 4 files**, 3.16 s; typecheck passed. Eight regressions cover view/session disconnect, identity-safe release, no automatic hold restart and local/stage out-to-next-round roster/control transitions. **46/46 captures fit**, controls at least **88 px**; root reviewed stage out/live standings and disconnected preview. Two new disconnect screens come from actual reducer player events. No live socket/remount integration claim; see ASSUMPTIONS #14. R5 full CI and current-source mutations are recorded below.
+
+P23 workflow uses read-only permissions, Ubuntu, 30-minute limit and actions/* only. It installs, typechecks, formats and runs only this game, then prints exact generated simulation/property evidence. Draft [PR #16](https://github.com/luisitin/partybox-rea-ports/pull/16) has successful baseline through R5 CI. Further bot-fairness review is active, so it remains draft until that change is verified. Post-green iterations go in LOOP.md; no convergence claimed yet.
+
+## R5 completed evidence and R6 review
+
+R5 full [CI 38204011353](https://github.com/luisitin/partybox-rea-ports/actions/runs/38204011353), head `33922278ed74f801614743d8c8b5610b3a204c0b`: **137/137 tests in 10 files**, 186.04 s; **7,000 matches / 35,000 rounds** and **1,003 traces / 128,384 events** passed. This is the actual log count, replacing the earlier estimate of 140. `tools/latest-scoped-ci.json` records matching hashes for every game file at verification. Two through eight seats each ran 1,000 seeds with easy/normal/sharp counts 334/333/333. Median round ms: 26,120; 25,880; 26,520; 26,560; 26,760; 26,920; 27,040. Maximum whole match: 176,840 ms, below 480,000. The six-seat minimum alive pose is seed 735, round 1, checked 20,320 ms, player p6, x 537.8275, y 17.6074; no fully off-top bot pose was observed.
+
+Fresh `node jobs/P23-bonk-io/tools/mutate.mjs`: **20/20 caught by failed assertions**, zero compiler-only catches. Clean baselines before/after are **128/128**. All original bytes and hashes match after restoration. `tools/mutation-results.json` retains every replacement, assertion and restored hash; the earlier 90-test mutation baseline above is historical.
+
+R6 independently reviewed all **46 captures** through 35 distinct groups, plus client and fit/motion sources. No uncovered material visual issue: above-arena identities, reconnect releases, eliminated/departed standings and final-round copy are covered. Jump availability and long TV names are cosmetic refinements with existing instructions, numbers and full phone names. Pause status belongs to the documented host envelope/overlay (GAME_CONTRACT line 174; DESIGN_SYSTEM lines 257-260). **100 media files, 5,037,728 bytes**, all hashed; zero overflow/outside/internal-scroll findings and controls at least 88 px. The isolated browser is closed. This round has zero player-visible gain; a subsequent bot target-tie finding is being handled separately.
+
+## R7 bot target ties
+
+`PB_SIM_GAMES=1 pnpm.cmd vitest run games/bonk-io/__tests__/game.test.ts games/bonk-io/__tests__/contract.test.ts games/bonk-io/__tests__/simulation.test.ts --maxWorkers=1`: **58/58 tests in three files**, 7.43 s, seven whole matches at 2-8 seats and all 20 SDK contracts. Two added regressions cover all three strengths, 64 seeds, exact/rounding-sized ties and reversed storage order, exact replay, exclusion of a genuinely farther rival and no RNG consumption before bucket eligibility. Both target directions occur in each of the 12 tied cases; the earlier first-rival implementation had only one direction per order. New full CI and serial mutations must verify frozen R7 source; older R5 evidence is retained in `r5-scoped-ci.json` and `r5-mutation-results.json`.
+
+R7 full [CI 38205694524](https://github.com/luisitin/partybox-rea-ports/actions/runs/38205694524), head `da8adb3e6ac15b5c89c0a66cbf1a13199bc04055`: **139/139 in 10 files**, 183.57 s, **7,000 matches / 35,000 rounds** and **1,003 traces / 128,384 events** passed. `pnpm.cmd typecheck` and `pnpm.cmd format` passed locally at R7. New per-count median round ms: 26,120; 25,880; 26,440; 26,640; 26,760; 26,920; 27,000. Maximum whole match is 176,920 ms. Three-seat round wins are 1,671/1,651/1,644 (range 27; earlier range 163); five-seat wins 963/976/966/1,051/1,013 (range 88; earlier range 162). These are descriptive changed seeded outcomes, not a controlled causal attribution or equal-win-rate proof. All server/spec hashes match that head; `r7-scoped-ci.json` correctly reports three differing R8 client files, so it is historical for the combined source.
+
+## R8 editable key release
+
+`pnpm.cmd vitest run games/bonk-io/client --maxWorkers=1`: **68/68 in four files**, 2.99 s. Four new regressions cover keyboard holds released after focus metadata becomes INPUT/TEXTAREA/SELECT/contentEditable, ignored new editable presses and a separate pointer source kept until its own release. Production accepts keyup while preserving the field's normal default behavior. No visible layout change, so the already hashed 46 captures and fit/motion evidence remain applicable. Combined-source full CI and twenty serial mutations are required next.

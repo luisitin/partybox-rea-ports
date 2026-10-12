@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Movement acceleration is disabled",
+    "file": "games/bonk-io/server/world.ts",
+    "from": "NORMAL_ACCELERATION = 480",
+    "to": "NORMAL_ACCELERATION = 0"
+  },
+  {
+    "name": "Gravity is disabled so a jump never lands",
+    "file": "games/bonk-io/server/world.ts",
+    "from": "GRAVITY = 950",
+    "to": "GRAVITY = 0"
+  },
+  {
+    "name": "A grounded normal jump has no impulse",
+    "file": "games/bonk-io/server/world.ts",
+    "from": "NORMAL_JUMP = 360",
+    "to": "NORMAL_JUMP = 0"
+  },
+  {
+    "name": "Heavy gains a higher jump instead of trading mobility away",
+    "file": "games/bonk-io/server/world.ts",
+    "from": "HEAVY_JUMP = 230",
+    "to": "HEAVY_JUMP = 460"
+  },
+  {
+    "name": "Heavy loses its bump resistance and impulse transfer advantage",
+    "file": "games/bonk-io/server/world.ts",
+    "from": "HEAVY_MASS = 4",
+    "to": "HEAVY_MASS = 1"
+  },
+  {
+    "name": "Shrinking starts ten seconds late",
+    "file": "games/bonk-io/server/world.ts",
+    "from": "SHRINK_MS = 15_000",
+    "to": "SHRINK_MS = 25_000"
+  },
+  {
+    "name": "The bottom fall plane kills balls inside the arena and spares fallen balls",
+    "file": "games/bonk-io/server/world.ts",
+    "from": "ball.y - BALL_RADIUS > H",
+    "to": "ball.y - BALL_RADIUS < H"
+  },
+  {
+    "name": "A neutral release fails to record its time allowing an older hold to override it",
+    "file": "games/bonk-io/server/world.ts",
+    "from": "controlAt: ms",
+    "to": "controlAt: b.controlAt"
+  },
+  {
+    "name": "The physics control helper accepts a control older than its latest accepted input",
+    "file": "games/bonk-io/server/world.ts",
+    "from": "ms < ball.controlAt",
+    "to": "false"
+  },
+  {
+    "name": "The sole surviving ball is denied its round win",
+    "file": "games/bonk-io/server/scoring.ts",
+    "from": "survivors === 1 || timeout",
+    "to": "survivors === 0 || timeout"
+  },
+  {
+    "name": "Survivors at the exact hard cap lose their declared shared point",
+    "file": "games/bonk-io/server/phases/score.ts",
+    "from": "state.checked >= state.endsAt - state.began",
+    "to": "state.checked > state.endsAt - state.began"
+  },
+  {
+    "name": "Entering the same score verdict twice double credits the win",
+    "file": "games/bonk-io/server/phases/score.ts",
+    "from": "state.phase.id === 'score' || state.phase.id === 'done'",
+    "to": "state.phase.id === 'done'"
+  },
+  {
+    "name": "Round five starts an illegal sixth round instead of ending the match",
+    "file": "games/bonk-io/server/index.ts",
+    "from": "state.round >= state.rounds",
+    "to": "state.round > state.rounds"
+  },
+  {
+    "name": "A timer for another phase instance advances the live physics beat",
+    "file": "games/bonk-io/server/phases/play.ts",
+    "from": "isTimerFor(state, event)",
+    "to": "(isTimerFor(state, event) || event.type === 'timer')"
+  },
+  {
+    "name": "Permanent leave and kick stop being recorded for later rounds",
+    "file": "games/bonk-io/server/index.ts",
+    "from": "onPlayerEvent(judged, event)",
+    "to": "onPlayerEvent(judged, { ...event, gone: undefined })"
+  },
+  {
+    "name": "Temporary disconnect keeps movement and Heavy held",
+    "file": "games/bonk-io/server/index.ts",
+    "from": "release(changed.world, event.playerId, releaseTime(changed, event.now))",
+    "to": "changed.world"
+  },
+  {
+    "name": "Pause retains held movement and Heavy after the room resumes",
+    "file": "games/bonk-io/server/index.ts",
+    "from": "world: release(next.world, undefined, releaseTime(next, event.now))",
+    "to": "world: next.world"
+  },
+  {
+    "name": "Resume moves the end clock but leaves the physics start unshifted",
+    "file": "games/bonk-io/server/index.ts",
+    "from": "began: state.began + shift",
+    "to": "began: state.began"
+  },
+  {
+    "name": "Phone only players lose their public arena stage during play",
+    "file": "games/bonk-io/server/index.ts",
+    "from": "state.phoneOnly ||",
+    "to": "false ||"
+  },
+  {
+    "name": "Spectators inherit the first player identity and role instead of watching",
+    "file": "games/bonk-io/server/index.ts",
+    "from": "controllerEnvelope(state, manifest.id, playerId, {",
+    "to": "controllerEnvelope(state, manifest.id, Object.keys(state.players)[0] ?? playerId, {"
+  }
+]
