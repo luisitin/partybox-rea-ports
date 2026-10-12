@@ -10,7 +10,7 @@ P04 r2-local 2026-10-12T01:34:26Z job/P04-draw-and-guess
 P05 r5-local 2026-10-11T22:33:37Z job/P05-blob-arena
 P06 r6-local 2026-10-11T22:35:43Z job/P06-snake-royale
 
-P07 r4-local 2026-10-12T01:36:16Z job/P07-paper-territory
+P07 r4-local 2026-10-12T01:41:28Z job/P07-paper-territory
 
 P08 r7-local 2026-10-11T22:25:22Z job/P08-hole-swallow
 
