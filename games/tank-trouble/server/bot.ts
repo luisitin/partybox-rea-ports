@@ -4,6 +4,8 @@ import {
   BOT_BEAT_MS,
   H,
   OMEGA,
+  OWNER_SAFE_MS,
+  SHELL_RADIUS,
   SHELL_SPEED,
   SPEED,
   TANK_RADIUS,
@@ -16,6 +18,7 @@ import {
   traceShell,
 } from './world';
 import type { Input, Point, Tank, World } from './world';
+import { firstWall } from './collision';
 
 const distance = (a: Point, b: Point): number => Math.hypot(a.x - b.x, a.y - b.y);
 function segmentDistance(p: Point, a: Point, b: Point): number {
@@ -26,6 +29,23 @@ function segmentDistance(p: Point, a: Point, b: Point): number {
     Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / Math.max(1e-8, dx * dx + dy * dy)),
   );
   return Math.hypot(p.x - a.x - u * dx, p.y - a.y - u * dy);
+}
+
+/** Distance to the first circular body contact, rather than distance to its center. */
+function circleContact(a: Point, b: Point, tank: Tank): number | null {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const length = Math.hypot(dx, dy);
+  const x = a.x - tank.x;
+  const y = a.y - tank.y;
+  const outside = x * x + y * y - (TANK_RADIUS + SHELL_RADIUS) ** 2;
+  if (outside <= 0) return 0;
+  if (length < 1e-8) return null;
+  const towards = -(x * dx + y * dy) / length;
+  const discriminant = towards * towards - outside;
+  if (discriminant < 0) return null;
+  const along = towards - Math.sqrt(discriminant);
+  return along >= 0 && along <= length + 1e-9 ? along : null;
 }
 
 export interface RouteTree {
@@ -63,26 +83,42 @@ export function route(world: World, from: Point, goal: Point): number[] {
 /** Check the first body along each ricochet. A return to the owner is unsafe, even if it misses now. */
 export function shotTarget(world: World, me: Tank, angle: number): string | null {
   const mouth = {
-    x: me.x + Math.cos(angle) * (TANK_RADIUS + 0.8),
-    y: me.y + Math.sin(angle) * (TANK_RADIUS + 0.8),
+    x: me.x + Math.cos(angle) * (TANK_RADIUS + SHELL_RADIUS + 0.15),
+    y: me.y + Math.sin(angle) * (TANK_RADIUS + SHELL_RADIUS + 0.15),
   };
-  if (!canOccupy(world.maze, mouth.x, mouth.y, 0.65)) return null;
+  if (
+    !canOccupy(world.maze, mouth.x, mouth.y, SHELL_RADIUS) ||
+    firstWall(world.maze.walls, me, { x: mouth.x - me.x, y: mouth.y - me.y }, SHELL_RADIUS)
+  )
+    return null;
   const segments = traceShell(world.maze, mouth, angle, SHELL_SPEED * 2.5, me.weapon !== 'beam');
-  let hit: string | null = null;
+  const speed = me.weapon === 'beam' ? 130 : me.weapon === 'guided' ? 34 : SHELL_SPEED;
+  const immuneDistance = (speed * OWNER_SAFE_MS) / 1000;
   let traveled = 0;
   for (const segment of segments) {
     const a = { x: segment.x1, y: segment.y1 };
     const b = { x: segment.x2, y: segment.y2 };
     const length = distance(a, b);
     let first = Infinity;
+    let hit: string | null = null;
     for (const tank of world.tanks) {
-      if (!tank.alive || (tank.id === me.id && traveled < 4)) continue;
-      if (segmentDistance(tank, a, b) > TANK_RADIUS + 0.65) continue;
-      const along = distance(tank, a);
-      if (along < first) {
+      if (!tank.alive) continue;
+      const protectedPart = tank.id === me.id ? Math.max(0, immuneDistance - traveled) : 0;
+      if (protectedPart > 0 && protectedPart >= length) continue;
+      const clipped =
+        protectedPart > 0
+          ? {
+              x: a.x + ((b.x - a.x) * protectedPart) / length,
+              y: a.y + ((b.y - a.y) * protectedPart) / length,
+            }
+          : a;
+      const contact = circleContact(clipped, b, tank);
+      if (contact === null) continue;
+      const along = protectedPart + contact;
+      if (along < first - 1e-9) {
         first = along;
         hit = tank.id;
-      }
+      } else if (Math.abs(along - first) <= 1e-9 && tank.id === me.id) hit = me.id;
     }
     if (hit) return hit === me.id ? null : hit;
     traveled += length;
