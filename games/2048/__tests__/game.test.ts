@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { createRng } from '@partybox/game-sdk';
+import { createRng, readingMs, wordCount } from '@partybox/game-sdk';
 import { testKit, testPlayers } from '@partybox/game-sdk/testing';
 import { game } from '../server/index';
+import { TERMINAL_PAYOFF_MS } from '../server/types';
 import type { State } from '../server/types';
 
 const T0 = 1_000_000;
@@ -125,13 +126,90 @@ describe('2048 race rules', () => {
     expect(next.reason).toBe('target');
     expect(next.racers.p1?.status).toBe('finished');
     expect(next.racers.p1?.score).toBe(2048);
-    expect(next.phase.deadline).toBeGreaterThanOrEqual(T0 + 500 + 8000);
+    // The longest final screen is Ben's phone: full standings plus the personal
+    // result and target-rule copy. The win overlay must not spend that reading time.
+    const rankingCopy = [
+      `${state.players.p1!.name} wins!`,
+      '2048 reached!',
+      `#1 ${state.players.p1!.name} Best tile 2048 2048 ★`,
+      `#2 ${state.players.p2!.name} Best tile 1024 32000`,
+      'You finished #2 · 32000 points',
+      'First to 2048 wins. Reaching the target beats merge score.',
+    ].join(' ');
+    const rankingHold = readingMs(wordCount(rankingCopy), { ui: true });
+    expect(TERMINAL_PAYOFF_MS).toBe(3000);
+    expect(next.terminalPayoffUntil).toBe(T0 + 500 + TERMINAL_PAYOFF_MS);
+    expect(next.phase.deadline! - next.phase.startedAt).toBe(rankingHold + TERMINAL_PAYOFF_MS);
+    expect(kit.timer(next, next.phase.deadline! - TERMINAL_PAYOFF_MS)).toBe(next);
     const done = kit.timer(next);
     expect(done.phase.id).toBe('done');
     expect(game.results(done)?.winnerIds).toEqual(['p1']);
     expect(game.results(done)?.ranking[0]?.playerId).toBe('p1');
     expect(move(next, 'p2', 'right')).toBe(next);
   });
+
+  it.each(['target', 'blocked'] as const)(
+    'preserves the exact public %s payoff clock through pause, resume and phone reload',
+    (reason) => {
+      let ready = withBoard(kit.start(), 'p1', row(1024, 1024));
+      if (reason === 'blocked') {
+        ready = withBoard(
+          withBoard(ready, 'p1', [...blocked], 96),
+          'p2',
+          [2, 2, 8, 16, 8, 16, 4, 8, 4, 8, 2, 4, 8, 16, 4, 8],
+        );
+        ready = {
+          ...ready,
+          racers: { ...ready.racers, p1: { ...ready.racers.p1!, status: 'blocked' } },
+        };
+      }
+      const lastPlayer = reason === 'target' ? 'p1' : 'p2';
+      expect(game.controllerView(ready, lastPlayer).terminalPayoffUntil).toBeNull();
+      const reveal = move(ready, lastPlayer, 'left', T0 + 500);
+      expect(reveal.reason).toBe(reason);
+      expect(reveal.racers[lastPlayer]?.status).toBe(reason === 'target' ? 'finished' : 'blocked');
+      expect(game.tvView(reveal).terminalPayoffUntil).toBe(T0 + 3500);
+      const paused = kit.vip(reveal, 'pause', T0 + 1000);
+      expect(game.controllerView(paused, lastPlayer).clockHeldAt).toBe(T0 + 1000);
+      expect(game.controllerView(paused, lastPlayer).terminalPayoffUntil).toBe(T0 + 3500);
+      expect(kit.timer(paused)).toBe(paused);
+      const returned = kit.player(
+        kit.player(paused, lastPlayer, false, undefined, T0 + 2000),
+        lastPlayer,
+        true,
+        undefined,
+        T0 + 2500,
+      );
+      expect(returned.phase).toEqual(paused.phase);
+      expect(returned.terminalPayoffUntil).toBe(T0 + 3500);
+      const resumed = kit.vip(returned, 'resume', T0 + 31_000);
+      expect(resumed.phase.deadline).toBe(reveal.phase.deadline! + 30_000);
+      expect(resumed.terminalPayoffUntil).toBe(T0 + 33_500);
+      expect(kit.vip(resumed, 'resume', T0 + 31_100)).toBe(resumed);
+      // A newly loaded phone gets the remaining 2,500 ms from the server view,
+      // without having to remember when this phase originally paused.
+      const reloaded = game.controllerView(resumed, lastPlayer);
+      expect(reloaded.terminalPayoffUntil).toBe(T0 + 33_500);
+      expect(reloaded.terminalPayoffUntil! - (T0 + 31_000)).toBe(2500);
+      expect(reloaded.mine?.board).toEqual(reveal.racers[lastPlayer]?.board);
+      // Pausing after the payoff finished must not show that board again on resume.
+      const afterPayoff = kit.vip(kit.vip(resumed, 'pause', T0 + 34_000), 'resume', T0 + 44_000);
+      expect(afterPayoff.phase.deadline).toBe(reveal.phase.deadline! + 40_000);
+      expect(game.controllerView(afterPayoff, lastPlayer).terminalPayoffUntil).toBe(T0 + 43_500);
+      expect(game.controllerView(afterPayoff, lastPlayer).terminalPayoffUntil!).toBeLessThan(
+        T0 + 44_000,
+      );
+      expect(kit.timer(afterPayoff, afterPayoff.phase.deadline! - 1)).toBe(afterPayoff);
+      const done = kit.timer(afterPayoff);
+      expect(done.phase.id).toBe('done');
+      expect(game.tvView(done).terminalPayoffUntil).toBeNull();
+      expect(game.controllerView(done, lastPlayer).terminalPayoffUntil).toBeNull();
+      expect(game.tvView(kit.vip(paused, 'skip', T0 + 31_000)).terminalPayoffUntil).toBeNull();
+      expect(
+        game.controllerView(kit.vip(paused, 'end'), lastPlayer).terminalPayoffUntil,
+      ).toBeNull();
+    },
+  );
 
   it('ends at the clock, rejects late moves, and lets identical highest scores share first', () => {
     let state = withBoard(kit.start(), 'p1', row(2, 2), 48);
@@ -141,6 +219,8 @@ describe('2048 race rules', () => {
     expect(late.racers.p1?.score).toBe(48);
     const reveal = kit.timer(state);
     expect(reveal.reason).toBe('clock');
+    expect(reveal.terminalPayoffUntil).toBeNull();
+    expect(game.tvView(reveal).terminalPayoffUntil).toBeNull();
     expect(reveal.phase.id).toBe('reveal');
     expect(reveal.phase.deadline! - reveal.phase.startedAt).toBeGreaterThanOrEqual(8000);
     const done = kit.timer(reveal);
@@ -202,16 +282,53 @@ describe('2048 race rules', () => {
   });
 
   it('ends early once the final live board blocks after a spawn', () => {
-    let state = withBoard(kit.start(), 'p1', [...blocked]);
+    let state = withBoard(kit.start(), 'p1', [...blocked], 96);
     state = {
       ...state,
       racers: { ...state.racers, p1: { ...state.racers.p1!, status: 'blocked' } },
     };
-    state = withBoard(state, 'p2', [2, 2, 8, 16, 8, 16, 4, 8, 4, 8, 2, 4, 8, 16, 4, 8]);
+    state = withBoard(state, 'p2', [2, 2, 8, 16, 8, 16, 4, 8, 4, 8, 2, 4, 8, 16, 4, 8], 40);
     const reveal = move(state, 'p2', 'left');
     expect(reveal.racers.p2?.status).toBe('blocked');
+    expect(reveal.racers.p2?.moves).toBe(1);
+    expect(reveal.racers.p2?.score).toBe(44);
+    expect(reveal.racers.p2?.board).toEqual([
+      4,
+      8,
+      16,
+      state.spawns[2]!.value,
+      8,
+      16,
+      4,
+      8,
+      4,
+      8,
+      2,
+      4,
+      8,
+      16,
+      4,
+      8,
+    ]);
     expect(reveal.phase.id).toBe('reveal');
     expect(reveal.reason).toBe('blocked');
+    // Count the longest actual final screen independently: the losing phone's
+    // complete standings, personal result, blocked reason and tie rule.
+    const rankingCopy = [
+      `${state.players.p1!.name} wins!`,
+      'No moves remain. Highest score wins.',
+      `#1 ${state.players.p1!.name} Best tile 4 96 ★`,
+      `#2 ${state.players.p2!.name} Best tile 16 44`,
+      'You finished #2 · 44 points',
+      'Equal scores share a place.',
+    ].join(' ');
+    const rankingHold = readingMs(wordCount(rankingCopy), { ui: true });
+    expect(reveal.terminalPayoffUntil).toBe(T0 + 3500);
+    expect(game.controllerView(reveal, 'p2').terminalPayoffUntil).toBe(T0 + 3500);
+    expect(reveal.phase.deadline! - reveal.phase.startedAt).toBe(rankingHold + TERMINAL_PAYOFF_MS);
+    expect(kit.timer(reveal, reveal.phase.deadline! - TERMINAL_PAYOFF_MS)).toBe(reveal);
+    expect(kit.timer(reveal, reveal.phase.deadline! - 1)).toBe(reveal);
+    expect(game.results(kit.timer(reveal))?.winnerIds).toEqual(['p1']);
   });
 
   it('closes when every connected racer blocks even if a disconnected board can still move', () => {
@@ -238,6 +355,7 @@ describe('2048 race rules', () => {
     expect(reveal.phase.id).toBe('reveal');
     expect(reveal.reason).toBe('blocked');
     expect(reveal.phase.startedAt).toBe(T0 + 700);
+    expect(reveal.terminalPayoffUntil).toBe(T0 + 700 + TERMINAL_PAYOFF_MS);
     expect(reveal.racers.p2).toEqual(state.racers.p2);
     expect(reveal.racers.p1?.score).toBe(96);
   });
@@ -257,6 +375,7 @@ describe('2048 race rules', () => {
     expect(reveal.reason).toBe('blocked');
     expect(reveal.phase.paused).toBeUndefined();
     expect(reveal.phase.startedAt).toBe(T0 + 6000);
+    expect(reveal.terminalPayoffUntil).toBe(T0 + 6000 + TERMINAL_PAYOFF_MS);
     expect(reveal.phase.deadline).toBeGreaterThanOrEqual(T0 + 14_000);
     expect(
       game.reduce(reveal, { type: 'timer', now: T0 + 180_000, phaseId: 'play', startedAt: T0 }),
@@ -296,6 +415,7 @@ describe('2048 race rules', () => {
     expect(reveal.phase.id).toBe('reveal');
     expect(reveal.reason).toBe('blocked');
     expect(reveal.phase.startedAt).toBe(T0 + 6500);
+    expect(reveal.terminalPayoffUntil).toBe(T0 + 6500 + TERMINAL_PAYOFF_MS);
     expect(reveal.racers).toEqual(resumed.racers);
     expect(reveal.players.p2?.connected).toBe(false);
     expect(Object.keys(game.results(kit.timer(reveal))!.scores).sort()).toEqual(['p1', 'p2']);
@@ -346,6 +466,8 @@ describe('2048 race rules', () => {
     const reveal = kit.vip(state, 'skip');
     expect(reveal.phase.id).toBe('reveal');
     expect(reveal.reason).toBe('host');
+    expect(reveal.terminalPayoffUntil).toBeNull();
+    expect(game.tvView(reveal).terminalPayoffUntil).toBeNull();
     expect(kit.vip(reveal, 'skip').phase.id).toBe('done');
     expect(kit.vip(state, 'end').phase.id).toBe('done');
     expect(kit.vip(reveal, 'end').phase.id).toBe('done');

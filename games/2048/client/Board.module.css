@@ -130,10 +130,14 @@
   justify-self: center;
 }
 
-.board[data-moving='true'] .cells .tile {
-  background: var(--board-well);
-  color: transparent;
-  box-shadow: none;
+/* The semantic snapshot also remains visible when motion is disabled before
+   React hydrates or while its preference subscription is catching up. */
+@media (prefers-reduced-motion: no-preference) {
+  :global(:root:not([data-motion='off'])) .board[data-moving='true'] .cells .tile {
+    background: var(--board-well);
+    color: transparent;
+    box-shadow: none;
+  }
 }
 
 .motion {

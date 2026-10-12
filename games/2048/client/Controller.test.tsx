@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
-import { PhoneOnlyProvider } from '@partybox/game-sdk/ui';
+import { describe, expect, it, vi } from 'vitest';
+import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
 import { Controller } from './Controller';
 import { Tv } from './Tv';
 import { game } from '../server/index';
@@ -26,15 +26,22 @@ function state(): State {
   };
 }
 
-function phone(s: State, id = 'racer-0', phoneOnly = false): string {
-  return renderToStaticMarkup(
+function phone(s: State, id = 'racer-0', phoneOnly = false, at: number | null = null): string {
+  const node = (
     <PhoneOnlyProvider value={phoneOnly}>
       <Controller
         view={{ ...game.controllerView(s, id), vip: null }}
         me={{ id, name: 'Racer 1', avatarId: 'fox' }}
         send={() => undefined}
       />
-    </PhoneOnlyProvider>,
+    </PhoneOnlyProvider>
+  );
+  return renderToStaticMarkup(
+    at === null ? (
+      node
+    ) : (
+      <ServerClockProvider offsetMs={at - Date.now()}>{node}</ServerClockProvider>
+    ),
   );
 }
 
@@ -47,6 +54,59 @@ function publicCards(html: string): string[] {
 }
 
 describe('2048 phone surfaces', () => {
+  it('keeps the winner own board through the complete payoff, then shows every final place', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(50000);
+    try {
+      const s = state();
+      s.phase = { id: 'reveal', startedAt: 20000, deadline: 40000 };
+      s.terminalPayoffUntil = 23000;
+      s.reason = 'target';
+      s.racers['racer-0'] = {
+        ...s.racers['racer-0']!,
+        status: 'finished',
+        board: [2048, ...Array<number>(15).fill(0)],
+      };
+      for (const at of [20000, 22999]) {
+        const html = phone(s, 'racer-0', false, at);
+        expect(html).toContain('You win!');
+        expect(html).toContain('2048 reached!');
+        expect(html).toContain('aria-label="Your board"');
+        expect(html.match(/role="grid"/g)).toHaveLength(1);
+        expect(html).not.toContain('<button');
+      }
+      const final = phone(s, 'racer-0', false, 23000);
+      expect(final).toContain('Final standings');
+      expect(final).not.toContain('aria-label="Your board"');
+      for (const player of PLAYERS) expect(final).toContain(player.name);
+      expect(phone(s, 'a-spectator', true, 20000)).toContain('Final standings');
+      const paused = { ...s, phase: { ...s.phase, paused: { at: 20500 } } };
+      expect(phone(paused, 'racer-0', false, 300000)).toContain('You win!');
+      const resumed = game.reduce(paused, { type: 'vip', action: 'resume', now: 50500 });
+      expect(phone(resumed, 'racer-0', false, 50500)).toContain('You win!');
+      expect(phone(resumed, 'racer-0', false, 53000)).toContain('Final standings');
+      const allBlocked: State = {
+        ...s,
+        reason: 'blocked',
+        racers: {
+          ...s.racers,
+          'racer-0': {
+            ...s.racers['racer-0']!,
+            status: 'blocked',
+            board: [2, 4, 2, 4, 4, 2, 4, 2, 2, 4, 2, 4, 4, 2, 4, 2],
+          },
+        },
+      };
+      const lastBoard = phone(allBlocked, 'racer-0', false, 22999);
+      expect(lastBoard).toContain('Game over!');
+      expect(lastBoard).toContain('aria-label="Your board"');
+      expect(lastBoard).not.toContain('<button');
+      expect(lastBoard).not.toContain('Swipe the board or tap a direction.');
+      expect(phone(allBlocked, 'racer-0', false, 23000)).toContain('Final standings');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
   it('renders one private control surface and four labelled native direction buttons', () => {
     const html = phone(state());
     expect(html.match(/role="grid"/g)).toHaveLength(1);

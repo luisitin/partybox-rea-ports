@@ -52,9 +52,9 @@ function candidate(
       const merged = partner !== undefined && before[from] === before[partner];
       sources.push({ from, to, value: before[from]!, merged });
       landed[to] = before[from]!;
-      if (merged) {
+      if (merged && partner !== undefined) {
         sources.push({ from: partner, to, value: before[partner]!, merged: true });
-        landed[to] *= 2;
+        landed[to] = before[from]! * 2;
         merges.push({ to, value: landed[to]! });
         next++;
       }
@@ -111,6 +111,7 @@ export function Board({
   tvMap = false,
   moves = 0,
   direction,
+  animateInitial = false,
 }: {
   board: readonly number[];
   label: string;
@@ -118,6 +119,7 @@ export function Board({
   tvMap?: boolean;
   moves?: number;
   direction?: Direction;
+  animateInitial?: boolean;
 }): JSX.Element {
   const L = useT(STRINGS);
   const reduced = usePrefersReducedMotion();
@@ -125,6 +127,14 @@ export function Board({
     board: [...board],
     moves,
     motion: null as BoardTransition | null,
+    // Only a caller that observed a genuine fresh race opts in. A later mount
+    // establishes its baseline without replaying historical tile appearances.
+    initial:
+      animateInitial &&
+      moves === 0 &&
+      validBoard(board) &&
+      board.some((value) => value > 0) &&
+      !reduced,
   }));
   // Adjust before paint so a received board never flashes its final tiles ahead of travel.
   if (frame.moves !== moves || !sameBoard(frame.board, board)) {
@@ -132,18 +142,30 @@ export function Board({
       board: [...board],
       moves,
       motion: reduced ? null : boardTransition(frame.board, board, frame.moves, moves, direction),
+      initial: false,
     });
   }
   const motion = reduced ? null : frame.motion;
+  const initial = !reduced && frame.initial;
+  const appearances = motion
+    ? [...motion.merges, motion.spawn]
+    : initial
+      ? frame.board.flatMap((value, to) => (value > 0 ? [{ to, value }] : []))
+      : [];
   useEffect(() => {
-    if (!frame.motion) return;
+    if (!frame.motion && !frame.initial) return;
     if (reduced) {
-      setFrame((current) => (current.motion ? { ...current, motion: null } : current));
+      setFrame((current) =>
+        current.motion || current.initial ? { ...current, motion: null, initial: false } : current,
+      );
       return;
     }
     // SDK base = 100ms travel + 200ms appearance. Clean up when another receipt arrives.
     const timer = setTimeout(
-      () => setFrame((current) => (current === frame ? { ...current, motion: null } : current)),
+      () =>
+        setFrame((current) =>
+          current === frame ? { ...current, motion: null, initial: false } : current,
+        ),
       MOTION_BASE,
     );
     return () => clearTimeout(timer);
@@ -156,7 +178,7 @@ export function Board({
       aria-readonly="true"
       data-mini={miniature ? 'true' : undefined}
       data-tv-map={tvMap ? 'true' : undefined}
-      data-moving={motion ? 'true' : undefined}
+      data-moving={motion || initial ? 'true' : undefined}
     >
       <div className={styles.cells}>
         {[0, 1, 2, 3].map((row) => (
@@ -183,9 +205,9 @@ export function Board({
           </div>
         ))}
       </div>
-      {motion ? (
+      {motion || initial ? (
         <div className={styles.motion} key={moves} aria-hidden="true">
-          {motion.sources.map((tile) => (
+          {motion?.sources.map((tile) => (
             <span
               key={`from:${tile.from}`}
               className={`${styles.tile} ${styles.movingTile}`}
@@ -198,14 +220,14 @@ export function Board({
               {tile.value}
             </span>
           ))}
-          {[...motion.merges, motion.spawn].map((tile, index) => (
+          {appearances.map((tile, index) => (
             <span
               key={`appear:${tile.to}`}
               className={`${styles.tile} ${styles.movingTile}`}
               style={tilePosition(tile.to)}
               data-value={tile.value}
               data-digits={String(tile.value).length}
-              data-motion={index < motion.merges.length ? 'merge' : 'spawn'}
+              data-motion={motion && index < motion.merges.length ? 'merge' : 'spawn'}
             >
               {tile.value}
             </span>

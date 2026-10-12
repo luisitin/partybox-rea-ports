@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import type { JSX, KeyboardEvent, PointerEvent } from 'react';
-import { buzz, usePhoneOnly, useServerNow, useT } from '@partybox/game-sdk/ui';
+import { MOTION_BASE, buzz, usePhoneOnly, useServerNow, useT } from '@partybox/game-sdk/ui';
 import type { GameControllerProps } from '@partybox/game-sdk/ui';
 import type { ControllerMergeView, Input } from '../server/types';
+import { TERMINAL_PAYOFF_MS } from '../server/types';
 import { Board } from './Board';
 import { RaceStage } from './RaceStage';
 import { StandingsStrip } from './StandingsStrip';
@@ -31,7 +32,8 @@ export function Controller({
     const storageKey = `partybox:2048:best:${view.me.id}`;
     let saved = 0;
     try {
-      saved = Number(localStorage.getItem(storageKey)) || 0;
+      const candidate = Number(localStorage.getItem(storageKey));
+      saved = Number.isSafeInteger(candidate) && candidate >= 0 ? candidate : 0;
     } catch {
       /* private/restricted storage does not affect the authoritative game */
     }
@@ -45,6 +47,17 @@ export function Controller({
   }, [view.me.id, mine?.score]);
   const animationInput = useRef<{ key: string; moves: number; dir: Input['dir'] } | null>(null);
   const playing = view.phaseId === 'play';
+  const terminalPayoff =
+    view.phaseId === 'reveal' &&
+    ((view.reason === 'target' && mine?.status === 'finished') ||
+      (view.reason === 'blocked' && mine?.status === 'blocked')) &&
+    view.me.role === 'player' &&
+    now < (view.terminalPayoffUntil ?? view.phaseAt + TERMINAL_PAYOFF_MS);
+  const winningPayoff = terminalPayoff && view.reason === 'target';
+  const lastPlayAt = useRef(playing ? view.phaseAt : null);
+  useEffect(() => {
+    if (playing) lastPlayAt.current = view.phaseAt;
+  }, [playing, view.phaseAt]);
   const connected = view.players.find((p) => p.id === view.me.id)?.connected !== false;
   const canMove =
     playing && connected && !view.paused && mine?.status === 'racing' && view.me.role === 'player';
@@ -53,7 +66,10 @@ export function Controller({
   const names = Object.fromEntries(view.players.map((p) => [p.id, p.name]));
   const leaderAway = view.players.find((p) => p.id === leader?.id)?.connected === false;
   const feedbackView = {
-    key: `${view.phaseId}:${view.phaseAt}:${view.me.id}`,
+    key:
+      terminalPayoff && lastPlayAt.current !== null
+        ? `play:${lastPlayAt.current}:${view.me.id}`
+        : `${view.phaseId}:${view.phaseAt}:${view.me.id}`,
     moves: mine?.moves ?? 0,
     score: mine?.score ?? 0,
     active: canMove,
@@ -64,7 +80,7 @@ export function Controller({
     const receipt = observeMove(feedbackRef.current, feedbackView, Date.now());
     feedbackRef.current = receipt.state;
     setFeedback(receipt.state);
-    if (receipt.accepted && playing && !view.paused)
+    if (receipt.accepted && (playing || terminalPayoff) && !view.paused)
       buzz(receipt.state.gain > 0 ? [20, 30, 20] : 8);
   };
   useEffect(observe, [feedbackView.key, feedbackView.moves, feedbackView.score, canMove]);
@@ -121,6 +137,7 @@ export function Controller({
     move(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : dy > 0 ? 'down' : 'up');
   };
   const keyboard = (event: KeyboardEvent<HTMLDivElement>): void => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
     const keys: Record<string, Input['dir']> = {
       ArrowLeft: 'left',
       ArrowUp: 'up',
@@ -134,14 +151,22 @@ export function Controller({
       S: 'down',
       d: 'right',
       D: 'right',
+      h: 'left',
+      H: 'left',
+      k: 'up',
+      K: 'up',
+      j: 'down',
+      J: 'down',
+      l: 'right',
+      L: 'right',
     };
     const dir = keys[event.key];
-    if (!dir || !canMove || event.repeat) return;
+    if (!dir || !canMove) return;
     event.preventDefault();
     move(dir);
   };
 
-  if (!playing || !mine || view.me.role === 'spectator') {
+  if ((!playing && !terminalPayoff) || !mine || view.me.role === 'spectator') {
     return <RaceStage view={view} phoneOnly={phoneOnly} />;
   }
 
@@ -167,11 +192,11 @@ export function Controller({
       </header>
       <div className={styles.intro}>
         <p>{L('Join the numbers and get to the {target} tile!', { target: view.target })}</p>
+        <span className={styles.clock} role="timer" data-urgent={left !== null && left <= 5000}>
+          {terminalPayoff ? L('Race complete') : view.paused ? L('Paused') : L('Time left')}{' '}
+          <strong>{terminalPayoff || left === null ? '—' : clockText(left)}</strong>
+        </span>
         <div className={styles.raceInfo}>
-          <span className={styles.clock} role="timer" data-urgent={left !== null && left <= 5000}>
-            {view.paused ? L('Paused') : L('Time left')}{' '}
-            <strong>{left === null ? '—' : clockText(left)}</strong>
-          </span>
           <span>
             {L('Best tile')} {mine.best} · {L('Place')} #{mine.rank}
           </span>
@@ -193,6 +218,12 @@ export function Controller({
             board={mine.board}
             label={L('Your board')}
             moves={mine.moves}
+            animateInitial={
+              playing &&
+              mine.moves === 0 &&
+              now - view.phaseAt >= 0 &&
+              now - view.phaseAt < MOTION_BASE
+            }
             direction={
               animationInput.current?.key === feedbackView.key &&
               animationInput.current.moves + 1 === mine.moves
@@ -200,26 +231,32 @@ export function Controller({
                 : undefined
             }
           />
-          {mine.status === 'blocked' ? (
+          {mine.status === 'blocked' || terminalPayoff ? (
             <div className={styles.overlay} role="status">
-              <strong>{L('Game over!')}</strong>
-              <span>{L('No moves left')}</span>
+              <strong>{winningPayoff ? L('You win!') : L('Game over!')}</strong>
+              <span>
+                {winningPayoff
+                  ? L('{target} reached!', { target: view.target })
+                  : L('No moves left')}
+              </span>
             </div>
           ) : null}
         </div>
       </div>
       <p className={styles.hint}>
-        {mine.status === 'blocked'
-          ? L('Your {score} points stay in the race.', { score: mine.score })
-          : phoneOnly && leader
-            ? L('{name} leads · best tile {tile}', {
-                name: `${names[leader.id] ?? leader.id}${leader.bot ? ` (${L('Bot')})` : leaderAway ? ` (${L('Away')})` : ''}`,
-                tile: leader.best,
-              })
-            : L('Swipe the board or tap a direction.')}
+        {terminalPayoff && winningPayoff
+          ? L('You won! · {score} points', { score: mine.score })
+          : mine.status === 'blocked'
+            ? L('Your {score} points stay in the race.', { score: mine.score })
+            : phoneOnly && leader
+              ? L('{name} leads · best tile {tile}', {
+                  name: `${names[leader.id] ?? leader.id}${leader.bot ? ` (${L('Bot')})` : leaderAway ? ` (${L('Away')})` : ''}`,
+                  tile: leader.best,
+                })
+              : L('Swipe the board or tap a direction.')}
       </p>
       {phoneOnly ? <StandingsStrip view={view} /> : null}
-      {mine.status !== 'blocked' ? (
+      {mine.status !== 'blocked' && !terminalPayoff ? (
         <div className={styles.controls} role="group" aria-label={L('Move tiles')}>
           {DIRECTIONS.map((dir) => (
             <button
@@ -246,15 +283,17 @@ export function Controller({
         </div>
       ) : null}
       <p className={styles.rule}>
-        {feedback.failed
-          ? L('Move not confirmed. Try again.')
-          : view.paused
-            ? L('Race paused. Controls resume with the clock.')
-            : phoneOnly
-              ? L('First to {target} wins. At the buzzer, highest score wins.', {
-                  target: view.target,
-                })
-              : L('Equal tiles merge once per move.')}
+        {terminalPayoff
+          ? L('Final standings follow.')
+          : feedback.failed
+            ? L('Move not confirmed. Try again.')
+            : view.paused
+              ? L('Race paused. Controls resume with the clock.')
+              : phoneOnly
+                ? L('First to {target} wins. At the buzzer, highest score wins.', {
+                    target: view.target,
+                  })
+                : L('Equal tiles merge once per move.')}
       </p>
     </div>
   );

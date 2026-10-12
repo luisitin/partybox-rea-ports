@@ -1,41 +1,34 @@
 # P09 resume
 
-2026-10-12 fidelity update: origin/main added the mandatory original/ours gate.
-Matched original classic478b6ec screenshots now exist under games/2048/fidelity;
-hosted URL redirects to play2048.co's2026 tutorial, so pinnedclassic is explicit.
-Phone HUD/280px board/score-rise/blocked overlay are repaired; Board agent is
-finishing100ms travel/200ms spawn-merge/squaremini maps. Full current UI tests,
-all new captures, fidelity gaps, hashes, final CI and3no-gain rounds remain.
-Fresh final-server simulation:21,000/21,000, max220,911ms <480,000. Fresh20/20
-server behavioral mutants are caught/restored; full UI baseline is deliberately
-held until animation/UI edits finish. Do not mark DONE with old gate figures.
+Runner r1-local; branch job/P09-2048-race; canonical games/2048; draft PR12.
 
-Latest KEEP GOING update: meaningful pacing/focus/phone-identity improvements are
-in progress. The green local figures below are the pre-pacing baseline; rerun
-simulations, all20mutations, own tests, captures, sums, type/format and new-head CI
-against the final ranked-results/reading-floor source before marking ready/DONE.
+Current implementation restores classic280px phone board, Score/Best score HUD,
+value fills, square public maps,100ms travel,200ms delayed spawn/merge,600ms
+score rise, initial appearances, arrows/WASD/HJKL and original swipe threshold.
+Target AND final-blocked players retain the private board through1200ms delay,
+800ms fade and1000ms fully-visible overlay, then all final standings. Public
+terminalPayoffUntil survives pause/resume/reload; full ranking reading time follows.
 
-Runner r1-local; branch job/P09-2048-race; canonical games/2048; PR #12.
+Fresh generalized-clock21k simulation is finishing;20new behavior mutants and
+current full baseline follow sequentially. Earlier114-test and21k results are
+historical. Source guards reject drift. Do not mark DONE using them.
 
-All local gates pass on current source: types, format,102 own-game tests (20 SDK
-contracts),1,003 mixed event-sequence seeds,21,000 bots/all counts+strengths,20/20
-behavioral mutation kills with restored-source proof,27 manually checked captures
-and60 verified media checksums (<10MB). Details in VERIFY.md and JSON artifacts.
+Original classic478b6ec was played in a fresh profile; start/midgame screenshots
+and visible states are games/2048/fidelity/. Hosted URL now redirects to the2026
+redesign. No upstream code/assets ship. Arial is the declared original fallback;
+Clear Sans glyph differences are explicit in GAPS.md.
 
-Implemented fixes: blocked reconnect completion, preserved pause cooldown at phone
-resume, stable live spectator seat order, Bot/Away labels, long-name TV grid
-containment, measured miniature board/caption separation, and full buzzer scoring
-copy on public play screens. Source/fixture/capture provenance is current.
+Remaining: finish own interactive motion probe (CSS timing float tolerance and
+600ms score receipt; JS debugger freezes cleanup while compositor captures),
+refresh29 static HTML/PNG captures and original/ours comparison after HUD repairs,
+manually review them, update GAPS/VERIFY/README/LOOP, regenerate combined media
+checksums and current-source evidence, pass typecheck/format/current CI. Then do
+three consecutive post-green no-gain reviews, mark PR ready and claim DONE.
 
-First repaired source milestone2861584 has green P09+kit CI. Final copy/evidence
-push and three consecutive no-gain KEEP GOING reviews are being finalized.
-Keep PR12 draft until that pushed head passes CI, then mark ready and the main
-claim DONE. Refresh the claim after every push; pull --rebase immediately before
-each CLAIMS.md commit in the existing r1-local claims worktree.
+Every own browser closes in finally with exact-profile zero-PID verification.
+Do not run captures concurrently. During mutation planting, do not import or
+change game server files or regenerate fixtures; wait for source restoration.
+Refresh the main claim after each job push, pulling --rebase immediately before
+EVERY CLAIMS commit in the existing r1-local claims worktree.
 
-No owned capture browser remains. Tests are one own-game worker. Original UI
-provider was unavailable; documented engine-play research is retained without
-claiming live visual/audio play. Owner core was read-only (126 manifests/no overlap).
-
-After P09 DONE, read fresh origin/main CLAIMS and take the lowest eligible job;
-resume any other unfinished r1-local claims first. Do not use historical gate results.
+Resume unfinished r1-local claims before taking any new job.

@@ -1,6 +1,6 @@
 import { readingMs, wordCount } from '@partybox/game-sdk';
 import { winners } from './scoring';
-import { REVEAL_MS, TARGET } from './types';
+import { REVEAL_MS, TARGET, TERMINAL_PAYOFF_MS } from './types';
 import type { State } from './types';
 
 /** TV summaries and phone standings are separate result screens: hold for the larger one. */
@@ -67,5 +67,8 @@ export function revealReadingMs(state: State): number {
       : 'Equal scores share a place.';
   phone += personal + wordCount(footer);
   // The TV module hides the generic player strip; both result layouts are English UI copy.
-  return Math.max(REVEAL_MS, readingMs(Math.max(tv, phone), { ui: true }));
+  const rankingHold = Math.max(REVEAL_MS, readingMs(Math.max(tv, phone), { ui: true }));
+  return (
+    rankingHold + (state.reason === 'target' || state.reason === 'blocked' ? TERMINAL_PAYOFF_MS : 0)
+  );
 }

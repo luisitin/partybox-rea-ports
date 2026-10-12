@@ -2,10 +2,17 @@
 import { enterPhase, isTimerFor } from '@partybox/game-sdk';
 import type { GameEvent, Transition } from '@partybox/game-sdk';
 import { revealReadingMs } from '../reveal-reading';
+import { TERMINAL_PAYOFF_MS } from '../types';
 import type { Input, State } from '../types';
 
 export function enterReveal(state: State, now: number): State {
-  const frozen = { ...state, reason: state.reason ?? 'host' };
+  const reason = state.reason ?? 'host';
+  const frozen = {
+    ...state,
+    reason,
+    terminalPayoffUntil:
+      reason === 'target' || reason === 'blocked' ? now + TERMINAL_PAYOFF_MS : null,
+  };
   return enterPhase(frozen, 'reveal', now, revealReadingMs(frozen));
 }
 export function reduceReveal(

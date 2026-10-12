@@ -50,6 +50,7 @@ function init(ctx: InitContext): State {
     settings: { seconds },
     phoneOnly: ctx.presence?.phoneOnly ?? false,
     reason: null,
+    terminalPayoffUntil: null,
   };
 }
 
@@ -71,17 +72,21 @@ const reduce = composeReduce<State, Input>({
   },
   afterVip: (_before, after, event) => recheckOnResume(after, event, closeIfDone),
   prepare: (state, event) => {
-    if (event.type !== 'vip' || event.action !== 'resume' || state.phase.id !== 'play')
-      return state;
+    if (event.type !== 'vip' || event.action !== 'resume') return state;
     const ms = pausedFor(state, event.now);
-    return ms <= 0
-      ? state
-      : {
-          ...state,
-          racers: Object.fromEntries(
-            Object.entries(state.racers).map(([id, r]) => [id, { ...r, lastAt: r.lastAt + ms }]),
-          ),
-        };
+    if (ms <= 0) return state;
+    if (state.phase.id === 'play')
+      return {
+        ...state,
+        racers: Object.fromEntries(
+          Object.entries(state.racers).map(([id, r]) => [id, { ...r, lastAt: r.lastAt + ms }]),
+        ),
+      };
+    return state.phase.id === 'reveal' &&
+      (state.reason === 'target' || state.reason === 'blocked') &&
+      state.terminalPayoffUntil != null
+      ? { ...state, terminalPayoffUntil: state.terminalPayoffUntil + ms }
+      : state;
   },
 });
 
@@ -112,6 +117,10 @@ function raceView(state: State): RaceView {
     winners: state.phase.id === 'play' ? [] : winners(state),
     reason: state.reason,
     target: TARGET,
+    terminalPayoffUntil:
+      state.phase.id === 'reveal' && (state.reason === 'target' || state.reason === 'blocked')
+        ? (state.terminalPayoffUntil ?? null)
+        : null,
   };
 }
 

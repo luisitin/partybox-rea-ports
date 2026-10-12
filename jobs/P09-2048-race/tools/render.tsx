@@ -78,7 +78,7 @@ async function capture(
   let markup = renderToStaticMarkup(clock(state, node));
   // SSR cannot run the accepted-counter effect. This labelled stress frame supplies its
   // largest receipt text to the real status slot; behavior is tested by move-feedback.test.ts.
-  if (receipt) markup = markup.replace(/(role="status"[^>]*>)[^<]*/, '$1+2048 points');
+  if (receipt) markup = markup.replace(/(role="status"[^>]*>)[^<]*/, '$1+2048');
   const formatted = await format(html(surface, name, markup, Object.keys(state.players).length), {
     ...formatOptions,
     parser: 'html',

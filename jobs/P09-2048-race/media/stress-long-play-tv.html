@@ -3158,22 +3158,35 @@ ight is the :root default above) ────────
 
       /* games/2048/client/Board.module.css */
       .pb_Board_558e3b53_board {
-        display: grid;
-        grid-template-rows: repeat(4, minmax(0, 1fr));
-        gap: var(--pb-space-2);
+        /* 280px mobile board: 10px inset/gaps and 6px/3px corners. Smaller
+     public maps scale this geometry instead of stretching the puzzle. */
+        --board-gap: calc(var(--pb-space-2) * 1.25);
+        --board-travel: calc(var(--pb-motion-fast) * 2 / 3);
+        --board-appear: calc(var(--pb-motion-fast) * 4 / 3);
+        --board-well: color-mix(in srgb, var(--pb-surface) 65%, var(--pb-bg));
+        position: relative;
+        box-sizing: border-box;
         width: 100%;
         aspect-ratio: 1;
-        padding: var(--pb-space-2);
-        border-radius: var(--pb-radius-lg);
+        border-radius: calc(var(--pb-radius) / 2);
         background: var(--pb-surface-2);
         color: var(--pb-text);
         container-type: inline-size;
+        font-family: var(--merge-font-family, Arial, Helvetica, sans-serif);
+      }
+
+      .pb_Board_558e3b53_cells {
+        position: absolute;
+        inset: var(--board-gap);
+        display: grid;
+        grid-template-rows: repeat(4, minmax(0, 1fr));
+        gap: var(--board-gap);
       }
 
       .pb_Board_558e3b53_row {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: var(--pb-space-2);
+        gap: var(--board-gap);
         min-height: 0;
       }
 
@@ -3181,107 +3194,200 @@ ight is the :root default above) ────────
         display: grid;
         place-items: center;
         min-width: 0;
-        border-radius: var(--pb-radius);
-        background: var(--pb-surface);
-        font-size: min(var(--pb-font-h1), 13cqw);
-        font-weight: 900;
+        border-radius: calc(var(--pb-radius) / 4);
+        background: var(--board-well);
+        font-size: 12.5cqw;
+        font-weight: 700;
         line-height: 1;
         font-variant-numeric: tabular-nums;
       }
 
       .pb_Board_558e3b53_tile[data-value='2'] {
-        background: var(--pb-surface);
+        background: color-mix(in srgb, var(--pb-surface) 92%, var(--pb-text));
       }
 
       .pb_Board_558e3b53_tile[data-value='4'] {
-        color: var(--pb-info);
+        background: color-mix(in srgb, var(--pb-surface) 84%, var(--pb-text));
       }
 
-      .pb_Board_558e3b53_tile[data-value='8'],
+      .pb_Board_558e3b53_tile[data-value='8'] {
+        background: var(--pb-accent-3);
+        color: var(--pb-on-accent);
+      }
+
       .pb_Board_558e3b53_tile[data-value='16'] {
-        color: var(--pb-accent-3);
+        background: var(--pb-info);
+        color: var(--pb-on-accent);
       }
 
-      .pb_Board_558e3b53_tile[data-value='32'],
+      .pb_Board_558e3b53_tile[data-value='32'] {
+        background: var(--pb-accent);
+        color: var(--pb-on-accent);
+      }
+
       .pb_Board_558e3b53_tile[data-value='64'] {
-        color: var(--pb-accent);
+        background: var(--pb-danger);
+        color: var(--pb-on-accent);
       }
 
       .pb_Board_558e3b53_tile[data-value='128'],
       .pb_Board_558e3b53_tile[data-value='256'],
       .pb_Board_558e3b53_tile[data-value='512'],
+      .pb_Board_558e3b53_tile[data-value='1024'],
+      .pb_Board_558e3b53_tile[data-value='2048'] {
+        --tile-glow: 24%;
+        background: color-mix(in srgb, var(--pb-accent-2-fill) 80%, var(--pb-surface));
+        color: var(--pb-on-accent-2-fill);
+        box-shadow: 0 0 calc(var(--pb-space-6) * 15 / 16) calc(var(--pb-space-2) * 1.25)
+          color-mix(in srgb, var(--pb-accent-2-fill) var(--tile-glow), transparent);
+      }
+
+      .pb_Board_558e3b53_tile[data-value='256'] {
+        --tile-glow: 32%;
+        background: color-mix(in srgb, var(--pb-accent-2-fill) 85%, var(--pb-surface));
+      }
+
+      .pb_Board_558e3b53_tile[data-value='512'] {
+        --tile-glow: 40%;
+        background: color-mix(in srgb, var(--pb-accent-2-fill) 90%, var(--pb-surface));
+      }
+
       .pb_Board_558e3b53_tile[data-value='1024'] {
-        color: var(--pb-accent-2);
+        --tile-glow: 48%;
+        background: color-mix(in srgb, var(--pb-accent-2-fill) 95%, var(--pb-surface));
       }
 
       .pb_Board_558e3b53_tile[data-value='2048'] {
+        --tile-glow: 56%;
         background: var(--pb-accent-2-fill);
-        color: var(--pb-on-accent-2-fill);
       }
 
       .pb_Board_558e3b53_tile[data-digits='3'] {
-        font-size: min(var(--pb-font-h1), 10cqw);
+        font-size: 8.928571429cqw;
       }
 
       .pb_Board_558e3b53_tile[data-digits='4'] {
-        font-size: min(var(--pb-font-h2), 8cqw);
+        font-size: 5.357142857cqw;
       }
 
-      .pb_Board_558e3b53_tile[data-pop='true'] {
-        animation: pb-pop var(--pb-motion-fast) var(--pb-ease);
-      }
-
-      /* Small stage boards are a map; the card repeats their largest tile at display size. */
-      .pb_Board_558e3b53_board[data-mini='true'] {
-        gap: var(--pb-space-1);
-        padding: var(--pb-space-1);
-        border-radius: var(--pb-radius);
-      }
-
-      .pb_Board_558e3b53_board[data-mini='true'] .pb_Board_558e3b53_row {
-        gap: var(--pb-space-1);
-      }
-
-      .pb_Board_558e3b53_board[data-mini='true'] .pb_Board_558e3b53_tile {
-        border-radius: calc(var(--pb-radius) / 2);
-        font-size: min(var(--pb-font-body), 13cqw);
-      }
-
-      .pb_Board_558e3b53_board[data-mini='true'] .pb_Board_558e3b53_tile[data-digits='4'] {
-        font-size: min(calc(var(--pb-font-body) * 0.75), 8cqw);
-      }
-
-      .pb_Board_558e3b53_board[data-mini='true'] .pb_Board_558e3b53_tile[data-digits='3'] {
-        font-size: min(var(--pb-font-body), 10cqw);
-      }
-
-      /* Wide TV map cells hold four-digit numbers at the sofa-readable 32px minimum.
-   The playing board on a phone stays square. */
+      .pb_Board_558e3b53_board[data-mini='true'],
       .pb_Board_558e3b53_board[data-tv-map='true'] {
-        aspect-ratio: auto;
-        height: calc(var(--pb-font-body) * 32 / 9 + var(--pb-space-1) * 5);
-        gap: var(--pb-space-1);
-        padding: var(--pb-space-1);
-        border-radius: var(--pb-radius);
+        --board-gap: 3.571428571cqw;
+        border-radius: 2.142857143%;
       }
 
-      .pb_Board_558e3b53_board[data-tv-map='true'] .pb_Board_558e3b53_row {
-        gap: var(--pb-space-1);
-      }
-
+      .pb_Board_558e3b53_board[data-mini='true'] .pb_Board_558e3b53_tile,
       .pb_Board_558e3b53_board[data-tv-map='true'] .pb_Board_558e3b53_tile {
-        border-radius: calc(var(--pb-radius) / 2);
-        font-size: calc(var(--pb-font-body) * 8 / 9);
+        border-radius: 5.217391304%;
       }
 
-      @media (prefers-reduced-motion: reduce) {
-        .pb_Board_558e3b53_tile[data-pop='true'] {
-          animation: none;
+      /* The phone is the essential original puzzle. Square TV maps are supplementary
+   party plumbing; the card repeats score and best tile at sofa-readable size. */
+      .pb_Board_558e3b53_board[data-tv-map='true'] {
+        width: calc(var(--pb-font-body) * 32 / 9 + var(--pb-space-1) * 5);
+        max-width: 100%;
+        justify-self: center;
+      }
+
+      /* The semantic snapshot also remains visible when motion is disabled before
+   React hydrates or while its preference subscription is catching up. */
+      @media (prefers-reduced-motion: no-preference) {
+        :global(:root:not([data-motion='off']))
+          .pb_Board_558e3b53_board[data-moving='true']
+          .pb_Board_558e3b53_cells
+          .pb_Board_558e3b53_tile {
+          background: var(--board-well);
+          color: transparent;
+          box-shadow: none;
         }
       }
 
-      :root[data-motion='off'] .pb_Board_558e3b53_tile[data-pop='true'] {
-        animation: none;
+      .pb_Board_558e3b53_motion {
+        position: absolute;
+        inset: var(--board-gap);
+        pointer-events: none;
+      }
+
+      .pb_Board_558e3b53_movingTile {
+        position: absolute;
+        left: calc(var(--tile-col) * (100% + var(--board-gap)) / 4);
+        top: calc(var(--tile-row) * (100% + var(--board-gap)) / 4);
+        width: calc((100% - var(--board-gap) * 3) / 4);
+        height: calc((100% - var(--board-gap) * 3) / 4);
+        z-index: 2;
+      }
+
+      .pb_Board_558e3b53_movingTile[data-motion='travel'] {
+        animation: travel var(--board-travel) ease-in-out both;
+      }
+
+      .pb_Board_558e3b53_movingTile[data-merged='true'] {
+        animation:
+          travel var(--board-travel) ease-in-out both,
+          consumed var(--board-travel) steps(1, end) both;
+      }
+
+      .pb_Board_558e3b53_movingTile[data-motion='spawn'] {
+        animation: appear var(--board-appear) ease var(--board-travel) both;
+      }
+
+      .pb_Board_558e3b53_movingTile[data-motion='merge'] {
+        z-index: 3;
+        animation: merge var(--board-appear) ease var(--board-travel) both;
+      }
+
+      @keyframes travel {
+        from {
+          transform: translate(
+            calc(var(--from-x) * (100% + var(--board-gap))),
+            calc(var(--from-y) * (100% + var(--board-gap)))
+          );
+        }
+        to {
+          transform: translate(0, 0);
+        }
+      }
+
+      @keyframes consumed {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+
+      @keyframes appear {
+        from {
+          opacity: 0;
+          transform: scale(0);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes merge {
+        0% {
+          transform: scale(0);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .pb_Board_558e3b53_motion {
+          display: none;
+        }
+      }
+
+      :root[data-motion='off'] .pb_Board_558e3b53_motion {
+        display: none;
       }
 
       /* games/2048/client/RaceStage.module.css */
@@ -3492,6 +3598,7 @@ ight is the :root default above) ────────
 
       /* games/2048/client/Controller.module.css */
       .pb_Controller_d61e2ba9_screen {
+        --merge-font-family: Arial, Helvetica, sans-serif;
         display: grid;
         grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
         gap: var(--pb-space-3);
@@ -3501,6 +3608,7 @@ ight is the :root default above) ────────
         padding-bottom: max(var(--pb-space-3), env(safe-area-inset-bottom));
         overscroll-behavior: none;
         color: var(--pb-text);
+        font-family: var(--merge-font-family);
       }
 
       .pb_Controller_d61e2ba9_screen[data-phone-only='true'] {
@@ -3509,34 +3617,59 @@ ight is the :root default above) ────────
 
       .pb_Controller_d61e2ba9_header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
         gap: var(--pb-space-3);
+        width: min(100%, calc(var(--pb-touch) * 70 / 11));
+        justify-self: center;
       }
 
       .pb_Controller_d61e2ba9_header h2 {
-        margin: 0;
-        font-size: var(--pb-font-h1);
-        font-weight: 900;
+        margin: calc(var(--pb-space-3) * 1.25) 0 0;
+        font-size: calc(var(--pb-font-h1) * 27 / 28);
+        font-weight: 700;
         line-height: 1.15;
       }
 
-      .pb_Controller_d61e2ba9_header p {
-        margin: var(--pb-space-1) 0 0;
+      .pb_Controller_d61e2ba9_intro {
+        display: grid;
+        grid-template-columns: 55% 42%;
+        justify-content: space-between;
+        width: min(100%, calc(var(--pb-touch) * 70 / 11));
+        justify-self: center;
+        font-size: calc(var(--pb-font-body) * 5 / 6);
+      }
+
+      .pb_Controller_d61e2ba9_intro > p {
+        line-height: 1.65;
+      }
+
+      .pb_Controller_d61e2ba9_raceInfo {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: space-between;
+        gap: var(--pb-space-2);
+        margin-top: var(--pb-space-2);
         font-size: var(--pb-font-caption);
         color: var(--pb-text-muted);
       }
 
       .pb_Controller_d61e2ba9_clock {
         display: grid;
-        justify-items: end;
+        justify-items: center;
+        align-content: center;
+        min-height: calc(var(--pb-touch) * 10 / 11);
+        align-self: start;
+        margin-top: calc(var(--pb-space-1) / 2);
+        border-radius: calc(var(--pb-radius) / 4);
+        background: var(--pb-surface-2);
         flex: none;
         font-size: var(--pb-font-caption);
         color: var(--pb-text-muted);
       }
 
       .pb_Controller_d61e2ba9_clock strong {
-        font-size: var(--pb-font-display);
+        font-size: var(--pb-font-button);
         color: var(--pb-accent-2);
         line-height: 1;
         font-variant-numeric: tabular-nums;
@@ -3548,62 +3681,119 @@ ight is the :root default above) ────────
 
       .pb_Controller_d61e2ba9_stats {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: calc(var(--pb-space-1) * 1.25);
         margin: 0;
-        padding: var(--pb-space-2) var(--pb-space-3);
-        background: var(--pb-surface);
-        border-radius: var(--pb-radius);
+        padding: 0;
         text-align: center;
       }
 
       .pb_Controller_d61e2ba9_stats dt {
-        font-size: var(--pb-font-caption);
+        font-size: calc(var(--pb-font-caption) * 13 / 14);
+        text-transform: uppercase;
+        line-height: 1;
         color: var(--pb-text-muted);
       }
 
       .pb_Controller_d61e2ba9_stats dd {
+        position: relative;
         margin: 0;
-        font-size: var(--pb-font-h1);
+        font-size: calc(var(--pb-font-h1) * 25 / 28);
         line-height: 1.2;
-        font-weight: 900;
+        font-weight: 700;
         font-variant-numeric: tabular-nums;
       }
 
-      .pb_Controller_d61e2ba9_stats > div:nth-child(2) dd {
-        color: var(--pb-accent-2);
+      .pb_Controller_d61e2ba9_stats > div {
+        min-width: calc(var(--pb-touch) * 15 / 11);
+        min-height: calc(var(--pb-touch) * 1.25);
+        padding: calc(var(--pb-space-2) * 1.25) calc(var(--pb-space-2) * 1.25)
+          calc(var(--pb-space-1) / 2);
+        background: var(--pb-surface-2);
+        border-radius: calc(var(--pb-radius) / 4);
+      }
+
+      .pb_Controller_d61e2ba9_stats dd {
+        margin-top: calc(var(--pb-space-1) / 2);
       }
 
       .pb_Controller_d61e2ba9_gain {
-        display: block;
-        min-height: calc(var(--pb-font-caption) * 1.3);
-        font-size: var(--pb-font-caption);
-        line-height: 1.3;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 5;
+        font-size: inherit;
         font-weight: 900;
         color: var(--pb-accent-3);
+        animation: scoreRise var(--pb-motion-slow) ease-in both;
+        pointer-events: none;
+      }
+
+      @keyframes scoreRise {
+        from {
+          opacity: 1;
+          transform: translateY(calc(var(--pb-space-5) * 25 / 24));
+        }
+        to {
+          opacity: 0;
+          transform: translateY(calc(var(--pb-space-5) * -50 / 24));
+        }
       }
 
       .pb_Controller_d61e2ba9_boardSpace {
         display: grid;
-        place-items: center;
+        place-items: start center;
         min-height: 0;
         container-type: size;
       }
 
       .pb_Controller_d61e2ba9_swipe {
         position: relative;
-        width: min(100%, 100cqh);
+        width: min(100%, 100cqh, calc(var(--pb-touch) * 70 / 11));
         aspect-ratio: 1;
         touch-action: none;
         user-select: none;
         -webkit-user-select: none;
         -webkit-touch-callout: none;
-        border-radius: var(--pb-radius-lg);
+        border-radius: calc(var(--pb-radius) / 2);
       }
 
       .pb_Controller_d61e2ba9_swipe:focus-visible,
       .pb_Controller_d61e2ba9_direction:focus-visible {
         outline: var(--pb-space-1) solid var(--pb-focus);
         outline-offset: var(--pb-space-1);
+      }
+
+      .pb_Controller_d61e2ba9_overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-3);
+        background: var(--pb-scrim);
+        border-radius: calc(var(--pb-radius) / 2);
+        animation: blockedFade calc(var(--pb-motion-base) * 8 / 3) ease
+          calc(var(--pb-motion-slow) * 2) backwards;
+      }
+
+      .pb_Controller_d61e2ba9_overlay strong {
+        font-size: calc(var(--pb-font-h1) * 15 / 14);
+      }
+
+      .pb_Controller_d61e2ba9_overlay span {
+        font-size: var(--pb-font-caption);
+      }
+
+      @keyframes blockedFade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
       }
 
       .pb_Controller_d61e2ba9_hint,
@@ -3657,10 +3847,24 @@ ight is the :root default above) ────────
         .pb_Controller_d61e2ba9_direction {
           transition: none;
         }
+        .pb_Controller_d61e2ba9_gain {
+          display: none;
+        }
+        .pb_Controller_d61e2ba9_overlay {
+          animation: none;
+        }
       }
 
       :root[data-motion='off'] .pb_Controller_d61e2ba9_direction {
         transition: none;
+      }
+
+      :root[data-motion='off'] .pb_Controller_d61e2ba9_gain {
+        display: none;
+      }
+
+      :root[data-motion='off'] .pb_Controller_d61e2ba9_overlay {
+        animation: none;
       }
 
       /* games/2048/client/Tv.module.css */
@@ -4068,129 +4272,131 @@ ight is the :root default above) ────────
                 aria-readonly="true"
                 data-tv-map="true"
               >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 1: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 2: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 1, column 4: 4"
-                    >4</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 2, column 3: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="64"
-                    data-digits="2"
-                    aria-label="Row 2, column 4: 64"
-                    >64</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 3, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 3, column 3: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 3, column 4: 4"
-                    >4</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 4, column 2: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 4, column 3: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="64"
-                    data-digits="2"
-                    aria-label="Row 4, column 4: 64"
-                    >64</span
-                  >
+                <div class="pb_Board_558e3b53_cells">
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 1: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 2: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 1, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 1, column 4: 4"
+                      >4</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 1: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 2, column 2: 2"
+                      >2</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 2, column 3: 16"
+                      >16</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="64"
+                      data-digits="2"
+                      aria-label="Row 2, column 4: 64"
+                      >64</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 3, column 1: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 3, column 2: 8"
+                      >8</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="32"
+                      data-digits="2"
+                      aria-label="Row 3, column 3: 32"
+                      >32</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 3, column 4: 4"
+                      >4</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 4, column 1: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 4, column 2: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 4, column 3: 8"
+                      >8</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="64"
+                      data-digits="2"
+                      aria-label="Row 4, column 4: 64"
+                      >64</span
+                    >
+                  </div>
                 </div>
               </div>
             </article>
@@ -4211,127 +4417,129 @@ ight is the :root default above) ────────
                 aria-readonly="true"
                 data-tv-map="true"
               >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 1: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 2: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 4: empty"
-                  ></span>
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 2, column 1: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 4: empty"
-                  ></span>
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 3, column 2: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 3, column 3: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 3, column 4: 2"
-                    >2</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 4, column 1: 128"
-                    >128</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 4, column 2: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 4, column 3: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 4, column 4: 4"
-                    >4</span
-                  >
+                <div class="pb_Board_558e3b53_cells">
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 1: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 2: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 1, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 1, column 4: empty"
+                    ></span>
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 2, column 1: 2"
+                      >2</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 2: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 4: empty"
+                    ></span>
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 3, column 1: 2"
+                      >2</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 3, column 2: 16"
+                      >16</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 3, column 3: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 3, column 4: 2"
+                      >2</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="128"
+                      data-digits="3"
+                      aria-label="Row 4, column 1: 128"
+                      >128</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="32"
+                      data-digits="2"
+                      aria-label="Row 4, column 2: 32"
+                      >32</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 4, column 3: 16"
+                      >16</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 4, column 4: 4"
+                      >4</span
+                    >
+                  </div>
                 </div>
               </div>
             </article>
@@ -4352,126 +4560,128 @@ ight is the :root default above) ────────
                 aria-readonly="true"
                 data-tv-map="true"
               >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 1: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 2: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 1, column 3: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 4: empty"
-                  ></span>
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 2, column 1: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 4: empty"
-                  ></span>
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 3, column 1: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 3, column 2: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 3, column 4: 2"
-                    >2</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 4, column 1: 128"
-                    >128</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 2: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 4: empty"
-                  ></span>
+                <div class="pb_Board_558e3b53_cells">
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 1: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 2: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 1, column 3: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 1, column 4: empty"
+                    ></span>
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 2, column 1: 16"
+                      >16</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 2, column 2: 8"
+                      >8</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 4: empty"
+                    ></span>
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="32"
+                      data-digits="2"
+                      aria-label="Row 3, column 1: 32"
+                      >32</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 3, column 2: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 3, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 3, column 4: 2"
+                      >2</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="128"
+                      data-digits="3"
+                      aria-label="Row 4, column 1: 128"
+                      >128</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 4, column 2: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 4, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 4, column 4: empty"
+                    ></span>
+                  </div>
                 </div>
               </div>
             </article>
@@ -4492,126 +4702,128 @@ ight is the :root default above) ────────
                 aria-readonly="true"
                 data-tv-map="true"
               >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 1: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 2: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 4: empty"
-                  ></span>
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 2, column 1: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 4: empty"
-                  ></span>
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 3, column 1: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 3, column 2: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 3, column 3: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 4: empty"
-                  ></span>
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 4, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 4, column 2: 128"
-                    >128</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 4, column 3: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 4, column 4: 4"
-                    >4</span
-                  >
+                <div class="pb_Board_558e3b53_cells">
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 1: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 2: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 1, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 1, column 4: empty"
+                    ></span>
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 2, column 1: 8"
+                      >8</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 2, column 2: 2"
+                      >2</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 4: empty"
+                    ></span>
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="32"
+                      data-digits="2"
+                      aria-label="Row 3, column 1: 32"
+                      >32</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 3, column 2: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 3, column 3: 16"
+                      >16</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 3, column 4: empty"
+                    ></span>
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 4, column 1: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="128"
+                      data-digits="3"
+                      aria-label="Row 4, column 2: 128"
+                      >128</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 4, column 3: 8"
+                      >8</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 4, column 4: 4"
+                      >4</span
+                    >
+                  </div>
                 </div>
               </div>
             </article>
@@ -4632,129 +4844,131 @@ ight is the :root default above) ────────
                 aria-readonly="true"
                 data-tv-map="true"
               >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 1: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 2: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 1, column 4: 2"
-                    >2</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 2, column 4: 8"
-                    >8</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 3, column 2: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 3, column 3: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 3, column 4: 2"
-                    >2</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 4, column 1: 128"
-                    >128</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 4, column 2: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 4, column 3: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 4, column 4: 4"
-                    >4</span
-                  >
+                <div class="pb_Board_558e3b53_cells">
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 1: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 2: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 1, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 1, column 4: 2"
+                      >2</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 1: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 2, column 2: 2"
+                      >2</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 2, column 4: 8"
+                      >8</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 3, column 1: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 3, column 2: 16"
+                      >16</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 3, column 3: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 3, column 4: 2"
+                      >2</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="128"
+                      data-digits="3"
+                      aria-label="Row 4, column 1: 128"
+                      >128</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="32"
+                      data-digits="2"
+                      aria-label="Row 4, column 2: 32"
+                      >32</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 4, column 3: 8"
+                      >8</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 4, column 4: 4"
+                      >4</span
+                    >
+                  </div>
                 </div>
               </div>
             </article>
@@ -4775,128 +4989,130 @@ ight is the :root default above) ────────
                 aria-readonly="true"
                 data-tv-map="true"
               >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 1: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 2: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 1, column 4: empty"
-                  ></span>
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 2, column 1: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 2, column 4: 8"
-                    >8</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 2: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 3, column 3: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 3, column 4: 16"
-                    >16</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 4, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 4, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 4, column 3: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="128"
-                    data-digits="3"
-                    aria-label="Row 4, column 4: 128"
-                    >128</span
-                  >
+                <div class="pb_Board_558e3b53_cells">
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 1: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 2: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 1, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 1, column 4: empty"
+                    ></span>
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 2, column 1: 2"
+                      >2</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 2: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 2, column 4: 8"
+                      >8</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 3, column 1: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 3, column 2: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 3, column 3: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 3, column 4: 16"
+                      >16</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 4, column 1: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 4, column 2: 8"
+                      >8</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="32"
+                      data-digits="2"
+                      aria-label="Row 4, column 3: 32"
+                      >32</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="128"
+                      data-digits="3"
+                      aria-label="Row 4, column 4: 128"
+                      >128</span
+                    >
+                  </div>
                 </div>
               </div>
             </article>
@@ -4917,129 +5133,131 @@ ight is the :root default above) ────────
                 aria-readonly="true"
                 data-tv-map="true"
               >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 1: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 2: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 1, column 3: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 1, column 4: 2"
-                    >2</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 2, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 2, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 2, column 3: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 2, column 4: 8"
-                    >8</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 3, column 2: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 3, column 3: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 3, column 4: 16"
-                    >16</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 4, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="8"
-                    data-digits="1"
-                    aria-label="Row 4, column 2: 8"
-                    >8</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="32"
-                    data-digits="2"
-                    aria-label="Row 4, column 3: 32"
-                    >32</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 4, column 4: 2"
-                    >2</span
-                  >
+                <div class="pb_Board_558e3b53_cells">
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 1: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 2: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 1, column 3: 16"
+                      >16</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 1, column 4: 2"
+                      >2</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 2, column 1: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 2, column 2: 8"
+                      >8</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="32"
+                      data-digits="2"
+                      aria-label="Row 2, column 3: 32"
+                      >32</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 2, column 4: 8"
+                      >8</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 3, column 1: 2"
+                      >2</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 3, column 2: 16"
+                      >16</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 3, column 3: 8"
+                      >8</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 3, column 4: 16"
+                      >16</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 4, column 1: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="8"
+                      data-digits="1"
+                      aria-label="Row 4, column 2: 8"
+                      >8</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="32"
+                      data-digits="2"
+                      aria-label="Row 4, column 3: 32"
+                      >32</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 4, column 4: 2"
+                      >2</span
+                    >
+                  </div>
                 </div>
               </div>
             </article>
@@ -5060,126 +5278,128 @@ ight is the :root default above) ────────
                 aria-readonly="true"
                 data-tv-map="true"
               >
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 1: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="1024"
-                    data-digits="4"
-                    aria-label="Row 1, column 2: 1024"
-                    >1024</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 1, column 3: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 1, column 4: 4"
-                    >4</span
-                  >
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 2, column 1: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="16"
-                    data-digits="2"
-                    aria-label="Row 2, column 2: 16"
-                    >16</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="4"
-                    data-digits="1"
-                    aria-label="Row 2, column 3: 4"
-                    >4</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 2, column 4: empty"
-                  ></span>
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 1: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 2: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 3, column 4: empty"
-                  ></span>
-                </div>
-                <div role="row" class="pb_Board_558e3b53_row">
-                  <span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="2"
-                    data-digits="1"
-                    aria-label="Row 4, column 1: 2"
-                    >2</span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 2: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 3: empty"
-                  ></span
-                  ><span
-                    class="pb_Board_558e3b53_tile"
-                    role="gridcell"
-                    data-value="0"
-                    data-digits="1"
-                    aria-label="Row 4, column 4: empty"
-                  ></span>
+                <div class="pb_Board_558e3b53_cells">
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 1: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="1024"
+                      data-digits="4"
+                      aria-label="Row 1, column 2: 1024"
+                      >1024</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 1, column 3: 16"
+                      >16</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 1, column 4: 4"
+                      >4</span
+                    >
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 2, column 1: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="16"
+                      data-digits="2"
+                      aria-label="Row 2, column 2: 16"
+                      >16</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="4"
+                      data-digits="1"
+                      aria-label="Row 2, column 3: 4"
+                      >4</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 2, column 4: empty"
+                    ></span>
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 3, column 1: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 3, column 2: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 3, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 3, column 4: empty"
+                    ></span>
+                  </div>
+                  <div role="row" class="pb_Board_558e3b53_row">
+                    <span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="2"
+                      data-digits="1"
+                      aria-label="Row 4, column 1: 2"
+                      >2</span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 4, column 2: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 4, column 3: empty"
+                    ></span
+                    ><span
+                      class="pb_Board_558e3b53_tile"
+                      role="gridcell"
+                      data-value="0"
+                      data-digits="1"
+                      aria-label="Row 4, column 4: empty"
+                    ></span>
+                  </div>
                 </div>
               </div>
             </article>

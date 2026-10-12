@@ -6,6 +6,8 @@ export const PHASES = ['play', 'reveal', 'done'] as const;
 export const TARGET = 2048;
 /** Minimum settling beat; the actual reveal also covers every visible word. */
 export const REVEAL_MS = 8000;
+/** Original 1,200 ms delay + 800 ms fade, then one fully visible second before rankings. */
+export const TERMINAL_PAYOFF_MS = 3000;
 export const MOVE_MS = 150;
 export const MAX_MOVES = 1200;
 export const DIRECTIONS = ['up', 'down', 'left', 'right'] as const;
@@ -34,6 +36,8 @@ export interface State extends GameStateBase {
   settings: { seconds: number };
   phoneOnly: boolean;
   reason: EndReason;
+  /** Terminal-board clock; absent in legacy fixtures and hidden outside terminal reveals. */
+  terminalPayoffUntil?: number | null;
 }
 export interface RacerView {
   id: string;
@@ -50,6 +54,7 @@ export interface RaceView {
   winners: string[];
   reason: EndReason;
   target: number;
+  terminalPayoffUntil: number | null;
 }
 export interface TvMergeView extends TvView, RaceView {}
 export interface ControllerMergeView extends ControllerView, RaceView {
