@@ -1,0 +1,223 @@
+diff --git a/games/kahoot/server/bot.ts b/games/kahoot/server/bot.ts
+--- a/games/kahoot/server/bot.ts
++++ b/games/kahoot/server/bot.ts
+@@ -3,7 +3,7 @@
+ // and stays quiet otherwise. Randomness comes from the given rng.
+ import type { BotSkill, Rng } from '@partybox/game-sdk';
+ import { questionById } from './content';
+-import { CLASSIC_KNOWLEDGE } from './classic';
++import { classicBotFact } from './classic';
+ import { wagerOptions } from './scoring';
+ import { isParticipating, quizModeOf } from './types';
+ import type { Input, State } from './types';
+@@ -32,9 +32,7 @@
+     const question = questionById(state.questionIds[state.index] ?? '', state.contentLang);
+     if (quizModeOf(state) === 'classic') {
+       if (!question) return null;
+-      const fact = Object.hasOwn(CLASSIC_KNOWLEDGE, question.id)
+-        ? CLASSIC_KNOWLEDGE[question.id]
+-        : undefined;
++      const fact = classicBotFact(question.id, question.question);
+       const known = fact === undefined ? -1 : question.choices.indexOf(fact);
+       const index =
+         known >= 0 && rng.chance(BOT_CORRECT_PROBABILITY[skill])
+diff --git a/games/kahoot/server/classic.ts b/games/kahoot/server/classic.ts
+--- a/games/kahoot/server/classic.ts
++++ b/games/kahoot/server/classic.ts
+@@ -19,11 +19,46 @@
+   music: classicPackSchema.parse(music),
+   custom: classicPackSchema.parse(custom),
+ };
+-// Public answer-text facts are authored independently; custom packs are guessed when unknown.
++// Public answer-text facts are authored independently; unknown custom facts remain guesses.
+ export const CLASSIC_KNOWLEDGE = {
+   ...classicKnowledgeSchema.parse(knowledge),
+   ...classicKnowledgeSchema.parse(teamKnowledge),
+ };
++
++// Build a prompt index from independently authored standard-pack facts only.
++// Conflicting answer words remove a prompt permanently, including later repeats.
++export function publicClassicPromptFacts(
++  packs: readonly { id: string; questions: readonly { id: string; prompt: string }[] }[],
++  facts: Readonly<Record<string, string>>,
++): ReadonlyMap<string, string> {
++  const answers = new Map<string, string>();
++  const ambiguous = new Set<string>();
++  for (const pack of packs) {
++    if (pack.id === 'custom') continue;
++    for (const { id, prompt } of pack.questions) {
++      const fact = Object.hasOwn(facts, id) ? facts[id] : undefined;
++      if (fact === undefined || ambiguous.has(prompt)) continue;
++      const prior = answers.get(prompt);
++      if (prior !== undefined && prior !== fact) {
++        answers.delete(prompt);
++        ambiguous.add(prompt);
++      } else answers.set(prompt, fact);
++    }
++  }
++  return answers;
++}
++
++const CLASSIC_PROMPT_FACTS = publicClassicPromptFacts(
++  Object.values(CLASSIC_PACKS),
++  CLASSIC_KNOWLEDGE,
++);
++
++/** Stable standard IDs keep priority; unknown custom IDs may reuse an exact public prompt. */
++export function classicBotFact(id: string, prompt: string): string | undefined {
++  if (Object.hasOwn(CLASSIC_KNOWLEDGE, id)) return CLASSIC_KNOWLEDGE[id];
++  return id.startsWith('custom-') ? CLASSIC_PROMPT_FACTS.get(prompt) : undefined;
++}
++
+ export type ClassicQuestion = Omit<Question, 'category'> & {
+   category: string;
+   explanation: string;
+diff --git a/games/kahoot/__tests__/custom-bot-public-facts.test.ts b/games/kahoot/__tests__/custom-bot-public-facts.test.ts
+new file mode 100644
+--- /dev/null
++++ b/games/kahoot/__tests__/custom-bot-public-facts.test.ts
+@@ -0,0 +1,144 @@
++// Public bot knowledge must survive owner IDs without reading the owner's answer key.
++import { describe, expect, it, vi } from 'vitest';
++import { createRng } from '@partybox/game-sdk';
++import type { BotSkill } from '@partybox/game-sdk';
++import { sampleInput } from '../server/bot';
++import { classicBotFact, classicQuestionById, publicClassicPromptFacts } from '../server/classic';
++import type { ClassicQuestion } from '../server/classic';
++import * as content from '../server/content';
++import type { State } from '../server/types';
++import { start, timer } from './helpers';
++
++const skills = ['easy', 'normal', 'sharp'] as const;
++const modes = ['classic', 'teams', 'tv-vote'] as const;
++const publicParis = classicQuestionById('general-01')!;
++
++function open(mode: (typeof modes)[number]): State {
++  let state = start({ quizMode: mode, classicPack: 'custom', questions: 5 });
++  for (let step = 0; step < 3 && state.phase.id !== 'question'; step++) state = timer(state);
++  expect(state.phase.id).toBe('question');
++  return { ...state, questionIds: ['custom-owner-fact'], index: 0, picks: {} };
++}
++
++function ownerQuestion(overrides: Partial<ClassicQuestion> = {}): ClassicQuestion {
++  return {
++    ...publicParis,
++    id: 'custom-owner-fact',
++    category: 'classic-custom',
++    choices: ['Tokyo', 'Berlin', 'Madrid', 'Paris'],
++    answerIndex: 0, // Deliberately wrong: learned fact text is Paris, not this owner's key.
++    ...overrides,
++  };
++}
++
++function forbiddenKeys(question: ClassicQuestion): ClassicQuestion {
++  const copy = { ...question };
++  for (const key of ['answerIndex', 'correctIndex', 'correct', 'explanation'])
++    Object.defineProperty(copy, key, {
++      configurable: true,
++      get() { throw new Error(`Bot read forbidden owner metadata: ${key}`); },
++    });
++  return copy;
++}
++
++function seededChoices(
++  question: ClassicQuestion,
++  skill: BotSkill,
++  mode: (typeof modes)[number] = 'classic',
++): number[] {
++  const state = open(mode);
++  const lookup = vi.spyOn(content, 'questionById').mockReturnValue(question);
++  try {
++    return Array.from({ length: 1000 }, (_, index) => {
++      const input = sampleInput(state, 'a', createRng(index + 1), skill);
++      if (input?.type !== 'answer') throw new Error('Custom quiz bot did not return a stamped answer');
++      return input.index;
++    });
++  } finally {
++    lookup.mockRestore();
++  }
++}
++
++function uniformAcrossSkills(question: ClassicQuestion): void {
++  const answers = skills.map((skill) => seededChoices(forbiddenKeys(question), skill));
++  expect(answers[1]).toEqual(answers[0]);
++  expect(answers[2]).toEqual(answers[0]);
++  for (const index of [0, 1, 2, 3]) {
++    const count = answers[0]!.filter((answer) => answer === index).length;
++    expect(count).toBeGreaterThanOrEqual(180);
++    expect(count).toBeLessThanOrEqual(320);
++  }
++}
++
++describe('custom bots reuse independent public facts', () => {
++  it.each(modes)('%s distinguishes all three strengths over 1,000 seeds on a renamed public prompt', (mode) => {
++    const question = ownerQuestion();
++    const counts = skills.map((skill) => seededChoices(question, skill, mode).filter((index) => index === 3).length);
++    // Six-to-seven percentage-point bands tolerate sampling noise but reject a flat 25%.
++    expect(counts[0]).toBeGreaterThanOrEqual(230);
++    expect(counts[0]).toBeLessThanOrEqual(370);
++    expect(counts[1]).toBeGreaterThanOrEqual(430);
++    expect(counts[1]).toBeLessThanOrEqual(570);
++    expect(counts[2]).toBeGreaterThanOrEqual(730);
++    expect(counts[2]).toBeLessThanOrEqual(870);
++    expect(counts[1]! - counts[0]!).toBeGreaterThan(100);
++    expect(counts[2]! - counts[1]!).toBeGreaterThan(200);
++  });
++
++  it('never reads the owner answer key or explanation, even for an exact known prompt', () => {
++    const answers = seededChoices(forbiddenKeys(ownerQuestion()), 'sharp');
++    expect(answers.filter((index) => index === 3).length).toBeGreaterThanOrEqual(730);
++  });
++
++  it.each(['A made-up fact?', '__proto__', 'constructor', 'toString', 'valueOf'])(
++    'keeps unknown/prototype prompt %s as a seeded uniform guess at every strength',
++    (question) => uniformAcrossSkills(ownerQuestion({ question })),
++  );
++
++  it('does not reuse the fact after the owner changes the prompt or omits its answer text', () => {
++    uniformAcrossSkills(ownerQuestion({ question: 'What is the capital of Atlantis?' }));
++    uniformAcrossSkills(ownerQuestion({ question: publicParis.question + ' ' }));
++    uniformAcrossSkills(ownerQuestion({ choices: ['Tokyo', 'Berlin', 'Madrid', 'Rome'] }));
++  });
++
++  it('does not resolve conflicting public duplicate prompts by an answer index', () => {
++    const violin = classicQuestionById('general-03')!;
++    expect(classicBotFact('custom-violin', violin.question)).toBeUndefined();
++    expect(classicBotFact('general-03', violin.question)).toBe('Four');
++    expect(classicBotFact('music-02', violin.question)).toBe('4');
++    uniformAcrossSkills(ownerQuestion({ question: violin.question, choices: [...violin.choices] }));
++  });
++
++  it('keeps canonical known-ID priority and never adds prompt lookup to unrelated IDs', () => {
++    expect(classicBotFact('general-01', 'An altered prompt')).toBe('Paris');
++    expect(classicBotFact('general-missing', publicParis.question)).toBeUndefined();
++    expect(classicBotFact('geo-000', publicParis.question)).toBeUndefined();
++  });
++
++  it('indexes only standard independent facts and keeps a conflicting prompt omitted after later repeats', () => {
++    const packs = [
++      { id: 'general', questions: [
++        { id: 'public-a', prompt: 'Repeated prompt' },
++        { id: 'public-b', prompt: 'Repeated prompt' },
++        { id: 'public-c', prompt: 'Repeated prompt' },
++        { id: 'missing-fact', prompt: 'No independent fact' },
++        { id: 'inherited-fact', prompt: 'Inherited fact' },
++        { id: 'public-safe', prompt: 'Unambiguous prompt' },
++      ] },
++      { id: 'custom', questions: [
++        { id: 'custom-poison', prompt: 'Unambiguous prompt' },
++        { id: 'custom-only', prompt: 'Owner-only prompt' },
++      ] },
++    ];
++    const facts = Object.assign(Object.create({ 'inherited-fact': 'Inherited' }), {
++      'public-a': 'A', 'public-b': 'B', 'public-c': 'A', 'public-safe': 'Safe',
++      'custom-poison': 'Wrong', 'custom-only': 'Owner key',
++    }) as Record<string, string>;
++    const index = publicClassicPromptFacts(packs, facts);
++    expect(index.get('Repeated prompt')).toBeUndefined();
++    expect(index.get('No independent fact')).toBeUndefined();
++    expect(index.get('Inherited fact')).toBeUndefined();
++    expect(index.get('Owner-only prompt')).toBeUndefined();
++    expect(index.get('Unambiguous prompt')).toBe('Safe');
++  });
++});

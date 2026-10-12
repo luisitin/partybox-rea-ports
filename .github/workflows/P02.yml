@@ -7,6 +7,9 @@ on:
       - '.github/workflows/P02.yml'
 permissions:
   contents: read
+concurrency:
+  group: '${{ github.workflow }}-${{ github.ref }}'
+  cancel-in-progress: true
 jobs:
   verify:
     runs-on: ubuntu-latest

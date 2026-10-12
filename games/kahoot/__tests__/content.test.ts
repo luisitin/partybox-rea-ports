@@ -107,7 +107,7 @@ describe('manifest', () => {
     expect(setting.options).toEqual(expected);
   });
 
-  it('declares the shared phases, including the classic podium', () => {
-    expect(game.phases).toEqual(['intro', 'question', 'reveal', 'wager', 'podium', 'done']);
+  it('declares the shared phases, including group discussion and the classic podium', () => {
+    expect(game.phases).toEqual(['intro', 'talk', 'question', 'reveal', 'wager', 'podium', 'done']);
   });
 });

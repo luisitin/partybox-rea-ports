@@ -1,0 +1,316 @@
+diff --git a/games/kahoot/client/ClassicController.tsx b/games/kahoot/client/ClassicController.tsx
+--- a/games/kahoot/client/ClassicController.tsx
++++ b/games/kahoot/client/ClassicController.tsx
+@@ -29,7 +29,7 @@
+ import { STRINGS } from './strings';
+ import styles from './Classic.module.css';
+ import { PhoneNext } from './NextStep';
+-import { GroupIdentity, GroupRoster, GroupVerdict, GroupDecision, groupTitle } from './GroupParts';
++import { GroupIdentity, GroupRoster, GroupVerdict, GroupDecision, GroupPlayerBar, groupTitle } from './GroupParts';
+ import { GroupTalk } from './GroupTalk';
+ import groups from './Group.module.css';
+ 
+@@ -54,6 +54,7 @@
+   const group = view.group;
+   const vote = group?.mode === 'tv-vote';
+   const showStage = view.showStage || phoneOnly || !view.participating;
++  const besideGroupReveal = group !== undefined && view.participating && !showStage && view.phaseId === 'reveal';
+   const stamp = view.answerStamp;
+   const key = stamp ? `${stamp.questionId}:${stamp.questionStartedAt}` : '';
+   const mine = pending?.key === key ? pending : null;
+@@ -223,30 +224,34 @@
+       </Screen>
+     );
+   }
++  const revealNext = view.participating && view.next && skip ? (
++    <PhoneNext
++      next={view.next}
++      skip={skip}
++      phaseKey={view.deadline}
++      revealAt={view.revealAt}
++      paused={view.paused}
++      clockHeldAt={view.clockHeldAt}
++      leaderboardAt={view.leaderboardAt}
++      nextAt={view.nextAt}
++    />
++  ) : undefined;
+   if (view.phaseId === 'reveal')
+     return (
+       <Screen
+         key={`reveal:${view.round?.number}`}
+         className={`${styles.phoneScreen} ${groups.phone}`}
+         title={round}
+-        footer={
+-          view.participating && view.next && skip ? (
+-            <PhoneNext
+-              next={view.next}
+-              skip={skip}
+-              phaseKey={view.deadline}
+-              revealAt={view.revealAt}
+-              paused={view.paused}
+-              clockHeldAt={view.clockHeldAt}
+-              leaderboardAt={view.leaderboardAt}
+-              nextAt={view.nextAt}
+-            />
+-          ) : undefined
+-        }
++        footer={besideGroupReveal ? (
++          <div className={groups.revealFooter}>
++            {revealNext}
++            <GroupPlayerBar view={view} />
++          </div>
++        ) : revealNext}
+       >
+         {view.participating && shown && view.outcome ? (
+           group ? (
+-            <GroupVerdict view={view} />
++            <GroupVerdict view={view} besideTv={besideGroupReveal} />
+           ) : (
+             <div className={styles.verdict} role="status">
+               <h3>
+@@ -274,7 +279,7 @@
+             </div>
+           )
+         ) : view.participating ? (
+-          <p className={styles.status}>{L('Your result is coming…')}</p>
++          <p className={`${styles.status} ${besideGroupReveal ? groups.pendingResult : ''}`}>{L('Your result is coming…')}</p>
+         ) : null}
+         {view.paused ? <p className={styles.status}>{L('Paused')}</p> : null}
+         {showStage && stage ? (
+diff --git a/games/kahoot/client/GroupParts.tsx b/games/kahoot/client/GroupParts.tsx
+--- a/games/kahoot/client/GroupParts.tsx
++++ b/games/kahoot/client/GroupParts.tsx
+@@ -50,6 +50,22 @@
+   const L = useT(STRINGS);
+   const team = group.teams.find((candidate) => candidate.id === group.myTeamId);
+   return <p className={styles.identity}>{team?.name ?? L(groupTitle(group))}</p>;
++}
++
++/** Footer scores use the already filtered personal bank, including the hidden final reveal. */
++export function GroupPlayerBar({ view }: { view: LightningControllerView }): JSX.Element | null {
++  const L = useT(STRINGS);
++  const group = view.group;
++  if (!group || !view.participating) return null;
++  const team = group.teams.find((candidate) => candidate.id === group.myTeamId);
++  const player = view.players.find((candidate) => candidate.id === view.me.id);
++  return (
++    <div className={styles.playerBar} data-group-player-bar="true" role="status" aria-label={L('Player and team score')}>
++      <b className={styles.barName}>{player?.name ?? L('You')}</b>
++      <span>{team?.name ?? L(group.mode === 'tv-vote' ? 'The room' : 'Your team')}</span>
++      <b className={styles.barScore} aria-label={L('{n} points', { n: view.myScore })}>{view.myScore}</b>
++    </div>
++  );
+ }
+ 
+ export function GroupStandings({
+@@ -111,7 +127,7 @@
+   );
+ }
+ 
+-export function GroupReceipt({ view }: { view: LightningControllerView }): JSX.Element | null {
++export function GroupReceipt({ view, besideTv = false }: { view: LightningControllerView; besideTv?: boolean }): JSX.Element | null {
+   const L = useT(STRINGS);
+   const group = view.group;
+   if (!group) return null;
+@@ -120,6 +136,7 @@
+   return (
+     <div className={styles.receipt} role="status">
+       <b>{team.name}</b>
++      {besideTv ? <p className={styles.receiptKind}>{L(group.mode === 'teams' ? 'Team results' : 'Room results')}</p> : null}
+       {team.correctPercent !== undefined ? (
+         <div className={styles.accuracy}>
+           <span>{L('Correct')}</span>
+@@ -133,7 +150,7 @@
+         </div>
+       ) : null}
+       <strong className={styles.gained}>{L('+{n} points', { n: team.gained })}</strong>
+-      <p className={styles.receiptTotal}>{L('{n} total', { n: team.score })}</p>
++      {!besideTv ? <p className={styles.receiptTotal}>{L('{n} total', { n: team.score })}</p> : null}
+       {group.mode === 'teams' ? (
+         <p className={styles.receiptRule}>
+           {L('Team points average players who stayed or answered')}
+@@ -143,7 +160,7 @@
+   );
+ }
+ 
+-export function GroupVerdict({ view }: { view: LightningControllerView }): JSX.Element {
++export function GroupVerdict({ view, besideTv = false }: { view: LightningControllerView; besideTv?: boolean }): JSX.Element {
+   const L = useT(STRINGS);
+   const vote = view.group?.mode === 'tv-vote';
+   const outcome = view.outcome;
+@@ -162,6 +179,7 @@
+     <div
+       className={styles.verdict}
+       data-stage={view.showStage || view.phoneOnly || undefined}
++      data-beside-tv={besideTv || undefined}
+       role="status"
+     >
+       <h3>
+@@ -183,7 +201,10 @@
+       ) : (
+         <p>{L('+{n} personal points', { n: outcome?.delta ?? 0 })}</p>
+       )}
+-      <GroupReceipt view={view} />
++      <GroupReceipt view={view} besideTv={besideTv} />
++      {besideTv && view.myRank !== undefined ? (
++        <p className={styles.rankStatus}>{L(vote ? 'The room is in place {rank}' : 'Your team is in place {rank}', { rank: view.myRank })}</p>
++      ) : null}
+       {view.round?.last ? <p>{L('The podium is next')}</p> : null}
+     </div>
+   );
+diff --git a/games/kahoot/client/Group.module.css b/games/kahoot/client/Group.module.css
+--- a/games/kahoot/client/Group.module.css
++++ b/games/kahoot/client/Group.module.css
+@@ -328,3 +328,77 @@
+ .phone .roster span {
+   font-size: var(--pb-font-caption);
+ }
++
++/* Native-like receipts apply only to participating phones beside a visible TV. */
++.verdict[data-beside-tv] {
++  margin-block: auto;
++  width: 100%;
++  gap: var(--pb-space-3);
++}
++.verdict[data-beside-tv] h3 {
++  flex-direction: column-reverse;
++  gap: var(--pb-space-2);
++}
++.verdict[data-beside-tv] .outcomeMark {
++  width: var(--pb-font-display);
++  height: var(--pb-font-display);
++  font-size: var(--pb-font-h1);
++}
++.verdict[data-beside-tv] .receipt {
++  grid-template-columns: minmax(0, 1fr);
++  max-width: calc(var(--pb-space-8) * 5);
++  padding: var(--pb-space-4);
++  gap: var(--pb-space-2);
++  text-align: center;
++}
++.receiptKind {
++  font-size: var(--pb-font-caption);
++  color: var(--pb-text-muted);
++}
++.verdict[data-beside-tv] .accuracy {
++  width: 100%;
++  justify-self: stretch;
++  gap: var(--pb-space-2);
++}
++.verdict[data-beside-tv] .gained {
++  grid-column: 1;
++  grid-row: auto;
++  justify-self: center;
++  padding: var(--pb-space-3);
++}
++.verdict[data-beside-tv] .receiptRule {
++  color: var(--pb-text-muted);
++}
++.rankStatus {
++  font-size: var(--pb-font-body);
++}
++.phone .pendingResult {
++  margin-block: auto;
++}
++.revealFooter {
++  display: flex;
++  flex-direction: column;
++  gap: var(--pb-space-2);
++}
++.playerBar {
++  display: grid;
++  grid-template-columns: minmax(0, 1fr) auto auto;
++  align-items: center;
++  gap: var(--pb-space-2);
++  padding: var(--pb-space-2);
++  background: var(--pb-surface);
++  border-radius: var(--pb-radius);
++  font-size: var(--pb-font-body);
++  line-height: 1.2;
++}
++.barName {
++  min-width: 0;
++  overflow-wrap: anywhere;
++}
++.barScore {
++  padding: var(--pb-space-1) var(--pb-space-2);
++  border-radius: calc(var(--pb-radius) / 2);
++  background: var(--pb-surface-2);
++  font-variant-numeric: tabular-nums;
++  white-space: nowrap;
++}
+diff --git a/games/kahoot/client/strings-es.ts b/games/kahoot/client/strings-es.ts
+--- a/games/kahoot/client/strings-es.ts
++++ b/games/kahoot/client/strings-es.ts
+@@ -215,4 +215,12 @@
+   'Vote distribution': 'Distribución de votos',
+   '{n} votes': '{n} votos',
+   '{n} did not vote': '{n} no votaron',
++  'Team results': 'Resultados del equipo',
++  'Room results': 'Resultados de la sala',
++  'Your team': 'Tu equipo',
++  'The room': 'La sala',
++  You: 'Tú',
++  'Player and team score': 'Jugador y puntuación del equipo',
++  'Your team is in place {rank}': 'Tu equipo está en el puesto {rank}',
++  'The room is in place {rank}': 'La sala está en el puesto {rank}',
+ };
+diff --git a/games/kahoot/__tests__/group-screens.test.tsx b/games/kahoot/__tests__/group-screens.test.tsx
+--- a/games/kahoot/__tests__/group-screens.test.tsx
++++ b/games/kahoot/__tests__/group-screens.test.tsx
+@@ -46,6 +46,7 @@
+   surface: 'tv' | 'phone' | 'stage',
+   id = PLAYERS[0]!.id,
+   now = state.phase.startedAt + 1_000,
++  vipSkip = false,
+ ): string {
+   vi.useFakeTimers({ toFake: ['Date'] });
+   vi.setSystemTime(now);
+@@ -61,6 +62,7 @@
+             view={{ ...view, vip: null }}
+             me={state.players[id] ?? { id, name: 'Audience', avatarId: 'owl' }}
+             send={() => undefined}
++            skip={vipSkip ? () => undefined : undefined}
+           />
+         </PhoneOnlyProvider>
+       )}
+@@ -195,6 +197,25 @@
+ });
+ 
+ describe('group results preserve honest scoring', () => {
++  it('centers native-like team receipts beside the TV while preserving staged screens and the VIP Next footer', () => {
++    let state = timer(timer(start('teams')));
++    state = answer(state, PLAYERS[0]!.id, question(state).answerIndex, 300);
++    state = timer(state);
++    const boardAt = tv(state).leaderboardAt! + 1;
++    const html = paint(state, 'phone', PLAYERS[0]!.id, boardAt, true);
++    expect(html).toContain('data-beside-tv="true"');
++    expect(html).toContain('Team results');
++    expect(html).toContain('Your team is in place');
++    expect(html).toContain('data-group-player-bar="true"');
++    expect(html).toContain(escape(PLAYERS[0]!.name));
++    expect(html).toContain('Next question');
++    expect(html).toContain(`aria-label="${phone(state, PLAYERS[0]!.id).myScore} points"`);
++    for (const staged of [paint(state, 'stage', PLAYERS[0]!.id, boardAt), paint(state, 'phone', 'audience', boardAt)]) {
++      expect(staged).not.toContain('data-beside-tv="true"');
++      expect(staged).not.toContain('data-group-player-bar="true"');
++      expect(staged).not.toContain('Team results');
++    }
++  });
+   it('shows a room success even when this player voted for a different answer', () => {
+     let state = timer(timer(start('tv-vote')));
+     const q = question(state);
+@@ -271,6 +292,13 @@
+       const html = paint(lastReveal, surface);
+       for (const team of roster) expect(html).not.toContain(escape(team.name));
+       expect(html).not.toContain('<meter');
++      if (surface === 'phone') {
++        expect(html).toContain('Your team');
++        const footer = html.match(/<div[^>]*data-group-player-bar="true"[\s\S]*?<\/div>/)?.[0];
++        expect(footer).toBeDefined();
++        expect(footer).toContain(`aria-label="${phone(lastReveal, PLAYERS[0]!.id).myScore} points"`);
++        expect(footer).not.toContain('Your team is in place');
++      }
+     }
+     let beats = 0;
+     while (state.phase.id === 'podium' && beats++ < 3) {
