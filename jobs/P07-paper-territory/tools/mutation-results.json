@@ -1,0 +1,598 @@
+{
+  "command": "node node_modules/vitest/vitest.mjs run games/paper-territory/__tests__/world.test.ts games/paper-territory/__tests__/game.test.ts games/paper-territory/__tests__/presence.test.ts games/paper-territory/__tests__/bot.test.ts --maxWorkers=1 --reporter=json --outputFile=<temporary report>",
+  "baseline": {
+    "exitCode": 0,
+    "total": 35,
+    "passed": 35,
+    "failed": 0
+  },
+  "mutations": [
+    {
+      "id": "M01",
+      "description": "inflate area scores",
+      "file": "games/paper-territory/server/scoring.ts",
+      "before": "[r.id, r.area]",
+      "after": "[r.id, r.area + 1]",
+      "originalSha256": "a906757a10b744ef13e1ae687f2d4df85bdc39e8b252e4d96484fd2bcc4053cc",
+      "mutatedSha256": "0743133c8e9bb2fa983a3a8a7b123ecce10dd5b57b1ee4d9543a3a6f29213543",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 32,
+      "failed": 3,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "Paper Territory lifecycle opens a four-second ready stage with every numbered home and no results",
+          "reason": [
+            "AssertionError: expected { p1: 10, p2: 10, p3: 10, p4: 10 } to deeply equal { p1: 9, p2: 9, p3: 9, p4: 9 }\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/game.test.ts:19:26\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "Paper Territory lifecycle scores owned tiles, preserves all seat identities, and ranks equal areas together",
+          "reason": [
+            "AssertionError: expected { p1: 31, p2: 21, p3: 31, p4: 10 } to deeply equal { p1: 30, p2: 20, p3: 30, p4: 9 }\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/game.test.ts:55:31\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, disconnect and return pause settles completed ticks before a VIP end freezes the final scores",
+          "reason": [
+            "AssertionError: expected { p1: 10, p2: 10, p3: 10, p4: 10 } to deeply equal { p1: 9, p2: 9, p3: 9, p4: 9 }\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/presence.test.ts:40:39\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M02",
+      "description": "score timer never finishes",
+      "file": "games/paper-territory/server/phases/score.ts",
+      "before": "next(state, event.now)",
+      "after": "state",
+      "originalSha256": "b0c11e577328b019c15c65e7f773bad81b12e0164dd3d5d62d25f54cdf92e893",
+      "mutatedSha256": "196baa4dc804698150518250c2b94e231ce0bef155031d2814f94607e3116cdc",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 33,
+      "failed": 2,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "Paper Territory lifecycle runs exactly two minutes in200ms physics beats and reveals the final tile areas",
+          "reason": [
+            "AssertionError: expected 'score' to be 'done' // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/game.test.ts:42:27\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, disconnect and return a permanent leave never respawns and still appears in complete finite final results",
+          "reason": [
+            "AssertionError: expected undefined to deeply equal [ 'p1', 'p2', 'p3', 'p4' ]\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/presence.test.ts:76:7\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M03",
+      "description": "play cap never exits",
+      "file": "games/paper-territory/server/phases/play.ts",
+      "before": "settled.checked >= ROUND_MS ? next(settled, now)",
+      "after": "false ? next(settled, now)",
+      "originalSha256": "36aaee39c70444460a57143476798730b521441d49c6ce6245ca0bcce07dcf68",
+      "mutatedSha256": "e037c2f3842c9b504c61f61f65c54f20641d6285790346d553b2ade1fca211ab",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 32,
+      "failed": 3,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "public trail threat strategy normal bots capture land at the 600 ms decision cadence for regression seed 2",
+          "reason": [
+            "AssertionError: expected 601 to be less than 601\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/bot.test.ts:16:23\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "Paper Territory lifecycle runs exactly two minutes in200ms physics beats and reveals the final tile areas",
+          "reason": [
+            "AssertionError: expected 'play' to be 'score' // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/game.test.ts:35:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "pause, disconnect and return a permanent leave never respawns and still appears in complete finite final results",
+          "reason": [
+            "AssertionError: expected undefined to deeply equal [ 'p1', 'p2', 'p3', 'p4' ]\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/presence.test.ts:76:7\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M04",
+      "description": "respawn after one second instead of three",
+      "file": "games/paper-territory/server/types.ts",
+      "before": "export const RESPAWN_TICKS = 15;",
+      "after": "export const RESPAWN_TICKS = 5;",
+      "originalSha256": "33aa0528298d8964d5123bd134a0ef43228a41f1c03b4103395879c935e14994",
+      "mutatedSha256": "c3ac5e5feaf307dbcbd3b9522ea68d72f1173034b4be8c5314a9dfe45a877d0d",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 33,
+      "failed": 2,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "pause, disconnect and return an eliminated runner respawn countdown does not consume paused time",
+          "reason": [
+            "AssertionError: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/presence.test.ts:88:90\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "grid, inputs and seed homes uses a40×28 board and a200ms simulation step with a3second respawn",
+          "reason": [
+            "AssertionError: expected [ 40, 28, 200, 5 ] to deeply equal [ 40, 28, 200, 15 ]\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:57:53\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M05",
+      "description": "allow reversal into the preceding tile",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "input.dir === (runner.dir + 2) % 4 ||",
+      "after": "false ||",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "60992da5f310dfa2257e501186296dc92ebd4a85cf6b1c76b78deda7a16b4827",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 34,
+      "failed": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "grid, inputs and seed homes queues a perpendicular turn and ignores reversal, same direction, dead or unknown runners",
+          "reason": [
+            "AssertionError: expected { width: 7, height: 7, …(4) } to be { width: 7, height: 7, …(4) } // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:91:72\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M06",
+      "description": "wrap right edge into the next row",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "(dir === 1 && x === width - 1)",
+      "after": "(dir === 1 && false)",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "d642c1e9ffe0c5aa725382a291734ab2ec3032da339b238aafdc6175df1af26b",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 33,
+      "failed": 2,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "grid, inputs and seed homes has four cardinal neighbours with no row wrapping or diagonal movement",
+          "reason": [
+            "AssertionError: expected 28 to be -1 // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:75:44\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "simultaneous movement and deaths dies at a wall and on its own trail, removing vulnerable trail immediately",
+          "reason": [
+            "AssertionError: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:199:36\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M07",
+      "description": "flood fill treats rival land as the blocking wall",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "world.owners.map((owner) => owner === slot)",
+      "after": "world.owners.map((owner) => owner !== slot)",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "3e28c9f8e911e1245d93bcc2ebf5839d0cfa7c76806d1f833343b6b898e06448",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 31,
+      "failed": 4,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "four-neighbour territory capture claims a closed trail and its enclosed interior, while leaving exterior cells alone",
+          "reason": [
+            "AssertionError: expected [ 17, 18, 25, 32, 31, 30, 23, 16 ] to include 24\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        },
+        {
+          "test": "four-neighbour territory capture diagonal gaps do not leak into an area sealed on all four cardinal sides",
+          "reason": [
+            "AssertionError: expected [ 17, 23, 25, 31 ] to include 24\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        },
+        {
+          "test": "four-neighbour territory capture can steal rival territory inside a loop while respecting protected rival homes",
+          "reason": [
+            "AssertionError: expected [ 17, 18, 25, 32, 31, 30, 23, 16 ] to include 24\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        },
+        {
+          "test": "four-neighbour territory capture closing a loop applies claims and clears the trail, with exact area accounting",
+          "reason": [
+            "AssertionError: expected 8 to be 9 // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:176:37\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M08",
+      "description": "drawn trail does not seal a loop",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "for (const cell of trail) blocked[cell] = true;",
+      "after": "for (const cell of trail) blocked[cell] = false;",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "0e6d938c2334b1d1466818b02a817a8d5546c030b5c4fd80d76f068f1e5d529b",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 32,
+      "failed": 3,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "four-neighbour territory capture claims a closed trail and its enclosed interior, while leaving exterior cells alone",
+          "reason": [
+            "AssertionError: expected [ 17, 18, 25, 32, 31, 30, 23 ] to include 24\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        },
+        {
+          "test": "four-neighbour territory capture can steal rival territory inside a loop while respecting protected rival homes",
+          "reason": [
+            "AssertionError: expected [ 17, 18, 25, 32, 31, 30, 23 ] to include 24\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        },
+        {
+          "test": "four-neighbour territory capture closing a loop applies claims and clears the trail, with exact area accounting",
+          "reason": [
+            "AssertionError: expected 8 to be 9 // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:176:37\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M09",
+      "description": "never award enclosed interior cells",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "if (!blocked[cell] && !outside[cell]) claims.add(cell);",
+      "after": "if (false) claims.add(cell);",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "dc7911aaf15e5223a755a1aedb77cf97caab2090f41d2096ddeb4adad9e8012c",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 31,
+      "failed": 4,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "four-neighbour territory capture claims a closed trail and its enclosed interior, while leaving exterior cells alone",
+          "reason": [
+            "AssertionError: expected [ 17, 18, 25, 32, 31, 30, 23 ] to include 24\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        },
+        {
+          "test": "four-neighbour territory capture diagonal gaps do not leak into an area sealed on all four cardinal sides",
+          "reason": [
+            "AssertionError: expected [] to include 24\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        },
+        {
+          "test": "four-neighbour territory capture can steal rival territory inside a loop while respecting protected rival homes",
+          "reason": [
+            "AssertionError: expected [ 17, 18, 25, 32, 31, 30, 23 ] to include 24\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        },
+        {
+          "test": "four-neighbour territory capture closing a loop applies claims and clears the trail, with exact area accounting",
+          "reason": [
+            "AssertionError: expected 8 to be 9 // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:176:37\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M10",
+      "description": "forbid stealing enclosed rival land",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "world.homes[cell] === -1 || world.homes[cell] === slot",
+      "after": "(world.homes[cell] === -1 && world.owners[cell] === -1) || world.homes[cell] === slot",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "c3ec0f9bd7b5da5e9d582e45771aafdac9e299e527ac0e5ffbc9df1ad9ea4469",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 34,
+      "failed": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "four-neighbour territory capture can steal rival territory inside a loop while respecting protected rival homes",
+          "reason": [
+            "AssertionError: expected [ 17, 18, 25, 32, 31, 30, 23 ] to include 24\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M11",
+      "description": "allow claiming protected rival homes",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "world.homes[cell] === -1 || world.homes[cell] === slot",
+      "after": "true",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "48a1ecba1a29aef26094ed36da21b4beee6acf1afe962a5ce999569f85b392a5",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 34,
+      "failed": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "four-neighbour territory capture can steal rival territory inside a loop while respecting protected rival homes",
+          "reason": [
+            "AssertionError: expected [ 17, 18, 25, 32, 31, 30, 23, 24 ] to not include 24\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1319:15)\n    at Proxy.<anonymous> (file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+expect@4.1.11/node_modules/@vitest/expect/dist/index.js:1156:15)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M12",
+      "description": "ignore crossing own trail",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "if (r.trail.includes(at)) markDeath(r.slot, 'trail');",
+      "after": "if (false) markDeath(r.slot, 'trail');",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "77c21f212929f9d9a6f09540a3e1214642940f87848e4c20aa86597dc730be71",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 34,
+      "failed": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "simultaneous movement and deaths dies at a wall and on its own trail, removing vulnerable trail immediately",
+          "reason": [
+            "AssertionError: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:202:36\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M13",
+      "description": "a cut kills the cutter instead of the trail owner",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "markDeath(other.slot, 'cut')",
+      "after": "markDeath(r.slot, 'cut')",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "5cd6cc9be90488b155da0a8a7a03ee7dbc6e076f4bbad0a42476e524bfb13e16",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 34,
+      "failed": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "simultaneous movement and deaths a trail cut kills its owner before that owner can close the loop on the same tick",
+          "reason": [
+            "AssertionError: expected true to be false // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:232:36\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M14",
+      "description": "ignore swapping head collision",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "(at === other.cell && there === r.cell)",
+      "after": "false",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "1594ce7d649680044c60b7fdaaa6ff47b906c779980688665d3ee1c5b0278e46",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 33,
+      "failed": 2,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "simultaneous movement and deaths kills both heads converging on one cell and both heads swapping cells",
+          "reason": [
+            "AssertionError: expected [ true, true ] to deeply equal [ false, false ]\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:215:48\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "simultaneous movement and deaths head collision wins over simultaneous trail cuts independent of runner iteration order",
+          "reason": [
+            "AssertionError: expected [ [ false, 'cut', 1 ], …(1) ] to deeply equal [ [ false, 'head', 1 ], …(1) ]\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:248:67\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M15",
+      "description": "ignore two heads converging on one tile",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "at === there ||",
+      "after": "false ||",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "531c16e1c6d832098e7df413bcbceb3cdf0156dd9f3a40ec01a0659ef60aa073",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 34,
+      "failed": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "simultaneous movement and deaths kills both heads converging on one cell and both heads swapping cells",
+          "reason": [
+            "AssertionError: expected [ true, true ] to deeply equal [ false, false ]\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:215:48\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M16",
+      "description": "move disconnected or inactive runners",
+      "file": "games/paper-territory/server/world.ts",
+      "before": ".filter((r) => r.alive && active.has(r.id))",
+      "after": ".filter((r) => r.alive)",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "1fdfcceaedbffa902f2a0dfa2d899329c4f3a33e66d14d8c49a57b6ae5214c32",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 34,
+      "failed": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "simultaneous movement and deaths does not move an inactive runner and advances ticks deterministically in batches",
+          "reason": [
+            "AssertionError: expected 32 to be 39 // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:287:55\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M17",
+      "description": "retain exposed territory after death",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "owner === slot && world.homes[cell] !== slot ? -1 : owner",
+      "after": "owner",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "4076e8b06dd41f5125f2528d8fd4cf5a2c47758f1ae4dd93d0a3012b3953d9fc",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 34,
+      "failed": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "respawn and protected homes loses exposed territory on death but keeps its nine home cells",
+          "reason": [
+            "AssertionError: expected +0 to be -1 // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:303:30\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M18",
+      "description": "respawn a permanent leaver",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "respawnTick: forever ? null : world.stepped + RESPAWN_TICKS",
+      "after": "respawnTick: world.stepped + RESPAWN_TICKS",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "492a7520a11e8f09c30464a8aa786697d7054f9737143b88b5b8413d0672c723",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 33,
+      "failed": 2,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "pause, disconnect and return a permanent leave never respawns and still appears in complete finite final results",
+          "reason": [
+            "AssertionError: expected 15 to be null\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/presence.test.ts:66:48\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        },
+        {
+          "test": "respawn and protected homes waits exactly fifteen ticks to respawn, and never respawns a permanently removed seat",
+          "reason": [
+            "AssertionError: expected 15 to be null\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:321:42\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M19",
+      "description": "last writer wins a contested simultaneous capture",
+      "file": "games/paper-territory/server/world.ts",
+      "before": "claims[cell] === -1 || claims[cell] === r.slot ? r.slot : -2",
+      "after": "r.slot",
+      "originalSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "mutatedSha256": "6834bc41fda05eff87192502ca4f58e8b066eeffeacc73b9f89016ba14044eeb",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 34,
+      "failed": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "simultaneous movement and deaths same-tick overlapping captures stay neutral independent of runner iteration order",
+          "reason": [
+            "AssertionError: expected 1 to be -1 // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/world.test.ts:279:37\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M20",
+      "description": "paused time consumes the match cap",
+      "file": "games/paper-territory/server/index.ts",
+      "before": "endsAt: state.endsAt + pausedFor(state, event.now)",
+      "after": "endsAt: state.endsAt",
+      "originalSha256": "ab2c20740f2a783530cbac82351ca3de3ebbe4fc8e5761765a8c762d73ac3fdb",
+      "mutatedSha256": "49b4f8363aede06de7c9296276106dfd9499b8b25c9f37930e0898b0abe33298",
+      "exitCode": 1,
+      "total": 35,
+      "passed": 34,
+      "failed": 1,
+      "caught": true,
+      "failureTests": [
+        {
+          "test": "pause, disconnect and return stops simulation and steering during pause, shifting all absolute clock views on resume",
+          "reason": [
+            "AssertionError: expected 1124000 to be 1129000 // Object.is equality\n    at C:/dev/rea-runs/r4/games/paper-territory/__tests__/presence.test.ts:18:28\n    at file:///C:/dev/rea-runs/r4/node_modules/.pnpm/@vitest+runner@4.1.11/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11"
+          ]
+        }
+      ]
+    }
+  ],
+  "restored": true,
+  "sourceRestoration": [
+    {
+      "file": "games/paper-territory/server/scoring.ts",
+      "beforeSha256": "a906757a10b744ef13e1ae687f2d4df85bdc39e8b252e4d96484fd2bcc4053cc",
+      "afterSha256": "a906757a10b744ef13e1ae687f2d4df85bdc39e8b252e4d96484fd2bcc4053cc",
+      "identical": true
+    },
+    {
+      "file": "games/paper-territory/server/phases/score.ts",
+      "beforeSha256": "b0c11e577328b019c15c65e7f773bad81b12e0164dd3d5d62d25f54cdf92e893",
+      "afterSha256": "b0c11e577328b019c15c65e7f773bad81b12e0164dd3d5d62d25f54cdf92e893",
+      "identical": true
+    },
+    {
+      "file": "games/paper-territory/server/phases/play.ts",
+      "beforeSha256": "36aaee39c70444460a57143476798730b521441d49c6ce6245ca0bcce07dcf68",
+      "afterSha256": "36aaee39c70444460a57143476798730b521441d49c6ce6245ca0bcce07dcf68",
+      "identical": true
+    },
+    {
+      "file": "games/paper-territory/server/types.ts",
+      "beforeSha256": "33aa0528298d8964d5123bd134a0ef43228a41f1c03b4103395879c935e14994",
+      "afterSha256": "33aa0528298d8964d5123bd134a0ef43228a41f1c03b4103395879c935e14994",
+      "identical": true
+    },
+    {
+      "file": "games/paper-territory/server/world.ts",
+      "beforeSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "afterSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+      "identical": true
+    },
+    {
+      "file": "games/paper-territory/server/index.ts",
+      "beforeSha256": "ab2c20740f2a783530cbac82351ca3de3ebbe4fc8e5761765a8c762d73ac3fdb",
+      "afterSha256": "ab2c20740f2a783530cbac82351ca3de3ebbe4fc8e5761765a8c762d73ac3fdb",
+      "identical": true
+    }
+  ],
+  "finalBaseline": {
+    "exitCode": 0,
+    "total": 35,
+    "passed": 35,
+    "failed": 0
+  }
+}

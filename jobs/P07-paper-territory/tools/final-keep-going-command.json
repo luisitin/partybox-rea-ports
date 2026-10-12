@@ -1,0 +1,8 @@
+{
+  "requestedCommand": "PB_RECORD_VERIFY=1 pnpm.cmd vitest run games/paper-territory --maxWorkers=1 (PB_SIM_GAMES unset)",
+  "actualCommand": "env -u PB_SIM_GAMES PB_RECORD_VERIFY=1 node node_modules/vitest/vitest.mjs run games/paper-territory --maxWorkers=1",
+  "shell": "Git Bash",
+  "fallbackAuthorizedByRoot": true,
+  "fallbackReason": "The owned PowerShell native process chain stalled after its source snapshot printed completion. Vitest began during inspection/cancellation; that owned chain was stopped and its partial output preserved. The installed Node CLI runs the same scoped suite with the same seed counts and one worker.",
+  "interruptedAttemptLog": "final-keep-going-ps-interrupted.log"
+}

@@ -1,0 +1,655 @@
+{
+  "recordedAtUtc": "2026-10-11T22:20:18.677Z",
+  "status": "passed",
+  "evidenceSource": "authoritative scoped CI; local duplicate stopped to preserve desktop CPU",
+  "ciRunUrl": "https://github.com/luisitin/partybox-rea-ports/actions/runs/38179181153",
+  "testedHeadSha": "18631b6eafa2079b832f570ff258cbe0535ecaab",
+  "command": "pnpm vitest run games/paper-territory --maxWorkers=1",
+  "maxWorkers": 1,
+  "benchmarkOverride": false,
+  "fullRun": {
+    "files": 14,
+    "tests": 120,
+    "failed": 0,
+    "durationSeconds": 63.79
+  },
+  "propertyTraces": 1003,
+  "generatedSeeds": 1000,
+  "regressionSeeds": [1, 2, 3],
+  "propertyEvidence": "property-results.json",
+  "botMatches": 3000,
+  "metrics": {
+    "2": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 845,
+      "decisionBeatMs": 600,
+      "wallMs": 5678.666561,
+      "botMs": 701.7125919998479,
+      "reducerMs": 4756.248529999976,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 668,
+          "meanFinalArea": 235,
+          "medianFinalArea": 235,
+          "maximumFinalArea": 406,
+          "meanCaptures": 47.5,
+          "medianCaptures": 47.5,
+          "meanDeaths": 0.5,
+          "medianDeaths": 0.5,
+          "grewBeyondHome": 668
+        },
+        "normal": {
+          "games": 333,
+          "players": 666,
+          "meanFinalArea": 218.5,
+          "medianFinalArea": 218.5,
+          "maximumFinalArea": 331,
+          "meanCaptures": 47,
+          "medianCaptures": 47,
+          "meanDeaths": 0.5,
+          "medianDeaths": 0.5,
+          "grewBeyondHome": 666
+        },
+        "sharp": {
+          "games": 333,
+          "players": 666,
+          "meanFinalArea": 218.5,
+          "medianFinalArea": 218.5,
+          "maximumFinalArea": 331,
+          "meanCaptures": 47,
+          "medianCaptures": 47,
+          "meanDeaths": 0.5,
+          "medianDeaths": 0.5,
+          "grewBeyondHome": 666
+        }
+      },
+      "budgetMs": 360000
+    },
+    "4": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 1144,
+      "decisionBeatMs": 600,
+      "wallMs": 11032.009567999998,
+      "botMs": 1964.0093489998944,
+      "reducerMs": 8750.150526000882,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 1336,
+          "meanFinalArea": 108.35479041916167,
+          "medianFinalArea": 97,
+          "maximumFinalArea": 332,
+          "meanCaptures": 45.55314371257485,
+          "medianCaptures": 45,
+          "meanDeaths": 2.197604790419162,
+          "medianDeaths": 2,
+          "grewBeyondHome": 1173
+        },
+        "normal": {
+          "games": 333,
+          "players": 1332,
+          "meanFinalArea": 114.72147147147147,
+          "medianFinalArea": 127,
+          "maximumFinalArea": 288,
+          "meanCaptures": 43.37162162162162,
+          "medianCaptures": 44,
+          "meanDeaths": 2.421171171171171,
+          "medianDeaths": 2,
+          "grewBeyondHome": 1185
+        },
+        "sharp": {
+          "games": 333,
+          "players": 1332,
+          "meanFinalArea": 110.59984984984985,
+          "medianFinalArea": 104,
+          "maximumFinalArea": 316,
+          "meanCaptures": 42.10735735735736,
+          "medianCaptures": 42,
+          "meanDeaths": 2.298798798798799,
+          "medianDeaths": 2,
+          "grewBeyondHome": 1221
+        }
+      },
+      "budgetMs": 360000
+    },
+    "8": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 1664,
+      "decisionBeatMs": 600,
+      "wallMs": 21513.265467,
+      "botMs": 5483.7784510009515,
+      "reducerMs": 15463.292946999278,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 2672,
+          "meanFinalArea": 52.32597305389221,
+          "medianFinalArea": 45,
+          "maximumFinalArea": 227,
+          "meanCaptures": 39.74550898203593,
+          "medianCaptures": 40,
+          "meanDeaths": 5.709580838323354,
+          "medianDeaths": 5,
+          "grewBeyondHome": 1973
+        },
+        "normal": {
+          "games": 333,
+          "players": 2664,
+          "meanFinalArea": 52.6951951951952,
+          "medianFinalArea": 46,
+          "maximumFinalArea": 227,
+          "meanCaptures": 37.846471471471475,
+          "medianCaptures": 38,
+          "meanDeaths": 5.87012012012012,
+          "medianDeaths": 5,
+          "grewBeyondHome": 1856
+        },
+        "sharp": {
+          "games": 333,
+          "players": 2664,
+          "meanFinalArea": 53.71771771771772,
+          "medianFinalArea": 48,
+          "maximumFinalArea": 217,
+          "meanCaptures": 37.63813813813814,
+          "medianCaptures": 37,
+          "meanDeaths": 5.9542042042042045,
+          "medianDeaths": 6,
+          "grewBeyondHome": 1915
+        }
+      },
+      "budgetMs": 360000
+    }
+  },
+  "opening": {
+    "legacyHeadSwapTick": 8,
+    "legacyAffectedSlots": [1, 2, 4, 5],
+    "headings": [1, 3, 2, 0, 1, 3, 0, 2],
+    "initialHomeOffsets": [0, 0, -1, 1, 0, 0, 0, 0],
+    "protectedHomesUnchanged": true,
+    "respawnCentersUnchanged": true,
+    "zeroCasualtyOpeningMs": 2000,
+    "verifiedPlayerCounts": [2, 4, 8]
+  },
+  "smallPairedBenchmark": {
+    "gamesEach": 20,
+    "sharpGamesEach": 6,
+    "sharpSeatsEach": 48,
+    "before": {
+      "games": 6,
+      "players": 48,
+      "meanFinalArea": 30.416666666666668,
+      "medianFinalArea": 9,
+      "maximumFinalArea": 166,
+      "meanCaptures": 15.1875,
+      "medianCaptures": 15,
+      "meanDeaths": 10.229166666666666,
+      "medianDeaths": 10,
+      "grewBeyondHome": 14
+    },
+    "after": {
+      "games": 6,
+      "players": 48,
+      "meanFinalArea": 55.229166666666664,
+      "medianFinalArea": 52,
+      "maximumFinalArea": 159,
+      "meanCaptures": 36.979166666666664,
+      "medianCaptures": 37,
+      "meanDeaths": 5.9375,
+      "medianDeaths": 5,
+      "grewBeyondHome": 35
+    }
+  },
+  "fullEightPlayerEcology": {
+    "before": {
+      "easy": {
+        "games": 334,
+        "players": 2672,
+        "meanFinalArea": 63.0684880239521,
+        "medianFinalArea": 55,
+        "maximumFinalArea": 262,
+        "meanCaptures": 44.446107784431135,
+        "medianCaptures": 44,
+        "meanDeaths": 4.692365269461078,
+        "medianDeaths": 5,
+        "grewBeyondHome": 2074
+      },
+      "normal": {
+        "games": 333,
+        "players": 2664,
+        "meanFinalArea": 60.74962462462462,
+        "medianFinalArea": 54,
+        "maximumFinalArea": 271,
+        "meanCaptures": 38.346846846846844,
+        "medianCaptures": 38,
+        "meanDeaths": 5.681306306306307,
+        "medianDeaths": 5,
+        "grewBeyondHome": 1913
+      },
+      "sharp": {
+        "games": 333,
+        "players": 2664,
+        "meanFinalArea": 39.31493993993994,
+        "medianFinalArea": 9,
+        "maximumFinalArea": 308,
+        "meanCaptures": 15.689564564564565,
+        "medianCaptures": 16,
+        "meanDeaths": 9.966216216216216,
+        "medianDeaths": 10,
+        "grewBeyondHome": 1135
+      }
+    },
+    "after": {
+      "easy": {
+        "games": 334,
+        "players": 2672,
+        "meanFinalArea": 52.32597305389221,
+        "medianFinalArea": 45,
+        "maximumFinalArea": 227,
+        "meanCaptures": 39.74550898203593,
+        "medianCaptures": 40,
+        "meanDeaths": 5.709580838323354,
+        "medianDeaths": 5,
+        "grewBeyondHome": 1973
+      },
+      "normal": {
+        "games": 333,
+        "players": 2664,
+        "meanFinalArea": 52.6951951951952,
+        "medianFinalArea": 46,
+        "maximumFinalArea": 227,
+        "meanCaptures": 37.846471471471475,
+        "medianCaptures": 38,
+        "meanDeaths": 5.87012012012012,
+        "medianDeaths": 5,
+        "grewBeyondHome": 1856
+      },
+      "sharp": {
+        "games": 333,
+        "players": 2664,
+        "meanFinalArea": 53.71771771771772,
+        "medianFinalArea": 48,
+        "maximumFinalArea": 217,
+        "meanCaptures": 37.63813813813814,
+        "medianCaptures": 37,
+        "meanDeaths": 5.9542042042042045,
+        "medianDeaths": 6,
+        "grewBeyondHome": 1915
+      }
+    }
+  },
+  "interpretation": "Same-skill ecology measures productive growth and survival; it does not establish mixed-skill ordering.",
+  "localAttempts": {
+    "final": false,
+    "interrupted": true,
+    "commandDetails": {
+      "requestedCommand": "PB_RECORD_VERIFY=1 pnpm.cmd vitest run games/paper-territory --maxWorkers=1 (PB_SIM_GAMES unset)",
+      "actualCommand": "env -u PB_SIM_GAMES PB_RECORD_VERIFY=1 node node_modules/vitest/vitest.mjs run games/paper-territory --maxWorkers=1",
+      "shell": "Git Bash",
+      "fallbackAuthorizedByRoot": true,
+      "fallbackReason": "The owned PowerShell native process chain stalled after its source snapshot printed completion. Vitest began during inspection/cancellation; that owned chain was stopped and its partial output preserved. The installed Node CLI runs the same scoped suite with the same seed counts and one worker.",
+      "interruptedAttemptLog": "final-keep-going-ps-interrupted.log"
+    },
+    "logs": ["final-keep-going-ps-interrupted.log", "final-keep-going.log"]
+  },
+  "historicalEvidence": "verification-results.json and mutation-results.json preserve the original experiment and restoration hashes, rather than claiming those hashes describe the new source.",
+  "sourceSnapshot": "final-keep-going-source-hashes.json",
+  "backendAndPropertySourcesUnchangedSinceSnapshot": true,
+  "sourceComparison": [
+    {
+      "file": "games/paper-territory/client/Controller.module.css",
+      "sha256": "6b624188102055bed30cf6eb1fa99a914f46d7e7cb8942d790e6f6da6364a974",
+      "currentSha256": "2c56a9d33c92628145df16eace17f09932309a3cd7770090c2e96a7e93dcfc62",
+      "unchanged": false
+    },
+    {
+      "file": "games/paper-territory/client/Controller.tsx",
+      "sha256": "d1e2a507d63c15e788412276b412bea1f2b08af0f380adea974a7b8df6102485",
+      "currentSha256": "2a5bad126de55fd815ef505177bb8c7e69f6168ecaed683042621de43b51b41e",
+      "unchanged": false
+    },
+    {
+      "file": "games/paper-territory/client/controls.test.ts",
+      "sha256": "33b02b08e0c0701237e9ddeaed6fcbce8fec44e103b9515a5191100f8aed4a4a",
+      "currentSha256": "33b02b08e0c0701237e9ddeaed6fcbce8fec44e103b9515a5191100f8aed4a4a",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/controls.ts",
+      "sha256": "c2247bf3e8607d7e1015606bc16a9c52319aaab8132a78429108824b5dbe9fd3",
+      "currentSha256": "c2247bf3e8607d7e1015606bc16a9c52319aaab8132a78429108824b5dbe9fd3",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/DirectionPad.test.tsx",
+      "sha256": "780c67384663cbb8a67fd74964b22c4c6d465b6c16c2e0bf95e9eee495ac5b7a",
+      "currentSha256": "780c67384663cbb8a67fd74964b22c4c6d465b6c16c2e0bf95e9eee495ac5b7a",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/DirectionPad.tsx",
+      "sha256": "5af05f66478a6f3581e5030c142277fc7d337fff5fbc84029b6ca6b288ec208b",
+      "currentSha256": "5af05f66478a6f3581e5030c142277fc7d337fff5fbc84029b6ca6b288ec208b",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/feedback.test.tsx",
+      "sha256": "435a57b2a7c2f22113f282c55d5cfae205e7fdf4468db225d869f595f7a784cc",
+      "currentSha256": "a0c24da514c9bf75ef6e42384cce6a6d7fd9dc3118a9d4634bcf352f4c415f03",
+      "unchanged": false
+    },
+    {
+      "file": "games/paper-territory/client/Map.module.css",
+      "sha256": "8646cb417c120c7ee93c69c02aa04259e659c7f1c0098a44ca14220c32466906",
+      "currentSha256": "8646cb417c120c7ee93c69c02aa04259e659c7f1c0098a44ca14220c32466906",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/Map.test.tsx",
+      "sha256": "76228fbd9b310bdfa985d8afaa8caeb2aa573ab3c4a0c45f77dd2e0c183403ab",
+      "currentSha256": "f94aba25b305f1b0d30fb0e3056bb486d296568a58a8452127040ffad9764b8b",
+      "unchanged": false
+    },
+    {
+      "file": "games/paper-territory/client/Map.tsx",
+      "sha256": "fd2626797a5d7bb600d7a57f713b1c481422413f4a76bc4aa5f595e5683d487c",
+      "currentSha256": "b9cb5b9261c9578bdb012ee0b28527ed7064a4324f5842363e8620d4bd0ed44c",
+      "unchanged": false
+    },
+    {
+      "file": "games/paper-territory/client/mapMath.test.ts",
+      "sha256": "a45e44269b86af3657d1f9d07b060109f0b88199aaf437f021369f1cd93e3358",
+      "currentSha256": "a45e44269b86af3657d1f9d07b060109f0b88199aaf437f021369f1cd93e3358",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/mapMath.ts",
+      "sha256": "bc19d6ebf8171af252ad0ebee20b7fa66aff6aa1a99e3a1c070f9b51e0559889",
+      "currentSha256": "bc19d6ebf8171af252ad0ebee20b7fa66aff6aa1a99e3a1c070f9b51e0559889",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/markerGeometry.ts",
+      "sha256": "fa59acd71b8785860d1b4b41203f02bc8256c590d00bed1a1547af7aa310dfe8",
+      "currentSha256": "fa59acd71b8785860d1b4b41203f02bc8256c590d00bed1a1547af7aa310dfe8",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/OwnershipPattern.module.css",
+      "sha256": "e00a3e049ea1aa2a8ee9303a89b5e480301bd6717fda6330e6dae9ae7d99e805",
+      "currentSha256": "e00a3e049ea1aa2a8ee9303a89b5e480301bd6717fda6330e6dae9ae7d99e805",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/OwnershipPattern.tsx",
+      "sha256": "8f26ca41f74129d4b95920b041393f33424ab3ec7cdc28159b3b3df2f3f780e0",
+      "currentSha256": "8f26ca41f74129d4b95920b041393f33424ab3ec7cdc28159b3b3df2f3f780e0",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/phone-entry.ts",
+      "sha256": "391679695d9a4e75a040c4f0007e147699c404777024b0b95b5c46e2e46e5a00",
+      "currentSha256": "391679695d9a4e75a040c4f0007e147699c404777024b0b95b5c46e2e46e5a00",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/SeatBadge.module.css",
+      "sha256": "21751bbe612947203a70d3de54c8558d4204d6f8efe8bb8bccf55bb37f49b87e",
+      "currentSha256": "21751bbe612947203a70d3de54c8558d4204d6f8efe8bb8bccf55bb37f49b87e",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/SeatBadge.tsx",
+      "sha256": "e1d528d69253c4b9f6dc208dcac6ee82fd40c1f985cee1b4b68fc6cbca55ef72",
+      "currentSha256": "e1d528d69253c4b9f6dc208dcac6ee82fd40c1f985cee1b4b68fc6cbca55ef72",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/shared.ts",
+      "sha256": "db612c7d35882a3f3ffdacbf314fe91abbc01dbbe6605260a2aadc1f6963d47f",
+      "currentSha256": "db612c7d35882a3f3ffdacbf314fe91abbc01dbbe6605260a2aadc1f6963d47f",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/standings.test.ts",
+      "sha256": "01b98f0d6a54fca26ad567927a29cdebd9f44fc2409ce8a06dbc5acf40fc3099",
+      "currentSha256": "01b98f0d6a54fca26ad567927a29cdebd9f44fc2409ce8a06dbc5acf40fc3099",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/standings.ts",
+      "sha256": "4d90367b8d2765a849174c3c1694c4e10b0f8c362ccd5197321c3f814f3859e6",
+      "currentSha256": "4d90367b8d2765a849174c3c1694c4e10b0f8c362ccd5197321c3f814f3859e6",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/strings.ts",
+      "sha256": "d3c9790d3f6d402151f71c8c0fc907a4d811c7b229d0594de5c051f4ef043c4e",
+      "currentSha256": "d3c9790d3f6d402151f71c8c0fc907a4d811c7b229d0594de5c051f4ef043c4e",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/textures.ts",
+      "sha256": "1ddd27b706ab7173204356aa133b1ec42bae5020682633400520dd390d497d2a",
+      "currentSha256": "1ddd27b706ab7173204356aa133b1ec42bae5020682633400520dd390d497d2a",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/tv-entry.ts",
+      "sha256": "31fbe6d8e8a263bfe92bc2384b2a5f17a92c4a5efd8cad53b3bcc1ba256671d5",
+      "currentSha256": "31fbe6d8e8a263bfe92bc2384b2a5f17a92c4a5efd8cad53b3bcc1ba256671d5",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/Tv.module.css",
+      "sha256": "2f37055324382069fedccd958945e091e8ba9052eb5dbd735e88fab737e15c3f",
+      "currentSha256": "2f37055324382069fedccd958945e091e8ba9052eb5dbd735e88fab737e15c3f",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/client/Tv.tsx",
+      "sha256": "5012f9cadfed4cadef03a6224c31bea9396c43ff083ab1305ae81b1154be0552",
+      "currentSha256": "5012f9cadfed4cadef03a6224c31bea9396c43ff083ab1305ae81b1154be0552",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/content/schema.ts",
+      "sha256": "55f0098b54f812a3ab3049dee58fe573bcb43519b48653c304f77520751ee5f7",
+      "currentSha256": "55f0098b54f812a3ab3049dee58fe573bcb43519b48653c304f77520751ee5f7",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/fixtures/done.json",
+      "sha256": "da2bbe39aec830b2b74bbff79bcb0b27b0ac1a6fdbb477830eb5e728c71700a1",
+      "currentSha256": "da2bbe39aec830b2b74bbff79bcb0b27b0ac1a6fdbb477830eb5e728c71700a1",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/fixtures/play.json",
+      "sha256": "41126ce6320ab622d6e491114ae7c729e3de99ad7cf67ecc28ef55dfd29bddf6",
+      "currentSha256": "41126ce6320ab622d6e491114ae7c729e3de99ad7cf67ecc28ef55dfd29bddf6",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/fixtures/ready.json",
+      "sha256": "0ed80761c8e82e8d6134a7264ad45bd8bbc052aaeb743c8b8e554b6007a1751e",
+      "currentSha256": "0ed80761c8e82e8d6134a7264ad45bd8bbc052aaeb743c8b8e554b6007a1751e",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/fixtures/score.json",
+      "sha256": "f770c838f5f5dbfd63242e6c353e2fbedf8c67e0b296f497bf865447048cb590",
+      "currentSha256": "f770c838f5f5dbfd63242e6c353e2fbedf8c67e0b296f497bf865447048cb590",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/manifest.json",
+      "sha256": "c2f109a393d9fb5830b399b76ab5ab38d132cbeee54263d31369dc00f055ade7",
+      "currentSha256": "c2f109a393d9fb5830b399b76ab5ab38d132cbeee54263d31369dc00f055ade7",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/server/bot.ts",
+      "sha256": "97c0fe7e8da56ffbb5bc8de665d0bd96c7d8c63c8c74f0e7b9927d2b5ae6733c",
+      "currentSha256": "97c0fe7e8da56ffbb5bc8de665d0bd96c7d8c63c8c74f0e7b9927d2b5ae6733c",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/server/content.ts",
+      "sha256": "af1c2fdf10b1750fe776cc6167b7c7a483f2b14744b52486175814dc8a57311a",
+      "currentSha256": "af1c2fdf10b1750fe776cc6167b7c7a483f2b14744b52486175814dc8a57311a",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/server/index.ts",
+      "sha256": "a3fb85bdc5642e801b022753b59ab244b84990549bf7a6c484c6059d5e0fc6b6",
+      "currentSha256": "a3fb85bdc5642e801b022753b59ab244b84990549bf7a6c484c6059d5e0fc6b6",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/server/phases/done.ts",
+      "sha256": "bf2ec38840cb419839a17fc03144df0a310d5405cd1ae42a19cd8ebd19ddb1b7",
+      "currentSha256": "bf2ec38840cb419839a17fc03144df0a310d5405cd1ae42a19cd8ebd19ddb1b7",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/server/phases/play.ts",
+      "sha256": "277cb04403dfcaababd9025f033246bbe523dc8a7ac2d04b488eec6de18a1de9",
+      "currentSha256": "277cb04403dfcaababd9025f033246bbe523dc8a7ac2d04b488eec6de18a1de9",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/server/phases/ready.ts",
+      "sha256": "e3b1da00f8819abac025e67343c106409d44a704d35987282428f338793d1623",
+      "currentSha256": "e3b1da00f8819abac025e67343c106409d44a704d35987282428f338793d1623",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/server/phases/score.ts",
+      "sha256": "b0c11e577328b019c15c65e7f773bad81b12e0164dd3d5d62d25f54cdf92e893",
+      "currentSha256": "b0c11e577328b019c15c65e7f773bad81b12e0164dd3d5d62d25f54cdf92e893",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/server/scoring.ts",
+      "sha256": "a906757a10b744ef13e1ae687f2d4df85bdc39e8b252e4d96484fd2bcc4053cc",
+      "currentSha256": "a906757a10b744ef13e1ae687f2d4df85bdc39e8b252e4d96484fd2bcc4053cc",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/server/types.ts",
+      "sha256": "33aa0528298d8964d5123bd134a0ef43228a41f1c03b4103395879c935e14994",
+      "currentSha256": "33aa0528298d8964d5123bd134a0ef43228a41f1c03b4103395879c935e14994",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/server/world.ts",
+      "sha256": "3e49b0528508238c0d37133eedbfd4631b6b4b39685921ac4442a5de7e9b4193",
+      "currentSha256": "3e49b0528508238c0d37133eedbfd4631b6b4b39685921ac4442a5de7e9b4193",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/__tests__/artifacts.test.tsx",
+      "sha256": "cce5547b321dd0172eaeb6599beb24f46f896e9b7837a1c0084b4d8ff9e566a4",
+      "currentSha256": "cce5547b321dd0172eaeb6599beb24f46f896e9b7837a1c0084b4d8ff9e566a4",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/__tests__/bot.test.ts",
+      "sha256": "f8235cd4cf50d2771686c7b609beb44821c26c4ba2f6523c98def1e6516b5fa5",
+      "currentSha256": "f8235cd4cf50d2771686c7b609beb44821c26c4ba2f6523c98def1e6516b5fa5",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/__tests__/contract.config.ts",
+      "sha256": "0bc9f6b798898d24b8bd70308e06c01dfd04020607dcd877d837c18452d670c2",
+      "currentSha256": "0bc9f6b798898d24b8bd70308e06c01dfd04020607dcd877d837c18452d670c2",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/__tests__/contract.test.ts",
+      "sha256": "7ab7041494761682d20492f708792d349b732697876ce34b4b87b4dc8d3d5a00",
+      "currentSha256": "7ab7041494761682d20492f708792d349b732697876ce34b4b87b4dc8d3d5a00",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/__tests__/game.test.ts",
+      "sha256": "91073947b43c5bd87bf1d7d80e74d86dfcb3cd10480bc33047e2f6dda5937abe",
+      "currentSha256": "91073947b43c5bd87bf1d7d80e74d86dfcb3cd10480bc33047e2f6dda5937abe",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/__tests__/presence.test.ts",
+      "sha256": "0495051a593288704802ed2320ca880b2553a078751dc11c35d68d3907b56dac",
+      "currentSha256": "0495051a593288704802ed2320ca880b2553a078751dc11c35d68d3907b56dac",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/__tests__/property.test.ts",
+      "sha256": "22cc3c17045edb121d195135aa0c3152e14265b1566ae24e269689ce8f72731c",
+      "currentSha256": "22cc3c17045edb121d195135aa0c3152e14265b1566ae24e269689ce8f72731c",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/__tests__/simulation.test.ts",
+      "sha256": "d1d09a58297a3cc918730a271158669bc5c852e10ca7f48d4ee789ae59ea5feb",
+      "currentSha256": "d1d09a58297a3cc918730a271158669bc5c852e10ca7f48d4ee789ae59ea5feb",
+      "unchanged": true
+    },
+    {
+      "file": "games/paper-territory/__tests__/world.test.ts",
+      "sha256": "795873d31ada1e0ec951f2761c302c54d762ddaa78097357215ea405400deee6",
+      "currentSha256": "795873d31ada1e0ec951f2761c302c54d762ddaa78097357215ea405400deee6",
+      "unchanged": true
+    }
+  ],
+  "clientChangesAfterCi": [
+    {
+      "file": "games/paper-territory/client/Controller.module.css",
+      "sha256": "6b624188102055bed30cf6eb1fa99a914f46d7e7cb8942d790e6f6da6364a974",
+      "currentSha256": "2c56a9d33c92628145df16eace17f09932309a3cd7770090c2e96a7e93dcfc62",
+      "unchanged": false
+    },
+    {
+      "file": "games/paper-territory/client/Controller.tsx",
+      "sha256": "d1e2a507d63c15e788412276b412bea1f2b08af0f380adea974a7b8df6102485",
+      "currentSha256": "2a5bad126de55fd815ef505177bb8c7e69f6168ecaed683042621de43b51b41e",
+      "unchanged": false
+    },
+    {
+      "file": "games/paper-territory/client/feedback.test.tsx",
+      "sha256": "435a57b2a7c2f22113f282c55d5cfae205e7fdf4468db225d869f595f7a784cc",
+      "currentSha256": "a0c24da514c9bf75ef6e42384cce6a6d7fd9dc3118a9d4634bcf352f4c415f03",
+      "unchanged": false
+    },
+    {
+      "file": "games/paper-territory/client/Map.test.tsx",
+      "sha256": "76228fbd9b310bdfa985d8afaa8caeb2aa573ab3c4a0c45f77dd2e0c183403ab",
+      "currentSha256": "f94aba25b305f1b0d30fb0e3056bb486d296568a58a8452127040ffad9764b8b",
+      "unchanged": false
+    },
+    {
+      "file": "games/paper-territory/client/Map.tsx",
+      "sha256": "fd2626797a5d7bb600d7a57f713b1c481422413f4a76bc4aa5f595e5683d487c",
+      "currentSha256": "b9cb5b9261c9578bdb012ee0b28527ed7064a4324f5842363e8620d4bd0ed44c",
+      "unchanged": false
+    }
+  ],
+  "subsequentClientValidation": "Parent owns targeted Map/roster checks and the next full CI after client-only R7/R8 fixes.",
+  "log": "final-ci.log"
+}

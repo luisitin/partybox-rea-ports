@@ -1,0 +1,717 @@
+{
+  "recordedAtUtc": "2026-10-12T02:20:54.946Z",
+  "conclusion": "success",
+  "createdAt": "2026-10-12T02:18:10Z",
+  "headSha": "7b9e1b6c7e932720165c33cd037218f9af955807",
+  "status": "completed",
+  "updatedAt": "2026-10-12T02:19:54Z",
+  "url": "https://github.com/luisitin/partybox-rea-ports/actions/runs/38195244834",
+  "command": "pnpm vitest run games/paper-io --maxWorkers=1",
+  "files": 14,
+  "tests": 147,
+  "failed": 0,
+  "durationSeconds": 78.19,
+  "propertyTraces": 1003,
+  "regressionSeeds": [1, 2, 3],
+  "generatedSeeds": 1000,
+  "botMatches": 7000,
+  "metrics": {
+    "2": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 845,
+      "decisionBeatMs": 600,
+      "wallMs": 3542.834977,
+      "botMs": 457.9420790000802,
+      "reducerMs": 2941.083887000019,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 668,
+          "meanFinalArea": 235,
+          "medianFinalArea": 235,
+          "maximumFinalArea": 406,
+          "meanCaptures": 47.5,
+          "medianCaptures": 47.5,
+          "meanDeaths": 0.5,
+          "medianDeaths": 0.5,
+          "grewBeyondHome": 668
+        },
+        "normal": {
+          "games": 333,
+          "players": 666,
+          "meanFinalArea": 218.5,
+          "medianFinalArea": 218.5,
+          "maximumFinalArea": 331,
+          "meanCaptures": 47,
+          "medianCaptures": 47,
+          "meanDeaths": 0.5,
+          "medianDeaths": 0.5,
+          "grewBeyondHome": 666
+        },
+        "sharp": {
+          "games": 333,
+          "players": 666,
+          "meanFinalArea": 218.5,
+          "medianFinalArea": 218.5,
+          "maximumFinalArea": 331,
+          "meanCaptures": 47,
+          "medianCaptures": 47,
+          "meanDeaths": 0.5,
+          "medianDeaths": 0.5,
+          "grewBeyondHome": 666
+        }
+      },
+      "budgetMs": 360000
+    },
+    "3": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 1002,
+      "decisionBeatMs": 600,
+      "wallMs": 5216.778516,
+      "botMs": 920.6373440000311,
+      "reducerMs": 4118.922547999599,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 1002,
+          "meanFinalArea": 146.62075848303394,
+          "medianFinalArea": 120,
+          "maximumFinalArea": 441,
+          "meanCaptures": 45.55888223552894,
+          "medianCaptures": 45,
+          "meanDeaths": 1.6497005988023952,
+          "medianDeaths": 1,
+          "grewBeyondHome": 884
+        },
+        "normal": {
+          "games": 333,
+          "players": 999,
+          "meanFinalArea": 151.92192192192192,
+          "medianFinalArea": 122,
+          "maximumFinalArea": 459,
+          "meanCaptures": 43.1991991991992,
+          "medianCaptures": 43,
+          "meanDeaths": 1.952952952952953,
+          "medianDeaths": 2,
+          "grewBeyondHome": 865
+        },
+        "sharp": {
+          "games": 333,
+          "players": 999,
+          "meanFinalArea": 111.998998998999,
+          "medianFinalArea": 90,
+          "maximumFinalArea": 455,
+          "meanCaptures": 42.84084084084084,
+          "medianCaptures": 45,
+          "meanDeaths": 2.4854854854854853,
+          "medianDeaths": 1,
+          "grewBeyondHome": 842
+        }
+      },
+      "budgetMs": 360000
+    },
+    "4": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 1137,
+      "decisionBeatMs": 600,
+      "wallMs": 7071.603296000001,
+      "botMs": 1476.8547839995554,
+      "reducerMs": 5375.825492000753,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 1336,
+          "meanFinalArea": 106.4752994011976,
+          "medianFinalArea": 106,
+          "maximumFinalArea": 316,
+          "meanCaptures": 44.134730538922156,
+          "medianCaptures": 44,
+          "meanDeaths": 2.4019461077844313,
+          "medianDeaths": 2,
+          "grewBeyondHome": 1119
+        },
+        "normal": {
+          "games": 333,
+          "players": 1332,
+          "meanFinalArea": 109.30705705705705,
+          "medianFinalArea": 120.5,
+          "maximumFinalArea": 309,
+          "meanCaptures": 42.98723723723724,
+          "medianCaptures": 43,
+          "meanDeaths": 2.3933933933933935,
+          "medianDeaths": 2,
+          "grewBeyondHome": 1134
+        },
+        "sharp": {
+          "games": 333,
+          "players": 1332,
+          "meanFinalArea": 115.88738738738739,
+          "medianFinalArea": 118,
+          "maximumFinalArea": 295,
+          "meanCaptures": 42.11186186186186,
+          "medianCaptures": 42,
+          "meanDeaths": 2.65990990990991,
+          "medianDeaths": 2,
+          "grewBeyondHome": 1144
+        }
+      },
+      "budgetMs": 360000
+    },
+    "5": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 1271,
+      "decisionBeatMs": 600,
+      "wallMs": 8643.775397,
+      "botMs": 2036.9916020013934,
+      "reducerMs": 6357.4261679968895,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 1670,
+          "meanFinalArea": 88.07065868263473,
+          "medianFinalArea": 80.5,
+          "maximumFinalArea": 309,
+          "meanCaptures": 43.18203592814371,
+          "medianCaptures": 43,
+          "meanDeaths": 3.2520958083832334,
+          "medianDeaths": 3,
+          "grewBeyondHome": 1400
+        },
+        "normal": {
+          "games": 333,
+          "players": 1665,
+          "meanFinalArea": 88.64924924924925,
+          "medianFinalArea": 82,
+          "maximumFinalArea": 272,
+          "meanCaptures": 41.04864864864865,
+          "medianCaptures": 41,
+          "meanDeaths": 3.36996996996997,
+          "medianDeaths": 3,
+          "grewBeyondHome": 1384
+        },
+        "sharp": {
+          "games": 333,
+          "players": 1665,
+          "meanFinalArea": 90.87327327327327,
+          "medianFinalArea": 86,
+          "maximumFinalArea": 291,
+          "meanCaptures": 40.91411411411411,
+          "medianCaptures": 41,
+          "meanDeaths": 3.5297297297297296,
+          "medianDeaths": 3,
+          "grewBeyondHome": 1389
+        }
+      },
+      "budgetMs": 360000
+    },
+    "6": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 1407,
+      "decisionBeatMs": 600,
+      "wallMs": 10986.007011999998,
+      "botMs": 2851.3786980013683,
+      "reducerMs": 7832.968275999803,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 2004,
+          "meanFinalArea": 75.54241516966069,
+          "medianFinalArea": 76,
+          "maximumFinalArea": 243,
+          "meanCaptures": 42.942115768463076,
+          "medianCaptures": 43,
+          "meanDeaths": 3.55938123752495,
+          "medianDeaths": 3,
+          "grewBeyondHome": 1643
+        },
+        "normal": {
+          "games": 333,
+          "players": 1998,
+          "meanFinalArea": 75.61261261261261,
+          "medianFinalArea": 76,
+          "maximumFinalArea": 265,
+          "meanCaptures": 40.33983983983984,
+          "medianCaptures": 40,
+          "meanDeaths": 3.903903903903904,
+          "medianDeaths": 4,
+          "grewBeyondHome": 1628
+        },
+        "sharp": {
+          "games": 333,
+          "players": 1998,
+          "meanFinalArea": 75.92892892892893,
+          "medianFinalArea": 76,
+          "maximumFinalArea": 235,
+          "meanCaptures": 40.567067067067065,
+          "medianCaptures": 41,
+          "meanDeaths": 3.942942942942943,
+          "medianDeaths": 4,
+          "grewBeyondHome": 1619
+        }
+      },
+      "budgetMs": 360000
+    },
+    "7": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 1521,
+      "decisionBeatMs": 600,
+      "wallMs": 12741.502092999996,
+      "botMs": 3675.5377180036157,
+      "reducerMs": 8731.755504993853,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 2338,
+          "meanFinalArea": 61.876817792985456,
+          "medianFinalArea": 56,
+          "maximumFinalArea": 212,
+          "meanCaptures": 40.13644140290847,
+          "medianCaptures": 41,
+          "meanDeaths": 5.128314798973482,
+          "medianDeaths": 5,
+          "grewBeyondHome": 1792
+        },
+        "normal": {
+          "games": 333,
+          "players": 2331,
+          "meanFinalArea": 62.497211497211495,
+          "medianFinalArea": 55,
+          "maximumFinalArea": 216,
+          "meanCaptures": 37.902187902187904,
+          "medianCaptures": 38,
+          "meanDeaths": 5.435006435006435,
+          "medianDeaths": 5,
+          "grewBeyondHome": 1726
+        },
+        "sharp": {
+          "games": 333,
+          "players": 2331,
+          "meanFinalArea": 62.71042471042471,
+          "medianFinalArea": 57,
+          "maximumFinalArea": 253,
+          "meanCaptures": 38.32689832689832,
+          "medianCaptures": 38,
+          "meanDeaths": 5.20978120978121,
+          "medianDeaths": 5,
+          "grewBeyondHome": 1722
+        }
+      },
+      "budgetMs": 360000
+    },
+    "8": {
+      "games": 1000,
+      "seeds": "1..1000",
+      "strengths": ["easy", "normal", "sharp"],
+      "medianRoundMs": 120000,
+      "maximumRoundMs": 120000,
+      "maximumGameMs": 131000,
+      "maximumEvents": 1653,
+      "decisionBeatMs": 600,
+      "wallMs": 14882.824345,
+      "botMs": 4614.67504600274,
+      "reducerMs": 9893.46419600078,
+      "bySkill": {
+        "easy": {
+          "games": 334,
+          "players": 2672,
+          "meanFinalArea": 53.20097305389221,
+          "medianFinalArea": 49,
+          "maximumFinalArea": 206,
+          "meanCaptures": 39.2810628742515,
+          "medianCaptures": 39,
+          "meanDeaths": 5.7107035928143715,
+          "medianDeaths": 5,
+          "grewBeyondHome": 1941
+        },
+        "normal": {
+          "games": 333,
+          "players": 2664,
+          "meanFinalArea": 52.820570570570574,
+          "medianFinalArea": 45,
+          "maximumFinalArea": 240,
+          "meanCaptures": 36.520270270270274,
+          "medianCaptures": 37,
+          "meanDeaths": 6.057057057057057,
+          "medianDeaths": 6,
+          "grewBeyondHome": 1844
+        },
+        "sharp": {
+          "games": 333,
+          "players": 2664,
+          "meanFinalArea": 52.91854354354354,
+          "medianFinalArea": 45,
+          "maximumFinalArea": 230,
+          "meanCaptures": 37.3277027027027,
+          "medianCaptures": 37,
+          "meanDeaths": 5.826951951951952,
+          "medianDeaths": 6,
+          "grewBeyondHome": 1863
+        }
+      },
+      "budgetMs": 360000
+    }
+  },
+  "sources": [
+    {
+      "file": "games/paper-io/AGENTS.md",
+      "testedSha256Lf": "9f3b983fe54d7b23496c7ae6c42b95003aff3bd1c5c2c6e1562570215d20ee6b",
+      "currentSha256Lf": "9f3b983fe54d7b23496c7ae6c42b95003aff3bd1c5c2c6e1562570215d20ee6b",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/CLAUDE.md",
+      "testedSha256Lf": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
+      "currentSha256Lf": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/README.md",
+      "testedSha256Lf": "784ea7ce186f6129f8b046827cd0d9b08b9be1c08bced763b38a4a2938d67714",
+      "currentSha256Lf": "784ea7ce186f6129f8b046827cd0d9b08b9be1c08bced763b38a4a2938d67714",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/__tests__/artifacts.test.tsx",
+      "testedSha256Lf": "848af61ff450a1f35bf0daf107c4db9d019c0b6dfb8c0ccbbfaada304948d782",
+      "currentSha256Lf": "848af61ff450a1f35bf0daf107c4db9d019c0b6dfb8c0ccbbfaada304948d782",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/__tests__/bot.test.ts",
+      "testedSha256Lf": "a9d94bb1ed93a6148a12d1a25bc0b8486c4e33e0fc55a010e1ad00e6e3887215",
+      "currentSha256Lf": "a9d94bb1ed93a6148a12d1a25bc0b8486c4e33e0fc55a010e1ad00e6e3887215",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/__tests__/contract.config.ts",
+      "testedSha256Lf": "0bc9f6b798898d24b8bd70308e06c01dfd04020607dcd877d837c18452d670c2",
+      "currentSha256Lf": "0bc9f6b798898d24b8bd70308e06c01dfd04020607dcd877d837c18452d670c2",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/__tests__/contract.test.ts",
+      "testedSha256Lf": "e5d5e856a6ae80c1194a9cb323151caea40ba567e1f984aa2e6964db6806e576",
+      "currentSha256Lf": "e5d5e856a6ae80c1194a9cb323151caea40ba567e1f984aa2e6964db6806e576",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/__tests__/game.test.ts",
+      "testedSha256Lf": "bcc75b62f41814b8254bc1b0e773517bceacbea399881c856d196f6e0ce031dd",
+      "currentSha256Lf": "bcc75b62f41814b8254bc1b0e773517bceacbea399881c856d196f6e0ce031dd",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/__tests__/presence.test.ts",
+      "testedSha256Lf": "b7941a9c3d03aa9561988a54f461c6cc655433100f550ac104c446196140e32f",
+      "currentSha256Lf": "b7941a9c3d03aa9561988a54f461c6cc655433100f550ac104c446196140e32f",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/__tests__/property.test.ts",
+      "testedSha256Lf": "f7eff3ad1db264001d310f9c107fa4e14110632d6c79e1ae0b2ae9f9b292facc",
+      "currentSha256Lf": "f7eff3ad1db264001d310f9c107fa4e14110632d6c79e1ae0b2ae9f9b292facc",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/__tests__/simulation.test.ts",
+      "testedSha256Lf": "c2efbb36b437058be6b5c506b8d1ded835bf8bc6ec640b798c165321532142c8",
+      "currentSha256Lf": "c2efbb36b437058be6b5c506b8d1ded835bf8bc6ec640b798c165321532142c8",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/__tests__/world.test.ts",
+      "testedSha256Lf": "795873d31ada1e0ec951f2761c302c54d762ddaa78097357215ea405400deee6",
+      "currentSha256Lf": "795873d31ada1e0ec951f2761c302c54d762ddaa78097357215ea405400deee6",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/Controller.module.css",
+      "testedSha256Lf": "7d619f534e278c5cd3b93362acc4c09d6fa7dc34d0e2810290b859d279c655fa",
+      "currentSha256Lf": "7d619f534e278c5cd3b93362acc4c09d6fa7dc34d0e2810290b859d279c655fa",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/Controller.tsx",
+      "testedSha256Lf": "f30879037c8831b75310e6bd263c48cf42fb1f11d4512b4b2f199355ed562f1c",
+      "currentSha256Lf": "f30879037c8831b75310e6bd263c48cf42fb1f11d4512b4b2f199355ed562f1c",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/DirectionPad.test.tsx",
+      "testedSha256Lf": "780c67384663cbb8a67fd74964b22c4c6d465b6c16c2e0bf95e9eee495ac5b7a",
+      "currentSha256Lf": "780c67384663cbb8a67fd74964b22c4c6d465b6c16c2e0bf95e9eee495ac5b7a",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/DirectionPad.tsx",
+      "testedSha256Lf": "5af05f66478a6f3581e5030c142277fc7d337fff5fbc84029b6ca6b288ec208b",
+      "currentSha256Lf": "5af05f66478a6f3581e5030c142277fc7d337fff5fbc84029b6ca6b288ec208b",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/Map.module.css",
+      "testedSha256Lf": "e8d4ad6c129d782d592896fbf66bce4d6c3545b8118b81b102f8ad7f83718939",
+      "currentSha256Lf": "e8d4ad6c129d782d592896fbf66bce4d6c3545b8118b81b102f8ad7f83718939",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/Map.test.tsx",
+      "testedSha256Lf": "46627faa97930e93b219eabe7cbf6eebe6891ef49ae80057b885cc9e82e5013e",
+      "currentSha256Lf": "46627faa97930e93b219eabe7cbf6eebe6891ef49ae80057b885cc9e82e5013e",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/Map.tsx",
+      "testedSha256Lf": "e3ebd505e4c1e5a60ed1c86eaf6e7a5bf9516cb58113f6c295fd80f6ef5511ec",
+      "currentSha256Lf": "e3ebd505e4c1e5a60ed1c86eaf6e7a5bf9516cb58113f6c295fd80f6ef5511ec",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/OwnershipPattern.module.css",
+      "testedSha256Lf": "e00a3e049ea1aa2a8ee9303a89b5e480301bd6717fda6330e6dae9ae7d99e805",
+      "currentSha256Lf": "e00a3e049ea1aa2a8ee9303a89b5e480301bd6717fda6330e6dae9ae7d99e805",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/OwnershipPattern.tsx",
+      "testedSha256Lf": "8f26ca41f74129d4b95920b041393f33424ab3ec7cdc28159b3b3df2f3f780e0",
+      "currentSha256Lf": "8f26ca41f74129d4b95920b041393f33424ab3ec7cdc28159b3b3df2f3f780e0",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/SeatBadge.module.css",
+      "testedSha256Lf": "21751bbe612947203a70d3de54c8558d4204d6f8efe8bb8bccf55bb37f49b87e",
+      "currentSha256Lf": "21751bbe612947203a70d3de54c8558d4204d6f8efe8bb8bccf55bb37f49b87e",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/SeatBadge.tsx",
+      "testedSha256Lf": "e1d528d69253c4b9f6dc208dcac6ee82fd40c1f985cee1b4b68fc6cbca55ef72",
+      "currentSha256Lf": "e1d528d69253c4b9f6dc208dcac6ee82fd40c1f985cee1b4b68fc6cbca55ef72",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/Tv.module.css",
+      "testedSha256Lf": "7dd7cc295ae6d956951b5289dc81d8335511d2a73d5f6e5be7dcc496c41697a2",
+      "currentSha256Lf": "7dd7cc295ae6d956951b5289dc81d8335511d2a73d5f6e5be7dcc496c41697a2",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/Tv.tsx",
+      "testedSha256Lf": "0338fa90acd0477c9b721849842aa247388d5c21bf6dff2ad50332604410fe95",
+      "currentSha256Lf": "0338fa90acd0477c9b721849842aa247388d5c21bf6dff2ad50332604410fe95",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/controls.test.ts",
+      "testedSha256Lf": "33b02b08e0c0701237e9ddeaed6fcbce8fec44e103b9515a5191100f8aed4a4a",
+      "currentSha256Lf": "33b02b08e0c0701237e9ddeaed6fcbce8fec44e103b9515a5191100f8aed4a4a",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/controls.ts",
+      "testedSha256Lf": "c2247bf3e8607d7e1015606bc16a9c52319aaab8132a78429108824b5dbe9fd3",
+      "currentSha256Lf": "c2247bf3e8607d7e1015606bc16a9c52319aaab8132a78429108824b5dbe9fd3",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/feedback.test.tsx",
+      "testedSha256Lf": "41c202f8b4692ac0c953879133414a724ed7a1acf0b43f796790eda6422b2a50",
+      "currentSha256Lf": "41c202f8b4692ac0c953879133414a724ed7a1acf0b43f796790eda6422b2a50",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/homeLabels.ts",
+      "testedSha256Lf": "38a2bd7810c5c5c5ef30c519eff36ae4b498dd6d066fd4dd5a6670fec1c2f635",
+      "currentSha256Lf": "38a2bd7810c5c5c5ef30c519eff36ae4b498dd6d066fd4dd5a6670fec1c2f635",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/mapMath.test.ts",
+      "testedSha256Lf": "a45e44269b86af3657d1f9d07b060109f0b88199aaf437f021369f1cd93e3358",
+      "currentSha256Lf": "a45e44269b86af3657d1f9d07b060109f0b88199aaf437f021369f1cd93e3358",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/mapMath.ts",
+      "testedSha256Lf": "bc19d6ebf8171af252ad0ebee20b7fa66aff6aa1a99e3a1c070f9b51e0559889",
+      "currentSha256Lf": "bc19d6ebf8171af252ad0ebee20b7fa66aff6aa1a99e3a1c070f9b51e0559889",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/markerGeometry.ts",
+      "testedSha256Lf": "fa59acd71b8785860d1b4b41203f02bc8256c590d00bed1a1547af7aa310dfe8",
+      "currentSha256Lf": "fa59acd71b8785860d1b4b41203f02bc8256c590d00bed1a1547af7aa310dfe8",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/phone-entry.ts",
+      "testedSha256Lf": "391679695d9a4e75a040c4f0007e147699c404777024b0b95b5c46e2e46e5a00",
+      "currentSha256Lf": "391679695d9a4e75a040c4f0007e147699c404777024b0b95b5c46e2e46e5a00",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/shared.ts",
+      "testedSha256Lf": "f72d752702106ccfa735d58ba638c498f926d335f5cc7c9476170e711d384749",
+      "currentSha256Lf": "f72d752702106ccfa735d58ba638c498f926d335f5cc7c9476170e711d384749",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/standings.test.ts",
+      "testedSha256Lf": "01b98f0d6a54fca26ad567927a29cdebd9f44fc2409ce8a06dbc5acf40fc3099",
+      "currentSha256Lf": "01b98f0d6a54fca26ad567927a29cdebd9f44fc2409ce8a06dbc5acf40fc3099",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/standings.ts",
+      "testedSha256Lf": "4d90367b8d2765a849174c3c1694c4e10b0f8c362ccd5197321c3f814f3859e6",
+      "currentSha256Lf": "4d90367b8d2765a849174c3c1694c4e10b0f8c362ccd5197321c3f814f3859e6",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/strings.ts",
+      "testedSha256Lf": "d3c9790d3f6d402151f71c8c0fc907a4d811c7b229d0594de5c051f4ef043c4e",
+      "currentSha256Lf": "d3c9790d3f6d402151f71c8c0fc907a4d811c7b229d0594de5c051f4ef043c4e",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/textures.ts",
+      "testedSha256Lf": "1ddd27b706ab7173204356aa133b1ec42bae5020682633400520dd390d497d2a",
+      "currentSha256Lf": "1ddd27b706ab7173204356aa133b1ec42bae5020682633400520dd390d497d2a",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/client/tv-entry.ts",
+      "testedSha256Lf": "31fbe6d8e8a263bfe92bc2384b2a5f17a92c4a5efd8cad53b3bcc1ba256671d5",
+      "currentSha256Lf": "31fbe6d8e8a263bfe92bc2384b2a5f17a92c4a5efd8cad53b3bcc1ba256671d5",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/content/schema.ts",
+      "testedSha256Lf": "55f0098b54f812a3ab3049dee58fe573bcb43519b48653c304f77520751ee5f7",
+      "currentSha256Lf": "55f0098b54f812a3ab3049dee58fe573bcb43519b48653c304f77520751ee5f7",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/fixtures/done.json",
+      "testedSha256Lf": "6d3482b702e1a8960cb52a3c61f7f8168679fdd116ce05b80af19407187397c0",
+      "currentSha256Lf": "6d3482b702e1a8960cb52a3c61f7f8168679fdd116ce05b80af19407187397c0",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/fixtures/play.json",
+      "testedSha256Lf": "ccb3d2eae611d18a98805a61b4d214d73a36c4845f9a7e16f039a2b57ee35ac9",
+      "currentSha256Lf": "ccb3d2eae611d18a98805a61b4d214d73a36c4845f9a7e16f039a2b57ee35ac9",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/fixtures/ready.json",
+      "testedSha256Lf": "0ed80761c8e82e8d6134a7264ad45bd8bbc052aaeb743c8b8e554b6007a1751e",
+      "currentSha256Lf": "0ed80761c8e82e8d6134a7264ad45bd8bbc052aaeb743c8b8e554b6007a1751e",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/fixtures/score.json",
+      "testedSha256Lf": "aca70b79c202dc011c5907127f217f7feb160f4e5e526214a037d0d35d7521d3",
+      "currentSha256Lf": "aca70b79c202dc011c5907127f217f7feb160f4e5e526214a037d0d35d7521d3",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/manifest.json",
+      "testedSha256Lf": "00d6b16f4fe8de6a49383f0d00936b28b65f200e2a70e72dfe2303b38fee0cf0",
+      "currentSha256Lf": "00d6b16f4fe8de6a49383f0d00936b28b65f200e2a70e72dfe2303b38fee0cf0",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/server/bot.ts",
+      "testedSha256Lf": "886c6ddeed091d6c3eaa3a08cf552a4bdd36a67e8d3afe0a5bca05b973325ece",
+      "currentSha256Lf": "886c6ddeed091d6c3eaa3a08cf552a4bdd36a67e8d3afe0a5bca05b973325ece",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/server/content.ts",
+      "testedSha256Lf": "af1c2fdf10b1750fe776cc6167b7c7a483f2b14744b52486175814dc8a57311a",
+      "currentSha256Lf": "af1c2fdf10b1750fe776cc6167b7c7a483f2b14744b52486175814dc8a57311a",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/server/index.ts",
+      "testedSha256Lf": "b85c483afa363d3a703e7e2eccebe6c86668575b51f3c466ecabe8cb9ad73e54",
+      "currentSha256Lf": "b85c483afa363d3a703e7e2eccebe6c86668575b51f3c466ecabe8cb9ad73e54",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/server/phases/done.ts",
+      "testedSha256Lf": "bf2ec38840cb419839a17fc03144df0a310d5405cd1ae42a19cd8ebd19ddb1b7",
+      "currentSha256Lf": "bf2ec38840cb419839a17fc03144df0a310d5405cd1ae42a19cd8ebd19ddb1b7",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/server/phases/play.ts",
+      "testedSha256Lf": "277cb04403dfcaababd9025f033246bbe523dc8a7ac2d04b488eec6de18a1de9",
+      "currentSha256Lf": "277cb04403dfcaababd9025f033246bbe523dc8a7ac2d04b488eec6de18a1de9",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/server/phases/ready.ts",
+      "testedSha256Lf": "e3b1da00f8819abac025e67343c106409d44a704d35987282428f338793d1623",
+      "currentSha256Lf": "e3b1da00f8819abac025e67343c106409d44a704d35987282428f338793d1623",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/server/phases/score.ts",
+      "testedSha256Lf": "b0c11e577328b019c15c65e7f773bad81b12e0164dd3d5d62d25f54cdf92e893",
+      "currentSha256Lf": "b0c11e577328b019c15c65e7f773bad81b12e0164dd3d5d62d25f54cdf92e893",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/server/scoring.ts",
+      "testedSha256Lf": "a906757a10b744ef13e1ae687f2d4df85bdc39e8b252e4d96484fd2bcc4053cc",
+      "currentSha256Lf": "a906757a10b744ef13e1ae687f2d4df85bdc39e8b252e4d96484fd2bcc4053cc",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/server/types.ts",
+      "testedSha256Lf": "33aa0528298d8964d5123bd134a0ef43228a41f1c03b4103395879c935e14994",
+      "currentSha256Lf": "33aa0528298d8964d5123bd134a0ef43228a41f1c03b4103395879c935e14994",
+      "matchesTestedHead": true
+    },
+    {
+      "file": "games/paper-io/server/world.ts",
+      "testedSha256Lf": "3e49b0528508238c0d37133eedbfd4631b6b4b39685921ac4442a5de7e9b4193",
+      "currentSha256Lf": "3e49b0528508238c0d37133eedbfd4631b6b4b39685921ac4442a5de7e9b4193",
+      "matchesTestedHead": true
+    }
+  ],
+  "allGameFilesMatchTestedHead": true
+}

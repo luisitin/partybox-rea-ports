@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "scope": "Post-green bot escape fallback; separate from historical CI run 38179181153",
+  "scenario": {
+    "board": [40, 28],
+    "head": [38, 5],
+    "currentHeading": "east",
+    "east": "Wall after 2 ticks (400 ms)",
+    "north": "5 clear ticks, wall at tick 6",
+    "south": "Existing own trail after 4 ticks",
+    "west": "Forbidden reverse",
+    "supportedDecisionBeatMs": 600,
+    "after": "All three strengths turn north immediately, then west after 3 ticks, and remain alive at tick 6. A 1200 ms straight runway is unavailable in this position; the regression uses the supported 600 ms decision cadence."
+  },
+  "change": "When both existing six-tile safety passes fail, search descending five-to-one-tile safety horizons and choose the longest available escape. Preserve reverse, wall, own-trail, and three-tick rival-head checks.",
+  "before": {
+    "command": "node node_modules/vitest/vitest.mjs run games/paper-territory/__tests__/bot.test.ts --maxWorkers=1 -t 'takes the longest escape'",
+    "log": "r11-bot-fallback-before.log",
+    "failed": 1,
+    "skipped": 5,
+    "durationSeconds": 14.38,
+    "assertion": "Expected north direction input, received null",
+    "process": "Completed failing assertion output; Vitest fork termination timed out, so only the owned completed command was stopped."
+  },
+  "after": {
+    "command": "node node_modules/vitest/vitest.mjs run games/paper-territory/__tests__/bot.test.ts games/paper-territory/__tests__/game.test.ts games/paper-territory/__tests__/world.test.ts games/paper-territory/__tests__/contract.test.ts --maxWorkers=1",
+    "log": "r11-bot-fallback-after.log",
+    "exitCode": 0,
+    "filesPassed": 4,
+    "testsPassed": 64,
+    "durationSeconds": 4.78,
+    "strengthsChecked": ["easy", "normal", "sharp"]
+  },
+  "sourceHashes": {
+    "games/paper-territory/server/bot.ts": {
+      "before": "97c0fe7e8da56ffbb5bc8de665d0bd96c7d8c63c8c74f0e7b9927d2b5ae6733c",
+      "after": "b7f0a9b54fe60295a7f020afc03607305f531187e175f8903352c8ddc09a5b9a"
+    },
+    "games/paper-territory/__tests__/bot.test.ts": {
+      "after": "7e53c58c0edd208d342ece5f9e19664fc55bf4c1b2753adbd6816db3b811778c"
+    }
+  },
+  "provenance": "Historical full CI, property, simulation and mutation evidence remains unchanged. This source change is validated by the targeted run above; the next job-scoped CI run will validate the complete current revision. No further heavy local run or browser was launched."
+}

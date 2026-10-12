@@ -1,0 +1,143 @@
+{
+  "recordedAtUtc": "2026-10-11T21:41:18.663Z",
+  "scope": "games/paper-territory only; maxWorkers=1; no browser launched by verification",
+  "fullRun": {
+    "command": "PB_RECORD_VERIFY=1 pnpm.cmd vitest run games/paper-territory --maxWorkers=1",
+    "benchmarkOverride": false,
+    "passed": 76,
+    "failed": 1,
+    "total": 77,
+    "files": 11,
+    "durationSeconds": 174.38,
+    "failure": "SDK fast bots exhausted the event cap while repeating unchanged queued headings",
+    "log": "final-verify.log"
+  },
+  "resolvedFailure": {
+    "fix": "Bot returns null when its chosen heading is already queued, yielding to the physics timer",
+    "command": "pnpm.cmd vitest run games/paper-territory/__tests__/contract.test.ts games/paper-territory/__tests__/world.test.ts games/paper-territory/__tests__/game.test.ts games/paper-territory/__tests__/presence.test.ts games/paper-territory/__tests__/bot.test.ts --maxWorkers=1",
+    "passed": 56,
+    "failed": 0,
+    "total": 56,
+    "files": 5,
+    "durationSeconds": 7.75,
+    "sdkContractTests": 20,
+    "fastRegressionTests": 36,
+    "log": "post-fix-verify.log"
+  },
+  "heavyChecksFromFullRun": {
+    "propertyTraces": 1003,
+    "eventsPerTrace": 40,
+    "regressionSeeds": [1, 2, 3],
+    "generatedSeeds": 1000,
+    "botMatches": 3000,
+    "gamesPerPartySize": {
+      "2": 1000,
+      "4": 1000,
+      "8": 1000
+    },
+    "decisionBeatMs": 600,
+    "medianRoundMs": 120000,
+    "maximumGameMs": 131000,
+    "manifestTimesTwoBudgetMs": 360000,
+    "evidence": ["property-results.json", "simulation-results.json"],
+    "repeatedAfterBotNoopFix": false
+  },
+  "mutations": {
+    "trials": 20,
+    "caughtByAssertionFailures": 20,
+    "baseline": {
+      "exitCode": 0,
+      "total": 35,
+      "passed": 35,
+      "failed": 0
+    },
+    "finalBaseline": {
+      "exitCode": 0,
+      "total": 35,
+      "passed": 35,
+      "failed": 0
+    },
+    "restoredOriginalBytes": true,
+    "sourceRestoration": [
+      {
+        "file": "games/paper-territory/server/scoring.ts",
+        "beforeSha256": "a906757a10b744ef13e1ae687f2d4df85bdc39e8b252e4d96484fd2bcc4053cc",
+        "afterSha256": "a906757a10b744ef13e1ae687f2d4df85bdc39e8b252e4d96484fd2bcc4053cc",
+        "identical": true
+      },
+      {
+        "file": "games/paper-territory/server/phases/score.ts",
+        "beforeSha256": "b0c11e577328b019c15c65e7f773bad81b12e0164dd3d5d62d25f54cdf92e893",
+        "afterSha256": "b0c11e577328b019c15c65e7f773bad81b12e0164dd3d5d62d25f54cdf92e893",
+        "identical": true
+      },
+      {
+        "file": "games/paper-territory/server/phases/play.ts",
+        "beforeSha256": "36aaee39c70444460a57143476798730b521441d49c6ce6245ca0bcce07dcf68",
+        "afterSha256": "36aaee39c70444460a57143476798730b521441d49c6ce6245ca0bcce07dcf68",
+        "identical": true
+      },
+      {
+        "file": "games/paper-territory/server/types.ts",
+        "beforeSha256": "33aa0528298d8964d5123bd134a0ef43228a41f1c03b4103395879c935e14994",
+        "afterSha256": "33aa0528298d8964d5123bd134a0ef43228a41f1c03b4103395879c935e14994",
+        "identical": true
+      },
+      {
+        "file": "games/paper-territory/server/world.ts",
+        "beforeSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+        "afterSha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e",
+        "identical": true
+      },
+      {
+        "file": "games/paper-territory/server/index.ts",
+        "beforeSha256": "ab2c20740f2a783530cbac82351ca3de3ebbe4fc8e5761765a8c762d73ac3fdb",
+        "afterSha256": "ab2c20740f2a783530cbac82351ca3de3ebbe4fc8e5761765a8c762d73ac3fdb",
+        "identical": true
+      }
+    ],
+    "evidence": "mutation-results.json"
+  },
+  "sourceSnapshotAfterBotFix": [
+    {
+      "file": "games/paper-territory/server/bot.ts",
+      "sha256": "51c47cde8fbd635681dafc790d621003134bc5815b1ffc0c46ef7a7940149ec9"
+    },
+    {
+      "file": "games/paper-territory/server/content.ts",
+      "sha256": "6a5b33d6b73dc3213bf98230b233cb14ca631b1e59a5307d72ff5bad55008dab"
+    },
+    {
+      "file": "games/paper-territory/server/index.ts",
+      "sha256": "ab2c20740f2a783530cbac82351ca3de3ebbe4fc8e5761765a8c762d73ac3fdb"
+    },
+    {
+      "file": "games/paper-territory/server/phases/done.ts",
+      "sha256": "bf2ec38840cb419839a17fc03144df0a310d5405cd1ae42a19cd8ebd19ddb1b7"
+    },
+    {
+      "file": "games/paper-territory/server/phases/play.ts",
+      "sha256": "36aaee39c70444460a57143476798730b521441d49c6ce6245ca0bcce07dcf68"
+    },
+    {
+      "file": "games/paper-territory/server/phases/ready.ts",
+      "sha256": "e3b1da00f8819abac025e67343c106409d44a704d35987282428f338793d1623"
+    },
+    {
+      "file": "games/paper-territory/server/phases/score.ts",
+      "sha256": "b0c11e577328b019c15c65e7f773bad81b12e0164dd3d5d62d25f54cdf92e893"
+    },
+    {
+      "file": "games/paper-territory/server/scoring.ts",
+      "sha256": "a906757a10b744ef13e1ae687f2d4df85bdc39e8b252e4d96484fd2bcc4053cc"
+    },
+    {
+      "file": "games/paper-territory/server/types.ts",
+      "sha256": "33aa0528298d8964d5123bd134a0ef43228a41f1c03b4103395879c935e14994"
+    },
+    {
+      "file": "games/paper-territory/server/world.ts",
+      "sha256": "73fdc72d72ca98b1ebe68f363108e015a309a626cb177d9df23388828c64f93e"
+    }
+  ]
+}
