@@ -792,7 +792,9 @@ it('writes current HTML and manifest only when the root requests fresh evidence'
   expect(frames.length).toBeGreaterThanOrEqual(90);
   expect(new Set(frames.map((frame) => frame.name)).size).toBe(frames.length);
   expect(new Set(Object.values(fixtures).map((state) => state.phase.id))).toEqual(
-    new Set(game.phases),
+    // This renderer exercises the original Wager/Classic flows. Group discussion is covered
+    // by group-render.test.tsx, which writes its own fixtures and five-surface evidence.
+    new Set(game.phases.filter((phase) => phase !== 'talk')),
   );
   const captures = captureFrames();
   expect(captures.length).toBeGreaterThanOrEqual(65);

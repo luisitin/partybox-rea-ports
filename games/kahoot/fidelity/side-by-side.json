@@ -1,0 +1,115 @@
+{
+  "generator": "make_comparison.py",
+  "font": "C:\\Windows\\Fonts\\segoeui.ttf",
+  "bold_font": "C:\\Windows\\Fonts\\segoeuib.ttf",
+  "policy": "Complete source images; no image cropping; proportional LANCZOS scaling.",
+  "comparisons": [
+    {
+      "moment": "1. Team Talk - host screen",
+      "note": "Whole source images. The original has two populated alternatives and question media; our authored question has four alternatives. Compare the prompt, clock, answer count and options placement; this is not a current live original capture.",
+      "images": [
+        {
+          "file": "original/official-2019-team-talk.png",
+          "sha256": "6093b7b75745ce45424eef32d20ebf0dd3985b9af5d5b6e0f7d9a2eef08a218d",
+          "native_pixels": [463, 276],
+          "display_pixels": [1000, 596],
+          "display_origin": [80, 398],
+          "crop": null,
+          "scale_percent": 215.983
+        },
+        {
+          "file": "ours/groups-teams-talk-tv.png",
+          "sha256": "b5afd3f128764c4a2afff9c5751be5858966bbf7502eeded3e2c2f6d9c3ec1e3",
+          "native_pixels": [1920, 1080],
+          "display_pixels": [1000, 562],
+          "display_origin": [1160, 415],
+          "crop": null,
+          "scale_percent": 52.083
+        }
+      ]
+    },
+    {
+      "moment": "2. Team Scoreboard - host screen",
+      "note": "Whole published composite retained: host scoreboard, joined phone and illustrated guests. Its host region is the semantic comparison; the complete composite is not a single TV viewport. Names, question content and PartyBox plumbing differ.",
+      "images": [
+        {
+          "file": "original/official-2021-team-scoreboard-composite.jpg",
+          "sha256": "ff5354d1e065c353d6881c051621db2fe00506f7d6771bf0d32598c10ffe1bc2",
+          "native_pixels": [1024, 576],
+          "display_pixels": [1000, 562],
+          "display_origin": [80, 1393],
+          "crop": null,
+          "scale_percent": 97.656
+        },
+        {
+          "file": "ours/groups-teams-standings-tv.png",
+          "sha256": "a0556580ee018d6fc34f73ecabc0d1515d474a9464e91a596168220daf19d3d0",
+          "native_pixels": [1920, 1080],
+          "display_pixels": [1000, 562],
+          "display_origin": [1160, 1393],
+          "crop": null,
+          "scale_percent": 52.083
+        }
+      ]
+    },
+    {
+      "moment": "3. Team Result - phone beside the TV",
+      "note": "Whole original correct/incorrect phone pair versus two complete port phones. Each pair shares its team gain and footer total despite different personal verdicts. Compare the percentage/gain panel and identity bar; the original pair is not one viewport.",
+      "images": [
+        {
+          "file": "original/official-team-phone-receipts.png",
+          "sha256": "10ee6e6fa2842c6ca888fe035d0d7ca0687a5880e9aee68f25dc8d9ee7c8529d",
+          "native_pixels": [986, 904],
+          "display_pixels": [1000, 917],
+          "display_origin": [80, 2373],
+          "crop": null,
+          "scale_percent": 101.42
+        },
+        {
+          "file": "ours/groups-teams-standings-phone-tv.png",
+          "sha256": "78076035bfb3156ba07e0adee057b27b27b75fe036abfb3e45789bdbe0c41dd1",
+          "native_pixels": [390, 844],
+          "display_pixels": [444, 960],
+          "display_origin": [1184, 2352],
+          "crop": null,
+          "scale_percent": 113.744
+        },
+        {
+          "file": "ours/groups-teams-incorrect-phone-tv.png",
+          "sha256": "84bdd5dbdc208d2944c5e172b47297b0056f8ef8d28e04689d96e22bb3649e01",
+          "native_pixels": [390, 844],
+          "display_pixels": [444, 960],
+          "display_origin": [1692, 2352],
+          "crop": null,
+          "scale_percent": 113.744
+        }
+      ]
+    },
+    {
+      "moment": "4. Answer Results - host screen",
+      "note": "Whole images. Compare the top prompt, centered vertical shape/count/check bars and four bottom alternatives. The original has two correct alternatives; our authored schema has one. The following explanation beat is a PartyBox reading adaptation, not an observed native sequence. No native motion or audio identity is claimed.",
+      "images": [
+        {
+          "file": "original/official-answer-results.png",
+          "sha256": "bd0791c3e0586d91f73a3d88a25c8d47532086eb68df59b4ff520af891965496",
+          "native_pixels": [2876, 1576],
+          "display_pixels": [1000, 548],
+          "display_origin": [80, 3716],
+          "crop": null,
+          "scale_percent": 34.771
+        },
+        {
+          "file": "ours/groups-teams-revealed-result-tv.png",
+          "sha256": "1866d799ac331e9f2866697e971e0dc28d1ca1206f4a956f9a169b14acd0f445",
+          "native_pixels": [1920, 1080],
+          "display_pixels": [1000, 562],
+          "display_origin": [1160, 3709],
+          "crop": null,
+          "scale_percent": 52.083
+        }
+      ]
+    }
+  ],
+  "output_pixels": [2240, 4478],
+  "output_sha256": "5a338f18efa27c68f97e514c7bd400fcc243db6162617bc4166154eaf7a7b1a5"
+}

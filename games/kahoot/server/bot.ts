@@ -3,7 +3,7 @@
 // and stays quiet otherwise. Randomness comes from the given rng.
 import type { BotSkill, Rng } from '@partybox/game-sdk';
 import { questionById } from './content';
-import { CLASSIC_KNOWLEDGE } from './classic';
+import { classicBotChoiceIndex } from './classic';
 import { wagerOptions } from './scoring';
 import { isParticipating, quizModeOf } from './types';
 import type { Input, State } from './types';
@@ -32,10 +32,7 @@ export function sampleInput(
     const question = questionById(state.questionIds[state.index] ?? '', state.contentLang);
     if (quizModeOf(state) === 'classic') {
       if (!question) return null;
-      const fact = Object.hasOwn(CLASSIC_KNOWLEDGE, question.id)
-        ? CLASSIC_KNOWLEDGE[question.id]
-        : undefined;
-      const known = fact === undefined ? -1 : question.choices.indexOf(fact);
+      const known = classicBotChoiceIndex(question.id, question.question, question.choices);
       const index =
         known >= 0 && rng.chance(BOT_CORRECT_PROBABILITY[skill])
           ? known

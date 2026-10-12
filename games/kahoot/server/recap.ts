@@ -7,7 +7,8 @@ import { categoryLabel, drawLabel, questionById } from './content';
 import { labelOf } from '../content/schema';
 import { PICKER_ES } from '../content/labels-es';
 import type { State } from './types';
-import { isFinalIndex, questionLangOf } from './types';
+import { groupModeOf, isFinalIndex, questionLangOf } from './types';
+import { groupStandings } from './teams';
 
 /** ADR-054: a Spanish game's recap is written in Spanish (its questions are); English otherwise. */
 const RECAP_ES: Readonly<Record<string, string>> = {
@@ -43,6 +44,16 @@ export function recap(state: State, ctx: RecapContext<State>): GameRecap | null 
     `${T('Settings')}: ${state.settings.questions} ${T('questions')} · ${state.settings.answerSeconds} ${T('s each')} · ${es ? drawn() : drawLabel(state.drawnFrom, state.drawnSubs ?? [])}`,
     '',
   );
+  const group = groupModeOf(state);
+  if (group) {
+    body.push(
+      `Quiz mode: ${group === 'teams' ? 'Teams' : 'Room vote'} · ${state.settings.talkSeconds ?? 5} s discussion minimum`,
+      '',
+    );
+    for (const team of state.teams ?? [])
+      body.push(`- ${team.name}: ${team.members.map(name).join(', ')}`);
+    body.push('');
+  }
   const seen = new Set<number>();
   for (const h of ctx.history) {
     if (h.phase !== 'reveal') continue;
@@ -63,16 +74,37 @@ export function recap(state: State, ctx: RecapContext<State>): GameRecap | null 
       body.push(`- ${'ABCD'[i]}. ${c}${i === q.answerIndex ? ' ✓' : ''}`),
     );
     body.push('');
+    const mode = groupModeOf(st);
+    if (mode === 'tv-vote') {
+      const decision = st.roomDecision;
+      body.push(
+        decision === undefined
+          ? `Room decision: no votes · shared streak ${st.roomStreak ?? 0}`
+          : `Room decision: ${'ABCD'[decision]}. ${q.choices[decision]} ${decision === q.answerIndex ? '✓' : '✗'} · shared streak ${st.roomStreak ?? 0} · mean vote time ${((st.roomElapsedMs ?? 0) / 1000).toFixed(1)} s`,
+        '',
+      );
+    }
+    if (mode) {
+      for (const team of groupStandings(st))
+        body.push(
+          `- ${team.name}: +${team.gained} ${mode === 'tv-vote' ? 'shared' : 'averaged'} points · ${team.score} total`,
+        );
+      body.push('');
+    }
     for (const p of ctx.players) {
       const pick = st.picks[p.id];
       const delta = st.lastDelta[p.id] ?? 0;
       const wager = final ? st.wagers[p.id] : undefined;
       const bet = wager ? ` · ${T('bet')} ${wager}` : '';
+      const pointKind =
+        mode === 'tv-vote' ? ' room points' : mode === 'teams' ? ' personal points' : '';
       if (!pick)
-        body.push(`- ${p.name}: ${T('no answer')}${bet} → ${delta >= 0 ? '+' : ''}${delta}`);
+        body.push(
+          `- ${p.name}: ${T('no answer')}${bet} → ${delta >= 0 ? '+' : ''}${delta}${pointKind}`,
+        );
       else
         body.push(
-          `- ${p.name}: ${'ABCD'[pick.index]} ${pick.index === q.answerIndex ? '✓' : '✗'} ${T('in')} ${(pick.elapsedMs / 1000).toFixed(1)} s${bet} → ${delta >= 0 ? '+' : ''}${delta}`,
+          `- ${p.name}: ${'ABCD'[pick.index]} ${pick.index === q.answerIndex ? '✓' : '✗'} ${T('in')} ${(pick.elapsedMs / 1000).toFixed(1)} s${bet} → ${delta >= 0 ? '+' : ''}${delta}${pointKind}`,
         );
     }
     body.push('');

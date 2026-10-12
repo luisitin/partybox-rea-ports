@@ -5,7 +5,7 @@ import { z } from '@partybox/game-sdk';
 import type { GameStateBase } from '@partybox/game-sdk';
 import type { ClassicPackId } from '../content/classic-schema';
 
-export const PHASES = ['intro', 'question', 'reveal', 'wager', 'podium', 'done'] as const;
+export const PHASES = ['intro', 'talk', 'question', 'reveal', 'wager', 'podium', 'done'] as const;
 export type PhaseId = (typeof PHASES)[number];
 
 /** Owner's pacing rule (owner decision cc45f4, 2026-09-25, docs/GAME_CONTRACT.md): "Enough time to read" — a
@@ -39,11 +39,19 @@ export const STREAK_CAP_POINTS = 300;
 export const WAGER_PERCENTS = [0, 25, 50, 75, 100] as const;
 export type WagerPercent = (typeof WAGER_PERCENTS)[number];
 export type QuizMode = 'wager' | 'classic';
+export type GroupMode = 'teams' | 'tv-vote';
+export interface QuizTeam {
+  id: string;
+  name: string;
+  members: string[];
+}
 
 export interface Settings {
   /** Missing in legacy saves means the unchanged wager game. */
-  quizMode?: QuizMode;
+  quizMode?: QuizMode | GroupMode;
   classicPack?: ClassicPackId;
+  teamCount?: number;
+  talkSeconds?: number;
   questions: number;
   answerSeconds: number;
   category: string;
@@ -89,6 +97,13 @@ export interface State extends GameStateBase {
   /** Fixed answer end: an early all-answered hold must not change speed arithmetic. */
   answerClosesAt?: number;
   questionReadableUntil?: number;
+  /** Group result reading windows frozen at scoring; presence changes cannot move shared cuts. */
+  groupRevealBeats?: {
+    answersMs: number;
+    explanationMs: number;
+    chartMs: number;
+    standingsMs: number;
+  };
   wagerClosesAt?: number;
   wagerReadableUntil?: number;
   /** Occupied competition rank currently being unveiled, descending 3 → 2 → 1. */
@@ -103,6 +118,16 @@ export interface State extends GameStateBase {
   /** Score change per player at the last reveal (negative on a lost wager). */
   lastDelta: Record<string, number>;
   stats: Record<string, PlayerStats>;
+  /** Fixed seeded membership; absent in unchanged legacy/classic saves. */
+  teams?: QuizTeam[];
+  teamScores?: Record<string, number>;
+  teamGains?: Record<string, number>;
+  /** Frozen at scoring; later presence updates cannot rewrite the result gauge. */
+  teamAccuracy?: Record<string, { correct: number; total: number }>;
+  /** Chosen plurality answer; absent when no vote was cast. */
+  roomDecision?: number;
+  roomStreak?: number;
+  roomElapsedMs?: number;
 }
 
 export const inputSchema = z.discriminatedUnion('type', [
@@ -131,7 +156,12 @@ export function isPlayer(state: GameStateBase, id: string): boolean {
 }
 
 export function quizModeOf(state: State): QuizMode {
-  return state.settings.quizMode === 'classic' ? 'classic' : 'wager';
+  return state.settings.quizMode === 'classic' || groupModeOf(state) ? 'classic' : 'wager';
+}
+export function groupModeOf(state: State): GroupMode | undefined {
+  return state.settings.quizMode === 'teams' || state.settings.quizMode === 'tv-vote'
+    ? state.settings.quizMode
+    : undefined;
 }
 export function questionLangOf(state: State): 'en' | 'es' {
   return quizModeOf(state) === 'classic' ? 'en' : (state.contentLang ?? 'en');

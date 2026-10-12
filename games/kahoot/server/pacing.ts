@@ -1,7 +1,15 @@
 // Classic reading budgets mirror the separate chart, standings and podium layouts.
 import { categoryLabel, drawLabel, questionById } from './content';
 import { classicPackLabel } from './classic';
-import { readMs, wordCount, isFinalIndex, isLastIndex, quizModeOf } from './types';
+import {
+  readMs,
+  wordCount,
+  isFinalIndex,
+  isLastIndex,
+  quizModeOf,
+  groupModeOf,
+  isParticipating,
+} from './types';
 import type { State } from './types';
 import { revealedPodiumEntries } from './standings';
 import { labelOf } from '../content/schema';
@@ -16,6 +24,110 @@ function questionWords(state: State): number {
 }
 function rosterWords(state: State, numbers: number): number {
   return Object.values(state.players).reduce((n, p) => n + wordCount(p.name) + numbers, 0);
+}
+function groupRosterWords(state: State, numbers: number): number {
+  return (state.teams ?? []).reduce(
+    (total, team) =>
+      total +
+      wordCount(team.name) +
+      numbers +
+      team.members.reduce((n, id) => n + wordCount(state.players[id]?.name ?? ''), 0),
+    0,
+  );
+}
+
+/** Budget the largest actual discussion screen, including only its own fixed team roster. */
+export function groupTalkMs(state: State): number {
+  const vote = groupModeOf(state) === 'tv-vote';
+  const title = vote ? ['Room vote', 'Voto de la sala'] : ['Teams', 'Equipos'];
+  const wordsIn = (spanish: boolean): number => {
+    const ui = (en: string, es = en): number => wordCount(spanish ? es : en);
+    const identity = Math.max(
+      wordCount(title[spanish ? 1 : 0]!),
+      ...(state.teams ?? []).map((team) => wordCount(team.name)),
+    );
+    const ownRoster = vote
+      ? identity
+      : Math.max(
+          identity,
+          ...(state.teams ?? [])
+            .filter((team) => team.members.some((id) => isParticipating(state, id)))
+            .map(
+              (team) =>
+                wordCount(team.name) +
+                team.members.reduce((n, id) => {
+                  const player = state.players[id];
+                  const marker = state.left?.includes(id)
+                    ? ui('Left', 'Salió')
+                    : !player
+                      ? ui('Unavailable', 'No disponible')
+                      : player.connected === false
+                        ? ui('Away', 'Ausente')
+                        : 0;
+                  return n + wordCount(player?.name ?? id) + marker;
+                }, 0),
+            ),
+        );
+    // The TV remains roster-free: prompt/options, four marks, clock/label,
+    // response count, discussion cue and ordinal/mode footer.
+    const tv =
+      questionWords(state) +
+      4 +
+      1 +
+      (vote ? ui('0 of 8 votes', '0 de 8 votos') : ui('0 of 8 answers', '0 de 8 respuestas')) +
+      (vote
+        ? ui(
+            'Discuss the room answer · then everyone votes',
+            'Conversen sobre la respuesta · luego todos votan',
+          )
+        : ui(
+            'Talk with your team · then everyone answers',
+            'Habla con tu equipo · luego todos responden',
+          )) +
+      ui('Question 1 of 20', 'Pregunta 1 de 20') +
+      wordCount(title[spanish ? 1 : 0]!);
+    const paused = ui('Paused', 'En pausa');
+    const participantCopy =
+      (vote
+        ? ui('Discuss the room answer', 'Conversen sobre la respuesta de la sala')
+        : ui('Talk with your team', 'Habla con tu equipo')) +
+      (vote
+        ? ui(
+            'Discuss now. Each vote helps choose one room answer.',
+            'Conversen ahora. Cada voto ayuda a elegir una respuesta de la sala.',
+          )
+        : ui(
+            'Discuss now. Everyone answers when the clock ends.',
+            'Conversen ahora. Todos responden cuando termine el reloj.',
+          )) +
+      Math.max(
+        1 + ui('Answers open after discussion', 'Las respuestas se abren después de conversar'),
+        paused * 2,
+      );
+    const spectatorCopy =
+      (vote
+        ? ui('Watching room discussion', 'Viendo la conversación de la sala')
+        : ui('Watching team discussion', 'Viendo la conversación del equipo')) +
+      ui(
+        'Players discuss now. Answers open when the clock ends.',
+        'Los jugadores conversan. Las respuestas se abren cuando termine el reloj.',
+      ) +
+      Math.max(1 + ui('Watching the quiz', 'Viendo el cuestionario'), paused * 2);
+    // A stage/remote team phone swaps the question pane for its own roster through
+    // a native disclosure. Never sum both panes. Spectators have no roster disclosure.
+    const question = questionWords(state) + 4;
+    const discovery =
+      Math.max(0, ...(state.teams ?? []).map((team) => wordCount(team.name))) +
+      ui('· Teammates', '· Compañeros');
+    return Math.max(
+      tv,
+      participantCopy + question + (vote ? identity : Math.max(identity, discovery)),
+      participantCopy + ownRoster + (vote ? 0 : ui('Back to question', 'Volver a la pregunta')),
+      participantCopy + ownRoster,
+      spectatorCopy + question + identity,
+    );
+  };
+  return readMs(Math.max(wordsIn(false), wordsIn(true)));
 }
 function uiWords(en: string, es = en): number {
   return Math.max(wordCount(en), wordCount(es));
@@ -46,6 +158,41 @@ function wagerReceiptWords(state: State, answerIndex: number | undefined): numbe
 }
 export function classicIntroMs(state: State): number {
   const pack = classicPackLabel(state.settings.classicPack ?? 'general');
+  const group = groupModeOf(state);
+  if (group) {
+    const wordsIn = (spanish: boolean): number => {
+      const ui = (en: string, es: string): number => wordCount(spanish ? es : en);
+      const title = group === 'teams' ? ui('Teams', 'Equipos') : ui('Room vote', 'Voto de la sala');
+      const rules =
+        group === 'teams'
+          ? ui(
+              'Everyone answers; team points are the average, and nobody is eliminated.',
+              'Todos responden; los puntos del equipo son el promedio y nadie queda eliminado.',
+            )
+          : ui(
+              'Everyone votes for one shared answer and score; nobody is eliminated.',
+              'Todos votan por una respuesta y puntuación compartidas; nadie queda eliminado.',
+            );
+      // TV and spectator intro show all public teams; an own-team phone is shorter.
+      const roster = groupRosterWords(state, 0);
+      const paused = state.phase.paused ? ui('Paused', 'En pausa') : 0;
+      return Math.max(
+        wordCount(`Kahoot! ${pack}`) +
+          ui('faster is worth more', 'más rápido, más puntos') +
+          title +
+          rules +
+          roster +
+          paused,
+        wordCount('Kahoot!') +
+          title +
+          rules +
+          roster +
+          ui('First question coming up…', 'Ya viene la primera pregunta…') +
+          paused,
+      );
+    };
+    return readMs(Math.max(wordsIn(false), wordsIn(true)));
+  }
   return readMs(
     Math.max(
       wordCount(`Kahoot! ${pack} faster is worth more`),
@@ -70,6 +217,8 @@ export function questionReadingMs(state: State): number {
       ? wordCount(`${categoryLabel(q.category)} ${labelOf(q.subcategory)} ${q.difficulty}`)
       : 0;
   const tv = questionWords(state) + 4 + 4 + 4 + 1 + rosterWords(state, 1) + topic;
+  // Group stage phones also show the public live response count, including after lock-in.
+  const progress = groupModeOf(state) ? uiWords('8 of 8 answered', '8 de 8 respondieron') : 0;
   // Phone-only question and four options plus its prompt/selection receipt.
   const phone =
     questionWords(state) +
@@ -77,7 +226,8 @@ export function questionReadingMs(state: State): number {
     4 +
     1 +
     4 +
-    (state.contentLang === 'es' && quizModeOf(state) === 'classic' ? 3 : 0);
+    (state.contentLang === 'es' && quizModeOf(state) === 'classic' ? 3 : 0) +
+    progress;
   // Wager's final phone also names its stake; classic's shapes do not need that line.
   const wagerFooter = isFinalIndex(state, state.index) ? 4 : 0;
   return readMs(Math.max(tv, phone + wagerFooter));
@@ -189,7 +339,195 @@ export interface ClassicRevealBeats {
   chartMs: number;
   standingsMs: number;
 }
+
+/** Group results use their actual TV/staged/near-TV surfaces, including both UI languages. */
+export function groupRevealTiming(state: State): ClassicRevealBeats & {
+  answersMs: number;
+  explanationMs: number;
+} {
+  if (state.phase.id === 'reveal' && state.groupRevealBeats) return state.groupRevealBeats;
+  const vote = groupModeOf(state) === 'tv-vote';
+  const last = isLastIndex(state, state.index);
+  const q = current(state);
+  const teams = state.teams ?? [];
+  const ids = Object.keys(state.players).filter((id) => isParticipating(state, id));
+  const longestName = Math.max(0, ...Object.values(state.players).map((p) => wordCount(p.name)));
+  const explanation = q && 'explanation' in q ? wordCount(q.explanation) : 0;
+  // Mirror the public reveal distribution; the cue never names a voter's choice.
+  const voteCounts = [0, 0, 0, 0];
+  if (vote) {
+    for (const id of Object.keys(state.players)) {
+      const pick = state.picks[id];
+      if (pick) voteCounts[pick.index] = (voteCounts[pick.index] ?? 0) + 1;
+    }
+  }
+  const mostVotes = Math.max(0, ...voteCounts);
+  const tied =
+    vote &&
+    state.roomDecision !== undefined &&
+    mostVotes > 0 &&
+    voteCounts[state.roomDecision] === mostVotes &&
+    voteCounts.filter((count) => count === mostVotes).length > 1;
+  const copies = (lang: 'en' | 'es') => {
+    const words = (en: string, es = en) => wordCount(lang === 'es' ? es : en);
+    const ordinal = words('Question 1 of 20', 'Pregunta 1 de 20');
+    const tie = tied
+      ? words(
+          'Tie — random choice among tied answers',
+          'Empate — elección al azar entre respuestas empatadas',
+        )
+      : 0;
+    const decision = !vote
+      ? 0
+      : state.roomDecision === undefined
+        ? words('No room answer — nobody voted', 'La sala no respondió — nadie votó')
+        : words('Room answer:', 'Respuesta de la sala:') +
+          2 +
+          words(
+            state.roomDecision === q?.answerIndex ? '✓ Correct' : 'Wrong',
+            state.roomDecision === q?.answerIndex ? '✓ Correcta' : 'Incorrecto',
+          ) +
+          tie;
+    // Native results show the prompt, four alternatives, four shape/count bases and mode.
+    const mode = words(vote ? 'Room vote' : 'Teams', vote ? 'Voto de la sala' : 'Equipos');
+    const chart = ordinal + questionWords(state) + 17 + mode + decision;
+    const receipt = (id: string, besideTv: boolean): number => {
+      const team = teams.find((candidate) => candidate.members.includes(id));
+      const pick = state.picks[id];
+      const correct =
+        !!q && (vote ? state.roomDecision === q.answerIndex : pick?.index === q.answerIndex);
+      const verdict = vote
+        ? correct
+          ? words('The room got it right!', '¡La sala acertó!')
+          : state.roomDecision === undefined
+            ? words('No room answer', 'La sala no respondió')
+            : words('The room got it wrong', 'La sala se equivocó')
+        : correct
+          ? words('Correct!', '¡Correcto!')
+          : pick
+            ? words('Wrong', 'Incorrecto')
+            : words('Too slow', 'Muy tarde');
+      let total =
+        (besideTv ? 1 : 0) +
+        verdict +
+        (vote
+          ? pick
+            ? words('Your vote: Diamond', 'Tu voto: Rombo')
+            : words('You did not vote', 'No votaste')
+          : words('+1300 personal points', '+1300 puntos personales'));
+      // Staged phones already read the cue in GroupDecision; only near-TV receipts add it.
+      if (besideTv) total += tie;
+      if (last) total += words('The podium is next', 'Ahora viene el podio');
+      // The final envelope withholds the complete team receipt, gauge and rank.
+      if (!last && team) {
+        total += wordCount(team.name) + words('+1300 points', '+1300 puntos');
+        if (!vote)
+          total += besideTv
+            ? words('Correct 100%', 'Correcto 100%')
+            : words('100% correct', '100% de aciertos');
+        if (besideTv)
+          total +=
+            words(
+              vote ? 'Room results' : 'Team results',
+              vote ? 'Resultados de la sala' : 'Resultados del equipo',
+            ) +
+            (!vote
+              ? words(
+                  'Team points average players who stayed or answered',
+                  'Los puntos del equipo promedian a quienes siguieron o respondieron',
+                )
+              : 0);
+      }
+      if (besideTv) {
+        const identity =
+          last || !team
+            ? words(vote ? 'The room' : 'Your team', vote ? 'La sala' : 'Tu equipo')
+            : wordCount(team.name);
+        // The footer shows a bare shared number, or an em dash and the hidden-score cue.
+        total +=
+          wordCount(state.players[id]?.name ?? '') +
+          identity +
+          (last
+            ? 1 +
+              words(
+                vote ? 'Room score after the podium' : 'Team score after the podium',
+                vote
+                  ? 'Puntuación de la sala después del podio'
+                  : 'Puntuación del equipo después del podio',
+              )
+            : 1);
+        if (!last && team)
+          total += words(
+            vote ? 'The room is in place 4' : 'Your team is in place 4',
+            vote ? 'La sala está en el puesto 4' : 'Tu equipo está en el puesto 4',
+          );
+      }
+      return total;
+    };
+    const ownStage = Math.max(0, ...ids.map((id) => receipt(id, false)));
+    const ownBeside = Math.max(0, ...ids.map((id) => receipt(id, true)));
+    const chartWords = Math.max(chart + ownStage, ordinal + ownBeside);
+    // The authored explanation is a separate shared beat, never crowded below all alternatives.
+    const explanationWords = Math.max(
+      ordinal +
+        wordCount(q?.question ?? '') +
+        words('Why this answer?', '¿Por qué esta respuesta?') +
+        2 +
+        wordCount(q?.choices[q.answerIndex] ?? '') +
+        explanation +
+        decision +
+        ownStage,
+      ordinal + ownBeside,
+    );
+    const rows = (members: boolean) =>
+      teams.reduce(
+        (n, team) =>
+          n +
+          wordCount(team.name) +
+          2 +
+          ((state.teamGains?.[team.id] ?? 0) > 0 ? 1 : 0) +
+          (members
+            ? team.members.reduce((m, id) => m + wordCount(state.players[id]?.name ?? id), 0)
+            : 0),
+        0,
+      );
+    const heading = words(
+      vote ? 'Room score' : 'Team scoreboard',
+      vote ? 'Puntuación de la sala' : 'Marcador de equipos',
+    );
+    const next = words('Next question', 'Siguiente pregunta');
+    const tvNext = Math.max(
+      words("Next on the VIP's phone", 'El VIP toca Siguiente'),
+      longestName + (lang === 'es' ? 2 : 3),
+    );
+    const boardWords = Math.max(
+      ordinal + heading + rows(true) + tvNext,
+      ordinal + heading + rows(false) + ownStage + next,
+      ordinal + ownBeside + next,
+    );
+    return { chartWords, explanationWords, boardWords };
+  };
+  const en = copies('en');
+  const es = copies('es');
+  const answersMs = readMs(Math.max(en.chartWords, es.chartWords));
+  const explanationMs =
+    explanation > 0 ? readMs(Math.max(en.explanationWords, es.explanationWords)) : 0;
+  return {
+    answersMs,
+    explanationMs,
+    chartMs: answersMs + explanationMs,
+    // Final groups keep a short button-reading window; no standings are revealed there.
+    standingsMs: last
+      ? readMs(Math.max(uiWords('Show podium', 'Mostrar el podio'), longestName + 3))
+      : readMs(Math.max(en.boardWords, es.boardWords)),
+  };
+}
+
 export function classicRevealBeats(state: State): ClassicRevealBeats {
+  if (groupModeOf(state)) {
+    const { chartMs, standingsMs } = groupRevealTiming(state);
+    return { chartMs, standingsMs };
+  }
   const q = current(state);
   const explanation = q && 'explanation' in q ? wordCount(q.explanation) : 0;
   const missed = Object.keys(state.players).length - Object.keys(state.picks).length;
@@ -211,11 +549,29 @@ export function classicRevealBeats(state: State): ClassicRevealBeats {
     0,
   );
   // A staged phone can show the chart with its own receipt; a TV-visible phone shows just the receipt.
-  const chartMs = readMs(chart + own);
+  const group = groupModeOf(state);
+  const roomAnswer = q ? wordCount(q.choices[state.roomDecision ?? q.answerIndex] ?? '') : 0;
+  const groupReceipt =
+    group === 'tv-vote'
+      ? wordCount(
+          'The room got it right Your vote Triangle The room +1300 points 99999 total Room answer Triangle Correct',
+        ) +
+        wordCount('Correct 100%') +
+        roomAnswer
+      : group === 'teams'
+        ? wordCount(
+            'Correct +1300 personal points Team 4 Correct 100% +1300 points 99999 total Team points average players who stayed or answered',
+          )
+        : 0;
+  const chartMs = readMs(chart + own + groupReceipt);
   if (isLastIndex(state, state.index)) return { chartMs, standingsMs: 0 };
   // Question n of m + Scoreboard; each full row is rank/name/score/delta.
-  const tvBoard = 4 + 1 + rosterWords(state, 3);
-  const phoneBoard = 4 + 1 + rosterWords(state, 2) + own;
+  const tvBoard = 4 + 1 + (group ? groupRosterWords(state, 3) : rosterWords(state, 3));
+  // Group phone standings show team rows without the TV's member-name lists.
+  const phoneRows = group
+    ? (state.teams ?? []).reduce((n, team) => n + wordCount(team.name) + 3, 0)
+    : rosterWords(state, 2);
+  const phoneBoard = 4 + 1 + phoneRows + own + groupReceipt;
   return { chartMs, standingsMs: readMs(Math.max(tvBoard, phoneBoard)) };
 }
 export function podiumMs(state: State): number {

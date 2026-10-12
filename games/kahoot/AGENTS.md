@@ -10,6 +10,8 @@
   topics, balanced `answerIndex`). Add questions with a `source` note and a `subcategory` from
   content/schema.ts; never time-sensitive facts. The topics checklist is a `multiselect` setting (ADR-034).
   Every existing wager-library English id also needs its Spanish twin in content/questions.es.json (or a `dropped` entry): content-es.test.ts. Separate authored classic packs are English-only under the P01 brief.
+- Group flows extend this canonical reducer; never restore the retired standalone engine or another picker card. Fixed teams, discussion and room voting use stamped answers and canonical300-point streak cap.
+- Hidden group decisions stay absent until reveal; final team scores/rows/envelope chips and personal team totals remain withheld until their podium tier. Custom pack IDs use the custom- namespace.
 - Imports: only @partybox/game-sdk (+ react in client/). server/ is pure (no Date.now, Math.random,
   timers, I/O).
 - Fixtures are full states with real question ids; regenerate by hand with the reducer after a

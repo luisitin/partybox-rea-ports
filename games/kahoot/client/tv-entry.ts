@@ -10,7 +10,7 @@ export const tv: GameTvModule = {
   Tv,
   // Each reading/reveal stage owns its roster. Fade duplicate shell names/scores in place,
   // retaining the host's stable timer-strip height and leaving questions' progress visible.
-  stripHidden: ['intro', 'reveal', 'podium'],
+  stripHidden: ['intro', 'talk', 'reveal', 'podium'],
   // T-0210 (ADR-064): each answer opens in a starburst iris. No toss into a question: a lightning
   // round's question is on screen the moment it starts, not a beat later.
   irisInto: ['reveal'],

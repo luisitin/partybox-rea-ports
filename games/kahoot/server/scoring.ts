@@ -1,6 +1,12 @@
 // Scoring for Lightning Round (README "Scoring"): base + speed + streak per regular question, the
 // wager on the final, then awards and results. Pure functions over State; no phase logic here.
-import { buildResults, pickAwards, speedPoints } from '@partybox/game-sdk';
+import {
+  buildResults,
+  majorityPick,
+  pickAwards,
+  speedPoints,
+  teamResults,
+} from '@partybox/game-sdk';
 import type { GameAward, GameResults } from '@partybox/game-sdk';
 import { questionById } from './content';
 import {
@@ -12,8 +18,10 @@ import {
   isFinalIndex,
   answerWindowOf,
   quizModeOf,
+  groupModeOf,
 } from './types';
 import type { PlayerStats, State, WagerPercent } from './types';
+import { groupStandings, scoringMembers, teamOf } from './teams';
 
 export const EMPTY_STATS: PlayerStats = { correct: 0, correctMs: 0, bestStreak: 0, wagerWon: 0 };
 
@@ -57,30 +65,101 @@ export function scoreCurrentQuestion(state: State): State {
   const streaks = { ...state.streaks };
   const stats = { ...state.stats };
   const lastDelta: Record<string, number> = {};
+  const mode = groupModeOf(state);
+  let rng = state.rng;
+  let decision: number | undefined;
+  let roomElapsed = 0;
+  let roomStreak = state.roomStreak ?? 0;
+  if (mode === 'tv-vote') {
+    const votes = Object.values(state.picks);
+    const [selected, after] = majorityPick(
+      Object.fromEntries(Object.entries(state.picks).map(([id, pick]) => [id, String(pick.index)])),
+      rng,
+    );
+    rng = after;
+    decision = selected === null ? undefined : Number(selected);
+    roomElapsed =
+      votes.length === 0 ? 0 : votes.reduce((n, pick) => n + pick.elapsedMs, 0) / votes.length;
+    roomStreak = question !== undefined && decision === question.answerIndex ? roomStreak + 1 : 0;
+  }
   for (const id of Object.keys(state.players)) {
     const pick = state.picks[id];
     const correct =
-      question !== undefined && pick !== undefined && pick.index === question.answerIndex;
+      question !== undefined &&
+      (mode === 'tv-vote'
+        ? decision === question.answerIndex
+        : pick !== undefined && pick.index === question.answerIndex);
     const previous = stats[id] ?? EMPTY_STATS;
-    const streak = correct ? (streaks[id] ?? 0) + 1 : 0;
+    const streak = mode === 'tv-vote' ? roomStreak : correct ? (streaks[id] ?? 0) + 1 : 0;
     const wager = state.wagers[id] ?? 0;
     let delta: number;
     // `0 - wager` (not `-wager`) so a lost 0 wager is +0, keeping views JSON-round-trippable.
     if (final) delta = correct ? wager : 0 - wager;
     else
       delta =
-        correct && pick ? questionPoints(pick.elapsedMs, answerWindowOf(state) / 1000, streak) : 0;
+        correct && (pick || mode === 'tv-vote')
+          ? questionPoints(
+              mode === 'tv-vote' ? roomElapsed : pick!.elapsedMs,
+              answerWindowOf(state) / 1000,
+              streak,
+            )
+          : 0;
     scores[id] = (scores[id] ?? 0) + delta;
     streaks[id] = streak;
     lastDelta[id] = delta;
     stats[id] = {
       correct: previous.correct + (correct ? 1 : 0),
-      correctMs: previous.correctMs + (correct && pick ? pick.elapsedMs : 0),
+      correctMs:
+        previous.correctMs +
+        (correct ? (mode === 'tv-vote' ? roomElapsed : (pick?.elapsedMs ?? 0)) : 0),
       bestStreak: Math.max(previous.bestStreak, streak),
       wagerWon: final && correct ? wager : previous.wagerWon,
     };
   }
-  return { ...state, scores, streaks, stats, lastDelta };
+  if (!mode) return { ...state, scores, streaks, stats, lastDelta };
+  const teamScores = { ...state.teamScores };
+  const teamGains: Record<string, number> = {};
+  const teamAccuracy: NonNullable<State['teamAccuracy']> = {};
+  for (const team of state.teams ?? []) {
+    const eligible = scoringMembers(state, team);
+    if (mode === 'teams')
+      teamAccuracy[team.id] = {
+        correct: eligible.filter(
+          (id) => question !== undefined && state.picks[id]?.index === question.answerIndex,
+        ).length,
+        total: eligible.length,
+      };
+    const gain =
+      mode === 'tv-vote'
+        ? (Object.values(lastDelta)[0] ?? 0)
+        : eligible.length === 0
+          ? 0
+          : Math.round(
+              eligible.reduce((sum, id) => sum + (lastDelta[id] ?? 0), 0) / eligible.length,
+            );
+    teamGains[team.id] = gain;
+    teamScores[team.id] = (teamScores[team.id] ?? 0) + gain;
+    for (const id of team.members) scores[id] = teamScores[team.id]!;
+  }
+  const { roomDecision: _oldDecision, ...base } = state;
+  return {
+    ...base,
+    scores,
+    streaks,
+    stats,
+    lastDelta,
+    rng,
+    teamScores,
+    teamGains,
+    ...(mode === 'teams' ? { teamAccuracy } : {}),
+    ...(mode === 'tv-vote'
+      ? {
+          roomStreak,
+          roomElapsedMs: roomElapsed,
+          ...(decision === undefined ? {} : { roomDecision: decision }),
+        }
+      : {}),
+  };
 }
 
 export function awards(state: State): GameAward[] {
@@ -114,7 +193,32 @@ export function awards(state: State): GameAward[] {
 
 export function results(state: State): GameResults | null {
   if (state.phase.id !== 'done') return null;
-  const base = buildResults(state, state.scores, awards(state));
+  // A room decision has collective speed/streak statistics. They cannot support individual
+  // superlatives, especially for an abstaining guest who shares the room's score.
+  const base = buildResults(
+    state,
+    state.scores,
+    groupModeOf(state) === 'tv-vote' ? [] : awards(state),
+  );
+  if (groupModeOf(state)) {
+    const teams = groupStandings(state);
+    const ranking = base.ranking.map((row) => ({
+      ...row,
+      rank: teams.find((team) => team.id === teamOf(state, row.playerId)?.id)?.rank ?? row.rank,
+    }));
+    const winners = teams.filter((team) => team.rank === 1);
+    return teamResults(
+      {
+        ...base,
+        ranking,
+        winnerIds: ranking.filter((row) => row.rank === 1).map((row) => row.playerId),
+      },
+      {
+        winner: winners.length === 1 ? winners[0]!.id : null,
+        teams: (state.teams ?? []).map((team) => ({ ...team, members: [...team.members] })),
+      },
+    );
+  }
   // Everyone scored along the way but the final wager took it all back: say so, rather than the
   // shell's "ended before anyone could" (b2 audit, T-0381).
   const lostAll =

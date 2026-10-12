@@ -1,5 +1,5 @@
 import type { ControllerView, TvView } from '@partybox/game-sdk';
-import type { QuizMode } from './types';
+import type { GroupMode, QuizMode } from './types';
 import type { WagerOption } from './scoring';
 import type { StandingRow } from './standings';
 export type { StandingRow } from './standings';
@@ -58,7 +58,27 @@ export interface Outcome {
   base?: number;
   bonus?: number;
 }
+export interface GroupView {
+  mode: GroupMode;
+  teams: {
+    id: string;
+    name: string;
+    members: string[];
+    score: number;
+    gained: number;
+    rank: number;
+    /** Present only after the current team answers are publicly revealed. */
+    correctPercent?: number;
+  }[];
+  myTeamId?: string;
+  /** Departures among only the fixed members already public in teams; distinct from connection. */
+  leftMembers?: string[];
+  /** Only present after reveal and when at least one room vote was cast. */
+  decision?: number;
+  roomStreak?: number;
+}
 export interface LightningTvView extends TvView {
+  group?: GroupView;
   contentLang?: 'en' | 'es';
   questionLang: 'en' | 'es';
   quizMode: QuizMode;
@@ -71,6 +91,8 @@ export interface LightningTvView extends TvView {
   correctIndex?: number;
   explanation?: string;
   revealAt?: number;
+  /** Group-only shared transition from native answer results to authored explanation. */
+  explanationAt?: number;
   leaderboardAt?: number;
   /** The reading-safe Next beat, including the final classic chart before the podium. */
   nextAt?: number;
@@ -82,6 +104,7 @@ export interface LightningTvView extends TvView {
   podium?: PodiumView;
 }
 export interface LightningControllerView extends ControllerView {
+  group?: GroupView;
   contentLang?: 'en' | 'es';
   questionLang: 'en' | 'es';
   quizMode: QuizMode;
@@ -104,6 +127,8 @@ export interface LightningControllerView extends ControllerView {
   standings?: StandingRow[];
   next?: RevealNext;
   revealAt?: number;
+  /** Present only during a group reveal with an authored explanation. */
+  explanationAt?: number;
   leaderboardAt?: number;
   /** The reading-safe Next beat; independent from whether a scoreboard is shown. */
   nextAt?: number;

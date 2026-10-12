@@ -1,0 +1,514 @@
+/* Team names and members carry identity; colour is reserved for the existing answer shapes. */
+.roster {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--pb-space-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.roster li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-1);
+  min-width: 0;
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border-left: var(--pb-space-1) solid var(--pb-accent-2);
+  background: var(--pb-surface);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.roster[data-mine],
+.roster[data-count='1'] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.members > span:not(:last-child)::after {
+  content: ' · ';
+}
+/* Eight long names must fit in the intro at the unchanged 36 px TV body size.
+   Separate member rows prevent the joining dot from stranding the next name on a new line. */
+:global([data-surface='tv']) .roster li {
+  display: grid;
+  grid-template-columns: calc(var(--pb-font-body) * 3.5) minmax(0, 1fr);
+  align-items: start;
+  column-gap: var(--pb-space-3);
+  padding-block: var(--pb-space-1);
+}
+:global([data-surface='tv']) .roster {
+  gap: var(--pb-space-2);
+}
+:global([data-surface='tv']) .members {
+  display: grid;
+  gap: 0;
+}
+:global([data-surface='tv']) .roster[data-count='1'] .members {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--pb-space-3);
+}
+:global([data-surface='tv']) .members > span {
+  display: block;
+}
+:global([data-surface='tv']) .members > span::after {
+  content: none;
+}
+/* Full-width member pairs keep every legal nickname readable in the host's intro. */
+:global([data-surface='tv']) [data-phase='intro'] .roster {
+  grid-template-columns: minmax(0, 1fr);
+}
+:global([data-surface='tv']) [data-phase='intro'] .roster .members {
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: var(--pb-space-3);
+}
+:global([data-surface='tv']) [data-phase='intro'] .roster li {
+  padding-block: 0;
+}
+.questionStage {
+  display: grid;
+  grid-template-rows: auto minmax(min-content, 1fr) auto auto;
+  gap: var(--pb-space-2);
+  flex: 1;
+  min-height: 0;
+}
+.questionPrompt {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: center;
+  font-size: var(--pb-font-body);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.questionMiddle {
+  display: grid;
+  grid-template-columns: calc(var(--pb-font-display) * 2) minmax(0, 1fr) calc(
+      var(--pb-font-display) * 2
+    );
+  align-items: center;
+  gap: var(--pb-space-4);
+  min-height: 0;
+}
+.countdown,
+.answerCount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-2);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+  text-align: center;
+}
+.countdownCircle {
+  display: grid;
+  place-items: center;
+  width: var(--pb-font-display);
+  height: var(--pb-font-display);
+  border-radius: 50%;
+  background: var(--pb-accent-2-fill);
+  color: var(--pb-on-accent-2-fill);
+  font-size: calc(var(--pb-font-display) * 0.75);
+  font-weight: 1000;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.countdownCircle[data-long] {
+  width: calc(var(--pb-font-display) * 1.5);
+  height: calc(var(--pb-font-display) * 1.5);
+}
+.countdownCircle[data-paused] {
+  background: var(--pb-surface-2);
+  color: var(--pb-text-muted);
+}
+.answerCount > b {
+  font-size: calc(var(--pb-font-display) * 0.75);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.questionInstruction {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+  text-align: center;
+  text-wrap: balance;
+}
+.questionAnswers li {
+  min-height: calc(var(--pb-space-8) * 1.5);
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-1);
+}
+.questionAnswers svg {
+  width: var(--pb-font-body);
+  height: var(--pb-font-body);
+}
+.questionFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--pb-space-4);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+  color: var(--pb-text-muted);
+}
+.groupBoard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--pb-space-2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+.groupBoard li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--pb-space-3);
+  padding: var(--pb-space-2) var(--pb-space-3);
+  background: var(--pb-surface);
+  border-radius: var(--pb-radius);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.groupBoard li:first-child {
+  border-left: var(--pb-space-1) solid var(--pb-accent-2);
+}
+.boardRank {
+  color: var(--pb-accent-2);
+}
+.boardIdentity,
+.boardScore {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-1);
+  min-width: 0;
+}
+.boardMembers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--pb-space-2);
+}
+.boardMembers > span {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.boardMembers > span:not(:last-child)::after {
+  content: ' ·';
+}
+.boardScore {
+  align-items: end;
+  font-variant-numeric: tabular-nums;
+}
+.boardScore > span {
+  color: var(--pb-accent-3);
+}
+.identity,
+.rule {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.identity {
+  color: var(--pb-accent-2);
+  font-weight: 900;
+}
+.rule {
+  color: var(--pb-text-muted);
+}
+.talk {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: var(--pb-space-3);
+  justify-content: center;
+}
+/* Own-team discovery stays readable beside the question on staged phones. */
+.phone .talk {
+  gap: var(--pb-space-2);
+}
+.phone .talk .members {
+  display: grid;
+  gap: var(--pb-space-1);
+}
+.phone .talk .members > span {
+  display: flex;
+  align-items: baseline;
+  gap: var(--pb-space-1);
+}
+.phone .talk .members > span::after {
+  content: none;
+}
+.memberName {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.memberPresence {
+  flex: none;
+  color: var(--pb-text-muted);
+  white-space: nowrap;
+}
+.teamDisclosure {
+  width: 100%;
+}
+.teamDisclosure summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--pb-touch);
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border: calc(var(--pb-space-1) / 4) solid var(--pb-border);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  color: var(--pb-text);
+  font-size: var(--pb-font-button);
+  line-height: 1.2;
+  font-weight: 800;
+  text-align: center;
+  list-style: none;
+  cursor: pointer;
+}
+.teamDisclosure summary::-webkit-details-marker {
+  display: none;
+}
+.teamDisclosure summary:focus-visible {
+  outline: var(--pb-space-1) solid var(--pb-focus);
+  outline-offset: calc(var(--pb-space-1) / 2);
+}
+.teamDisclosure .disclosureOpen,
+.teamDisclosure[open] .disclosureClosed {
+  display: none;
+}
+.teamDisclosure[open] .disclosureOpen {
+  display: inline;
+}
+.teamDisclosure .roster {
+  margin-top: var(--pb-space-2);
+}
+/* A native disclosure keeps the two maximum-sized panes separate, with no play scrolling. */
+.talk:has(.teamDisclosure[open]) .talkQuestion {
+  display: none;
+}
+.talkQuestion {
+  display: grid;
+  gap: var(--pb-space-2);
+}
+.phone .talk[data-stage] .talkPrompt {
+  font-size: var(--pb-font-body);
+}
+.talkChoices ol {
+  gap: var(--pb-space-2);
+}
+.talkChoices li {
+  font-size: var(--pb-font-caption);
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+}
+.decision {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pb-space-2);
+  margin: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.decision > b {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.decisionMark {
+  display: inline-flex;
+  flex: none;
+  padding: var(--pb-space-1);
+  border-radius: calc(var(--pb-radius) / 2);
+}
+.mark {
+  width: var(--pb-font-body);
+  height: var(--pb-font-body);
+}
+.verdict {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--pb-space-1);
+  text-align: center;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.verdict h3,
+.verdict p,
+.receipt p {
+  margin: 0;
+}
+.verdict h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-2);
+  font-size: var(--pb-font-h2);
+}
+.outcomeMark {
+  display: grid;
+  place-items: center;
+  width: var(--pb-space-6);
+  height: var(--pb-space-6);
+  border-radius: 50%;
+  background: var(--pb-danger);
+  color: var(--pb-on-accent);
+  flex: none;
+}
+.outcomeMark[data-correct] {
+  background: var(--pb-accent-3);
+  color: var(--pb-on-accent-2-fill);
+}
+.receipt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--pb-space-2);
+  width: 100%;
+  padding: var(--pb-space-3);
+  background: var(--pb-surface);
+  border-radius: var(--pb-radius);
+  text-align: left;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.receipt b {
+  color: var(--pb-accent-2);
+}
+.accuracy {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-1);
+  grid-column: 1;
+  font-size: var(--pb-font-caption);
+}
+.accuracy meter {
+  flex: 1;
+  min-width: var(--pb-space-5);
+  height: var(--pb-space-3);
+  appearance: none;
+  background: var(--pb-surface-2);
+  border-radius: var(--pb-radius);
+}
+.accuracy meter::-webkit-meter-bar {
+  background: var(--pb-surface-2);
+  border: 0;
+  border-radius: var(--pb-radius);
+}
+.accuracy meter::-webkit-meter-optimum-value {
+  background: var(--pb-accent-3);
+}
+.accuracy meter::-moz-meter-bar {
+  background: var(--pb-accent-3);
+}
+.gained {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  padding: var(--pb-space-2);
+  border-radius: calc(var(--pb-radius) / 2);
+  background: var(--pb-surface-2);
+  font-size: var(--pb-font-h1);
+  text-align: center;
+  white-space: nowrap;
+}
+.receiptTotal {
+  grid-column: 2;
+  text-align: center;
+  font-size: var(--pb-font-caption);
+}
+.receiptRule {
+  grid-column: 1 / -1;
+  font-size: var(--pb-font-caption);
+}
+.verdict[data-stage] .receipt {
+  padding: var(--pb-space-2);
+  gap: var(--pb-space-1);
+}
+.phone .roster li {
+  padding: var(--pb-space-2);
+}
+.phone .roster span {
+  font-size: var(--pb-font-caption);
+}
+
+/* Native-like receipts apply only to participating phones beside a visible TV. */
+.verdict[data-beside-tv] {
+  margin-block: auto;
+  width: 100%;
+  gap: var(--pb-space-3);
+}
+.verdict[data-beside-tv] h3 {
+  flex-direction: column-reverse;
+  gap: var(--pb-space-2);
+}
+.verdict[data-beside-tv] .outcomeMark {
+  width: var(--pb-font-display);
+  height: var(--pb-font-display);
+  font-size: var(--pb-font-h1);
+}
+.verdict[data-beside-tv] .receipt {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: calc(var(--pb-space-8) * 5);
+  padding: var(--pb-space-4);
+  gap: var(--pb-space-2);
+  text-align: center;
+}
+.receiptKind {
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+}
+.verdict[data-beside-tv] .accuracy {
+  width: 100%;
+  justify-self: stretch;
+  gap: var(--pb-space-2);
+}
+.verdict[data-beside-tv] .gained {
+  grid-column: 1;
+  grid-row: auto;
+  justify-self: center;
+  padding: var(--pb-space-3);
+}
+.verdict[data-beside-tv] .receiptRule {
+  color: var(--pb-text-muted);
+}
+.rankStatus {
+  font-size: var(--pb-font-body);
+}
+.phone .pendingResult {
+  margin-block: auto;
+}
+.revealFooter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-2);
+}
+.playerBar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+  background: var(--pb-surface);
+  border-radius: var(--pb-radius);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.barName {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.barPending {
+  grid-column: 1 / -1;
+  text-align: right;
+  color: var(--pb-text-muted);
+  font-size: var(--pb-font-caption);
+}
+.barScore {
+  padding: var(--pb-space-1) var(--pb-space-2);
+  border-radius: calc(var(--pb-radius) / 2);
+  background: var(--pb-surface-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

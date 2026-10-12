@@ -1,0 +1,124 @@
+/* Full authored text wraps on both stages; no clipping, line clamp or omitted content. */
+.explanation {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--pb-space-2);
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.prompt,
+.heading,
+.copy {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.prompt,
+.heading {
+  font-size: var(--pb-font-h2);
+  line-height: 1.1;
+  text-align: center;
+  text-wrap: balance;
+}
+.prompt {
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.correctChoice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--pb-space-2);
+  min-width: 0;
+  margin: 0;
+  padding: var(--pb-space-2);
+  border-radius: calc(var(--pb-radius) / 2);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.correctChoice > b {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.shape {
+  flex: none;
+  width: var(--pb-font-body);
+  height: var(--pb-font-body);
+}
+.check {
+  flex: none;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+  font-weight: 1000;
+}
+.copy {
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.decision {
+  min-width: 0;
+}
+.decision > p {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.receipt {
+  display: grid;
+  gap: var(--pb-space-1);
+  min-width: 0;
+  padding-top: var(--pb-space-2);
+  border-top: calc(var(--pb-space-1) / 4) solid var(--pb-border);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.primaryRow,
+.teamRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-1) var(--pb-space-2);
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.primaryRow > b {
+  font-size: var(--pb-font-body);
+}
+.myVote,
+.voteMark {
+  display: inline-flex;
+  align-items: center;
+}
+.myVote {
+  gap: var(--pb-space-1);
+}
+.voteMark {
+  padding: var(--pb-space-1);
+  border-radius: calc(var(--pb-radius) / 2);
+}
+.cue {
+  margin: 0;
+  text-align: center;
+}
+/* The SDK phone scale keeps all 110/42/120-character content legible and wrapped. */
+:global([data-surface='phone']) .prompt {
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+:global([data-surface='phone']) .heading {
+  font-size: var(--pb-font-h2);
+  line-height: 1.2;
+}
+:global([data-surface='phone']) .correctChoice,
+:global([data-surface='phone']) .copy {
+  font-size: var(--pb-font-body);
+}
+:global([data-surface='phone']) .receipt {
+  font-size: var(--pb-font-caption);
+}

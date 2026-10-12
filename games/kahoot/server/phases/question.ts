@@ -9,7 +9,11 @@ import type { Advance } from './intro';
 
 /** Asks the next drawn question (index + 1) with fresh picks. */
 export function enterQuestion(state: State, now: number): State {
-  const index = Math.min(state.index + 1, state.questionIds.length - 1);
+  // Talk has already advanced the draw index; it must ask that same question.
+  const index =
+    state.phase.id === 'talk'
+      ? state.index
+      : Math.min(state.index + 1, state.questionIds.length - 1);
   const asking = { ...state, index, picks: {} };
   const duration = classicQuestionMs(asking);
   return enterPhase(

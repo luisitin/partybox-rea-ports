@@ -15,13 +15,16 @@ import {
 } from '@partybox/game-sdk';
 import type { GameDefinition, InitContext } from '@partybox/game-sdk';
 import manifestJson from '../manifest.json' with { type: 'json' };
+import type { ClassicPackId } from '../content/classic-schema';
 import { recap } from './recap';
 import { sampleInput } from './bot';
 import { subcategoriesOf } from './content';
 import { drawClassicQuestions, drawQuestions } from './draw';
 import { enterIntro, reduceIntro } from './phases/intro';
+import { enterTalk, reduceTalk } from './phases/talk';
 import { enterQuestion, finishQuestionIfDone, reduceQuestion } from './phases/question';
-import { enterDone, enterReveal, reduceReveal } from './phases/reveal';
+import { enterReveal, reduceReveal } from './phases/reveal';
+import { enterDone } from './phases/done';
 import { enterWager, finishWagerIfDone, reduceWager } from './phases/wager';
 import { enterPodium, reducePodium } from './phases/podium';
 import { occupiedPodiumRanks } from './standings';
@@ -34,7 +37,9 @@ import {
   isLastIndex,
   isPlayer,
   quizModeOf,
+  groupModeOf,
 } from './types';
+import { makeTeams } from './teams';
 import type { Input, Settings, State } from './types';
 import { controllerView, tvView } from './views';
 
@@ -53,8 +58,14 @@ export function settingsFrom(raw: InitContext['settings']): Settings {
   // Topics: the manifest's comma-joined multiselect, kept to the category's own topics (ADR-034).
   const topics = subcategoriesOf(category);
   return {
-    quizMode: selectSetting(manifest, raw, 'quizMode') as 'wager' | 'classic',
-    classicPack: selectSetting(manifest, raw, 'classicPack') as 'general' | 'movies' | 'science',
+    quizMode: selectSetting(manifest, raw, 'quizMode') as Settings['quizMode'],
+    classicPack: selectSetting(manifest, raw, 'classicPack') as ClassicPackId,
+    ...(raw['quizMode'] === 'teams' || raw['quizMode'] === 'tv-vote'
+      ? {
+          teamCount: numberSetting(manifest, raw, 'teamCount'),
+          talkSeconds: numberSetting(manifest, raw, 'talkSeconds'),
+        }
+      : {}),
     questions: numberSetting(manifest, raw, 'questions'),
     answerSeconds: numberSetting(manifest, raw, 'answerSeconds'),
     category,
@@ -74,7 +85,7 @@ function init(ctx: InitContext): State {
   }
   const settings = settingsFrom(ctx.settings);
   const [draw, rng] =
-    settings.quizMode === 'classic'
+    settings.quizMode !== 'wager'
       ? drawClassicQuestions(
           seedRng(ctx.seed),
           settings.classicPack ?? 'general',
@@ -107,6 +118,21 @@ function init(ctx: InitContext): State {
     // ADR-054: the deck's language, fixed for the game (absent = English).
     ...(ctx.contentLang === 'es' ? { contentLang: 'es' as const } : {}),
   };
+  const mode = groupModeOf(base);
+  if (mode) {
+    const [teams, after] = makeTeams(mode, Object.keys(players), settings.teamCount ?? 2, rng);
+    return enterIntro(
+      {
+        ...base,
+        rng: after,
+        teams,
+        teamScores: Object.fromEntries(teams.map((team) => [team.id, 0])),
+        teamGains: {},
+        roomStreak: 0,
+      },
+      ctx.now,
+    );
+  }
   return enterIntro(base, ctx.now);
 }
 
@@ -114,6 +140,8 @@ function init(ctx: InitContext): State {
 export function advance(state: State, now: number): State {
   switch (state.phase.id) {
     case 'intro':
+      return groupModeOf(state) ? enterTalk(state, now) : enterQuestion(state, now);
+    case 'talk':
     case 'wager':
       return enterQuestion(state, now);
     case 'question':
@@ -122,7 +150,9 @@ export function advance(state: State, now: number): State {
       if (quizModeOf(state) === 'classic')
         return isLastIndex(state, state.index)
           ? enterPodium(state, now)
-          : enterQuestion(state, now);
+          : groupModeOf(state)
+            ? enterTalk(state, now)
+            : enterQuestion(state, now);
       if (isFinalIndex(state, state.index)) return enterDone(state, now);
       const lastRegular = state.index === state.questionIds.length - 2;
       return lastRegular ? enterWager(state, now) : enterQuestion(state, now);
@@ -158,6 +188,7 @@ function restorePendingWindow(state: State): State {
 const reduce = composeReduce<State, Input>({
   phases: {
     intro: reduceIntro,
+    talk: reduceTalk,
     question: reduceQuestion,
     reveal: reduceReveal,
     wager: reduceWager,

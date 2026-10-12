@@ -17,8 +17,15 @@ export const contractConfig = {
   hiddenFromTv: (base: GameStateBase): string[] => {
     const state = base as State;
     const hidden: string[] = [];
-    if (state.phase.id === 'question')
-      hidden.push('correctIndex', 'pickIndex', 'answerDistribution');
+    if (state.phase.id === 'question' || state.phase.id === 'talk')
+      hidden.push(
+        'correctIndex',
+        'pickIndex',
+        'answerDistribution',
+        'explanation',
+        'decision',
+        'correctPercent',
+      );
     if (finalPending(state)) hidden.push('wagerAmount');
     return hidden;
   },
@@ -26,8 +33,15 @@ export const contractConfig = {
     // Own values travel under `myPickIndex` / `myWagerAmount` (different key names by design).
     const state = base as State;
     const hidden: string[] = [];
-    if (state.phase.id === 'question')
-      hidden.push('correctIndex', 'pickIndex', 'answerDistribution');
+    if (state.phase.id === 'question' || state.phase.id === 'talk')
+      hidden.push(
+        'correctIndex',
+        'pickIndex',
+        'answerDistribution',
+        'explanation',
+        'decision',
+        'correctPercent',
+      );
     if (finalPending(state)) hidden.push('wagerAmount');
     return hidden;
   },
@@ -38,5 +52,35 @@ export const contractConfig = {
     { quizMode: 'classic', classicPack: 'general', questions: 5, answerSeconds: 5 },
     { quizMode: 'classic', classicPack: 'movies', questions: 20, answerSeconds: 15 },
     { quizMode: 'classic', classicPack: 'science', questions: 10, answerSeconds: 30 },
+    {
+      quizMode: 'teams',
+      classicPack: 'sports',
+      questions: 5,
+      answerSeconds: 5,
+      teamCount: 2,
+      talkSeconds: 5,
+    },
+    {
+      quizMode: 'teams',
+      classicPack: 'music',
+      questions: 20,
+      answerSeconds: 30,
+      teamCount: 4,
+      talkSeconds: 20,
+    },
+    {
+      quizMode: 'tv-vote',
+      classicPack: 'sports',
+      questions: 10,
+      answerSeconds: 15,
+      talkSeconds: 5,
+    },
+    {
+      quizMode: 'tv-vote',
+      classicPack: 'custom',
+      questions: 20,
+      answerSeconds: 5,
+      talkSeconds: 20,
+    },
   ],
 };

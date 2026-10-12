@@ -1,0 +1,61 @@
+{
+  "checked": "2026-10-12",
+  "runner": "r2-local",
+  "purpose": "Original publisher reference frames for documentation only; not runtime assets or a complete native gameplay recording.",
+  "sources": [
+    {
+      "id": "school-testimonial",
+      "publisherPage": "https://kahoot.com/schools/how-it-works/",
+      "url": "https://kahoot.com/files/2020/03/30SEC-video-schools-2-mp4.mp4",
+      "width": 524,
+      "height": 294,
+      "durationSeconds": 30.069144,
+      "audioStreams": 0,
+      "sha256": "ecbfade18438824868c813eb48a97ff0f379fd2729b443c76b898377fd06805b",
+      "coverage": "Edited school testimonial; phone notice only, no readable response chart, scoreboard or podium."
+    },
+    {
+      "id": "board-demonstration",
+      "publisherRecord": "https://kahoot.com/wp-json/wp/v2/media/128522",
+      "url": "https://kahoot.com/files/2026/09/Frame-1171275830.webm",
+      "width": 562,
+      "height": 354,
+      "durationSeconds": 22.033,
+      "audioStreams": 0,
+      "sha256": "17194c68cec8e2e4d6aec64af19e81eb3c0ce07a220f2959c2594482654eeeab",
+      "coverage": "Numbered board-selection question and correct-result card; excluded as evidence of personal-device team flow or native phase lengths."
+    }
+  ],
+  "frames": [
+    {
+      "file": "original/playback-school-phone-12s.png",
+      "sourceId": "school-testimonial",
+      "seekSeconds": 12,
+      "width": 524,
+      "height": 294,
+      "sha256": "19d558575df27723c8e218f4ded5920b0aa3d04b218dc3bca8362a90087fcdfe"
+    },
+    {
+      "file": "original/playback-board-question-8s.png",
+      "sourceId": "board-demonstration",
+      "seekSeconds": 8,
+      "width": 562,
+      "height": 354,
+      "sha256": "5c4b10a50efadffe665dfb2707a7000327c8fdecf837c21c2fc6a3930af354ce"
+    },
+    {
+      "file": "original/playback-board-correct-9_5s.png",
+      "sourceId": "board-demonstration",
+      "seekSeconds": 9.5,
+      "width": 562,
+      "height": 354,
+      "sha256": "ef5688f90a6dc15d5f1d715f56932c6bf9535cd3acff91f734107e874e8d2134"
+    }
+  ],
+  "limits": [
+    "No live room was played and no browser was launched.",
+    "Seek positions and publisher clip lengths are not native phase duration measurements.",
+    "No original soundtrack was inspected.",
+    "No retained frame shows the standard response-count bar chart, scoreboard or podium."
+  ]
+}

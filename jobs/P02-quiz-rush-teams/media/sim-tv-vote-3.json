@@ -1,0 +1,70 @@
+{
+  "mode": "tv-vote",
+  "players": 3,
+  "matches": 1000,
+  "requiredMatches": 1000,
+  "completeRequiredCampaign": true,
+  "seeds": "1..1000",
+  "medianRoundMs": 105421,
+  "medianMatchMs": 1072400.5,
+  "longestMatchMs": 1166771,
+  "maxStateBytes": 1595,
+  "events": 57020,
+  "strengths": {
+    "easy": {
+      "matches": 336,
+      "elapsedMs": 336441324
+    },
+    "normal": {
+      "matches": 334,
+      "elapsedMs": 331143510
+    },
+    "sharp": {
+      "matches": 330,
+      "elapsedMs": 320702814
+    }
+  },
+  "packs": {
+    "general": 167,
+    "movies": 167,
+    "science": 167,
+    "sports": 167,
+    "music": 166,
+    "custom": 166
+  },
+  "packStrengths": {
+    "general": {
+      "easy": 56,
+      "normal": 56,
+      "sharp": 55
+    },
+    "movies": {
+      "easy": 56,
+      "normal": 56,
+      "sharp": 55
+    },
+    "science": {
+      "easy": 56,
+      "normal": 56,
+      "sharp": 55
+    },
+    "sports": {
+      "easy": 56,
+      "normal": 56,
+      "sharp": 55
+    },
+    "music": {
+      "easy": 56,
+      "normal": 55,
+      "sharp": 55
+    },
+    "custom": {
+      "easy": 56,
+      "normal": 55,
+      "sharp": 55
+    }
+  },
+  "estimateLimitMs": 3120000,
+  "measurement": "Round = discussion + used answer window + reveal/standings; match also includes intro and occupied podium tiers.",
+  "settings": "Manifest defaults; six packs rotate per seed, strengths rotate after every six seeds so each eighteen-seed cycle covers every pack/skill pair; variable custom draw is min(requested default10, pack length); every third room phone-only."
+}

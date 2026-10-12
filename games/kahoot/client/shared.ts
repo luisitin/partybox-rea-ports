@@ -7,6 +7,12 @@ export const shared: GameShared = {
   strings: STRINGS,
   sounds: { reveal: 'reveal', wager: 'wager', podium: 'silence', done: 'win' },
   // Public fallback uses the SDK's synthesized beds; no licensed host file is downloaded.
-  beds: { question: 'pulse', reveal: 'latenight', wager: 'warm', podium: 'latenight' },
+  beds: {
+    talk: 'warm',
+    question: 'pulse',
+    reveal: 'latenight',
+    wager: 'warm',
+    podium: 'latenight',
+  },
   // Licensed core file music is excluded from this asset-free public draft.
 };

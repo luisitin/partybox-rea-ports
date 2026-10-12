@@ -14,9 +14,16 @@ import { STRINGS } from './strings';
 import styles from './Classic.module.css';
 import { TvNext, useStandingsUp } from './NextStep';
 import { useStandingsCue } from './useRevealCue';
+import { GroupRoster, GroupDecision, GroupStandings, groupTitle } from './GroupParts';
+import { GroupQuestion } from './GroupQuestion';
+import { GroupIntroRules } from './GroupIntroRules';
+import { GroupAnswerChart } from './GroupAnswerChart';
+import { GroupExplanation } from './GroupExplanation';
 
 export function ClassicTv({ view, skip }: GameTvProps<LightningTvView>): JSX.Element {
   const L = useT(STRINGS);
+  const group = view.group;
+  const vote = group?.mode === 'tv-vote';
   const now = useServerNow(100, view.paused, view.clockHeldAt);
   useStandingsCue(view);
   const nextUp = useStandingsUp(
@@ -29,6 +36,8 @@ export function ClassicTv({ view, skip }: GameTvProps<LightningTvView>): JSX.Ele
   const round = L('Question {n} of {m}', { n: view.round?.number ?? 0, m: view.round?.total ?? 0 });
   const leaderboard =
     view.phaseId === 'reveal' && view.leaderboardAt !== undefined && now >= view.leaderboardAt;
+  const explanation =
+    view.phaseId === 'reveal' && view.explanationAt !== undefined && now >= view.explanationAt;
   return (
     <Stage className={styles.stage}>
       <div className={styles.tvPage} data-phase={view.phaseId}>
@@ -38,42 +47,73 @@ export function ClassicTv({ view, skip }: GameTvProps<LightningTvView>): JSX.Ele
             <p>
               {view.categoryLabel} · {L('faster is worth more')}
             </p>
+            {group ? (
+              <>
+                <p>{L(groupTitle(group))}</p>
+                <GroupIntroRules group={group} />
+                <GroupRoster group={group} players={view.players} />
+              </>
+            ) : null}
             {view.paused ? <p>{L('Paused')}</p> : null}
           </div>
         ) : null}
-        {view.phaseId === 'question' && view.question ? (
-          <>
-            <header className={styles.tvHeader}>
-              <div>
-                <p>{round}</p>
-                <p>{L('{n} of {m} answered', { n: view.answeredCount, m: view.totalCount })}</p>
-              </div>
-            </header>
-            <h2 className={styles.tvPrompt}>{view.question.text}</h2>
-            <QuestionOptions question={view.question} />
-          </>
+        {(view.phaseId === 'question' || view.phaseId === 'talk') && view.question ? (
+          group ? (
+            <GroupQuestion view={view} now={now} />
+          ) : (
+            <>
+              <header className={styles.tvHeader}>
+                <div>
+                  <p>{round}</p>
+                  <p>
+                    {L('{n} of {m} answered', {
+                      n: view.answeredCount,
+                      m: view.totalCount,
+                    })}
+                  </p>
+                </div>
+              </header>
+              <h2 className={styles.tvPrompt}>{view.question.text}</h2>
+              <QuestionOptions question={view.question} />
+            </>
+          )
         ) : null}
         {view.phaseId === 'reveal' ? (
           <>
-            <header className={styles.tvHeader}>
-              <p>{round}</p>
-              {view.paused ? <p>{L('Paused')}</p> : null}
-              {nextUp && view.next && skip ? (
-                <TvNext
-                  next={view.next}
-                  skip={skip}
-                  vipName={view.players.find((player) => player.id === view.vip)?.name}
-                />
-              ) : null}
-            </header>
+            {!group || leaderboard || explanation ? (
+              <header className={styles.tvHeader}>
+                <p>{round}</p>
+                {view.paused ? <p>{L('Paused')}</p> : null}
+                {nextUp && view.next && skip ? (
+                  <TvNext
+                    next={view.next}
+                    skip={skip}
+                    vipName={view.players.find((player) => player.id === view.vip)?.name}
+                  />
+                ) : null}
+              </header>
+            ) : null}
             {leaderboard ? (
               <>
-                <h2 className={styles.headline}>{L('Scoreboard')}</h2>
-                <PublicStandings rows={view.standings ?? []} gains />
+                <h2 className={styles.headline}>
+                  {L(group ? (vote ? 'Room score' : 'Team scoreboard') : 'Scoreboard')}
+                </h2>
+                {group ? (
+                  <GroupStandings view={view} gains />
+                ) : (
+                  <PublicStandings rows={view.standings ?? []} gains />
+                )}
               </>
+            ) : group ? (
+              explanation ? (
+                <GroupExplanation view={view} />
+              ) : (
+                <GroupAnswerChart view={view} />
+              )
             ) : (
               <>
                 <p className={styles.asked}>{view.question?.text}</p>
+                <GroupDecision view={view} />
                 <ClassicChart view={view} />
               </>
             )}
@@ -90,7 +130,11 @@ export function ClassicTv({ view, skip }: GameTvProps<LightningTvView>): JSX.Ele
         {view.phaseId === 'done' ? (
           <>
             <h2 className={styles.headline}>{L('Final standings')}</h2>
-            <PublicStandings rows={view.standings ?? []} />
+            {group ? (
+              <GroupStandings view={view} />
+            ) : (
+              <PublicStandings rows={view.standings ?? []} />
+            )}
           </>
         ) : null}
       </div>

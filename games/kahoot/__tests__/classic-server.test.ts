@@ -68,7 +68,9 @@ function toWager(): State {
 describe('separate original classic packs', () => {
   it('keeps three exact twenty-question packs and matching answer-text facts', () => {
     const ids: string[] = [];
-    for (const pack of Object.values(CLASSIC_PACKS)) {
+    for (const pack of ['general', 'movies', 'science'].map(
+      (id) => CLASSIC_PACKS[id as 'general' | 'movies' | 'science'],
+    )) {
       expect(pack.questions).toHaveLength(20);
       for (const q of pack.questions) {
         ids.push(q.id);
@@ -76,7 +78,8 @@ describe('separate original classic packs', () => {
       }
     }
     expect(new Set(ids).size).toBe(60);
-    expect(Object.keys(CLASSIC_KNOWLEDGE)).toHaveLength(60);
+    expect(Object.keys(CLASSIC_KNOWLEDGE).filter((id) => ids.includes(id))).toHaveLength(60);
+    expect(Object.keys(CLASSIC_KNOWLEDGE)).toHaveLength(100);
     expect(QUESTIONS).toHaveLength(6153);
     expect(QUESTIONS_ES).toHaveLength(5561);
   });

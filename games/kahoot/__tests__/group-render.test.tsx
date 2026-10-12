@@ -1,0 +1,617 @@
+// Full group phases are rendered through production views/components in every supported surface.
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { format, resolveConfig } from 'prettier';
+import { PhoneOnlyProvider, ServerClockProvider, PlayerChips, Timer } from '@partybox/game-sdk/ui';
+import type { PlayerInfo } from '@partybox/game-sdk';
+import { testKit } from '@partybox/game-sdk/testing';
+import { afterEach, expect, it, vi } from 'vitest';
+import { Controller } from '../client/Controller';
+import { Tv } from '../client/Tv';
+import { REVEAL_BEAT_MS } from '../client/timing';
+import { tv as tvModule } from '../client/tv-entry';
+import { game } from '../server/index';
+import * as content from '../server/content';
+import { CLASSIC_PACKS } from '../server/classic';
+import type { ClassicQuestion } from '../server/classic';
+import { classicPackSchema } from '../content/classic-schema';
+import type { ClassicPack } from '../content/classic-schema';
+import { classicQuestionMs, classicRevealBeats, groupTalkMs } from '../server/pacing';
+import type { State, Input, GroupMode } from '../server/types';
+import { input, phone, timer, tv, vip } from './helpers';
+import { digest, standalone, stateDigest } from './upgrade-evidence';
+import type { Surface, UpgradeFrame } from './upgrade-evidence';
+import { GROUP_MEDIA, writeGroupEvidence } from './group-evidence';
+
+const T0 = 2_000_000_000_000;
+const presenceKit = testKit(game, { t0: T0 });
+const SURFACES: readonly Surface[] = ['tv', 'phone-tv', 'phone-only', 'remote', 'spectator'];
+const frames: UpgradeFrame[] = [];
+const fixtures: Record<string, State> = {};
+const EDGE_SURFACES: readonly Surface[] = ['tv', 'phone-only', 'remote'];
+type EdgeVariant = 'words' | 'unbroken';
+interface EdgeContent {
+  variant: EdgeVariant;
+  file: string;
+  sha256: string;
+}
+const edgePacks: { pack: ClassicPack; json: string; content: EdgeContent }[] = [];
+afterEach(() => vi.useRealTimers());
+const seats: PlayerInfo[] = Array.from({ length: 8 }, (_, i) => ({
+  id: `seat-${i + 1}`,
+  name: `${String(i + 1).padStart(2, '0')} Maximiliana Guadalupe Washington XIII`,
+  avatarId: 'fox',
+  connected: true,
+  canSeeTv: true,
+}));
+function start(mode: GroupMode, teams: number): State {
+  return game.init({
+    players: seats,
+    settings: {
+      quizMode: mode,
+      classicPack: 'sports',
+      questions: 5,
+      answerSeconds: 10,
+      teamCount: teams,
+      talkSeconds: 5,
+    },
+    seed: 42,
+    now: T0,
+  });
+}
+function played(initial: State): State[] {
+  const states: State[] = [];
+  let state = initial;
+  for (let step = 0; step < 100; step++) {
+    states.push(state);
+    if (state.phase.id === 'done') return states;
+    const phase = state.phase.id;
+    if (phase === 'question') {
+      const at = state.phase.startedAt;
+      const q = content.questionById(state.questionIds[state.index]!, state.contentLang)!;
+      for (const [index, player] of Object.values(state.players).entries()) {
+        if (state.phase.id !== 'question') break;
+        const team =
+          state.teams?.findIndex((candidate) => candidate.members.includes(player.id)) ?? 0;
+        const correct =
+          state.settings.quizMode === 'tv-vote'
+            ? index < 5
+            : team === 0
+              ? state.index > 0 || index === 0
+              : state.index < 4 - team;
+        const stamp = phone(state, player.id).answerStamp;
+        if (!stamp) throw new Error('Group answer has no canonical stamp');
+        state = input(
+          state,
+          player.id,
+          { type: 'answer', ...stamp, index: correct ? q.answerIndex : (q.answerIndex + 1) % 4 },
+          at + 300 + index * 100,
+        );
+      }
+    }
+    if (state.phase.id === phase) state = timer(state);
+  }
+  throw new Error('Group fixture trace did not finish');
+}
+interface PaintOptions {
+  playerId?: string;
+  vipSkip?: boolean;
+  surfaces?: readonly Surface[];
+  customContent?: EdgeContent;
+  roomTie?: boolean;
+}
+function paint(
+  name: string,
+  source: State,
+  at = source.phase.startedAt + 100,
+  options: PaintOptions = {},
+): void {
+  fixtures[`group-${name}`] = source;
+  if (source.phase.id === 'talk' && !fixtures.talk) fixtures.talk = source;
+  for (const surface of options.surfaces ?? SURFACES) {
+    const id = surface === 'spectator' ? 'audience' : (options.playerId ?? 'seat-1');
+    const only = surface === 'phone-only' || surface === 'spectator';
+    const state: State = {
+      ...source,
+      phoneOnly: only,
+      players: Object.fromEntries(
+        Object.entries(source.players).map(([key, player]) => [
+          key,
+          { ...player, canSeeTv: surface !== 'remote' || key !== id },
+        ]),
+      ),
+    };
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(at);
+    const publicView = tv(state);
+    const controller = phone(state, id);
+    const html = renderToStaticMarkup(
+      <ServerClockProvider offsetMs={0}>
+        {surface === 'tv' ? (
+          <Tv view={{ ...publicView, vip: null }} skip={() => undefined} />
+        ) : (
+          <PhoneOnlyProvider value={controller.phoneOnly === true}>
+            <Controller
+              view={{ ...controller, vip: null }}
+              me={state.players[id] ?? { id, name: 'Spectator', avatarId: 'owl' }}
+              send={(_input: Input) => undefined}
+              skip={options.vipSkip ? () => undefined : undefined}
+            />
+          </PhoneOnlyProvider>
+        )}
+      </ServerClockProvider>,
+    );
+    if (options.surfaces && surface === 'phone-tv' && source.phase.id === 'reveal') {
+      const footer = html.match(/<div[^>]*data-group-player-bar="true"[\s\S]*?<\/div>/)?.[0];
+      expect(footer, name + ' identity footer').toBeDefined();
+      const team = controller.group?.teams.find((row) => row.id === controller.group?.myTeamId);
+      if (team) {
+        expect(footer).toContain(
+          'aria-label="' +
+            team.score +
+            (controller.group?.mode === 'teams' ? ' team points"' : ' room points"'),
+        );
+      } else {
+        expect(footer).toContain(
+          controller.group?.mode === 'teams'
+            ? 'Team score after the podium'
+            : 'Room score after the podium',
+        );
+        expect(footer).toMatch(/aria-hidden="true"[^>]*>—<\/b>/);
+        expect(footer).not.toMatch(/aria-label="\d+ (?:team|room) points"/);
+      }
+    }
+    expect(html, `${name}-${surface}`).not.toMatch(/NaN|undefined|Infinity/);
+    expect(html).toMatch(/<(?:h[123]|p)\b/);
+    if (surface === 'spectator' || source.phase.id === 'talk')
+      expect(html).not.toContain('<button');
+    if (only || surface === 'remote')
+      expect(html).not.toMatch(/look at the TV|watch the TV|see the TV/i);
+    const chrome =
+      surface === 'tv'
+        ? renderToStaticMarkup(
+            <ServerClockProvider offsetMs={0}>
+              <div className="evidence-strip">
+                <div
+                  className={`evidence-chips ${tvModule.stripHidden?.includes(publicView.phaseId) ? 'evidence-chips-hidden' : ''}`}
+                >
+                  {!tvModule.stripHidden?.includes(publicView.phaseId) ? (
+                    <>
+                      <div data-chips-named="true">
+                        <PlayerChips
+                          players={publicView.players}
+                          showScores={source.phase.id === 'done'}
+                          size="sm"
+                        />
+                      </div>
+                      <div data-chips-faces="true" hidden>
+                        <PlayerChips
+                          players={publicView.players}
+                          showScores={source.phase.id === 'done'}
+                          size="sm"
+                          facesOnly
+                        />
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+                <div className="evidence-timer">
+                  {publicView.timerMode === 'normal' && publicView.deadline !== null ? (
+                    <Timer
+                      deadline={publicView.deadline}
+                      phaseKey={publicView.phaseId}
+                      phaseAt={publicView.phaseAt}
+                      paused={publicView.paused}
+                      clockHeldAt={publicView.clockHeldAt}
+                      size="lg"
+                    />
+                  ) : null}
+                </div>
+              </div>
+              <div
+                className="evidence-bar"
+                style={publicView.timerMode === 'hidden' ? { visibility: 'hidden' } : undefined}
+              />
+            </ServerClockProvider>,
+          )
+        : '<div class="evidence-phone-countdown"><span class="evidence-phone-track"></span></div>';
+    if (options.customContent && ['talk', 'question', 'reveal'].includes(source.phase.id)) {
+      const expected = edgePacks
+        .find((entry) => entry.content.variant === options.customContent?.variant)!
+        .pack.questions.find((question) => question.id === source.questionIds[source.index])!;
+      expect(html, name + ' custom prompt').toContain(expected.prompt);
+      if (source.phase.id !== 'reveal') {
+        expect(publicView).not.toHaveProperty('correctIndex');
+        expect(publicView).not.toHaveProperty('explanation');
+        expect(controller).not.toHaveProperty('correctIndex');
+        expect(controller).not.toHaveProperty('explanation');
+        expect(publicView.group).not.toHaveProperty('decision');
+        if (controller.stage) {
+          expect(controller.stage).not.toHaveProperty('correctIndex');
+          expect(controller.stage).not.toHaveProperty('explanation');
+        }
+      } else if (publicView.explanationAt !== undefined && at >= publicView.explanationAt) {
+        expect(html, name + ' custom explanation').toContain(expected.explanation);
+        expect(html).toContain('data-group-explanation="true"');
+      } else {
+        expect(html, name + ' separate custom explanation').not.toContain(expected.explanation);
+        expect(html).toContain('data-group-answer-chart="vertical"');
+      }
+    }
+    if (options.roomTie) {
+      expect(html, name + ' tie cue').toContain('data-room-tie="true"');
+      expect(html).toContain('Tie — random choice among tied answers');
+      expect(publicView.answerDistribution?.counts).toEqual([4, 4, 0, 0]);
+    }
+    const frame: UpgradeFrame & { customContent?: EdgeContent; roomTie?: true } = {
+      name: `groups-${name}-${surface}`,
+      surface,
+      width: surface === 'tv' ? 1920 : 390,
+      height: surface === 'tv' ? 1080 : 844,
+      at,
+      stateHash: stateDigest(state),
+      html,
+      chrome,
+      ...(options.customContent ? { customContent: options.customContent } : {}),
+      ...(options.roomTie ? { roomTie: true as const } : {}),
+    };
+    expect(standalone(frame)).not.toMatch(/:global\(|\bglobal\(/);
+    frames.push(frame);
+  }
+}
+/** Real stamped inputs close one first-round vote; no hand-authored scoring or phase times. */
+function firstRound(initial: State, tied = false): { talk: State; question: State; reveal: State } {
+  const talk = timer(initial);
+  expect(talk.phase.id).toBe('talk');
+  expect(talk.index).toBe(0);
+  const question = timer(talk);
+  expect(question.phase.id).toBe('question');
+  const current = content.questionById(question.questionIds[question.index]!, question.contentLang);
+  if (!current) throw new Error('First-round fixture needs its selected content');
+  let reveal = question;
+  for (const [index, player] of Object.values(question.players).entries()) {
+    expect(reveal.phase.id).toBe('question');
+    const stamp = phone(reveal, player.id).answerStamp;
+    if (!stamp) throw new Error('First-round fixture needs a real answer stamp');
+    const choice = tied
+      ? index < 4
+        ? 0
+        : 1
+      : index < 5
+        ? current.answerIndex
+        : (current.answerIndex + 1) % 4;
+    reveal = input(
+      reveal,
+      player.id,
+      { type: 'answer', ...stamp, index: choice },
+      question.phase.startedAt + 300 + index * 100,
+    );
+  }
+  if (reveal.phase.id === 'question') reveal = timer(reveal);
+  expect(reveal.phase.id).toBe('reveal');
+  expect(reveal.index).toBe(0);
+  expect(Object.keys(reveal.picks)).toHaveLength(8);
+  return { talk, question, reveal };
+}
+
+/** Schema-valid synthetic owner packs exercise both wrapping and maximum visible word counts. */
+function customEdgePack(variant: EdgeVariant): ClassicPack {
+  const unbroken = variant === 'unbroken';
+  return classicPackSchema.parse({
+    id: 'custom',
+    name: CLASSIC_PACKS.custom.name,
+    lang: 'en',
+    questions: CLASSIC_PACKS.custom.questions.map(({ id }) => ({
+      id,
+      prompt: unbroken ? 'W'.repeat(110) : 'a '.repeat(54) + 'aa',
+      options: Array.from({ length: 4 }, (_, index) =>
+        unbroken ? 'W'.repeat(41) + (index + 1) : 'a '.repeat(20) + (index + 1) + 'b',
+      ),
+      correct: 0,
+      explanation: unbroken ? 'M'.repeat(120) : 'a '.repeat(59) + 'aa',
+      difficulty: 1,
+    })),
+  });
+}
+
+async function paintCustomEdges(variant: EdgeVariant): Promise<void> {
+  const pack = customEdgePack(variant);
+  expect(pack.questions).toHaveLength(5);
+  for (const question of pack.questions) {
+    expect(question.prompt).toHaveLength(110);
+    expect(question.options.every((option) => option.length === 42)).toBe(true);
+    expect(question.explanation).toHaveLength(120);
+  }
+  const players = seats.map((player, index) => ({
+    ...player,
+    name:
+      String(index + 1).padStart(2, '0') +
+      (variant === 'unbroken' ? 'W'.repeat(38) : ' ' + 'a '.repeat(18) + 'a'),
+  }));
+  expect(players.every((player) => player.name.length === 40)).toBe(true);
+  const packPath = resolve(GROUP_MEDIA, 'custom-edge-' + variant + '.json');
+  const json = await format(JSON.stringify(pack), {
+    ...(await resolveConfig(packPath)),
+    filepath: packPath,
+  });
+  const provenance: EdgeContent = {
+    variant,
+    file: 'custom-edge-' + variant + '.json',
+    sha256: digest(json),
+  };
+  edgePacks.push({ pack, json, content: provenance });
+  const original = content.questionById;
+  const replacements = new Map(
+    pack.questions.map((question) => {
+      const bundled = original(question.id, 'en');
+      if (!bundled)
+        throw new Error('Custom fixture ID must exist in the compiled five-question draw');
+      const replacement: ClassicQuestion = {
+        ...bundled,
+        question: question.prompt,
+        choices: [...question.options],
+        answerIndex: question.correct,
+        explanation: question.explanation,
+        difficulty: (['easy', 'medium', 'hard'] as const)[question.difficulty - 1]!,
+        source: 'Schema-validated ' + variant + ' custom layout fixture; not bundled sample text',
+      };
+      return [question.id, replacement] as const;
+    }),
+  );
+  // The same production lookup feeds init, phase budgets, scoring, public views and paint.
+  const lookup = vi
+    .spyOn(content, 'questionById')
+    .mockImplementation((id, lang) => replacements.get(id) ?? original(id, lang));
+  try {
+    for (const mode of ['teams', 'tv-vote'] as const) {
+      const initial = game.init({
+        players,
+        settings: {
+          quizMode: mode,
+          classicPack: 'custom',
+          questions: 5,
+          answerSeconds: 10,
+          teamCount: 2,
+          talkSeconds: 5,
+        },
+        seed: 42,
+        now: T0,
+      });
+      expect(initial.questionIds).toHaveLength(5);
+      expect(initial.questionIds.every((id) => replacements.has(id))).toBe(true);
+      expect(initial.teams).toHaveLength(mode === 'teams' ? 2 : 1);
+      expect(
+        initial.teams?.every((team) => team.members.length === (mode === 'teams' ? 4 : 8)),
+      ).toBe(true);
+      const round = firstRound(initial);
+      expect(round.talk.phase.deadline! - round.talk.phase.startedAt).toBe(
+        Math.max(5000, groupTalkMs(round.talk)),
+      );
+      expect(round.question.answerWindowMs).toBe(classicQuestionMs(round.question));
+      const beats = classicRevealBeats(round.reveal);
+      expect(round.reveal.phase.deadline! - round.reveal.phase.startedAt).toBe(
+        beats.chartMs + beats.standingsMs,
+      );
+      paint('custom-' + variant + '-' + mode + '-intro', initial, undefined, {
+        surfaces: EDGE_SURFACES,
+        customContent: provenance,
+      });
+      for (const phase of ['talk', 'question', 'reveal'] as const) {
+        const at =
+          phase === 'reveal' ? round.reveal.phase.startedAt + REVEAL_BEAT_MS + 100 : undefined;
+        paint('custom-' + variant + '-' + mode + '-' + phase, round[phase], at, {
+          surfaces: EDGE_SURFACES,
+          customContent: provenance,
+        });
+      }
+      paint(
+        'custom-' + variant + '-' + mode + '-explanation',
+        round.reveal,
+        tv(round.reveal).explanationAt! + 100,
+        {
+          surfaces: EDGE_SURFACES,
+          customContent: provenance,
+        },
+      );
+    }
+  } finally {
+    lookup.mockRestore();
+  }
+}
+
+function paintTeamPresence(): void {
+  const talk = timer(start('teams', 2));
+  expect(talk.phase.id).toBe('talk');
+  const own = talk.teams?.find((team) => team.members.includes('seat-1'));
+  if (!own) throw new Error('Presence fixture needs seat-1 in a four-person team');
+  expect(own.members).toHaveLength(4);
+  const teammates = own.members.filter((id) => id !== 'seat-1');
+  const leaver = teammates[0]!;
+  const offline = teammates[1]!;
+  const active = teammates[2]!;
+  const left = presenceKit.player(talk, leaver, false, 'left', talk.phase.startedAt + 100);
+  const reconnected = presenceKit.player(left, leaver, true, undefined, talk.phase.startedAt + 200);
+  const absent = presenceKit.player(
+    reconnected,
+    offline,
+    false,
+    undefined,
+    talk.phase.startedAt + 300,
+  );
+  expect(absent.left).toContain(leaver);
+  expect(absent.left).not.toContain(offline);
+  expect(absent.players[leaver]?.connected).toBe(true);
+  expect(absent.players[offline]?.connected).toBe(false);
+  expect(absent.players[active]?.connected).toBe(true);
+  expect(phone(absent, 'seat-1').participating).toBe(true);
+  expect(phone(absent, leaver).participating).toBe(false);
+  expect(absent.teams).toEqual(talk.teams);
+  paint('two-teams-presence-talk', absent, talk.phase.startedAt + 400, {
+    surfaces: ['phone-tv', 'phone-only', 'remote'],
+  });
+}
+
+function writeCustomEdgePacks(): void {
+  mkdirSync(GROUP_MEDIA, { recursive: true });
+  for (const entry of edgePacks)
+    writeFileSync(resolve(GROUP_MEDIA, entry.content.file), entry.json, 'utf8');
+  writeFileSync(
+    resolve(GROUP_MEDIA, 'custom-edge-provenance.json'),
+    JSON.stringify(
+      {
+        description:
+          'Synthetic schema-valid owner packs, not the bundled sample. Each capture installs a ' +
+          'questionById spy for these five existing custom IDs before init and retains it through ' +
+          'the reducer trace, scoring, pacing and render. Replay requires the matching pack file; ' +
+          'phase-fixtures.json alone resolves to different bundled sample text.',
+        settings: {
+          classicPack: 'custom',
+          questions: 5,
+          answerSeconds: 10,
+          teamCount: 2,
+          talkSeconds: 5,
+        },
+        seats: 8,
+        nameLength: 40,
+        teams: 'Two teams of four; room-vote mode has one room of eight',
+        phases: ['intro', 'talk', 'question', 'reveal', 'explanation'],
+        surfaces: EDGE_SURFACES,
+        packs: edgePacks.map(({ content: provenance }) => ({
+          ...provenance,
+          captures: frames
+            .filter(
+              (frame) =>
+                (frame as UpgradeFrame & { customContent?: EdgeContent }).customContent?.variant ===
+                provenance.variant,
+            )
+            .map((frame) => frame.name),
+        })),
+      },
+      null,
+      2,
+    ) + '\n',
+    'utf8',
+  );
+}
+
+it('renders every canonical group phase and role, plus paused/locked/long-name flows', async () => {
+  frames.length = 0;
+  edgePacks.length = 0;
+  expect(seats.every((player) => player.name.length === 40)).toBe(true);
+  for (const mode of ['teams', 'tv-vote'] as const) {
+    const states = played(start(mode, 4));
+    for (const phase of ['intro', 'talk', 'question', 'reveal', 'done']) {
+      const state = states.find((s) => s.phase.id === phase);
+      if (!state) throw new Error(`Missing ${mode} ${phase}`);
+      paint(`${mode}-${phase}`, state);
+      if (phase === 'reveal') {
+        paint(`${mode}-revealed-result`, state, state.phase.startedAt + REVEAL_BEAT_MS + 100);
+        paint(`${mode}-explanation`, state, tv(state).explanationAt! + 100);
+        paint(`${mode}-standings`, state, (tv(state).leaderboardAt ?? state.phase.startedAt) + 100);
+      }
+    }
+    for (const podium of states.filter((s) => s.phase.id === 'podium'))
+      paint(`${mode}-podium-${podium.podiumRank}`, podium);
+    const question = states.find((s) => s.phase.id === 'question')!;
+    const stamp = phone(question, 'seat-1').answerStamp!;
+    const locked = input(
+      question,
+      'seat-1',
+      { type: 'answer', ...stamp, index: 0 },
+      question.phase.startedAt + 300,
+    );
+    paint(`${mode}-locked`, locked, question.phase.startedAt + 400);
+    paint(
+      `${mode}-paused`,
+      vip(locked, 'pause', question.phase.startedAt + 500),
+      question.phase.startedAt + 10000,
+    );
+    const firstReveal = states.find((s) => s.phase.id === 'reveal')!;
+    const firstBoardAt = (tv(firstReveal).leaderboardAt ?? firstReveal.phase.startedAt) + 100;
+    paint(mode + '-standings-vip', firstReveal, firstBoardAt, {
+      vipSkip: true,
+      surfaces: ['phone-tv'],
+    });
+    if (mode === 'teams') {
+      // The same team has one correct and one wrong answer, so both receipts show 50%.
+      const incorrectTeammate = firstReveal.teams
+        ?.find((team) => team.members.includes('seat-1'))
+        ?.members.find((id) => phone(firstReveal, id).outcome?.correct === false);
+      if (!incorrectTeammate) throw new Error('The first team needs an incorrect teammate receipt');
+      expect(phone(firstReveal, 'seat-1').outcome?.correct).toBe(true);
+      expect(phone(firstReveal, incorrectTeammate).outcome?.correct).toBe(false);
+      expect(
+        phone(firstReveal, incorrectTeammate).group?.teams.find((team) =>
+          team.members.includes(incorrectTeammate),
+        )?.correctPercent,
+      ).toBe(50);
+      paint('teams-standings-wrong', firstReveal, firstBoardAt, {
+        playerId: incorrectTeammate,
+        surfaces: ['phone-tv'],
+      });
+    }
+    const final = states.filter((s) => s.phase.id === 'reveal').at(-1)!;
+    expect((tv(final).nextAt ?? final.phase.startedAt) + 100).toBeLessThan(final.phase.deadline!);
+    paint(`${mode}-last-reveal`, final);
+    paint(`${mode}-last-explanation`, final, tv(final).explanationAt! + 100);
+    const readyAt = phone(final, 'seat-1').nextAt;
+    if (readyAt === undefined) throw new Error('Final reveal needs its authored podium-ready beat');
+    expect(phone(final, 'seat-1').group?.teams).toHaveLength(0);
+    expect(phone(final, 'seat-1').myRank).toBeUndefined();
+    paint(mode + '-last-reveal-ready', final, readyAt + 100, {
+      vipSkip: true,
+      surfaces: ['phone-tv'],
+    });
+  }
+  paint(
+    'two-teams-talk',
+    played(start('teams', 2)).find((s) => s.phase.id === 'talk')!,
+  );
+  paintTeamPresence();
+  expect(
+    frames.filter((frame) => frame.name.startsWith('groups-two-teams-presence-talk-')),
+  ).toHaveLength(3);
+  for (const variant of ['words', 'unbroken'] as const) await paintCustomEdges(variant);
+  expect(frames.filter((frame) => frame.name.startsWith('groups-custom-'))).toHaveLength(60);
+  const tied = firstRound(start('tv-vote', 2), true);
+  expect(tv(tied.talk).group?.decision).toBeUndefined();
+  expect(tv(tied.question).group?.decision).toBeUndefined();
+  expect(tv(tied.question).answerDistribution).toBeUndefined();
+  expect(tv(tied.reveal).answerDistribution?.counts).toEqual([4, 4, 0, 0]);
+  expect([0, 1]).toContain(tied.reveal.roomDecision);
+  paint(
+    'tv-vote-tied-reveal',
+    tied.reveal,
+    (tv(tied.reveal).revealAt ?? tied.reveal.phase.startedAt) + REVEAL_BEAT_MS + 100,
+    { roomTie: true },
+  );
+  paint(
+    'tv-vote-tied-standings-vip',
+    tied.reveal,
+    (tv(tied.reveal).leaderboardAt ?? tied.reveal.phase.startedAt) + 100,
+    { roomTie: true, vipSkip: true, surfaces: ['phone-tv'] },
+  );
+  expect(
+    frames.filter(
+      (frame) =>
+        frame.name.startsWith('groups-tv-vote-tied-reveal-') ||
+        frame.name === 'groups-tv-vote-tied-standings-vip-phone-tv',
+    ),
+  ).toHaveLength(6);
+  expect(frames.length).toBeGreaterThanOrEqual(90);
+  for (const name of [
+    'groups-teams-standings-vip-phone-tv',
+    'groups-tv-vote-standings-vip-phone-tv',
+    'groups-teams-standings-wrong-phone-tv',
+    'groups-teams-last-reveal-ready-phone-tv',
+    'groups-tv-vote-last-reveal-ready-phone-tv',
+  ]) {
+    expect(frames.filter((frame) => frame.name === name)).toHaveLength(1);
+  }
+  if (process.env.P02_WRITE_EVIDENCE === '1') {
+    // Write content first so the evidence writer hashes the pack, provenance and all captures.
+    writeCustomEdgePacks();
+    await writeGroupEvidence(frames, fixtures);
+  }
+});
