@@ -1,7 +1,7 @@
 // Bounded launch/cleanup probes for this job's unique profile, copied from public P04's protocol.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { profileCommand, runProfileCommand } from './tools/close-browser.mjs';
 
 export function browserEndpoint(processHandle, profile) {
   return new Promise((resolve, reject) => {
@@ -39,19 +39,23 @@ export function browserEndpoint(processHandle, profile) {
   });
 }
 
-export function verifyClosedProfile(profile) {
+export async function verifyClosedProfile(profile) {
   if (process.platform !== 'win32') return true;
-  const literal = profile.replaceAll("'", "''");
-  const command = `$captureProfile='${literal}'; for ($captureAttempt=0; $captureAttempt -lt 8; $captureAttempt++) { $captureProcesses=@(Get-CimInstance Win32_Process -Filter "Name = 'chrome.exe' OR Name = 'msedge.exe'" | Where-Object { $_.CommandLine -and $_.CommandLine.Contains($captureProfile) }); if ($captureProcesses.Count -eq 0) { exit 0 }; Start-Sleep -Milliseconds 200 }; exit 1`;
-  const result = spawnSync(
-    'powershell.exe',
-    [
-      '-NoProfile',
-      '-NonInteractive',
-      '-EncodedCommand',
-      Buffer.from(command, 'utf16le').toString('base64'),
-    ],
-    { windowsHide: true, stdio: 'ignore', timeout: 10_000 },
+  const command = profileCommand(
+    profile,
+    `
+    for ($captureAttempt=0; $captureAttempt -lt 8; $captureAttempt++) {
+      if (@(Get-OwnedProfileProcesses).Count -eq 0) { exit 0 };
+      Start-Sleep -Milliseconds 200;
+    };
+    if (@(Get-OwnedProfileProcesses).Count -eq 0) { exit 0 };
+    exit 1;
+  `,
   );
-  return result.status === 0;
+  const result = await runProfileCommand(command, 12_000);
+  if (result.error || result.status !== 0)
+    console.error(
+      `Owned browser verification failed: ${result.error || result.stderr || `PowerShell status ${result.status}`}`,
+    );
+  return !result.error && result.status === 0;
 }

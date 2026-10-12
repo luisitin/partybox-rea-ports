@@ -23,7 +23,7 @@ export function hashMedia(job = import.meta.dirname) {
   collect(media);
   files.sort();
   const bytes = files.reduce((sum, file) => sum + statSync(file).size, 0);
-  const limitBytes = 10 * 1024 * 1024;
+  const limitBytes = 10_000_000;
   if (bytes >= limitBytes)
     throw new Error(`Evidence budget exceeded: ${bytes} bytes (limit ${limitBytes}).`);
   const lines = files.map(

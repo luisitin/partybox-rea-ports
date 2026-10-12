@@ -189,6 +189,26 @@ function start(nextMode: QuizMode, only = false): void {
     phoneMount++;
     publish();
   },
+  rejoinNewQuestion() {
+    // The disconnected phone missed done/lobby/discussion; publish only the later question.
+    clearTimeout(autoTimer);
+    held = false;
+    sent.length = 0;
+    state = initialState();
+    if (state.phase.id === 'talk' && state.phase.deadline !== null) {
+      offset += Math.max(0, state.phase.deadline - now());
+      state = game.reduce(state, {
+        type: 'timer',
+        phaseId: state.phase.id,
+        startedAt: state.phase.startedAt,
+        now: now(),
+      });
+    }
+    shown = state;
+    phoneMount++;
+    scheduleTimer();
+    publish();
+  },
   showPhone(playerId = 'p1') {
     if (id !== playerId) phoneMount++;
     id = playerId;

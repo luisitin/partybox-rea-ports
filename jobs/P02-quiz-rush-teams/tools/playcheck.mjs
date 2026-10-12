@@ -35,11 +35,6 @@ const server = await createServer({
   server: { host: '127.0.0.1', port: 0, cors: true },
   appType: 'mpa',
 });
-server.middlewares.use((request, response, next) => {
-  if (request.url !== '/__p02_native_origin') return next();
-  response.setHeader('Content-Type', 'text/html; charset=utf-8');
-  response.end('<!doctype html><html><head></head><body></body></html>');
-});
 const browser =
   process.env.P02_BROWSER ??
   [
@@ -99,7 +94,12 @@ try {
   await viewport('phone');
   const address = server.httpServer.address();
   // Establish a real local origin so the SDK sessionStorage draft behaves as it does in the host.
-  await rpc(socket, 'Page.navigate', { url: `http://127.0.0.1:${address.port}/__p02_native_origin` });
+  const origin = `http://127.0.0.1:${address.port}/jobs/P02-quiz-rush-teams/tools/origin.html`;
+  const originResponse = await fetch(origin, { signal: AbortSignal.timeout(15_000) });
+  if (!originResponse.ok) throw new Error(`Native origin failed: ${originResponse.status}`);
+  const navigation = await rpc(socket, 'Page.navigate', { url: origin });
+  if (navigation.errorText)
+    throw new Error(`Native origin navigation failed: ${navigation.errorText}`);
   const url = `http://127.0.0.1:${address.port}/jobs/P02-quiz-rush-teams/tools/live.html`;
   const response = await fetch(url, { signal: AbortSignal.timeout(15_000) });
   if (!response.ok) throw new Error(`Native harness HTML failed: ${response.status}`);
@@ -195,7 +195,7 @@ try {
   }
   socket?.close();
   browserSocket?.close();
-  if (profile) closeBrowserProfile(profile);
+  if (profile) await closeBrowserProfile(profile);
   if (processHandle?.pid && processHandle.exitCode === null) {
     if (process.platform === 'win32')
       spawnSync('taskkill', ['/PID', String(processHandle.pid), '/T', '/F'], {
@@ -206,7 +206,7 @@ try {
     else processHandle.kill('SIGKILL');
   }
   await Promise.race([server.close(), wait(5000)]);
-  if (profile && !verifyClosedProfile(profile)) {
+  if (profile && !(await verifyClosedProfile(profile))) {
     console.error(`Could not confirm the owned native browser is closed: ${profile}`);
     process.exitCode = 1;
   }

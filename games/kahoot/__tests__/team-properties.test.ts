@@ -1,4 +1,6 @@
 // Generated traces exercise the actual reducer, including hostile but schema-valid receipts.
+import { deepStrictEqual, ok, strictEqual } from 'node:assert/strict';
+import { performance } from 'node:perf_hooks';
 import { expect, it } from 'vitest';
 import fc from 'fast-check';
 import { createRng } from '@partybox/game-sdk';
@@ -9,33 +11,49 @@ import type { Input, State } from '../server/types';
 import { GROUP_MODES, NEW_PACKS, STRENGTHS } from './test-team-sim';
 
 function assertSafe(state: State, starters: string[], teams: State['teams']) {
-  expect(game.phases).toContain(state.phase.id);
-  expect(state.teams).toEqual(teams);
-  expect(Object.keys(state.players).sort()).toEqual(starters);
-  expect(Object.keys(state.scores).sort()).toEqual(starters);
-  expect(state.teams.flatMap((team) => team.members).sort()).toEqual(starters);
-  expect(Object.values(state.scores).every((score) => Number.isInteger(score) && score >= 0)).toBe(
-    true,
+  ok(game.phases.includes(state.phase.id), 'Declared phase');
+  deepStrictEqual(state.teams, teams, 'Fixed team membership');
+  deepStrictEqual(
+    Object.keys(state.players).sort(),
+    starters,
+    'Every starter remains in the roster',
+  );
+  deepStrictEqual(Object.keys(state.scores).sort(), starters, 'Every starter retains a score');
+  deepStrictEqual(
+    state.teams.flatMap((team) => team.members).sort(),
+    starters,
+    'Teams partition the starters',
+  );
+  ok(
+    Object.values(state.scores).every((score) => Number.isInteger(score) && score >= 0),
+    'Finite nonnegative integer scores',
   );
   for (const team of state.teams)
-    expect(team.members.every((id) => state.scores[id] === state.teamScores[team.id])).toBe(true);
+    ok(
+      team.members.every((id) => state.scores[id] === state.teamScores[team.id]),
+      'Shared team scores',
+    );
   for (const answer of Object.values(state.answers)) {
-    expect(Number.isInteger(answer.choice) && answer.choice >= 0 && answer.choice <= 3).toBe(true);
-    expect(Number.isFinite(answer.elapsed) && answer.elapsed >= 0).toBe(true);
+    ok(Number.isInteger(answer.choice) && answer.choice >= 0 && answer.choice <= 3, 'Valid choice');
+    ok(Number.isFinite(answer.elapsed) && answer.elapsed >= 0, 'Valid answer elapsed time');
   }
   if (state.phase.id === 'done') {
     const result = game.results(state)!;
-    expect(result.ranking.map((row) => row.playerId).sort()).toEqual(starters);
-    expect(result.winnerIds.slice().sort()).toEqual(
+    deepStrictEqual(result.ranking.map((row) => row.playerId).sort(), starters, 'Starter results');
+    deepStrictEqual(
+      result.winnerIds.slice().sort(),
       result.ranking
         .filter((row) => row.rank === 1)
         .map((row) => row.playerId)
         .sort(),
+      'Winners match the first rank',
     );
-  } else expect(game.results(state)).toBeNull();
+  } else strictEqual(game.results(state), null, 'No results before done');
 }
 
 it('replays pure, safe group traces for seeds 1,2,3 and 1,000 independently generated seeds', () => {
+  const begun = performance.now();
+  let traces = 0;
   const rng = createRng(0x702);
   const seeds = [1, 2, 3, ...Array.from({ length: 1000 }, () => rng.int(4, 0x7fffffff))];
   for (const mode of GROUP_MODES)
@@ -57,8 +75,8 @@ it('replays pure, safe group traces for seeds 1,2,3 and 1,000 independently gene
       let state = kit.start();
       const initial = JSON.stringify(state);
       const teams = structuredClone(state.teams);
-      expect(fuzzOnce(game, state, seed)).toEqual([]);
-      expect(JSON.stringify(state)).toBe(initial);
+      deepStrictEqual(fuzzOnce(game, state, seed), [], 'Initial discussion totality');
+      strictEqual(JSON.stringify(state), initial, 'Discussion fuzz purity');
       const generated = fc.sample(
         fc.array(fc.integer({ min: 0, max: 12 }), { minLength: 12, maxLength: 24 }),
         { seed, numRuns: 1 },
@@ -141,20 +159,30 @@ it('replays pure, safe group traces for seeds 1,2,3 and 1,000 independently gene
             event = { type: 'vip', now, action: 'end' };
         }
         if (event.type === 'input')
-          expect(game.inputSchema.safeParse(event.input).success).toBe(true);
+          strictEqual(
+            game.inputSchema.safeParse(event.input).success,
+            true,
+            'Schema-valid trace input',
+          );
         const before = JSON.stringify(state);
         const next = game.reduce(state, event);
-        expect(JSON.stringify(state)).toBe(before);
-        expect(game.reduce(JSON.parse(before), event)).toEqual(next);
-        expect(JSON.parse(JSON.stringify(next))).toEqual(next);
-        if (ignored) expect(next).toEqual(state);
+        const serialized = JSON.stringify(next);
+        strictEqual(JSON.stringify(state), before, 'Reducer purity');
+        // These states are plain JSON: exact replay bytes also check property order determinism.
+        strictEqual(
+          JSON.stringify(game.reduce(JSON.parse(before), event)),
+          serialized,
+          'Deterministic replay',
+        );
+        deepStrictEqual(JSON.parse(serialized), next, 'Lossless JSON state');
+        if (ignored)
+          strictEqual(serialized, before, 'Ignored input/timer leaves the state unchanged');
         for (const id of starters)
-          expect(next.scores[id]!).toBeGreaterThanOrEqual(state.scores[id]!);
+          ok(next.scores[id]! >= state.scores[id]!, 'Scores never decrease');
         assertSafe(next, starters, teams);
         if (next.phase.id === 'question' && !fuzzedQuestion) {
-          const serialized = JSON.stringify(next);
-          expect(fuzzOnce(game, next, seed)).toEqual([]);
-          expect(JSON.stringify(next)).toBe(serialized);
+          deepStrictEqual(fuzzOnce(game, next, seed), [], 'Question totality');
+          strictEqual(JSON.stringify(next), serialized, 'Question fuzz purity');
           fuzzedQuestion = true;
         }
         state = next;
@@ -162,9 +190,18 @@ it('replays pure, safe group traces for seeds 1,2,3 and 1,000 independently gene
       if (state.phase.paused) state = kit.vip(state, 'resume', now + 100);
       state = kit.until(state, 'done', 200);
       assertSafe(state, starters, teams);
-      expect(kit.vip(state, 'end', state.phase.startedAt + 100)).toEqual(state);
-      expect(JSON.stringify(kit.start())).toBe(initial);
+      strictEqual(
+        JSON.stringify(kit.vip(state, 'end', state.phase.startedAt + 100)),
+        JSON.stringify(state),
+        'Terminal end is inert',
+      );
+      strictEqual(JSON.stringify(kit.start()), initial, 'Deterministic initialization');
+      traces++;
     }
+  strictEqual(traces, GROUP_MODES.length * seeds.length, 'Every mode and seed was checked');
+  console.log(
+    `Kahoot! group properties: ${traces} traces in ${Math.round(performance.now() - begun)} ms; all seeds and invariants retained.`,
+  );
 }, 180_000);
 
 it('rejects malformed payloads at the SDK schema boundary', () => {

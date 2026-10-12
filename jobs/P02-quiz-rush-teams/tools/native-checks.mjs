@@ -158,6 +158,14 @@ export async function nativeChecks({ evaluate, settle, tap, viewport, screenshot
         `document.querySelectorAll('${pads}')[${retainedChoice}].getAttribute('aria-pressed')==='true' && Array.from(document.querySelectorAll('${pads}')).every(b=>b.disabled)`,
       )),
     'Unconfirmed choice survives a refresh during a crossing pause without resending',
+    {
+      phase: current.phase,
+      answers: current.answers,
+      sent: current.sent,
+      client: await evaluate(
+        `(() => { let saved; try { saved=Object.keys(sessionStorage).filter(key=>key.startsWith('pb:draft:')).map(key=>({key,value:sessionStorage.getItem(key)})); } catch(error) { saved=String(error); } return {href:location.href, origin:location.origin, saved, selected:Array.from(document.querySelectorAll('${pads}'),b=>b.getAttribute('aria-pressed'))}; })()`,
+      ),
+    },
   );
   await call('p02.resume(); p02.advance(1400)');
   check(
@@ -188,6 +196,22 @@ export async function nativeChecks({ evaluate, settle, tap, viewport, screenshot
         `Array.from(document.querySelectorAll('${pads}')).every(b=>!b.disabled && b.getAttribute('aria-pressed')!=='true')`,
       )),
     'Finished-game pending drafts cannot preselect or send in a new match',
+  );
+
+  await call('p02.start("teams"); p02.timer(); p02.hold(true); p02.pause()');
+  await tap(pads, await evaluate('p02.key()'));
+  await call('p02.ack()');
+  const oldInstance = (await info()).phone.phaseAt;
+  await call('p02.rejoinNewQuestion()');
+  current = await info();
+  check(
+    current.phone.phaseAt !== oldInstance &&
+      current.sent.length === 0 &&
+      !current.answers.p1 &&
+      (await evaluate(
+        `Array.from(document.querySelectorAll('${pads}')).every(b=>!b.disabled && b.getAttribute('aria-pressed')!=='true')`,
+      )),
+    'Rejoining a later round-one question without intermediate pushes ignores the old draft',
   );
 
   await call('p02.start("teams", true); p02.timer()');

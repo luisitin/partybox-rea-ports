@@ -23,10 +23,13 @@ passes28assertions/36layouts, including pending-choice pause/refresh recovery;
 the final harness must establish a real local origin and verify bounded tree
 cleanup after intermittent Windows navigation/process-exit failures.
 Compact receipts fix the observed24px maximum phone-only reveal overflow;
-regenerate/capture and verify it. No complete green full suite is claimed yet.
+all92current captures now measure zero overflow/clipping. Draft PR18 is open
+on P01 base. Final capture cleanup/hash, full CI and convergence remain.
 Latest full run:305pass/2fail/1skip. Failures are a60second exhaustive-property
 wall bound (raised to180seconds) and P01's historical media count including the
-new root talk fixture (legacy rendering now filters solo). Rerun both checks.
+new root talk fixture (legacy rendering now filters solo). Native assertions
+retain all2,006traces and pass in6.9seconds;101focused SDK/legacy/CLI/draft
+checks pass. Drafts also include phaseAt to avoid a later-match collision.
 Custom packs compile from validated text to content/custom.json; no runtime
 SDK content-injection API is assumed. Rebuild/restart and select Custom.
 

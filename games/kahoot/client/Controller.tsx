@@ -36,8 +36,8 @@ export function Controller({
   const seat = view.players.find((player) => player.id === view.me.id);
   const stage = phoneOnly || view.stage || spectator;
   const phase = view.phaseId;
-  const slot = useDraft(`answer:${view.mode}:${view.round}:${view.me.id}`);
-  const identity = `${phase}:${view.mode}:${view.round}:${view.me.id}`;
+  const slot = useDraft(`answer:${view.mode}:${view.round}:${view.phaseAt}:${view.me.id}`);
+  const identity = `${phase}:${view.mode}:${view.round}:${view.phaseAt}:${view.me.id}`;
   const recoverable =
     phase === 'question' && !spectator && seat?.status === 'active' && !view.submitted;
   const [local, setLocal] = useState(() => ({

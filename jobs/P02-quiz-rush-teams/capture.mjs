@@ -175,8 +175,11 @@ async function capture() {
       if (result.exceptionDetails) throw new Error(JSON.stringify(result.exceptionDetails));
       metrics.push({ name: frame.name, ...result.result.value });
       const png = resolve(media, `${frame.name}.png`);
-      // All 92 standalone HTML frames are retained; TV and phone-only also get review PNGs.
-      if (frame.surface === 'tv' || frame.surface === 'phone-only') {
+      // All 92 HTML frames are retained; added modes get TV/phone-only review PNGs.
+      if (
+        !frame.name.startsWith('solo-') &&
+        (frame.surface === 'tv' || frame.surface === 'phone-only')
+      ) {
         const shot = await rpc(socket, 'Page.captureScreenshot', {
           format: 'png',
           captureBeyondViewport: false,
@@ -206,7 +209,7 @@ async function capture() {
     }
     socket?.close();
     browserSocket?.close();
-    closeBrowserProfile(profile);
+    await closeBrowserProfile(profile);
     if (processHandle?.pid && processHandle.exitCode === null) {
       if (process.platform === 'win32')
         spawnSync('taskkill.exe', ['/PID', String(processHandle.pid), '/T', '/F'], {
@@ -216,7 +219,7 @@ async function capture() {
         });
       else processHandle.kill('SIGKILL');
     }
-    if (!verifyClosedProfile(profile))
+    if (!(await verifyClosedProfile(profile)))
       throw new Error(`Could not confirm the owned capture browser is closed: ${profile}`);
     // Keep the unique OS profile; no recursive deletion of computed filesystem paths.
     console.log('P02 owned capture browser closed.');
