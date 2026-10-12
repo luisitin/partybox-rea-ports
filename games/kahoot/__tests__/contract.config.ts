@@ -18,7 +18,14 @@ export const contractConfig = {
     const state = base as State;
     const hidden: string[] = [];
     if (state.phase.id === 'question' || state.phase.id === 'talk')
-      hidden.push('correctIndex', 'pickIndex', 'answerDistribution', 'explanation', 'decision');
+      hidden.push(
+        'correctIndex',
+        'pickIndex',
+        'answerDistribution',
+        'explanation',
+        'decision',
+        'correctPercent',
+      );
     if (finalPending(state)) hidden.push('wagerAmount');
     return hidden;
   },
@@ -27,7 +34,14 @@ export const contractConfig = {
     const state = base as State;
     const hidden: string[] = [];
     if (state.phase.id === 'question' || state.phase.id === 'talk')
-      hidden.push('correctIndex', 'pickIndex', 'answerDistribution', 'explanation', 'decision');
+      hidden.push(
+        'correctIndex',
+        'pickIndex',
+        'answerDistribution',
+        'explanation',
+        'decision',
+        'correctPercent',
+      );
     if (finalPending(state)) hidden.push('wagerAmount');
     return hidden;
   },

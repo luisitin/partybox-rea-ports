@@ -105,8 +105,11 @@ describe.each(['teams', 'tv-vote'] as const)('%s discussion and answer screens',
       (team) => team.id === phone(talking, PLAYERS[0]!.id).group?.myTeamId,
     );
     if (!ownTeam) throw new Error('Participants need their team identity during discussion');
-    for (const member of ownTeam.members)
-      expect(privatePhone).toContain(escape(talking.players[member]!.name));
+    expect(privatePhone).toContain(escape(ownTeam.name));
+    for (const member of ownTeam.members) {
+      if (mode === 'teams') expect(privatePhone).toContain(escape(talking.players[member]!.name));
+      else expect(privatePhone).not.toContain(escape(talking.players[member]!.name));
+    }
     const remote = {
       ...talking,
       players: {
@@ -122,10 +125,33 @@ describe.each(['teams', 'tv-vote'] as const)('%s discussion and answer screens',
     ]) {
       expect(html).toContain(escape(q.text));
       for (const choice of q.choices) expect(html).toContain(escape(choice));
+      for (const player of PLAYERS) expect(html).not.toContain(escape(player.name));
       expect(buttons(html)).toHaveLength(0);
       expect(html).not.toMatch(/Look at the TV|Tap your answer|Tap your vote/);
     }
     expect(tvModule.stripHidden).toContain('talk');
+  });
+
+  it('keeps a pause-aware TV countdown left, the real response count right, and four choices below', () => {
+    const talking = timer(start(mode));
+    const discussion = paint(talking, 'tv');
+    expect(discussion).toContain('data-group-question="talk"');
+    expect(discussion).toMatch(/data-position="left"[\s\S]*?role="timer"/);
+    expect(discussion).toMatch(
+      /data-position="right"[\s\S]*?aria-label="0 of 8 (?:answered|voted)"/,
+    );
+    expect(discussion).toContain('data-position="bottom"');
+    expect(discussion).not.toContain('aria-label="Teams and players"');
+    let answering = timer(talking);
+    answering = answer(answering, PLAYERS[0]!.id, 0, 300);
+    const live = paint(answering, 'tv');
+    expect(live).toContain('data-group-question="question"');
+    expect(live).toContain(`aria-label="1 of 8 ${mode === 'tv-vote' ? 'voted' : 'answered'}"`);
+    const paused = vip(answering, 'pause', answering.phase.startedAt + 500);
+    expect(paint(paused, 'tv')).toMatch(
+      /data-paused="true"[^>]*role="timer"[^>]*aria-label="Paused"/,
+    );
+    expect(tv(paused).timerMode).toBe('hidden');
   });
 
   it('retains four shape controls, acknowledges the actual vote, and disables pause and disconnected answers', () => {
@@ -206,7 +232,15 @@ describe('group results preserve honest scoring', () => {
     const html = paint(state, 'phone');
     expect(html).toContain(`+${own.outcome.delta} personal points`);
     expect(html).toContain(`+${team.gained} points`);
-    expect(html).toContain('Team points average every member');
+    expect(html).toContain('Team points average players who stayed or answered');
+    expect(team.correctPercent).toBe(50);
+    expect(html).toMatch(
+      /<meter\b[^>]*min="0"[^>]*max="100"[^>]*value="50"[^>]*aria-label="50% correct"/,
+    );
+    const board = paint(state, 'tv', PLAYERS[0]!.id, tv(state).leaderboardAt! + 1);
+    expect(board).toContain('data-group-scoreboard="vertical"');
+    for (const player of PLAYERS) expect(board).toContain(escape(player.name));
+    expect(board).toContain(escape(team.name));
     const idle = timer(timer(timer(start('tv-vote'))));
     expect(idle.phase.id).toBe('reveal');
     expect(paint(idle, 'tv')).toContain('No room answer — nobody voted');
@@ -236,6 +270,7 @@ describe('team podium only reveals occupied tiers', () => {
     for (const surface of ['tv', 'phone', 'stage'] as const) {
       const html = paint(lastReveal, surface);
       for (const team of roster) expect(html).not.toContain(escape(team.name));
+      expect(html).not.toContain('<meter');
     }
     let beats = 0;
     while (state.phase.id === 'podium' && beats++ < 3) {
@@ -247,6 +282,7 @@ describe('team podium only reveals occupied tiers', () => {
       for (const surface of ['tv', 'phone', 'stage'] as const) {
         const html = paint(state, surface);
         expect(buttons(html)).toHaveLength(0);
+        expect(html).not.toContain('<meter');
         for (const team of roster) {
           if (allowed.has(team.id)) expect(html).toContain(escape(team.name));
           else expect(html).not.toContain(escape(team.name));
@@ -259,6 +295,13 @@ describe('team podium only reveals occupied tiers', () => {
       const html = paint(state, surface);
       for (const team of roster) expect(html).toContain(escape(team.name));
       expect(html).toContain('aria-label="Standings"');
+      if (surface === 'tv') {
+        expect(html).toContain('data-group-scoreboard="vertical"');
+        for (const player of PLAYERS) expect(html).toContain(escape(player.name));
+      } else {
+        expect(html).not.toContain('data-group-scoreboard="vertical"');
+        for (const player of PLAYERS) expect(html).not.toContain(escape(player.name));
+      }
     }
   });
 });

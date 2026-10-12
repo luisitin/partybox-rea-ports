@@ -26,7 +26,7 @@
 .members > span:not(:last-child)::after {
   content: ' · ';
 }
-/* Eight long names must fit beside the question at the unchanged 36 px TV body size.
+/* Eight long names must fit in the intro at the unchanged 36 px TV body size.
    Separate member rows prevent the joining dot from stranding the next name on a new line. */
 :global([data-surface='tv']) .roster li {
   display: grid;
@@ -52,8 +52,135 @@
 :global([data-surface='tv']) .members > span::after {
   content: none;
 }
-.tvTalk {
+.questionStage {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
   gap: var(--pb-space-2);
+  flex: 1;
+  min-height: 0;
+}
+.questionPrompt {
+  margin: 0;
+  text-align: center;
+  font-size: var(--pb-font-h2);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.questionMiddle {
+  display: grid;
+  grid-template-columns: calc(var(--pb-font-display) * 2) minmax(0, 1fr) calc(
+      var(--pb-font-display) * 2
+    );
+  align-items: center;
+  gap: var(--pb-space-4);
+  min-height: 0;
+}
+.countdown,
+.answerCount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-2);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+  text-align: center;
+}
+.countdownCircle {
+  display: grid;
+  place-items: center;
+  width: calc(var(--pb-font-display) * 1.25);
+  height: calc(var(--pb-font-display) * 1.25);
+  border-radius: 50%;
+  background: var(--pb-accent-2-fill);
+  color: var(--pb-on-accent-2-fill);
+  font-size: calc(var(--pb-font-display) * 0.75);
+  font-weight: 1000;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.countdownCircle[data-paused] {
+  background: var(--pb-surface-2);
+  color: var(--pb-text-muted);
+}
+.answerCount > b {
+  font-size: calc(var(--pb-font-display) * 0.75);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.questionInstruction {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+  text-align: center;
+  text-wrap: balance;
+}
+.questionAnswers li {
+  min-height: calc(var(--pb-space-8) * 1.5);
+}
+.questionAnswers svg {
+  width: var(--pb-font-h2);
+  height: var(--pb-font-h2);
+}
+.questionFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--pb-space-4);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+  color: var(--pb-text-muted);
+}
+.groupBoard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--pb-space-2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+.groupBoard li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--pb-space-3);
+  padding: var(--pb-space-2) var(--pb-space-3);
+  background: var(--pb-surface);
+  border-radius: var(--pb-radius);
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.groupBoard li:first-child {
+  border-left: var(--pb-space-1) solid var(--pb-accent-2);
+}
+.boardRank {
+  color: var(--pb-accent-2);
+}
+.boardIdentity,
+.boardScore {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-1);
+  min-width: 0;
+}
+.boardMembers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--pb-space-2);
+}
+.boardMembers > span {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.boardMembers > span:not(:last-child)::after {
+  content: ' ·';
+}
+.boardScore {
+  align-items: end;
+  font-variant-numeric: tabular-nums;
+}
+.boardScore > span {
+  color: var(--pb-accent-3);
 }
 .identity,
 .rule {
@@ -95,7 +222,6 @@
   width: var(--pb-font-body);
   height: var(--pb-font-body);
 }
-.receipt,
 .verdict {
   display: flex;
   flex-direction: column;
@@ -111,18 +237,94 @@
   margin: 0;
 }
 .verdict h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-2);
   font-size: var(--pb-font-h2);
+}
+.outcomeMark {
+  display: grid;
+  place-items: center;
+  width: var(--pb-space-6);
+  height: var(--pb-space-6);
+  border-radius: 50%;
+  background: var(--pb-danger);
+  color: var(--pb-on-accent);
+  flex: none;
+}
+.outcomeMark[data-correct] {
+  background: var(--pb-accent-3);
+  color: var(--pb-on-accent-2-fill);
+}
+.receipt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--pb-space-2);
+  width: 100%;
+  padding: var(--pb-space-3);
+  background: var(--pb-surface);
+  border-radius: var(--pb-radius);
+  text-align: left;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
 }
 .receipt b {
   color: var(--pb-accent-2);
 }
+.accuracy {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-1);
+  grid-column: 1;
+  font-size: var(--pb-font-caption);
+}
+.accuracy meter {
+  flex: 1;
+  min-width: var(--pb-space-5);
+  height: var(--pb-space-3);
+  appearance: none;
+  background: var(--pb-surface-2);
+  border-radius: var(--pb-radius);
+}
+.accuracy meter::-webkit-meter-bar {
+  background: var(--pb-surface-2);
+  border: 0;
+  border-radius: var(--pb-radius);
+}
+.accuracy meter::-webkit-meter-optimum-value {
+  background: var(--pb-accent-3);
+}
+.accuracy meter::-moz-meter-bar {
+  background: var(--pb-accent-3);
+}
+.gained {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  padding: var(--pb-space-2);
+  border-radius: calc(var(--pb-radius) / 2);
+  background: var(--pb-surface-2);
+  font-size: var(--pb-font-h1);
+  text-align: center;
+  white-space: nowrap;
+}
+.receiptTotal {
+  grid-column: 2;
+  text-align: center;
+  font-size: var(--pb-font-caption);
+}
+.receiptRule {
+  grid-column: 1 / -1;
+  font-size: var(--pb-font-caption);
+}
+.verdict[data-stage] .receipt {
+  padding: var(--pb-space-2);
+  gap: var(--pb-space-1);
+}
 .phone .roster li {
   padding: var(--pb-space-2);
 }
-.phone .roster span,
-.receipt > p:last-child {
+.phone .roster span {
   font-size: var(--pb-font-caption);
-}
-:global([data-surface='tv']) .receipt > p:last-child {
-  font-size: var(--pb-font-body);
 }

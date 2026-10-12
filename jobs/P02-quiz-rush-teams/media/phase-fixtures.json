@@ -190,7 +190,7 @@
     "phase": {
       "id": "talk",
       "startedAt": 2000000022296,
-      "deadline": 2000000061043
+      "deadline": 2000000039830
     },
     "rng": {
       "seed": 42,
@@ -377,7 +377,7 @@
     "phase": {
       "id": "talk",
       "startedAt": 2000000022296,
-      "deadline": 2000000061043
+      "deadline": 2000000039830
     },
     "rng": {
       "seed": 42,
@@ -563,8 +563,8 @@
   "group-teams-question": {
     "phase": {
       "id": "question",
-      "startedAt": 2000000061043,
-      "deadline": 2000000091132
+      "startedAt": 2000000039830,
+      "deadline": 2000000069919
     },
     "rng": {
       "seed": 42,
@@ -747,14 +747,14 @@
     "teamGains": {},
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000091132,
-    "questionReadableUntil": 2000000091132
+    "answerClosesAt": 2000000069919,
+    "questionReadableUntil": 2000000069919
   },
   "group-teams-reveal": {
     "phase": {
       "id": "reveal",
-      "startedAt": 2000000091132,
-      "deadline": 2000000159534
+      "startedAt": 2000000069919,
+      "deadline": 2000000127931
     },
     "rng": {
       "seed": 42,
@@ -863,19 +863,19 @@
         "elapsedMs": 900
       },
       "seat-8": {
-        "index": 1,
+        "index": 2,
         "elapsedMs": 1000
       }
     },
     "scores": {
-      "seat-1": 989,
+      "seat-1": 498,
       "seat-2": 990,
       "seat-3": 991,
       "seat-4": 991,
       "seat-5": 987,
       "seat-6": 990,
       "seat-7": 987,
-      "seat-8": 989
+      "seat-8": 498
     },
     "streaks": {
       "seat-1": 1,
@@ -885,7 +885,7 @@
       "seat-5": 1,
       "seat-6": 1,
       "seat-7": 1,
-      "seat-8": 1
+      "seat-8": 0
     },
     "wagers": {},
     "lastDelta": {
@@ -896,7 +896,7 @@
       "seat-5": 988,
       "seat-6": 987,
       "seat-7": 985,
-      "seat-8": 983
+      "seat-8": 0
     },
     "stats": {
       "seat-1": {
@@ -942,9 +942,9 @@
         "wagerWon": 0
       },
       "seat-8": {
-        "correct": 1,
-        "correctMs": 1000,
-        "bestStreak": 1,
+        "correct": 0,
+        "correctMs": 0,
+        "bestStreak": 0,
         "wagerWon": 0
       }
     },
@@ -971,27 +971,45 @@
       }
     ],
     "teamScores": {
-      "team-1": 989,
+      "team-1": 498,
       "team-2": 991,
       "team-3": 990,
       "team-4": 987
     },
     "teamGains": {
-      "team-1": 989,
+      "team-1": 498,
       "team-2": 991,
       "team-3": 990,
       "team-4": 987
     },
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000091132,
-    "questionReadableUntil": 2000000091132
+    "answerClosesAt": 2000000069919,
+    "questionReadableUntil": 2000000069919,
+    "teamAccuracy": {
+      "team-1": {
+        "correct": 1,
+        "total": 2
+      },
+      "team-2": {
+        "correct": 2,
+        "total": 2
+      },
+      "team-3": {
+        "correct": 2,
+        "total": 2
+      },
+      "team-4": {
+        "correct": 2,
+        "total": 2
+      }
+    }
   },
   "group-teams-standings": {
     "phase": {
       "id": "reveal",
-      "startedAt": 2000000091132,
-      "deadline": 2000000159534
+      "startedAt": 2000000069919,
+      "deadline": 2000000127931
     },
     "rng": {
       "seed": 42,
@@ -1100,19 +1118,19 @@
         "elapsedMs": 900
       },
       "seat-8": {
-        "index": 1,
+        "index": 2,
         "elapsedMs": 1000
       }
     },
     "scores": {
-      "seat-1": 989,
+      "seat-1": 498,
       "seat-2": 990,
       "seat-3": 991,
       "seat-4": 991,
       "seat-5": 987,
       "seat-6": 990,
       "seat-7": 987,
-      "seat-8": 989
+      "seat-8": 498
     },
     "streaks": {
       "seat-1": 1,
@@ -1122,7 +1140,7 @@
       "seat-5": 1,
       "seat-6": 1,
       "seat-7": 1,
-      "seat-8": 1
+      "seat-8": 0
     },
     "wagers": {},
     "lastDelta": {
@@ -1133,7 +1151,7 @@
       "seat-5": 988,
       "seat-6": 987,
       "seat-7": 985,
-      "seat-8": 983
+      "seat-8": 0
     },
     "stats": {
       "seat-1": {
@@ -1179,9 +1197,9 @@
         "wagerWon": 0
       },
       "seat-8": {
-        "correct": 1,
-        "correctMs": 1000,
-        "bestStreak": 1,
+        "correct": 0,
+        "correctMs": 0,
+        "bestStreak": 0,
         "wagerWon": 0
       }
     },
@@ -1208,26 +1226,44 @@
       }
     ],
     "teamScores": {
-      "team-1": 989,
+      "team-1": 498,
       "team-2": 991,
       "team-3": 990,
       "team-4": 987
     },
     "teamGains": {
-      "team-1": 989,
+      "team-1": 498,
       "team-2": 991,
       "team-3": 990,
       "team-4": 987
     },
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000091132,
-    "questionReadableUntil": 2000000091132
+    "answerClosesAt": 2000000069919,
+    "questionReadableUntil": 2000000069919,
+    "teamAccuracy": {
+      "team-1": {
+        "correct": 1,
+        "total": 2
+      },
+      "team-2": {
+        "correct": 2,
+        "total": 2
+      },
+      "team-3": {
+        "correct": 2,
+        "total": 2
+      },
+      "team-4": {
+        "correct": 2,
+        "total": 2
+      }
+    }
   },
   "group-teams-done": {
     "phase": {
       "id": "done",
-      "startedAt": 2000000755677,
+      "startedAt": 2000000609787,
       "deadline": null
     },
     "rng": {
@@ -1342,14 +1378,14 @@
       }
     },
     "scores": {
-      "seat-1": 5846,
+      "seat-1": 5205,
       "seat-2": 2080,
       "seat-3": 3274,
       "seat-4": 3274,
       "seat-5": 987,
       "seat-6": 2080,
       "seat-7": 987,
-      "seat-8": 5846
+      "seat-8": 5205
     },
     "streaks": {
       "seat-1": 5,
@@ -1359,7 +1395,7 @@
       "seat-5": 0,
       "seat-6": 0,
       "seat-7": 0,
-      "seat-8": 5
+      "seat-8": 4
     },
     "wagers": {},
     "lastDelta": {
@@ -1416,9 +1452,9 @@
         "wagerWon": 0
       },
       "seat-8": {
-        "correct": 5,
-        "correctMs": 5000,
-        "bestStreak": 5,
+        "correct": 4,
+        "correctMs": 4000,
+        "bestStreak": 4,
         "wagerWon": 0
       }
     },
@@ -1445,7 +1481,7 @@
       }
     ],
     "teamScores": {
-      "team-1": 5846,
+      "team-1": 5205,
       "team-2": 3274,
       "team-3": 2080,
       "team-4": 987
@@ -1458,15 +1494,33 @@
     },
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000655236,
-    "questionReadableUntil": 2000000655236,
+    "answerClosesAt": 2000000507614,
+    "questionReadableUntil": 2000000507614,
+    "teamAccuracy": {
+      "team-1": {
+        "correct": 2,
+        "total": 2
+      },
+      "team-2": {
+        "correct": 0,
+        "total": 2
+      },
+      "team-3": {
+        "correct": 0,
+        "total": 2
+      },
+      "team-4": {
+        "correct": 0,
+        "total": 2
+      }
+    },
     "podiumRank": 1
   },
   "group-teams-podium-3": {
     "phase": {
       "id": "podium",
-      "startedAt": 2000000686190,
-      "deadline": 2000000707188
+      "startedAt": 2000000540300,
+      "deadline": 2000000561298
     },
     "rng": {
       "seed": 42,
@@ -1580,14 +1634,14 @@
       }
     },
     "scores": {
-      "seat-1": 5846,
+      "seat-1": 5205,
       "seat-2": 2080,
       "seat-3": 3274,
       "seat-4": 3274,
       "seat-5": 987,
       "seat-6": 2080,
       "seat-7": 987,
-      "seat-8": 5846
+      "seat-8": 5205
     },
     "streaks": {
       "seat-1": 5,
@@ -1597,7 +1651,7 @@
       "seat-5": 0,
       "seat-6": 0,
       "seat-7": 0,
-      "seat-8": 5
+      "seat-8": 4
     },
     "wagers": {},
     "lastDelta": {
@@ -1654,9 +1708,9 @@
         "wagerWon": 0
       },
       "seat-8": {
-        "correct": 5,
-        "correctMs": 5000,
-        "bestStreak": 5,
+        "correct": 4,
+        "correctMs": 4000,
+        "bestStreak": 4,
         "wagerWon": 0
       }
     },
@@ -1683,7 +1737,7 @@
       }
     ],
     "teamScores": {
-      "team-1": 5846,
+      "team-1": 5205,
       "team-2": 3274,
       "team-3": 2080,
       "team-4": 987
@@ -1696,15 +1750,33 @@
     },
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000655236,
-    "questionReadableUntil": 2000000655236,
+    "answerClosesAt": 2000000507614,
+    "questionReadableUntil": 2000000507614,
+    "teamAccuracy": {
+      "team-1": {
+        "correct": 2,
+        "total": 2
+      },
+      "team-2": {
+        "correct": 0,
+        "total": 2
+      },
+      "team-3": {
+        "correct": 0,
+        "total": 2
+      },
+      "team-4": {
+        "correct": 0,
+        "total": 2
+      }
+    },
     "podiumRank": 3
   },
   "group-teams-podium-2": {
     "phase": {
       "id": "podium",
-      "startedAt": 2000000707188,
-      "deadline": 2000000730350
+      "startedAt": 2000000561298,
+      "deadline": 2000000584460
     },
     "rng": {
       "seed": 42,
@@ -1818,14 +1890,14 @@
       }
     },
     "scores": {
-      "seat-1": 5846,
+      "seat-1": 5205,
       "seat-2": 2080,
       "seat-3": 3274,
       "seat-4": 3274,
       "seat-5": 987,
       "seat-6": 2080,
       "seat-7": 987,
-      "seat-8": 5846
+      "seat-8": 5205
     },
     "streaks": {
       "seat-1": 5,
@@ -1835,7 +1907,7 @@
       "seat-5": 0,
       "seat-6": 0,
       "seat-7": 0,
-      "seat-8": 5
+      "seat-8": 4
     },
     "wagers": {},
     "lastDelta": {
@@ -1892,9 +1964,9 @@
         "wagerWon": 0
       },
       "seat-8": {
-        "correct": 5,
-        "correctMs": 5000,
-        "bestStreak": 5,
+        "correct": 4,
+        "correctMs": 4000,
+        "bestStreak": 4,
         "wagerWon": 0
       }
     },
@@ -1921,7 +1993,7 @@
       }
     ],
     "teamScores": {
-      "team-1": 5846,
+      "team-1": 5205,
       "team-2": 3274,
       "team-3": 2080,
       "team-4": 987
@@ -1934,15 +2006,33 @@
     },
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000655236,
-    "questionReadableUntil": 2000000655236,
+    "answerClosesAt": 2000000507614,
+    "questionReadableUntil": 2000000507614,
+    "teamAccuracy": {
+      "team-1": {
+        "correct": 2,
+        "total": 2
+      },
+      "team-2": {
+        "correct": 0,
+        "total": 2
+      },
+      "team-3": {
+        "correct": 0,
+        "total": 2
+      },
+      "team-4": {
+        "correct": 0,
+        "total": 2
+      }
+    },
     "podiumRank": 2
   },
   "group-teams-podium-1": {
     "phase": {
       "id": "podium",
-      "startedAt": 2000000730350,
-      "deadline": 2000000755677
+      "startedAt": 2000000584460,
+      "deadline": 2000000609787
     },
     "rng": {
       "seed": 42,
@@ -2056,14 +2146,14 @@
       }
     },
     "scores": {
-      "seat-1": 5846,
+      "seat-1": 5205,
       "seat-2": 2080,
       "seat-3": 3274,
       "seat-4": 3274,
       "seat-5": 987,
       "seat-6": 2080,
       "seat-7": 987,
-      "seat-8": 5846
+      "seat-8": 5205
     },
     "streaks": {
       "seat-1": 5,
@@ -2073,7 +2163,7 @@
       "seat-5": 0,
       "seat-6": 0,
       "seat-7": 0,
-      "seat-8": 5
+      "seat-8": 4
     },
     "wagers": {},
     "lastDelta": {
@@ -2130,9 +2220,9 @@
         "wagerWon": 0
       },
       "seat-8": {
-        "correct": 5,
-        "correctMs": 5000,
-        "bestStreak": 5,
+        "correct": 4,
+        "correctMs": 4000,
+        "bestStreak": 4,
         "wagerWon": 0
       }
     },
@@ -2159,7 +2249,7 @@
       }
     ],
     "teamScores": {
-      "team-1": 5846,
+      "team-1": 5205,
       "team-2": 3274,
       "team-3": 2080,
       "team-4": 987
@@ -2172,15 +2262,33 @@
     },
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000655236,
-    "questionReadableUntil": 2000000655236,
+    "answerClosesAt": 2000000507614,
+    "questionReadableUntil": 2000000507614,
+    "teamAccuracy": {
+      "team-1": {
+        "correct": 2,
+        "total": 2
+      },
+      "team-2": {
+        "correct": 0,
+        "total": 2
+      },
+      "team-3": {
+        "correct": 0,
+        "total": 2
+      },
+      "team-4": {
+        "correct": 0,
+        "total": 2
+      }
+    },
     "podiumRank": 1
   },
   "group-teams-locked": {
     "phase": {
       "id": "question",
-      "startedAt": 2000000061043,
-      "deadline": 2000000091132
+      "startedAt": 2000000039830,
+      "deadline": 2000000069919
     },
     "rng": {
       "seed": 42,
@@ -2368,16 +2476,16 @@
     "teamGains": {},
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000091132,
-    "questionReadableUntil": 2000000091132
+    "answerClosesAt": 2000000069919,
+    "questionReadableUntil": 2000000069919
   },
   "group-teams-paused": {
     "phase": {
       "id": "question",
-      "startedAt": 2000000061043,
-      "deadline": 2000000091132,
+      "startedAt": 2000000039830,
+      "deadline": 2000000069919,
       "paused": {
-        "at": 2000000061543
+        "at": 2000000040330
       }
     },
     "rng": {
@@ -2566,14 +2674,14 @@
     "teamGains": {},
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000091132,
-    "questionReadableUntil": 2000000091132
+    "answerClosesAt": 2000000069919,
+    "questionReadableUntil": 2000000069919
   },
   "group-teams-last-reveal": {
     "phase": {
       "id": "reveal",
-      "startedAt": 2000000655236,
-      "deadline": 2000000686190
+      "startedAt": 2000000507614,
+      "deadline": 2000000540300
     },
     "rng": {
       "seed": 42,
@@ -2687,14 +2795,14 @@
       }
     },
     "scores": {
-      "seat-1": 5846,
+      "seat-1": 5205,
       "seat-2": 2080,
       "seat-3": 3274,
       "seat-4": 3274,
       "seat-5": 987,
       "seat-6": 2080,
       "seat-7": 987,
-      "seat-8": 5846
+      "seat-8": 5205
     },
     "streaks": {
       "seat-1": 5,
@@ -2704,7 +2812,7 @@
       "seat-5": 0,
       "seat-6": 0,
       "seat-7": 0,
-      "seat-8": 5
+      "seat-8": 4
     },
     "wagers": {},
     "lastDelta": {
@@ -2761,9 +2869,9 @@
         "wagerWon": 0
       },
       "seat-8": {
-        "correct": 5,
-        "correctMs": 5000,
-        "bestStreak": 5,
+        "correct": 4,
+        "correctMs": 4000,
+        "bestStreak": 4,
         "wagerWon": 0
       }
     },
@@ -2790,7 +2898,7 @@
       }
     ],
     "teamScores": {
-      "team-1": 5846,
+      "team-1": 5205,
       "team-2": 3274,
       "team-3": 2080,
       "team-4": 987
@@ -2803,8 +2911,26 @@
     },
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000655236,
-    "questionReadableUntil": 2000000655236
+    "answerClosesAt": 2000000507614,
+    "questionReadableUntil": 2000000507614,
+    "teamAccuracy": {
+      "team-1": {
+        "correct": 2,
+        "total": 2
+      },
+      "team-2": {
+        "correct": 0,
+        "total": 2
+      },
+      "team-3": {
+        "correct": 0,
+        "total": 2
+      },
+      "team-4": {
+        "correct": 0,
+        "total": 2
+      }
+    }
   },
   "group-tv-vote-intro": {
     "phase": {
@@ -2979,7 +3105,7 @@
     "phase": {
       "id": "talk",
       "startedAt": 2000000020132,
-      "deadline": 2000000054117
+      "deadline": 2000000038099
     },
     "rng": {
       "seed": 42,
@@ -3147,8 +3273,8 @@
   "group-tv-vote-question": {
     "phase": {
       "id": "question",
-      "startedAt": 2000000054117,
-      "deadline": 2000000084206
+      "startedAt": 2000000038099,
+      "deadline": 2000000068188
     },
     "rng": {
       "seed": 42,
@@ -3313,14 +3439,14 @@
     "teamGains": {},
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000084206,
-    "questionReadableUntil": 2000000084206
+    "answerClosesAt": 2000000068188,
+    "questionReadableUntil": 2000000068188
   },
   "group-tv-vote-reveal": {
     "phase": {
       "id": "reveal",
-      "startedAt": 2000000084206,
-      "deadline": 2000000148712
+      "startedAt": 2000000068188,
+      "deadline": 2000000120573
     },
     "rng": {
       "seed": 42,
@@ -3529,16 +3655,16 @@
     },
     "roomStreak": 1,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000084206,
-    "questionReadableUntil": 2000000084206,
+    "answerClosesAt": 2000000068188,
+    "questionReadableUntil": 2000000068188,
     "roomElapsedMs": 650,
     "roomDecision": 1
   },
   "group-tv-vote-standings": {
     "phase": {
       "id": "reveal",
-      "startedAt": 2000000084206,
-      "deadline": 2000000148712
+      "startedAt": 2000000068188,
+      "deadline": 2000000120573
     },
     "rng": {
       "seed": 42,
@@ -3747,15 +3873,15 @@
     },
     "roomStreak": 1,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000084206,
-    "questionReadableUntil": 2000000084206,
+    "answerClosesAt": 2000000068188,
+    "questionReadableUntil": 2000000068188,
     "roomElapsedMs": 650,
     "roomDecision": 1
   },
   "group-tv-vote-done": {
     "phase": {
       "id": "done",
-      "startedAt": 2000000666926,
+      "startedAt": 2000000539220,
       "deadline": null
     },
     "rng": {
@@ -3965,8 +4091,8 @@
     },
     "roomStreak": 5,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000613675,
-    "questionReadableUntil": 2000000613675,
+    "answerClosesAt": 2000000485103,
+    "questionReadableUntil": 2000000485103,
     "roomElapsedMs": 650,
     "roomDecision": 3,
     "podiumRank": 1
@@ -3974,8 +4100,8 @@
   "group-tv-vote-podium-1": {
     "phase": {
       "id": "podium",
-      "startedAt": 2000000645928,
-      "deadline": 2000000666926
+      "startedAt": 2000000518222,
+      "deadline": 2000000539220
     },
     "rng": {
       "seed": 42,
@@ -4184,8 +4310,8 @@
     },
     "roomStreak": 5,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000613675,
-    "questionReadableUntil": 2000000613675,
+    "answerClosesAt": 2000000485103,
+    "questionReadableUntil": 2000000485103,
     "roomElapsedMs": 650,
     "roomDecision": 3,
     "podiumRank": 1
@@ -4193,8 +4319,8 @@
   "group-tv-vote-locked": {
     "phase": {
       "id": "question",
-      "startedAt": 2000000054117,
-      "deadline": 2000000084206
+      "startedAt": 2000000038099,
+      "deadline": 2000000068188
     },
     "rng": {
       "seed": 42,
@@ -4364,16 +4490,16 @@
     "teamGains": {},
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000084206,
-    "questionReadableUntil": 2000000084206
+    "answerClosesAt": 2000000068188,
+    "questionReadableUntil": 2000000068188
   },
   "group-tv-vote-paused": {
     "phase": {
       "id": "question",
-      "startedAt": 2000000054117,
-      "deadline": 2000000084206,
+      "startedAt": 2000000038099,
+      "deadline": 2000000068188,
       "paused": {
-        "at": 2000000054617
+        "at": 2000000038599
       }
     },
     "rng": {
@@ -4544,14 +4670,14 @@
     "teamGains": {},
     "roomStreak": 0,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000084206,
-    "questionReadableUntil": 2000000084206
+    "answerClosesAt": 2000000068188,
+    "questionReadableUntil": 2000000068188
   },
   "group-tv-vote-last-reveal": {
     "phase": {
       "id": "reveal",
-      "startedAt": 2000000613675,
-      "deadline": 2000000645928
+      "startedAt": 2000000485103,
+      "deadline": 2000000518222
     },
     "rng": {
       "seed": 42,
@@ -4760,8 +4886,8 @@
     },
     "roomStreak": 5,
     "answerWindowMs": 30089,
-    "answerClosesAt": 2000000613675,
-    "questionReadableUntil": 2000000613675,
+    "answerClosesAt": 2000000485103,
+    "questionReadableUntil": 2000000485103,
     "roomElapsedMs": 650,
     "roomDecision": 3
   },
@@ -4769,7 +4895,7 @@
     "phase": {
       "id": "talk",
       "startedAt": 2000000020565,
-      "deadline": 2000000055848
+      "deadline": 2000000038099
     },
     "rng": {
       "seed": 42,

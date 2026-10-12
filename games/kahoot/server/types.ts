@@ -115,6 +115,8 @@ export interface State extends GameStateBase {
   teams?: QuizTeam[];
   teamScores?: Record<string, number>;
   teamGains?: Record<string, number>;
+  /** Frozen at scoring; later presence updates cannot rewrite the result gauge. */
+  teamAccuracy?: Record<string, { correct: number; total: number }>;
   /** Chosen plurality answer; absent when no vote was cast. */
   roomDecision?: number;
   roomStreak?: number;

@@ -52,6 +52,42 @@ export function GroupIdentity({ group }: { group: Group }): JSX.Element {
   return <p className={styles.identity}>{team?.name ?? L(groupTitle(group))}</p>;
 }
 
+export function GroupStandings({
+  view,
+  gains = false,
+}: {
+  view: LightningTvView;
+  gains?: boolean;
+}): JSX.Element {
+  const L = useT(STRINGS);
+  return (
+    <ol className={styles.groupBoard} data-group-scoreboard="vertical" aria-label={L('Standings')}>
+      {(view.standings ?? []).map((row) => {
+        const team = view.group?.teams.find((candidate) => candidate.id === row.playerId);
+        return (
+          <li key={row.playerId}>
+            <b className={styles.boardRank}>#{row.rank}</b>
+            <div className={styles.boardIdentity}>
+              <b>{row.name}</b>
+              <span className={styles.boardMembers}>
+                {team?.members.map((id) => (
+                  <span key={id}>
+                    {view.players.find((player) => player.id === id)?.name ?? id}
+                  </span>
+                ))}
+              </span>
+            </div>
+            <div className={styles.boardScore}>
+              <b>{row.score}</b>
+              {gains && row.delta !== undefined && row.delta > 0 ? <span>+{row.delta}</span> : null}
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
 export function GroupDecision({ view }: { view: LightningTvView }): JSX.Element | null {
   const L = useT(STRINGS);
   const group = view.group;
@@ -84,11 +120,24 @@ export function GroupReceipt({ view }: { view: LightningControllerView }): JSX.E
   return (
     <div className={styles.receipt} role="status">
       <b>{team.name}</b>
-      <p>
-        {L('+{n} points', { n: team.gained })} · {L('{n} total', { n: team.score })}
-      </p>
+      {team.correctPercent !== undefined ? (
+        <div className={styles.accuracy}>
+          <span>{L('Correct')}</span>
+          <meter
+            min={0}
+            max={100}
+            value={team.correctPercent}
+            aria-label={L('{n}% correct', { n: team.correctPercent })}
+          />
+          <b>{team.correctPercent}%</b>
+        </div>
+      ) : null}
+      <strong className={styles.gained}>{L('+{n} points', { n: team.gained })}</strong>
+      <p className={styles.receiptTotal}>{L('{n} total', { n: team.score })}</p>
       {group.mode === 'teams' ? (
-        <p>{L('Team points average every member’s contribution')}</p>
+        <p className={styles.receiptRule}>
+          {L('Team points average players who stayed or answered')}
+        </p>
       ) : null}
     </div>
   );
@@ -110,8 +159,21 @@ export function GroupVerdict({ view }: { view: LightningControllerView }): JSX.E
         ? 'Wrong'
         : 'Too slow';
   return (
-    <div className={styles.verdict} role="status">
-      <h3>{L(verdict)}</h3>
+    <div
+      className={styles.verdict}
+      data-stage={view.showStage || view.phoneOnly || undefined}
+      role="status"
+    >
+      <h3>
+        <span
+          className={styles.outcomeMark}
+          data-correct={outcome?.correct || undefined}
+          aria-hidden="true"
+        >
+          {outcome?.correct ? '✓' : '✕'}
+        </span>
+        {L(verdict)}
+      </h3>
       {vote ? (
         <p>
           {view.myPickIndex === null

@@ -39,13 +39,25 @@ it does not claim native import-format compatibility.
 
 Resume rechecked the current official team guide and a firsthand teacher account before rebuilding against the published canonical P01 engine. The official guide confirms personal-device averaging and five-to-twenty-second discussion. Current core inspection found T-1146 now ships wager teams, mean scoring and a team podium, while explicitly excluding discussion, room vote and donor packs. Preserve that newer core behavior during future adaptation; the public frozen baseline predates it.
 
-Historical read-only monorepo comparison verified Lightning Round already received
-P01's chart/tally/verdict cues in T-1117. It retains1–16players, EN/ES, a
-300-point streak cap and wager finale. Its current inputs are individual
-picks/wagers at that inspection; the newer T-1146 team addition is described above. P02 is an opt-in upgrade
-under that card, with exact injected classic defaults and separate metadata.
+Current P02 implements Teams and Room vote inside the canonical public P01
+engine. Wager retains its 1–16-player roster, English/Spanish library,
+300-point streak cap and final wager. Classic remains an individual
+authored-pack flow. New groups use the same stamped answer packet, shared
+view contract and staged podium; their discussion and collective scoring are
+additive paths within the existing module.
 
 No original team match was played: no live room PIN/captain account was
 provided. Published official screenshots, the firsthand teacher report and
 empirical work reconstruct the flow. No original source, questions or assets
 are copied; new artwork remains existing original SVG/CSS marks.
+
+## Historical standalone implementation
+
+An earlier read-only monorepo comparison found P01 chart/tally/verdict cues
+already shipped in T-1117. At that inspection Lightning Round exposed
+individual picks and wagers; T-1146 subsequently added wager teams, described
+above. The original P02 branch proposed an injected classic adapter and
+separate metadata. That adapter belonged to the retired standalone engine;
+current P02 integrates directly with the canonical public P01 implementation.
+Historical source and verification remain in git b254dd4 and
+HISTORICAL_VERIFY.md.

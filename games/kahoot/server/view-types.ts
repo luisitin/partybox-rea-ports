@@ -67,6 +67,8 @@ export interface GroupView {
     score: number;
     gained: number;
     rank: number;
+    /** Present only after the current team answers are publicly revealed. */
+    correctPercent?: number;
   }[];
   myTeamId?: string;
   /** Only present after reveal and when at least one room vote was cast. */

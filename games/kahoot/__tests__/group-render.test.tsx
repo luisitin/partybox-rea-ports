@@ -56,7 +56,11 @@ function played(initial: State): State[] {
         const team =
           state.teams?.findIndex((candidate) => candidate.members.includes(player.id)) ?? 0;
         const correct =
-          state.settings.quizMode === 'tv-vote' ? index < 5 : team === 0 || state.index < 4 - team;
+          state.settings.quizMode === 'tv-vote'
+            ? index < 5
+            : team === 0
+              ? state.index > 0 || index === 0
+              : state.index < 4 - team;
         const stamp = phone(state, player.id).answerStamp;
         if (!stamp) throw new Error('Group answer has no canonical stamp');
         state = input(

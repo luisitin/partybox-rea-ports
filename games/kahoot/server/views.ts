@@ -61,6 +61,17 @@ function groupOf(state: State, playerId?: string): GroupView | undefined {
   const mode = groupModeOf(state);
   if (!mode) return undefined;
   let teams = groupStandings(state);
+  if (mode === 'teams' && state.phase.id === 'reveal')
+    teams = teams.map((team) => {
+      const accuracy = state.teamAccuracy?.[team.id];
+      return {
+        ...team,
+        correctPercent:
+          accuracy && accuracy.total > 0
+            ? Math.round((100 * accuracy.correct) / accuracy.total)
+            : 0,
+      };
+    });
   if (state.phase.id === 'reveal' && isLastIndex(state, state.index)) teams = [];
   if (state.phase.id === 'podium')
     teams = teams.filter((team) => team.rank >= (state.podiumRank ?? 1) && team.rank <= 3);
@@ -206,7 +217,14 @@ export function tvView(state: State, gameId: string): LightningTvView {
           ? connectedParticipants(state).filter((id) => Object.hasOwn(state.wagers, id)).length
           : 0,
     totalCount: connectedParticipants(state).length,
-    timerMode: ['intro', 'reveal', 'podium'].includes(phase) ? 'quiet' : 'normal',
+    // Group stages place the original-style circular clock beside the question.
+    // Phones retain their normal envelope and their own local countdown.
+    timerMode:
+      group && (phase === 'talk' || phase === 'question')
+        ? 'hidden'
+        : ['intro', 'reveal', 'podium'].includes(phase)
+          ? 'quiet'
+          : 'normal',
     ...nextOf(state),
     ...(group ? { group } : {}),
   };

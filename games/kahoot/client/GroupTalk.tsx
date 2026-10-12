@@ -3,7 +3,7 @@ import type { JSX } from 'react';
 import { Screen, useT } from '@partybox/game-sdk/ui';
 import type { LightningControllerView } from '../server/views';
 import { QuestionOptions } from './ClassicParts';
-import { GroupRoster, groupTitle } from './GroupParts';
+import { GroupIdentity, GroupRoster, groupTitle } from './GroupParts';
 import { STRINGS } from './strings';
 import classic from './Classic.module.css';
 import styles from './Group.module.css';
@@ -35,8 +35,10 @@ export function GroupTalk({
             </span>
           ) : null}
         </header>
-        {group ? (
+        {group && !showStage && group.mode === 'teams' ? (
           <GroupRoster group={group} players={view.players} mine={view.participating} />
+        ) : group ? (
+          <GroupIdentity group={group} />
         ) : null}
         {question ? (
           <>

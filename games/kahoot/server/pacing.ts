@@ -28,23 +28,52 @@ function groupRosterWords(state: State, numbers: number): number {
   );
 }
 
-/** The discussion stage carries the prompt/options, team membership and its explicit lock cue. */
+/** Budget the largest actual discussion screen, never an invisible whole-room roster. */
 export function groupTalkMs(state: State): number {
-  const instruction =
-    groupModeOf(state) === 'tv-vote'
-      ? 'Discuss the room answer Discuss now. Each vote helps choose one room answer.'
-      : 'Talk with your team Discuss now. Everyone answers when the clock ends.';
-  return Math.max(
-    questionReadingMs(state),
-    readMs(
-      questionWords(state) +
-        groupRosterWords(state, 2) +
-        wordCount(instruction) +
-        wordCount('Question 1 of 20 Answers open after discussion') +
-        4 +
-        1,
-    ),
+  const vote = groupModeOf(state) === 'tv-vote';
+  const title = vote ? 'Room vote' : 'Teams';
+  const identity = Math.max(
+    wordCount(title),
+    ...(state.teams ?? []).map((team) => wordCount(team.name)),
   );
+  const ownRoster = vote
+    ? identity
+    : Math.max(
+        identity,
+        ...(state.teams ?? []).map(
+          (team) =>
+            wordCount(team.name) +
+            team.members.reduce((n, id) => n + wordCount(state.players[id]?.name ?? ''), 0),
+        ),
+      );
+  // The TV shows the prompt/options, four marks, a circular clock/label, answer count,
+  // discussion cue and ordinal/mode footer. It no longer shows any player names.
+  const tv =
+    questionWords(state) +
+    4 +
+    1 +
+    wordCount(vote ? 'Room talk' : 'Team talk') +
+    wordCount(vote ? '0 of 8 votes' : '0 of 8 answers') +
+    wordCount(
+      vote
+        ? 'Discuss the room answer · then everyone votes'
+        : 'Talk with your team · then everyone answers',
+    ) +
+    wordCount(`Question 1 of 20 ${title}`);
+  const phoneCopy =
+    wordCount(vote ? 'Discuss the room answer' : 'Talk with your team') +
+    1 +
+    wordCount(
+      vote
+        ? 'Discuss now. Each vote helps choose one room answer.'
+        : 'Discuss now. Everyone answers when the clock ends.',
+    ) +
+    wordCount('Answers open after discussion');
+  // A staged phone adds the question/options and only its team identity. Beside the
+  // TV, a team phone instead reads its own roster; a room-vote phone has no roster.
+  const stagedPhone = phoneCopy + questionWords(state) + 4 + identity;
+  const besideTvPhone = phoneCopy + ownRoster;
+  return readMs(Math.max(tv, stagedPhone, besideTvPhone));
 }
 function uiWords(en: string, es = en): number {
   return Math.max(wordCount(en), wordCount(es));
@@ -251,18 +280,23 @@ export function classicRevealBeats(state: State): ClassicRevealBeats {
     group === 'tv-vote'
       ? wordCount(
           'The room got it right Your vote Triangle The room +1300 points 99999 total Room answer Triangle Correct',
-        ) + roomAnswer
+        ) +
+        wordCount('Correct 100%') +
+        roomAnswer
       : group === 'teams'
         ? wordCount(
-            'Correct +1300 personal points Team 4 +1300 points 99999 total Team points average every member’s contribution',
+            'Correct +1300 personal points Team 4 Correct 100% +1300 points 99999 total Team points average players who stayed or answered',
           )
         : 0;
   const chartMs = readMs(chart + own + groupReceipt);
   if (isLastIndex(state, state.index)) return { chartMs, standingsMs: 0 };
   // Question n of m + Scoreboard; each full row is rank/name/score/delta.
   const tvBoard = 4 + 1 + (group ? groupRosterWords(state, 3) : rosterWords(state, 3));
-  const phoneBoard =
-    4 + 1 + (group ? groupRosterWords(state, 3) : rosterWords(state, 2)) + own + groupReceipt;
+  // Group phone standings show team rows without the TV's member-name lists.
+  const phoneRows = group
+    ? (state.teams ?? []).reduce((n, team) => n + wordCount(team.name) + 3, 0)
+    : rosterWords(state, 2);
+  const phoneBoard = 4 + 1 + phoneRows + own + groupReceipt;
   return { chartMs, standingsMs: readMs(Math.max(tvBoard, phoneBoard)) };
 }
 export function podiumMs(state: State): number {

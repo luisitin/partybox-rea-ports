@@ -8,7 +8,8 @@ import { questionPoints, scoreCurrentQuestion } from '../server/scoring';
 import { recap } from '../server/recap';
 import { standingsOf } from '../server/standings';
 import { groupStandings, scoringMembers } from '../server/teams';
-import { answerWindowOf, groupModeOf, quizModeOf } from '../server/types';
+import { groupTalkMs, questionReadingMs } from '../server/pacing';
+import { answerWindowOf, groupModeOf, quizModeOf, readMs, wordCount } from '../server/types';
 import type { GroupMode, Input, State } from '../server/types';
 import { controllerView, tvView } from '../server/views';
 
@@ -142,6 +143,75 @@ describe('group settings and fixed seeded membership', () => {
 });
 
 describe('discussion, stamped answers and presence', () => {
+  it('room discussion ignores hidden member names while the answer stage still budgets its strip', () => {
+    const s: State = { ...start('tv-vote', 8), index: 0, questionIds: ['sports-09'] };
+    const longNames: State = {
+      ...s,
+      players: Object.fromEntries(
+        Object.entries(s.players).map(([id, player]) => [
+          id,
+          { ...player, name: 'One two three four five six seven eight' },
+        ]),
+      ),
+    };
+    expect(groupTalkMs(longNames)).toBe(groupTalkMs(s));
+    expect(questionReadingMs(longNames)).toBeGreaterThan(questionReadingMs(s));
+    expect(groupTalkMs(longNames)).toBeLessThan(questionReadingMs(longNames));
+    const q = questionById('sports-09')!;
+    // This is the complete TV talk screen: question/options/marks, clock label,
+    // answer count, discussion cue and footer. No other player's name is visible.
+    const visible =
+      wordCount(q.question) +
+      q.choices.reduce((n, text) => n + wordCount(text), 0) +
+      4 +
+      wordCount(
+        '20 Room talk 0 of 8 votes Discuss the room answer · then everyone votes Question 1 of 5 Room vote',
+      );
+    expect(groupTalkMs(s)).toBeGreaterThanOrEqual(readMs(visible));
+  });
+  it('team discussion budgets the largest own roster without summing other teams', () => {
+    const s: State = {
+      ...start('teams', 8),
+      index: 0,
+      questionIds: ['sports-09'],
+      teams: [
+        { id: 'team-1', name: 'Team 1', members: ['p0', 'p1', 'p2', 'p3'] },
+        { id: 'team-2', name: 'Team 2', members: ['p4', 'p5', 'p6', 'p7'] },
+      ],
+    };
+    const names = (all: boolean): State => ({
+      ...s,
+      players: Object.fromEntries(
+        Object.entries(s.players).map(([id, player]) => [
+          id,
+          {
+            ...player,
+            name:
+              all || ['p0', 'p1', 'p2', 'p3'].includes(id)
+                ? 'One two three four five six seven eight'
+                : player.name,
+          },
+        ]),
+      ),
+    });
+    const oneLongTeam = names(false);
+    const everyLongTeam = names(true);
+    expect(groupTalkMs(oneLongTeam)).toBeGreaterThan(groupTalkMs(s));
+    expect(groupTalkMs(everyLongTeam)).toBe(groupTalkMs(oneLongTeam));
+    const visibleOwnPhone = wordCount(
+      'Talk with your team 20 Team 1 One two three four five six seven eight One two three four five six seven eight One two three four five six seven eight One two three four five six seven eight Discuss now. Everyone answers when the clock ends. Answers open after discussion',
+    );
+    expect(groupTalkMs(oneLongTeam)).toBeGreaterThanOrEqual(readMs(visibleOwnPhone));
+    const smallerTeams: State = {
+      ...everyLongTeam,
+      teams: Array.from({ length: 4 }, (_, index) => ({
+        id: `team-${index + 1}`,
+        name: `Team ${index + 1}`,
+        members: [`p${index * 2}`, `p${index * 2 + 1}`],
+      })),
+    };
+    expect(groupTalkMs(smallerTeams)).toBeLessThan(groupTalkMs(everyLongTeam));
+  });
   it.each(['teams', 'tv-vote'] as const)(
     '%s VIP end discards an unfinished accepted answer and retains every starter',
     (mode) => {

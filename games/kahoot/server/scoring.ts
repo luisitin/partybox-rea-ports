@@ -119,8 +119,16 @@ export function scoreCurrentQuestion(state: State): State {
   if (!mode) return { ...state, scores, streaks, stats, lastDelta };
   const teamScores = { ...state.teamScores };
   const teamGains: Record<string, number> = {};
+  const teamAccuracy: NonNullable<State['teamAccuracy']> = {};
   for (const team of state.teams ?? []) {
     const eligible = scoringMembers(state, team);
+    if (mode === 'teams')
+      teamAccuracy[team.id] = {
+        correct: eligible.filter(
+          (id) => question !== undefined && state.picks[id]?.index === question.answerIndex,
+        ).length,
+        total: eligible.length,
+      };
     const gain =
       mode === 'tv-vote'
         ? (Object.values(lastDelta)[0] ?? 0)
@@ -143,6 +151,7 @@ export function scoreCurrentQuestion(state: State): State {
     rng,
     teamScores,
     teamGains,
+    ...(mode === 'teams' ? { teamAccuracy } : {}),
     ...(mode === 'tv-vote'
       ? {
           roomStreak,
