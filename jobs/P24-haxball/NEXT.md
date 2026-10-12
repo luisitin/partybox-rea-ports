@@ -9,14 +9,17 @@ Runner r3-local on job/P24-haxball. Draft PR17 is open; KEEP GOING remains.
   every strength has actual goal activity at every count.20/20 valid mutations killed/restored.
 - Final frame-settled capture2026-10-12T04:14:00.653Z:55 static pages and67 mounted checks pass.
   Controls60px,spacing8px;TV minimum jersey37.863px/body36px/timer128px. Browser/endpointclosed.
-- Retained media124files/6,178,355bytes; SHA256SUMS.txt includes every file. Recompute after
+- Retained media167files/8,642,244bytes; SHA256SUMS.txt includes every file. Recompute after
   any media change using hash-media.mjs and independently verify with PowerShell Get-FileHash.
 - Initial exact-head CI passed4337c3d (run38203229374). Round1 adds confirmed goal cues:
   37 focused client/SSR tests,64 mounted goal-cue checks and67 mounted control checks pass.
   Goal at the horn or first seen after delayed reset also cues once; replay/refresh stays silent.
-- Next review fixes persistent last-goal credit after the short reset while keeping halftime
-  instructions and measured phone/TV fit. Then fix player/post overlap and pin a possible
-  post-crossing kick overwriting goal attribution; rerun scoped rules/full sim if physics changes.
+- Round2 retained-credit improvement passes46 focused tests,75 static layouts,12 mounted credit
+  checks plus67 controls/64 goal cues. Worst-case64-W name fits704px phone product area;
+  TV jerseys/body/timer remain34.613/36/128px. Original half caps/default188000ms are unchanged.
+- Next fix player/post overlap and pin a possible post-crossing kick overwriting attribution.
+  Eight local test-first regressions fail on the unchanged server, confirming both defects.
+  Fix world.ts, then recheck scoped rules/full simulation and mutations.
 - Keep PRdraft until final exact-head P24 CI is green. Log/push actual five-weakness rounds
   until3 consecutive rounds gain nothing player-visible. No original live or human LAN play claimed.
 - Install already complete; pnpm.cmd on PowerShell. Only own game tests withoneworker;

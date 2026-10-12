@@ -179,6 +179,10 @@ function writePublicInteractions(): void {
     departed: samples['play-left']!,
     spectator: play,
     done: samples['done']!,
+    'play-last-goal': samples['play-last-goal']!,
+    'play-last-own-long': samples['play-last-own-long']!,
+    'halftime-last-own-long': samples['halftime-last-own-long']!,
+    'done-last-own-long': samples['done-last-own-long']!,
     ...audioSamples,
   };
   const views = Object.fromEntries(
@@ -206,6 +210,62 @@ function writePublicInteractions(): void {
 }
 
 describe('actual-components SSR phase and edge evidence', () => {
+  it('retains reducer-scored last-goal identity through play, halftime and done without extending the half', () => {
+    const ordinary = samples['play-last-goal']!;
+    const ownLong = samples['play-last-own-long']!;
+    expect(ordinary.phase.id).toBe('play');
+    expect(ordinary.goals).toEqual({ red: 1, blue: 0 });
+    expect(ordinary.lastGoal?.ownGoal).toBe(false);
+    expect(ordinary.halfEndsAt).toBe(samples['play']!.halfEndsAt);
+    const ordinaryScorer = game
+      .tvView(ordinary)
+      .discs.find((disc) => disc.id === ordinary.lastGoal!.scorerId)!;
+    const ordinaryMarkup = render(ordinary, 'tv');
+    const ordinaryCredit =
+      ordinaryMarkup.match(
+        /<(?:p|h2)\b[^>]*data-hax-goal-credit="true"[^>]*>[\s\S]*?<\/(?:p|h2)>/,
+      )?.[0] ?? '';
+    expect(ordinaryCredit).toContain('Last goal:');
+    expect(ordinaryCredit).toContain(ordinaryScorer.name);
+    expect(ownLong.phase.id).toBe('play');
+    expect(ownLong.halfEndsAt).toBe(samples['play']!.halfEndsAt);
+    expect(ownLong.lastGoal?.scorerId).toBe('p1');
+    expect(ownLong.lastGoal?.ownGoal).toBe(true);
+    for (const key of ['play-last-own-long', 'halftime-last-own-long', 'done-last-own-long']) {
+      const state = samples[key]!;
+      const view = game.controllerView(state, 'p1');
+      expect(view.lastGoal, key).toEqual(game.controllerView(ownLong, 'p1').lastGoal);
+      expect(view.discs.find((disc) => disc.id === 'p1')?.name, key).toBe('W'.repeat(64));
+      expect(state.goals, key).toEqual(ownLong.goals);
+      const scorer = view.discs.find((disc) => disc.id === view.lastGoal!.scorerId)!;
+      const jersey = `${scorer.team === 'red' ? 'R' : 'B'}${scorer.number}`;
+      const markups = [render(state, 'tv')];
+      for (const phoneOnly of [false, true])
+        for (const viewer of ['p1', 'spectator']) {
+          const markup = render(state, 'controller', phoneOnly, viewer);
+          if (state.phase.id === 'play' && !phoneOnly && viewer === 'p1') {
+            // The TV owns retained credit in this mode; keep the active phone's
+            // score and controls available without another field or text row.
+            expect((markup.match(/data-hax-control=/g) ?? []).length, key).toBe(9);
+            expect(markup, key).not.toContain('data-haxball-pitch="true"');
+            expect(markup, key).not.toContain('data-hax-goal-credit="true"');
+          } else markups.push(markup);
+        }
+      for (const markup of markups) {
+        const credit =
+          markup.match(
+            /<(?:p|h2)\b[^>]*data-hax-goal-credit="true"[^>]*>[\s\S]*?<\/(?:p|h2)>/,
+          )?.[0] ?? '';
+        expect(credit.replace(/<[^>]*>/g, ''), key).toContain(`Last goal: Own goal by ${jersey}`);
+        expect(credit, key).toMatch(/aria-label="[^"]*Own goal by [^"]*W{64}[^"]*"/);
+      }
+    }
+    expect(samples['halftime-last-own-long']!.phase.id).toBe('halftime');
+    expect(samples['halftime-last-own-long']!.phase.startedAt).toBe(ownLong.halfEndsAt);
+    expect(samples['done-last-own-long']!.phase.id).toBe('done');
+    expect(samples['done-last-own-long']!.clock - samples['play']!.clock).toBe(188_000);
+  });
+
   it('projects real red/blue goals and horn/delayed score rises without private input or kick cues', () => {
     const scores = {
       'audio-zero': [0, 0],

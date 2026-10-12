@@ -44,10 +44,24 @@ export function matchHeadline(view: MatchView): string {
   }
   return view.half === 1 ? 'First half' : 'Second half';
 }
-export function goalCredit(view: MatchView): string {
-  if (!view.lastGoal || view.phaseId !== 'goal') return '';
-  const scorer = view.discs.find((d) => d.id === view.lastGoal!.scorerId);
-  if (!scorer) return 'Back to the centre for kick-off';
-  const identity = `${jersey(scorer.team, scorer.number)} · ${shortName(scorer.name, 24)}`;
-  return view.lastGoal.ownGoal ? `Own goal by ${identity}` : `Scored by ${identity}`;
+export function goalCredit(
+  view: MatchView,
+  style: 'named' | 'jersey' | 'accessible' = 'named',
+): string {
+  const goal = view.lastGoal;
+  if (!goal) return '';
+  const prefix = view.phaseId === 'goal' ? '' : 'Last goal: ';
+  const scorer = view.discs.find((d) => d.id === goal.scorerId);
+  if (!scorer) {
+    const credit =
+      style === 'jersey'
+        ? `${teamName(goal.team)} · ${goal.ownGoal ? 'uncredited own goal' : 'no credited scorer'}`
+        : `${teamName(goal.team)} goal · ${goal.ownGoal ? 'own goal, ' : ''}no credited scorer`;
+    return `${prefix}${credit}`;
+  }
+  const number = jersey(scorer.team, scorer.number);
+  if (style === 'jersey') return `${prefix}${goal.ownGoal ? `Own goal by ${number}` : number}`;
+  const name = style === 'accessible' ? scorer.name.trim() || 'Player' : shortName(scorer.name, 24);
+  const identity = `${number} · ${name}`;
+  return `${prefix}${goal.ownGoal ? `Own goal by ${identity}` : `Scored by ${identity}`}`;
 }

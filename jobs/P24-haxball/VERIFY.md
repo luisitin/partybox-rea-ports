@@ -92,5 +92,21 @@ steady intervals 282/312/347/470 ms against its unchanged 200–450 ms tolerance
 the 650 ms lease. A justified rerun passed the unchanged check at 297/313 ms; no tolerance was
 relaxed and no product input code changed.
 
+Post-green round 2: the same focused client/SSR command PASS 46 tests / 3 files, 5.87 s,
+start 23:46:18 local / 04:46:18 UTC. Its first attempt had 45 passes and one erroneous assertion
+that an active phone in a TV room contains a pitch/credit row; the actual phone deliberately
+keeps controls while the TV carries that credit. The corrected assertion checks that behavior.
+SVG title children are single strings, removing React's multi-child title warnings.
+
+`P24_CPU_CAPTURE=1 node jobs/P24-haxball/capture.mjs` PASS, capture
+2026-10-12T04:46:58.495Z: 75 full static layouts with no fit/typography issues, 67/67 mounted
+controls, 64/64 goal-cue checks and 12/12 retained-credit checks. The 64-W-name own-goal credit
+fits a 704 px product mount in a 390x844 phone; its visible jersey headline is one 15.39 px line,
+and aria-label/title retain the full name. TV minimum jersey/body/timer sizes are
+34.61328125/36/128 px. Native browser/process and exact endpoint closure verified in layout.json.
+After canonical formatting and hashing: 167 media files, 8,642,244 bytes, below the strict 10 MB
+limit. Round-1 CI also passed on `823d36e`, run
+[38204769866](https://github.com/luisitin/partybox-rea-ports/actions/runs/38204769866).
+
 Original live practice and a human eight-stranger network playtest were unavailable.
 Research, simulation, SSR and mounted evidence are not original live play.

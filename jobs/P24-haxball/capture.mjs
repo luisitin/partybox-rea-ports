@@ -298,6 +298,139 @@ async function stopBrowser() {
   }
 }
 
+/** Audit retained goal credit in the real phone Controller's existing704 px mount. */
+async function runRetainedGoalFit(sessionId, evaluate) {
+  const report = {
+    source: 'interaction-views.json: real post-reset controller projections',
+    viewport: { width: 390, height: 844, productHeight: 704 },
+    browserOwnership: 'Reuses the already-mounted goal-audio fixture on the same CDP page.',
+    checks: [],
+    captures: [],
+    passed: false,
+  };
+  const check = (name, passed, observed) => {
+    report.checks.push({ name, passed: !!passed, observed });
+    console.log(`P24 retained credit: ${passed ? 'PASS' : 'FAIL'} ${name}`);
+  };
+  try {
+    await cdp.send(
+      'Emulation.setDeviceMetricsOverride',
+      {
+        width: 390,
+        height: 844,
+        deviceScaleFactor: 1,
+        mobile: false,
+        screenWidth: 390,
+        screenHeight: 844,
+      },
+      sessionId,
+    );
+    for (const [kind, file] of [
+      ['play-last-goal', 'interaction-post-goal.png'],
+      ['play-last-own-long', 'interaction-own-goal-long.png'],
+    ]) {
+      await evaluate(`window.harness.setSurface('controller',${JSON.stringify(kind)},true)`);
+      await sleep(40);
+      const observed = await evaluate(`(() => {
+        const view = window.harness.currentView;
+        const scorer = view.discs.find(disc => disc.id === view.lastGoal?.scorerId);
+        const credit = document.querySelector('[data-hax-goal-credit="true"]');
+        const bounds = credit?.getBoundingClientRect();
+        const mount = document.querySelector('.mount')?.getBoundingClientRect();
+        return {
+          phaseId: view.phaseId, ownGoal: view.lastGoal?.ownGoal,
+          scorer: scorer ? { id: scorer.id, name: scorer.name, team: scorer.team, number: scorer.number } : null,
+          compact: document.querySelector('[data-haxball-stage]')?.getAttribute('data-compact'),
+          controls: document.querySelectorAll('[data-hax-control]').length,
+          surface: document.documentElement.dataset.surface,
+          productHeight: mount?.height ?? null,
+          visible: credit?.innerText.trim() ?? null,
+          ariaLabel: credit?.getAttribute('aria-label') ?? null,
+          title: credit?.getAttribute('title') ?? null,
+          creditHeight: bounds?.height ?? null,
+          lineHeight: credit ? Number.parseFloat(getComputedStyle(credit).lineHeight) : null,
+          cues: [...window.harness.cues]
+        };
+      })()`);
+      if (!observed.scorer) throw new Error(`No real public scorer in ${kind}.`);
+      const jersey = `${observed.scorer.team === 'red' ? 'R' : 'B'}${observed.scorer.number}`;
+      const expected = `Last goal: ${observed.ownGoal ? `Own goal by ${jersey}` : jersey}`;
+      check(
+        `${kind} keeps compact play and nine controls in704 px`,
+        observed.phaseId === 'play' &&
+          observed.compact === 'true' &&
+          observed.controls === 9 &&
+          observed.surface === 'controller' &&
+          Math.abs(observed.productHeight - 704) <= 1,
+        observed,
+      );
+      check(`${kind} visible credit uses compact jersey headline`, observed.visible === expected, {
+        expected,
+        visible: observed.visible,
+        jersey,
+      });
+      check(
+        `${kind} accessible credit retains the complete public name`,
+        observed.ariaLabel?.includes(observed.scorer.name) &&
+          observed.ariaLabel?.includes(jersey) &&
+          observed.title?.includes(observed.scorer.name) &&
+          (!observed.ownGoal || observed.ariaLabel?.includes('Own goal by')),
+        {
+          ariaLabel: observed.ariaLabel,
+          title: observed.title,
+          fullName: observed.scorer.name,
+          jersey,
+        },
+      );
+      check(`${kind} retained goal mount is silent`, observed.cues.length === 0, {
+        cues: observed.cues,
+      });
+      if (kind === 'play-last-own-long') {
+        check(
+          'own-goal long-name fixture exercises64 unbroken characters',
+          observed.ownGoal && observed.scorer.name.length >= 64 && !/\s/.test(observed.scorer.name),
+          { ownGoal: observed.ownGoal, nameLength: observed.scorer.name.length },
+        );
+      }
+      const layout = await evaluate(`(${auditLayout.toString()})(true)`);
+      check(
+        `${kind} mounted geometry and typography fit`,
+        !layout.overflow.horizontal &&
+          !layout.overflow.vertical &&
+          layout.summary.controlIssues === 0 &&
+          layout.summary.offscreen === 0 &&
+          layout.summary.textClipped === 0 &&
+          layout.summary.scrollContainers === 0 &&
+          layout.summary.typographyIssues === 0,
+        {
+          summary: layout.summary,
+          overflow: layout.overflow,
+          creditHeight: observed.creditHeight,
+          lineHeight: observed.lineHeight,
+        },
+      );
+      const screenshot = await cdp.send(
+        'Page.captureScreenshot',
+        { format: 'png', captureBeyondViewport: false },
+        sessionId,
+      );
+      await writeFile(join(media, file), Buffer.from(screenshot.data, 'base64'));
+      report.captures.push({ file, ...layout });
+    }
+    const errors = await evaluate('window.qaErrors');
+    check('retained-credit page reports no runtime errors', errors.length === 0, { errors });
+  } catch (error) {
+    check('mounted retained-credit scenario completion', false, { error: String(error) });
+  }
+  report.passed = report.checks.length > 0 && report.checks.every((item) => item.passed);
+  await writeFile(
+    join(media, 'retained-credit.json'),
+    `${JSON.stringify(report, null, 2)}\n`,
+    'utf8',
+  );
+  return report;
+}
+
 /** Mount real TV/phone components using only matching authoritative public projections. */
 async function runGoalAudio(sessionId) {
   const report = {
@@ -503,6 +636,7 @@ async function runGoalAudio(sessionId) {
     await cuesAre('enabled phone-only next blue goal cheers exactly once', ['cheer']);
     const errors = await evaluate('window.qaErrors');
     check('goal audio page reports no runtime errors', errors.length === 0, { errors });
+    report.retainedCredit = await runRetainedGoalFit(sessionId, evaluate);
   } catch (error) {
     check('mounted goal audio scenario completion', false, { error: String(error) });
   } finally {
@@ -612,6 +746,8 @@ async function main() {
     if (!report.interaction.passed) process.exitCode = 1;
     report.goalAudio = await runGoalAudio(sessionId);
     if (!report.goalAudio.passed) process.exitCode = 1;
+    report.retainedCredit = report.goalAudio.retainedCredit;
+    if (!report.retainedCredit?.passed) process.exitCode = 1;
   } finally {
     try {
       report.cleanup = await stopBrowser();
@@ -639,6 +775,14 @@ async function main() {
                   passed: report.goalAudio.passed,
                   checks: report.goalAudio.checks.length,
                   captures: report.goalAudio.captures.length,
+                }
+              : undefined,
+            retainedCredit: report.retainedCredit
+              ? {
+                  report: 'retained-credit.json',
+                  passed: report.retainedCredit.passed,
+                  checks: report.retainedCredit.checks.length,
+                  captures: report.retainedCredit.captures.length,
                 }
               : undefined,
           },

@@ -21,9 +21,9 @@ export function Pitch({ view, mine }: { view: MatchView; mine?: string }): JSX.E
       aria-labelledby={`${id}-title ${id}-description`}
       data-haxball-pitch="true"
     >
-      <title id={`${id}-title`}>
-        Haxball pitch · Red {view.goals.red}, Blue {view.goals.blue}
-      </title>
+      <title
+        id={`${id}-title`}
+      >{`Haxball pitch · Red ${view.goals.red}, Blue ${view.goals.blue}`}</title>
       <desc id={`${id}-description`}>Numbered team discs and the ball. {description}</desc>
       <rect className={styles.field} x={0} y={0} width={W} height={H} rx={2} />
       <path className={styles.marking} d={`M${W / 2} 0V${H}`} />
@@ -100,9 +100,7 @@ export function Pitch({ view, mine }: { view: MatchView; mine?: string }): JSX.E
           data-offline={!disc.connected || disc.departed || undefined}
           transform={`translate(${disc.x} ${disc.y})`}
         >
-          <title>
-            {jersey(disc.team, disc.number)} · {disc.name}
-          </title>
+          <title>{`${jersey(disc.team, disc.number)} · ${disc.name}`}</title>
           {disc.id === mine ? <circle className={styles.mine} r={PLAYER_R + 2} /> : null}
           <circle className={styles.disc} r={PLAYER_R + 0.7} />
           <text className={styles.number} textAnchor="middle" dominantBaseline="central">

@@ -94,6 +94,9 @@ export function MatchStage({
   compact?: boolean;
 }): JSX.Element {
   const credit = goalCredit(view);
+  const accessibleCredit = goalCredit(view, 'accessible');
+  const compactCredit =
+    compact && view.phaseId === 'play' && credit ? goalCredit(view, 'jersey') : '';
   return (
     <div
       className={styles.match}
@@ -102,12 +105,24 @@ export function MatchStage({
       data-compact={compact || undefined}
     >
       <ScoreLine view={view} now={now} />
-      <div className={styles.headline} role={view.phaseId === 'play' ? undefined : 'status'}>
-        <h2>{matchHeadline(view)}</h2>
-        {credit ? (
-          <p>{credit}</p>
-        ) : view.phaseId === 'halftime' ? (
+      <div
+        className={styles.headline}
+        role={view.phaseId === 'play' && !credit ? undefined : 'status'}
+      >
+        <h2
+          data-hax-goal-credit={compactCredit ? 'true' : undefined}
+          aria-label={compactCredit ? accessibleCredit : undefined}
+          title={compactCredit ? accessibleCredit : undefined}
+        >
+          {compactCredit || matchHeadline(view)}
+        </h2>
+        {view.phaseId === 'halftime' ? (
           <p>Keep your team and number. Change the goal you attack.</p>
+        ) : null}
+        {credit && !compactCredit ? (
+          <p data-hax-goal-credit="true" aria-label={accessibleCredit} title={accessibleCredit}>
+            {credit}
+          </p>
         ) : null}
       </div>
       <div className={styles.fieldRow}>

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { PhoneOnlyProvider, ServerClockProvider } from '@partybox/game-sdk/ui';
 import { testKit, testPlayers } from '@partybox/game-sdk/testing';
 import { game } from '../server/index';
+import { enterGoal } from '../server/phases/goal';
 import type { State } from '../server/types';
 import { Controller } from './Controller';
 import { Tv } from './Tv';
@@ -127,6 +128,73 @@ describe('Haxball actual phone and TV screens', () => {
     );
     expect(renderPhone(goal)).not.toMatch(/<button|data-hax-control=/);
     expect(renderPhone(goal)).toContain('Controls return when play begins.');
+  });
+
+  it.each([false, true])(
+    'keeps named last-goal credit after reset, at half-time and at the result (own goal=%s)',
+    (ownGoal) => {
+      const start = kit.start();
+      const scorer = start.discs.find((d) => d.team === (ownGoal ? 'blue' : 'red'))!;
+      const goal = enterGoal(start, { team: 'red', scorerId: scorer.id, ownGoal }, kit.t0 + 100);
+      const resumed = kit.vip(goal, 'skip', kit.t0 + 200);
+      const halftime = kit.vip(resumed, 'skip', kit.t0 + 300);
+      const second = kit.vip(halftime, 'skip', kit.t0 + 400);
+      const done = kit.vip(second, 'end', kit.t0 + 500);
+      const creditedName = start.players[scorer.id]!.name;
+      const credit = `Last goal: ${ownGoal ? 'Own goal by' : 'Scored by'} ${jersey(scorer.team, scorer.number)} · ${creditedName}`;
+      expect(resumed.phase.id).toBe('play');
+      for (const state of [resumed, halftime, second, done]) {
+        for (const html of [renderTv(state), renderPhone(state, 'spectator', true)]) {
+          expect(html).toContain('data-hax-goal-credit="true"');
+          expect(html).toContain(credit);
+          expect(html).not.toContain('Back to the centre for kick-off');
+        }
+      }
+      for (const html of [renderTv(halftime), renderPhone(halftime, 'p1', true)]) {
+        expect(html).toContain('Keep your team and number. Change the goal you attack.');
+        expect(html).toContain(credit);
+      }
+    },
+  );
+
+  it('keeps active compact last-goal credit short while exposing the full own-goal name', () => {
+    const start = kit.start();
+    const scorer = start.discs.find((d) => d.team === 'blue')!;
+    const name = 'W'.repeat(64);
+    const maximum: State = {
+      ...start,
+      players: { ...start.players, [scorer.id]: { ...start.players[scorer.id]!, name } },
+    };
+    const goal = enterGoal(
+      maximum,
+      { team: 'red', scorerId: scorer.id, ownGoal: true },
+      kit.t0 + 100,
+    );
+    const resumed = kit.vip(goal, 'skip', kit.t0 + 200);
+    const html = renderPhone(resumed, scorer.id, true);
+    const creditedHeadline =
+      html.match(/<h2[^>]*data-hax-goal-credit="true"[^>]*>[^<]*<\/h2>/)?.[0] ?? '';
+    const shortCredit = `Last goal: Own goal by ${jersey(scorer.team, scorer.number)}`;
+    const fullCredit = `${shortCredit} · ${name}`;
+    expect(creditedHeadline).toContain(`aria-label="${fullCredit}"`);
+    expect(creditedHeadline).toContain(`title="${fullCredit}"`);
+    expect(creditedHeadline).toContain(`>${shortCredit}</h2>`);
+    expect(html).not.toContain('<p data-hax-goal-credit=');
+    expect(html).toContain('Half 1 / 2');
+    expect(html).toContain('data-haxball-pitch="true"');
+    expect(html.match(/data-hax-control=/g) ?? []).toHaveLength(9);
+    expect(html).toContain(`${jersey(scorer.team, scorer.number)} · you`);
+  });
+
+  it('identifies the scoring team honestly when no scorer can be credited', () => {
+    const start = kit.start();
+    const goal = enterGoal(start, { team: 'blue', scorerId: null, ownGoal: false }, kit.t0 + 100);
+    const resumed = kit.vip(goal, 'skip', kit.t0 + 200);
+    expect(renderTv(goal)).toContain('Blue goal · no credited scorer');
+    for (const html of [renderTv(resumed), renderPhone(resumed, 'spectator', true)]) {
+      expect(html).toContain('Last goal: Blue goal · no credited scorer');
+      expect(html).not.toContain('Back to the centre for kick-off');
+    }
   });
 
   it('half-time explains changing goals while retaining team and number', () => {

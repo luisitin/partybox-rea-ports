@@ -44,6 +44,9 @@ The TV, or each phone-only stage, cues a fresh confirmed goal with the SDK's `ch
 It also catches a score first seen after a delayed reset or at the horn. Refreshes,
 duplicate updates and pause/resume do not replay goals; phones with a TV leave this cue to it.
 The shell supplies playback and mute settings. A player's own confirmed kick uses `thud`.
+The latest scorer or own-goal credit remains visible after the short reset, through play,
+halftime and the final view. Compact active phones show the scorer's jersey with the full name
+in accessible text; halftime still explains the change of attacking ends.
 
 ## Inputs
 
