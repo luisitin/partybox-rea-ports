@@ -43,6 +43,7 @@ const longNames = (state: State): State => ({
   ),
 });
 const play = fixtures.find((fixture) => fixture.name === 'play')?.state;
+const ready = fixtures.find((fixture) => fixture.name === 'ready')?.state;
 const done = fixtures.find((fixture) => fixture.name === 'done')?.state;
 const score = fixtures.find((fixture) => fixture.name === 'score')?.state;
 let skipPending: State | undefined;
@@ -55,6 +56,16 @@ if (play) {
     settings: { powerups: true },
     now: play.began,
     presence: { mode: 'together', phoneOnly: false },
+  });
+  fixtures.push({
+    name: 'play-no-powerups',
+    state: game.init({
+      players: Object.values(play.players),
+      seed: 42,
+      settings: { powerups: false },
+      now: play.began,
+      presence: { mode: 'together', phoneOnly: false },
+    }),
   });
   // A pre-equipped eight-seat hand with its spawn shield lifted uses the real first physics sample.
   burstReady = {
@@ -193,9 +204,28 @@ if (done)
       winnerIds: Object.keys(done.players),
     },
   });
-if (score) fixtures.push({ name: 'score-long', state: longNames(score) });
+if (ready)
+  fixtures.push({
+    name: 'ready-paused',
+    state: game.reduce(ready, {
+      type: 'vip',
+      action: 'pause',
+      now: ready.phase.startedAt + 1000,
+    }),
+  });
+if (score) {
+  fixtures.push({ name: 'score-long', state: longNames(score) });
+  fixtures.push({
+    name: 'score-paused',
+    state: game.reduce(score, {
+      type: 'vip',
+      action: 'pause',
+      now: score.phase.startedAt + 1000,
+    }),
+  });
+}
 
-function render(state: State, surface: Surface, remote = false): string {
+function render(state: State, surface: Surface, remote = false, at?: number): string {
   const phoneOnly = surface === 'phone-only' || surface === 'spectator';
   const stable: State = {
     ...state,
@@ -221,6 +251,7 @@ function render(state: State, surface: Surface, remote = false): string {
       </PhoneOnlyProvider>
     );
   const now =
+    at ??
     stable.phase.paused?.at ??
     (stable.phase.id === 'play' ? stable.began + stable.checked : stable.phase.startedAt + 1000);
   return renderToStaticMarkup(
@@ -469,6 +500,103 @@ it('Burst labels volleys and explains owner capacity without disabling held Fire
       expect(fire).toBeDefined();
       expect(fire).toContain('disabled');
     }
+  }
+});
+
+it('steering buttons visibly say Turn left and Turn right on every player phone surface', () => {
+  const active = fixtures.find((fixture) => fixture.name === 'play-active-long')?.state;
+  expect(active).toBeDefined();
+  if (!active) return;
+  for (const [surface, remote] of [
+    ['phone-tv', false],
+    ['phone-only', false],
+    ['phone-tv', true],
+  ] as const) {
+    const html = render(active, surface, remote);
+    for (const label of ['Turn left', 'Turn right']) {
+      const button = html.match(
+        new RegExp(`<button\\b[^>]*aria-label="${label}"[^>]*>([\\s\\S]*?)<\\/button>`),
+      );
+      expect(button, `${surface}/${remote}/${label}`).not.toBeNull();
+      expect(button?.[1]).toContain(`<span>${label}</span>`);
+    }
+  }
+});
+
+it('paused ready and score interludes name the hold and keep their remaining countdown on every surface', () => {
+  const interludes = fixtures.filter((fixture) =>
+    ['ready', 'score', 'score-last'].includes(fixture.name),
+  );
+  expect(interludes).toHaveLength(3);
+  const timers = (html: string) =>
+    [...html.matchAll(/<[^>]+role="timer"[^>]*>([^<]*)<\/[^>]+>/g)].map((match) => match[1]);
+  for (const { state, name } of interludes) {
+    const pauseAt = state.phase.startedAt + 1000;
+    const hold = 60_000;
+    const paused = game.reduce(state, { type: 'vip', action: 'pause', now: pauseAt });
+    const resumed = game.reduce(paused, {
+      type: 'vip',
+      action: 'resume',
+      now: pauseAt + hold,
+    });
+    expect(paused.phase.id).toBe(state.phase.id);
+    expect(paused.phase.deadline).toBe(state.phase.deadline);
+    expect(game.tvView(paused)).toMatchObject({ paused: true, clockHeldAt: pauseAt });
+    expect(game.controllerView(paused, 'p1')).toMatchObject({
+      paused: true,
+      clockHeldAt: pauseAt,
+    });
+    expect(resumed.phase.id).toBe(state.phase.id);
+    expect(resumed.phase.startedAt).toBe(state.phase.startedAt);
+    expect(resumed.phase.deadline).toBe(state.phase.deadline! + hold);
+    for (const [surface, remote] of [
+      ['tv', false],
+      ['phone-tv', false],
+      ['phone-only', false],
+      ['spectator', false],
+      ['phone-tv', true],
+    ] as const) {
+      const before = render(state, surface, remote, pauseAt);
+      const held = render(paused, surface, remote, pauseAt + hold);
+      const after = render(resumed, surface, remote, pauseAt + hold);
+      expect(held, `${name}/${surface}/${remote}`).toMatch(/>Paused(?:<|\s)/);
+      expect(held).not.toMatch(/>Ready<|>Get ready[ <]|>Find your tank<|>Next<|>Results</);
+      expect(timers(before)).toHaveLength(1);
+      expect(timers(held)).toEqual(timers(before));
+      expect(after).not.toMatch(/>Paused(?:<|\s)/);
+      expect(timers(after)).toEqual(timers(before));
+    }
+  }
+});
+
+it('powerups disabled exposes only a public boolean and removes the TV weapon legend', () => {
+  expect(play).toBeDefined();
+  if (!play) return;
+  for (const powerups of [true, false]) {
+    const playing = game.init({
+      players: Object.values(play.players),
+      seed: 42,
+      settings: { powerups },
+      now: play.began,
+      presence: { mode: 'together', phoneOnly: false },
+    });
+    const finished = game.reduce(playing, {
+      type: 'vip',
+      action: 'end',
+      now: playing.began,
+    });
+    for (const state of [playing, finished]) {
+      for (const view of [game.tvView(state), game.controllerView(state, 'p1')]) {
+        expect(view.powerupsEnabled).toBe(powerups);
+        expect(view).not.toHaveProperty('settings');
+      }
+      const html = render(state, 'tv');
+      for (const label of ['Burst', 'Beam', 'Seeker']) {
+        if (powerups) expect(html).toContain(label);
+        else expect(html).not.toContain(label);
+      }
+    }
+    if (!powerups) expect(playing.world.pickups).toEqual([]);
   }
 });
 

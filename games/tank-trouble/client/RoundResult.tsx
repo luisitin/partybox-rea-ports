@@ -47,7 +47,9 @@ export function RoundResult({
         </div>
       ) : null}
       <div className={styles.next}>
-        <span>{view.round >= view.rounds ? L('Results') : L('Next')}</span>
+        <span>
+          {view.paused ? L('Paused') : view.round >= view.rounds ? L('Results') : L('Next')}
+        </span>
         <b role="timer">{Math.max(0, seconds)}s</b>
       </div>
     </div>

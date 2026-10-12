@@ -23,6 +23,8 @@ Spectators watch the stage with no controls.
 
 The first round starts after the shell's instructions and countdown; later mazes have an
 identification beat. Results never wait for input. Pausing holds every combat clock.
+READY and SCORE label the held countdown Paused. Disabling weapon crates also hides
+the TV weapon legend.
 
 ### Phone only (no TV)
 

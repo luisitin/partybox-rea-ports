@@ -48,7 +48,7 @@ export function Tv({ view }: GameTvProps<TankTroubleTvView>): JSX.Element {
               {Math.max(1, seconds)}
             </div>
           </div>
-          <p className={styles.line}>{L('Find your tank')}</p>
+          <p className={styles.line}>{view.paused ? L('Paused') : L('Find your tank')}</p>
         </div>
       </Stage>
     );
@@ -83,21 +83,23 @@ export function Tv({ view }: GameTvProps<TankTroubleTvView>): JSX.Element {
             />
           </div>
           <p className={styles.line}>{line}</p>
-          <p className={styles.legend}>
-            {Object.entries(WEAPON_MARKS).map(([kind, mark]) => (
-              <span key={kind}>
-                <svg
-                  className={styles.legendMark}
-                  viewBox="-3 -3 6 6"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <path d={mark} />
-                </svg>
-                {weaponName(kind, L)}
-              </span>
-            ))}
-          </p>
+          {view.powerupsEnabled ? (
+            <p className={styles.legend}>
+              {Object.entries(WEAPON_MARKS).map(([kind, mark]) => (
+                <span key={kind}>
+                  <svg
+                    className={styles.legendMark}
+                    viewBox="-3 -3 6 6"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path d={mark} />
+                  </svg>
+                  {weaponName(kind, L)}
+                </span>
+              ))}
+            </p>
+          ) : null}
         </div>
         <aside className={styles.rail}>
           <h2 className={styles.headline}>{headline}</h2>

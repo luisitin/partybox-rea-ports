@@ -23,8 +23,8 @@ import styles from './Controller.module.css';
 
 const ACTIONS: readonly { action: ControlAction; mark: string; label: string }[] = [
   { action: 'forward', mark: '▲', label: 'Forward' },
-  { action: 'left', mark: '◀', label: 'Left' },
-  { action: 'right', mark: '▶', label: 'Right' },
+  { action: 'left', mark: '◀', label: 'Turn left' },
+  { action: 'right', mark: '▶', label: 'Turn right' },
   { action: 'reverse', mark: '▼', label: 'Reverse' },
   { action: 'fire', mark: '◎', label: 'Fire' },
 ];
@@ -246,7 +246,7 @@ export function Controller({
         <h2>{L('Round {n}', { n: view.round })}</h2>
         <span className={styles.identity}>{view.slot + 1}</span>
         <p className={styles.mainLine}>{L('Your tank {n}', { n: view.slot + 1 })}</p>
-        <p>{L('Ready')}</p>
+        <p>{view.paused ? L('Paused') : L('Ready')}</p>
         <span className={styles.countdown} role="timer">
           {Math.max(1, Math.ceil(left / 1000))}
         </span>
@@ -307,7 +307,8 @@ export function Controller({
       ) : null}
       {phase === 'ready' ? (
         <p className={styles.status}>
-          {L('Get ready')} <span role="timer">{Math.max(1, Math.ceil(left / 1000))}</span>
+          {view.paused ? L('Paused') : L('Get ready')}{' '}
+          <span role="timer">{Math.max(1, Math.ceil(left / 1000))}</span>
         </p>
       ) : null}
       {phase !== 'ready' ? (

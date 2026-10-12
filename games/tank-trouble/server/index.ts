@@ -32,6 +32,7 @@ const manifest = gameManifestSchema.parse(manifestJson);
 interface MatchView {
   round: number;
   rounds: number;
+  powerupsEnabled: boolean;
   began: number;
   endsAt: number;
   checked: number;
@@ -175,6 +176,7 @@ function matchView(state: State): MatchView {
   return {
     round: state.round,
     rounds: ROUNDS,
+    powerupsEnabled: state.settings.powerups,
     began: state.began,
     endsAt: state.endsAt,
     checked: state.checked,
