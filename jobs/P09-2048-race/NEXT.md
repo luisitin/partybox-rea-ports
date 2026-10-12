@@ -33,11 +33,15 @@ independent server and root reviews completed three consecutive post-green
 no-gain rounds3–5, recorded inLOOP.md. All79checksums were also checked against
 committed git blobs:8,251,290bytes; source/test/motion guards match.
 
-Only final review-doc push/headCI/ready/claim bookkeeping remains. Implementation,
-tests and all media are unchanged by this final review log. RefreshPRbody from
-jobREADME, require final head'sP09/kit green, markPRready andP09claimDONE. Then
-take the lowest eligible queued job; P05 was stale at15:25UTC (claim06:59Z,
-branch1f6ac64 lastcommit06:57:37Z), but recheck freshmain beforeclaiming.
+Implementation, verification and three quality-review rounds are complete.
+Final review commits change documentation only; tests and media are unchanged.
+The authoritative ready/DONE records arePR12 andmainCLAIMS.md: require the
+latest PRhead'sP09/kit green before ready/DONE. No further game changes are
+required by the recorded reviews. The PRbody is the under60line jobREADME.
+
+Next queue action is the lowest eligible job after all own active claims are
+finished. P05 was stale at15:25UTC (claim06:59Z,branch1f6ac64 lastcommit06:57:37Z),
+but recheck freshmain/branch activity beforeclaiming. Owner core stays read-only.
 
 Every own browser closes in finally with exact-profile zero-PID verification.
 Do not run captures concurrently. During mutation planting, do not import or
