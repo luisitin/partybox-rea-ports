@@ -1,0 +1,360 @@
+{
+  "command": "node jobs/P01-quiz-rush/mutate.mjs",
+  "testCommand": "node node_modules/vitest/vitest.mjs run games/quiz-rush/__tests__/game.test.ts --maxWorkers=1 --reporter=json --outputFile=<temporary report>",
+  "baselineTests": 25,
+  "mutations": 20,
+  "killed": 20,
+  "invalidMutations": 0,
+  "sourceHashes": {
+    "games/quiz-rush/server/scoring.ts": "c571486ce2381f98ed42404e3d38873bd6fbeb3029b0a791f0acb9950307813b",
+    "games/quiz-rush/server/phases/question.ts": "6e71b7c04adb6f2abba5e79e583beaf9dc932f380bf3bf0bcb552aad87f9fdd6",
+    "games/quiz-rush/server/index.ts": "a92524d4a1694878f60d32357e69365e1d0d68690bf993a0627d115aae9629de",
+    "games/quiz-rush/server/content.ts": "a8c5c7bcbcb2c7cb60f0707487651c1bfd9fb7de387f7e3a27c5c0d8df0779a9"
+  },
+  "results": [
+    {
+      "id": "M01",
+      "description": "Speed points inflated tenfold",
+      "file": "games/quiz-rush/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "scoring awards 1000 at zero, 750 halfway and 500 at the end; clamps both ends",
+          "message": "AssertionError: expected 10000 to be 1000 // Object.is equality"
+        },
+        {
+          "name": "scoring rounds speed points to the nearest integer",
+          "message": "AssertionError: expected 9741 to be 974 // Object.is equality"
+        },
+        {
+          "name": "scoring builds streaks by 100 up to 500 and credits exactly once",
+          "message": "AssertionError: expected 9750 to be 975 // Object.is equality"
+        },
+        {
+          "name": "pause and pacing holds inputs and timers; pause time earns no speed points",
+          "message": "AssertionError: expected 9500 to be 950 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M02",
+      "description": "Slower answers earn more points",
+      "file": "games/quiz-rush/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "scoring awards 1000 at zero, 750 halfway and 500 at the end; clamps both ends",
+          "message": "AssertionError: expected 1250 to be 750 // Object.is equality"
+        },
+        {
+          "name": "scoring rounds speed points to the nearest integer",
+          "message": "AssertionError: expected 1026 to be 974 // Object.is equality"
+        },
+        {
+          "name": "scoring builds streaks by 100 up to 500 and credits exactly once",
+          "message": "AssertionError: expected 1025 to be 975 // Object.is equality"
+        },
+        {
+          "name": "pause and pacing holds inputs and timers; pause time earns no speed points",
+          "message": "AssertionError: expected 1050 to be 950 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M03",
+      "description": "Speed points round upward instead of nearest",
+      "file": "games/quiz-rush/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "scoring rounds speed points to the nearest integer",
+          "message": "AssertionError: expected 975 to be 974 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M04",
+      "description": "Elapsed time is not clamped",
+      "file": "games/quiz-rush/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "scoring awards 1000 at zero, 750 halfway and 500 at the end; clamps both ends",
+          "message": "AssertionError: expected 1013 to be 1000 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M05",
+      "description": "Wrong answers and timeouts earn 25 points",
+      "file": "games/quiz-rush/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "scoring wrong answers and timeouts score zero and break streaks",
+          "message": "AssertionError: expected { outcome: 'wrong', base: 25, …(3) } to match object { outcome: 'wrong', points: +0, …(2) }"
+        }
+      ]
+    },
+    {
+      "id": "M06",
+      "description": "Wrong answer preserves a streak",
+      "file": "games/quiz-rush/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "scoring wrong answers and timeouts score zero and break streaks",
+          "message": "AssertionError: expected { outcome: 'wrong', base: +0, …(3) } to match object { outcome: 'wrong', points: +0, …(2) }"
+        }
+      ]
+    },
+    {
+      "id": "M07",
+      "description": "Correct answer increments streak by two",
+      "file": "games/quiz-rush/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "scoring builds streaks by 100 up to 500 and credits exactly once",
+          "message": "AssertionError: expected 100 to be +0 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M08",
+      "description": "Streak cap rises from 500 to 5000",
+      "file": "games/quiz-rush/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "scoring builds streaks by 100 up to 500 and credits exactly once",
+          "message": "AssertionError: expected 600 to be 500 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M09",
+      "description": "Streak growth shrinks from 100 to 10",
+      "file": "games/quiz-rush/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "scoring builds streaks by 100 up to 500 and credits exactly once",
+          "message": "AssertionError: expected 10 to be 100 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M10",
+      "description": "Streak bonus omitted from score",
+      "file": "games/quiz-rush/server/scoring.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "scoring builds streaks by 100 up to 500 and credits exactly once",
+          "message": "AssertionError: expected 975 to be 1075 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M11",
+      "description": "Last answer leaves question open",
+      "file": "games/quiz-rush/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "scoring wrong answers and timeouts score zero and break streaks",
+          "message": "AssertionError: expected undefined to match object { outcome: 'wrong', points: +0, …(2) }"
+        },
+        {
+          "name": "scoring builds streaks by 100 up to 500 and credits exactly once",
+          "message": "TypeError: Cannot read properties of undefined (reading 'bonus')"
+        },
+        {
+          "name": "one tap per question closes immediately on the last connected answer, not on the first",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "pause and pacing holds inputs and timers; pause time earns no speed points",
+          "message": "TypeError: Cannot read properties of undefined (reading 'base')"
+        },
+        {
+          "name": "views and bots skips empty podium tiers and does not spoil final ranks on the reveal phone",
+          "message": "AssertionError: expected 1 to be +0 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M12",
+      "description": "First answer closes question prematurely",
+      "file": "games/quiz-rush/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "scoring keeps equal scores at the same rank",
+          "message": "AssertionError: expected [ 1, 2 ] to deeply equal [ 1, 1 ]"
+        },
+        {
+          "name": "one tap per question closes immediately on the last connected answer, not on the first",
+          "message": "AssertionError: expected 'reveal' to be 'question' // Object.is equality"
+        },
+        {
+          "name": "one tap per question all disconnected moves to reveal and keeps every departed seat in results",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        },
+        {
+          "name": "pause and pacing a paused drop is rechecked on resume, and a leave cannot rejoin the match",
+          "message": "AssertionError: expected 'reveal' to be 'question' // Object.is equality"
+        },
+        {
+          "name": "views and bots the question views are identical when the key, explanation or other answers change",
+          "message": "AssertionError: expected { gameId: 'quiz-rush', …(13) } to deeply equal { gameId: 'quiz-rush', …(13) }"
+        },
+        {
+          "name": "views and bots reveals the correct shape and accurate four bars, including missed seats",
+          "message": "AssertionError: expected null to match object { correctChoice: 2, …(2) }"
+        },
+        {
+          "name": "views and bots starts later unanswered questions without a wait when no eligible seat remains",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M13",
+      "description": "Duplicate answers overwrite the first choice",
+      "file": "games/quiz-rush/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "one tap per question locks first answer, ignores duplicates and round-stale answers",
+          "message": "AssertionError: expected { …(16) } to be { …(16) } // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M14",
+      "description": "Answers from an old round are accepted",
+      "file": "games/quiz-rush/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "one tap per question locks first answer, ignores duplicates and round-stale answers",
+          "message": "AssertionError: expected { Object (phase, rng, ...) } to be { …(16) } // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M15",
+      "description": "Pre-start timestamps are accepted",
+      "file": "games/quiz-rush/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "one tap per question rejects unknown/prototype senders, pre-start and disconnected taps",
+          "message": "AssertionError: expected { …(16) } to be { …(16) } // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M16",
+      "description": "Answer at the deadline is accepted",
+      "file": "games/quiz-rush/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "one tap per question rejects a tap exactly at or past the deadline before scoring it",
+          "message": "AssertionError: expected 'question' to be 'reveal' // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M17",
+      "description": "Disconnected player can answer",
+      "file": "games/quiz-rush/server/phases/question.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "one tap per question rejects unknown/prototype senders, pre-start and disconnected taps",
+          "message": "AssertionError: expected { …(16) } to be { …(16) } // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M18",
+      "description": "Pause time is included in speed scoring",
+      "file": "games/quiz-rush/server/index.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "pause and pacing holds inputs and timers; pause time earns no speed points",
+          "message": "AssertionError: expected 825 to be 950 // Object.is equality"
+        }
+      ]
+    },
+    {
+      "id": "M19",
+      "description": "Answer key is leaked by public question",
+      "file": "games/quiz-rush/server/content.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "views and bots the question views are identical when the key, explanation or other answers change",
+          "message": "AssertionError: expected { gameId: 'quiz-rush', …(13) } to deeply equal { gameId: 'quiz-rush', …(13) }"
+        }
+      ]
+    },
+    {
+      "id": "M20",
+      "description": "All final podium ranks appear on first beat",
+      "file": "games/quiz-rush/server/index.ts",
+      "status": "killed",
+      "exitCode": 1,
+      "tests": 25,
+      "failed": [
+        {
+          "name": "views and bots gates podium rank tiers on server time, including tied winners",
+          "message": "AssertionError: expected [ 1, 2, 3, 4, 5, 6, 7, 8 ] to deeply equal [ 3 ]"
+        }
+      ]
+    }
+  ]
+}

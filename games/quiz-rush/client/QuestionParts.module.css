@@ -1,0 +1,326 @@
+.choice0 {
+  --pb-quiz-choice-color: var(--pb-player-1);
+}
+.choice1 {
+  --pb-quiz-choice-color: var(--pb-player-4);
+}
+.choice2 {
+  --pb-quiz-choice-color: var(--pb-player-2);
+}
+.choice3 {
+  --pb-quiz-choice-color: var(--pb-player-3);
+}
+
+.reveal {
+  display: grid;
+  gap: var(--pb-space-4);
+  min-height: 0;
+}
+
+.chart {
+  display: grid;
+  gap: var(--pb-space-3);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.chart li {
+  display: grid;
+  grid-template-columns: var(--pb-space-8) minmax(0, 1fr) auto calc(var(--pb-font-body) * 5);
+  align-items: center;
+  gap: var(--pb-space-5);
+  padding: var(--pb-space-3) var(--pb-space-5);
+  border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  font-size: var(--pb-font-body);
+}
+
+.chart li[data-correct] {
+  border-color: var(--pb-accent-3);
+}
+
+.chartShape {
+  width: var(--pb-space-8);
+  height: var(--pb-space-8);
+  color: var(--pb-quiz-choice-color);
+}
+
+.chartText {
+  min-width: 0;
+}
+.optionText {
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.barTrack {
+  overflow: hidden;
+  height: var(--pb-space-2);
+  margin-top: var(--pb-space-2);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface-2);
+}
+
+.bar {
+  height: 100%;
+  background: var(--pb-quiz-choice-color);
+  transform-origin: left;
+  transform: scaleX(var(--pb-quiz-bar-scale));
+  transition: transform var(--pb-motion-slow) var(--pb-ease);
+  animation: quiz-bar-in var(--pb-motion-slow) var(--pb-ease) backwards;
+}
+
+@keyframes quiz-bar-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(var(--pb-quiz-bar-scale));
+  }
+}
+
+.count {
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+.correct {
+  color: var(--pb-accent-3);
+  font-weight: 900;
+  white-space: nowrap;
+}
+.explanation {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  color: var(--pb-accent-3);
+}
+.fact {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.35;
+}
+.missed {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  color: var(--pb-text-muted);
+}
+
+.reveal[data-compact] {
+  gap: var(--pb-space-3);
+}
+.reveal[data-compact] .chart {
+  gap: var(--pb-space-2);
+}
+.reveal[data-compact] .chart li {
+  grid-template-columns: var(--pb-space-5) minmax(0, 1fr) auto;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2) var(--pb-space-3);
+}
+.reveal[data-compact] .chartShape {
+  width: var(--pb-space-5);
+  height: var(--pb-space-5);
+}
+.reveal[data-compact] .correct {
+  grid-column: 2 / -1;
+  font-size: var(--pb-font-caption);
+}
+.reveal[data-compact] .correct:empty {
+  display: none;
+}
+.reveal[data-compact] .explanation {
+  display: none;
+}
+
+.podium {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--pb-space-5);
+  align-items: end;
+  width: 100%;
+  min-height: calc(var(--pb-font-display) * 3);
+}
+
+.podiumPlace {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-width: 0;
+  text-align: center;
+}
+
+.podiumPeople {
+  display: grid;
+  gap: var(--pb-space-3);
+  padding: var(--pb-space-4);
+}
+.podiumPerson {
+  display: grid;
+  justify-items: center;
+  gap: var(--pb-space-2);
+}
+.podiumPeople[data-many] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.podiumPeople[data-many] .podiumName {
+  font-size: var(--pb-font-body);
+}
+.podiumPeople[data-many] .podiumScore {
+  font-size: var(--pb-font-body);
+}
+.podiumName {
+  max-width: 100%;
+  font-size: var(--pb-font-h2);
+  overflow-wrap: anywhere;
+}
+.podiumScore {
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+}
+.plinth {
+  display: grid;
+  place-items: center;
+  min-height: calc(var(--pb-space-8) * 1.5);
+  border: calc(var(--pb-space-1) / 2) solid var(--pb-border);
+  border-radius: var(--pb-radius-lg) var(--pb-radius-lg) 0 0;
+  background: var(--pb-surface-2);
+  color: var(--pb-text-muted);
+  font-size: var(--pb-font-h1);
+  font-weight: 900;
+}
+.podiumPlace[data-rank='1'] .plinth {
+  min-height: calc(var(--pb-space-8) * 3);
+}
+.podiumPlace[data-rank='2'] .plinth {
+  min-height: calc(var(--pb-space-8) * 2);
+}
+.podiumPlace[data-revealed] .plinth {
+  border-color: var(--pb-accent-2);
+  color: var(--pb-accent-2);
+}
+.podiumPlace[data-revealed] .podiumPeople {
+  animation: global(pb-pop) var(--pb-motion-slow) var(--pb-ease) backwards;
+}
+
+.podium[data-compact] {
+  gap: var(--pb-space-2);
+  min-height: calc(var(--pb-font-display) * 4);
+}
+.podium[data-compact] .podiumPeople {
+  padding: var(--pb-space-2) 0;
+  gap: var(--pb-space-2);
+}
+.podium[data-compact] .podiumName {
+  font-size: var(--pb-font-body);
+}
+.podium[data-compact] .podiumScore {
+  font-size: var(--pb-font-caption);
+}
+.podium[data-compact] .plinth {
+  min-height: var(--pb-space-7);
+  font-size: var(--pb-font-h2);
+}
+.podium[data-compact] .podiumPlace[data-rank='1'] .plinth {
+  min-height: calc(var(--pb-space-7) * 2);
+}
+.podium[data-compact] .podiumPlace[data-rank='2'] .plinth {
+  min-height: calc(var(--pb-space-7) * 1.5);
+}
+.podium[data-compact] .podiumPeople[data-many] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.podium[data-compact] .podiumPeople[data-many] .podiumPerson > :first-child {
+  display: none;
+}
+.podium[data-compact] .podiumPeople[data-many] .podiumScore {
+  font-size: var(--pb-font-caption);
+}
+
+/* Large tied groups need the stage's width. Preserve every name and rank instead of stacking eight people over one narrow plinth. */
+.podium[data-crowded] {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--pb-space-4);
+  min-height: 0;
+}
+.podium[data-crowded] .podiumPlace {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--pb-space-4);
+}
+.podium[data-crowded] .podiumPlace:not([data-revealed]) {
+  display: none;
+}
+.podium[data-crowded] .podiumPeople {
+  order: 1;
+  flex: 1;
+  min-width: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: var(--pb-space-3);
+}
+.podium[data-crowded] .podiumPerson {
+  grid-template-columns: var(--pb-space-7) minmax(0, 1fr);
+  align-items: center;
+  justify-items: start;
+  text-align: left;
+}
+.podium[data-crowded] .podiumPerson > :first-child {
+  width: var(--pb-space-7);
+  height: var(--pb-space-7);
+}
+.podium[data-crowded] .podiumName {
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.podium[data-crowded] .podiumScore {
+  grid-column: 2;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+.podium[data-crowded] .podiumPlace .plinth {
+  order: 0;
+  flex: none;
+  align-self: stretch;
+  width: calc(var(--pb-space-8) * 2);
+  min-height: var(--pb-space-8);
+  font-size: var(--pb-font-h2);
+  border-radius: var(--pb-radius-lg);
+}
+.podium[data-compact][data-crowded] .podiumPeople {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: var(--pb-space-2);
+}
+.podium[data-compact][data-crowded] .podiumPerson {
+  grid-template-columns: minmax(0, 1fr);
+}
+.podium[data-compact][data-crowded] .podiumPerson > :first-child {
+  display: none;
+}
+.podium[data-compact][data-crowded] .podiumScore {
+  grid-column: 1;
+  font-size: var(--pb-font-caption);
+}
+.podium[data-compact][data-crowded] .podiumPlace .plinth {
+  width: var(--pb-space-8);
+  font-size: var(--pb-font-h2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+    animation: none;
+  }
+  .podiumPlace[data-revealed] .podiumPeople {
+    animation: none;
+  }
+}
+:global(:root[data-motion='off']) .bar {
+  transition: none;
+  animation: none;
+}
+:global(:root[data-motion='off']) .podiumPlace[data-revealed] .podiumPeople {
+  animation: none;
+}
