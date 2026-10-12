@@ -22,6 +22,8 @@ R28 compact palette:
 - `$env:WRITE_EVIDENCE='1'; pnpm.cmd vitest run games/skribbl/__tests__/evidence.test.tsx --maxWorkers=1 --pool=threads`:10checks pass, exit0,1.48s; all33HTML files regenerated.
 - `node jobs/P04-draw-and-guess/tools/capture.mjs`:33captures pass, exit0, zero viewport overflows; its one browser closes in finally after the live browser had completed. Manual normal/compact artist review verifies readable full color names, selection mark, larger canvas and all tools fitting.
 - Scoped Prettier follows all generated results and fixtures. `node jobs/P04-draw-and-guess/tools/hash-media.mjs`:68files,2,157,072bytes, hashes updated. No server sources changed.
+- The initial final-format check reports the33regenerated HTML files as unformatted and exits1. `pnpm.cmd exec prettier --write 'jobs/P04-draw-and-guess/media/*.html'` fixes them; hashing is rerun afterward. Final `pnpm.cmd format` and `git diff --check` pass, exit0.
+- CI38201146096 passes56s for0dec027: install/typecheck/format and complete scoped suite318checks in31files,26.92s, with all7,000matches and SDK/property checks. This is final gameplay source; subsequent no-gain reviews change documentation only.
 
 Windows11, Node24.19.0, pnpm12.4.2. `pnpm.cmd` is the Windows launcher for the
 documented pnpm commands; PowerShell blocks pnpm.ps1. Only this game was tested.
