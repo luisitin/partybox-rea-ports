@@ -1,107 +1,118 @@
 # Kahoot!
 
-> Preparatory core wager/library base only. No classic mode, verification, host integration or release claim. See the temp root change and migration notes.
-
 ## Overview
 
-Speed trivia, four choices per question: faster correct answers earn more, streaks add a bonus, before
-the last question everyone wagers part of their score. Highest score wins. The picker's minutes follow the question count: 25 s + 24 s a question + 1 s a player a question (T-1117 adds the answer chart's reading budget). This is the spec.
-
-## Music
-
-SDK reveal/wager and personal verdict cues are retained. Licensed core file music and all art files are excluded from this asset-free temp draft. The original core music plan and provenance remain recorded in `../../provenance/core-README.md`; restoring that host-only track is an integration decision.
+A speed quiz upgrading PartyBox's existing Lightning Round engine. `quizMode: wager` remains the
+default (including old states without a mode); `classic` adds shape-pad play and a staged top three.
+Joining, room codes, names, lobby and the start countdown belong to the PartyBox shell.
 
 ## Players
 
-1–16. Late joiners spectate (engine). Disconnected players are not waited for; reconnect → can answer. Bots: welcome (`supportsBots`) — the bot answers from the pack / plays the odds.
+1–16 players; the P01 living-room target is 2–8. Late joiners spectate. Temporary disconnections
+do not hold answer collection; reconnect restores the accepted choice and the current beat.
+Permanent departures retain their scores but cannot submit again. Spectators receive a read-only stage.
+Bots have easy/normal/sharp strengths: 30/50/80% known-answer rates, seeded wrong choices and preset bets.
+Classic bots use a separate learned-answer-text map; no question library is downloaded by phones.
+
+## Modes
+
+| Mode | Questions | Ending | Phone beside a visible TV |
+| --- | --- | --- | --- |
+| `wager` | Requested regular count plus one hardest-available final | Bet, final reveal, results | Prompt and four labelled choices |
+| `classic` | Exactly the requested count from one authored pack; no extra final | Last chart, occupied podium tiers, results | Triangle, diamond, circle and square pads; no prompt/options text |
 
 ## Phases
 
-| Phase      | TV                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Phone                                                                                                                                                                                                                                                                                                                                                                                                            | Exit                                                                                                                                                                                                                                                                                         |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `intro`    | title card + topic pill                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | "Get ready"                                                                                                                                                                                                                                                                                                                                                                                                      | 2 s title beat (ADR-053: the shell's start stage already showed the rules and counted 3 · 2 · 1; was 9 s) or VIP skip → first `question`                                                                                                                                                     |
-| `question` | question + choices A–D in a 2×2 grid, "n / m answered" — every locked-in face pops onto the count line (I-007 A) and the phones still thinking are ringed in the strip until they lock in (B)                                                                                                                                                                                                                                                                                                                                                                                                                                                | `ChoiceGrid`, one tap locks the pick; I-288 B: "+974 now" under the question (`worth`), draining with the speed bonus until the tap; I-789 B (design review): the answers share the height under the question (66 px each, down to their content — four fit an SE), four short ones two by two, sideways question left / answers right; a tap moves nothing (the status line's space is held)                    | every connected player picked, or `answerSeconds` deadline, or VIP skip → `reveal`                                                                                                                                                                                                           |
-| `reveal`   | correct choice marked ✓, per player: ✓/✗/–, points, 🔥 streak (a "phone only" room gets the same `rows` on the phone); I-589 A: right answers fastest first, each with its time (`rows[].elapsedMs`, ⚡ on the fastest); B: 2 s on, the rows re-deal into score order (the standings) and — the owner's note — a Next button arrives on the TV (the header's topic slot) and the VIP's phone (`next`: `question`/`wager`; `vipSkipHidden` drops the shell's Skip / Next)                                                                                                                                                                     | same grid with ✓/✗ marks + outcome line; I-288 A: the phone's clock is quiet here and in the intro (bar, no seconds), like the TV's; I-790 C (design review): the verdict is on the tiles (green ring + "✓ the answer", red ring + "you"; a 2×2 tile keeps ✓ / ✗) and one band under the question says it with the two numbers apart — "Wrong · +0 this round · 987 total" (the old card under the list is gone) | time to read every row: 2 s race + 1.3 × (1.5 s + ⅓ s × (answer + 12 + 3 a player)), ≥ 8 s; the final 1.2 s + 1.3 × (1.5 s + ⅓ s × (answer + 2 + 4 a player)), ≥ 8 s (was 8 s / 5 s flat) — or Next / VIP skip → next `question`; after the last regular one `wager`; after the final `done` |
-| `wager`    | "Place your wagers", "n / m placed", standings — phone: every wager row carries a stack of gold chips, one per 25 % (I-026 A); a placed pick bumps its chips, the prompt becomes "n in the pot" and the other rows step back (B); on the final question the "Your bet" footer breathes until the answer is locked (C); a fifth Custom row takes a percentage or a points amount (the owner's note); I-550 A: TV and phone name the final's topic before the bet (`finalTopic`: category · topic · difficulty, optional) and — the owner's note — the phone lays the stakes out two by two with a one-line custom row, all on screen on an SE | `ChoiceGrid` of 0 / 25 / 50 / 75 / 100 % of score                                                                                                                                                                                                                                                                                                                                                                | every connected player wagered, or 15 s deadline, or VIP skip → final `question` (flagged `final`, hardest difficulty available)                                                                                                                                                             |
-| `done`     | final standings — the shell's results crown one clear winner: face beside the line and `pb-crown` on it (I-025 A), confetti (48 pieces for a person, 16 for a bot — B), and the board under it comes back from 55 % over 1.2 s so the name reads first (C)                                                                                                                                                                                                                                                                                                                                                                                   | rank + score                                                                                                                                                                                                                                                                                                                                                                                                     | terminal: `results()` is non-null                                                                                                                                                                                                                                                            |
+| Phase | TV | Phone | Exit |
+| --- | --- | --- | --- |
+| `intro` | Title and selected pack/topics | First-question notice | Reading budget; wager also has a 2 s minimum |
+| `question` | Prompt, four choices, clock and connected lock count | Mode's answer pad; one accepted choice locks | All connected participants answered after the reading hold, answer deadline, or VIP skip |
+| `reveal` | Classic: answer-count chart, explanation, then standings except on last question. Wager: chart and fastest-correct race, then standings; final shows bets/verdicts/totals | Correct/wrong/too slow, delta and total; classic separates speed and streak points and shows rank before the last question | Reading budgets, or VIP Next/skip; classic last → podium; wager last regular → wager; wager final → done |
+| `wager` | Final topic/difficulty, placed count and standings; no wager amounts | Preset shares or custom percent/points; personal bet receipt | All connected bets after the reading hold, max(15 s, reading budget), or VIP skip |
+| `podium` | Classic only: occupied ranks descending 3 → 2 → 1 | Public tiers on staged phones; otherwise reveal notice and personal rank once unveiled | Each tier's reading budget or VIP skip; empty tiers skipped, then done |
+| `done` | Complete final standings and shell results | Personal rank/score; staged phones also show standings | Terminal; `results()` is non-null |
 
-Leader mark (I-268): A — the roster's ▲ became a small "1st" tag ("1.º"); B — the same tag on the
-reveal rows (was 👑) and the late joiner's bench (was 🏆), none while nobody has scored or all tie;
-C — a roster score that goes up shows "+N" over it for 2 s.
+Classic's last reveal omits public final rows/standings and roster scores. Podium payloads contain
+only already unveiled top-three tiers; full standings return at `done`. Equal scores share competition
+ranks, including podium ties. Phones retain their own total; they do not receive unrevealed rivals' totals.
 
-Regular reveals also show A–D answer bars beside the muted question: each letter is paired directly with its accepted-pick count, ✓ marks the correct letter, and “No answer” labels missing seats. The chart uses h2 text and 24 px bars at 1080p. Accepted picks still count after a disconnect. Personal correct/wrong cues match the phone verdict beat (300 ms regular / 1.2 s final). The regular reveal budgets ten extra chart words: `max(8 s, 2 s + readMs(answerWords + 12 + 3 × players))`; the final reading rule is unchanged. No extra score or podium phase interrupts the wager finale. The four-question minigame wrapper allows 100 s for the expanded reading budget.
+## Phone-only and remote play
 
-Room line (I-565): B — while choosing, the phone's top line ends "· 4/8 in" and the last one reads "Everyone's waiting on you" (one 40 ms buzz); a phone that is in says "waiting for Priya" (1–2 left).
+`ctx.presence.phoneOnly` is captured at init; `canSeeTv: false` also gives that player the stage.
+Clients honour the SDK `usePhoneOnly` context. Staged players never receive “look at the TV” instructions.
 
-The final on a phone under 760 px tall (T-0106): the bet sits in the kicker only ("… · you bet 1822"), with no "Your bet" footer in the question and no "The bets are in" footer in the reveal, so all four answers stay on screen; taller phones keep the footer (I-026 C).
+| Beat | Phone-only/remote player | Spectator or permanently departed player |
+| --- | --- | --- |
+| Intro/question | Title notice; complete prompt/options and controls | Public title/question/options, without controls |
+| Reveal | Personal receipt; classic chart/standings; wager per-player rows | Public chart, rows/standings and explanations as appropriate |
+| Wager | Stakes controls and topic; missing bet defaults to zero | Topic, rules and standings; no stakes controls |
+| Podium/done | Unveiled tiers, then full board; personal rank/score | Same public stage, without personal controls |
 
 ## Inputs
 
-`{ type: 'pick', index: 0–3 }` — once per connected player during `question`, at or after opening and strictly before the current deadline. An early or disconnected tap is ignored; a late first tap advances to reveal without recording it (regular: “Too slow”; final: no answer loses the wager). `{ type: 'wager', percent: 0 | 25
-| 50 | 75 | 100 }` — once per player during `wager`; amount = `floor(score × percent / 100)` rounded
-down to a multiple of 10, equal amounts collapse so a 0-point player only sees (and can only wager) 0;
-no input by the deadline = 0. `{ type: 'wager', amount: n }` (I-026, the phone's custom row: a
-percentage 1–100 becomes points by the same rule on the phone, points go as typed) — the server clamps
-it to 0…score and rounds down to tens (`clampWager`; the whole score is allowed); `amount` wins when
-both are sent; bots keep the presets. Later inputs, spectators/unknown ids and wrong-phase inputs are ignored.
+- Wager answer: `{ type: 'pick', index: 0..3 }`.
+- Classic answer: `{ type: 'answer', questionId, questionStartedAt, index: 0..3 }`; both stamp fields
+  must match the current question. Old-question/old-entry taps and unstamped picks are rejected.
+- Bet: `{ type: 'wager', percent: 0|25|50|75|100 }` or `{ type: 'wager', amount }` (integer points,
+  0–1,000,000 before clamping); `amount` wins if both are supplied. Custom percentages become points
+  on the phone. Stakes below the whole score round down to tens; an all-in stake keeps the exact score.
+
+Only the first connected participant input in its phase is accepted, at/after opening and strictly
+before the original answer/bet deadline. Unknown ids, spectators, departed seats and duplicates are
+ignored. Late first inputs advance without acceptance. Classic shows sending/confirmed states and
+allows a same-choice retry when confirmation is missing; server acceptance remains one choice.
 
 ## Scoring
 
-Regular question, correct: **500** + speed bonus `speedPoints(elapsedMs, answerSeconds × 1000, 500, 0)`
-(500 at 0 ms → 0 at the deadline, so 1000 → 500 in total; `elapsedMs` is measured against the
-deadline, a pause costs nothing) + streak bonus 100 × (streak − 1) capped at 300, streak = consecutive
-correct answers including this one. Wrong or no answer: 0 and the streak resets to 0. Final question:
-correct → **+ wager**; wrong or no answer → **− wager**. **A score can go down here** (never below 0:
-a wager is at most the whole score); no base/speed/streak points on the final, the streak counter
-still updates. Winners = rank 1 (ties share). Awards (only when someone qualifies; ties → lowest
-player id): **Lightning fingers** = lowest average time over correct answers (≥ 1 correct);
-**Hot streak** = longest streak (≥ 2); **High roller** = largest wager won on the final (≥ 1).
+Every regular question (and every classic question): correct = 500 + a rounded 500→0 linear speed
+bonus over the actual answer window + `min(300, 100 × (streak − 1))`. Thus base/speed is 1,000→500;
+the streak includes this correct answer. Wrong/missing = zero and resets the streak.
+Wager final: correct = +bet; wrong/missing = −bet; no base/speed/streak points. This is the only score
+decrease, never below zero. Missing bet = zero. Scores are applied once, on reveal entry.
+Highest score wins; ties share rank 1. Qualified awards: Lightning fingers (lowest average correct
+time), Hot streak (longest streak ≥2), High roller (largest final bet won ≥1). Award ties use lowest id.
 
-## Edge cases
+## Pacing, sound and edge cases
 
-- Draw is seeded and repeat-free: same seed + settings ⇒ same questions. A `category` with fewer than
-  `questions + 1` items falls back to `all` (`drawnFrom` in state / TV header says which).
-- VIP skip: `intro` → question 1; `question` → its reveal (unanswered = wrong; only the final loses the
-  wager); `reveal` → next question / wager / done; `wager` → final question, missing wagers = 0. VIP end
-  → `done` with scores so far (unrevealed question = 0). Pause holds the deadline; inputs/timers ignored.
-- Every phase has a deadline. Everyone idle: all score 0 and tie for first, no awards. 1 player works.
-
-The TV question page is a size container: under 560 px of stage (a sixteen-player roster, four chip
-rows) the prompt drops to h2 and the choice cards to 84 px so the count line stays above the host bar
-(`capture-lightning-16.ts` proves 16 and 6 players).
+Reading budget = `round(1.3 × (1500 + 333 × visibleWords))` ms, counting the larger relevant TV/phone
+screen, names and UI labels. Both modes use `max(answerSeconds × 1000, question reading budget)`.
+All-answered/all-bet locks shorten the phase only to its reading hold; the original end remains the
+speed-scoring window and can be restored for an eligible reconnect. Classic chart/standings and each
+podium tier have separate reading budgets. Wager reveals budget race/standings or final animations,
+with an 8 s minimum. VIP Next appears during the reveal beat; timers advance without a host click.
+Pause ignores inputs/timers, freezes client clocks and shifts deadline/scoring clocks on resume.
+VIP skip advances the current phase; missing picks score zero (or lose a final bet). VIP end enters
+done with already revealed scores. Idle games terminate with tied zero scores; absent seats do not block.
+Seeded draws do not repeat questions; option order stays as authored. Wager topic/category shortages
+fall back to the broader category then all, and the displayed draw label records the fallback.
+SDK pulse/reveal/wager/result cues and synthesized beds respect device settings. Verdicts wait for
+the shared reveal beat. Token-based shapes, marks and words accompany colour; reduced motion is honoured.
 
 ## Settings
 
-`questions` number 10 (5–20 step 1, regular questions; the final is extra) · `answerSeconds` number 15
-(5–30 step 5) · `category` select `all` (default) or one of the fourteen content categories ·
-`subcategories` multiselect (ADR-034): the topics of the chosen category to draw from, comma-joined,
-`''` = the whole category; picks outside the category are dropped. The draw uses the ticked topics if
-they hold `questions + 1` items, else the whole category, else all (`drawnFrom` / `drawnSubs` in state;
-the TV intro says which: "Sports · Basketball, Soccer").
+`quizMode` wager/classic (default wager); `classicPack` general/movies/science (default general);
+`questions` 5–20 (default 10; regular count in wager, exact count in classic);
+`answerSeconds` 5–30 step 5 (default 15; requested minimum); wager `category` all or 14 categories,
+plus comma-joined `subcategories` (empty = all topics; out-of-category topics discarded).
+Classic always uses English questions (`questionLang: en`), independently of host `contentLang`.
+Wager retains EN/ES content selection. The inherited 100 s minigame sets wager, four regular questions
+and a 5 s requested answer minimum; reading budgets still apply. Manifest estimate: 8 minutes.
 
 ## Content
 
-`content/questions.json` — 6 153 questions across fourteen categories and 63 topics. The ten
-established categories hold 460–772 questions each; BL-015 adds 50 each in Board & Card Games,
-World Heritage, Museum Collections and Ig Nobel Science, with one 50-question topic per new
-category. Each question: `id`, `category`, `subcategory`, `difficulty`, `question`, four distinct `choices`,
-`answerIndex`, `source` (J-GPT-005 round 3's 1 500, ids `gpt-0001…1500`, carry a source URL). Widely documented, non-time-sensitive, family-friendly, mainstream
-(pub-quiz, not specialist), no question text repeated. `content/schema.ts` enforces ≥ 200 items, ≥ 6
-categories, unique ids, and that every topic belongs to its category; `__tests__/content.test.ts`
-enforces the balance. The phone never downloads the questions (I-752): the wager arithmetic lives in
-`server/wager.ts`, which imports no content (A), and `__tests__/phone-bundle.test.ts` fails if any client
-file reaches the content (C).
+Classic: three original English JSON packs of 20 questions, validated by `content/classic-schema.ts`
+and exported through `content/schema.ts`; unique ids, four distinct options, explanation, difficulty.
+Wager: `questions.json` has 6,153 items across 14 categories/63 topics; `questions.es.json` has 5,561
+items and 704 explicit dropped English ids. Library ids, translations, source notes and attribution
+are preserved. Content loads only on the server. Recap retains question choices, picks/times/deltas,
+final bets, standings and awards. Per-phase fixture states live under `fixtures/`.
 
-`content/questions.es.json` (ADR-054) — the Spanish deck a Spanish game deals (Latin American Spanish): 5 561
-questions, every English id translated (5 449, same id) or listed in `dropped` (118: questions about English itself or
-English-only jargon); 112 of the entries are ES-only `-es` replacements of a dropped item, same topic and
-difficulty. The 1 500 `gpt-` questions were translated in T-0270 (41 replaced; review file:
-`reports/translate/lightning-round/REVIEW-T-0270.md`). `__tests__/content-es.test.ts` requires every English id to be
-translated or dropped and every topic to hold at least 21 Spanish questions.
+## Sources
 
-BL-015 adds 200 matching es-MX twins. Per-question evidence is in
-`reports/content/lightning-round-sources.md`; licenses and adaptations are in `content/SOURCES.md`.
-
-T-0703 adds 586 questions from the B13 trivia set (PR #22 job; 15 rows use PR #28's corrections). They are English only, listed in the Spanish deck's `dropped`. Each has a row in `content-pack-origins.json`; publishers and URLs are in `content/SOURCES.md`. Of the set's 1 000 rows, 414 were held back: 190 name another question's answer in the stem, 113 are surplus in templated series (five kept each), 47 duplicate a pack question or another row, 39 would skew a category's topics past the 1.3× balance, 21 are time-sensitive ("as of 2025"), and 4 give away their own answer or a distractor in the stem. Board & Card Games now holds 63 questions. The 63 new near pairs that keep different facts are reviewed in `reports/content/content-pack-duplicate-review.json`.
-
-The unrelated unwired Name Your Baby pack, schema registration and test are excluded from this preparation. The existing core artifact must remain intact in its original repository.
+[P01 research](../../jobs/P01-quiz-rush/RESEARCH.md) pairs official guides with independent screenshots
+and studies; original live timing was unavailable. [Current scoring help](https://support.kahoot.com/hc/en-us/articles/115002303908-How-points-work)
+has no streak points: this port's 300-point bonus is intentional; it also omits the original sub-0.5 s exception.
+[Source matrix](../../jobs/P01-quiz-rush/SOURCES.md), [classic fact references](../../jobs/P01-quiz-rush/CONTENT_SOURCES.md),
+[library licences](content/SOURCES.md) and [pinned core provenance](../../jobs/P01-quiz-rush/core-base/SOURCE.json)
+record origin and limits. Art is authored inline SVG/CSS; inherited file art/licensed music are excluded.
+[Core host migration](../../jobs/P01-quiz-rush/core-base/HOST_MIGRATION.md) is a handoff, not an applied core change.

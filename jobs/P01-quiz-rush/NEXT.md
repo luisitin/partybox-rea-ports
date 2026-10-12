@@ -1,5 +1,13 @@
 # P01 handoff
 
+## Resumed locally (2026-10-12, r1-local)
+
+- Resume-first confirmed P01 is the only unfinished r1-local claim; P22 remains DONE. Existing uncommitted classic upgrade was preserved. Reinstalled frozen dependencies with corepack/pnpm (no additions).
+- Classic server/client implementation is present, including stamped shape answers, three twenty-question packs, remote/spectator stage and occupied podium tiers. Wager/legacy mode stays the default. Fresh audit repaired score-before-reveal timing, final-chart Next timing, paused final clocks and staged-phone final totals; expanded podium receipt reading budgets and Spanish UI keys.
+- The focused real-reducer mutation baseline passes 72/72 assertions. Initial typecheck found test/view wiring errors now corrected; the full post-fix check is still pending. Root is running mutate-upgrade.mjs sequentially, which temporarily changes/restores server files. Do not run or edit tested server source until it exits.
+- Fresh render-upgrade.test.tsx/upgrade-evidence.ts create reducer-backed phase fixtures and current standalone HTML; old media still needs replacing before opt-in generation/capture. Root owns one worker and at most one finally-closed browser.
+- Still required: full game-only run with fresh 32000-match/property evidence, current fixtures, 20 mutation results, all-phase visual fit/hand review, hashes, typecheck/format, push/PR2 CI and a NEW KEEP GOING loop. PR remains draft; no current upgrade completion is claimed.
+
 ## Current owner-required upgrade
 
 - P22 completed first: PR15 ready, head9ea55b4 passed CI38212237338, claimDONE. P01 reopened r1-local on main at 2026-10-12; PR2 returned to draft. Branchjob/P01-quiz-rush merged fresh main for official naming/overlap requirements.
