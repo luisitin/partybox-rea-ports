@@ -22,10 +22,10 @@ pnpm.cmd format
 pnpm.cmd vitest run games/tank-trouble --maxWorkers=1 --pool=threads
 ```
 
-The [game spec](../../games/tank-trouble/README.md) describes the mechanics and screens.
-[RESEARCH.md](RESEARCH.md) and [SOURCES.md](SOURCES.md) record the original flow.
-[VERIFY.md](VERIFY.md) records checks; [NEXT.md](NEXT.md) is the resume point.
-[LOOP.md](LOOP.md) records the required player-focused improvement loop.
+The [game spec](https://github.com/luisitin/partybox-rea-ports/blob/job/P22-ricochet-rumble/games/tank-trouble/README.md) describes the mechanics and screens.
+[RESEARCH.md](https://github.com/luisitin/partybox-rea-ports/blob/job/P22-ricochet-rumble/jobs/P22-ricochet-rumble/RESEARCH.md) and [SOURCES.md](https://github.com/luisitin/partybox-rea-ports/blob/job/P22-ricochet-rumble/jobs/P22-ricochet-rumble/SOURCES.md) record the original flow.
+[VERIFY.md](https://github.com/luisitin/partybox-rea-ports/blob/job/P22-ricochet-rumble/jobs/P22-ricochet-rumble/VERIFY.md) records checks; [NEXT.md](https://github.com/luisitin/partybox-rea-ports/blob/job/P22-ricochet-rumble/jobs/P22-ricochet-rumble/NEXT.md) is the resume point.
+[LOOP.md](https://github.com/luisitin/partybox-rea-ports/blob/job/P22-ricochet-rumble/jobs/P22-ricochet-rumble/LOOP.md) records the required player-focused improvement loop.
 
 No original code or assets are copied, no new dependencies are added, and no runtime
-network calls are made. Remaining research limitations belong in [ASSUMPTIONS.md](ASSUMPTIONS.md).
+network calls are made. Remaining research limitations belong in [ASSUMPTIONS.md](https://github.com/luisitin/partybox-rea-ports/blob/job/P22-ricochet-rumble/jobs/P22-ricochet-rumble/ASSUMPTIONS.md).
