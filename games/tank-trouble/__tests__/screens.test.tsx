@@ -46,9 +46,41 @@ const play = fixtures.find((fixture) => fixture.name === 'play')?.state;
 const done = fixtures.find((fixture) => fixture.name === 'done')?.state;
 const score = fixtures.find((fixture) => fixture.name === 'score')?.state;
 if (play) {
+  const fresh = game.init({
+    players: Object.values(play.players),
+    seed: 42,
+    settings: { powerups: true },
+    now: play.began,
+    presence: { mode: 'together', phoneOnly: false },
+  });
+  let departed = game.reduce(fresh, {
+    type: 'player',
+    now: play.began,
+    playerId: 'p1',
+    connected: false,
+    gone: 'left',
+  });
+  departed = game.reduce(departed, { type: 'vip', now: play.began + 2000, action: 'skip' });
+  departed = game.reduce(departed, {
+    type: 'timer',
+    now: departed.phase.deadline!,
+    phaseId: departed.phase.id,
+    startedAt: departed.phase.startedAt,
+  });
+  departed = game.reduce(departed, {
+    type: 'player',
+    now: departed.phase.startedAt + 1,
+    playerId: 'p1',
+    connected: true,
+  });
+  fixtures.push({ name: 'ready-gone', state: departed });
   fixtures.push({
     name: 'play-paused',
-    state: { ...play, phase: { ...play.phase, paused: { at: play.phase.startedAt } } },
+    state: game.reduce(play, {
+      type: 'vip',
+      action: 'pause',
+      now: Math.max(play.phase.startedAt, play.began + play.checked),
+    }),
   });
   fixtures.push({
     name: 'play-active-long',
@@ -109,7 +141,9 @@ function render(state: State, surface: Surface, remote = false): string {
         />
       </PhoneOnlyProvider>
     );
-  const now = stable.phase.paused?.at ?? stable.phase.startedAt + 1000;
+  const now =
+    stable.phase.paused?.at ??
+    (stable.phase.id === 'play' ? stable.began + stable.checked : stable.phase.startedAt + 1000);
   return renderToStaticMarkup(
     <ServerClockProvider offsetMs={now - Date.now()}>{node}</ServerClockProvider>,
   );
@@ -146,6 +180,19 @@ describe.each(fixtures)('screen: $name', ({ name, state }) => {
       if (name === 'done-tied-long') expect(html.match(/#1/g)).toHaveLength(8);
     }
   });
+});
+
+it('departed seats and spectators watch the next maze without an invented tank or controls', () => {
+  const departed = fixtures.find((fixture) => fixture.name === 'ready-gone')?.state;
+  expect(departed?.phase.id).toBe('ready');
+  if (!departed) return;
+  expect(game.controllerView(departed, 'p1').participating).toBe(false);
+  for (const surface of ['phone-tv', 'phone-only', 'spectator'] as const) {
+    const html = render(departed, surface);
+    expect(html).toContain('Spectating');
+    expect(html).toContain('<svg');
+    expect(html).not.toMatch(/tank 0|Tank 0|Your tank|Find your|<button/);
+  }
 });
 
 it('compact round receipts show the winner, own gain and current rank within an honest short beat', () => {

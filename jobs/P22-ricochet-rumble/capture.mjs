@@ -70,13 +70,13 @@ class Devtools {
       }
     });
   }
-  call(method, params = {}) {
+  call(method, params = {}, timeoutMs = 30000) {
     return new Promise((resolveCall, reject) => {
       const id = this.nextId++;
       const timer = setTimeout(() => {
         this.pending.delete(id);
         reject(new Error(`DevTools timed out: ${method}`));
-      }, 30000);
+      }, timeoutMs);
       this.pending.set(id, {
         resolve: (result) => {
           clearTimeout(timer);
@@ -260,8 +260,141 @@ function measure() {
   };
 }
 
+// Runs only when requested, in the same owned page after its ordinary screenshots.
+async function measureMotion() {
+  const tank = [...document.querySelectorAll('.evidence-main svg g')].find(
+    (el) =>
+      [...el.classList].some((name) => /(?:^|[_-])tank(?:[_-]|$)/.test(name)) &&
+      el.getAttribute('data-out') !== 'true',
+  );
+  if (!tank) return { status: 'unavailable', reason: 'No live Arena tank group found.' };
+  const tankTitle = tank.querySelector('title')?.textContent ?? '';
+  const number = tankTitle.match(/Tank (\d+):/)?.[1];
+  const scene = tank.closest('svg').parentElement;
+  const label = [...scene.querySelectorAll('span')].find(
+    (el) =>
+      [...el.classList].some((name) => /(?:^|[_-])number(?:[_-]|$)/.test(name)) &&
+      el.textContent.trim() === number,
+  );
+  if (!label) return { status: 'unavailable', reason: 'Matching tank number label not found.' };
+  const motionAttributes = [...document.querySelectorAll('[data-motion="off"]')].map((el) => ({
+    el,
+    value: el.getAttribute('data-motion'),
+  }));
+  const original = {
+    transform: tank.getAttribute('transform'),
+    cssTransform: tank.style.getPropertyValue('transform'),
+    cssTransformPriority: tank.style.getPropertyPriority('transform'),
+    left: label.style.getPropertyValue('left'),
+    leftPriority: label.style.getPropertyPriority('left'),
+  };
+  const restoreProperty = (el, property, value, priority) => {
+    if (value) el.style.setProperty(property, value, priority);
+    else el.style.removeProperty(property);
+  };
+  try {
+    for (const { el } of motionAttributes) el.removeAttribute('data-motion');
+    await document.fonts.ready;
+    await new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
+    const readPose = () => {
+      const style = getComputedStyle(tank);
+      const matrix = new DOMMatrix(style.transform === 'none' ? undefined : style.transform);
+      return { x: matrix.e, y: matrix.f, labelLeftPx: parseFloat(getComputedStyle(label).left) };
+    };
+    const tankStyle = getComputedStyle(tank);
+    const labelStyle = getComputedStyle(label);
+    const before = readPose();
+    const matrix = new DOMMatrix(tankStyle.transform === 'none' ? undefined : tankStyle.transform);
+    matrix.e += 5;
+    const labelShiftPx = (tank.closest('svg').getBoundingClientRect().width * 5) / 160;
+    const expected = {
+      x: before.x + 5,
+      y: before.y,
+      labelLeftPx: before.labelLeftPx + labelShiftPx,
+    };
+    const mutation = original.cssTransform ? 'inline-css' : 'svg-attribute';
+    const start = performance.now();
+    if (mutation === 'inline-css') tank.style.setProperty('transform', matrix.toString());
+    else
+      tank.setAttribute(
+        'transform',
+        `matrix(${matrix.a} ${matrix.b} ${matrix.c} ${matrix.d} ${matrix.e} ${matrix.f})`,
+      );
+    label.style.setProperty('left', `${expected.labelLeftPx}px`);
+    const samples = [];
+    const sample = (kind) =>
+      samples.push({ kind, elapsedMs: performance.now() - start, ...readPose() });
+    sample('immediate');
+    await new Promise((done) => {
+      let frame;
+      const tick = () => {
+        sample('frame');
+        frame = requestAnimationFrame(tick);
+      };
+      frame = requestAnimationFrame(tick);
+      setTimeout(() => {
+        cancelAnimationFrame(frame);
+        sample('final');
+        done();
+      }, 400);
+    });
+    const between = (value, from, to) =>
+      value > Math.min(from, to) + 0.01 && value < Math.max(from, to) - 0.01;
+    const intermediateTankPoses = samples.filter((pose) =>
+      between(pose.x, before.x, expected.x),
+    ).length;
+    const intermediateLabelPositions = samples.filter((pose) =>
+      between(pose.labelLeftPx, before.labelLeftPx, expected.labelLeftPx),
+    ).length;
+    const immediate = samples[0];
+    const final = samples.at(-1);
+    const mid = samples.reduce((nearest, pose) =>
+      Math.abs(pose.elapsedMs - 100) < Math.abs(nearest.elapsedMs - 100) ? pose : nearest,
+    );
+    const immediateEnd =
+      Math.abs(immediate.x - expected.x) <= 0.01 &&
+      Math.abs(immediate.labelLeftPx - expected.labelLeftPx) <= 0.01;
+    return {
+      status: 'measured',
+      tankTitle,
+      tankClass: tank.getAttribute('class'),
+      labelClass: label.getAttribute('class'),
+      mutation,
+      originalTransform: original.transform,
+      originalCssTransform: original.cssTransform,
+      reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+      transition: {
+        tank: { property: tankStyle.transitionProperty, duration: tankStyle.transitionDuration },
+        label: { property: labelStyle.transitionProperty, duration: labelStyle.transitionDuration },
+      },
+      shiftWorldUnits: 5,
+      before,
+      expected,
+      immediate,
+      mid,
+      final,
+      samples,
+      intermediateTankPoses,
+      intermediateLabelPositions,
+      tankBehavior: intermediateTankPoses ? 'interpolated' : 'jump',
+      labelBehavior: intermediateLabelPositions ? 'interpolated' : 'jump',
+      immediateEnd,
+      finalReachedEnd:
+        Math.abs(final.x - expected.x) <= 0.01 &&
+        Math.abs(final.labelLeftPx - expected.labelLeftPx) <= 0.01,
+    };
+  } finally {
+    if (original.transform === null) tank.removeAttribute('transform');
+    else tank.setAttribute('transform', original.transform);
+    restoreProperty(tank, 'transform', original.cssTransform, original.cssTransformPriority);
+    restoreProperty(label, 'left', original.left, original.leftPriority);
+    for (const { el, value } of motionAttributes) el.setAttribute('data-motion', value);
+  }
+}
+
 let browser;
 let socket;
+let dev;
 let browserClosed = false;
 const metrics = [];
 try {
@@ -318,7 +451,7 @@ try {
     );
     socket.addEventListener('error', reject, { once: true });
   });
-  const dev = new Devtools(socket);
+  dev = new Devtools(socket);
   await dev.call('Page.enable');
   await dev.call('Runtime.enable');
   const { frameTree } = await dev.call('Page.getFrameTree');
@@ -374,10 +507,111 @@ try {
     JSON.stringify(metrics, null, 2) + '\n',
     'utf8',
   );
+  if (process.env.PB_MEASURE_MOTION === '1') {
+    const probes = [];
+    const probeFrame = cases.find((frame) => frame.name === 'play-tv');
+    const previousFrame = cases.at(-1);
+    try {
+      if (!probeFrame) throw new Error('Motion probe needs the existing play-tv fixture.');
+      await dev.call('Emulation.setDeviceMetricsOverride', {
+        width: probeFrame.width,
+        height: probeFrame.height,
+        deviceScaleFactor: 1,
+        mobile: false,
+      });
+      for (const preference of ['no-preference', 'reduce']) {
+        await dev.call('Emulation.setEmulatedMedia', {
+          features: [{ name: 'prefers-reduced-motion', value: preference }],
+        });
+        await dev.call('Page.setDocumentContent', {
+          frameId: frameTree.frame.id,
+          html: readFileSync(resolve(media, `${probeFrame.name}.html`), 'utf8'),
+        });
+        const result = await dev.call('Runtime.evaluate', {
+          expression: `(${measureMotion.toString()})()`,
+          awaitPromise: true,
+          returnByValue: true,
+        });
+        if (result.exceptionDetails) throw new Error(JSON.stringify(result.exceptionDetails));
+        probes.push({ preference, ...result.result.value });
+      }
+    } catch (error) {
+      probes.push({ status: 'error', reason: error.message });
+      console.warn(`Motion diagnostic: ${error.message}`);
+    } finally {
+      try {
+        await dev.call('Emulation.setEmulatedMedia', { features: [] });
+        if (previousFrame) {
+          await dev.call('Emulation.setDeviceMetricsOverride', {
+            width: previousFrame.width,
+            height: previousFrame.height,
+            deviceScaleFactor: 1,
+            mobile: previousFrame.surface !== 'tv',
+          });
+          await dev.call('Page.setDocumentContent', {
+            frameId: frameTree.frame.id,
+            html: readFileSync(resolve(media, `${previousFrame.name}.html`), 'utf8'),
+          });
+        }
+      } catch (error) {
+        probes.push({ status: 'restore-error', reason: error.message });
+      }
+    }
+    const motionFile = resolve(media, 'motion-results.json');
+    let priorRuns = [];
+    if (existsSync(motionFile)) {
+      try {
+        const prior = JSON.parse(readFileSync(motionFile, 'utf8'));
+        if (Array.isArray(prior.runs)) priorRuns = prior.runs;
+      } catch {}
+    }
+    const hasTween = probes
+      .find((probe) => probe.preference === 'no-preference')
+      ?.transition?.tank?.duration?.split(',')
+      .some((duration) => parseFloat(duration) > 0);
+    writeFileSync(
+      motionFile,
+      JSON.stringify(
+        {
+          diagnosticOnly: true,
+          runs: [
+            ...priorRuns,
+            {
+              label: process.env.PB_MOTION_LABEL ?? (hasTween ? 'css-tween' : 'original-snapshot'),
+              artifact: `${probeFrame?.name ?? 'play-tv'}.html`,
+              artifactSha256: probeFrame
+                ? createHash('sha256')
+                    .update(readFileSync(resolve(media, `${probeFrame.name}.html`)))
+                    .digest('hex')
+                : null,
+              probes,
+            },
+          ],
+        },
+        null,
+        2,
+      ) + '\n',
+      'utf8',
+    );
+    console.log(`Recorded ${probes.length} motion diagnostics in media/motion-results.json.`);
+  }
 } catch (error) {
   console.error('Capture failed:', error);
   throw error;
 } finally {
+  if (dev && socket?.readyState === WebSocket.OPEN) {
+    let closeTimeout;
+    try {
+      await Promise.race([
+        dev.call('Browser.close', {}, 1500),
+        new Promise((done) => (closeTimeout = setTimeout(done, 2000))),
+      ]);
+    } catch {
+      // The owned process-tree fallback below also covers a closed/unresponsive CDP connection.
+    } finally {
+      clearTimeout(closeTimeout);
+    }
+  }
   socket?.close();
   if (browser?.pid) {
     const killer = spawn('taskkill.exe', ['/PID', String(browser.pid), '/T', '/F'], {
@@ -402,7 +636,7 @@ try {
         const timeout = setTimeout(() => {
           verifier.unref();
           done(null);
-        }, 5000);
+        }, 15000);
         verifier.once('exit', (code) => {
           clearTimeout(timeout);
           done(code);
@@ -414,8 +648,8 @@ try {
       })) === 0;
     browser.unref();
     if (!browserClosed)
-      console.warn(
-        `Owned browser PID ${browser.pid} has not reported exit; preserving its profile.`,
+      throw new Error(
+        `Owned browser PID ${browser.pid} closure is unverified; preserving its profile at ${profile}.`,
       );
     else console.log(`Owned browser PID ${browser.pid} is closed.`);
   }

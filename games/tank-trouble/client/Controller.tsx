@@ -39,11 +39,12 @@ export function Controller({
   const now = useServerNow(250, view.paused, view.clockHeldAt);
   const phase = view.phaseId;
   const player = view.me.role === 'player';
+  const participating = player && view.participating;
   const connected = view.players.find((seat) => seat.id === view.me.id)?.connected !== false;
-  const active = phase === 'play' && player && view.alive && connected && !view.paused;
+  const active = phase === 'play' && participating && view.alive && connected && !view.paused;
   const { held, press } = useControls(active, `${phase}:${view.round}`, send);
-  const stage = phoneOnly || !player;
-  const playing = phase === 'play' && player && view.alive;
+  const stage = phoneOnly || !participating;
+  const playing = phase === 'play' && participating && view.alive;
   const mine = view.scores[view.me.id] ?? 0;
   const ownTank = view.arena.tanks.find((tank) => tank.id === view.me.id);
   const tint: CSSProperties = { ['--tank-color' as string]: playerColor(Math.max(0, view.slot)) };
@@ -176,7 +177,7 @@ export function Controller({
     );
   }
 
-  if (phase === 'ready' && player && !stage) {
+  if (phase === 'ready' && participating && !stage) {
     return (
       <div className={styles.ready} style={tint}>
         <h2>{L('Round {n}', { n: view.round })}</h2>
@@ -199,7 +200,7 @@ export function Controller({
       />
     );
 
-  if (phase === 'play' && player && !stage) {
+  if (phase === 'play' && participating && !stage) {
     return (
       <WaitingScreen
         title={L('Your tank is out')}
@@ -210,9 +211,9 @@ export function Controller({
   }
 
   let title = L('Round {n}', { n: view.round });
-  let line = player ? L('Tank {n}', { n: view.slot + 1 }) : L('Spectating');
+  let line = participating ? L('Tank {n}', { n: view.slot + 1 }) : L('Spectating');
   if (phase === 'play') {
-    title = player ? L('Your tank is out') : L('Spectating');
+    title = participating ? L('Your tank is out') : L('Spectating');
     line = aliveLine;
   } else if (phase === 'done') {
     title = L('Final standings');

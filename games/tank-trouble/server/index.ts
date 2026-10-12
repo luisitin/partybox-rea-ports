@@ -46,6 +46,7 @@ interface MatchView {
 }
 export interface TankTroubleTvView extends TvView, MatchView {}
 export interface TankTroubleControllerView extends ControllerView, MatchView {
+  participating: boolean;
   slot: number;
   alive: boolean;
   drive: number;
@@ -210,6 +211,7 @@ function controllerView(state: State, id: string): TankTroubleControllerView {
       deadline: deadline(state),
     }),
     ...matchView(state),
+    participating: hasPlayer(state, id) && !state.left.includes(id),
     slot: tank?.slot ?? -1,
     alive: tank?.alive ?? false,
     drive: tank?.drive ?? 0,

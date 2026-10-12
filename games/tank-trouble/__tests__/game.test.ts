@@ -92,26 +92,44 @@ describe('pause and presence', () => {
   it('a drop releases controls, rejects offline input, and a temporary reconnect keeps the same tank', () => {
     const held = kit.input(kit.start(), 'p1', command, kit.t0 + 1);
     const dropped = kit.player(held, 'p1', false, undefined, kit.t0 + 2);
+    expect(game.controllerView(dropped, 'p1').participating).toBe(true);
     expect(tank(dropped).drive).toBe(0);
     expect(tank(dropped).fire).toBe(false);
     expect(kit.input(dropped, 'p1', command, kit.t0 + 10)).toBe(dropped);
     const returned = kit.player(dropped, 'p1', true, undefined, kit.t0 + 10);
+    expect(game.controllerView(returned, 'p1').participating).toBe(true);
     expect(tank(returned).x).toBe(tank(dropped).x);
     expect(tank(returned).id).toBe('p1');
     expect(tank(kit.input(returned, 'p1', command, kit.t0 + 11)).fire).toBe(true);
   });
 
   it('permanent leaves never respawn or take controls, even after reconnect', () => {
-    const state = kit.start({ players: testPlayers(3) });
+    const state = { ...kit.start({ players: testPlayers(3) }), scores: { p1: 3, p2: 0, p3: 0 } };
     const left = kit.player(state, 'p1', false, 'left', kit.t0 + 1);
     expect(tank(left).alive).toBe(false);
     expect(left.left).toContain('p1');
+    expect(game.controllerView(left, 'p1').participating).toBe(false);
     const returned = kit.player(left, 'p1', true, undefined, kit.t0 + 2);
+    expect(game.controllerView(returned, 'p1').participating).toBe(false);
     expect(kit.input(returned, 'p1', command, kit.t0 + 3)).toBe(returned);
     const ready = kit.vip(kit.vip(returned, 'skip', kit.t0 + 4), 'skip', kit.t0 + 5);
     expect(ready.phase.id).toBe('ready');
     expect(ready.world.tanks.map((t) => t.id)).not.toContain('p1');
     expect(Object.keys(ready.scores)).toContain('p1');
+    const view = game.controllerView(ready, 'p1');
+    expect(view.participating).toBe(false);
+    expect(view.slot).toBe(-1);
+    expect(view.me.role).toBe('player');
+    expect(view.alive).toBe(false);
+    expect(view.scores.p1).toBe(3);
+    const done = kit.vip(ready, 'end', kit.t0 + 6);
+    const final = game.controllerView(done, 'p1');
+    expect(final.participating).toBe(false);
+    expect(final.me.role).toBe('player');
+    expect(final.scores.p1).toBe(3);
+    expect(final.rank).toBe(1);
+    expect(final.tied).toBe(false);
+    expect(game.results(done)!.winnerIds).toEqual(['p1']);
   });
 
   it('finishes a drop-completed fight on resume instead of waiting for a timer', () => {
@@ -148,6 +166,7 @@ describe('public views and terminal outcomes', () => {
       const cv = game.controllerView(state, id);
       expect(cv.arena).toEqual(tv.arena);
       expect(cv.me.role).toBe(['p1', 'p2'].includes(id) ? 'player' : 'spectator');
+      expect(cv.participating).toBe(['p1', 'p2'].includes(id));
       for (const field of ['rng', 'left', 'settings', 'nextBullet', 'safeUntil']) {
         expect(cv).not.toHaveProperty(field);
         expect(cv.arena).not.toHaveProperty(field);
