@@ -1,0 +1,34 @@
+{
+  "id": "haxball",
+  "name": "Haxball",
+  "icon": "⚽",
+  "tagline": "Two teams. One ball. Make the pass.",
+  "description": "Move your numbered disc with a phone D-pad and hold Kick to strike on contact. Two balanced teams play two short halves on one public pitch. Odd groups get a named helper on the smaller team. Most team goals wins.",
+  "howToPlay": [
+    "Find your team and jersey. Hold the D-pad to move; holding Kick slows you down.",
+    "Get behind the ball. Hold Kick to send it away on contact. Release to rearm.",
+    "Score in the opposite goal. Swap ends at halftime. Most goals after two halves wins."
+  ],
+  "version": "0.1.0",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "estimatedMinutes": 4,
+  "tags": ["comedy"],
+  "category": "arcade",
+  "presence": { "needs": "anywhere" },
+  "addedOn": "2026-10-11",
+  "noCards": true,
+  "settings": [
+    {
+      "key": "halfSeconds",
+      "label": "Seconds per half",
+      "description": "Two halves; goal resets count inside the clock",
+      "type": "number",
+      "default": 90,
+      "min": 30,
+      "max": 120,
+      "step": 30
+    }
+  ],
+  "supportsBots": true
+}

@@ -1,0 +1,172 @@
+{
+  "capturedAt": "2026-10-12T06:41:02.697Z",
+  "sourceDescription": "Final touch cancellation guard, first full mounted rerun",
+  "completedControls": 104,
+  "passedControls": 103,
+  "failedChecks": [
+    {
+      "name": "held controls renew on roughly 300ms heartbeat",
+      "passed": false,
+      "observed": {
+        "configuredMs": 300,
+        "observedDeltasMs": [297, 201, 295, 373, 472],
+        "packets": [
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 92,
+            "dx": 1,
+            "dy": 1,
+            "kick": true
+          },
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 93,
+            "dx": 1,
+            "dy": 1,
+            "kick": true
+          },
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 94,
+            "dx": 1,
+            "dy": 1,
+            "kick": true
+          },
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 95,
+            "dx": 1,
+            "dy": 1,
+            "kick": true
+          },
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 96,
+            "dx": 1,
+            "dy": 1,
+            "kick": true
+          },
+          {
+            "type": "control",
+            "phaseAt": 1700000000000,
+            "seq": 97,
+            "dx": 1,
+            "dy": 1,
+            "kick": true
+          }
+        ],
+        "note": "First interval is anchored to component mount, so steady heartbeat intervals exclude it."
+      }
+    }
+  ],
+  "cleanup": {
+    "browser": {
+      "verifiedClosed": true,
+      "verification": "CDP process membership plus native PID/creation/exit checks",
+      "browserPid": 105220,
+      "observedProcesses": 6,
+      "forcedProcesses": 0,
+      "exitedRecords": [
+        {
+          "pid": 26508,
+          "type": "launcher",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 105220,
+          "created": "2026-10-12T06:41:02.8219604Z",
+          "type": "browser",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 90652,
+          "created": "2026-10-12T06:41:03.0653582Z",
+          "type": "renderer",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 52360,
+          "created": "2026-10-12T06:41:03.0306622Z",
+          "type": "renderer",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 114040,
+          "created": "2026-10-12T06:41:02.9639492Z",
+          "type": "GPU",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 63516,
+          "created": "2026-10-12T06:41:02.9668349Z",
+          "type": "network.mojom.NetworkService",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 65440,
+          "created": "2026-10-12T06:41:02.9869346Z",
+          "type": "storage.mojom.StorageService",
+          "nativeState": "not-found"
+        }
+      ],
+      "endpoint": {
+        "checked": true,
+        "closed": true
+      }
+    },
+    "profileRemoved": true
+  },
+  "secondRun": {
+    "failed": [
+      {
+        "name": "held controls renew on roughly 300ms heartbeat",
+        "passed": false,
+        "observed": {
+          "configuredMs": 300,
+          "observedDeltasMs": [151, 294, 849],
+          "packets": [
+            {
+              "type": "control",
+              "phaseAt": 1700000000000,
+              "seq": 92,
+              "dx": 1,
+              "dy": 1,
+              "kick": true
+            },
+            {
+              "type": "control",
+              "phaseAt": 1700000000000,
+              "seq": 93,
+              "dx": 1,
+              "dy": 1,
+              "kick": true
+            },
+            {
+              "type": "control",
+              "phaseAt": 1700000000000,
+              "seq": 94,
+              "dx": 1,
+              "dy": 1,
+              "kick": true
+            },
+            {
+              "type": "control",
+              "phaseAt": 1700000000000,
+              "seq": 95,
+              "dx": 1,
+              "dy": 1,
+              "kick": true
+            }
+          ],
+          "note": "First interval is anchored to component mount, so steady heartbeat intervals exclude it."
+        }
+      }
+    ],
+    "capturedAt": "2026-10-12T06:44:40.176Z"
+  }
+}

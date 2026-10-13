@@ -1,0 +1,94 @@
+{
+  "capturedAt": "2026-10-12T06:04:44.645Z",
+  "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "pages": [],
+  "browserVersion": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/154.0.8037.99",
+    "revision": "@45889d77830582727fe00dbfd614bcb7aac35caa",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "jsVersion": "15.4.80.20"
+  },
+  "touchDispatchFeatureFlag": "--disable-features=SyntheticPointerActions",
+  "interaction": {
+    "report": "interaction.json",
+    "passed": false,
+    "checks": 88,
+    "captures": 3
+  },
+  "goalAudio": {
+    "report": "goal-audio.json",
+    "passed": true,
+    "checks": 64,
+    "captures": 2
+  },
+  "retainedCredit": {
+    "report": "retained-credit.json",
+    "passed": true,
+    "checks": 12,
+    "captures": 2
+  },
+  "cleanup": {
+    "browser": {
+      "verifiedClosed": true,
+      "verification": "CDP process membership plus native PID/creation/exit checks",
+      "browserPid": 11676,
+      "observedProcesses": 7,
+      "forcedProcesses": 0,
+      "exitedRecords": [
+        {
+          "pid": 17748,
+          "type": "launcher",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 11676,
+          "created": "2026-10-12T06:04:44.7149916Z",
+          "type": "browser",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 69168,
+          "created": "2026-10-12T06:04:45.0156226Z",
+          "type": "renderer",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 77484,
+          "created": "2026-10-12T06:04:44.8864519Z",
+          "type": "renderer",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 105120,
+          "created": "2026-10-12T06:04:44.8612037Z",
+          "type": "renderer",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 27256,
+          "created": "2026-10-12T06:04:44.7985718Z",
+          "type": "GPU",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 25336,
+          "created": "2026-10-12T06:04:44.8014965Z",
+          "type": "network.mojom.NetworkService",
+          "nativeState": "not-found"
+        },
+        {
+          "pid": 28900,
+          "created": "2026-10-12T06:04:44.8204990Z",
+          "type": "storage.mojom.StorageService",
+          "nativeState": "not-found"
+        }
+      ],
+      "endpoint": {
+        "checked": true,
+        "closed": true
+      }
+    },
+    "profileRemoved": true
+  }
+}

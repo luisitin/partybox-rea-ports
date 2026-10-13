@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="en" data-surface="controller" data-motion="off">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Haxball controller evidence</title>
+    <style>
+      /* Design tokens (docs/DESIGN_SYSTEM.md). Every colour, size and duration in the app comes from here.
+   Colour tokens are re-declared per theme below (docs/DESIGN_SYSTEM.md → Themes).
+   The TV shell and the controller shell each set a type-scale column via `data-surface` (stamped on
+   <html> by main.tsx and on the shell element). */
+      :root {
+        --pb-bg: #0f1020;
+        /* ADR-056: how much of the page colour washes over a game's art — the backdrop behind play and
+     the key art behind the start stage. Art is drawn for a dark stage; a light theme washes it
+     far more, so text drawn on the stage keeps its contrast. */
+        --pb-art-wash: 16%;
+        --pb-tile-wash: 0%;
+        --pb-surface: #1c1e3a;
+        --pb-surface-2: #272a52;
+        --pb-text: #f5f6ff;
+        --pb-text-muted: #b3b7d9;
+        --pb-accent: #ff5d8f;
+        --pb-accent-2: #ffd166;
+        --pb-accent-3: #06d6a0;
+        --pb-danger: #ef476f;
+        --pb-info: #4cc9f0;
+        --pb-focus: #ffd166;
+        --pb-on-accent: #1a0b12;
+        /* accent-2 as a FILL (VIP pill, letter discs) — stays gold even where accent-2 text darkens */
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        /* optional edge for surfaces; only High Contrast sets it */
+        --pb-border: transparent;
+        /* the veil behind a pause curtain or a phone sheet: the theme's own ink, never a baked-in night */
+        --pb-scrim: rgb(15 16 32 / 62%);
+
+        --pb-player-1: #ff5d8f;
+        --pb-player-2: #ffd166;
+        --pb-player-3: #06d6a0;
+        --pb-player-4: #4cc9f0;
+        --pb-player-5: #b388ff;
+        --pb-player-6: #ff9f43;
+        --pb-player-7: #48dbfb;
+        --pb-player-8: #f368e0;
+
+        /* The two teams (P00 §6 TeamBanner, audit #52): Sun follows the theme's accent, Moon its info
+     colour. Always shown with the shape (▲ / ●) and the name, never as a tint on a face. */
+        --pb-team-sun: var(--pb-accent);
+        --pb-team-moon: var(--pb-info);
+
+        --pb-font-family:
+          'Nunito Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system,
+          Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --pb-font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+
+        --pb-space-1: 4px;
+        --pb-space-2: 8px;
+        --pb-space-3: 12px;
+        --pb-space-4: 16px;
+        --pb-space-5: 24px;
+        --pb-space-6: 32px;
+        --pb-space-7: 48px;
+        --pb-space-8: 64px;
+
+        --pb-radius: 12px;
+        --pb-radius-lg: 24px;
+        --pb-touch: 44px;
+
+        --pb-motion-fast: 150ms;
+        --pb-motion-base: 300ms;
+        --pb-motion-slow: 600ms;
+        --pb-motion-pulse: 1000ms;
+        --pb-motion-confetti: 3000ms;
+        --pb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        /* phone column by default; the TV shell overrides. I-100 C: rem, so a phone's "larger text"
+     setting scales the words (16 px root = the same sizes as before). */
+        --pb-font-display: 3rem;
+        --pb-font-h1: 1.75rem;
+        --pb-font-h2: 1.375rem;
+        --pb-font-body: 1.125rem;
+        --pb-font-caption: 0.875rem;
+        --pb-font-button: 1.25rem;
+        --pb-chip-size: 40px;
+      }
+
+      /* ── Themes (src/theme.ts sets data-theme on <html>;
+ight is the :root default above) ────────
+   Every palette keeps text ≥ 4.5:1 on bg/surface and button labels ≥ 4.5:1 on accents. Player
+   colours stay bright in every theme — they are avatar discs, not text. */
+      [data-theme='daylight'] {
+        color-scheme: light;
+        --pb-bg: #f6f5ff;
+        --pb-art-wash: 90%;
+        --pb-tile-wash: 45%;
+        --pb-surface: #ffffff;
+        --pb-surface-2: #e9e7fb;
+        --pb-text: #171633;
+        --pb-text-muted: #4a4c6e;
+        --pb-accent: #c2185b;
+        --pb-accent-2: #7a4b00;
+        --pb-accent-3: #0b6b4e;
+        --pb-danger: #c0143c;
+        --pb-info: #0b6e99;
+        --pb-focus: #c2185b;
+        --pb-on-accent: #ffffff;
+        --pb-accent-2-fill: #ffd166;
+        --pb-on-accent-2-fill: #1a0b12;
+        --pb-scrim: rgb(23 22 51 / 45%);
+      }
+
+      [data-theme='arcade'] {
+        --pb-bg: #050014;
+        --pb-surface: #14002e;
+        --pb-surface-2: #23064a;
+        --pb-text: #f0f6ff;
+        --pb-text-muted: #a8b3d6;
+        --pb-accent: #ff2bd6;
+        --pb-accent-2: #00f0ff;
+        --pb-accent-3: #39ff14;
+        --pb-danger: #ff3860;
+        --pb-info: #8f96ff;
+        --pb-focus: #00f0ff;
+        --pb-on-accent: #050014;
+        --pb-accent-2-fill: #00f0ff;
+        --pb-on-accent-2-fill: #050014;
+        --pb-scrim: rgb(5 0 20 / 62%);
+      }
+
+      [data-theme='cabin'] {
+        --pb-bg: #1d1410;
+        --pb-surface: #2c211b;
+        --pb-surface-2: #3d2e26;
+        --pb-text: #fbf3e8;
+        --pb-text-muted: #cbb8a6;
+        --pb-accent: #ee8050;
+        --pb-accent-2: #f2c14e;
+        --pb-accent-3: #8fbf5a;
+        --pb-danger: #f07070;
+        --pb-info: #6fb3d2;
+        --pb-focus: #f2c14e;
+        --pb-on-accent: #1d1410;
+        --pb-accent-2-fill: #f2c14e;
+        --pb-on-accent-2-fill: #1d1410;
+        --pb-scrim: rgb(29 20 16 / 62%);
+      }
+
+      [data-theme='contrast'] {
+        --pb-bg: #000000;
+        --pb-surface: #111111;
+        --pb-surface-2: #242424;
+        --pb-text: #ffffff;
+        --pb-text-muted: #e6e6e6;
+        --pb-accent: #ff4fa3;
+        --pb-accent-2: #ffff00;
+        --pb-accent-3: #00ff88;
+        --pb-danger: #ff5555;
+        --pb-info: #66ccff;
+        --pb-focus: #ffffff;
+        --pb-on-accent: #000000;
+        --pb-accent-2-fill: #ffff00;
+        --pb-on-accent-2-fill: #000000;
+        --pb-border: #ffffff;
+        --pb-scrim: rgb(0 0 0 / 78%);
+      }
+      [data-surface='tv'] {
+        --pb-font-display: 128px;
+        --pb-font-h1: 72px;
+        --pb-font-h2: 48px;
+        --pb-font-body: 36px;
+        --pb-font-caption: 28px;
+        --pb-tv-text-min: 28px; /* nothing read from the couch is smaller (T-0393) */
+        --pb-font-button: 36px;
+        --pb-chip-size: 72px;
+        /* 5 % of 1920×1080 in px: viewport units ignore the fit zoom (src/tv/fit.ts). */
+        --pb-overscan-x: 96px;
+        --pb-overscan-y: 54px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :root {
+          --pb-motion-fast: 0ms;
+          --pb-motion-base: 0ms;
+          --pb-motion-slow: 0ms;
+          --pb-motion-pulse: 0ms;
+          --pb-motion-confetti: 0ms;
+        }
+      }
+
+      /* The in-app motion switch (a phone's card-style sheet, loop 311): the same collapse. */
+      :root[data-motion='off'] {
+        --pb-motion-fast: 0ms;
+        --pb-motion-base: 0ms;
+        --pb-motion-slow: 0ms;
+        --pb-motion-pulse: 0ms;
+        --pb-motion-confetti: 0ms;
+      }
+
+      .hax-controller-screen {
+        height: 100%;
+        min-height: 0;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-3);
+        color: var(--pb-text);
+      }
+      .hax-controller-identity {
+        flex: none;
+        text-align: center;
+      }
+      .hax-controller-identity h2 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+        line-height: 1.15;
+      }
+      .hax-controller-identity p {
+        margin: var(--pb-space-1) 0 0;
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+        overflow-wrap: anywhere;
+      }
+      .hax-controller-identity[data-team='red'] h2 {
+        color: var(--pb-danger);
+      }
+      .hax-controller-identity[data-team='blue'] h2 {
+        color: var(--pb-info);
+      }
+      .hax-controller-score {
+        flex: none;
+      }
+      .hax-controller-attack {
+        margin: var(--pb-space-2) 0 0;
+        font-size: var(--pb-font-body);
+        font-weight: 800;
+        text-align: center;
+      }
+      .hax-controller-phonePitch {
+        flex: none;
+        min-height: 0;
+      }
+      .hax-controller-feedback {
+        flex: none;
+        margin: 0;
+        padding: var(--pb-space-1) var(--pb-space-2);
+        min-height: calc(var(--pb-font-body) * 1.25);
+        font-size: var(--pb-font-body);
+        line-height: 1.25;
+        font-weight: 800;
+        text-align: center;
+        overflow-wrap: anywhere;
+      }
+      .hax-controller-controls {
+        flex: 1;
+        min-height: calc(var(--pb-touch) * 3 + var(--pb-space-8));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-3);
+      }
+      .hax-controller-pad {
+        flex: none;
+        display: grid;
+        grid-template-columns: repeat(3, calc(var(--pb-touch) + var(--pb-space-4)));
+        grid-template-rows: repeat(3, calc(var(--pb-touch) + var(--pb-space-4)));
+        gap: var(--pb-space-2);
+        touch-action: none;
+      }
+      .hax-controller-direction,
+      .hax-controller-kick {
+        appearance: none;
+        border: 0;
+        border-radius: var(--pb-radius);
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      .hax-controller-direction {
+        display: grid;
+        place-items: center;
+        min-width: var(--pb-touch);
+        min-height: var(--pb-touch);
+        padding: 0;
+        font-size: var(--pb-font-h1);
+        font-weight: 900;
+      }
+      .hax-controller-direction[data-hax-control='up-left'] {
+        grid-area: 1 / 1;
+      }
+      .hax-controller-direction[data-hax-control='up'] {
+        grid-area: 1 / 2;
+      }
+      .hax-controller-direction[data-hax-control='up-right'] {
+        grid-area: 1 / 3;
+      }
+      .hax-controller-direction[data-hax-control='left'] {
+        grid-area: 2 / 1;
+      }
+      .hax-controller-direction[data-hax-control='right'] {
+        grid-area: 2 / 3;
+      }
+      .hax-controller-direction[data-hax-control='down-left'] {
+        grid-area: 3 / 1;
+      }
+      .hax-controller-direction[data-hax-control='down'] {
+        grid-area: 3 / 2;
+      }
+      .hax-controller-direction[data-hax-control='down-right'] {
+        grid-area: 3 / 3;
+      }
+      .hax-controller-padCentre {
+        grid-area: 2 / 2;
+        display: grid;
+        place-items: center;
+        font-size: var(--pb-font-h2);
+        font-weight: 900;
+      }
+      .hax-controller-kick {
+        flex: 1;
+        max-width: calc(var(--pb-touch) * 2.5);
+        min-height: calc(var(--pb-touch) * 3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pb-space-2);
+        padding: var(--pb-space-2);
+      }
+      .hax-controller-kick span {
+        font-size: var(--pb-font-display);
+        line-height: 1;
+      }
+      .hax-controller-kick b {
+        font-size: var(--pb-font-h2);
+      }
+      .hax-controller-kick small {
+        font-size: var(--pb-font-caption);
+        text-align: center;
+      }
+      .hax-controller-direction[data-held],
+      .hax-controller-kick[data-held] {
+        background: var(--pb-accent-2-fill);
+        color: var(--pb-on-accent-2-fill);
+        outline: var(--pb-space-1) solid var(--pb-focus);
+        outline-offset: 0;
+      }
+      .hax-controller-direction:focus-visible,
+      .hax-controller-kick:focus-visible {
+        outline: var(--pb-space-1) solid var(--pb-focus);
+        outline-offset: var(--pb-space-1);
+      }
+      .hax-controller-hint {
+        flex: none;
+        margin: 0;
+        font-size: var(--pb-font-caption);
+        line-height: 1.25;
+        text-align: center;
+        color: var(--pb-text-muted);
+      }
+      .hax-controller-hint span {
+        display: inline-block;
+        margin-top: var(--pb-space-1);
+      }
+      .hax-controller-watching {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-2);
+      }
+      .hax-controller-watching > :first-child {
+        flex: 1;
+        min-height: 0;
+      }
+      @media (max-height: 740px) {
+        .hax-controller-screen {
+          gap: var(--pb-space-1);
+        }
+        .hax-controller-hint span {
+          display: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hax-controller-screen * {
+          animation: none;
+          transition: none;
+        }
+      }
+
+      .hax-tv-stage {
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-3);
+      }
+      .hax-tv-help {
+        margin: 0;
+        flex: none;
+        text-align: center;
+        color: var(--pb-text-muted);
+        font-size: var(--pb-font-body);
+        line-height: 1.15;
+      }
+
+      .hax-match-match {
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-2);
+      }
+      .hax-match-scoreLine {
+        flex: none;
+        display: grid;
+        grid-template-columns: 1fr 1.2fr 1fr;
+        align-items: center;
+        gap: var(--pb-space-3);
+        text-align: center;
+      }
+      .hax-match-teamScore,
+      .hax-match-clock {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--pb-space-1);
+      }
+      .hax-match-teamScore span,
+      .hax-match-clock span {
+        font-size: var(--pb-font-body);
+        font-weight: 800;
+      }
+      .hax-match-teamScore b {
+        font-size: var(--pb-font-display);
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
+      .hax-match-clock b {
+        font: 900 var(--pb-font-display)/1 var(--pb-font-mono);
+      }
+      .hax-match-teamScore[data-team='red'] span {
+        color: var(--pb-danger);
+      }
+      .hax-match-teamScore[data-team='blue'] span {
+        color: var(--pb-info);
+      }
+      .hax-match-headline {
+        flex: none;
+        text-align: center;
+        min-height: var(--pb-space-5);
+      }
+      .hax-match-headline h2 {
+        margin: 0;
+        font-size: var(--pb-font-h2);
+        line-height: 1.1;
+      }
+      .hax-match-headline p {
+        margin: var(--pb-space-1) 0 0;
+        font-size: var(--pb-font-body);
+      }
+      .hax-match-fieldRow {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 3.2fr) minmax(0, 1fr);
+        align-items: center;
+        gap: var(--pb-space-4);
+      }
+      .hax-match-pitchBox {
+        height: 100%;
+        min-height: 0;
+        min-width: 0;
+      }
+      .hax-match-teamRoster h3 {
+        margin: 0 0 var(--pb-space-3);
+        font-size: var(--pb-font-body);
+      }
+      .hax-match-roster,
+      .hax-match-compactRoster {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .hax-match-roster {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-4);
+      }
+      .hax-match-roster li {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--pb-space-2);
+        min-width: 0;
+      }
+      .hax-match-jersey {
+        flex: none;
+        display: inline-block;
+        font-size: var(--pb-font-body);
+        line-height: 1.25;
+      }
+      [data-team='red'] .hax-match-jersey {
+        color: var(--pb-danger);
+      }
+      [data-team='blue'] .hax-match-jersey {
+        color: var(--pb-info);
+      }
+      .hax-match-playerName {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        font-size: var(--pb-font-body);
+        line-height: 1.25;
+      }
+      .hax-match-playerName small {
+        display: block;
+        font-size: var(--pb-font-body);
+        color: var(--pb-text-muted);
+      }
+      .hax-match-compactRoster {
+        display: flex;
+        justify-content: center;
+        gap: var(--pb-space-2);
+        flex-wrap: wrap;
+      }
+      .hax-match-compactRoster li {
+        display: flex;
+        align-items: center;
+        gap: var(--pb-space-1);
+      }
+      .hax-match-helperMark {
+        font-size: var(--pb-font-caption);
+        color: var(--pb-text-muted);
+      }
+      [data-surface='controller'] .hax-match-scoreLine {
+        gap: var(--pb-space-2);
+      }
+      [data-surface='controller'] .hax-match-teamScore span,
+      [data-surface='controller'] .hax-match-clock span {
+        font-size: var(--pb-font-caption);
+      }
+      [data-surface='controller'] .hax-match-teamScore b,
+      [data-surface='controller'] .hax-match-clock b {
+        font-size: var(--pb-font-h1);
+      }
+      [data-surface='controller'] .hax-match-headline h2 {
+        font-size: var(--pb-font-h2);
+      }
+      [data-surface='controller'] .hax-match-headline p {
+        font-size: var(--pb-font-caption);
+      }
+      [data-surface='controller'] .hax-match-fieldRow {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: minmax(0, 1fr) auto;
+        gap: var(--pb-space-2);
+      }
+      [data-surface='controller'] .hax-match-pitchBox {
+        grid-column: 1 / 3;
+        grid-row: 1;
+      }
+      [data-surface='controller'] .hax-match-redRoster,
+      [data-surface='controller'] .hax-match-blueRoster {
+        grid-row: 2;
+      }
+      [data-surface='controller'] .hax-match-roster {
+        gap: var(--pb-space-2);
+      }
+      [data-surface='controller'] .hax-match-teamRoster h3 {
+        font-size: var(--pb-font-body);
+        margin-bottom: var(--pb-space-2);
+      }
+      [data-surface='controller'] .hax-match-jersey,
+      [data-surface='controller'] .hax-match-playerName {
+        font-size: var(--pb-font-caption);
+      }
+      [data-surface='controller'] .hax-match-playerName small {
+        font-size: var(--pb-font-caption);
+      }
+      [data-compact] .hax-match-scoreLine {
+        gap: var(--pb-space-1);
+      }
+      [data-compact] .hax-match-headline h2 {
+        font-size: var(--pb-font-caption);
+      }
+      [data-compact] .hax-match-headline {
+        min-height: 0;
+      }
+      [data-compact] .hax-match-fieldRow {
+        flex: none;
+        grid-template-rows: auto auto;
+      }
+      [data-compact] .hax-match-pitchBox {
+        height: calc(var(--pb-space-8) * 3);
+      }
+      [data-compact] .hax-match-teamRoster {
+        text-align: center;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hax-match-match * {
+          animation: none;
+          transition: none;
+        }
+      }
+
+      .hax-pitch-pitch {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .hax-pitch-field {
+        fill: var(--pb-surface);
+        stroke: var(--pb-text-muted);
+        stroke-width: 0.6;
+      }
+      .hax-pitch-marking {
+        fill: none;
+        stroke: var(--pb-text-muted);
+        stroke-width: 0.45;
+      }
+      .hax-pitch-centre,
+      .hax-pitch-post {
+        fill: var(--pb-text);
+      }
+      .hax-pitch-goal {
+        fill: var(--pb-surface-2);
+        stroke: var(--pb-text);
+        stroke-width: 0.6;
+      }
+      .hax-pitch-attackArrow {
+        fill: none;
+        stroke: var(--pb-text);
+        stroke-width: 0.8;
+      }
+      .hax-pitch-attackLabel {
+        fill: var(--pb-text);
+        font: 900 calc(var(--pb-space-2) - var(--pb-space-1) / 4) var(--pb-font-family);
+      }
+      .hax-pitch-disc {
+        fill: var(--pb-bg);
+        stroke-width: 1.1;
+      }
+      [data-team='red'] .hax-pitch-disc {
+        stroke: var(--pb-danger);
+      }
+      [data-team='blue'] .hax-pitch-disc {
+        stroke: var(--pb-info);
+      }
+      .hax-pitch-number {
+        fill: var(--pb-text);
+        font: 900 calc(var(--pb-space-2) - var(--pb-space-1) / 4) var(--pb-font-family);
+      }
+      .hax-pitch-mine {
+        fill: none;
+        stroke: var(--pb-focus);
+        stroke-width: 0.65;
+      }
+      .hax-pitch-helper,
+      .hax-pitch-left {
+        fill: none;
+        stroke: var(--pb-text);
+        stroke-width: 0.7;
+      }
+      [data-offline] .hax-pitch-disc {
+        stroke-dasharray: 1.1 0.8;
+      }
+      .hax-pitch-ballHalo {
+        fill: var(--pb-bg);
+      }
+      .hax-pitch-ball {
+        fill: var(--pb-accent-2-fill);
+        stroke: var(--pb-on-accent-2-fill);
+        stroke-width: 0.35;
+      }
+
+      .hax-stage-stage {
+        display: flex;
+        flex-direction: column;
+        gap: var(--pb-space-5);
+        min-height: 100%;
+        /* The top is the overscan band unless the host already fills it (T-0179: under the playing
+     header, which sits inside the band, the shell sets --pb-stage-top). */
+        padding: var(--pb-stage-top, var(--pb-overscan-y, 54px)) var(--pb-overscan-x, 96px)
+          var(--pb-overscan-y, 54px);
+      }
+
+      .hax-stage-center {
+        /* `safe`: a stage taller than its box overflows downward, never up under the roster (a 16-player
+     Bingo with the hall board on put its kicker through the third chip row — loop 265). */
+        justify-content: safe center;
+        align-items: safe center;
+        text-align: center;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font-family);
+      }
+      body {
+        width: 390px;
+        height: 844px;
+      }
+      main {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main data-evidence-surface="controller">
+      <section class="hax-controller-screen" data-surface="controller" data-phase="play">
+        <header class="hax-controller-identity" data-team="red">
+          <h2>Red · R2 · you</h2>
+          <p title="Alexandria Montgomery-Wellington">Alexandria Montgomery-Welli…</p>
+        </header>
+        <div class="hax-controller-score">
+          <div class="hax-match-scoreLine" aria-label="Red 0, Blue 0">
+            <div class="hax-match-teamScore" data-team="red"><span>Red →</span><b>0</b></div>
+            <div class="hax-match-clock" role="timer" aria-label="First half time left">
+              <span>Half 1 / 2</span><b>1:30</b>
+            </div>
+            <div class="hax-match-teamScore" data-team="blue"><span>← Blue</span><b>0</b></div>
+          </div>
+          <p class="hax-controller-attack">Attack the right → goal</p>
+        </div>
+        <p class="hax-controller-feedback" role="status" aria-live="polite">
+          Kick armed · get close to the ball
+        </p>
+        <div class="hax-controller-controls">
+          <div
+            class="hax-controller-pad"
+            role="group"
+            aria-label="Held movement arrows"
+            data-hax-pad="true"
+          >
+            <span class="hax-controller-padCentre" aria-hidden="true" data-hax-pad-centre="true"
+              >R2</span
+            ><button
+              type="button"
+              class="hax-controller-direction"
+              data-hax-control="up-left"
+              aria-label="Move up and left"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">↖</span></button
+            ><button
+              type="button"
+              class="hax-controller-direction"
+              data-hax-control="up"
+              aria-label="Move up"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">↑</span></button
+            ><button
+              type="button"
+              class="hax-controller-direction"
+              data-hax-control="up-right"
+              aria-label="Move up and right"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">↗</span></button
+            ><button
+              type="button"
+              class="hax-controller-direction"
+              data-hax-control="left"
+              aria-label="Move left"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">←</span></button
+            ><button
+              type="button"
+              class="hax-controller-direction"
+              data-hax-control="right"
+              aria-label="Move right"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">→</span></button
+            ><button
+              type="button"
+              class="hax-controller-direction"
+              data-hax-control="down-left"
+              aria-label="Move down and left"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">↙</span></button
+            ><button
+              type="button"
+              class="hax-controller-direction"
+              data-hax-control="down"
+              aria-label="Move down"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">↓</span></button
+            ><button
+              type="button"
+              class="hax-controller-direction"
+              data-hax-control="down-right"
+              aria-label="Move down and right"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">↘</span>
+            </button>
+          </div>
+          <button
+            type="button"
+            class="hax-controller-kick"
+            data-hax-control="kick"
+            aria-label="Hold Kick near the ball; release after kicking"
+            aria-pressed="false"
+          >
+            <span aria-hidden="true">◎</span><b>Kick</b><small>hold near ball</small>
+          </button>
+        </div>
+        <p class="hax-controller-hint">
+          Get behind the ball. Kick sends it away. Release to rearm.<br /><span
+            >Keyboard: arrows or WASD · Space or X kicks</span
+          >
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

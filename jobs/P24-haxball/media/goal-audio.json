@@ -1,0 +1,5381 @@
+{
+  "capturedAt": "2026-10-12T06:54:26.644Z",
+  "source": ["interaction-views.json", "interaction-tv-views.json"],
+  "browserOwnership": "Same capture.mjs browser and page; no new instance or tab.",
+  "method": "Real Tv/Controller in SoundProvider; observed cheer callbacks, without microphone/audio-output claims.",
+  "checks": [
+    {
+      "name": "TV first mount is silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "tv",
+        "kind": "audio-zero",
+        "phoneOnly": false,
+        "goals": {
+          "red": 0,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV red goal cues exactly once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-red",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "mounted audio surface fits: interaction-goal-tv.png",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 0,
+          "controlIssues": 0,
+          "controlSpacingIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 2,
+          "podiumPlaceholders": 0,
+          "svgJerseyIssues": 0,
+          "tvBodyFontIssues": 0,
+          "tvTimerFontIssues": 0,
+          "typographyIssues": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "TV audio-red cannot replay red goal",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-red",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV audio-red-paused cannot replay red goal",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-red-paused",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV audio-red-resumed cannot replay red goal",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-red-resumed",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV blue goal adds one cue when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer", "cheer"],
+        "cues": ["cheer", "cheer"],
+        "surface": "tv",
+        "kind": "audio-blue",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "TV retained goal remount is silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "tv",
+        "kind": "audio-red",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV later blue rise after remount cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-blue",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "TV decrease/reset/historical restore audio-red stays silent",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-red",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV decrease/reset/historical restore audio-reset stays silent",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-reset",
+        "phoneOnly": false,
+        "goals": {
+          "red": 0,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV decrease/reset/historical restore audio-red stays silent",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-red",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV decrease/reset/historical restore audio-blue stays silent",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-blue",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "TV genuinely higher red score cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer", "cheer"],
+        "cues": ["cheer", "cheer"],
+        "surface": "tv",
+        "kind": "audio-red-new",
+        "phoneOnly": false,
+        "goals": {
+          "red": 2,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "TV direct audio-red-cap score projection cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-red-cap",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV direct audio-red-done score projection cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-red-done",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV direct audio-red-delayed score projection cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-red-delayed",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV paused score rise is silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "tv",
+        "kind": "audio-red-paused",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV resume cannot replay a paused rise",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "tv",
+        "kind": "audio-red-resumed",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "TV next fresh unpaused blue score cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "tv",
+        "kind": "audio-blue",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller first mount is silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-zero",
+        "phoneOnly": true,
+        "goals": {
+          "red": 0,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller red goal cues exactly once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-red",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "mounted audio surface fits: interaction-goal-phone.png",
+      "passed": true,
+      "observed": {
+        "summary": {
+          "controls": 0,
+          "controlIssues": 0,
+          "controlSpacingIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0,
+          "svgJerseyIssues": 0,
+          "tvBodyFontIssues": 0,
+          "tvTimerFontIssues": 0,
+          "typographyIssues": 0
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller audio-red cannot replay red goal",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-red",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller audio-red-paused cannot replay red goal",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-red-paused",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller audio-red-resumed cannot replay red goal",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-red-resumed",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller blue goal adds one cue when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer", "cheer"],
+        "cues": ["cheer", "cheer"],
+        "surface": "controller",
+        "kind": "audio-blue",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller retained goal remount is silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller later blue rise after remount cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-blue",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller decrease/reset/historical restore audio-red stays silent",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-red",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller decrease/reset/historical restore audio-reset stays silent",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-reset",
+        "phoneOnly": true,
+        "goals": {
+          "red": 0,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller decrease/reset/historical restore audio-red stays silent",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-red",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller decrease/reset/historical restore audio-blue stays silent",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-blue",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller genuinely higher red score cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer", "cheer"],
+        "cues": ["cheer", "cheer"],
+        "surface": "controller",
+        "kind": "audio-red-new",
+        "phoneOnly": true,
+        "goals": {
+          "red": 2,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller direct audio-red-cap score projection cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-red-cap",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller direct audio-red-done score projection cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-red-done",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller direct audio-red-delayed score projection cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-red-delayed",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller paused score rise is silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red-paused",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller resume cannot replay a paused rise",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red-resumed",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "phone-only Controller next fresh unpaused blue score cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-blue",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller first mount is silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-zero",
+        "phoneOnly": false,
+        "goals": {
+          "red": 0,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller red goal cues exactly once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller audio-red cannot replay red goal",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller audio-red-paused cannot replay red goal",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red-paused",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller audio-red-resumed cannot replay red goal",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red-resumed",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller blue goal adds one cue when enabled",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-blue",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller retained goal remount is silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller later blue rise after remount cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-blue",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller decrease/reset/historical restore audio-red stays silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller decrease/reset/historical restore audio-reset stays silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-reset",
+        "phoneOnly": false,
+        "goals": {
+          "red": 0,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller decrease/reset/historical restore audio-red stays silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller decrease/reset/historical restore audio-blue stays silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-blue",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller genuinely higher red score cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red-new",
+        "phoneOnly": false,
+        "goals": {
+          "red": 2,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller direct audio-red-cap score projection cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red-cap",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller direct audio-red-done score projection cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red-done",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller direct audio-red-delayed score projection cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red-delayed",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller paused score rise is silent",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red-paused",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller resume cannot replay a paused rise",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red-resumed",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller next fresh unpaused blue score cues once when enabled",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-blue",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "with-TV Controller consumes disabled goal rise silently",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red",
+        "phoneOnly": false,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "enabling phone-only cannot replay disabled goal rise",
+      "passed": true,
+      "observed": {
+        "expected": [],
+        "cues": [],
+        "surface": "controller",
+        "kind": "audio-red",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 0
+        }
+      }
+    },
+    {
+      "name": "enabled phone-only next blue goal cheers exactly once",
+      "passed": true,
+      "observed": {
+        "expected": ["cheer"],
+        "cues": ["cheer"],
+        "surface": "controller",
+        "kind": "audio-blue",
+        "phoneOnly": true,
+        "goals": {
+          "red": 1,
+          "blue": 1
+        }
+      }
+    },
+    {
+      "name": "goal audio page reports no runtime errors",
+      "passed": true,
+      "observed": {
+        "errors": []
+      }
+    },
+    {
+      "name": "job media after goal audio stays below10 MB",
+      "passed": true,
+      "observed": {
+        "bytes": 9068874,
+        "limitBytes": 10000000
+      }
+    }
+  ],
+  "captures": [
+    {
+      "file": "interaction-goal-tv.png",
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "surface": "tv"
+      },
+      "document": {
+        "clientWidth": 1920,
+        "clientHeight": 1080,
+        "scrollWidth": 1920,
+        "scrollHeight": 1080,
+        "bodyClientWidth": 1920,
+        "bodyClientHeight": 1080,
+        "bodyScrollWidth": 1920,
+        "bodyScrollHeight": 1080
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Red goal!",
+          "bounds": {
+            "x": 96,
+            "y": 242,
+            "width": 1728,
+            "height": 52.8
+          },
+          "hidden": null,
+          "fontSize": "48px",
+          "lineHeight": "52.8px"
+        },
+        {
+          "tag": "h3",
+          "class": "",
+          "text": "Red team",
+          "bounds": {
+            "x": 96,
+            "y": 497.2,
+            "width": 326.14,
+            "height": 48
+          },
+          "hidden": null,
+          "fontSize": "36px",
+          "lineHeight": "normal"
+        },
+        {
+          "tag": "h3",
+          "class": "",
+          "text": "Blue team",
+          "bounds": {
+            "x": 1497.84,
+            "y": 497.2,
+            "width": 326.16,
+            "height": 48
+          },
+          "hidden": null,
+          "fontSize": "36px",
+          "lineHeight": "normal"
+        }
+      ],
+      "controls": [],
+      "controlIssues": [],
+      "controlSpacing": {
+        "requiredMinimumPx": null,
+        "visibleControls": 0,
+        "pairs": [],
+        "minimumSpacingPx": null,
+        "nestedPairsExcluded": [],
+        "issues": []
+      },
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [
+        {
+          "tag": "div",
+          "class": "chrome",
+          "text": "PB · R3 · Public-view interaction QA",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "reason": "display:none"
+        },
+        {
+          "tag": "div",
+          "class": "bottom",
+          "text": "Haxball · Phone controller",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "reason": "display:none"
+        }
+      ],
+      "podiumPlaceholders": [],
+      "svgJerseys": {
+        "selector": "svg[data-haxball-pitch=\"true\"] g[data-jersey] text",
+        "labels": [
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R1",
+            "bounds": {
+              "x": 789.03,
+              "y": 637.7,
+              "width": 41.84,
+              "height": 52
+            },
+            "jersey": "R1",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 5.516183035714286,
+              "b": 0,
+              "c": 0,
+              "d": 5.516183035714286
+            },
+            "minimumLinearScale": 5.516183035714286,
+            "effectiveFontPx": 38.61328125,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B1",
+            "bounds": {
+              "x": 1089.51,
+              "y": 637.7,
+              "width": 41.05,
+              "height": 52
+            },
+            "jersey": "B1",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 5.516183035714286,
+              "b": 0,
+              "c": 0,
+              "d": 5.516183035714286
+            },
+            "minimumLinearScale": 5.516183035714286,
+            "effectiveFontPx": 38.61328125,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R2",
+            "bounds": {
+              "x": 627.39,
+              "y": 637.7,
+              "width": 47.39,
+              "height": 52
+            },
+            "jersey": "R2",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 5.516183035714286,
+              "b": 0,
+              "c": 0,
+              "d": 5.516183035714286
+            },
+            "minimumLinearScale": 5.516183035714286,
+            "effectiveFontPx": 38.61328125,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B2",
+            "bounds": {
+              "x": 1245.6,
+              "y": 637.7,
+              "width": 46.59,
+              "height": 52
+            },
+            "jersey": "B2",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 5.516183035714286,
+              "b": 0,
+              "c": 0,
+              "d": 5.516183035714286
+            },
+            "minimumLinearScale": 5.516183035714286,
+            "effectiveFontPx": 38.61328125,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R3",
+            "bounds": {
+              "x": 715.65,
+              "y": 510.83,
+              "width": 47.39,
+              "height": 52
+            },
+            "jersey": "R3",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 5.516183035714286,
+              "b": 0,
+              "c": 0,
+              "d": 5.516183035714286
+            },
+            "minimumLinearScale": 5.516183035714286,
+            "effectiveFontPx": 38.61328125,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B3",
+            "bounds": {
+              "x": 1157.34,
+              "y": 510.83,
+              "width": 46.59,
+              "height": 52
+            },
+            "jersey": "B3",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 5.516183035714286,
+              "b": 0,
+              "c": 0,
+              "d": 5.516183035714286
+            },
+            "minimumLinearScale": 5.516183035714286,
+            "effectiveFontPx": 38.61328125,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R4",
+            "bounds": {
+              "x": 715.65,
+              "y": 764.58,
+              "width": 47.39,
+              "height": 52
+            },
+            "jersey": "R4",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 5.516183035714286,
+              "b": 0,
+              "c": 0,
+              "d": 5.516183035714286
+            },
+            "minimumLinearScale": 5.516183035714286,
+            "effectiveFontPx": 38.61328125,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B4",
+            "bounds": {
+              "x": 1157.34,
+              "y": 764.58,
+              "width": 46.59,
+              "height": 52
+            },
+            "jersey": "B4",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 5.516183035714286,
+              "b": 0,
+              "c": 0,
+              "d": 5.516183035714286
+            },
+            "minimumLinearScale": 5.516183035714286,
+            "effectiveFontPx": 38.61328125,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          }
+        ],
+        "minimumTvPx": 38.61328125,
+        "minimumPhonePx": null,
+        "issues": []
+      },
+      "tvTypography": {
+        "body": [
+          {
+            "tag": "span",
+            "class": "",
+            "text": "Red →",
+            "bounds": {
+              "x": 310.39,
+              "y": 54,
+              "width": 103.7,
+              "height": 48
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "b",
+            "class": "",
+            "text": "1",
+            "bounds": {
+              "x": 325.44,
+              "y": 106,
+              "width": 73.63,
+              "height": 128
+            },
+            "classification": "tv-body",
+            "fontSizePx": 128,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "span",
+            "class": "",
+            "text": "Half 1 / 2",
+            "bounds": {
+              "x": 886.14,
+              "y": 54,
+              "width": 147.7,
+              "height": 48
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "span",
+            "class": "",
+            "text": "← Blue",
+            "bounds": {
+              "x": 1501.19,
+              "y": 54,
+              "width": 113.11,
+              "height": 48
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "b",
+            "class": "",
+            "text": "0",
+            "bounds": {
+              "x": 1520.94,
+              "y": 106,
+              "width": 73.63,
+              "height": 128
+            },
+            "classification": "tv-body",
+            "fontSizePx": 128,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "h2",
+            "class": "",
+            "text": "Red goal!",
+            "bounds": {
+              "x": 96,
+              "y": 242,
+              "width": 1728,
+              "height": 52.8
+            },
+            "classification": "tv-body",
+            "fontSizePx": 48,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "p",
+            "class": "",
+            "text": "Scored by R1 · Chloë",
+            "bounds": {
+              "x": 96,
+              "y": 298.8,
+              "width": 1728,
+              "height": 48
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "h3",
+            "class": "",
+            "text": "Red team",
+            "bounds": {
+              "x": 96,
+              "y": 497.2,
+              "width": 326.14,
+              "height": 48
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "b",
+            "class": "_jersey_iwgga_90",
+            "text": "R1",
+            "bounds": {
+              "x": 96,
+              "y": 557.2,
+              "width": 39.02,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "span",
+            "class": "_playerName_iwgga_102",
+            "text": "Chloë",
+            "bounds": {
+              "x": 143.02,
+              "y": 557.2,
+              "width": 93.42,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "b",
+            "class": "_jersey_iwgga_90",
+            "text": "R2",
+            "bounds": {
+              "x": 96,
+              "y": 618.2,
+              "width": 44.19,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "span",
+            "class": "_playerName_iwgga_102",
+            "text": "Alexandria Montgomery-Wellington",
+            "bounds": {
+              "x": 148.19,
+              "y": 618.2,
+              "width": 273.95,
+              "height": 90
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "b",
+            "class": "_jersey_iwgga_90",
+            "text": "R3",
+            "bounds": {
+              "x": 96,
+              "y": 724.2,
+              "width": 44.19,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "span",
+            "class": "_playerName_iwgga_102",
+            "text": "Davi",
+            "bounds": {
+              "x": 148.19,
+              "y": 724.2,
+              "width": 68.47,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "b",
+            "class": "_jersey_iwgga_90",
+            "text": "R4",
+            "bounds": {
+              "x": 96,
+              "y": 785.2,
+              "width": 44.19,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "span",
+            "class": "_playerName_iwgga_102",
+            "text": "Gabrielle",
+            "bounds": {
+              "x": 148.19,
+              "y": 785.2,
+              "width": 139.84,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "h3",
+            "class": "",
+            "text": "Blue team",
+            "bounds": {
+              "x": 1497.84,
+              "y": 497.2,
+              "width": 326.16,
+              "height": 48
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "b",
+            "class": "_jersey_iwgga_90",
+            "text": "B1",
+            "bounds": {
+              "x": 1497.84,
+              "y": 557.2,
+              "width": 38.28,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "span",
+            "class": "_playerName_iwgga_102",
+            "text": "Hiro",
+            "bounds": {
+              "x": 1544.13,
+              "y": 557.2,
+              "width": 67.67,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "b",
+            "class": "_jersey_iwgga_90",
+            "text": "B2",
+            "bounds": {
+              "x": 1497.84,
+              "y": 618.2,
+              "width": 43.44,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "span",
+            "class": "_playerName_iwgga_102",
+            "text": "Emilia",
+            "bounds": {
+              "x": 1549.28,
+              "y": 618.2,
+              "width": 91.45,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "b",
+            "class": "_jersey_iwgga_90",
+            "text": "B3",
+            "bounds": {
+              "x": 1497.84,
+              "y": 679.2,
+              "width": 43.44,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "span",
+            "class": "_playerName_iwgga_102",
+            "text": "Farid",
+            "bounds": {
+              "x": 1549.28,
+              "y": 679.2,
+              "width": 76.2,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "b",
+            "class": "_jersey_iwgga_90",
+            "text": "B4",
+            "bounds": {
+              "x": 1497.84,
+              "y": 740.2,
+              "width": 43.44,
+              "height": 45
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "span",
+            "class": "_playerName_iwgga_102",
+            "text": "Benjamin Constantinopoulos",
+            "bounds": {
+              "x": 1549.28,
+              "y": 740.2,
+              "width": 274.72,
+              "height": 90
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          },
+          {
+            "tag": "p",
+            "class": "_help_538vg_8",
+            "text": "Controls rest between plays · watch the pitch",
+            "bounds": {
+              "x": 96,
+              "y": 984.61,
+              "width": 1728,
+              "height": 41.39
+            },
+            "classification": "tv-body",
+            "fontSizePx": 36,
+            "requiredMinimumPx": 32,
+            "meetsMinimum": true
+          }
+        ],
+        "timers": [
+          {
+            "tag": "b",
+            "class": "",
+            "text": "1:30",
+            "bounds": {
+              "x": 819.25,
+              "y": 106,
+              "width": 281.5,
+              "height": 128
+            },
+            "classification": "tv-timer",
+            "fontSizePx": 128,
+            "requiredMinimumPx": 96,
+            "meetsMinimum": true
+          }
+        ],
+        "minimumBodyPx": 36,
+        "minimumTimerPx": 128,
+        "issues": []
+      },
+      "typographyIssues": [],
+      "summary": {
+        "controls": 0,
+        "controlIssues": 0,
+        "controlSpacingIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 2,
+        "podiumPlaceholders": 0,
+        "svgJerseyIssues": 0,
+        "tvBodyFontIssues": 0,
+        "tvTimerFontIssues": 0,
+        "typographyIssues": 0
+      }
+    },
+    {
+      "file": "interaction-goal-phone.png",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "surface": "phone"
+      },
+      "document": {
+        "clientWidth": 390,
+        "clientHeight": 844,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "bodyClientWidth": 390,
+        "bodyClientHeight": 844,
+        "bodyScrollWidth": 390,
+        "bodyScrollHeight": 844
+      },
+      "overflow": {
+        "horizontal": false,
+        "vertical": false
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Red · R2 · you",
+          "bounds": {
+            "x": 12,
+            "y": 82,
+            "width": 366,
+            "height": 25.3
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "25.3px"
+        },
+        {
+          "tag": "h2",
+          "class": "",
+          "text": "Red goal!",
+          "bounds": {
+            "x": 12,
+            "y": 197.3,
+            "width": 366,
+            "height": 24.19
+          },
+          "hidden": null,
+          "fontSize": "22px",
+          "lineHeight": "24.2px"
+        },
+        {
+          "tag": "h3",
+          "class": "",
+          "text": "Red team",
+          "bounds": {
+            "x": 12,
+            "y": 610.5,
+            "width": 179,
+            "height": 24
+          },
+          "hidden": null,
+          "fontSize": "18px",
+          "lineHeight": "normal"
+        },
+        {
+          "tag": "h3",
+          "class": "",
+          "text": "Blue team",
+          "bounds": {
+            "x": 199,
+            "y": 610.5,
+            "width": 179,
+            "height": 24
+          },
+          "hidden": null,
+          "fontSize": "18px",
+          "lineHeight": "normal"
+        }
+      ],
+      "controls": [],
+      "controlIssues": [],
+      "controlSpacing": {
+        "requiredMinimumPx": 8,
+        "visibleControls": 0,
+        "pairs": [],
+        "minimumSpacingPx": null,
+        "nestedPairsExcluded": [],
+        "issues": []
+      },
+      "offscreen": [],
+      "textClipped": [],
+      "scrollContainers": [],
+      "intentionalHidden": [],
+      "podiumPlaceholders": [],
+      "svgJerseys": {
+        "selector": "svg[data-haxball-pitch=\"true\"] g[data-jersey] text",
+        "labels": [
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R1",
+            "bounds": {
+              "x": 134.66,
+              "y": 418.49,
+              "width": 14.77,
+              "height": 18
+            },
+            "jersey": "R1",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B1",
+            "bounds": {
+              "x": 240.71,
+              "y": 418.49,
+              "width": 14.48,
+              "height": 18
+            },
+            "jersey": "B1",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R2",
+            "bounds": {
+              "x": 77.62,
+              "y": 418.49,
+              "width": 16.88,
+              "height": 18
+            },
+            "jersey": "R2",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B2",
+            "bounds": {
+              "x": 295.8,
+              "y": 418.49,
+              "width": 16.6,
+              "height": 18
+            },
+            "jersey": "B2",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R3",
+            "bounds": {
+              "x": 108.77,
+              "y": 373.72,
+              "width": 16.88,
+              "height": 18
+            },
+            "jersey": "R3",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B3",
+            "bounds": {
+              "x": 264.65,
+              "y": 373.72,
+              "width": 16.6,
+              "height": 18
+            },
+            "jersey": "B3",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "R4",
+            "bounds": {
+              "x": 108.77,
+              "y": 463.27,
+              "width": 16.88,
+              "height": 18
+            },
+            "jersey": "R4",
+            "team": "red",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          },
+          {
+            "tag": "text",
+            "class": "",
+            "text": "B4",
+            "bounds": {
+              "x": 264.65,
+              "y": 463.27,
+              "width": 16.6,
+              "height": 18
+            },
+            "jersey": "B4",
+            "team": "blue",
+            "fontSizePx": 7,
+            "screenCtm": {
+              "a": 1.946808510638298,
+              "b": 0,
+              "c": 0,
+              "d": 1.946808510638298
+            },
+            "minimumLinearScale": 1.946808510638298,
+            "effectiveFontPx": 13.627659574468085,
+            "requiredMinimumPx": null,
+            "meetsMinimum": null
+          }
+        ],
+        "minimumTvPx": null,
+        "minimumPhonePx": 13.627659574468085,
+        "issues": []
+      },
+      "tvTypography": {
+        "body": [],
+        "timers": [],
+        "minimumBodyPx": null,
+        "minimumTimerPx": null,
+        "issues": []
+      },
+      "typographyIssues": [],
+      "summary": {
+        "controls": 0,
+        "controlIssues": 0,
+        "controlSpacingIssues": 0,
+        "offscreen": 0,
+        "textClipped": 0,
+        "scrollContainers": 0,
+        "intentionalHidden": 0,
+        "podiumPlaceholders": 0,
+        "svgJerseyIssues": 0,
+        "tvBodyFontIssues": 0,
+        "tvTimerFontIssues": 0,
+        "typographyIssues": 0
+      }
+    }
+  ],
+  "passed": true,
+  "retainedCredit": {
+    "source": "interaction-views.json: real post-reset controller projections",
+    "viewport": {
+      "width": 390,
+      "height": 844,
+      "productHeight": 704
+    },
+    "browserOwnership": "Reuses the already-mounted goal-audio fixture on the same CDP page.",
+    "checks": [
+      {
+        "name": "play-last-goal keeps compact play and nine controls in704 px",
+        "passed": true,
+        "observed": {
+          "phaseId": "play",
+          "ownGoal": false,
+          "scorer": {
+            "id": "p3",
+            "name": "Chloë",
+            "team": "red",
+            "number": 1
+          },
+          "compact": "true",
+          "controls": 9,
+          "surface": "controller",
+          "productHeight": 704,
+          "visible": "Last goal: R1",
+          "ariaLabel": "Last goal: Scored by R1 · Chloë",
+          "title": "Last goal: Scored by R1 · Chloë",
+          "creditHeight": 15.390625,
+          "lineHeight": 15.4,
+          "cues": []
+        }
+      },
+      {
+        "name": "play-last-goal visible credit uses compact jersey headline",
+        "passed": true,
+        "observed": {
+          "expected": "Last goal: R1",
+          "visible": "Last goal: R1",
+          "jersey": "R1"
+        }
+      },
+      {
+        "name": "play-last-goal accessible credit retains the complete public name",
+        "passed": true,
+        "observed": {
+          "ariaLabel": "Last goal: Scored by R1 · Chloë",
+          "title": "Last goal: Scored by R1 · Chloë",
+          "fullName": "Chloë",
+          "jersey": "R1"
+        }
+      },
+      {
+        "name": "play-last-goal retained goal mount is silent",
+        "passed": true,
+        "observed": {
+          "cues": []
+        }
+      },
+      {
+        "name": "play-last-goal mounted geometry and typography fit",
+        "passed": true,
+        "observed": {
+          "summary": {
+            "controls": 9,
+            "controlIssues": 0,
+            "controlSpacingIssues": 0,
+            "offscreen": 0,
+            "textClipped": 0,
+            "scrollContainers": 0,
+            "intentionalHidden": 0,
+            "podiumPlaceholders": 0,
+            "svgJerseyIssues": 0,
+            "tvBodyFontIssues": 0,
+            "tvTimerFontIssues": 0,
+            "typographyIssues": 0
+          },
+          "overflow": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "creditHeight": 15.390625,
+          "lineHeight": 15.4
+        }
+      },
+      {
+        "name": "play-last-own-long keeps compact play and nine controls in704 px",
+        "passed": true,
+        "observed": {
+          "phaseId": "play",
+          "ownGoal": true,
+          "scorer": {
+            "id": "p1",
+            "name": "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+            "team": "red",
+            "number": 2
+          },
+          "compact": "true",
+          "controls": 9,
+          "surface": "controller",
+          "productHeight": 704,
+          "visible": "Last goal: Own goal by R2",
+          "ariaLabel": "Last goal: Own goal by R2 · WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+          "title": "Last goal: Own goal by R2 · WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+          "creditHeight": 15.390625,
+          "lineHeight": 15.4,
+          "cues": []
+        }
+      },
+      {
+        "name": "play-last-own-long visible credit uses compact jersey headline",
+        "passed": true,
+        "observed": {
+          "expected": "Last goal: Own goal by R2",
+          "visible": "Last goal: Own goal by R2",
+          "jersey": "R2"
+        }
+      },
+      {
+        "name": "play-last-own-long accessible credit retains the complete public name",
+        "passed": true,
+        "observed": {
+          "ariaLabel": "Last goal: Own goal by R2 · WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+          "title": "Last goal: Own goal by R2 · WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+          "fullName": "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+          "jersey": "R2"
+        }
+      },
+      {
+        "name": "play-last-own-long retained goal mount is silent",
+        "passed": true,
+        "observed": {
+          "cues": []
+        }
+      },
+      {
+        "name": "own-goal long-name fixture exercises64 unbroken characters",
+        "passed": true,
+        "observed": {
+          "ownGoal": true,
+          "nameLength": 64
+        }
+      },
+      {
+        "name": "play-last-own-long mounted geometry and typography fit",
+        "passed": true,
+        "observed": {
+          "summary": {
+            "controls": 9,
+            "controlIssues": 0,
+            "controlSpacingIssues": 0,
+            "offscreen": 0,
+            "textClipped": 0,
+            "scrollContainers": 0,
+            "intentionalHidden": 0,
+            "podiumPlaceholders": 0,
+            "svgJerseyIssues": 0,
+            "tvBodyFontIssues": 0,
+            "tvTimerFontIssues": 0,
+            "typographyIssues": 0
+          },
+          "overflow": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "creditHeight": 15.390625,
+          "lineHeight": 15.4
+        }
+      },
+      {
+        "name": "retained-credit page reports no runtime errors",
+        "passed": true,
+        "observed": {
+          "errors": []
+        }
+      }
+    ],
+    "captures": [
+      {
+        "file": "interaction-post-goal.png",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "surface": "phone"
+        },
+        "document": {
+          "clientWidth": 390,
+          "clientHeight": 844,
+          "scrollWidth": 390,
+          "scrollHeight": 844,
+          "bodyClientWidth": 390,
+          "bodyClientHeight": 844,
+          "bodyScrollWidth": 390,
+          "bodyScrollHeight": 844
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        },
+        "headings": [
+          {
+            "tag": "h2",
+            "class": "",
+            "text": "Red · R2 · you",
+            "bounds": {
+              "x": 12,
+              "y": 82,
+              "width": 366,
+              "height": 25.3
+            },
+            "hidden": null,
+            "fontSize": "22px",
+            "lineHeight": "25.3px"
+          },
+          {
+            "tag": "h2",
+            "class": "",
+            "text": "Last goal: Scored by R1 · Chloë",
+            "bounds": {
+              "x": 12,
+              "y": 197.3,
+              "width": 366,
+              "height": 15.39
+            },
+            "hidden": null,
+            "fontSize": "14px",
+            "lineHeight": "15.4px"
+          }
+        ],
+        "controls": [
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and left",
+            "bounds": {
+              "x": 36,
+              "y": 513.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up",
+            "bounds": {
+              "x": 104,
+              "y": 513.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and right",
+            "bounds": {
+              "x": 172,
+              "y": 513.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move left",
+            "bounds": {
+              "x": 36,
+              "y": 581.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move right",
+            "bounds": {
+              "x": 172,
+              "y": 581.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and left",
+            "bounds": {
+              "x": 36,
+              "y": 649.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down",
+            "bounds": {
+              "x": 104,
+              "y": 649.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and right",
+            "bounds": {
+              "x": 172,
+              "y": 649.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_kick_j6luw_74",
+            "text": "Hold Kick near the ball; release after kicking",
+            "bounds": {
+              "x": 244,
+              "y": 545.09,
+              "width": 110,
+              "height": 132
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          }
+        ],
+        "controlIssues": [],
+        "controlSpacing": {
+          "requiredMinimumPx": 8,
+          "visibleControls": 9,
+          "pairs": [
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 76,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 107.48023074035522,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 148,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 148,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 11.313708498984761,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 11.313708498984761,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 80,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 80,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 107.48023074035522,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 12,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 12,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 76,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 11.313708498984761,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 148,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 148,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 11.313708498984761,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 12,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 12,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 76,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 148,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 148,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 80,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 80,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 12,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 12,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            }
+          ],
+          "minimumSpacingPx": 8,
+          "nestedPairsExcluded": [],
+          "issues": []
+        },
+        "offscreen": [],
+        "textClipped": [],
+        "scrollContainers": [],
+        "intentionalHidden": [],
+        "podiumPlaceholders": [],
+        "svgJerseys": {
+          "selector": "svg[data-haxball-pitch=\"true\"] g[data-jersey] text",
+          "labels": [
+            {
+              "tag": "text",
+              "class": "",
+              "text": "R1",
+              "bounds": {
+                "x": 141.86,
+                "y": 308.69,
+                "width": 13.02,
+                "height": 16
+              },
+              "jersey": "R1",
+              "team": "red",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "B1",
+              "bounds": {
+                "x": 235.25,
+                "y": 308.69,
+                "width": 12.77,
+                "height": 16
+              },
+              "jersey": "B1",
+              "team": "blue",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "R2",
+              "bounds": {
+                "x": 91.63,
+                "y": 308.69,
+                "width": 14.82,
+                "height": 16
+              },
+              "jersey": "R2",
+              "team": "red",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "B2",
+              "bounds": {
+                "x": 283.76,
+                "y": 308.69,
+                "width": 14.58,
+                "height": 16
+              },
+              "jersey": "B2",
+              "team": "blue",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "R3",
+              "bounds": {
+                "x": 119.06,
+                "y": 269.26,
+                "width": 14.82,
+                "height": 16
+              },
+              "jersey": "R3",
+              "team": "red",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "B3",
+              "bounds": {
+                "x": 256.33,
+                "y": 269.26,
+                "width": 14.58,
+                "height": 16
+              },
+              "jersey": "B3",
+              "team": "blue",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "R4",
+              "bounds": {
+                "x": 119.06,
+                "y": 348.12,
+                "width": 14.82,
+                "height": 16
+              },
+              "jersey": "R4",
+              "team": "red",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "B4",
+              "bounds": {
+                "x": 256.33,
+                "y": 348.12,
+                "width": 14.58,
+                "height": 16
+              },
+              "jersey": "B4",
+              "team": "blue",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            }
+          ],
+          "minimumTvPx": null,
+          "minimumPhonePx": 12,
+          "issues": []
+        },
+        "tvTypography": {
+          "body": [],
+          "timers": [],
+          "minimumBodyPx": null,
+          "minimumTimerPx": null,
+          "issues": []
+        },
+        "typographyIssues": [],
+        "summary": {
+          "controls": 9,
+          "controlIssues": 0,
+          "controlSpacingIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0,
+          "svgJerseyIssues": 0,
+          "tvBodyFontIssues": 0,
+          "tvTimerFontIssues": 0,
+          "typographyIssues": 0
+        }
+      },
+      {
+        "file": "interaction-own-goal-long.png",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "surface": "phone"
+        },
+        "document": {
+          "clientWidth": 390,
+          "clientHeight": 844,
+          "scrollWidth": 390,
+          "scrollHeight": 844,
+          "bodyClientWidth": 390,
+          "bodyClientHeight": 844,
+          "bodyScrollWidth": 390,
+          "bodyScrollHeight": 844
+        },
+        "overflow": {
+          "horizontal": false,
+          "vertical": false
+        },
+        "headings": [
+          {
+            "tag": "h2",
+            "class": "",
+            "text": "Red · R2 · you",
+            "bounds": {
+              "x": 12,
+              "y": 82,
+              "width": 366,
+              "height": 25.3
+            },
+            "hidden": null,
+            "fontSize": "22px",
+            "lineHeight": "25.3px"
+          },
+          {
+            "tag": "h2",
+            "class": "",
+            "text": "Last goal: Own goal by R2 · WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+            "bounds": {
+              "x": 12,
+              "y": 197.3,
+              "width": 366,
+              "height": 15.39
+            },
+            "hidden": null,
+            "fontSize": "14px",
+            "lineHeight": "15.4px"
+          }
+        ],
+        "controls": [
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and left",
+            "bounds": {
+              "x": 36,
+              "y": 513.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up",
+            "bounds": {
+              "x": 104,
+              "y": 513.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move up and right",
+            "bounds": {
+              "x": 172,
+              "y": 513.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move left",
+            "bounds": {
+              "x": 36,
+              "y": 581.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move right",
+            "bounds": {
+              "x": 172,
+              "y": 581.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and left",
+            "bounds": {
+              "x": 36,
+              "y": 649.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down",
+            "bounds": {
+              "x": 104,
+              "y": 649.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_direction_j6luw_73",
+            "text": "Move down and right",
+            "bounds": {
+              "x": 172,
+              "y": 649.09,
+              "width": 60,
+              "height": 60
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          },
+          {
+            "tag": "button",
+            "class": "_kick_j6luw_74",
+            "text": "Hold Kick near the ball; release after kicking",
+            "bounds": {
+              "x": 244,
+              "y": 545.09,
+              "width": 110,
+              "height": 132
+            },
+            "disabled": false,
+            "insideViewport": true,
+            "clippedBy": [],
+            "minimumTouchSize": 44,
+            "targetFits": true
+          }
+        ],
+        "controlIssues": [],
+        "controlSpacing": {
+          "requiredMinimumPx": 8,
+          "visibleControls": 9,
+          "pairs": [
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 76,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 107.48023074035522,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 148,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 148,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 11.313708498984761,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 11.313708498984761,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up",
+                "bounds": {
+                  "x": 104,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 80,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 80,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 107.48023074035522,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 76,
+              "edgeSeparationPx": 76,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move up and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 513.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "up-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 12,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 12,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 76,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 11.313708498984761,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move left",
+                "bounds": {
+                  "x": 36,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 148,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 148,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 76.4198926981712,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "geometry": "diagonal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 11.313708498984761,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "vertical",
+              "horizontalGapPx": 0,
+              "verticalGapPx": 8,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move right",
+                "bounds": {
+                  "x": 172,
+                  "y": 581.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 12,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 12,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 76,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 76,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and left",
+                "bounds": {
+                  "x": 36,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-left"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 148,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 148,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 8,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 8,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down",
+                "bounds": {
+                  "x": 104,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 80,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 80,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            },
+            {
+              "first": {
+                "tag": "button",
+                "class": "_direction_j6luw_73",
+                "text": "Move down and right",
+                "bounds": {
+                  "x": 172,
+                  "y": 649.09,
+                  "width": 60,
+                  "height": 60
+                },
+                "control": "down-right"
+              },
+              "second": {
+                "tag": "button",
+                "class": "_kick_j6luw_74",
+                "text": "Hold Kick near the ball; release after kicking",
+                "bounds": {
+                  "x": 244,
+                  "y": 545.09,
+                  "width": 110,
+                  "height": 132
+                },
+                "control": "kick"
+              },
+              "geometry": "horizontal",
+              "horizontalGapPx": 12,
+              "verticalGapPx": 0,
+              "edgeSeparationPx": 12,
+              "requiredMinimumPx": 8,
+              "meetsMinimum": true
+            }
+          ],
+          "minimumSpacingPx": 8,
+          "nestedPairsExcluded": [],
+          "issues": []
+        },
+        "offscreen": [],
+        "textClipped": [],
+        "scrollContainers": [],
+        "intentionalHidden": [],
+        "podiumPlaceholders": [],
+        "svgJerseys": {
+          "selector": "svg[data-haxball-pitch=\"true\"] g[data-jersey] text",
+          "labels": [
+            {
+              "tag": "text",
+              "class": "",
+              "text": "R1",
+              "bounds": {
+                "x": 141.86,
+                "y": 308.69,
+                "width": 13.02,
+                "height": 16
+              },
+              "jersey": "R1",
+              "team": "red",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "B1",
+              "bounds": {
+                "x": 235.25,
+                "y": 308.69,
+                "width": 12.77,
+                "height": 16
+              },
+              "jersey": "B1",
+              "team": "blue",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "R2",
+              "bounds": {
+                "x": 91.63,
+                "y": 308.69,
+                "width": 14.82,
+                "height": 16
+              },
+              "jersey": "R2",
+              "team": "red",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "B2",
+              "bounds": {
+                "x": 283.76,
+                "y": 308.69,
+                "width": 14.58,
+                "height": 16
+              },
+              "jersey": "B2",
+              "team": "blue",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "R3",
+              "bounds": {
+                "x": 119.06,
+                "y": 269.26,
+                "width": 14.82,
+                "height": 16
+              },
+              "jersey": "R3",
+              "team": "red",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "B3",
+              "bounds": {
+                "x": 256.33,
+                "y": 269.26,
+                "width": 14.58,
+                "height": 16
+              },
+              "jersey": "B3",
+              "team": "blue",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "R4",
+              "bounds": {
+                "x": 119.06,
+                "y": 348.12,
+                "width": 14.82,
+                "height": 16
+              },
+              "jersey": "R4",
+              "team": "red",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            },
+            {
+              "tag": "text",
+              "class": "",
+              "text": "B4",
+              "bounds": {
+                "x": 256.33,
+                "y": 348.12,
+                "width": 14.58,
+                "height": 16
+              },
+              "jersey": "B4",
+              "team": "blue",
+              "fontSizePx": 7,
+              "screenCtm": {
+                "a": 1.7142857142857142,
+                "b": 0,
+                "c": 0,
+                "d": 1.7142857142857142
+              },
+              "minimumLinearScale": 1.7142857142857142,
+              "effectiveFontPx": 12,
+              "requiredMinimumPx": null,
+              "meetsMinimum": null
+            }
+          ],
+          "minimumTvPx": null,
+          "minimumPhonePx": 12,
+          "issues": []
+        },
+        "tvTypography": {
+          "body": [],
+          "timers": [],
+          "minimumBodyPx": null,
+          "minimumTimerPx": null,
+          "issues": []
+        },
+        "typographyIssues": [],
+        "summary": {
+          "controls": 9,
+          "controlIssues": 0,
+          "controlSpacingIssues": 0,
+          "offscreen": 0,
+          "textClipped": 0,
+          "scrollContainers": 0,
+          "intentionalHidden": 0,
+          "podiumPlaceholders": 0,
+          "svgJerseyIssues": 0,
+          "tvBodyFontIssues": 0,
+          "tvTimerFontIssues": 0,
+          "typographyIssues": 0
+        }
+      }
+    ],
+    "passed": true
+  }
+}

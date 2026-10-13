@@ -1,0 +1,196 @@
+.match {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-2);
+}
+.scoreLine {
+  flex: none;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  align-items: center;
+  gap: var(--pb-space-3);
+  text-align: center;
+}
+.teamScore,
+.clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--pb-space-1);
+}
+.teamScore span,
+.clock span {
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+}
+.teamScore b {
+  font-size: var(--pb-font-display);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.clock b {
+  font: 900 var(--pb-font-display)/1 var(--pb-font-mono);
+}
+.teamScore[data-team='red'] span {
+  color: var(--pb-danger);
+}
+.teamScore[data-team='blue'] span {
+  color: var(--pb-info);
+}
+.headline {
+  flex: none;
+  text-align: center;
+  min-height: var(--pb-space-5);
+}
+.headline h2 {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+  line-height: 1.1;
+}
+.headline p {
+  margin: var(--pb-space-1) 0 0;
+  font-size: var(--pb-font-body);
+}
+.fieldRow {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3.2fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--pb-space-4);
+}
+.pitchBox {
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+}
+.teamRoster h3 {
+  margin: 0 0 var(--pb-space-3);
+  font-size: var(--pb-font-body);
+}
+.roster,
+.compactRoster {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.roster {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-4);
+}
+.roster li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--pb-space-2);
+  min-width: 0;
+}
+.jersey {
+  flex: none;
+  display: inline-block;
+  font-size: var(--pb-font-body);
+  line-height: 1.25;
+}
+[data-team='red'] .jersey {
+  color: var(--pb-danger);
+}
+[data-team='blue'] .jersey {
+  color: var(--pb-info);
+}
+.playerName {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--pb-font-body);
+  line-height: 1.25;
+}
+.playerName small {
+  display: block;
+  font-size: var(--pb-font-body);
+  color: var(--pb-text-muted);
+}
+.compactRoster {
+  display: flex;
+  justify-content: center;
+  gap: var(--pb-space-2);
+  flex-wrap: wrap;
+}
+.compactRoster li {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-1);
+}
+.helperMark {
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+}
+:global([data-surface='controller']) .scoreLine {
+  gap: var(--pb-space-2);
+}
+:global([data-surface='controller']) .teamScore span,
+:global([data-surface='controller']) .clock span {
+  font-size: var(--pb-font-caption);
+}
+:global([data-surface='controller']) .teamScore b,
+:global([data-surface='controller']) .clock b {
+  font-size: var(--pb-font-h1);
+}
+:global([data-surface='controller']) .headline h2 {
+  font-size: var(--pb-font-h2);
+}
+:global([data-surface='controller']) .headline p {
+  font-size: var(--pb-font-caption);
+}
+:global([data-surface='controller']) .fieldRow {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: var(--pb-space-2);
+}
+:global([data-surface='controller']) .pitchBox {
+  grid-column: 1 / 3;
+  grid-row: 1;
+}
+:global([data-surface='controller']) .redRoster,
+:global([data-surface='controller']) .blueRoster {
+  grid-row: 2;
+}
+:global([data-surface='controller']) .roster {
+  gap: var(--pb-space-2);
+}
+:global([data-surface='controller']) .teamRoster h3 {
+  font-size: var(--pb-font-body);
+  margin-bottom: var(--pb-space-2);
+}
+:global([data-surface='controller']) .jersey,
+:global([data-surface='controller']) .playerName {
+  font-size: var(--pb-font-caption);
+}
+:global([data-surface='controller']) .playerName small {
+  font-size: var(--pb-font-caption);
+}
+[data-compact] .scoreLine {
+  gap: var(--pb-space-1);
+}
+[data-compact] .headline h2 {
+  font-size: var(--pb-font-caption);
+}
+[data-compact] .headline {
+  min-height: 0;
+}
+[data-compact] .fieldRow {
+  flex: none;
+  grid-template-rows: auto auto;
+}
+[data-compact] .pitchBox {
+  height: calc(var(--pb-space-8) * 3);
+}
+[data-compact] .teamRoster {
+  text-align: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .match * {
+    animation: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,762 @@
+{
+  "method": "react-dom/server; actual components, actual module CSS with matching namespaces, design/tokens.css; frozen server-time offset",
+  "cssSources": [
+    "games/haxball/client/Controller.module.css",
+    "games/haxball/client/Tv.module.css",
+    "games/haxball/client/MatchStage.module.css",
+    "games/haxball/client/Pitch.module.css",
+    "packages/game-sdk/src/tv/Stage.module.css"
+  ],
+  "screens": [
+    {
+      "file": "tv-play.html",
+      "fixture": "play",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 30997
+    },
+    {
+      "file": "phone-play-tv-p1.html",
+      "fixture": "play",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 26114
+    },
+    {
+      "file": "phone-play-tv-spectator.html",
+      "fixture": "play",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31489
+    },
+    {
+      "file": "phone-play-only-p1.html",
+      "fixture": "play",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 34206
+    },
+    {
+      "file": "phone-play-only-spectator.html",
+      "fixture": "play",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31551
+    },
+    {
+      "file": "tv-goal.html",
+      "fixture": "goal",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 31210
+    },
+    {
+      "file": "phone-goal-tv-p1.html",
+      "fixture": "goal",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 31996
+    },
+    {
+      "file": "phone-goal-tv-spectator.html",
+      "fixture": "goal",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31764
+    },
+    {
+      "file": "phone-goal-only-p1.html",
+      "fixture": "goal",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 32058
+    },
+    {
+      "file": "phone-goal-only-spectator.html",
+      "fixture": "goal",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31826
+    },
+    {
+      "file": "tv-halftime.html",
+      "fixture": "halftime",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 31070
+    },
+    {
+      "file": "phone-halftime-tv-p1.html",
+      "fixture": "halftime",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 31848
+    },
+    {
+      "file": "phone-halftime-tv-spectator.html",
+      "fixture": "halftime",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31616
+    },
+    {
+      "file": "phone-halftime-only-p1.html",
+      "fixture": "halftime",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 31910
+    },
+    {
+      "file": "phone-halftime-only-spectator.html",
+      "fixture": "halftime",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31678
+    },
+    {
+      "file": "tv-play-last.html",
+      "fixture": "play-last",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 31263
+    },
+    {
+      "file": "phone-play-last-tv-p1.html",
+      "fixture": "play-last",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 26114
+    },
+    {
+      "file": "phone-play-last-tv-spectator.html",
+      "fixture": "play-last",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31773
+    },
+    {
+      "file": "phone-play-last-only-p1.html",
+      "fixture": "play-last",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 34536
+    },
+    {
+      "file": "phone-play-last-only-spectator.html",
+      "fixture": "play-last",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31835
+    },
+    {
+      "file": "tv-done.html",
+      "fixture": "done",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 31210
+    },
+    {
+      "file": "phone-done-tv-p1.html",
+      "fixture": "done",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 32070
+    },
+    {
+      "file": "phone-done-tv-spectator.html",
+      "fixture": "done",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31757
+    },
+    {
+      "file": "phone-done-only-p1.html",
+      "fixture": "done",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 32132
+    },
+    {
+      "file": "phone-done-only-spectator.html",
+      "fixture": "done",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31819
+    },
+    {
+      "file": "tv-play-odd.html",
+      "fixture": "play-odd",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 31202
+    },
+    {
+      "file": "phone-play-odd-tv-p1.html",
+      "fixture": "play-odd",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 26114
+    },
+    {
+      "file": "phone-play-odd-tv-spectator.html",
+      "fixture": "play-odd",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31700
+    },
+    {
+      "file": "phone-play-odd-only-p1.html",
+      "fixture": "play-odd",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 34405
+    },
+    {
+      "file": "phone-play-odd-only-spectator.html",
+      "fixture": "play-odd",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31762
+    },
+    {
+      "file": "tv-play-kick-armed.html",
+      "fixture": "play-kick-armed",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 30997
+    },
+    {
+      "file": "phone-play-kick-armed-tv-p1.html",
+      "fixture": "play-kick-armed",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 26105
+    },
+    {
+      "file": "phone-play-kick-armed-tv-spectator.html",
+      "fixture": "play-kick-armed",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31489
+    },
+    {
+      "file": "phone-play-kick-armed-only-p1.html",
+      "fixture": "play-kick-armed",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 34197
+    },
+    {
+      "file": "phone-play-kick-armed-only-spectator.html",
+      "fixture": "play-kick-armed",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31551
+    },
+    {
+      "file": "tv-play-paused.html",
+      "fixture": "play-paused",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 30963
+    },
+    {
+      "file": "phone-play-paused-tv-p1.html",
+      "fixture": "play-paused",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 31685
+    },
+    {
+      "file": "phone-play-paused-tv-spectator.html",
+      "fixture": "play-paused",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31455
+    },
+    {
+      "file": "phone-play-paused-only-p1.html",
+      "fixture": "play-paused",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 31747
+    },
+    {
+      "file": "phone-play-paused-only-spectator.html",
+      "fixture": "play-paused",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31517
+    },
+    {
+      "file": "tv-play-left.html",
+      "fixture": "play-left",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 31193
+    },
+    {
+      "file": "phone-play-left-tv-p1.html",
+      "fixture": "play-left",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 31952
+    },
+    {
+      "file": "phone-play-left-tv-spectator.html",
+      "fixture": "play-left",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31697
+    },
+    {
+      "file": "phone-play-left-only-p1.html",
+      "fixture": "play-left",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 32014
+    },
+    {
+      "file": "phone-play-left-only-spectator.html",
+      "fixture": "play-left",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31759
+    },
+    {
+      "file": "tv-goal-own.html",
+      "fixture": "goal-own",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 31210
+    },
+    {
+      "file": "phone-goal-own-tv-p1.html",
+      "fixture": "goal-own",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 31996
+    },
+    {
+      "file": "phone-goal-own-tv-spectator.html",
+      "fixture": "goal-own",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31764
+    },
+    {
+      "file": "phone-goal-own-only-p1.html",
+      "fixture": "goal-own",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 32058
+    },
+    {
+      "file": "phone-goal-own-only-spectator.html",
+      "fixture": "goal-own",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31826
+    },
+    {
+      "file": "tv-play-last-goal.html",
+      "fixture": "play-last-goal",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 31288
+    },
+    {
+      "file": "phone-play-last-goal-tv-p1.html",
+      "fixture": "play-last-goal",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 26114
+    },
+    {
+      "file": "phone-play-last-goal-tv-spectator.html",
+      "fixture": "play-last-goal",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31798
+    },
+    {
+      "file": "phone-play-last-goal-only-p1.html",
+      "fixture": "play-last-goal",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 34463
+    },
+    {
+      "file": "phone-play-last-goal-only-spectator.html",
+      "fixture": "play-last-goal",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31860
+    },
+    {
+      "file": "tv-play-last-own-long.html",
+      "fixture": "play-last-own-long",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 31701
+    },
+    {
+      "file": "phone-play-last-own-long-tv-p1.html",
+      "fixture": "play-last-own-long",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 26170
+    },
+    {
+      "file": "phone-play-last-own-long-tv-spectator.html",
+      "fixture": "play-last-own-long",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 32225
+    },
+    {
+      "file": "phone-play-last-own-long-only-p1.html",
+      "fixture": "play-last-own-long",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 34856
+    },
+    {
+      "file": "phone-play-last-own-long-only-spectator.html",
+      "fixture": "play-last-own-long",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 32287
+    },
+    {
+      "file": "tv-halftime-last-own-long.html",
+      "fixture": "halftime-last-own-long",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 31736
+    },
+    {
+      "file": "phone-halftime-last-own-long-tv-p1.html",
+      "fixture": "halftime-last-own-long",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 32598
+    },
+    {
+      "file": "phone-halftime-last-own-long-tv-spectator.html",
+      "fixture": "halftime-last-own-long",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 32310
+    },
+    {
+      "file": "phone-halftime-last-own-long-only-p1.html",
+      "fixture": "halftime-last-own-long",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 32660
+    },
+    {
+      "file": "phone-halftime-last-own-long-only-spectator.html",
+      "fixture": "halftime-last-own-long",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 32372
+    },
+    {
+      "file": "tv-done-last-own-long.html",
+      "fixture": "done-last-own-long",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 31624
+    },
+    {
+      "file": "phone-done-last-own-long-tv-p1.html",
+      "fixture": "done-last-own-long",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 32554
+    },
+    {
+      "file": "phone-done-last-own-long-tv-spectator.html",
+      "fixture": "done-last-own-long",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 32185
+    },
+    {
+      "file": "phone-done-last-own-long-only-p1.html",
+      "fixture": "done-last-own-long",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 32616
+    },
+    {
+      "file": "phone-done-last-own-long-only-spectator.html",
+      "fixture": "done-last-own-long",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 32247
+    },
+    {
+      "file": "tv-done-draw.html",
+      "fixture": "done-draw",
+      "surface": "tv",
+      "phoneOnly": false,
+      "viewer": "tv",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 30931
+    },
+    {
+      "file": "phone-done-draw-tv-p1.html",
+      "fixture": "done-draw",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 31773
+    },
+    {
+      "file": "phone-done-draw-tv-spectator.html",
+      "fixture": "done-draw",
+      "surface": "controller",
+      "phoneOnly": false,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31460
+    },
+    {
+      "file": "phone-done-draw-only-p1.html",
+      "fixture": "done-draw",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "p1",
+      "width": 390,
+      "height": 844,
+      "bytes": 31835
+    },
+    {
+      "file": "phone-done-draw-only-spectator.html",
+      "fixture": "done-draw",
+      "surface": "controller",
+      "phoneOnly": true,
+      "viewer": "spectator",
+      "width": 390,
+      "height": 844,
+      "bytes": 31522
+    }
+  ]
+}
