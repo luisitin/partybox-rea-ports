@@ -1,0 +1,32 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 1 failed) 25ms
+     × adds points to earlier turns instead of replacing either player total 4ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 23 passed (24)
+   Start at  21:57:16
+   Duration  498ms (transform 191ms, setup 0ms, import 329ms, tests 25ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/skribbl/__tests__/game.test.ts > guesses and points > adds points to earlier turns instead of replacing either player total
+AssertionError: expected 860 to be 2060 // Object.is equality
+
+- Expected
++ Received
+
+- 2060
++ 860
+
+ ❯ games/skribbl/__tests__/game.test.ts:244:29
+    242|     const prior = { ...s, scores: { ...s.scores, [id]: 1200, [s.drawer…
+    243|     const next = kit.input(prior, id, { type: 'guess', text: s.word },…
+    244|     expect(next.scores[id]).toBe(1200 + 860);
+       |                             ^
+    245|     expect(next.scores[s.drawer]).toBe(2300 + 250);
+    246|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

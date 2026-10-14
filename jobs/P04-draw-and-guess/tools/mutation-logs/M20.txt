@@ -1,0 +1,32 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 1 failed) 40ms
+     × pause ignores play and timers; resume shifts all timing by precisely the held interval 6ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 23 passed (24)
+   Start at  21:57:31
+   Duration  584ms (transform 236ms, setup 0ms, import 394ms, tests 40ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/skribbl/__tests__/game.test.ts > secrets, lifecycle and determinism > pause ignores play and timers; resume shifts all timing by precisely the held interval
+AssertionError: expected 1031000 to be 1036000 // Object.is equality
+
+- Expected
++ Received
+
+- 1036000
++ 1031000
+
+ ❯ games/skribbl/__tests__/game.test.ts:351:28
+    349|     expect(resumed.phase.paused).toBeUndefined();
+    350|     expect(resumed.began).toBe(s.began + 5000);
+    351|     expect(resumed.endsAt).toBe(s.endsAt + 5000);
+       |                            ^
+    352|     expect(resumed.phase.deadline).toBe(s.phase.deadline! + 5000);
+    353|     const id = guesser(s);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

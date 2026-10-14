@@ -1,0 +1,32 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 1 failed) 25ms
+     × every player draws once per lap and the final reveal continues into stable complete results 4ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 23 passed (24)
+   Start at  21:57:30
+   Duration  492ms (transform 187ms, setup 0ms, import 323ms, tests 25ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/skribbl/__tests__/game.test.ts > choice and drawing turns > every player draws once per lap and the final reveal continues into stable complete results
+AssertionError: expected [ 'p3', 'p1', 'p4', 'p7' ] to have a length of 8 but got 4
+
+- Expected
++ Received
+
+- 8
++ 4
+
+ ❯ games/skribbl/__tests__/game.test.ts:179:23
+    177|       }
+    178|       expect(s.phase.id).toBe('done');
+    179|       expect(artists).toHaveLength(8 * laps);
+       |                       ^
+    180|       for (const id of Object.keys(s.players))
+    181|         expect(artists.filter((x) => x === id)).toHaveLength(laps);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

@@ -1,0 +1,208 @@
+{
+  "command": "pnpm.cmd vitest run games/skribbl/__tests__/game.test.ts --maxWorkers=1 --pool=threads",
+  "total": 20,
+  "caught": 20,
+  "restored": true,
+  "results": [
+    {
+      "id": "M01",
+      "description": "Zero guess base points",
+      "file": "games/skribbl/server/scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "e96883837f0655dd022baa59f2e94cc7fdd9f6926cd3c1a11ed77d3abd78209e",
+      "mutantSha256": "a21a58d2259e10d34e07381b09bdb85c789dd4d37973dc7b875b4b8d4f99bd16",
+      "testLog": "tools/mutation-logs/M01.txt"
+    },
+    {
+      "id": "M02",
+      "description": "Remove speed points",
+      "file": "games/skribbl/server/scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "e96883837f0655dd022baa59f2e94cc7fdd9f6926cd3c1a11ed77d3abd78209e",
+      "mutantSha256": "e4d13c09e46e8635f9ba80c7a4153f153c523eda2d7c1d0bbf49095e7488ef8c",
+      "testLog": "tools/mutation-logs/M02.txt"
+    },
+    {
+      "id": "M03",
+      "description": "Reward slow guesses instead of fast ones",
+      "file": "games/skribbl/server/scoring.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "e96883837f0655dd022baa59f2e94cc7fdd9f6926cd3c1a11ed77d3abd78209e",
+      "mutantSha256": "00861336be66c2a2de9311e2403af3c80d97f7d53d890b88db2180907fbf8de1",
+      "testLog": "tools/mutation-logs/M03.txt"
+    },
+    {
+      "id": "M04",
+      "description": "Artist receives zero points",
+      "file": "games/skribbl/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "736abf92de7151f364daa40019249cd26b775cfc8af9623345c7ff323e92b60a",
+      "mutantSha256": "891cc34a73f39244a413f23402c8da6968842ef9d7c9e845497b67176b4f960a",
+      "testLog": "tools/mutation-logs/M04.txt"
+    },
+    {
+      "id": "M05",
+      "description": "Replace accumulated solver score",
+      "file": "games/skribbl/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "736abf92de7151f364daa40019249cd26b775cfc8af9623345c7ff323e92b60a",
+      "mutantSha256": "15f1ac71153997e96f87833d409dd43cc646188580a3dba195ab8d1c09774c35",
+      "testLog": "tools/mutation-logs/M05.txt"
+    },
+    {
+      "id": "M06",
+      "description": "Award correct guesses repeatedly",
+      "file": "games/skribbl/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "736abf92de7151f364daa40019249cd26b775cfc8af9623345c7ff323e92b60a",
+      "mutantSha256": "9bfe8b1e11e12b6ad48242e8a9abe0fe8dc9255b1fbf416237fddbeeeac0ffae",
+      "testLog": "tools/mutation-logs/M06.txt"
+    },
+    {
+      "id": "M07",
+      "description": "Every wrong guess scores",
+      "file": "games/skribbl/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "736abf92de7151f364daa40019249cd26b775cfc8af9623345c7ff323e92b60a",
+      "mutantSha256": "f500f355ea992c98f83187c7c6497e10ae9aa9fd49af39a3dc6ec01677ee159f",
+      "testLog": "tools/mutation-logs/M07.txt"
+    },
+    {
+      "id": "M08",
+      "description": "TV and public board leak the answer",
+      "file": "games/skribbl/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "0642a82050b7372afb00b9d3486d25d0c2048513bd1957f79ce1b9b6c1d97f52",
+      "mutantSha256": "59a749228d2591c80f874a85a7111fee98af6bc66ab9e14957bf907bd762aae1",
+      "testLog": "tools/mutation-logs/M08.txt"
+    },
+    {
+      "id": "M09",
+      "description": "Word choices leak to other phones",
+      "file": "games/skribbl/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "0642a82050b7372afb00b9d3486d25d0c2048513bd1957f79ce1b9b6c1d97f52",
+      "mutantSha256": "2184234b4d04a9bc2d79cb70b841ec1f02eccfc3711c13f83194bdd7482b4de2",
+      "testLog": "tools/mutation-logs/M09.txt"
+    },
+    {
+      "id": "M10",
+      "description": "Drawing secret leaks to all phones",
+      "file": "games/skribbl/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "0642a82050b7372afb00b9d3486d25d0c2048513bd1957f79ce1b9b6c1d97f52",
+      "mutantSha256": "0aef610f7ad652bb4053c037e65d8c4416e4979b64e3f8e31802d0df803bef91",
+      "testLog": "tools/mutation-logs/M10.txt"
+    },
+    {
+      "id": "M11",
+      "description": "Other players choose the artist word",
+      "file": "games/skribbl/server/phases/choose.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "ac4d7d86cf1712f055b4094b35a12c61032a2d0c5133de84b61af6d6988844f5",
+      "mutantSha256": "3cfe241823a7736ff28516de6246c35e0a5023c54d44da37e1cd45bb76d338f9",
+      "testLog": "tools/mutation-logs/M11.txt"
+    },
+    {
+      "id": "M12",
+      "description": "Other players can erase or paint",
+      "file": "games/skribbl/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "736abf92de7151f364daa40019249cd26b775cfc8af9623345c7ff323e92b60a",
+      "mutantSha256": "08e69830153df968d8008b9ecedbd7e59f9bf567b39bc438cf6fe5d7c61e840a",
+      "testLog": "tools/mutation-logs/M12.txt"
+    },
+    {
+      "id": "M13",
+      "description": "Undo deletes the oldest stroke",
+      "file": "games/skribbl/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "736abf92de7151f364daa40019249cd26b775cfc8af9623345c7ff323e92b60a",
+      "mutantSha256": "cd0d210551468ffe32c8ea27a1271805a0a136924e1bc68c569153b9ff1eae1f",
+      "testLog": "tools/mutation-logs/M13.txt"
+    },
+    {
+      "id": "M14",
+      "description": "Clear keeps all strokes",
+      "file": "games/skribbl/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "736abf92de7151f364daa40019249cd26b775cfc8af9623345c7ff323e92b60a",
+      "mutantSha256": "f7481a35bb008ed3169516b85e7aff12a5c0684d0ca300a9ff452a2a33d4d2cc",
+      "testLog": "tools/mutation-logs/M14.txt"
+    },
+    {
+      "id": "M15",
+      "description": "Stroke limit permits an extra stroke",
+      "file": "games/skribbl/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "736abf92de7151f364daa40019249cd26b775cfc8af9623345c7ff323e92b60a",
+      "mutantSha256": "c3ff05a320d359d523844512ee2785243a725f9577c524138de22f18dc7dd33e",
+      "testLog": "tools/mutation-logs/M15.txt"
+    },
+    {
+      "id": "M16",
+      "description": "Hints appear twice as early",
+      "file": "games/skribbl/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "736abf92de7151f364daa40019249cd26b775cfc8af9623345c7ff323e92b60a",
+      "mutantSha256": "5e2dc125a555c945c953bac9ee065e9e14f2501943a123ffa2863823668c724c",
+      "testLog": "tools/mutation-logs/M16.txt"
+    },
+    {
+      "id": "M17",
+      "description": "Idle drawing never exits at its cap",
+      "file": "games/skribbl/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "736abf92de7151f364daa40019249cd26b775cfc8af9623345c7ff323e92b60a",
+      "mutantSha256": "bc0e7c83a9ab03fa8856f4c5353b7716bb5f3b6c54edc58d95386fdce89aba64",
+      "testLog": "tools/mutation-logs/M17.txt"
+    },
+    {
+      "id": "M18",
+      "description": "Draw duration accidentally doubles",
+      "file": "games/skribbl/server/phases/draw.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "736abf92de7151f364daa40019249cd26b775cfc8af9623345c7ff323e92b60a",
+      "mutantSha256": "2915defe851f10767f154152333de1eaf231a3d7619d047b0d240cd81b07dc58",
+      "testLog": "tools/mutation-logs/M18.txt"
+    },
+    {
+      "id": "M19",
+      "description": "Rotation skips every second artist",
+      "file": "games/skribbl/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "0642a82050b7372afb00b9d3486d25d0c2048513bd1957f79ce1b9b6c1d97f52",
+      "mutantSha256": "c9375c0f31c74660723539ced549bb016c55e00308a73fb7911c550216c838e5",
+      "testLog": "tools/mutation-logs/M19.txt"
+    },
+    {
+      "id": "M20",
+      "description": "Pause consumes drawing time",
+      "file": "games/skribbl/server/index.ts",
+      "caught": true,
+      "exitCode": 1,
+      "originalSha256": "0642a82050b7372afb00b9d3486d25d0c2048513bd1957f79ce1b9b6c1d97f52",
+      "mutantSha256": "c8909bdbce1e65683f4aac4a4d298397566faccc6961424fb05a5f057246c188",
+      "testLog": "tools/mutation-logs/M20.txt"
+    }
+  ]
+}

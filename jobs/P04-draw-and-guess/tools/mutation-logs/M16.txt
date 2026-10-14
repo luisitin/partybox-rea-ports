@@ -1,0 +1,32 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 1 failed) 24ms
+     × timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer 4ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 23 passed (24)
+   Start at  21:57:27
+   Duration  472ms (transform 180ms, setup 0ms, import 312ms, tests 24ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/skribbl/__tests__/game.test.ts > choice and drawing turns > timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ games/skribbl/__tests__/game.test.ts:156:25
+    154|     };
+    155|     advanceTo(8000);
+    156|     expect(s.hintCount).toBe(0);
+       |                         ^
+    157|     advanceTo(10_000);
+    158|     expect(s.hintCount).toBe(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

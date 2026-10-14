@@ -1,0 +1,92 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 4 failed) 31ms
+     × the drawer picks the selected word; the choice timeout picks a valid fallback 4ms
+     × timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer 1ms
+     × awards 300 base plus 700 times remaining time, only once; the artist also earns points 1ms
+     × adds points to earlier turns instead of replacing either player total 1ms
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 20 passed (24)
+   Start at  21:57:29
+   Duration  519ms (transform 195ms, setup 0ms, import 333ms, tests 31ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/skribbl/__tests__/game.test.ts > choice and drawing turns > the drawer picks the selected word; the choice timeout picks a valid fallback
+AssertionError: expected 60000 to be 30000 // Object.is equality
+
+- Expected
++ Received
+
+- 30000
++ 60000
+
+ ❯ games/skribbl/__tests__/game.test.ts:27:42
+     25|     expect(chosen.phase.id).toBe('draw');
+     26|     expect(chosen.word).toBe(s.choices[2]);
+     27|     expect(chosen.endsAt - chosen.began).toBe(30_000);
+       |                                          ^
+     28|     expect(chosen.phase.deadline).toBe(chosen.began + BEAT_MS);
+     29|     const fallback = kit.timer(s);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  games/skribbl/__tests__/game.test.ts > choice and drawing turns > timer beats reveal hints at a third and two thirds, preserve the end, then reveal the answer
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ games/skribbl/__tests__/game.test.ts:158:25
+    156|     expect(s.hintCount).toBe(0);
+    157|     advanceTo(10_000);
+    158|     expect(s.hintCount).toBe(1);
+       |                         ^
+    159|     advanceTo(20_000);
+    160|     expect(s.hintCount).toBe(2);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  games/skribbl/__tests__/game.test.ts > guesses and points > awards 300 base plus 700 times remaining time, only once; the artist also earns points
+AssertionError: expected 930 to be 860 // Object.is equality
+
+- Expected
++ Received
+
+- 860
++ 930
+
+ ❯ games/skribbl/__tests__/game.test.ts:197:29
+    195|     const now = s.began + 6000;
+    196|     const next = kit.input(s, id, { type: 'guess', text: s.word }, now…
+    197|     expect(next.scores[id]).toBe(300 + Math.floor((700 * 24_000) / 30_…
+       |                             ^
+    198|     expect(next.gains[id]).toBe(next.scores[id]);
+    199|     expect(next.scores[s.drawer]).toBeGreaterThan(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  games/skribbl/__tests__/game.test.ts > guesses and points > adds points to earlier turns instead of replacing either player total
+AssertionError: expected 2130 to be 2060 // Object.is equality
+
+- Expected
++ Received
+
+- 2060
++ 2130
+
+ ❯ games/skribbl/__tests__/game.test.ts:244:29
+    242|     const prior = { ...s, scores: { ...s.scores, [id]: 1200, [s.drawer…
+    243|     const next = kit.input(prior, id, { type: 'guess', text: s.word },…
+    244|     expect(next.scores[id]).toBe(1200 + 860);
+       |                             ^
+    245|     expect(next.scores[s.drawer]).toBe(2300 + 250);
+    246|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯

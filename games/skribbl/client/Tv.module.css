@@ -1,0 +1,129 @@
+.stage {
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: var(--pb-space-5);
+  color: var(--pb-text);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pb-space-6);
+  min-width: 0;
+}
+
+.heading {
+  min-width: 0;
+}
+
+.kicker,
+.artist,
+.solvers,
+.rule,
+.cover p {
+  margin: 0;
+  font-size: var(--pb-font-body);
+  line-height: 1.2;
+}
+
+.kicker,
+.rule {
+  color: var(--pb-text-muted);
+}
+
+.title {
+  margin: var(--pb-space-2) 0 0;
+  font-size: var(--pb-font-h1);
+  font-weight: 900;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.title[data-mask='true'] {
+  font-family: var(--pb-font-mono);
+  letter-spacing: var(--pb-space-1);
+}
+
+.clock {
+  flex: none;
+  display: grid;
+  justify-items: center;
+  padding: var(--pb-space-3) var(--pb-space-5);
+  background: var(--pb-surface);
+  border-radius: var(--pb-radius-lg);
+  font-size: var(--pb-font-body);
+}
+
+.clock b {
+  font-size: calc(var(--pb-font-display) * 0.75);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock[data-low='true'] b {
+  color: var(--pb-accent-2);
+}
+
+.layout {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) calc(var(--pb-space-8) * 7);
+  gap: var(--pb-space-5);
+  align-items: center;
+}
+
+.paper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 3;
+  max-height: 100%;
+}
+
+.cover {
+  position: absolute;
+  inset: var(--pb-space-1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--pb-space-5);
+  text-align: center;
+  padding: var(--pb-space-6);
+  background: var(--pb-bg);
+  border-radius: var(--pb-radius);
+}
+
+.cover h2 {
+  margin: 0;
+  font-size: var(--pb-font-h2);
+}
+
+.empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  color: var(--pb-text-muted);
+  font-size: var(--pb-font-body);
+}
+
+.side {
+  display: grid;
+  gap: var(--pb-space-3);
+  min-width: 0;
+}
+
+.artist {
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.solvers {
+  color: var(--pb-accent-3);
+  font-weight: 800;
+}

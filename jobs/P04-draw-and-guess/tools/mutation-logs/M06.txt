@@ -1,0 +1,38 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 1 failed) 25ms
+     × awards 300 base plus 700 times remaining time, only once; the artist also earns points 5ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 23 passed (24)
+   Start at  21:57:17
+   Duration  476ms (transform 185ms, setup 0ms, import 316ms, tests 25ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/skribbl/__tests__/game.test.ts > guesses and points > awards 300 base plus 700 times remaining time, only once; the artist also earns points
+AssertionError: expected { p1: +0, p2: 1696, p3: +0, p4: 500 } to deeply equal { p1: +0, p2: 860, p3: +0, p4: 250 }
+
+- Expected
++ Received
+
+  {
+    "p1": 0,
+-   "p2": 860,
++   "p2": 1696,
+    "p3": 0,
+-   "p4": 250,
++   "p4": 500,
+  }
+
+ ❯ games/skribbl/__tests__/game.test.ts:202:26
+    200|     expect(Object.keys(next.solved)).toContain(id);
+    201|     const again = kit.input(next, id, { type: 'guess', text: s.word },…
+    202|     expect(again.scores).toEqual(next.scores);
+       |                          ^
+    203|     expect(again.solved).toEqual(next.solved);
+    204|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

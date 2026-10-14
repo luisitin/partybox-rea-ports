@@ -1,0 +1,32 @@
+
+ RUN  v4.1.11 C:/dev/rea-runs/r2
+
+ ❯ games/skribbl/__tests__/game.test.ts (24 tests | 1 failed) 24ms
+     × caps drawings, rejects invalid payloads at the schema boundary, and stays within wire budgets 5ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 23 passed (24)
+   Start at  21:57:26
+   Duration  495ms (transform 181ms, setup 0ms, import 313ms, tests 24ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  games/skribbl/__tests__/game.test.ts > choice and drawing turns > caps drawings, rejects invalid payloads at the schema boundary, and stays within wire budgets
+AssertionError: expected [ { points: [ …(2) ], …(2) }, …(240) ] to have a length of 240 but got 241
+
+- Expected
++ Received
+
+- 240
++ 241
+
+ ❯ games/skribbl/__tests__/game.test.ts:110:23
+    108|       s = kit.input(s, s.drawer, { type: 'stroke', stroke }, s.began +…
+    109|     }
+    110|     expect(s.strokes).toHaveLength(MAX_STROKES);
+       |                       ^
+    111|     expect(jsonBytes(s)).toBeLessThanOrEqual(STATE_SIZE_LIMIT_BYTES);
+    112|     expect(jsonBytes(game.tvView(s))).toBeLessThanOrEqual(64 * 1024);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

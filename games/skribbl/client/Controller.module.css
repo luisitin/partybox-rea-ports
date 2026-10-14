@@ -1,0 +1,251 @@
+.screen {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pb-space-3);
+  width: 100%;
+  height: 100%;
+  max-height: calc(100dvh - var(--pb-space-8) - var(--pb-space-6) - var(--pb-space-1));
+  min-height: 0;
+  padding: var(--pb-space-3);
+  padding-bottom: max(var(--pb-space-3), env(safe-area-inset-bottom));
+  color: var(--pb-text);
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.header {
+  display: flex;
+  align-items: start;
+  gap: var(--pb-space-2);
+  flex: none;
+}
+
+.heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.kicker,
+.clock,
+.title,
+.message,
+.status p,
+.choose p {
+  margin: 0;
+}
+
+.kicker {
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+}
+
+.title {
+  font-size: var(--pb-font-h1);
+  font-weight: 900;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.title[data-mask='true'] {
+  font-family: var(--pb-font-mono);
+  font-size: var(--pb-font-h2);
+}
+
+.clock {
+  font-size: var(--pb-font-h2);
+  font-weight: 900;
+  color: var(--pb-accent-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.artistProgress {
+  margin: var(--pb-space-1) 0 0;
+  color: var(--pb-accent-3);
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+}
+
+.choose {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-4);
+  text-align: center;
+  font-size: var(--pb-font-body);
+}
+
+.choices {
+  display: grid;
+  gap: var(--pb-space-3);
+  width: 100%;
+}
+
+.choices button,
+.answerBar button {
+  min-height: var(--pb-touch);
+  border: var(--pb-space-1) solid var(--pb-border);
+  border-radius: var(--pb-radius);
+  font: 800 var(--pb-font-button) var(--pb-font-family);
+  background: var(--pb-accent);
+  color: var(--pb-on-accent);
+  touch-action: manipulation;
+}
+
+.choices button {
+  display: flex;
+  align-items: center;
+  gap: var(--pb-space-4);
+  padding: var(--pb-space-3) var(--pb-space-4);
+}
+
+.choices button span {
+  font-family: var(--pb-font-mono);
+}
+
+.screen button:focus-visible,
+.screen input:focus-visible {
+  outline: var(--pb-space-1) solid var(--pb-focus);
+  outline-offset: var(--pb-space-1);
+}
+
+.screen button:disabled,
+.screen input:disabled {
+  opacity: 0.55;
+}
+
+.screen[data-drawing='true'] > :last-child {
+  flex: 1;
+}
+
+.picture {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: calc(var(--pb-space-8) * 4);
+  aspect-ratio: 5 / 3;
+}
+
+.screen[data-phase='reveal'] .picture,
+.screen[data-phase='done'] .picture {
+  max-height: calc(var(--pb-space-8) * 3);
+}
+
+.breath {
+  display: grid;
+  place-items: center;
+  flex: 1;
+  min-height: 0;
+}
+
+.status {
+  display: grid;
+  gap: var(--pb-space-1);
+  flex: none;
+  text-align: center;
+  font-size: var(--pb-font-caption);
+  color: var(--pb-text-muted);
+}
+
+.correct {
+  padding: var(--pb-space-3);
+  color: var(--pb-accent-3);
+  font-size: var(--pb-font-body);
+  font-weight: 900;
+}
+
+.message {
+  text-align: center;
+  color: var(--pb-text-muted);
+  font-size: var(--pb-font-body);
+}
+
+.guess {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  flex: none;
+  display: grid;
+  gap: var(--pb-space-2);
+  background: var(--pb-bg);
+}
+
+.guess label {
+  font-size: var(--pb-font-caption);
+  font-weight: 800;
+}
+
+.feedback {
+  display: grid;
+  gap: var(--pb-space-1);
+  min-height: calc(var(--pb-font-caption) * 2.5);
+  font-size: var(--pb-font-body);
+  font-weight: 800;
+}
+
+.feedback span {
+  font-size: var(--pb-font-caption);
+  font-weight: 400;
+  color: var(--pb-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.answerBar {
+  display: flex;
+  gap: var(--pb-space-2);
+}
+
+.answerBar input {
+  box-sizing: border-box;
+  width: 0;
+  flex: 1;
+  min-height: var(--pb-touch);
+  padding: var(--pb-space-2) var(--pb-space-3);
+  border: var(--pb-space-1) solid var(--pb-surface-2);
+  border-radius: var(--pb-radius);
+  background: var(--pb-surface);
+  color: var(--pb-text);
+  font: 400 var(--pb-font-body) var(--pb-font-family);
+}
+
+.answerBar button {
+  padding: var(--pb-space-2) var(--pb-space-4);
+}
+
+@media (max-height: 600px) {
+  .screen {
+    gap: var(--pb-space-2);
+    padding: var(--pb-space-2);
+  }
+
+  .screen[data-stage='true'][data-phase='draw'] .picture {
+    max-height: calc(var(--pb-space-8) * 2);
+  }
+
+  .screen[data-phase='draw'] .status p:not(.correct) {
+    display: none;
+  }
+
+  .breath {
+    display: none;
+  }
+}
+
+/* Safari's keyboard can reduce the visual viewport without changing media queries. */
+.screen[data-compact='true'] {
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-2);
+}
+
+.screen[data-compact='true'][data-stage='true'][data-phase='draw'] .picture {
+  max-height: calc(var(--pb-space-8) * 2);
+}
+
+.screen[data-compact='true'][data-phase='draw'] .status p:not(.correct),
+.screen[data-compact='true'] .breath {
+  display: none;
+}

@@ -1,0 +1,196 @@
+{
+  "checks": [
+    "normal artist 5:3 bitmap",
+    "compact artist 5:3 bitmap",
+    "compact six-color palette full labels and touch targets",
+    "normal pointer border projection",
+    "compact pointer border projection",
+    "normal release-only endpoint",
+    "compact release-only endpoint",
+    "pointer chunk merge",
+    "one Undo per gesture",
+    "accidental Clear preserves ink",
+    "second Clear confirms deletion",
+    "delayed Clear/Undo acknowledgements",
+    "real canvas paint",
+    "known-unsent ink preview survives pause",
+    "known-unsent dot resumes exactly once",
+    "paused ink preserves FIFO and 80ms spacing",
+    "cancelled Undo preserves older dot preview",
+    "cancelled Undo never sends against older dot",
+    "active dirty tail preview survives pause",
+    "resumed active tail preserves endpoints",
+    "one Undo for resumed gesture",
+    "unmounted drawing queue never replays",
+    "never-sent dots survive artist remount",
+    "brush-only draft restores Gray and Thick",
+    "next stroke uses restored color and width",
+    "tools survive empty FIFO without ink replay",
+    "restored dots deliver once in FIFO order",
+    "sent ink never replays after remount",
+    "active dirty tail survives artist remount",
+    "restored dirty tail keeps endpoints once",
+    "one Undo for a restored tail gesture",
+    "pause restores guess without a receipt",
+    "paused guess stops awaiting feedback",
+    "paused guess fits keyboard viewport",
+    "paused draft survives phone remount",
+    "resume never automatically resends a guess",
+    "manual retry after pause accepted and cleared",
+    "unsent guess survives phone remount",
+    "draft restore never submits automatically",
+    "accepted guess stays cleared after remount",
+    "hydrated receipt preserves newer typing",
+    "remount never duplicates in-flight submission",
+    "accepted guess clears draft",
+    "refused guess retained",
+    "same-text retry receipt",
+    "new draft survives old refusal",
+    "phone-only guess fit",
+    "Safari visual-viewport-only keyboard fit",
+    "keyboard-height guess fit",
+    "immediate point receipt",
+    "keyboard-height solved fit",
+    "solved phone refresh does not replay success",
+    "next match correct guess celebrates once",
+    "public solve sound once",
+    "five final-second ticks",
+    "paused sound silence",
+    "same-mounted TV countdown survives early-end rematch"
+  ],
+  "firstGestureChunks": 26,
+  "finalRevision": 90,
+  "normal": {
+    "height": 844,
+    "layoutHeight": 844,
+    "compact": "false",
+    "overflow": []
+  },
+  "safariKeyboard": {
+    "height": 500,
+    "layoutHeight": 844,
+    "compact": "true",
+    "overflow": []
+  },
+  "keyboard": {
+    "height": 500,
+    "layoutHeight": 500,
+    "compact": "true",
+    "overflow": []
+  },
+  "solved": {
+    "height": 500,
+    "layoutHeight": 500,
+    "compact": "true",
+    "overflow": []
+  },
+  "solvedPhoneCues": 1,
+  "nextMatchPhoneCues": 2,
+  "finalTicks": 5,
+  "rematchTicks": 10,
+  "normalArtist": {
+    "left": 16,
+    "top": 190.1874977558046,
+    "width": 358,
+    "height": 214.79687948839077,
+    "first": [50, 30],
+    "last": [950, 570],
+    "projectionErrorPx": 0
+  },
+  "compactArtist": {
+    "left": 104.3281197186074,
+    "top": 94.18749571906812,
+    "width": 181.3437605627852,
+    "height": 108.79688356186375,
+    "first": [50, 30],
+    "last": [950, 570],
+    "projectionErrorPx": 0,
+    "compactPalette": {
+      "tops": [215, 215, 215, 215, 215, 215],
+      "heights": [46, 46, 46, 46, 46, 46],
+      "touch": 44,
+      "labels": ["Ink", "Rose", "Gold", "Mint", "Sky", "Gray"],
+      "labelsFit": true,
+      "selected": "Gray ✓",
+      "overflow": false
+    }
+  },
+  "pausedInk": {
+    "pausedDots": {
+      "pausedDotPreview": true,
+      "sentBeforeResume": 1,
+      "sentAfterResume": 2,
+      "dotSpacingMs": 280.69999998807907,
+      "gestures": [6, 7]
+    },
+    "activeTail": {
+      "pausedTailPreview": true,
+      "points": [
+        [100, 120],
+        [500, 300],
+        [900, 480]
+      ],
+      "sentPackets": 2,
+      "undoStrokes": 0
+    },
+    "unmountedQueue": {
+      "sentPackets": 0,
+      "strokes": 0
+    },
+    "cancelledUndo": {
+      "oldGesturePreserved": true,
+      "sentPackets": 1
+    }
+  },
+  "refreshedInk": {
+    "tools": {
+      "toolsRestored": {
+        "color": "Gray ✓",
+        "width": "Thick ✓"
+      },
+      "toolsAfterSend": {
+        "color": "Gray ✓",
+        "width": "Thick ✓"
+      },
+      "nextColor": 5,
+      "nextWidth": 18
+    },
+    "dots": {
+      "sentPackets": 2,
+      "points": [
+        [250, 180],
+        [750, 420]
+      ],
+      "duplicatePackets": 0
+    },
+    "activeTail": {
+      "points": [
+        [100, 120],
+        [500, 300],
+        [900, 480]
+      ],
+      "sentPackets": 1,
+      "undoStrokes": 0
+    }
+  },
+  "pausedGuess": {
+    "pausedDraft": "kept during pause",
+    "resumedDraft": "kept during pause",
+    "retryDraft": "",
+    "pausedReceiptRevision": 0,
+    "acceptedReceiptRevision": 1,
+    "automaticRetries": 0,
+    "pausedOverflow": []
+  },
+  "refreshedDraft": {
+    "unsent": "my unsent drawing guess",
+    "accepted": "",
+    "newer": "new typing during acknowledgement",
+    "automaticallySent": 0
+  },
+  "refusedDrafts": {
+    "firstRefusal": "retry this guess",
+    "repeatedRefusal": "retry this guess",
+    "newerDraft": "my newer draft"
+  }
+}
